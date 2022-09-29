@@ -1,2 +1,2 @@
-# web
+# helpwave web
 The official web application of helpwave

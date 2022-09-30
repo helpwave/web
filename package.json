@@ -1,0 +1,13 @@
+{
+  "name": "web-monorepo",
+  "version": "1.0.0",
+  "description": "monorepo for web-related projects",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helpwave/web.git"
+  },
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/helpwave/web/issues"
+  }
+}

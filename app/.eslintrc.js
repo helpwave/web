@@ -21,7 +21,7 @@ module.exports = {
     // For ternaries it should always be 'before' but override doesn't work with 'off'
     // therefore turning it off altogether
     'operator-linebreak': ['off'],
-    // basically allow danling commas in situations where they might be useful
+    // basically allow dangling commas in situations where they might be useful
     // for quickly lists of *things* (e.g. exports, arrays, objects) but disallow
     // for unnecessary things (functions and imports)
     'comma-dangle': ['error', {

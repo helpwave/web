@@ -9,5 +9,12 @@
   "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/helpwave/web/issues"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3"
   }
 }

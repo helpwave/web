@@ -1,7 +1,20 @@
+import Cookies from 'js-cookie'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import useAuth from '../hooks/useAuth'
+import { loginWithCredentials } from '../utils/login'
+
+const loginProcessMock = () => {
+  console.log('logging in..')
+  return loginWithCredentials({ username: '', password: '' })
+    .then(accessToken => Cookies.set('jwt-access-token', accessToken))
+}
 
 const Home: NextPage = () => {
+  const user = useAuth(loginProcessMock)
+
+  console.log(user)
+
   return (
       <div>
         <Head>
@@ -11,7 +24,7 @@ const Home: NextPage = () => {
         </Head>
 
         <h1 className="text-3xl font-bold underline">
-          Hello world!
+          {user === null ? 'Logging in..' : `Hello ${user.username}`}
         </h1>
       </div>
   )

@@ -1,7 +1,7 @@
 import type { FunctionComponent } from 'react'
 import type { PropsWithTranslation, Translation, Translations } from '../../hocs/withTranslation'
 import { withTranslation } from '../../hocs/withTranslation'
-import { Language } from '../../hooks/useLanguage';
+import { Language } from '../../hooks/useLanguage'
 
 interface TitleTranslation extends Translation {
   welcome: string,

@@ -2,7 +2,7 @@ import type { ComponentType } from 'react'
 import type { Language } from '../hooks/useLanguage'
 import { useLanguage } from '../hooks/useLanguage'
 
-export type EventualString = string | Promise<string> | ((...args: any[]) => (string | Promise<string>));
+export type EventualString = string | ((...args: any[]) => string);
 export type Translation<T = Record<string, EventualString>> = Record<keyof T, EventualString>;
 export type Translations<T = Translation> = Record<Language, T>;
 export type PropsWithTranslation<T = Translation, P = unknown> = P & { translation: T };

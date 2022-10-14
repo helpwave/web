@@ -1,9 +1,9 @@
 import type { NextPage } from 'next'
-import Title from './Title'
-import LanguageSwitcher from './LangugeSwitcher'
+import Title from '../../components/examples/Title'
+import LanguageSwitcher from '../../components/LangugeSwitcher'
 import { ProvideLanguage } from '../../hooks/useLanguage'
 
-const Test: NextPage = () => {
+const Intl: NextPage = () => {
   return (
     <ProvideLanguage>
       <div className={'flex justify-center items-center h-screen'}>
@@ -14,4 +14,4 @@ const Test: NextPage = () => {
   )
 }
 
-export default Test
+export default Intl

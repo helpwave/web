@@ -1,7 +1,7 @@
 import type { FunctionComponent } from 'react'
-import type { PropsWithTranslation, Translation, Translations } from '../../hocs/withTranslation'
-import { withTranslation } from '../../hocs/withTranslation'
-import { Language, useLanguage } from '../../hooks/useLanguage'
+import type { PropsWithTranslation, Translation, Translations } from '../hocs/withTranslation'
+import { withTranslation } from '../hocs/withTranslation'
+import { Language, useLanguage } from '../hooks/useLanguage'
 
 interface LanguageSwitcherTranslation extends Translation {
   toggleLanguage: string

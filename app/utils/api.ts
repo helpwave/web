@@ -9,7 +9,7 @@ const addContentType = (headers?: Headers) => {
   return headers
 }
 
-// TODO: add a way to log requests to the console (using console.groupCollapsed() console.groupEnd())
+// TODO: add a way to log requests to the console (using console.groupCollapsed() & console.groupEnd())
 const create = (path: string, options: RequestInit) => ({
   mock: <T>(mockedData: T) => ({
     json: <S extends z.ZodType<T>>(schema: S): Promise<z.output<S>> => {

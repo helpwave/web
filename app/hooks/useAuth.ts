@@ -77,7 +77,7 @@ const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
       Cookies.remove(options.cookies.refreshTokenName)
     }
 
-    // sucess, return user data extracted from jwt
+    // success, return user data extracted from jwt
     if (accessTokenValid) {
       return setUser(jwt.parse(accessToken))
     }
@@ -92,7 +92,7 @@ const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
       return
     }
     redirect()
-  }, [redirect])
+  }, [redirect, options])
 
   const logout = (redirect: () => void) => {
     Cookies.remove(options.cookies.accessTokenName)
@@ -100,7 +100,7 @@ const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
     redirect()
   }
 
-  return { user, logout }
+  return { user, logout, accessToken: Cookies.get(options.cookies.accessTokenName) }
 }
 
 export default useAuth

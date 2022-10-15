@@ -11,9 +11,9 @@ const loginProcessMock = () => {
 }
 
 const Home: NextPage = () => {
-  const { user, logout } = useAuth(loginProcessMock)
+  const { user, logout, accessToken } = useAuth(loginProcessMock)
 
-  console.log(user)
+  console.log(user, accessToken)
 
   return (
       <div>

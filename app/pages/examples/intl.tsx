@@ -7,7 +7,7 @@ const Intl: NextPage = () => {
   return (
     <ProvideLanguage>
       <div className="flex justify-center items-center h-screen">
-        <Title name={'Testine Test'} />
+        <Title name="Testine Test" />
         <LanguageSwitcher />
       </div>
     </ProvideLanguage>

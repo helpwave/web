@@ -15,6 +15,7 @@ module.exports = {
     // the behaviour of ternary operators is often more clear than using '||', '&&' or '??'
     'no-unneeded-ternary': 'off',
     'no-use-before-define': 'off',
+    'quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
     // this rule is utter trash
     'n/no-callback-literal': 'off',
     // This highly depends on the situation even when the same operators are used.
@@ -52,8 +53,19 @@ module.exports = {
         }
       }
     ],
+    'jsx-quotes': ['error', 'prefer-double'],
+    'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'ignore', propElementValues: 'always' }],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
+    'react/jsx-wrap-multilines': ['error', {
+      declaration: 'parens-new-line',
+      assignment: 'parens-new-line',
+      return: 'parens-new-line',
+      arrow: 'parens-new-line',
+      condition: 'parens-new-line',
+      logical: 'parens-new-line',
+      prop: 'parens-new-line'
+    }]
   },
   settings: {
     react: {

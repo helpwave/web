@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
-import { verify, decode } from 'jsonwebtoken'
 import type { VerifyOptions } from 'jsonwebtoken'
+import { decode, verify } from 'jsonwebtoken'
 import { z } from 'zod'
 import { loginWithRefreshToken } from '../utils/login'
 import config from '../utils/config'
@@ -44,23 +44,37 @@ const jwt = {
   }
 }
 
-const useAuth = (redirect: () => void) => {
+type UseAuthOptions = {
+  cookies: {
+    accessTokenName: string,
+    refreshTokenName: string
+  }
+}
+
+const defaultUseAuthOptions: UseAuthOptions = {
+  cookies: {
+    accessTokenName: 'jwt-access-token',
+    refreshTokenName: 'jwt-refresh-token'
+  }
+}
+
+const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const accessToken = Cookies.get('jwt-access-token')
-    const refreshToken = Cookies.get('jwt-refresh-token')
+    const accessToken = Cookies.get(options.cookies.accessTokenName)
+    const refreshToken = Cookies.get(options.cookies.refreshTokenName)
 
     const accessTokenValid = accessToken !== undefined && jwt.verify(accessToken)
     const refreshTokenValid = refreshToken !== undefined && jwt.verify(refreshToken)
 
     // remove tokens if invalid
     if (accessToken !== undefined && !accessTokenValid) {
-      Cookies.remove('jwt-access-token')
+      Cookies.remove(options.cookies.accessTokenName)
     }
 
     if (refreshToken !== undefined && !refreshTokenValid) {
-      Cookies.remove('jwt-refresh-token')
+      Cookies.remove(options.cookies.refreshTokenName)
     }
 
     // sucess, return user data extracted from jwt

@@ -8,7 +8,7 @@ export enum Language {
 
 export const DEFAULT_LANGUAGE = Language.DE
 
-export interface LanguageContextValue {
+export type LanguageContextValue = {
   language: Language,
   setLanguage: Dispatch<SetStateAction<Language>>
 }

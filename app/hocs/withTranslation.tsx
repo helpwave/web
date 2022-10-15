@@ -4,14 +4,18 @@ import { useLanguage } from '../hooks/useLanguage'
 
 export type EventualString = string | ((...args: any[]) => string);
 export type Translation<T = Record<string, EventualString>> = Record<keyof T, EventualString>;
-export type Translations<T = Translation> = Record<Language, T>;
-export type PropsWithTranslation<T = Translation, P = unknown> = P & { translation: T };
+export type Translations<T extends Translation> = Record<Language, T>;
+export type PropsWithTranslation<P, T extends Translation> = P & { translation: T };
 
-export const withTranslation = <T extends PropsWithTranslation>(WrappedComponent: ComponentType<T>, translations: Translations) => {
-  const ComponentWithTranslation = (props: Omit<T, keyof PropsWithTranslation>) => {
+export const withTranslation = <Props, OwnTranslation extends Translation>(
+  WrappedComponent: ComponentType<PropsWithTranslation<Props, OwnTranslation>>,
+  translations: Translations<OwnTranslation>
+) => {
+  const ComponentWithTranslation = (props: Omit<Props, 'translation'>) => {
     const { language } = useLanguage()
     const translation = translations[language]
-    return <WrappedComponent {...props as T} translation={translation} />
+    const mergedProps = { ...props, translation } as PropsWithTranslation<Props, OwnTranslation>
+    return <WrappedComponent {...mergedProps} />
   }
   return ComponentWithTranslation
 }

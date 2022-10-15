@@ -94,7 +94,13 @@ const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
     redirect()
   }, [redirect])
 
-  return user
+  const logout = (redirect: () => void) => {
+    Cookies.remove(options.cookies.accessTokenName)
+    Cookies.remove(options.cookies.refreshTokenName)
+    redirect()
+  }
+
+  return { user, logout }
 }
 
 export default useAuth

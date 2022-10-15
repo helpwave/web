@@ -11,7 +11,7 @@ const loginProcessMock = () => {
 }
 
 const Home: NextPage = () => {
-  const user = useAuth(loginProcessMock)
+  const { user, logout } = useAuth(loginProcessMock)
 
   console.log(user)
 
@@ -26,6 +26,8 @@ const Home: NextPage = () => {
         <h1 className="text-3xl font-bold underline">
           {user === null ? 'Logging in..' : `Hello ${user.username}`}
         </h1>
+
+        <button onClick={() => logout(() => window.location.reload())}>Logout</button>
       </div>
   )
 }

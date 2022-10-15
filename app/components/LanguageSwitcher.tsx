@@ -3,14 +3,12 @@ import type { PropsWithTranslation, Translations } from '../hocs/withTranslation
 import { withTranslation } from '../hocs/withTranslation'
 import { Language, useLanguage } from '../hooks/useLanguage'
 
-type Empty = Record<string, never>
-
 type LanguageSwitcherTranslation = {
   toggleLanguage: string
 }
 
 // TODO: Basic and naive implementation of a LanguageSwitcher
-const LanguageSwitcher: FunctionComponent<PropsWithTranslation<Empty, LanguageSwitcherTranslation>> = ({ translation }) => {
+const LanguageSwitcher: FunctionComponent<PropsWithTranslation<LanguageSwitcherTranslation>> = ({ translation }) => {
   const { language, setLanguage } = useLanguage()
 
   const onClick = () => {

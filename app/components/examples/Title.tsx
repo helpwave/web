@@ -14,7 +14,7 @@ type TitleProps = {
 }
 
 // Simple Title component to demonstrate some translations
-const Title: FunctionComponent<PropsWithTranslation<TitleProps, TitleTranslation>> = (props) => {
+const Title: FunctionComponent<PropsWithTranslation<TitleTranslation, TitleProps>> = (props) => {
   return (
     <p className="rounded bg-gray-800 text-gray-200 p-1 px-2">
       {props.translation.welcome}{'! '}

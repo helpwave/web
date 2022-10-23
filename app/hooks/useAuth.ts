@@ -88,14 +88,17 @@ export const useAuth = (redirect: () => void, options = defaultUseAuthOptions) =
     // access token expired, use refresh token to acquire new access token and set user data afterwards
     if (refreshTokenValid) {
       loginWithRefreshToken(refreshToken)
-        .then(accessToken => {
+        .then(({ accessToken, refreshToken }) => {
+          if (refreshToken !== null) {
+            Cookies.set('jwt-refresh-token', refreshToken)
+          }
           Cookies.set('jwt-access-token', accessToken)
           setUser(jwt.parse(accessToken))
         })
       return
     }
     redirect()
-  }, [redirect, options, setUser])
+  }, [redirect, options, user, setUser])
 
   const logout = (redirect: () => void) => {
     Cookies.remove(options.cookies.accessTokenName)

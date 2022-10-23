@@ -9,7 +9,7 @@ const mockJwt = (type: 'refresh-token' | 'access-token', username: string) => {
     iss: 'dev.auth.helpwave.de',
     aud: 'dev.web.helpwave.de',
     sub: 123456789,
-    exp: (Date.now() / 1000) + 30 * 60 * 60,
+    exp: (Date.now() / 1000) + type === 'access-token' ? (30 * 60) : (14 * 24 * 60 * 60), // 30 minutes for access token, 14 days for refresh token
     iat: Date.now() / 1000,
   }
   const userPayload = {
@@ -26,24 +26,25 @@ export type Credentials = {
 }
 
 const jwtResponse = z.object({
-  jwt: z.string()
+  accessToken: z.string(),
+  refreshToken: z.string().nullable()
 })
 
-// TODO: implement shouldRetrieveRefreshToken functionality
 const loginWithCredentials = (credentials: Credentials & { shouldRetrieveRefreshToken: boolean }) => {
   return api
     .post('/login/credentials', credentials)
-    .mock({ jwt: mockJwt('access-token', 'user@dev.helpwave.de') })
+    .mock({
+      accessToken: mockJwt('access-token', 'user@dev.helpwave.de'),
+      refreshToken: credentials.shouldRetrieveRefreshToken ? mockJwt('refresh-token', 'user@dev.helpwave.de') : null
+    })
     .json(jwtResponse)
-    .then(json => json.jwt)
 }
 
 const loginWithRefreshToken = (refreshToken: string) => {
   return api
     .post('/login/refresh-token', { token: refreshToken })
-    .mock({ jwt: mockJwt('refresh-token', 'user@dev.helpwave.de') })
+    .mock({ accessToken: mockJwt('refresh-token', 'user@dev.helpwave.de') })
     .json(jwtResponse)
-    .then(json => json.jwt)
 }
 
 export {

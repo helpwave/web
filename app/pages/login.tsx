@@ -20,7 +20,10 @@ const LoginPage: NextPage = () => {
   const handleLogin = () => {
     // TODO: input validation?
     loginWithCredentials({ username: '', password: '', shouldRetrieveRefreshToken: rememberMe })
-      .then(accessToken => {
+      .then(({ accessToken, refreshToken }) => {
+        if (refreshToken !== null) {
+          Cookies.set('jwt-refresh-token', refreshToken)
+        }
         Cookies.set('jwt-access-token', accessToken)
 
         if (router.query.back) {

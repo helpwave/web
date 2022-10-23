@@ -29,8 +29,8 @@ const jwtResponse = z.object({
   jwt: z.string()
 })
 
-// TODO: should this request a refresh token as well?
-const loginWithCredentials = (credentials: Credentials) => {
+// TODO: implement shouldRetrieveRefreshToken functionality
+const loginWithCredentials = (credentials: Credentials & { shouldRetrieveRefreshToken: boolean }) => {
   return api
     .post('/login/credentials', credentials)
     .mock({ jwt: mockJwt('access-token', 'user@dev.helpwave.de') })

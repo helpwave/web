@@ -58,7 +58,7 @@ const defaultUseAuthOptions: UseAuthOptions = {
   }
 }
 
-const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
+export const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
@@ -77,12 +77,15 @@ const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
       Cookies.remove(options.cookies.refreshTokenName)
     }
 
-    // success, return user data extracted from jwt
+    // success, set user data extracted from jwt (if user isn't already set)
     if (accessTokenValid) {
-      return setUser(jwt.parse(accessToken))
+      if (user === null) {
+        setUser(jwt.parse(accessToken))
+      }
+      return
     }
 
-    // access token expired, use refresh token to acquire new access token and return user data afterwards
+    // access token expired, use refresh token to acquire new access token and set user data afterwards
     if (refreshTokenValid) {
       loginWithRefreshToken(refreshToken)
         .then(accessToken => {
@@ -92,7 +95,7 @@ const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
       return
     }
     redirect()
-  }, [redirect, options])
+  }, [redirect, options, setUser])
 
   const logout = (redirect: () => void) => {
     Cookies.remove(options.cookies.accessTokenName)
@@ -102,5 +105,3 @@ const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
 
   return { user, logout, accessToken: Cookies.get(options.cookies.accessTokenName) }
 }
-
-export default useAuth

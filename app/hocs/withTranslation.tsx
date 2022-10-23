@@ -2,12 +2,10 @@ import type { ComponentType } from 'react'
 import type { Language } from '../hooks/useLanguage'
 import { useLanguage } from '../hooks/useLanguage'
 
-export type EventualString = string | ((...args: any[]) => string);
-export type Translation<T = Record<string, EventualString>> = Record<keyof T, EventualString>;
-export type Translations<T extends Translation> = Record<Language, T>;
-export type PropsWithTranslation<T extends Translation, P = unknown> = P & { translation: T };
+export type Translations<T> = Record<Language, T>
+export type PropsWithTranslation<T, P = unknown> = P & { translation: T }
 
-export const withTranslation = <Props, OwnTranslation extends Translation>(
+export const withTranslation = <Props, OwnTranslation>(
   WrappedComponent: ComponentType<PropsWithTranslation<OwnTranslation, Props>>,
   translations: Translations<OwnTranslation>
 ) => {

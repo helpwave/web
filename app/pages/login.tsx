@@ -7,7 +7,7 @@ import Cookies from 'js-cookie'
 import { loginWithCredentials } from '../utils/login'
 import { Input } from '../components/Input'
 import { Checkbox } from '../components/Checkbox'
-import { Language, ProvideLanguage } from '../hooks/useLanguage'
+import { Language } from '../hooks/useLanguage'
 import { withTranslation } from '../hocs/withTranslation'
 import type { Translations, PropsWithTranslation } from '../hocs/withTranslation'
 
@@ -91,7 +91,6 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ProvideLanguage>
       <div className="flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-md space-y-8">
           <div>
@@ -132,7 +131,6 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
           </div>
         </div>
       </div>
-      </ProvideLanguage>
     </div>
   )
 }

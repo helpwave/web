@@ -124,7 +124,7 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
             </div>
 
             <div className="w-80">
-              <button onClick={handleLogin} className="bg-indigo-600 py-2 px-4 text-sm font-medium text-white rounded-md w-full hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 focus:ring-2 focus:ring-offset-2">
+              <button onClick={handleLogin} className="bg-indigo-500 py-2 px-4 text-sm font-medium text-white rounded-md w-full hover:bg-indigo-600 focus:outline-none focus:ring-indigo-500 focus:ring-2 focus:ring-offset-2">
                 {translation.signIn}
               </button>
             </div>

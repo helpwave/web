@@ -1,5 +1,7 @@
 import type { z } from 'zod'
-import config from './config'
+import { getConfig } from './config'
+
+const config = getConfig()
 
 const addContentType = (headers?: Headers) => {
   if (!headers) {

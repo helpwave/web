@@ -106,29 +106,31 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
                 {translation.contactSubheader.getAccess}
               </p>
             </div>
-          <div className="flex flex-col mt-8 space-y-4 items-center">
-            <div className="w-80">
-              <Input id="login:username" autocomplete="username" placeholder={translation.username} label={translation.username} value={username} onChange={setUsername} />
-            </div>
-            <div className="w-80">
-              <Input id="login:password" autocomplete="current-password" placeholder={translation.password} label={translation.password} value={password} onChange={setPassword} />
-            </div>
+          <form onSubmit={e => e.preventDefault()}>
+            <div className="flex flex-col mt-8 space-y-4 items-center">
+              <div className="w-80">
+                <Input id="login:username" required autoComplete="username" placeholder={translation.username} label={translation.username} value={username} onChange={setUsername} />
+              </div>
+              <div className="w-80">
+                <Input id="login:password" required autoComplete="current-password" placeholder={translation.password} label={translation.password} value={password} onChange={setPassword} />
+              </div>
 
-            <div className="flex items-center justify-between w-80">
-              <Checkbox id="login:remember-me" label={translation.stayLoggedIn} onChange={setRememberMe} checked={rememberMe} />
-              <div className="text-sm">
-                <Link href="/forgot-password" passHref>
-                  <a className="font-medium text-indigo-600 hover:text-indigo-500">{translation.forgotPassword}</a>
-                </Link>
+              <div className="flex items-center justify-between w-80">
+                <Checkbox id="login:remember-me" label={translation.stayLoggedIn} onChange={setRememberMe} checked={rememberMe} />
+                <div className="text-sm">
+                  <Link href="/forgot-password" passHref>
+                    <a className="font-medium text-indigo-600 hover:text-indigo-500">{translation.forgotPassword}</a>
+                  </Link>
+                </div>
+              </div>
+
+              <div className="w-80">
+                <button onClick={handleLogin} type="submit" className="bg-indigo-500 py-2 px-4 text-sm font-medium text-white rounded-md w-full hover:bg-indigo-600 focus:outline-none focus:ring-indigo-500 focus:ring-2 focus:ring-offset-2">
+                  {translation.signIn}
+                </button>
               </div>
             </div>
-
-            <div className="w-80">
-              <button onClick={handleLogin} className="bg-indigo-500 py-2 px-4 text-sm font-medium text-white rounded-md w-full hover:bg-indigo-600 focus:outline-none focus:ring-indigo-500 focus:ring-2 focus:ring-offset-2">
-                {translation.signIn}
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

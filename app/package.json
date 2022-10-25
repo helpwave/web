@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.0.1",
+    "classnames": "^2.3.2",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "next": "12.3.1",
@@ -17,6 +19,8 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "^0.5.7",
     "@types/js-cookie": "^3.0.2",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "18.7.23",

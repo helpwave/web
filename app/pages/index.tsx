@@ -1,17 +1,11 @@
-import Cookies from 'js-cookie'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import useAuth from '../hooks/useAuth'
-import { loginWithCredentials } from '../utils/login'
-
-const loginProcessMock = () => {
-  console.log('logging in..')
-  return loginWithCredentials({ username: '', password: '' })
-    .then(accessToken => Cookies.set('jwt-access-token', accessToken))
-}
+import { useAuth } from '../hooks/useAuth'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
-  const { user, logout, accessToken } = useAuth(loginProcessMock)
+  const router = useRouter()
+  const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
   console.log(user, accessToken)
 
@@ -24,7 +18,7 @@ const Home: NextPage = () => {
         </Head>
 
         <h1 className="text-3xl font-bold underline">
-          {user === null ? 'Logging in..' : `Hello ${user.username}`}
+          {user === null ? 'Redirecting to log in page..' : `Hello ${user.username}`}
         </h1>
 
         <button onClick={() => logout(() => window.location.reload())}>Logout</button>

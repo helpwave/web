@@ -21,10 +21,21 @@ export const ProvideLanguage: FunctionComponent<PropsWithChildren> = ({ children
   const [language, setLanguage] = useState<Language>(DEFAULT_LANGUAGE)
 
   useEffect(() => {
-    const matchBrowserLanguage = Object.entries(Language).find(([_, language]) => language === window.navigator.language)
-    if (!matchBrowserLanguage) return
-    const [_, language] = matchBrowserLanguage
-    setLanguage(language)
+    // TODO: this is one of the few places where unit tests would be useful
+    const languagesToTestAgainst: [string, Language][] = [
+      ...Object.values(Language).map(language => [language, language]) as [string, Language][],
+      ...Object.values(Language).map(language => [language.split('-')[0], language]) as [string, Language][]
+    ].sort((a, b) => b[0].localeCompare(a[0]))
+
+    const matchingBrowserLanguages = window.navigator.languages
+      .map(language => languagesToTestAgainst.find(([test]) => language === test))
+      .filter(entry => entry !== undefined) as [string, Language][]
+
+    if (matchingBrowserLanguages.length === 0) return
+
+    const firstMatch = matchingBrowserLanguages[0][1]
+    console.log(`setting language to: ${firstMatch}`)
+    setLanguage(firstMatch)
   }, [])
 
   return (

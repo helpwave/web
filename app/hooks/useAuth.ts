@@ -4,7 +4,9 @@ import type { VerifyOptions } from 'jsonwebtoken'
 import { decode, verify } from 'jsonwebtoken'
 import { z } from 'zod'
 import { loginWithRefreshToken } from '../utils/login'
-import config from '../utils/config'
+import { getConfig } from '../utils/config'
+
+const config = getConfig()
 
 // this type will be extended in the future
 const jwtUserPayload = z.object({

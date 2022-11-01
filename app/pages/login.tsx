@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 import { loginWithCredentials } from '../utils/login'
 import { Input } from '../components/Input'
 import { Checkbox } from '../components/Checkbox'
+import { Button } from '../components/Button'
 import { Language } from '../hooks/useLanguage'
 import { withTranslation } from '../hocs/withTranslation'
 import type { Translations, PropsWithTranslation } from '../hocs/withTranslation'
@@ -125,9 +126,9 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
               </div>
 
               <div className="w-80">
-                <button onClick={handleLogin} type="submit" className="bg-indigo-500 py-2 px-4 text-sm font-medium text-white rounded-md w-full hover:bg-indigo-600 focus:outline-none focus:ring-indigo-500 focus:ring-2 focus:ring-offset-2">
-                  {translation.signIn}
-                </button>
+              <Button variant="primary" size="large" onClick={handleLogin} type="submit">
+                {translation.signIn}
+              </Button>
               </div>
             </div>
           </form>

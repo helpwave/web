@@ -13,7 +13,7 @@ const jwtUserPayload = z.object({
   username: z.string()
 })
 
-type User = z.output<typeof jwtUserPayload>
+export type User = z.output<typeof jwtUserPayload>
 
 // TODO: decide on some sensible options
 const jwtDefaultOptions: VerifyOptions = {

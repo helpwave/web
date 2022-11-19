@@ -1,5 +1,7 @@
 import React from 'react'
+import Link from 'next/link'
 import { Menu, MenuItem } from './Menu'
+import { ProfilePicture } from './ProfilePicture'
 import type { User } from '../hooks/useAuth'
 
 type UserMenuProps = {
@@ -8,21 +10,16 @@ type UserMenuProps = {
 
 const UserMenu = ({ user }: UserMenuProps) => {
   // TODO: meaningful menu content
-  // TODO: proper avatars
   return (
     <div className="relative">
-      <Menu<HTMLDivElement> trigger={(onClick, ref) => (
+      <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick} className="flex gap-2 relative items-center group cursor-pointer select-none">
-          <div className="rounded-full">
-            <img className="rounded-full h-8 w-8 border border-slate-200 group-hover:border-indigo-200" src="https://source.boringavatars.com/" alt={user.username} />
-          </div>
-          <div className="text-sm font-semibold text-slate-700 group-hover:text-indigo-400">{user.username}</div>
+          <ProfilePicture avatarUrl={user.avatarUrl} altText={user.displayName} size="small" />
+          <div className="text-sm font-semibold text-slate-700 group-hover:text-indigo-400">{user.displayName}</div>
       </div>
       )}>
-        <MenuItem>menu!</MenuItem>
-        <MenuItem>menu!</MenuItem>
-        <MenuItem>menu!</MenuItem>
-        <MenuItem>menu!</MenuItem>
+        <Link href="/profile"><MenuItem alignment="right">Profile</MenuItem></Link>
+        <Link href="/settings"><MenuItem alignment="right">Settings</MenuItem></Link>
       </Menu>
     </div>
   )

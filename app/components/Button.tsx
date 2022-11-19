@@ -29,7 +29,7 @@ const Button = ({ children, disabled = false, variant, size = 'medium', onClick,
     className={cx('py-2 px-4 text-sm font-medium focus:outline-none', className, {
       'text-white bg-indigo-500 hover:bg-indigo-600 focus:ring-indigo-500': variant === 'primary',
       'TODO1': size === 'small', // TODO: add styles for small buttons
-      'TODO2': size === 'medium', // TODO: add styles for medium buttons
+      'rounded-md': size === 'medium', // TODO: add styles for medium buttons
       'rounded-md w-full focus:ring-2 focus:ring-offset-2': size === 'large'
     })}
     {...restProps}

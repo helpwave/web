@@ -8,12 +8,31 @@ import { getConfig } from '../utils/config'
 
 const config = getConfig()
 
-// this type will be extended in the future
-const jwtUserPayload = z.object({
-  username: z.string()
+const organizationSchema = z.object({
+  id: z.string().uuid(),
+  shortName: z.string(),
+  longName: z.string(),
+  avatarUrl: z.string().url().nullable(), // TODO: make this required once we have a default avatar, should enforce https (or localhost) as well
+  contactEmail: z.string().email().nullable(), // TODO: in the rfc this is currently named "contact"
 })
 
-export type User = z.output<typeof jwtUserPayload>
+const userSchema = z.object({
+  id: z.string().uuid(),
+  fullName: z.string(),
+  displayName: z.string(),
+  email: z.string().email(),
+  // TODO: in the distant future we might want to use s3 or something, this could require a change here possibly?;
+  // TODO: should enfore https (or localhost?)
+  avatarUrl: z.string().url(),
+  role: z.enum(['admin', 'user']),
+  organizations: z.array(organizationSchema.merge(z.object({ role: z.string() }))),
+})
+
+// TODO: we may or may not have some differentiating features between the actual user data and what is stored in the jwt
+// TODO: for the time being we will just add things here regardless but we may have to revisit this in the future
+const jwtUserPayload = userSchema
+
+export type User = z.output<typeof userSchema>
 
 // TODO: decide on some sensible options
 const jwtDefaultOptions: VerifyOptions = {

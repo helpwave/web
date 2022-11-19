@@ -99,10 +99,8 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">{translation.signInHeader}</h2>
             <p className="mt-4 text-center text-sm text-gray-600">
                 {translation.contactSubheader.or}
-                <Link href="/contact" passHref>
-                  <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                    {translation.contactSubheader.contactUs}
-                  </a>
+                <Link href="/contact" passHref className="font-medium text-indigo-600 hover:text-indigo-500">
+                  {translation.contactSubheader.contactUs}
                 </Link>
                 {translation.contactSubheader.getAccess}
               </p>
@@ -119,8 +117,8 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
               <div className="flex items-center justify-between w-80">
                 <Checkbox id="login:remember-me" label={translation.stayLoggedIn} onChange={setRememberMe} checked={rememberMe} />
                 <div className="text-sm">
-                  <Link href="/forgot-password" passHref>
-                    <a className="font-medium text-indigo-600 hover:text-indigo-500">{translation.forgotPassword}</a>
+                  <Link href="/forgot-password" passHref className="font-medium text-indigo-600 hover:text-indigo-500">
+                    {translation.forgotPassword}
                   </Link>
                 </div>
               </div>

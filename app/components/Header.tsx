@@ -31,7 +31,7 @@ const Header = ({ title, navigation = [], actions = [], withIcon = true }: Heade
             <nav className="text-sm text-slate-700 font-semibold align-center">
               <ul className="flex space-x-8">
                 {navigation.map((item) => (
-                  <Link href={item.href} key={item.href} passHref><a className="hover:text-indigo-500 dark:hover:text-indigo-400">{item.text}</a></Link>
+                  <Link href={item.href} key={item.href} passHref className="hover:text-indigo-500">{item.text}</Link>
                 ))}
               </ul>
             </nav>

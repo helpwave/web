@@ -8,7 +8,12 @@ export type SchemaObject = {
   }
 }
 
-export type Schema = SchemaObject | { type: 'string' } | { type: 'number' | 'integer' } | { type: 'boolean' } | { type: 'array', items: Schema } | { '$ref': string }
+export type PrimitiveSchema =
+| { type: 'string', example?: string }
+| { type: 'number' | 'integer', example?: number }
+| { type: 'boolean', example?: boolean }
+
+export type Schema = SchemaObject | PrimitiveSchema | { type: 'array', items: Schema } | { '$ref': string }
 
 
 const resolveRef = (ref: string, allSchemas: Record<string, Schema>): Schema => {

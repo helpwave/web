@@ -1,5 +1,5 @@
 import openapi from './swagger.json' assert { type: 'json' }
-import { schemaToZodString } from './schema'
+import { schemaToExample, schemaToZodString } from './schema'
 import type { Schema, PrimitiveSchema } from './schema'
 import { keyInfoToSchemaAndType, calculateKeyInfo } from './names'
 import type { KeyInfo } from './names'
@@ -52,6 +52,8 @@ const generateFunctionDataFromRouteMethod = (path: string, route: Route['methods
   // TODO: guessing indentation level of 4 here
   const zodSchema = happyResponse ? schemaToZodString(happyResponse, definitions, 4) : 'z.unknown()' // TODO: this shouldn't happen?
 
+  const mock = happyResponse ? schemaToExample(happyResponse, definitions) : 'THIS SHOULDN\'T HAPPEN'
+
   return {
     fnName: determineFunctionName(route),
     method: route.method,
@@ -60,7 +62,7 @@ const generateFunctionDataFromRouteMethod = (path: string, route: Route['methods
     requestBody: requestBody,
     headers: headers,
     query: query,
-    mock: '<NOT IMPLEMENTED>', // TODO
+    mock: JSON.stringify(mock), // TODO: stringify isn't all that great, use objectify instead (for objects)
     textOrJson: textOrJson,
     returnSchema: zodSchema
   }

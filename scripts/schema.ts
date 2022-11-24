@@ -21,6 +21,28 @@ const resolveRef = (ref: string, allSchemas: Record<string, Schema>): Schema => 
   return allSchemas[ref.replace('#/definitions/', '')]
 }
 
+export const schemaToExample = (schema: Schema, allSchemas: Record<string, Schema>): any => {
+  if('$ref' in schema) {
+    return schemaToExample(resolveRef(schema['$ref'], allSchemas), allSchemas)
+  } else {
+    switch(schema.type) {
+      case 'object':
+        return Object.fromEntries(
+          Object.entries(schema.properties).map(([key, value]) => {
+            return [key, schemaToExample(value, allSchemas)]
+          })
+        )
+      case 'array': return schemaToExample(schema.items, allSchemas)
+      case 'string': return schema.example || 'TODO'
+      case 'number': return schema.example || 'TODO'
+      case 'integer': return schema.example || 'TODO'
+      case 'boolean': return schema.example || 'TODO'
+      default:
+          throw new Error('not implemented: ' + (schema as { type: string }).type)
+    }
+  }
+}
+
 const schemaToZod = (schema: Schema, allSchemas: Record<string, Schema>): z.Schema => {
   if('$ref' in schema) {
     return schemaToZod(resolveRef(schema['$ref'], allSchemas), allSchemas)

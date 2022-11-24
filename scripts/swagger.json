@@ -4,7 +4,170 @@
     "contact": {}
   },
   "paths": {
-    "/er": {
+    "/departments": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "departments"
+        ],
+        "summary": "get all departments",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "0-indexed page number, 0 is assumed when omitted",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "page size, 100 is assumed when omitted",
+            "name": "page_size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/routes.GetDepartmentsResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/routes.HTTPErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "departments"
+        ],
+        "summary": "create new department",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Bearer: \u003cTOKEN\u003e",
+            "name": "authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "description": "Dep. to add",
+            "name": "department",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/routes.CreateDepartmentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/routes.SingleDepartmentResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/routes.HTTPErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/departments/{id}": {
+      "delete": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "departments"
+        ],
+        "summary": "delete a department",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Bearer: \u003cTOKEN\u003e",
+            "name": "authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "department id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/routes.HTTPErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "departments"
+        ],
+        "summary": "update an department by id",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Bearer: \u003cTOKEN\u003e",
+            "name": "authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Department's ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "ER to update",
+            "name": "department",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/routes.UpdateDepartmentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/routes.HTTPErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/emergency-room": {
       "get": {
         "produces": [
           "application/json"
@@ -83,17 +246,11 @@
             "schema": {
               "$ref": "#/definitions/routes.HTTPErrorResponse"
             }
-          },
-          "501": {
-            "description": "Not Implemented",
-            "schema": {
-              "$ref": "#/definitions/routes.HTTPErrorResponse"
-            }
           }
         }
       }
     },
-    "/er/{id}": {
+    "/emergency-room/{id}": {
       "get": {
         "produces": [
           "application/json"
@@ -228,6 +385,104 @@
         }
       }
     },
+    "/organizations": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "organizations"
+        ],
+        "summary": "create a new organization",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Bearer: \u003cTOKEN\u003e",
+            "name": "authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "description": "Org to add",
+            "name": "organization",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/routes.CreateOrgRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/routes.GetSingleOrgResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/routes.HTTPErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "create a new user",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Bearer: \u003cTOKEN\u003e",
+            "name": "authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "description": "user to add",
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/routes.CreateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/routes.CreateUserResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/routes.HTTPErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/routes.HTTPErrorResponse"
+            }
+          }
+        }
+      }
+    },
     "/version": {
       "get": {
         "description": "return the version",
@@ -251,7 +506,8 @@
           "type": "string"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "pediatric surgery"
         }
       }
     },
@@ -263,10 +519,106 @@
       ],
       "properties": {
         "lat": {
-          "type": "number"
+          "type": "number",
+          "example": 51.9893434
         },
         "long": {
-          "type": "number"
+          "type": "number",
+          "example": 7.62613583
+        }
+      }
+    },
+    "routes.CreateDepartmentRequest": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "pediatric surgery"
+        }
+      }
+    },
+    "routes.CreateOrgRequest": {
+      "type": "object",
+      "required": [
+        "contactEmail",
+        "longName"
+      ],
+      "properties": {
+        "contactEmail": {
+          "type": "string",
+          "example": "example@helpwave.de"
+        },
+        "longName": {
+          "type": "string",
+          "example": "Uniklinikum Münster"
+        },
+        "shortName": {
+          "type": "string",
+          "example": "UKM"
+        }
+      }
+    },
+    "routes.CreateUserRequest": {
+      "type": "object",
+      "required": [
+        "email",
+        "fullName",
+        "password"
+      ],
+      "properties": {
+        "admin": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string",
+          "example": "example@helpwave.de"
+        },
+        "fullName": {
+          "type": "string",
+          "example": "Some Name"
+        },
+        "organization": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 6,
+          "example": "hunter2"
+        }
+      }
+    },
+    "routes.CreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "userID": {
+          "type": "string"
+        }
+      }
+    },
+    "routes.GetDepartmentsResponse": {
+      "type": "object",
+      "properties": {
+        "departments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/models.DepartmentBase"
+          }
+        },
+        "lastPage": {
+          "type": "boolean"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "totalSize": {
+          "type": "integer"
         }
       }
     },
@@ -282,16 +634,13 @@
         "lastPage": {
           "type": "boolean"
         },
-        "numPages": {
-          "type": "integer"
-        },
         "page": {
           "type": "integer"
         },
         "pageSize": {
           "type": "integer"
         },
-        "totalSite": {
+        "totalSize": {
           "type": "integer"
         }
       }
@@ -311,7 +660,8 @@
           }
         },
         "displayableAddress": {
-          "type": "string"
+          "type": "string",
+          "example": "Kardinal-von-Galen-Ring 10, 48149 Münster, Germany"
         },
         "id": {
           "type": "string"
@@ -320,13 +670,35 @@
           "$ref": "#/definitions/models.Point"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "Uniklinikum Münster"
         },
         "open": {
           "type": "boolean"
         },
         "utilization": {
-          "type": "integer"
+          "type": "integer",
+          "example": 4
+        }
+      }
+    },
+    "routes.GetSingleOrgResponse": {
+      "type": "object",
+      "properties": {
+        "avatarUrl": {
+          "type": "string"
+        },
+        "contactEmail": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "longName": {
+          "type": "string"
+        },
+        "shortName": {
+          "type": "string"
         }
       }
     },
@@ -334,10 +706,12 @@
       "type": "object",
       "properties": {
         "code": {
-          "type": "integer"
+          "type": "integer",
+          "example": 500
         },
         "message": {
-          "type": "string"
+          "type": "string",
+          "example": "Some complicated error message here"
         }
       }
     },
@@ -372,19 +746,43 @@
           }
         },
         "displayableAddress": {
-          "type": "string"
+          "type": "string",
+          "example": "Kardinal-von-Galen-Ring 10, 48149 Münster, Germany"
         },
         "location": {
           "$ref": "#/definitions/models.Point"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "Uniklinikum Münster"
         },
         "open": {
           "type": "boolean"
         },
         "utilization": {
-          "type": "integer"
+          "type": "integer",
+          "example": 4
+        }
+      }
+    },
+    "routes.SingleDepartmentResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "example": "pediatric surgery"
+        }
+      }
+    },
+    "routes.UpdateDepartmentRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "pediatric surgery"
         }
       }
     }

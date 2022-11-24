@@ -1,15 +1,8 @@
 import openapi from './swagger.json' assert { type: 'json' }
-import { z } from 'zod'
-
-type SchemaObject = {
-  type: 'object'
-  required: string[],
-  properties: {
-    [key: string]: Schema
-  }
-}
-
-type Schema = SchemaObject | { type: 'string' } | { type: 'number' | 'integer' } | { type: 'boolean' } | { type: 'array', items: Schema } | { '$ref': string }
+import { schemaToZodString } from './schema'
+import type { Schema } from './schema'
+import { keyInfoToSchemaAndType, calculateKeyInfo } from './names'
+import type { KeyInfo } from './names'
 
 type RouteParameter = {
   in: 'path' | 'query' | 'header' | 'body' | 'cookie',
@@ -37,71 +30,6 @@ type Route = {
   }[]
 }
 
-const resolveRef = (ref: string, allSchemas: Record<string, Schema>): Schema => {
-  // TODO: this'll probably not parse all refs
-  return allSchemas[ref.replace('#/definitions/', '')]
-}
-
-const schemaToZod = (schema: Schema, allSchemas: Record<string, Schema>): z.Schema => {
-  if('$ref' in schema) {
-    return schemaToZod(resolveRef(schema['$ref'], allSchemas), allSchemas)
-  } else {
-    switch(schema.type) {
-      case 'object':
-        return z.object(
-          Object.fromEntries(
-            Object.entries(schema.properties).map(([key, value]) => {
-              if ((schema.required || []).includes(key)) {
-                return [key, schemaToZod(value, allSchemas)]
-              } else {
-                return [key, schemaToZod(value, allSchemas).optional()]
-              }
-            })
-          )
-        )
-      case 'array': return z.array(schemaToZod(schema.items, allSchemas))
-      case 'string': return z.string()
-      case 'number': return z.number()
-      case 'integer': return z.number().int()
-      case 'boolean': return z.boolean()
-      default:
-          throw new Error('not implemented: ' + (schema as { type: string }).type)
-    }
-  }
-}
-
-const objectify = (obj: Record<string, string>, indentation: number): string => {
-  const entries = Object.entries(obj).map(([key, value]) => `${' '.repeat(indentation + 2)}${key}: ${value}`).join(',\n')
-  return `{\n${entries}\n${' '.repeat(indentation)}}`
-}
-
-const schemaToZodString = (schema: Schema, allSchemas: Record<string, Schema>, indentation=0): string => {
-  if('$ref' in schema) { // TODO: maybe this should not resolve dependencies but rather access already generated schema strings
-    return schemaToZodString(resolveRef(schema['$ref'], allSchemas), allSchemas, indentation)
-  } else {
-    switch(schema.type) {
-      case 'object':
-        const constructedObject = Object.fromEntries(
-          Object.entries(schema.properties).map(([key, value]) => {
-            if ((schema.required || []).includes(key)) {
-              return [key, schemaToZodString(value, allSchemas, indentation + 2)]
-            } else {
-              return [key, `${schemaToZodString(value, allSchemas, indentation + 2)}.optional()`]
-            }
-          })
-        )
-        return `z.object(${objectify(constructedObject, indentation)})`
-      case 'array': return `z.array(${schemaToZodString(schema.items, allSchemas)})`
-      case 'string': return `z.string()`
-      case 'number': return `z.number()`
-      case 'integer': return `z.number().int()`
-      case 'boolean': return `z.boolean()`
-      default:
-          throw new Error('not implemented: ' + (schema as { type: string }).type)
-    }
-  }
-}
-
 const generateFunctionFromRouteMethod = (path: string, route: Route['methods'][number], definitions: Record<string, Schema>): string => {
   const fnName = route.summary
   const method = route.method
@@ -120,38 +48,21 @@ const generateFunctionFromRouteMethod = (path: string, route: Route['methods'][n
   return `const ${fnName} = (${argsAsString}) => {\n  return api\n    .${method}('${path}'${possibleRequestBody})\n    .mock(${mock})\n    .${textOrJson}(${zodSchema})\n}`
 }
 
+const modelTypes: KeyInfo[] = Object.keys(openapi.definitions)
+  .filter(key => key.startsWith('models.'))
+  .map(calculateKeyInfo('models', 'model', 'Model'))
+
+const routeTypes: KeyInfo[] = Object.keys(openapi.definitions)
+  .filter(key => key.startsWith('routes.'))
+  .map(calculateKeyInfo('routes', 'route', 'Route'))
+
 const definitions = openapi.definitions as Record<string, Schema>
 
-const modelTypes = Object.keys(openapi.definitions).filter(key => key.startsWith('models.')).map(key => key.split('.')[1]) // TODO: do uppercase / lowercase / prefixing n shit here instead
-const routeTypes =  Object.keys(openapi.definitions).filter(key => key.startsWith('routes.')).map(key => key.split('.')[1])
+// this generates the type and schema definitions for both routes and models
+const modelTypesAndSchemas = modelTypes.map(fullKey => keyInfoToSchemaAndType(definitions, fullKey)).join('\n\n')
+const routeTypesAndSchemas = routeTypes.map(fullKey => keyInfoToSchemaAndType(definitions, fullKey)).join('\n\n')
 
-console.log(modelTypes.map(key => {
-  const schema = definitions[`models.${key}`]
-  const zodSchema = schemaToZodString(schema, definitions)
-
-  const schemaDefinition = `export const model${key.toLowerCase()} = ${zodSchema}`
-  const typeDefinition = `export type Model${key} = z.infer<typeof model${key.toLowerCase()}>`
-
-  return `${schemaDefinition}\n${typeDefinition}`
-}).join('\n\n'))
-
-console.log(routeTypes.map(key => {
-  const schema = definitions[`routes.${key}`]
-  const zodSchema = schemaToZodString(schema, definitions)
-
-  const schemaDefinition = `export const route${key.toLowerCase()} = ${zodSchema}`
-  const typeDefinition = `export type Route${key} = z.infer<typeof route${key.toLowerCase()}>`
-
-  return `${schemaDefinition}\n${typeDefinition}`
-}).join('\n\n'))
-
-// Object.entries(definitions).forEach(([key, definition]) => {
-//   const schema = schemaToZodString(definition, definitions)
-//   console.log('\n--- ' + key + ' ---')
-//   console.log(schema)
-//   console.log('')
-// })
-
+// turns the awkward openapi format into a more usable one
 const sensibleRoute = (path: string, unsensibleRoute: typeof openapi['paths'][keyof typeof openapi['paths']]): Route => ({
   path,
   methods: Object.entries(unsensibleRoute).map(([method, value]) => ({
@@ -167,4 +78,7 @@ const sensibleRoute = (path: string, unsensibleRoute: typeof openapi['paths'][ke
 
 const route = sensibleRoute('/version', openapi.paths['/version'])
 
-// console.log(generateFunctionFromRouteMethod('/version', route.methods[0], definitions))
+// console.log(modelTypesAndSchemas)
+// console.log(routeTypesAndSchemas)
+
+console.log(generateFunctionFromRouteMethod('/version', route.methods[0], definitions))

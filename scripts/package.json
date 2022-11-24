@@ -2,20 +2,23 @@
   "name": "scripts",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/openapi.cjs",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm ./openapi.ts"
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "run": "node dist/openapi.cjs",
+    "start": "tsup && node dist/openapi.cjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ts-node": "^10.9.1",
     "zod": "^3.19.1"
   },
   "devDependencies": {
     "@types/node": "18.7.23",
+    "tsup": "^6.5.0",
     "typescript": "^4.8.4"
   }
 }

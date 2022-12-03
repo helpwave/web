@@ -14,28 +14,28 @@ export const Navbar = () => {
             id="example-navbar-danger"
           >
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
-              <li className="nav-item">
+              <li className="hover:underline nav-item">
                 <a className="px-3 py-2 flex items-center text-xs font-bold leading-snug text-white hover:opacity-75" href="#">
                   <span className="ml-2">
                     Roadmap
                   </span>
                 </a>
               </li>
-              <li className="nav-item">
+              <li className="hover:underline nav-item">
                 <a className="px-3 py-2 flex items-center text-xs font-bold leading-snug text-white hover:opacity-75" href="#">
                   <span className="ml-2">
                     Team
                   </span>
                 </a>
               </li>
-              <li className="nav-item">
+              <li className="hover:underline nav-item">
                 <a className="px-3 py-2 flex items-center text-xs font-bold leading-snug text-white hover:opacity-75" href="#">
                   <span className="ml-2">
                     About
                   </span>
                 </a>
               </li>
-              <li className="nav-item">
+              <li className="hover:underline nav-item">
                 <a className="px-3 py-2 flex items-center text-xs font-bold leading-snug text-white hover:opacity-75" href="#">
                   <span className="ml-2">
                     Contact us

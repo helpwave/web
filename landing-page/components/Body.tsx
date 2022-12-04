@@ -2,7 +2,14 @@
 export const Body = () => {
   return (
     <div id="indicators-carousel" className="relative" data-carousel="static">
-      <div className="relative h-56 overflow-hidden rounded-lg md:h-96"></div>
+        <div className="flex h-96" data-carousel-item="active">
+          <span className="m-auto text-white w-1/3">
+            <h4 className="font-medium leading-tight text-4xl mt-0 mb-2">
+              Helpwave
+            </h4>
+            At helpwave, we don't see information technology as an old marriage that has fallen asleep, but as a newly & rekindled hot affair.
+          </span>
+      </div>
       <div className="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
         <button type="button" className="bg-white w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
         <button type="button" className="bg-secondary w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>

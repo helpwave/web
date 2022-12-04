@@ -13,8 +13,87 @@ export const Footer = () => {
         <img src="https://www.warendorf.de/fileadmin/templates/gfx/logo.svg"
              className="ml-5 h-8" alt="warendorf Logo" />
       </div>
-      <div className="sm:flex">
-        <span className="mt-14 underline">Our Team</span>
+      <div className="mt-14">
+        <span className="underline">Our Team</span>
+        <div className="container mx-auto mt-5">
+          <div className="grid grid-cols-4 content-center gap-5">
+            <div className="bg-gray-300 rounded-3xl w-fit">
+              <div className="flex m-3">
+                <img className="rounded-full h-12" src="https://avatars.githubusercontent.com/u/54689374?v=4"/>
+                <div className="ml-3">
+                 <span className="text-base ml-1 mt-2">
+                   Florian
+                 </span>
+                  <div className="text-xs ml-1 text-secondary">
+                    <span>
+                      Frontend developer
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-300 rounded-3xl w-fit">
+              <div className="flex m-3">
+                <img className="rounded-full h-12" src="https://avatars.githubusercontent.com/u/40192999?v=4"/>
+                <div className="ml-3">
+                 <span className="text-base ml-1 mt-2">
+                   Max
+                 </span>
+                  <div className="text-xs ml-1 text-secondary">
+                    <span>
+                      Project Management
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-300 rounded-3xl w-fit">
+              <div className="flex m-3">
+                <img className="rounded-full h-12" src="https://avatars.githubusercontent.com/u/26925347?v=4"/>
+                <div className="ml-3">
+                 <span className="text-base ml-1 mt-2">
+                   Nico
+                 </span>
+                  <div className="text-xs ml-1 text-secondary">
+                    <span>
+                      Server administrator
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-300 rounded-3xl w-fit">
+              <div className="flex m-3">
+                <img className="rounded-full h-12" src="https://avatars.githubusercontent.com/u/16372321?v=4"/>
+                <div className="ml-3">
+                 <span className="text-base ml-1 mt-2">
+                   Jannik
+                 </span>
+                  <div className="text-xs ml-1 text-secondary">
+                    <span>
+                      Frontend developer
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-300 rounded-3xl w-fit">
+              <div className="flex m-3">
+                <img className="rounded-full h-12" src="https://avatars.githubusercontent.com/u/57251443?v=4"/>
+                <div className="ml-3">
+                 <span className="text-base ml-1 mt-2">
+                   Christian
+                 </span>
+                  <div className="text-xs ml-1 text-secondary">
+                    <span>
+                      Project Management
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   )

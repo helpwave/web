@@ -16,7 +16,7 @@ export const Footer = () => {
       <div className="mt-14">
         <span className="underline">Our Team</span>
         <div className="container mx-auto mt-5">
-          <div className="grid grid-cols-4 content-center gap-5 md:visible">
+          <div className="grid grid-cols-1 md:grid-cols-4 content-center gap-4">
             <div className="bg-gray-300 rounded-3xl">
               <div className="flex m-3">
                 <img className="rounded-full h-12" src="https://avatars.githubusercontent.com/u/54689374?v=4"/>
@@ -56,7 +56,7 @@ export const Footer = () => {
                  </span>
                   <div className="text-xs ml-1 text-secondary">
                     <span>
-                      Server Administrator
+                      Server Engineer
                     </span>
                   </div>
                 </div>

@@ -5,7 +5,7 @@ export const Navbar = () => {
   return (
     <>
       <nav className="bg-primary relative flex flex-wrap items-center justify-between px-2 py-3 mb-3">
-        <a href="#" className="flex items-center">
+        <a href="/" className="flex items-center">
           <img src="https://raw.githubusercontent.com/Just-another-Muensterhack/helpwave-static/main/banner.svg" className="h-6 mr-3 sm:h-9" alt="Flowbite Logo"/>
         </a>
         <button data-collapse-toggle="navbar-default" type="button"
@@ -43,7 +43,7 @@ export const Navbar = () => {
               </a>
             </li>
             <li className="hover:underline nav-item">
-              <a className="px-3 py-2 flex items-center text-xs font-bold leading-snug text-white hover:opacity-75" href="#">
+              <a className="px-3 py-2 flex items-center text-xs font-bold leading-snug text-white hover:opacity-75" href="/contact">
                   <span className="ml-2">
                     Contact us
                   </span>

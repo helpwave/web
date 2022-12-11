@@ -1,20 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.bg-primary{
-  background: #281C20;
-}
-
-.bg-secondary{
-  background: #5D4D80;
-}
-
-.text-secondary{
-  color: #5D4D80;
-}
-
-
-.bg-team{
-  background: #DDDDDD;
-}

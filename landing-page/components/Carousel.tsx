@@ -1,6 +1,6 @@
 export const Carousel = () => {
   return (
-    <div id="carouselExampleCrossfade" className="carousel slide carousel-fade relative" data-bs-ride="carousel">
+    <div className="carousel slide carousel-fade relative" data-bs-ride="carousel">
       <div className="carousel-inner relative w-full overflow-hidden">
         <div className="carousel-item  float-left w-full">
           <div className="flex h-96" data-carousel-item="active">

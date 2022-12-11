@@ -14,14 +14,14 @@ export const Footer = () => {
         <span className="underline">Our Team</span>
         <div className="container mx-auto mt-5">
           <div className="grid grid-cols-1 md:grid-cols-4 content-center gap-4">
-            <div className="bg-gray-300 rounded-3xl">
+            <div className="bg-team bg-gray-300 rounded-3xl">
               <div className="flex m-3">
                 <img className="rounded-full h-12" src="https://avatars.githubusercontent.com/u/54689374?v=4"/>
                 <div className="ml-3">
                  <span className="text-base ml-1 mt-2">
                    Florian
                  </span>
-                  <div className="text-xs ml-1 text-secondary">
+                  <div className="text-xs ml-1  text-secondary">
                     <span>
                       Frontend Developer
                     </span>

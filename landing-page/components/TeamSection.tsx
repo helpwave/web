@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react'
+import GridBox from './GridBox'
 
 const roles = ['Frontend Developer', 'Backend Developer', 'Backend Engineer', 'Product Owner', 'Product Manager', 'Customer Relations', 'DevOps']
 
@@ -27,19 +27,6 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
     {role === 'Customer Relations' && <div className="font-medium text-xl text-[#AD5461]">{role}</div>}
     {role === 'Backend Developer' && <div className="font-medium text-xl text-[#AD5461]">{role}</div>}
     {role === 'DevOps' && <div className="font-medium text-xl text-[#FF9933]">{role}</div>}
-  </div>
-)
-
-const GridBox = ({ children, heading }: PropsWithChildren<{ heading?: ReactNode }>) => (
-  <div className="relative w-fit p-14">
-    {heading && (
-      <div className="absolute inset-x-14 inset-y-0 z-1">{heading}</div>
-    )}
-    <div className="absolute inset-x-0  inset-y-14 border-t-2 border-b-2 border-dashed border-[#8E75CE] z-0 pointer-events-none"></div>
-    <div className="absolute inset-x-14 inset-y-0  border-l-2 border-r-2 border-dashed border-[#8E75CE] z-0 pointer-events-none"></div>
-    <div className="relative border-2 rounded-[32px] border-[#4F3879] p-9 z-1">
-      {children}
-    </div>
   </div>
 )
 

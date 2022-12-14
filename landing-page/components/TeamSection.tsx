@@ -6,12 +6,12 @@ type Role = typeof roles[number]
 
 const teamMembers = [
   { name: 'Felix', role: 'Frontend Developer' },
-  { name: 'Felix', role: 'Product Manager' },
+  { name: 'Felix', role: 'Project Manager' },
   { name: 'Max', role: 'Backend Developer' },
   { name: 'Jonas', role: 'Product Owner' },
   { name: 'Jannik', role: 'Frontend Developer' },
   { name: 'Christian', role: 'Customer Relations' },
-  { name: 'Max', role: 'Backend Engineer' },
+  { name: 'Max', role: 'Project Manager' },
   { name: 'Florian', role: 'Backend Developer' },
   { name: 'Nico', role: 'DevOps' }
 ]
@@ -22,11 +22,10 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
       {name}
     </div>
     {role === 'Frontend Developer' && <div className="font-medium text-xl text-[#8E75CE]">{role}</div>}
-    {role === 'Product Manager' && <div className="font-medium text-xl text-[#7DED99]">{role}</div>}
+    {role === 'Project Manager' && <div className="font-medium text-xl text-[#7DED99]">{role}</div>}
     {role === 'Product Owner' && <div className="font-medium text-xl text-[#AD5461]">{role}</div>}
     {role === 'Customer Relations' && <div className="font-medium text-xl text-[#AD5461]">{role}</div>}
     {role === 'Backend Developer' && <div className="font-medium text-xl text-[#AD5461]">{role}</div>}
-    {role === 'Backend Engineer' && <div className="font-medium text-xl text-[#AD5461]">{role}</div>}
     {role === 'DevOps' && <div className="font-medium text-xl text-[#FF9933]">{role}</div>}
   </div>
 )

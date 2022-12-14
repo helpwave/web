@@ -4,7 +4,7 @@ const items = [
   { name: 'Team', link: '#team' },
   { name: 'Roadmap', link: '#roadmap' },
   { name: 'About', link: '#about' },
-  { name: 'Contact us', link: '#contact-us' },
+  { name: 'Contact us', link: 'mailto:contact@helpwave.de' },
 ]
 
 // TODO: colors

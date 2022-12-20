@@ -71,6 +71,69 @@ importers:
       tailwindcss: 3.1.8_postcss@8.4.16
       typescript: 4.8.4
 
+  landing-page:
+    specifiers:
+      '@radix-ui/react-checkbox': ^1.0.1
+      '@tailwindcss/forms': ^0.5.3
+      '@tailwindcss/typography': ^0.5.7
+      '@types/js-cookie': ^3.0.2
+      '@types/jsonwebtoken': ^8.5.9
+      '@types/node': 18.7.23
+      '@types/react': 18.0.21
+      '@types/react-dom': 18.0.6
+      '@typescript-eslint/eslint-plugin': ^5.38.1
+      '@typescript-eslint/parser': ^5.38.1
+      autoprefixer: ^10.4.12
+      classnames: ^2.3.2
+      eslint: 8.24.0
+      eslint-config-next: 12.3.1
+      eslint-config-standard: ^17.0.0
+      eslint-plugin-import: ^2.26.0
+      eslint-plugin-n: ^15.3.0
+      eslint-plugin-promise: ^6.0.1
+      eslint-plugin-react: ^7.31.8
+      eslint-plugin-react-hooks: ^4.6.0
+      js-cookie: ^3.0.1
+      jsonwebtoken: ^8.5.1
+      next: 12.3.1
+      postcss: ^8.4.16
+      react: 18.2.0
+      react-dom: 18.2.0
+      tailwindcss: ^3.1.8
+      typescript: 4.8.4
+      zod: ^3.19.1
+    dependencies:
+      '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      classnames: 2.3.2
+      js-cookie: 3.0.1
+      jsonwebtoken: 8.5.1
+      next: 12.3.1_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      zod: 3.19.1
+    devDependencies:
+      '@tailwindcss/forms': 0.5.3_tailwindcss@3.1.8
+      '@tailwindcss/typography': 0.5.7_tailwindcss@3.1.8
+      '@types/js-cookie': 3.0.2
+      '@types/jsonwebtoken': 8.5.9
+      '@types/node': 18.7.23
+      '@types/react': 18.0.21
+      '@types/react-dom': 18.0.6
+      '@typescript-eslint/eslint-plugin': 5.38.1_c7qepppml3d4ahu5cnfwqe6ltq
+      '@typescript-eslint/parser': 5.38.1_ypn2ylkkyfa5i233caldtndbqa
+      autoprefixer: 10.4.12_postcss@8.4.16
+      eslint: 8.24.0
+      eslint-config-next: 12.3.1_ypn2ylkkyfa5i233caldtndbqa
+      eslint-config-standard: 17.0.0_4ybqc3giaxsbo5btq74wfmkary
+      eslint-plugin-import: 2.26.0_gofx6msuqd4luqedfouzks2s4u
+      eslint-plugin-n: 15.3.0_eslint@8.24.0
+      eslint-plugin-promise: 6.0.1_eslint@8.24.0
+      eslint-plugin-react: 7.31.8_eslint@8.24.0
+      eslint-plugin-react-hooks: 4.6.0_eslint@8.24.0
+      postcss: 8.4.16
+      tailwindcss: 3.1.8_postcss@8.4.16
+      typescript: 4.8.4
+
 packages:
 
   /@babel/runtime-corejs3/7.19.1:

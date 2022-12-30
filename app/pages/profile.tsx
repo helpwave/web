@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { PropsWithChildren } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import cx from 'classnames'
@@ -10,6 +11,13 @@ import { Button } from '../components/Button'
 import { Input, noop } from '../components/Input'
 import { ProfilePicture } from '../components/ProfilePicture'
 import { UserCard } from '../components/UserCard'
+
+const Section = ({ title, children }: PropsWithChildren<{ title: string }>) => (
+  <div className="flex">
+    <div className="w-48 p-4 text-right">{title}</div>
+    <div className="w-72 p-4 space-y-6">{children}</div>
+  </div>
+)
 
 const ProfilePage: NextPage = () => {
   const router = useRouter()
@@ -26,6 +34,14 @@ const ProfilePage: NextPage = () => {
       setAvatarUrl(user.avatarUrl)
     }
   }, [user])
+
+  const discard = () => {
+    if (user) {
+      setFullName(user.fullName)
+      setDisplayName(user.displayName)
+      setAvatarUrl(user.avatarUrl)
+    }
+  }
 
   const save = () => {
     console.log('saving the following changes', {
@@ -44,66 +60,60 @@ const ProfilePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header title="helpwave" navigation={[
-        { text: 'Dashboard', href: '/' },
-        { text: 'Contact', href: '/contact' },
-      ]} actions={[
-        <UserMenu key="user-menu" user={user} />
-      ]} />
+      <Header
+        title="helpwave"
+        navigation={[
+          { text: 'Dashboard', href: '/' },
+          { text: 'Contact', href: '/contact' },
+        ]}
+        actions={[<UserMenu key="user-menu" user={user} />]}
+      />
 
       <div className="p-4 w-full h-full">
         <h1 className="text-xl text-slate-700 font-medium pb-2">Profile</h1>
 
-        <span>This is how you appear to others</span>
-
-        <div className="p-2">
+        <Section title="This is how you appear to others">
           <UserCard user={{ ...user, fullName, displayName, avatarUrl }} />
-        </div>
+        </Section>
 
-        <br />
+        <hr />
 
-        <div>
-          <span>Update your avatar</span>
-
-          <div className="w-64 p-4">
-
+        <Section title="Update your avatar">
           <ProfilePicture avatarUrl={avatarUrl} altText="profile picture" size="large" />
           {/* For now this is just a text input for a url, this should become some kind of file chooser in the future */}
           <Input id="profile:avatar-url" label="Avatar URL" value={avatarUrl} onChange={setAvatarUrl} />
-        </div>
-        </div>
+        </Section>
 
-        <br />
+        <hr />
 
-        <div>
-          <span>Update your full name and display name</span>
-
-          <div className="w-64 p-4">
-            <Input id="profile:fullname" label="Full name" value={fullName} onChange={setFullName} />
-            <br />
+        <Section title="Update your display name and full name">
             <Input id="profile:displayname" label="Display name" value={displayName} onChange={setDisplayName} />
-            <br />
+            <Input id="profile:fullname" label="Full name" value={fullName} onChange={setFullName} />
             <Input id="profile:email" label="Email" value={user.email} onChange={noop} disabled />
-          </div>
 
-        </div>
+            <div className="flex justify-end gap-2">
 
-        <Button variant="primary" onClick={save}>Save</Button>
+              <Button color="negative" variant="tertiary" onClick={discard}>
+                Discard changes
+              </Button>
 
-        <br />
-        <br />
+              <Button color="accent" variant="primary" onClick={save}>
+                Save
+              </Button>
 
-        <div>
-          <span>You are part of the following organizations</span>
+            </div>
+        </Section>
 
-          <div className="w-80 p-4">
-            {user.organizations.map(organization => (
-              <div key={organization.id} className="flex items-center gap-2">
-                {organization.shortName} ({organization.longName})
-              </div>
-            ))}
-          </div>
-        </div>
+        <hr />
+
+        <Section title="Your organizations">
+          {user.organizations.map((organization) => (
+            <div key={organization.id} className="flex items-center gap-2">
+              {organization.shortName} ({organization.longName})
+            </div>
+          ))}
+        </Section>
+
       </div>
     </div>
   )

@@ -124,7 +124,7 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
               </div>
 
               <div className="w-80">
-              <Button variant="primary" size="large" onClick={handleLogin} type="submit">
+              <Button color="accent" variant="primary" size="large" onClick={handleLogin} type="submit">
                 {translation.signIn}
               </Button>
               </div>

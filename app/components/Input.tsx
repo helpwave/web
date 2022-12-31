@@ -16,7 +16,7 @@ type InputProps = {
   type?: HTMLInputTypeAttribute,
   /**
    * Callback for when the input's value changes
-   * This is pretty much required but made optinal for the rare cases where it actually isn't need such as when used with disabled
+   * This is pretty much required but made optional for the rare cases where it actually isn't need such as when used with disabled
    * That could be enforced through a union type but that seems a bit overkill
    * @default noop
    */

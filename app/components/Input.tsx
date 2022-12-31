@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 
+const noop = () => { /* noop */ }
+
 type InputProps = {
   /**
    * used for the label's `for` attribute
@@ -12,10 +14,16 @@ type InputProps = {
    * @default 'text'
    */
   type?: HTMLInputTypeAttribute,
-  onChange: (text: string) => void
+  /**
+   * Callback for when the input's value changes
+   * This is pretty much required but made optional for the rare cases where it actually isn't need such as when used with disabled
+   * That could be enforced through a union type but that seems a bit overkill
+   * @default noop
+   */
+  onChange?: (text: string) => void
 } & Omit<InputHTMLAttributes<Element>, 'id' | 'value' | 'label' | 'type' | 'onChange'>
 
-const ControlledInput = ({ id, type = 'text', value, label, onChange, ...restProps }: InputProps) => {
+const ControlledInput = ({ id, type = 'text', value, label, onChange = noop, ...restProps }: InputProps) => {
   return (
     <div className="w-full">
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">{label}</label>
@@ -38,7 +46,7 @@ type UncontrolledInputProps = Omit<InputProps, 'value'> & {
   defaultValue?: string
 }
 
-const UncontrolledInput = ({ defaultValue = '', onChange, ...props }: UncontrolledInputProps) => {
+const UncontrolledInput = ({ defaultValue = '', onChange = noop, ...props }: UncontrolledInputProps) => {
   const [value, setValue] = useState(defaultValue)
 
   const handleChange = (text: string) => {
@@ -57,5 +65,6 @@ const UncontrolledInput = ({ defaultValue = '', onChange, ...props }: Uncontroll
 
 export {
   UncontrolledInput,
-  ControlledInput as Input
+  ControlledInput as Input,
+  noop
 }

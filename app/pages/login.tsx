@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 import { loginWithCredentials } from '../utils/login'
 import { Input } from '../components/Input'
 import { Checkbox } from '../components/Checkbox'
+import { Button } from '../components/Button'
 import { Language } from '../hooks/useLanguage'
 import { withTranslation } from '../hocs/withTranslation'
 import type { Translations, PropsWithTranslation } from '../hocs/withTranslation'
@@ -98,10 +99,8 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">{translation.signInHeader}</h2>
             <p className="mt-4 text-center text-sm text-gray-600">
                 {translation.contactSubheader.or}
-                <Link href="/contact" passHref>
-                  <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                    {translation.contactSubheader.contactUs}
-                  </a>
+                <Link href="/contact" passHref className="font-medium text-indigo-600 hover:text-indigo-500">
+                  {translation.contactSubheader.contactUs}
                 </Link>
                 {translation.contactSubheader.getAccess}
               </p>
@@ -118,16 +117,16 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
               <div className="flex items-center justify-between w-80">
                 <Checkbox id="login:remember-me" label={translation.stayLoggedIn} onChange={setRememberMe} checked={rememberMe} />
                 <div className="text-sm">
-                  <Link href="/forgot-password" passHref>
-                    <a className="font-medium text-indigo-600 hover:text-indigo-500">{translation.forgotPassword}</a>
+                  <Link href="/forgot-password" passHref className="font-medium text-indigo-600 hover:text-indigo-500">
+                    {translation.forgotPassword}
                   </Link>
                 </div>
               </div>
 
               <div className="w-80">
-                <button onClick={handleLogin} type="submit" className="bg-indigo-500 py-2 px-4 text-sm font-medium text-white rounded-md w-full hover:bg-indigo-600 focus:outline-none focus:ring-indigo-500 focus:ring-2 focus:ring-offset-2">
-                  {translation.signIn}
-                </button>
+              <Button color="accent" variant="primary" size="large" onClick={handleLogin} type="submit">
+                {translation.signIn}
+              </Button>
               </div>
             </div>
           </form>

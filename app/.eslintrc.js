@@ -14,6 +14,10 @@ module.exports = {
     'space-before-function-paren': 'off',
     // the behaviour of ternary operators is often more clear than using '||', '&&' or '??'
     'no-unneeded-ternary': 'off',
+    // This rule has a small problem: when using jsx it is pretty common to wrap the (true / false) expressions in parentheses and have the "?" or ":" on the same line.
+    // This isn't allowed with this rule as it would require an additional newline for "?" and ":".
+    // As the rule doesn't really enforce anything useful (a lot of bad styles are still allowed, but some good ones as well; no real way to filter further) disabling it doesn't hurt.
+    'multiline-ternary': 'off',
     'no-use-before-define': 'off',
     'quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
     // this rule is utter trash
@@ -65,7 +69,7 @@ module.exports = {
       condition: 'parens-new-line',
       logical: 'parens-new-line',
       prop: 'parens-new-line'
-    }]
+    }],
   },
   settings: {
     react: {

@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import { tw } from '@twind/core'
 import { Header } from '../components/Header'
 
 const ContactPage: NextPage = () => {
@@ -12,7 +13,7 @@ const ContactPage: NextPage = () => {
           { text: 'Contact', href: '/contact' }
         ]}
         actions={[
-          <div key="0" className="w-40" />
+          <div key="0" className={tw('w-40')} />
         ]}
       />
       not sure how this is going to look, just a placeholder right now

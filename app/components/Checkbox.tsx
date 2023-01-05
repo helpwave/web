@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
-import cx from 'classnames'
+import { tw, tx } from '@twind/core'
 
 import CheckIcon from '../icons/Check'
 
@@ -20,13 +20,13 @@ type CheckboxProps = {
 
 const ControlledCheckbox = ({ id, label, checked, disabled, onChange }: CheckboxProps) => {
   return (
-    <div className="flex justify-center items-center space-x-2">
+    <div className={tw('flex justify-center items-center space-x-2')}>
       <CheckboxPrimitive.Root
         onCheckedChange={onChange}
         checked={checked}
         disabled={disabled}
         id={id}
-        className={cx('w-4 h-4 flex items-center mx-[1px] border border-gray-300 rounded focus:outline-none focus:border-indigo-500 focus:border-2 focus:w-[18px] focus:h-[18px] focus:mx-0', {
+        className={tx('w-4 h-4 flex items-center mx-[1px] border border-gray-300 rounded focus:outline-none focus:border-indigo-500 focus:border-2 focus:w-[18px] focus:h-[18px] focus:mx-0', {
           'text-gray-400': disabled,
           'bg-indigo-600 text-white': checked,
           'bg-white text-indigo-600': !checked
@@ -36,7 +36,7 @@ const ControlledCheckbox = ({ id, label, checked, disabled, onChange }: Checkbox
           <CheckIcon width={14} height={14} />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
-      <label className="text-sm font-medium" htmlFor={id}>{label}</label>
+      <label className={tw('text-sm font-medium')} htmlFor={id}>{label}</label>
     </div>
   )
 }

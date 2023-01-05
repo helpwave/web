@@ -1,6 +1,6 @@
 import React from 'react'
 import type { PropsWithChildren, ButtonHTMLAttributes } from 'react'
-import cx from 'classnames'
+import { tx } from '@twind/core'
 
 // TODO: add more variants
 // TODO: this could be matched to some kind of tailwind/twind custom colors
@@ -47,7 +47,7 @@ const Button = ({
   <button
     onClick={disabled ? undefined : onClick}
     disabled={disabled}
-    className={cx('py-2 px-4 text-sm font-medium focus:outline-none', className, {
+    className={tx('py-2 px-4 text-sm font-medium focus:outline-none', className, {
 
       // primary & {accent, accent-secondary, positive, negative, neutral}
       'text-white bg-indigo-500 hover:bg-indigo-600 focus:ring-indigo-500': variant === 'primary' && color === 'accent',

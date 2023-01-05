@@ -1,4 +1,5 @@
 import type { FunctionComponent } from 'react'
+import { tw } from '@twind/core'
 import type { PropsWithTranslation, Translations } from '../hocs/withTranslation'
 import { withTranslation } from '../hocs/withTranslation'
 import { Language, useLanguage } from '../hooks/useLanguage'
@@ -17,7 +18,7 @@ const LanguageSwitcher: FunctionComponent<PropsWithTranslation<LanguageSwitcherT
   }
 
   return (
-    <button className="border-2 m-2 p-1 border-gray-800 text-gray-800 w-44" onClick={onClick}>{translation.toggleLanguage}</button>
+    <button className={tw('border-2 m-2 p-1 border-gray-800 text-gray-800 w-44')} onClick={onClick}>{translation.toggleLanguage}</button>
   )
 }
 

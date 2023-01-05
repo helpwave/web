@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
+import { tw } from '@twind/core'
 
 const noop = () => { /* noop */ }
 
@@ -25,13 +26,13 @@ type InputProps = {
 
 const ControlledInput = ({ id, type = 'text', value, label, onChange = noop, ...restProps }: InputProps) => {
   return (
-    <div className="w-full">
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">{label}</label>
+    <div className={tw('w-full')}>
+      <label htmlFor={id} className={tw('block text-sm font-medium text-gray-700')}>{label}</label>
       <input
         value={value}
         id={id}
         type={type}
-        className="mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500"
+        className={tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500')}
         onChange={e => onChange(e.target.value)}
         {...restProps}
       />

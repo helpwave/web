@@ -4,6 +4,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
+import { tw } from '@twind/core'
 import { loginWithCredentials } from '../utils/login'
 import { Input } from '../components/Input'
 import { Checkbox } from '../components/Checkbox'
@@ -92,38 +93,38 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex items-center justify-center py-12 px-4">
-        <div className="w-full max-w-md space-y-8">
+      <div className={tw('flex items-center justify-center py-12 px-4')}>
+        <div className={tw('w-full max-w-md space-y-8')}>
           <div>
-            <HelpwaveLogo className="mx-auto h-12 w-auto" />
-            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">{translation.signInHeader}</h2>
-            <p className="mt-4 text-center text-sm text-gray-600">
+            <HelpwaveLogo className={tw('mx-auto h-12 w-auto')} />
+            <h2 className={tw('mt-6 text-center text-3xl font-bold tracking-tight text-gray-900')}>{translation.signInHeader}</h2>
+            <p className={tw('mt-4 text-center text-sm text-gray-600')}>
                 {translation.contactSubheader.or}
-                <Link href="/contact" passHref className="font-medium text-indigo-600 hover:text-indigo-500">
+                <Link href="/contact" passHref className={tw('font-medium text-indigo-600 hover:text-indigo-500')}>
                   {translation.contactSubheader.contactUs}
                 </Link>
                 {translation.contactSubheader.getAccess}
               </p>
             </div>
           <form onSubmit={e => e.preventDefault()}>
-            <div className="flex flex-col mt-8 space-y-4 items-center">
-              <div className="w-80">
+            <div className={tw('flex flex-col mt-8 space-y-4 items-center')}>
+              <div className={tw('w-80')}>
                 <Input id="login:username" required autoComplete="username" placeholder={translation.username} label={translation.username} value={username} onChange={setUsername} />
               </div>
-              <div className="w-80">
+              <div className={tw('w-80')}>
                 <Input id="login:password" required autoComplete="current-password" placeholder={translation.password} label={translation.password} value={password} onChange={setPassword} />
               </div>
 
-              <div className="flex items-center justify-between w-80">
+              <div className={tw('flex items-center justify-between w-80')}>
                 <Checkbox id="login:remember-me" label={translation.stayLoggedIn} onChange={setRememberMe} checked={rememberMe} />
-                <div className="text-sm">
-                  <Link href="/forgot-password" passHref className="font-medium text-indigo-600 hover:text-indigo-500">
+                <div className={tw('text-sm')}>
+                  <Link href="/forgot-password" passHref className={tw('font-medium text-indigo-600 hover:text-indigo-500')}>
                     {translation.forgotPassword}
                   </Link>
                 </div>
               </div>
 
-              <div className="w-80">
+              <div className={tw('w-80')}>
               <Button color="accent" variant="primary" size="large" onClick={handleLogin} type="submit">
                 {translation.signIn}
               </Button>

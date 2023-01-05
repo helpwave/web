@@ -1,7 +1,9 @@
-import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Inter, Space_Grotesk as SpaceGrotesk } from '@next/font/google'
+import { tw } from '@twind/core'
+import withNextApp from '../twind/next/app'
+import { config } from '../twind/config'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,11 +27,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}</style>
       </Head>
-      <div className="font-sans">
+      <div className={tw('font-sans')}>
         <Component {...pageProps} />
       </div>
     </>
   )
 }
 
-export default MyApp
+export default withNextApp(config, MyApp)

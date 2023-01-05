@@ -1,3 +1,5 @@
+import { tw } from '@twind/core'
+
 type CarouselProps = {
   items: {
     name: string,
@@ -7,8 +9,8 @@ type CarouselProps = {
 
 export const Carousel = ({ items } : CarouselProps) => {
   return (
-    <div className="rounded-lg w-[18px]">
-      <div className="flex flex-col space-y-[26px]">
+    <div className={tw('rounded-lg w-[18px]')}>
+      <div className={tw('flex flex-col space-y-[26px]')}>
       {items.map(({ name, link }) => (
         <div key={link}>{name}</div>
       ))}

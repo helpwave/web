@@ -1,6 +1,7 @@
 import { tw } from '@twind/core'
 import Header from './Header'
 import Helpwave from '../icons/Helpwave'
+import { Checkbox } from './Checkbox'
 
 const StartSection = () => {
   return (
@@ -23,6 +24,18 @@ const StartSection = () => {
           <span className={tw('text-hw-temp-red')}>{'rekindled'}</span>
           {' hot affair'}
         </div>
+
+        <div className={tw('p-4 flex gap-16')}>
+          <div className={tw('flex flex-col')}>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-1" label="Feature 1" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-2" label="Feature 2" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-3" label="Feature 3" /></div>
+          </div>
+          <div className={tw('flex flex-col')}>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-4" label="Feature 4" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-5" label="Feature 5" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-6" label="Feature 6" /></div>
+          </div>
         </div>
       </div>
     </div>

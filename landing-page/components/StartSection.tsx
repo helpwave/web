@@ -4,7 +4,7 @@ import Helpwave from './icons/Helpwave'
 
 const StartSection = () => {
   return (
-    <div className={tw('w-screen h-screen bg-primary text-white')}>
+    <div className={tw('w-screen h-screen bg-hw-find-a-good-name-for-this-background text-white')}>
       <div className={tw('py-8 px-16')}>
         <Header />
       </div>

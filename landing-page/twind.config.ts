@@ -40,6 +40,16 @@ export const config = defineConfig({
   theme: {
     extend: {
       colors: {
+        // TODO: custom helpwave (hw) colors go here
+        'hw-primary': {
+          300: '#8E75CE',
+          400: '#B275CE',
+          500: '#8070A9',
+          600: '#694BB4',
+          700: '#5D4D80',
+          800: '#4F3879'
+        },
+        'hw-find-a-good-name-for-this-background': '#281C20',
       },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],

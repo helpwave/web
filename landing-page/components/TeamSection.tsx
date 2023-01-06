@@ -37,7 +37,7 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
 
 const TeamSection = () => {
   return (
-    <div className={tw('w-screen h-screen bg-primary')}>
+    <div className={tw('w-screen h-screen bg-hw-find-a-good-name-for-this-background')}>
       <div className={tw('flex justify-end p-8')}>
         <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>Our Team</h1>}>
           <div className={tw('w-fit grid grid-cols-2 gap-16')}>

@@ -1,34 +1,37 @@
 import { tw } from '@twind/core'
 import GridBox from './GridBox'
 
-const roles = ['Frontend Developer', 'Backend Developer', 'Backend Engineer', 'Product Owner', 'Product Manager', 'Customer Relations', 'DevOps']
+const roles = { /* eslint-disable key-spacing, no-multi-spaces */
+  FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: '#8E75CE' },
+  BACKEND_DEVELOPER:  { id: 'BACKEND-DEVELOPER',  name: 'Backend Developer',  color: '#AD5461' },
+  PRODUCT_OWNER:      { id: 'PRODUCT_OWNER',      name: 'Product Owner',      color: '#AD5461' },
+  PRODUCT_MANAGER:    { id: 'PRODUCT_MANAGER',    name: 'Product Manager',    color: '#AD5461' },
+  CUSTOMER_RELATIONS: { id: 'CUSTOMER_RELATIONS', name: 'Customer Relations', color: '#AD5461' },
+  DEVOPS:             { id: 'DEVOPS',             name: 'DevOps',             color: '#FF9933' },
+} /* eslint-enable key-spacing, no-multi-spaces */
 
-type Role = typeof roles[number]
+type Role = keyof typeof roles
 
-const teamMembers = [
-  { name: 'Felix', role: 'Frontend Developer' },
-  { name: 'Felix', role: 'Project Manager' },
-  { name: 'Max', role: 'Backend Developer' },
-  { name: 'Jonas', role: 'Product Owner' },
-  { name: 'Jannik', role: 'Frontend Developer' },
-  { name: 'Christian', role: 'Customer Relations' },
-  { name: 'Max', role: 'Project Manager' },
-  { name: 'Florian', role: 'Backend Developer' },
-  { name: 'Nico', role: 'DevOps' }
-]
+const roleEnum = Object.fromEntries(Object.keys(roles).map((key) => [key, key])) as { [key in Role]: key }
 
-// TODO: fix this using twind
+const teamMembers = [ /* eslint-disable key-spacing, no-multi-spaces */
+  { name: 'Felix',     role: roleEnum.FRONTEND_DEVELOPER },
+  { name: 'Felix',     role: roleEnum.PRODUCT_MANAGER },
+  { name: 'Max',       role: roleEnum.BACKEND_DEVELOPER },
+  { name: 'Jonas',     role: roleEnum.PRODUCT_OWNER },
+  { name: 'Jannik',    role: roleEnum.FRONTEND_DEVELOPER },
+  { name: 'Christian', role: roleEnum.CUSTOMER_RELATIONS },
+  { name: 'Max',       role: roleEnum.PRODUCT_MANAGER },
+  { name: 'Florian',   role: roleEnum.BACKEND_DEVELOPER },
+  { name: 'Nico',      role: roleEnum.DEVOPS }
+] /* eslint-enable key-spacing, no-multi-spaces */
+
 const Person = ({ name, role }: { name: string, role: Role }) => (
   <div className={tw('w-48')}>
     <div className={tw('font-semibold text-4xl text-white')}>
       {name}
     </div>
-    {role === 'Frontend Developer' && <div className={tw('font-medium text-xl text-[#8E75CE]')}>{role}</div>}
-    {role === 'Project Manager'    && <div className={tw('font-medium text-xl text-[#7DED99]')}>{role}</div>}
-    {role === 'Product Owner'      && <div className={tw('font-medium text-xl text-[#AD5461]')}>{role}</div>}
-    {role === 'Customer Relations' && <div className={tw('font-medium text-xl text-[#AD5461]')}>{role}</div>}
-    {role === 'Backend Developer'  && <div className={tw('font-medium text-xl text-[#AD5461]')}>{role}</div>}
-    {role === 'DevOps'             && <div className={tw('font-medium text-xl text-[#FF9933]')}>{role}</div>}
+    <div className={tw(`font-medium text-xl text-[${roles[role].color}]`)}>{roles[role].name}</div>
   </div>
 )
 

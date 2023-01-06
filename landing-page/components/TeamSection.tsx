@@ -2,12 +2,12 @@ import { tw } from '@twind/core'
 import GridBox from './GridBox'
 
 const roles = { /* eslint-disable key-spacing, no-multi-spaces */
-  FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: '#8E75CE' },
-  BACKEND_DEVELOPER:  { id: 'BACKEND-DEVELOPER',  name: 'Backend Developer',  color: '#AD5461' },
-  PRODUCT_OWNER:      { id: 'PRODUCT_OWNER',      name: 'Product Owner',      color: '#AD5461' },
-  PRODUCT_MANAGER:    { id: 'PRODUCT_MANAGER',    name: 'Product Manager',    color: '#AD5461' },
-  CUSTOMER_RELATIONS: { id: 'CUSTOMER_RELATIONS', name: 'Customer Relations', color: '#AD5461' },
-  DEVOPS:             { id: 'DEVOPS',             name: 'DevOps',             color: '#FF9933' },
+  FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: 'hw-primary-300' },
+  BACKEND_DEVELOPER:  { id: 'BACKEND-DEVELOPER',  name: 'Backend Developer',  color: 'hw-temp-red'    },
+  PRODUCT_OWNER:      { id: 'PRODUCT_OWNER',      name: 'Product Owner',      color: 'hw-temp-green'  },
+  PRODUCT_MANAGER:    { id: 'PRODUCT_MANAGER',    name: 'Product Manager',    color: 'hw-temp-green'  },
+  CUSTOMER_RELATIONS: { id: 'CUSTOMER_RELATIONS', name: 'Customer Relations', color: 'hw-temp-green'  },
+  DEVOPS:             { id: 'DEVOPS',             name: 'DevOps',             color: 'hw-temp-orange' },
 } /* eslint-enable key-spacing, no-multi-spaces */
 
 type Role = keyof typeof roles
@@ -21,7 +21,7 @@ const teamMembers = [ /* eslint-disable key-spacing, no-multi-spaces */
   { name: 'Jonas',     role: roleEnum.PRODUCT_OWNER },
   { name: 'Jannik',    role: roleEnum.FRONTEND_DEVELOPER },
   { name: 'Christian', role: roleEnum.CUSTOMER_RELATIONS },
-  { name: 'Max',       role: roleEnum.PRODUCT_MANAGER },
+  { name: 'Max',       role: roleEnum.BACKEND_DEVELOPER },
   { name: 'Florian',   role: roleEnum.BACKEND_DEVELOPER },
   { name: 'Nico',      role: roleEnum.DEVOPS }
 ] /* eslint-enable key-spacing, no-multi-spaces */
@@ -31,7 +31,7 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
     <div className={tw('font-semibold text-4xl text-white')}>
       {name}
     </div>
-    <div className={tw(`font-medium text-xl text-[${roles[role].color}]`)}>{roles[role].name}</div>
+    <div className={tw(`font-medium text-xl text-${roles[role].color}`)}>{roles[role].name}</div>
   </div>
 )
 

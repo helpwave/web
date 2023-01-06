@@ -49,6 +49,9 @@ export const config = defineConfig({
           700: '#5D4D80',
           800: '#4F3879'
         },
+        'hw-temp-red': '#AD5461',
+        'hw-temp-green': '#7DED99',
+        'hw-temp-orange': '#FF9933',
         'hw-find-a-good-name-for-this-background': '#281C20',
       },
       fontFamily: {

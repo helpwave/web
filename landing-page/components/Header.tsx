@@ -8,7 +8,6 @@ const items = [
   { name: 'Contact us', link: '#contact' },
 ]
 
-// TODO: colors
 const Header = () => {
   return (
     <div className={tw('font-space text-xl py-2 px-4 flex justify-end')}>

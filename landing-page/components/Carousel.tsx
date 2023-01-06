@@ -16,19 +16,13 @@ const globalStyles = css`
   --background-hover-color: rgba(229, 229, 229, 0.12);
   --background-active-color: rgba(229, 229, 229, 0.10);
 
-  --text-color: rgba(255, 255, 255, 0.65);
-  --text-active-color: rgba(255, 255, 255, 0.9);
-
-  --dot-color: rgba(255, 255, 255, 0.1);
-  --dot-active-color: hsl(259, 25%, 40%);
-
   --duration: 300ms;
   --short-duration: 150ms;
 }
 
 .toc {
   @apply fixed opacity-0 text-sm leading-7 pointer-events-none;
-  top: 20vh;
+  top: 30vh;
   left: 0;
   z-index: 100;
   transition: opacity var(--short-duration) ease-in-out;
@@ -67,27 +61,24 @@ const globalStyles = css`
 }
 
 .toc-item {
-  @apply block relative outline-none no-underline;
+  @apply block relative text-white/60 outline-none no-underline;
   padding-left: 18px;
-  color: var(--text-color);
   transition: color var(--short-duration) ease-in-out;
 }
 
 .toc-item--selected {
-  @apply font-medium;
-  color: var(--text-active-color);
+  @apply font-medium text-white/90;
 }
 
 .toc-item::before {
-  @apply absolute left-0 top-1/2 w-1.5 h-1.5 rounded pointer-events-none;
+  @apply absolute left-0 top-1/2 w-1.5 h-1.5 bg-white/10 rounded pointer-events-none;
   content: "";
   margin-top: -3px;
-  background-color: var(--dot-color);
   transition: background-color var(--short-duration) ease-in-out;
 }
 
 .toc-item--selected::before {
-  background-color: var(--dot-active-color);
+  @apply bg-hw-primary-700;
 }
 
 .toc-item::after {

@@ -17,7 +17,12 @@ const StartSection = () => {
         <div className={tw('font-sans text-2xl font-medium mt-4')}>
           {"At helpwave, we don't see information technology"}<br />
           {'as an old marriage that has fallen asleep, but as'}<br />
-          {'a newly & rekindled hot affair'}
+          {'a '}
+          <span className={tw('text-hw-primary-400')}>{'newly'}</span>
+          {' & '}
+          <span className={tw('text-hw-temp-red')}>{'rekindled'}</span>
+          {' hot affair'}
+        </div>
         </div>
       </div>
     </div>

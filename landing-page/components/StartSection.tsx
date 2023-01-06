@@ -1,6 +1,6 @@
 import { tw } from '@twind/core'
 import Header from './Header'
-import Helpwave from './icons/Helpwave'
+import Helpwave from '../icons/Helpwave'
 
 const StartSection = () => {
   return (

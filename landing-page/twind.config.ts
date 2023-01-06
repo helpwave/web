@@ -40,10 +40,6 @@ export const config = defineConfig({
   theme: {
     extend: {
       colors: {
-        // TODO: custom helpwave colors go here
-        primary: '#281C20',
-        secondary: '#5D4D80',
-        team: '#DDDDDD'
       },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],
@@ -53,3 +49,5 @@ export const config = defineConfig({
   },
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms(), presetTypography()]
 }) as unknown as TwindConfig // TODO: twind is being very dumb right here, not my fault
+
+export default config

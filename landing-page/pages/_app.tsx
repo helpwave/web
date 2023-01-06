@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Inter, Space_Grotesk as SpaceGrotesk } from '@next/font/google'
 import { tw } from '@twind/core'
 import withNextApp from '../twind/next/app'
-import { config } from '../twind/config'
+import { config } from '../twind.config'
 
 const inter = Inter({
   subsets: ['latin'],

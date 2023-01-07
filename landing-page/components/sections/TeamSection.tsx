@@ -1,5 +1,6 @@
 import { tw } from '@twind/core'
-import GridBox from './GridBox'
+import GridBox from '../GridBox'
+import { Section } from '../Section'
 
 const roles = { /* eslint-disable key-spacing, no-multi-spaces */
   FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: 'hw-primary-300' },
@@ -37,15 +38,15 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
 
 const TeamSection = () => {
   return (
-    <div className={tw('w-screen h-screen bg-hw-find-a-good-name-for-this-background')}>
-      <div className={tw('flex justify-end p-8')}>
+    <Section id="team">
+      <div className={tw('flex justify-end')}>
         <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>Our Team</h1>}>
           <div className={tw('w-fit grid grid-cols-2 gap-16')}>
             {teamMembers.map(({ name, role }, index) => <Person key={index} name={name} role={role} />)}
           </div>
         </GridBox>
       </div>
-    </div>
+      </Section>
   )
 }
 

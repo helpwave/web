@@ -49,10 +49,15 @@ export const config = defineConfig({
           700: '#5D4D80',
           800: '#4F3879'
         },
+        // TODO: these are just temporary names, will have to find proper ones soon and add a bunch of shades for each one
         'hw-temp-red': '#AD5461',
         'hw-temp-green': '#7DED99',
         'hw-temp-orange': '#FF9933',
-        'hw-find-a-good-name-for-this-background': '#281C20',
+        'hw-temp-gray': {
+          a: '#1B1B1B',
+          b: '#25282B',
+          c: '#281C20'
+        }
       },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],

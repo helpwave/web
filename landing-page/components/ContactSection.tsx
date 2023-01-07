@@ -1,18 +1,17 @@
+import { tw } from '@twind/core'
 import GridBox from './GridBox'
 import ContactForm from './ContactForm'
-import { tw } from '@twind/core'
+import { Section } from './Section'
 
 const ContactSection = () => {
   return (
-    <div id="contact">
-      <div className={tw('w-screen h-screen bg-white')}>
-        <div className={tw('flex justify-center p-8')}>
+    <Section id="contact">
+        <div className={tw('flex justify-center')}>
           <GridBox heading={<h1 className={tw('text-5xl font-space font-bold pl-4 pb-4')}>Contact us</h1>}>
-            <ContactForm/>
+              <ContactForm/>
           </GridBox>
         </div>
-      </div>
-    </div>
+    </Section>
   )
 }
 

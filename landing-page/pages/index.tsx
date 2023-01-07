@@ -1,8 +1,10 @@
 import type { NextPage } from 'next'
-import StartSection from '../components/StartSection'
-import TeamSection from '../components/TeamSection'
-import RoadmapSection from '../components/RoadmapSection'
-import ContactSection from '../components/ContactSection'
+import StartSection from '../components/sections/StartSection'
+import TeamSection from '../components/sections/TeamSection'
+import RoadmapSection from '../components/sections/RoadmapSection'
+import ContactSection from '../components/sections/ContactSection'
+import PartnerSection from '../components/sections/CustomerSection'
+import FeaturesSection from '../components/sections/FeaturesSection'
 import { Carousel } from '../components/Carousel'
 
 const items = [
@@ -16,7 +18,9 @@ const Home: NextPage = () => {
   return (
       <>
         <StartSection />
+        <FeaturesSection />
         <TeamSection />
+        <PartnerSection />
         <RoadmapSection />
         <ContactSection />
         <Carousel items={items} activeLink="#team" />

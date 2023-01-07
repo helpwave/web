@@ -1,11 +1,11 @@
 import { tw } from '@twind/core'
-import Header from './Header'
-import Helpwave from '../icons/Helpwave'
-import { Checkbox } from './Checkbox'
+import Header from '../Header'
+import Helpwave from '../../icons/Helpwave'
+import { Checkbox } from '../Checkbox'
 
 const StartSection = () => {
   return (
-    <div className={tw('w-screen h-screen bg-hw-find-a-good-name-for-this-background text-white')}>
+    <div className={tw('w-screen h-screen bg-hw-temp-gray-c text-white')} id="start">
       <div className={tw('py-8 px-16')}>
         <Header />
       </div>

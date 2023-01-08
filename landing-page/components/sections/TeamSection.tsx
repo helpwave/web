@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import { tw } from '@twind/core'
 import GridBox from '../GridBox'
 import { Section } from '../Section'
@@ -36,9 +37,9 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
   </div>
 )
 
-const TeamSection = () => {
+const TeamSection = forwardRef<HTMLDivElement>(function TeamSection(_, ref) {
   return (
-    <Section id="team">
+    <Section ref={ref} id="team">
       <div className={tw('flex justify-end')}>
         <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>Our Team</h1>}>
           <div className={tw('w-fit grid grid-cols-2 gap-16')}>
@@ -48,6 +49,6 @@ const TeamSection = () => {
       </div>
       </Section>
   )
-}
+})
 
 export default TeamSection

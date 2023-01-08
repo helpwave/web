@@ -1,12 +1,13 @@
+import { forwardRef } from 'react'
 import { tw } from '@twind/core'
 import { TitleSection } from '../Section'
 
-const RoadmapSection = () => {
+const RoadmapSection = forwardRef<HTMLDivElement>(function RoadmapSection(_, ref) {
   return (
-    <TitleSection title="Roadmap" id="roadmap">
+    <TitleSection id="roadmap" ref={ref} title="Roadmap">
 
     </TitleSection>
   )
-}
+})
 
 export default RoadmapSection

@@ -1,12 +1,13 @@
+import { forwardRef } from 'react'
 import { tw } from '@twind/core'
-import { Section } from '../Section'
+import { TitleSection } from '../Section'
 
-const FeaturesSection = () => {
+const FeaturesSection = forwardRef<HTMLDivElement>(function FeaturesSection(_, ref) {
   return (
-    <Section id="features">
+    <TitleSection ref={ref} id="features" title="Solve real world problems">
 
-    </Section>
+    </TitleSection>
   )
-}
+})
 
 export default FeaturesSection

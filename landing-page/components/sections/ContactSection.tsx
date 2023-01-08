@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { tw } from '@twind/core'
 import { Input } from '../Input'
 import { TitleSection } from '../Section'
 
-const ContactSection = () => {
+const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref) {
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -21,8 +21,7 @@ const ContactSection = () => {
   }
 
   return (
-    <TitleSection title="Contact" id="contact">
-
+    <TitleSection id="contact" ref={ref} title="Contact">
         <form onSubmit={handleSubmit}>
           <span className={tw('block font-medium text-white')}>Your Information</span>
 
@@ -45,6 +44,6 @@ const ContactSection = () => {
         </form>
     </TitleSection>
   )
-}
+})
 
 export default ContactSection

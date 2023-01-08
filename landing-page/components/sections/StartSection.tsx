@@ -1,11 +1,12 @@
+import { forwardRef } from 'react'
 import { tw } from '@twind/core'
 import Header from '../Header'
 import Helpwave from '../../icons/Helpwave'
 import { Checkbox } from '../Checkbox'
 
-const StartSection = () => {
+const StartSection = forwardRef<HTMLDivElement>(function StartSection(_, ref) {
   return (
-    <div className={tw('w-screen h-screen bg-hw-temp-gray-c text-white')} id="start">
+    <div className={tw('w-screen h-screen bg-hw-temp-gray-c text-white')} id="start" ref={ref}>
       <div className={tw('py-8 px-16')}>
         <Header />
       </div>
@@ -40,6 +41,6 @@ const StartSection = () => {
       </div>
     </div>
   )
-}
+})
 
 export default StartSection

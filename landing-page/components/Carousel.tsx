@@ -5,7 +5,8 @@ type CarouselProps = {
     link: string,
     label: string
   }[],
-  activeLink: string
+  activeLink?: string,
+  hidden?: boolean
 }
 
 // TODO: generalize these variables and put them into the twind config
@@ -121,10 +122,10 @@ const cx = (maybeClassNames: Record<string, boolean>) =>
     .map(([className]) => className)
     .join(' ')
 
-export const Carousel = ({ items, activeLink } : CarouselProps) => {
+export const Carousel = ({ items, activeLink, hidden = false } : CarouselProps) => {
   return (
     <div className={tw(globalStyles)}>
-      <div className="toc toc--visible">
+      <div className={cx({ 'toc': true, 'toc--visible': !hidden })}>
         <div className="toc-bar"></div>
         <div className="toc-background"></div>
         <div className="toc-hitbox"></div>

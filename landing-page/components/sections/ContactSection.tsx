@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import { tw } from '@twind/core'
 import { Input } from '../Input'
 import { TitleSection } from '../Section'
+import Send from '../../icons/Send'
 
 const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref) {
   const [email, setEmail] = useState('')
@@ -40,7 +41,10 @@ const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref
             <textarea className={tw('mt-1 block w-full h-full bg-hw-temp-gray-a placeholder:text-[#8E8E93] border-2 border-hw-primary-700 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500')} value={message} onChange={(e) => setMessage(e.target.value)} />
           </div>
 
-          <button type="submit" className={tw('')}>Send</button>
+          <button type="submit" className={tw('mt-2 py-1 px-4 flex border-2 border-hw-primary-700 rounded-md space-x-2')}>
+            <span>Send</span>
+            <Send width={20} height={24} />
+          </button>
         </form>
     </TitleSection>
   )

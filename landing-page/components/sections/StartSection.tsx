@@ -13,7 +13,7 @@ const StartSection = forwardRef<HTMLDivElement>(function StartSection(_, ref) {
       <div className={tw('relative top-[30vh] m-auto w-[580px]')}>
         <div className={tw('flex justify-between')}>
           <div className={tw('font-space text-7xl font-bold')}>helpwave</div>
-          <Helpwave className={tw('align-center')} height="52" width="64" />
+          <Helpwave className={tw('align-center')} height="64" width="64" />
         </div>
 
         <div className={tw('font-sans text-2xl font-medium mt-4')}>

@@ -2,10 +2,11 @@ import Link from 'next/link'
 import { tw } from '@twind/core'
 
 const items = [
+  { name: 'Features', link: '#features' },
   { name: 'Team', link: '#team' },
+  { name: 'Partners', link: '#partner' },
   { name: 'Roadmap', link: '#roadmap' },
-  { name: 'About', link: '#about' },
-  { name: 'Contact us', link: '#contact' },
+  { name: 'Conact', link: '#contact' },
 ]
 
 const Header = () => {

@@ -6,9 +6,9 @@ import Ukm from '../../icons/partners/ukm'
 import MSHack from '../../icons/partners/MSHack'
 
 const partners = [
-  { name: 'Stadt Warendorf', Icon: StadtWarendorf },
+  { name: 'Muensterhack', Icon: MSHack },
   { name: 'Uniklinik Münster', Icon: Ukm },
-  { name: 'Muensterhack', Icon: MSHack }
+  { name: 'Stadt Warendorf', Icon: StadtWarendorf },
 ]
 
 const PartnerSection = forwardRef<HTMLDivElement>(function PartnerSection(_, ref) {

@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import { tw } from '@twind/core'
 import StartSection from '../components/sections/StartSection'
 import TeamSection from '../components/sections/TeamSection'
 import RoadmapSection from '../components/sections/RoadmapSection'

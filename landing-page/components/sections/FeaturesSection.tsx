@@ -1,5 +1,4 @@
 import { forwardRef } from 'react'
-import { tw } from '@twind/core'
 import { TitleSection } from '../Section'
 
 const FeaturesSection = forwardRef<HTMLDivElement>(function FeaturesSection(_, ref) {

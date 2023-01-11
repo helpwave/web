@@ -22,7 +22,7 @@ type CheckboxProps = {
 
 const ControlledCheckbox = ({ id, label, checked, disabled, onChange }: CheckboxProps) => {
   return (
-    <div className={tw('flex justify-center items-center space-x-2')}>
+    <div className={tw('flex justify-start items-center space-x-2')}>
       <CheckboxPrimitive.Root
         onCheckedChange={onChange}
         checked={checked}

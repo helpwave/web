@@ -3,7 +3,8 @@ import type { SVGProps } from 'react'
 
 export default forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(function UkmLogo(props, ref) {
   return (
-    <svg width="538.58264" height="472.32281" viewBox="0 0 538.58264 472.32281" ref={ref} {...props}>
+    <svg role="img" width="538.58264" height="472.32281" viewBox="0 0 538.58264 472.32281" ref={ref} {...props}>
+      <title>Universitätsklinikum Münster</title>
       <defs id="defs8611">
         <clipPath id="clipPath8381">
           <path d="m 79.256,574.725 -65.083,0 0,-56.976 65.083,0 0,56.976 z" id="path8383" />

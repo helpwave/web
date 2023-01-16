@@ -19,7 +19,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>helpwave</title>
         <style>{`
           :root {
             --font-inter: ${inter.style.fontFamily};

@@ -13,7 +13,7 @@ class MyDocument extends Document {
           <link rel="canonical" href="https://helpwave.de/" />
           <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
           <meta name="description" content="Next generation healthcare software approach!" />
-          <meta name="og:title" property="og:title" content="Next generation healthcare software approach!" />
+          <meta name="og:title" property="og:title" content="helpwave" />
           <meta property="og:description" content="Next generation healthcare software approach!" />
           <meta property="og:url" content="https://helpwave.de/" />
           <meta property="og:type" content="website" />

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "name": "helpwave",
-  "short_name": "helpave",
+  "short_name": "helpwave",
   "lang": "en",
   "description": "Next generation healthcare software approach!",
   "orientation": "portrait",

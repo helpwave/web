@@ -6,9 +6,9 @@ import Ukm from '../../icons/partners/ukm'
 import MSHack from '../../icons/partners/MSHack'
 
 const partners = [
-  { name: 'Muensterhack', icon: MSHack, url: 'https://www.muensterhack.de/' },
-  { name: 'Uniklinik Münster', icon: Ukm, url: 'https://www.ukm.de/' },
-  { name: 'Stadt Warendorf', icon: StadtWarendorf, url: 'https://www.warendorf.de/' },
+  { name: 'Muensterhack', Icon: MSHack, url: 'https://www.muensterhack.de/' },
+  { name: 'Uniklinik Münster', Icon: Ukm, url: 'https://www.ukm.de/' },
+  { name: 'Stadt Warendorf', Icon: StadtWarendorf, url: 'https://www.warendorf.de/' },
 ]
 
 const PartnerSection = forwardRef<HTMLDivElement>(function PartnerSection(_, ref) {
@@ -18,7 +18,7 @@ const PartnerSection = forwardRef<HTMLDivElement>(function PartnerSection(_, ref
       {partners.map((partner) => (
         <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer">
           <div className={tw('py-2 px-8 bg-white rounded-lg')}>
-            <partner.icon className={tw('w-44 h-16')} />
+            <partner.Icon className={tw('w-44 h-16')} />
           </div>
         </a>
       ))}

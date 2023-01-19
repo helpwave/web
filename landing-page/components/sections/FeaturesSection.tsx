@@ -38,7 +38,7 @@ const FeaturesSection = forwardRef<HTMLDivElement>(function FeaturesSection(_, r
           <div className={tw("w-3/12 h-full rounded-l-3xl ml-8 mt-4 bg-gray-200")}/>
         </div>
         <div className={tw("w-full h-3/6 flex justify-end")}>
-          <div className={tw("w-9/12 h-5/6 rounded-l-3xl bg-gray-200 ")}/>
+          <div className={tw("w-9/12 h-5/6 rounded-l-3xl bg-gray-200")}/>
         </div>
       </div>
     </div>

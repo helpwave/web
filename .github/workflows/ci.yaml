@@ -49,5 +49,5 @@ jobs:
       - name: Install pnpm dependencies
         run: pnpm install
 
-      - name: Lint
-        run: pnpm run --filter ./app lint
+      - run: pnpm --filter "*" build
+      - run: pnpm --filter "*" lint

@@ -4,7 +4,7 @@ The official helpwave web frontends.
 
 # Projects 
 This repository is split up into multiple subprojects using [pnpm](https://pnpm.io) workspaces.
-- Helpwave web application (see [app](/app))
+- helpwave web application (see [app](/app))
 - Landing Page of helpwave (see [landing-page](/landing-page))
 
 # Getting Started

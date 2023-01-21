@@ -10,7 +10,7 @@ type TitleSection = Section & {
 
 export const Section = forwardRef<HTMLDivElement, Section>(function Section({ id, children }, ref) {
   return (
-    <div className={tw('w-full h-screen bg-hw-temp-gray-c text-white')} ref={ref} id={id}>
+    <div className={tw('w-full h-screen bg-hw-dark-gray-600 text-white')} ref={ref} id={id}>
       <div className={tw('p-32')}>
         {children}
       </div>

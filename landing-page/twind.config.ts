@@ -49,15 +49,38 @@ export const config = defineConfig({
           700: '#5D4D80',
           800: '#4F3879'
         },
-        // TODO: these are just temporary names, will have to find proper ones soon and add a bunch of shades for each one
-        'hw-temp-red': '#AD5461',
-        'hw-temp-green': '#7DED99',
-        'hw-temp-orange': '#FF9933',
-        'hw-temp-gray': {
-          a: '#1B1B1B',
-          b: '#25282B',
-          c: '#281C20'
-        }
+        'hw-positive': {
+          300: '#7DED99',
+          // TODO: 400 is still missing, see figma
+          500: '#52BC6D'
+        },
+        'hw-negative': {
+          300: '#D77585',
+          400: '#A97070',
+          500: '#A54F5C',
+          600: '#804D4D'
+        },
+        'hw-neutral': {
+          // TODO: 300 is still missing, see figma
+          400: '#FF9933'
+          // TODO: 500 is still missing, see figma
+        },
+        'hw-info': {
+          // TODO: everything still missing, see figma
+        },
+        'hw-dark-gray': {
+          600: '#281C20',
+          700: '#25282B',
+          800: '#1B1B1B'
+        },
+        // these are a bunch of colors which look good together, the idea behind these is that they can be used in places where a lot of colors without any meaning are used
+        // as an example of this think of google calendar event colors, they don't have any inherent meaning, other than what you assign to each
+        'hw-pool': {
+          // TODO: there should be more of these and potentially more shades for each one of them
+          red: '#AD5461',
+          green: '#7DED99',
+          orange: '#FF9933'
+        },
       },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],

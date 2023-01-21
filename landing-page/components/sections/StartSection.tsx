@@ -6,7 +6,7 @@ import { Checkbox } from '../Checkbox'
 
 const StartSection = forwardRef<HTMLDivElement>(function StartSection(_, ref) {
   return (
-    <div className={tw('w-full h-screen bg-hw-temp-gray-c text-white')} id="start" ref={ref}>
+    <div className={tw('w-full h-screen bg-hw-dark-gray-600 text-white')} id="start" ref={ref}>
       <div className={tw('py-8 px-16')}>
         <Header />
       </div>

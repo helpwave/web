@@ -34,10 +34,10 @@ type InputProps = {
 
 const ControlledInput = ({ id, type = 'text', value, label, group = [], onChange = noop, ...restProps }: InputProps) => {
   const borders = { /* eslint-disable key-spacing, no-multi-spaces */
-    top:    group.includes('top')    ? 'border-t-1 border-t-hw-temp-gray-b' : 'border-t-2 border-t-hw-primary-700 mt-1',
-    left:   group.includes('left')   ? 'border-l-1 border-l-hw-temp-gray-b' : 'border-l-2 border-l-hw-primary-700',
-    bottom: group.includes('bottom') ? 'border-b-1 border-b-hw-temp-gray-b' : 'border-b-2 border-b-hw-primary-700',
-    right:  group.includes('right')  ? 'border-r-1 border-r-hw-temp-gray-b' : 'border-r-2 border-r-hw-primary-700',
+    top:    group.includes('top')    ? 'border-t-1 border-t-hw-dark-gray-700' : 'border-t-2 border-t-hw-primary-700 mt-1',
+    left:   group.includes('left')   ? 'border-l-1 border-l-hw-dark-gray-700' : 'border-l-2 border-l-hw-primary-700',
+    bottom: group.includes('bottom') ? 'border-b-1 border-b-hw-dark-gray-700' : 'border-b-2 border-b-hw-primary-700',
+    right:  group.includes('right')  ? 'border-r-1 border-r-hw-dark-gray-700' : 'border-r-2 border-r-hw-primary-700',
   } /* eslint-enable key-spacing, no-multi-spaces */
 
   const corners = { /* eslint-disable key-spacing, no-multi-spaces */
@@ -54,7 +54,7 @@ const ControlledInput = ({ id, type = 'text', value, label, group = [], onChange
         value={value}
         id={id}
         type={type}
-        className={tw(`block w-full h-full bg-hw-temp-gray-a placeholder:text-[#8E8E93] ${Object.values(borders).join(' ')} ${Object.values(corners).join(' ')} shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500`)}
+        className={tw(`block w-full h-full bg-hw-dark-gray-800 placeholder:text-[#8E8E93] ${Object.values(borders).join(' ')} ${Object.values(corners).join(' ')} shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500`)}
         onChange={e => onChange(e.target.value)}
         {...restProps}
       />

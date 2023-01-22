@@ -20,6 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+        <title>Dashboard</title>
         <style>{`
           :root {
             --font-inter: ${inter.style.fontFamily};

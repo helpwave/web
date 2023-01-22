@@ -6,7 +6,12 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head />
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="description" content="Next generation healthcare software approach!" />
+          <meta name="og:title" property="og:title" content="helpwave" />
+          <meta property="og:description" content="Next generation healthcare software approach!" />
+        </Head>
         <body>
           <Main />
           <NextScript />

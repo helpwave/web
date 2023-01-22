@@ -3,23 +3,8 @@ import type { SVGProps } from 'react'
 
 export default forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(function Helpwave(props, ref) {
   return (
-    <svg width="1024" height="1024" fill="white" viewBox="0 0 640 640" ref={ref} {...props}>
-      <path d="M287 538.079V163.122" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M335 537.994L335 130.99" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M215 488.725L287 163.122" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M215 488.725L174 263.802" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M147 405.182L174 263.802" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M147 405.182H92" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M384 212.391V105.284" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M384 537.994V452.309" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M439 181.33V101" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M439 537.994L439.244 471.053" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M493 190.969V105.284" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M545 244.523V158.837" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M596 265.944V223.101" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M545 537.994H596" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M493 537.994V500.507" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <ellipse cx="69" cy="403.04" rx="25" ry="26.7766" fill="white"/>
+    <svg width="888" height="888" fill="white" viewBox="0 0 888 888" ref={ref} {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M841 444.5C841 663.481 663.481 841 444.5 841C225.519 841 48 663.481 48 444.5C48 225.519 225.519 48 444.5 48C663.481 48 841 225.519 841 444.5ZM318.087 351.694C234.965 364.1 168 443.255 168 543.235C168 556.49 157.255 567.235 144 567.235C130.745 567.235 120 556.49 120 543.235C120 412.276 216.746 302 340.92 302C354.175 302 364.92 312.745 364.92 326C364.92 326.147 364.919 326.293 364.916 326.439C364.919 326.582 364.92 326.725 364.92 326.869C364.92 394.32 395.399 452.293 440.756 486.686C454.251 403.974 520.187 338.495 603.217 338.495C616.472 338.495 627.217 349.241 627.217 362.495C627.217 362.782 627.212 363.067 627.202 363.352C627.213 363.644 627.218 363.938 627.218 364.233C627.218 439.021 681.995 495.773 745.001 495.773C758.255 495.773 769.001 506.519 769.001 519.773C769.001 533.028 758.255 543.773 745.001 543.773C659.466 543.773 591.821 474.864 580.795 388.955C530.07 400.186 489.12 448.759 486.37 511.315C502.721 517.036 520.03 520.104 537.84 520.104C551.095 520.104 561.84 530.849 561.84 544.104C561.84 557.358 551.095 568.104 537.84 568.104C421.6 568.104 329.395 471.469 318.087 351.694Z" />
     </svg>
   )
 })

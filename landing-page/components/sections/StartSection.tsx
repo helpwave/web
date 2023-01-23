@@ -17,24 +17,24 @@ const StartSection = forwardRef<HTMLDivElement>(function StartSection(_, ref) {
         </div>
 
         <div className={tw('font-sans text-2xl font-medium mt-4')}>
-          {"At helpwave, we don't see information technology"}<br />
-          {'as an old marriage that has fallen asleep, but as'}<br />
-          {'a '}
-          <span className={tw('text-hw-primary-400')}>{'newly'}</span>
-          {' & '}
-          <span className={tw('text-hw-temp-red')}>{'rekindled'}</span>
-          {' hot affair'}
+          {'Bei helpwave entwickeln wir keine Software für das Gesundheitssystem, sondern mit ihm. '}<br />
+          {'in diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}<br />
+          {'entstehen '}
+          <span className={tw('text-hw-primary-400')}>{'echte'}</span>
+          {' Lösungen für '}
+          <span className={tw('text-hw-temp-red')}>{'echte'}</span>
+          {' Menschen'}
         </div>
 
         <div className={tw('p-4 flex gap-16')}>
           <div className={tw('flex flex-col')}>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-1" label="Disruptive" /></div>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-2" label="Bleeding Edge" /></div>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-3" label="High-End" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-1" label="Intuitiv" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-2" label="Kollaborativ" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-3" label="Praxisnah" /></div>
           </div>
           <div className={tw('flex flex-col')}>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-4" label="Interdisciplinary" /></div>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-5" label="Digitalization" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-4" label="Sicher" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-5" label="Interprofessionell" /></div>
             <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-6" label="Open-Source" /></div>
           </div>
         </div>

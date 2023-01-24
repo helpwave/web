@@ -18,12 +18,12 @@ const StartSection = forwardRef<HTMLDivElement>(function StartSection(_, ref) {
 
         <div className={tw('font-sans text-2xl font-medium mt-4')}>
           {'Bei helpwave entwickeln wir keine Software für das Gesundheitssystem, sondern mit ihm. '}<br />
-          {'in diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}<br />
+          {'In diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}<br />
           {'entstehen '}
           <span className={tw('text-hw-primary-400')}>{'echte'}</span>
           {' Lösungen für '}
           <span className={tw('text-hw-temp-red')}>{'echte'}</span>
-          {' Menschen'}
+          {' Menschen.'}
         </div>
 
         <div className={tw('p-4 flex gap-16')}>

@@ -6,7 +6,7 @@ const items = [
   { name: 'Team', link: '#team' },
   { name: 'Partners', link: '#partner' },
   { name: 'Roadmap', link: '#roadmap' },
-  { name: 'Conact', link: '#contact' },
+  { name: 'Contact', link: '#contact' },
 ]
 
 const Header = () => {

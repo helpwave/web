@@ -4,6 +4,7 @@ import { tw } from '@twind/core'
 import { TitleSection } from '../Section'
 import { Input } from '../Input'
 import Send from '../../icons/Send'
+import { hubspotSubmitForm } from '../../utils/hubspot'
 
 const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref) {
   const [email, setEmail] = useState('')
@@ -13,12 +14,17 @@ const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    console.log({
-      email,
-      firstName,
-      lastName,
-      message,
-    })
+    // TODO: this ain't it chief, validate the values more properly
+    if (email !== '' && firstName !== '' && lastName !== '' && message !== '') {
+      hubspotSubmitForm({
+        email,
+        firstName,
+        lastName,
+        message,
+      })
+        .then(console.log)
+        .catch(console.error)
+    }
   }
 
   return (

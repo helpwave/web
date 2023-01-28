@@ -65,7 +65,7 @@ const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
   }
 }
 
-const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLanguage>>(function StartSection(props, ref) {
+const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLanguage, Record<string, unknown>>>(function StartSection(props, ref) {
   const language = useTranslation(props.language, defaultStartSectionLanguage)
   return (
     <div className={tw('w-full h-screen bg-hw-dark-gray-600 text-white')} id="start" ref={ref}>

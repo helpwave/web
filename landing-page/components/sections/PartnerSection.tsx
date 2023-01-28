@@ -27,7 +27,7 @@ const defaultPartnerSectionTranslations: Record<Languages, PartnerSectionLanguag
   }
 }
 
-const PartnerSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnerSectionLanguage>>(function PartnerSection(props, ref) {
+const PartnerSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnerSectionLanguage, Record<string, unknown>>>(function PartnerSection(props, ref) {
   const language = useTranslation(props.language, defaultPartnerSectionTranslations)
   return (
     <TitleSection id="partner" ref={ref} title={language.heading}>

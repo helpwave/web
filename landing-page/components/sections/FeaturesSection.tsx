@@ -41,7 +41,7 @@ const Feature = ({ title, details }: { title: string, details: string }) => (
   </div>
 )
 
-const FeaturesSection = forwardRef<HTMLDivElement, PropsWithLanguage<FeaturesSectionLanguage>>(function FeaturesSection(props, ref) {
+const FeaturesSection = forwardRef<HTMLDivElement, PropsWithLanguage<FeaturesSectionLanguage, Record<string, unknown>>>(function FeaturesSection(props, ref) {
   const language = useTranslation(props.language, defaultFeaturesSectionLanguage)
 
   return (

@@ -53,7 +53,7 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
   </div>
 )
 
-const TeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<TeamSectionLanguage>>(function TeamSection(props, ref) {
+const TeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<TeamSectionLanguage, Record<string, unknown>>>(function TeamSection(props, ref) {
   const language = useTranslation(props.language, defaultTeamSectionTranslations)
   return (
     <Section ref={ref} id="team">

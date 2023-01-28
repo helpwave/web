@@ -49,7 +49,7 @@ const defaultContactSectionTranslations: Record<Languages, ContactSectionLanguag
   }
 }
 
-const ContactSection = forwardRef<HTMLDivElement, PropsWithLanguage<ContactSectionLanguage>>(function ContactSection(props, ref) {
+const ContactSection = forwardRef<HTMLDivElement, PropsWithLanguage<ContactSectionLanguage, Record<string, unknown>>>(function ContactSection(props, ref) {
   const language = useTranslation(props.language, defaultContactSectionTranslations)
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')

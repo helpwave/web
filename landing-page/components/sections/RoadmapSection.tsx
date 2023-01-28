@@ -18,7 +18,7 @@ const defaultRoadmapSectionTranslations: Record<Languages, RoadmapSectionLanguag
   }
 }
 
-const RoadmapSection = forwardRef<HTMLDivElement, PropsWithLanguage<RoadmapSectionLanguage>>(function RoadmapSection(props, ref) {
+const RoadmapSection = forwardRef<HTMLDivElement, PropsWithLanguage<RoadmapSectionLanguage, Record<string, unknown>>>(function RoadmapSection(props, ref) {
   const language = useTranslation(props.language, defaultRoadmapSectionTranslations)
   return (
     <TitleSection id="roadmap" ref={ref} title={language.heading}>

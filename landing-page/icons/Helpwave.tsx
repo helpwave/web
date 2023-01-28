@@ -3,23 +3,11 @@ import type { SVGProps } from 'react'
 
 export default forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(function Helpwave(props, ref) {
   return (
-    <svg width="1024" height="1024" fill="white" viewBox="0 0 640 640" ref={ref} {...props}>
-      <path d="M287 538.079V163.122" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M335 537.994L335 130.99" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M215 488.725L287 163.122" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M215 488.725L174 263.802" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M147 405.182L174 263.802" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M147 405.182H92" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M384 212.391V105.284" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M384 537.994V452.309" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M439 181.33V101" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M439 537.994L439.244 471.053" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M493 190.969V105.284" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M545 244.523V158.837" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M596 265.944V223.101" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M545 537.994H596" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <path d="M493 537.994V500.507" stroke="white" strokeWidth="25" strokeLinecap="round"/>
-      <ellipse cx="69" cy="403.04" rx="25" ry="26.7766" fill="white"/>
+    <svg width="888" height="888" viewBox="0 0 888 888" fill="none" strokeLinecap="round" strokeWidth="48" ref={ref} {...props}>
+      <path d="M144 543.235C144 423.259 232.164 326 340.92 326" stroke="currentColor" />
+      <path d="M537.84 544.104C429.084 544.104 340.92 446.844 340.92 326.869" stroke="currentColor" />
+      <path d="M462.223 518.035C462.223 432.133 525.348 362.495 603.217 362.495" stroke="currentColor" />
+      <path d="M745.001 519.773C666.696 519.773 603.218 450.136 603.218 364.233" stroke="currentColor" />
     </svg>
   )
 })

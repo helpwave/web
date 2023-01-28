@@ -5,11 +5,11 @@ import { Section } from '../Section'
 
 const roles = { /* eslint-disable key-spacing, no-multi-spaces */
   FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: 'hw-primary-300' },
-  BACKEND_DEVELOPER:  { id: 'BACKEND-DEVELOPER',  name: 'Backend Developer',  color: 'hw-temp-red'    },
-  PRODUCT_OWNER:      { id: 'PRODUCT_OWNER',      name: 'Product Owner',      color: 'hw-temp-green'  },
-  PRODUCT_MANAGER:    { id: 'PRODUCT_MANAGER',    name: 'Product Manager',    color: 'hw-temp-green'  },
-  CUSTOMER_RELATIONS: { id: 'CUSTOMER_RELATIONS', name: 'Customer Relations', color: 'hw-temp-green'  },
-  DEVOPS:             { id: 'DEVOPS',             name: 'DevOps',             color: 'hw-temp-orange' },
+  BACKEND_DEVELOPER:  { id: 'BACKEND-DEVELOPER',  name: 'Backend Developer',  color: 'hw-pool-red'    },
+  PRODUCT_OWNER:      { id: 'PRODUCT_OWNER',      name: 'Product Owner',      color: 'hw-pool-green'  },
+  PRODUCT_MANAGER:    { id: 'PRODUCT_MANAGER',    name: 'Product Manager',    color: 'hw-pool-green'  },
+  CUSTOMER_RELATIONS: { id: 'CUSTOMER_RELATIONS', name: 'Customer Relations', color: 'hw-pool-green'  },
+  DEVOPS:             { id: 'DEVOPS',             name: 'DevOps',             color: 'hw-pool-orange' },
 } /* eslint-enable key-spacing, no-multi-spaces */
 
 type Role = keyof typeof roles

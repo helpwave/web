@@ -1,29 +1,47 @@
 import { forwardRef } from 'react'
 import { tw } from '@twind/core'
 import Header from '../Header'
-import Helpwave from '../../icons/Helpwave'
+import Helpwave from '../../icons/HelpwaveRect'
 import { Checkbox } from '../Checkbox'
+
+const HeroMessageDe = () => (
+  <>
+    {'Bei helpwave entwickeln wir keine Software für das Gesundheitssystem, sondern mit ihm. '}<br />
+    {'In diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}<br />
+    {'entstehen '}
+    <span className={tw('text-hw-primary-400')}>{'echte'}</span>
+    {' Lösungen für '}
+    <span className={tw('text-hw-pool-red')}>{'echte'}</span>
+    {' Menschen.'}
+  </>
+)
+
+const HeroMessageEn = () => (
+  <>
+    {"At helpwave, we don't see information technology"}<br />
+    {'as an old marriage that has fallen asleep, but as'}<br />
+    {'a '}
+    <span className={tw('text-hw-primary-400')}>{'newly'}</span>
+    {' & '}
+    <span className={tw('text-hw-pool-red')}>{'rekindled'}</span>
+    {' hot affair'}
+  </>
+)
 
 const StartSection = forwardRef<HTMLDivElement>(function StartSection(_, ref) {
   return (
-    <div className={tw('w-full h-screen bg-hw-temp-gray-c text-white')} id="start" ref={ref}>
+    <div className={tw('w-full h-screen bg-hw-dark-gray-600 text-white')} id="start" ref={ref}>
       <div className={tw('py-8 px-16')}>
         <Header />
       </div>
       <div className={tw('relative top-[30vh] m-auto w-[580px]')}>
         <div className={tw('flex justify-between')}>
           <div className={tw('font-space text-7xl font-bold')}>helpwave</div>
-          <Helpwave className={tw('align-center')} height="64" width="64" />
+          <Helpwave className={tw('align-center')} height="72" width="96" />
         </div>
 
         <div className={tw('font-sans text-2xl font-medium mt-4')}>
-          {'Bei helpwave entwickeln wir keine Software für das Gesundheitssystem, sondern mit ihm. '}<br />
-          {'In diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}<br />
-          {'entstehen '}
-          <span className={tw('text-hw-primary-400')}>{'echte'}</span>
-          {' Lösungen für '}
-          <span className={tw('text-hw-temp-red')}>{'echte'}</span>
-          {' Menschen.'}
+          <HeroMessageDe />
         </div>
 
         <div className={tw('p-4 flex gap-16')}>

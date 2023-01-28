@@ -1,18 +1,20 @@
 import type { ComponentType } from 'react'
-import type { Language } from '../hooks/useLanguage'
+import type { Languages } from '../hooks/useLanguage'
 import { useLanguage } from '../hooks/useLanguage'
+import { useTranslation } from '../hooks/useTranslation'
 
-export type Translations<T> = Record<Language, T>
-export type PropsWithTranslation<T, P = unknown> = P & { translation: T }
-
-export const withTranslation = <Props, OwnTranslation>(
-  WrappedComponent: ComponentType<PropsWithTranslation<OwnTranslation, Props>>,
-  translations: Translations<OwnTranslation>
+/**
+ * This is a higher order component, which might have some problems with ref passing.
+ * Therefore it is recommended to use the `useTranslatino` hook instead.
+ * `useTranslation` is also used in the `withTranslation` hoc internally.
+ */
+export const withTranslation = <Props, OwnTranslation extends Record<string, unknown>>(
+  WrappedComponent: ComponentType<Props & { language: OwnTranslation }>,
+  translations: Record<Languages, OwnTranslation>
 ) => {
-  const ComponentWithTranslation = (props: Omit<Props, 'translation'>) => {
-    const { language } = useLanguage()
-    const translation = translations[language]
-    const mergedProps = { ...props, translation } as PropsWithTranslation<OwnTranslation, Props>
+  const ComponentWithTranslation = (props: Omit<Props, 'language'>) => {
+    const translation = useTranslation<OwnTranslation>(useLanguage().language, translations)
+    const mergedProps = { ...props, language: translation } as Props & { language: OwnTranslation }
     return <WrappedComponent {...mergedProps} />
   }
   return ComponentWithTranslation

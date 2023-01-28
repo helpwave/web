@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
+import { Toaster } from 'react-hot-toast'
 import { Inter, Space_Grotesk as SpaceGrotesk } from '@next/font/google'
 import { tw } from '@twind/core'
 import withNextApp from '../twind/next/app'
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <div className={tw('font-sans')}>
         <Component {...pageProps} />
+        <Toaster />
       </div>
     </>
   )

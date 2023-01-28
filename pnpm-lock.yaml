@@ -96,6 +96,7 @@ importers:
       next: ^13.0.6
       react: ^18.2.0
       react-dom: ^18.2.0
+      react-hot-toast: ^2.4.0
       react-intersection-observer: ^9.4.1
       typescript: ^4.9.4
     dependencies:
@@ -109,6 +110,7 @@ importers:
       next: 13.0.6_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-hot-toast: 2.4.0_biqbaboplfbrettd7655fr4n2y
       react-intersection-observer: 9.4.1_react@18.2.0
     devDependencies:
       '@types/node': 18.7.23
@@ -1595,6 +1597,12 @@ packages:
       slash: 3.0.0
     dev: true
 
+  /goober/2.1.11:
+    resolution: {integrity: sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==}
+    peerDependencies:
+      csstype: ^3.0.10
+    dev: false
+
   /grapheme-splitter/1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: true
@@ -2176,6 +2184,20 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hot-toast/2.4.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-qnnVbXropKuwUpriVVosgo8QrB+IaPJCpL8oBI6Ov84uvHZ5QQcTp2qg6ku2wNfgJl6rlQXJIQU5q+5lmPOutA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      goober: 2.1.11
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - csstype
     dev: false
 
   /react-intersection-observer/9.4.1_react@18.2.0:

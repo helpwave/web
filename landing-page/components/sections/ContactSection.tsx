@@ -1,9 +1,12 @@
 import { forwardRef, useState } from 'react'
 import type { FormEvent } from 'react'
+import toast from 'react-hot-toast'
 import { tw } from '@twind/core'
 import { TitleSection } from '../Section'
 import { Input } from '../Input'
+import { Toast } from '../Toast'
 import Send from '../../icons/Send'
+import AlertCircle from '../../icons/AlertCircle'
 import { hubspotSubmitForm } from '../../utils/hubspot'
 
 const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref) {
@@ -22,8 +25,18 @@ const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref
         lastName,
         message,
       })
-        .then(console.log)
-        .catch(console.error)
+        .then((json) => { // TODO: this may still be an errornous response, check the actual response for errors
+          setEmail('')
+          setFirstName('')
+          setLastName('')
+          setMessage('')
+
+          toast.custom(<Toast message="Message sent!" theme="dark" variant="primary" icon={<Send width={20} height={24} />} />, { position: 'bottom-left', duration: 1000 })
+        })
+        .catch((error) => {
+          console.error(error)
+          toast.custom(<Toast message="Something went wrong" theme="dark" variant="negative" icon={<AlertCircle />} />, { position: 'bottom-left', duration: 5000 })
+        })
     }
   }
 
@@ -43,8 +56,8 @@ const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref
         <br />
 
         <span className={tw('block font-medium text-white')}>Message</span>
-        <div className={tw('flex w-96 h-48')}>
-          <textarea className={tw('mt-1 block w-full h-full bg-hw-dark-gray-800 placeholder:text-[#8E8E93] border-2 border-hw-primary-700 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500')} value={message} onChange={(e) => setMessage(e.target.value)} />
+        <div className={tw('flex w-96')}>
+          <textarea className={tw('mt-1 block w-full h-48 bg-hw-dark-gray-800 placeholder:text-[#8E8E93] border-2 border-hw-primary-700 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500')} value={message} onChange={(e) => setMessage(e.target.value)} />
         </div>
 
         <button type="submit" className={tw('mt-2 py-1 px-4 flex border-2 border-hw-primary-700 rounded-md space-x-2')}>

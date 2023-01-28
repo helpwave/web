@@ -30,4 +30,4 @@ export const hubspotSubmitForm = ({ firstName, lastName, email, message }: { fir
         }
       }
     })
-  })
+  }).then(res => res.json())

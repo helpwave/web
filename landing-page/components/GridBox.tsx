@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { tw } from '@twind/core'
 
-const GridBox = ({ children, heading, childrenSurroundingClassName }: PropsWithChildren<{ heading?: ReactNode, childrenSurroundingClassName?: string }>) => (
+const GridBox = ({ children, heading, childrenSurroundingClassName = '' }: PropsWithChildren<{ heading?: ReactNode, childrenSurroundingClassName?: string }>) => (
   <div className={tw('relative w-fit p-14')}>
     {heading && (
       <div className={tw('absolute inset-x-14 inset-y-0 z-1')}>{heading}</div>

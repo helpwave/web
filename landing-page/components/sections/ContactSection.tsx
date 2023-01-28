@@ -8,8 +8,49 @@ import { Toast } from '../Toast'
 import Send from '../../icons/Send'
 import AlertCircle from '../../icons/AlertCircle'
 import { hubspotSubmitForm } from '../../utils/hubspot'
+import { useTranslation } from '../../hooks/useTranslation'
+import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
 
-const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref) {
+type ContactSectionLanguage = {
+  heading: string,
+  yourInformation: string,
+  email: string,
+  firstName: string,
+  lastName: string,
+  message: string,
+  send: string,
+  successMessage: string,
+  failureMessage: string,
+}
+
+const defaultContactSectionTranslations: Record<Languages, ContactSectionLanguage> = {
+  en: {
+    heading: 'Contact',
+    yourInformation: 'Your Information',
+    email: 'Email',
+    firstName: 'First name',
+    lastName: 'Last name',
+    message: 'Message',
+    send: 'Send',
+    successMessage: 'Message sent!',
+    failureMessage: 'Something went wrong!'
+  },
+  de: {
+    heading: 'Kontakt',
+    yourInformation: 'DE: Your Information', // TODO: translate (in a nice sounding way; not "Ihre/Deine Informationen")
+    email: 'Email',
+    firstName: 'Vorname',
+    lastName: 'Nachname',
+    message: 'Nachricht',
+    send: 'Abschicken',
+    successMessage: 'Nachricht gesendet!',
+    failureMessage: 'Es ist ein Fehler aufgetreten!'
+  }
+}
+
+const ContactSection = forwardRef<HTMLDivElement, PropsWithLanguage<ContactSectionLanguage>>(function ContactSection(props, ref) {
+  const language = useTranslation(props.language, defaultContactSectionTranslations)
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -31,37 +72,37 @@ const ContactSection = forwardRef<HTMLDivElement>(function ContactSection(_, ref
           setLastName('')
           setMessage('')
 
-          toast.custom(<Toast message="Message sent!" theme="dark" variant="primary" icon={<Send width={20} height={24} />} />, { position: 'bottom-left', duration: 1000 })
+          toast.custom(<Toast message={language.successMessage} theme="dark" variant="primary" icon={<Send width={20} height={24} />} />, { position: 'bottom-left', duration: 1000 })
         })
         .catch((error) => {
           console.error(error)
-          toast.custom(<Toast message="Something went wrong" theme="dark" variant="negative" icon={<AlertCircle />} />, { position: 'bottom-left', duration: 5000 })
+          toast.custom(<Toast message={language.failureMessage} theme="dark" variant="negative" icon={<AlertCircle />} />, { position: 'bottom-left', duration: 5000 })
         })
     }
   }
 
   return (
-    <TitleSection id="contact" ref={ref} title="Contact">
+    <TitleSection id="contact" ref={ref} title={language.heading}>
       <form onSubmit={handleSubmit}>
         <span className={tw('block font-medium text-white')}>Your Information</span>
 
         <div className={tw('flex w-96')}>
-          <Input id="contact-us-email" group={['bottom']} label="Email" placeholder="Email" type="email" value={email} onChange={setEmail} />
+          <Input id="contact-us-email" group={['bottom']} label={language.email} placeholder={language.email} type="email" value={email} onChange={setEmail} />
         </div>
         <div className={tw('flex w-96')}>
-          <Input id="contact-us-first-name" group={['top', 'right']} label="First name" placeholder="First name" type="text" value={firstName} onChange={setFirstName} />
-          <Input id="contact-us-last-name" group={['top', 'left']} label="Last name" placeholder="Last name" type="text" value={lastName} onChange={setLastName} />
+          <Input id="contact-us-first-name" group={['top', 'right']} label={language.firstName} placeholder={language.firstName} type="text" value={firstName} onChange={setFirstName} />
+          <Input id="contact-us-last-name" group={['top', 'left']} label={language.lastName} placeholder={language.lastName} type="text" value={lastName} onChange={setLastName} />
         </div>
 
         <br />
 
-        <span className={tw('block font-medium text-white')}>Message</span>
+        <span className={tw('block font-medium text-white')}>{language.message}</span>
         <div className={tw('flex w-96')}>
           <textarea className={tw('mt-1 block w-full h-48 bg-hw-dark-gray-800 placeholder:text-[#8E8E93] border-2 border-hw-primary-700 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500')} value={message} onChange={(e) => setMessage(e.target.value)} />
         </div>
 
         <button type="submit" className={tw('mt-2 py-1 px-4 flex border-2 border-hw-primary-700 rounded-md space-x-2')}>
-          <span>Send</span>
+          <span>{language.send}</span>
           <Send width={20} height={24} />
         </button>
       </form>

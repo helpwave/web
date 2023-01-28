@@ -4,6 +4,9 @@ import { TitleSection } from '../Section'
 import StadtWarendorf from '../../icons/partners/StadtWarendorf'
 import Ukm from '../../icons/partners/ukm'
 import MSHack from '../../icons/partners/MSHack'
+import { useTranslation } from '../../hooks/useTranslation'
+import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
 
 const partners = [
   { name: 'Muensterhack', Icon: MSHack, url: 'https://www.muensterhack.de/' },
@@ -11,9 +14,23 @@ const partners = [
   { name: 'Stadt Warendorf', Icon: StadtWarendorf, url: 'https://www.warendorf.de/' },
 ]
 
-const PartnerSection = forwardRef<HTMLDivElement>(function PartnerSection(_, ref) {
+export type PartnerSectionLanguage = {
+  heading: string
+}
+
+const defaultPartnerSectionTranslations: Record<Languages, PartnerSectionLanguage> = {
+  en: {
+    heading: 'Our Partners',
+  },
+  de: {
+    heading: 'Unsere Partner',
+  }
+}
+
+const PartnerSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnerSectionLanguage>>(function PartnerSection(props, ref) {
+  const language = useTranslation(props.language, defaultPartnerSectionTranslations)
   return (
-    <TitleSection id="partner" ref={ref} title="Our Partners">
+    <TitleSection id="partner" ref={ref} title={language.heading}>
       <div className={tw('flex gap-4 pt-4')}>
       {partners.map((partner) => (
         <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer">

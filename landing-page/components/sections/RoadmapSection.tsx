@@ -14,7 +14,7 @@ const defaultRoadmapSectionTranslations: Record<Languages, RoadmapSectionLanguag
     heading: 'Roadmap',
   },
   de: {
-    heading: 'DE: Roadmap', // TODO: translate (or do we want to leave it in english as is?)
+    heading: 'Roadmap',
   }
 }
 

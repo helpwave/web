@@ -1,34 +1,72 @@
 import { forwardRef } from 'react'
+import type { FC as ReactFC } from 'react'
 import { tw } from '@twind/core'
 import Header from '../Header'
 import Helpwave from '../../icons/HelpwaveRect'
 import { Checkbox } from '../Checkbox'
+import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '../../hooks/useTranslation'
+import type { PropsWithLanguage } from '../../hooks/useTranslation'
 
-const HeroMessageDe = () => (
-  <>
-    {'Bei helpwave entwickeln wir keine Software für das Gesundheitssystem, sondern mit ihm. '}<br />
-    {'In diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}<br />
-    {'entstehen '}
-    <span className={tw('text-hw-primary-400')}>{'echte'}</span>
-    {' Lösungen für '}
-    <span className={tw('text-hw-pool-red')}>{'echte'}</span>
-    {' Menschen.'}
-  </>
-)
+export type StartSectionLanguage = {
+  HeroMessageComponent: ReactFC,
+  features: {
+    intuitive: string,
+    collaborative: string,
+    practical: string,
+    secure: string,
+    interdisciplinary: string,
+    openSource: string
+  }
+}
 
-const HeroMessageEn = () => (
-  <>
-    {"At helpwave, we don't see information technology"}<br />
-    {'as an old marriage that has fallen asleep, but as'}<br />
-    {'a '}
-    <span className={tw('text-hw-primary-400')}>{'newly'}</span>
-    {' & '}
-    <span className={tw('text-hw-pool-red')}>{'rekindled'}</span>
-    {' hot affair'}
-  </>
-)
+const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
+  en: {
+    HeroMessageComponent: () => (
+      <>
+        {"At helpwave, we don't see information technology"}<br />
+        {'as an old marriage that has fallen asleep, but as'}<br />
+        {'a '}
+        <span className={tw('text-hw-primary-400')}>{'newly'}</span>
+        {' & '}
+        <span className={tw('text-hw-pool-red')}>{'rekindled'}</span>
+        {' hot affair'}
+      </>
+    ),
+    features: {
+      intuitive: 'Intuitive',
+      collaborative: 'Collaborative',
+      practical: 'Practical',
+      secure: 'Secure',
+      interdisciplinary: 'Interdisciplinary',
+      openSource: 'Open Source'
+    }
+  },
+  de: {
+    HeroMessageComponent: () => (
+      <>
+        {'Bei helpwave entwickeln wir keine Software für das Gesundheitssystem, sondern mit ihm. '}<br />
+        {'In diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}<br />
+        {'entstehen '}
+        <span className={tw('text-hw-primary-400')}>{'echte'}</span>
+        {' Lösungen für '}
+        <span className={tw('text-hw-pool-red')}>{'echte'}</span>
+        {' Menschen.'}
+      </>
+    ),
+    features: {
+      intuitive: 'Intuitiv',
+      collaborative: 'Kollaborativ',
+      practical: 'Praxisnah',
+      secure: 'Sicher',
+      interdisciplinary: 'Interprofessionell',
+      openSource: 'Open Source'
+    }
+  }
+}
 
-const StartSection = forwardRef<HTMLDivElement>(function StartSection(_, ref) {
+const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLanguage, Record<string, unknown>>>(function StartSection(props, ref) {
+  const language = useTranslation(props.language, defaultStartSectionLanguage)
   return (
     <div className={tw('w-full h-screen bg-hw-dark-gray-600 text-white')} id="start" ref={ref}>
       <div className={tw('py-8 px-16')}>
@@ -41,19 +79,19 @@ const StartSection = forwardRef<HTMLDivElement>(function StartSection(_, ref) {
         </div>
 
         <div className={tw('font-sans text-2xl font-medium mt-4')}>
-          <HeroMessageDe />
+          <language.HeroMessageComponent />
         </div>
 
         <div className={tw('p-4 flex gap-16')}>
           <div className={tw('flex flex-col')}>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-1" label="Intuitiv" /></div>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-2" label="Kollaborativ" /></div>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-3" label="Praxisnah" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-1" label={language.features.intuitive} /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-2" label={language.features.collaborative} /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-3" label={language.features.practical} /></div>
           </div>
           <div className={tw('flex flex-col')}>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-4" label="Sicher" /></div>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-5" label="Interprofessionell" /></div>
-            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-6" label="Open-Source" /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-4" label={language.features.secure} /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-5" label={language.features.interdisciplinary} /></div>
+            <div className={tw('p-2')}><Checkbox checked={true} onChange={() => undefined} disabled id="feature-6" label={language.features.openSource} /></div>
           </div>
         </div>
       </div>

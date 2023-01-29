@@ -5,6 +5,7 @@ import { Inter, Space_Grotesk as SpaceGrotesk } from '@next/font/google'
 import { tw } from '@twind/core'
 import withNextApp from '../twind/next/app'
 import { config } from '../twind.config'
+import { ProvideLanguage } from '../hooks/useLanguage'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,10 +30,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}</style>
       </Head>
-      <div className={tw('font-sans')}>
-        <Component {...pageProps} />
-        <Toaster />
-      </div>
+      <ProvideLanguage>
+        <div className={tw('font-sans')}>
+          <Component {...pageProps} />
+          <Toaster />
+        </div>
+      </ProvideLanguage>
     </>
   )
 }

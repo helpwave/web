@@ -9,9 +9,9 @@ import { loginWithCredentials } from '../utils/login'
 import { Input } from '../components/Input'
 import { Checkbox } from '../components/Checkbox'
 import { Button } from '../components/Button'
-import { Language } from '../hooks/useLanguage'
-import { withTranslation } from '../hocs/withTranslation'
-import type { Translations, PropsWithTranslation } from '../hocs/withTranslation'
+import type { Languages } from '../hooks/useLanguage'
+import { useTranslation } from '../hooks/useTranslation'
+import type { PropsWithLanguage } from '../hooks/useTranslation'
 
 import HelpwaveLogo from '../icons/Helpwave'
 
@@ -29,8 +29,8 @@ type LoginTranslation = {
   signIn: string
 }
 
-const defaultLoginTranslation: Translations<LoginTranslation> = {
-  [Language.EN]: {
+const defaultLoginTranslation: Record<Languages, LoginTranslation> = {
+  en: {
     signInHeader: 'Sign in to your organization',
     contactSubheader: {
       or: 'Or ',
@@ -43,7 +43,7 @@ const defaultLoginTranslation: Translations<LoginTranslation> = {
     forgotPassword: 'Forgot your password?',
     signIn: 'Sign in'
   },
-  [Language.DE]: {
+  de: {
     signInHeader: 'Melden Sie sich bei Ihrer Organisation an',
     contactSubheader: {
       or: 'Oder ',
@@ -58,8 +58,9 @@ const defaultLoginTranslation: Translations<LoginTranslation> = {
   }
 }
 
-const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translation }) => {
+const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
   const router = useRouter()
+  const translation = useTranslation(props.language, defaultLoginTranslation)
   const [rememberMe, setRememberMe] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -135,4 +136,4 @@ const LoginPage: NextPage<PropsWithTranslation<LoginTranslation>> = ({ translati
   )
 }
 
-export default withTranslation(LoginPage, defaultLoginTranslation)
+export default LoginPage

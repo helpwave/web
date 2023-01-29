@@ -1,8 +1,8 @@
 import type { FunctionComponent } from 'react'
 import { tw } from '@twind/core'
-import type { PropsWithTranslation, Translations } from '../../hocs/withTranslation'
-import { withTranslation } from '../../hocs/withTranslation'
-import { Language } from '../../hooks/useLanguage'
+import { useTranslation } from '../../hooks/useTranslation'
+import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
 
 type TitleTranslation = {
   welcome: string,
@@ -10,33 +10,34 @@ type TitleTranslation = {
   page: (page: number) => string
 }
 
-type TitleProps = {
-  name: string
-}
-
-// Simple Title component to demonstrate some translations
-const Title: FunctionComponent<PropsWithTranslation<TitleTranslation, TitleProps>> = (props) => {
-  return (
-    <p className={tw('rounded bg-gray-800 text-gray-200 p-1 px-2')}>
-      {props.translation.welcome}{'! '}
-      {props.translation.goodToSeeYou}{', '}
-      <span className={tw('text-green-300')}>{props.name}</span>{'. '}
-      {props.translation.page(123)}
-    </p>
-  )
-}
-
-const defaultTitleTranslations: Translations<TitleTranslation> = {
-  [Language.EN]: {
+const defaultTitleTranslations: Record<Languages, TitleTranslation> = {
+  en: {
     welcome: 'Welcome',
     goodToSeeYou: 'Good to see you',
     page: (page) => `Page ${page}`
   },
-  [Language.DE]: {
+  de: {
     welcome: 'Willkommen',
     goodToSeeYou: 'Schön dich zu sehen',
     page: (page) => `Seite ${page}`
   }
 }
 
-export default withTranslation(Title, defaultTitleTranslations)
+type TitleProps = {
+  name: string
+}
+
+// Simple Title component to demonstrate some translations
+const Title: FunctionComponent<PropsWithLanguage<TitleTranslation, TitleProps>> = (props) => {
+  const translation = useTranslation(props.language, defaultTitleTranslations)
+  return (
+    <p className={tw('rounded bg-gray-800 text-gray-200 p-1 px-2')}>
+      {translation.welcome}{'! '}
+      {translation.goodToSeeYou}{', '}
+      <span className={tw('text-green-300')}>{props.name}</span>{'. '}
+      {translation.page(123)}
+    </p>
+  )
+}
+
+export default Title

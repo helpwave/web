@@ -1,20 +1,29 @@
-import type { FunctionComponent } from 'react'
 import { tw } from '@twind/core'
-import type { PropsWithTranslation, Translations } from '../hocs/withTranslation'
-import { withTranslation } from '../hocs/withTranslation'
-import { Language, useLanguage } from '../hooks/useLanguage'
+import { useTranslation } from '../hooks/useTranslation'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Languages } from '../hooks/useLanguage'
 
 type LanguageSwitcherTranslation = {
   toggleLanguage: string
 }
 
+const defaultLanguageSwitcherTranslations: Record<Languages, LanguageSwitcherTranslation> = {
+  en: {
+    toggleLanguage: 'Toggle language',
+  },
+  de: {
+    toggleLanguage: 'Sprache wechseln',
+  }
+}
+
 // TODO: Basic and naive implementation of a LanguageSwitcher
-const LanguageSwitcher: FunctionComponent<PropsWithTranslation<LanguageSwitcherTranslation>> = ({ translation }) => {
+const LanguageSwitcher = () => {
   const { language, setLanguage } = useLanguage()
+  const translation = useTranslation(language, defaultLanguageSwitcherTranslations)
 
   const onClick = () => {
-    if (language === Language.DE) setLanguage(Language.EN)
-    if (language === Language.EN) setLanguage(Language.DE)
+    if (language === 'de') setLanguage('en')
+    if (language === 'en') setLanguage('de')
   }
 
   return (
@@ -22,13 +31,4 @@ const LanguageSwitcher: FunctionComponent<PropsWithTranslation<LanguageSwitcherT
   )
 }
 
-const defaultLanguageSwitcherTranslations: Translations<LanguageSwitcherTranslation> = {
-  [Language.EN]: {
-    toggleLanguage: 'Toggle language',
-  },
-  [Language.DE]: {
-    toggleLanguage: 'Sprache wechseln',
-  }
-}
-
-export default withTranslation(LanguageSwitcher, defaultLanguageSwitcherTranslations)
+export default LanguageSwitcher

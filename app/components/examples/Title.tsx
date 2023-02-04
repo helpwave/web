@@ -1,8 +1,8 @@
 import type { FunctionComponent } from 'react'
 import { tw } from '@twind/core'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type TitleTranslation = {
   welcome: string,

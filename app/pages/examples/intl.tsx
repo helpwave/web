@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import { tw } from '@twind/core'
 import Title from '../../components/examples/Title'
 import LanguageSwitcher from '../../components/LanguageSwitcher'
-import { ProvideLanguage } from '../../hooks/useLanguage'
+import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 
 const Intl: NextPage = () => {
   return (

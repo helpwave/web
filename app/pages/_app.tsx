@@ -2,7 +2,7 @@ import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from '@next/font/google'
 import { tw } from '@twind/core'
-import { ProvideLanguage } from '../hooks/useLanguage'
+import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '../twind/next/app'
 import { config } from '../twind.config'
 

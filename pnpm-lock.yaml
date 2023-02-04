@@ -10,6 +10,7 @@ importers:
 
   app:
     specifiers:
+      '@helpwave/common': workspace:*
       '@next/font': ^13.0.6
       '@radix-ui/react-checkbox': ^1.0.1
       '@twind/core': ^1.1.2
@@ -40,6 +41,7 @@ importers:
       typescript: ^4.9.4
       zod: ^3.19.1
     dependencies:
+      '@helpwave/common': link:../lib
       '@next/font': 13.0.6
       '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@twind/core': 1.1.2_typescript@4.9.4
@@ -127,6 +129,14 @@ importers:
       eslint-plugin-react: 7.31.8_eslint@8.24.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.24.0
       typescript: 4.9.4
+
+  lib:
+    specifiers:
+      '@types/react': ^18.0.21
+      '@types/react-dom': ^18.0.6
+    devDependencies:
+      '@types/react': 18.0.21
+      '@types/react-dom': 18.0.6
 
 packages:
 

@@ -9,9 +9,9 @@ import { loginWithCredentials } from '../utils/login'
 import { Input } from '../components/Input'
 import { Checkbox } from '../components/Checkbox'
 import { Button } from '../components/Button'
-import type { Languages } from '../hooks/useLanguage'
-import { useTranslation } from '../hooks/useTranslation'
-import type { PropsWithLanguage } from '../hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 
 import HelpwaveLogo from '../icons/Helpwave'
 

@@ -22,6 +22,9 @@ type ContactSectionLanguage = {
   send: string,
   successMessage: string,
   failureMessage: string,
+  MoreTitle: string,
+  MoreText: string,
+  MoreTextForCTA: string
 }
 
 const defaultContactSectionTranslations: Record<Languages, ContactSectionLanguage> = {
@@ -34,7 +37,10 @@ const defaultContactSectionTranslations: Record<Languages, ContactSectionLanguag
     message: 'Message',
     send: 'Send',
     successMessage: 'Message sent!',
-    failureMessage: 'Something went wrong!'
+    failureMessage: 'Something went wrong!',
+    MoreTitle: 'U want more?',
+    MoreText: 'You can already become part of the helpwave family and join us on our way to an innovative healthcare system.',
+    MoreTextForCTA: 'Simply register for it right here!'
   },
   de: {
     heading: 'Kontakt',
@@ -45,7 +51,10 @@ const defaultContactSectionTranslations: Record<Languages, ContactSectionLanguag
     message: 'Nachricht',
     send: 'Abschicken',
     successMessage: 'Nachricht gesendet!',
-    failureMessage: 'Es ist ein Fehler aufgetreten!'
+    failureMessage: 'Es ist ein Fehler aufgetreten!',
+    MoreTitle: 'U want more?',
+    MoreText: 'Du kannst schon heute Teil der helpwave-Familie werden und uns auf unserem Weg zu einem innovativen Gesundheitswesen begleiten.',
+    MoreTextForCTA: 'Melde dich dafür einfach direkt hier an!'
   }
 }
 
@@ -83,29 +92,38 @@ const ContactSection = forwardRef<HTMLDivElement, PropsWithLanguage<ContactSecti
 
   return (
     <TitleSection id="contact" ref={ref} title={language.heading}>
-      <form onSubmit={handleSubmit}>
-        <span className={tw('block font-medium text-white')}>Your Information</span>
+      <div className={tw('flex space-x-16')}>
+        <div>
+          <form onSubmit={handleSubmit}>
+            <span className={tw('block font-medium text-white')}>Your Information</span>
 
-        <div className={tw('flex w-96')}>
-          <Input id="contact-us-email" group={['bottom']} label={language.email} placeholder={language.email} type="email" value={email} onChange={setEmail} />
+            <div className={tw('flex w-96')}>
+              <Input id="contact-us-email" group={['bottom']} label={language.email} placeholder={language.email} type="email" value={email} onChange={setEmail} />
+            </div>
+            <div className={tw('flex w-96')}>
+              <Input id="contact-us-first-name" group={['top', 'right']} label={language.firstName} placeholder={language.firstName} type="text" value={firstName} onChange={setFirstName} />
+              <Input id="contact-us-last-name" group={['top', 'left']} label={language.lastName} placeholder={language.lastName} type="text" value={lastName} onChange={setLastName} />
+            </div>
+
+            <br />
+
+            <span className={tw('block font-medium text-white')}>{language.message}</span>
+            <div className={tw('flex w-96')}>
+              <textarea className={tw('mt-1 block w-full h-48 bg-hw-dark-gray-800 placeholder:text-[#8E8E93] border-2 border-hw-primary-700 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500')} value={message} onChange={(e) => setMessage(e.target.value)} />
+            </div>
+
+            <button type="submit" className={tw('mt-2 py-1 px-4 flex border-2 border-hw-primary-700 rounded-md space-x-2')}>
+              <span>{language.send}</span>
+              <Send width={20} height={24} />
+            </button>
+          </form>
         </div>
-        <div className={tw('flex w-96')}>
-          <Input id="contact-us-first-name" group={['top', 'right']} label={language.firstName} placeholder={language.firstName} type="text" value={firstName} onChange={setFirstName} />
-          <Input id="contact-us-last-name" group={['top', 'left']} label={language.lastName} placeholder={language.lastName} type="text" value={lastName} onChange={setLastName} />
+        <div className={tw('w-64')}>
+          <h2 className={tw('text-2xl pt-5 pb-3')}>{language.MoreTitle}</h2>
+          <span className={tw('block')}>{language.MoreText}</span>
+          <span className={tw('text-hw-primary-400 text-xl inline-block mt-5')}>{language.MoreTextForCTA}</span>
         </div>
-
-        <br />
-
-        <span className={tw('block font-medium text-white')}>{language.message}</span>
-        <div className={tw('flex w-96')}>
-          <textarea className={tw('mt-1 block w-full h-48 bg-hw-dark-gray-800 placeholder:text-[#8E8E93] border-2 border-hw-primary-700 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500')} value={message} onChange={(e) => setMessage(e.target.value)} />
-        </div>
-
-        <button type="submit" className={tw('mt-2 py-1 px-4 flex border-2 border-hw-primary-700 rounded-md space-x-2')}>
-          <span>{language.send}</span>
-          <Send width={20} height={24} />
-        </button>
-      </form>
+      </div>
     </TitleSection>
   )
 })

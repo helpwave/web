@@ -12,10 +12,10 @@ import MSHack from '../../icons/partners/MSHack'
 const roles = { /* eslint-disable key-spacing, no-multi-spaces */
   FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: 'hw-primary-300' },
   BACKEND_DEVELOPER:  { id: 'BACKEND-DEVELOPER',  name: 'Backend Developer',  color: 'hw-pool-red'    },
+  MOBILE_DEVELOPER:  { id: 'MOBILE-DEVELOPER',  name: 'Mobile Developer',  color: 'hw-pool-orange'    },
   PRODUCT_OWNER:      { id: 'PRODUCT_OWNER',      name: 'Product Owner',      color: 'hw-pool-green'  },
-  PRODUCT_MANAGER:    { id: 'PRODUCT_MANAGER',    name: 'Product Manager',    color: 'hw-pool-green'  },
+  PROJECT_MANAGER:    { id: 'PROJECT_MANAGER',    name: 'Project Manager',    color: 'hw-pool-green'  },
   CUSTOMER_RELATIONS: { id: 'CUSTOMER_RELATIONS', name: 'Customer Relations', color: 'hw-pool-green'  },
-  DEVOPS:             { id: 'DEVOPS',             name: 'DevOps',             color: 'hw-pool-orange' },
 } /* eslint-enable key-spacing, no-multi-spaces */
 
 type Role = keyof typeof roles
@@ -23,15 +23,14 @@ type Role = keyof typeof roles
 const roleEnum = Object.fromEntries(Object.keys(roles).map((key) => [key, key])) as { [key in Role]: key }
 
 const teamMembers = [ /* eslint-disable key-spacing, no-multi-spaces */
-  { name: 'Felix',     role: roleEnum.FRONTEND_DEVELOPER },
-  { name: 'Felix',     role: roleEnum.PRODUCT_MANAGER },
-  { name: 'Max',       role: roleEnum.BACKEND_DEVELOPER },
-  { name: 'Jonas',     role: roleEnum.PRODUCT_OWNER },
   { name: 'Jannik',    role: roleEnum.FRONTEND_DEVELOPER },
+  { name: 'Felix',     role: roleEnum.PROJECT_MANAGER },
+  { name: 'Max',       role: roleEnum.PROJECT_MANAGER },
+  { name: 'Jonas',     role: roleEnum.PRODUCT_OWNER },
+  { name: 'Felix',     role: roleEnum.MOBILE_DEVELOPER },
   { name: 'Christian', role: roleEnum.CUSTOMER_RELATIONS },
   { name: 'Max',       role: roleEnum.BACKEND_DEVELOPER },
-  { name: 'Florian',   role: roleEnum.BACKEND_DEVELOPER },
-  { name: 'Nico',      role: roleEnum.DEVOPS }
+  { name: 'Florian',   role: roleEnum.MOBILE_DEVELOPER },
 ] /* eslint-enable key-spacing, no-multi-spaces */
 
 const partners = [ /* eslint-disable key-spacing, no-multi-spaces */

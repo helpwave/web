@@ -1,12 +1,13 @@
 {
-  "name": "@helpwave/web",
+  "name": "@helpwave/web-landing-page",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cf:pages": "next build && next export"
   },
   "dependencies": {
     "@helpwave/common": "workspace:*",

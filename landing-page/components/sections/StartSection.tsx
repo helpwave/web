@@ -24,13 +24,13 @@ const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
   en: {
     HeroMessageComponent: () => (
       <>
-        {"At helpwave, we don't see information technology"}<br />
-        {'as an old marriage that has fallen asleep, but as'}<br />
-        {'a '}
-        <span className={tw('text-hw-primary-400')}>{'newly'}</span>
-        {' & '}
-        <span className={tw('text-hw-pool-red')}>{'rekindled'}</span>
-        {' hot affair'}
+        {"At helpwave, we don't develop software for healthcare workers but with them."}<br />
+        {'In this collective of doctors, developers and other bright minds,'}<br />
+        {'we develop '}
+        <span className={tw('text-hw-primary-400')}>{'real'}</span>
+        {' solutions for '}
+        <span className={tw('text-hw-pool-red')}>{'real'}</span>
+        {' people'}
       </>
     ),
     features: {

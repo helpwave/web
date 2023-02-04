@@ -5,6 +5,9 @@ import { Section } from '../Section'
 import { useTranslation } from '../../hooks/useTranslation'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import type { Languages } from '../../hooks/useLanguage'
+import StadtWarendorf from '../../icons/partners/StadtWarendorf'
+import Ukm from '../../icons/partners/ukm'
+import MSHack from '../../icons/partners/MSHack'
 
 const roles = { /* eslint-disable key-spacing, no-multi-spaces */
   FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: 'hw-primary-300' },
@@ -31,16 +34,25 @@ const teamMembers = [ /* eslint-disable key-spacing, no-multi-spaces */
   { name: 'Nico',      role: roleEnum.DEVOPS }
 ] /* eslint-enable key-spacing, no-multi-spaces */
 
-export type TeamSectionLanguage = {
-  heading: string
+const partners = [ /* eslint-disable key-spacing, no-multi-spaces */
+  { name: 'Muensterhack',      Icon: MSHack,         url: 'https://www.muensterhack.de/' },
+  { name: 'Uniklinik Münster', Icon: Ukm,            url: 'https://www.ukm.de/' },
+  { name: 'Stadt Warendorf',   Icon: StadtWarendorf, url: 'https://www.warendorf.de/' },
+] /* eslint-enable key-spacing, no-multi-spaces */
+
+export type PartnersTeamSectionLanguage = {
+  headingPartners: string,
+  headingTeam: string
 }
 
-const defaultTeamSectionTranslations: Record<Languages, TeamSectionLanguage> = {
+const defaultPartnersTeamSectionTranslations: Record<Languages, PartnersTeamSectionLanguage> = {
   en: {
-    heading: 'Our Team',
+    headingPartners: 'Our Partners',
+    headingTeam: 'Our Team'
   },
   de: {
-    heading: 'Unser Team',
+    headingPartners: 'Unsere Partner',
+    headingTeam: 'Unser Team',
   }
 }
 
@@ -53,19 +65,33 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
   </div>
 )
 
-const TeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<TeamSectionLanguage, Record<string, unknown>>>(function TeamSection(props, ref) {
-  const language = useTranslation(props.language, defaultTeamSectionTranslations)
+const PartnersTeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnersTeamSectionLanguage, Record<string, unknown>>>(function TeamSection(props, ref) {
+  const language = useTranslation(props.language, defaultPartnersTeamSectionTranslations)
   return (
-    <Section ref={ref} id="team">
-      <div className={tw('flex justify-end')}>
-        <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>{language.heading}</h1>}>
-          <div className={tw('w-fit grid grid-cols-2 gap-16')}>
-            {teamMembers.map(({ name, role }, index) => <Person key={index} name={name} role={role} />)}
+    <Section ref={ref} id="partners_team">
+      <div className={tw('flex justify-between')}>
+        <div className={tw('')}>
+          <h1 className={tw('text-5xl font-space font-bold pb-4')}>{language.headingPartners}</h1>
+          <div className={tw('flex flex-col gap-4 pt-4')}>
+            {partners.map((partner) => (
+              <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer">
+                <div className={tw('flex justify-center py-2 px-8 bg-white rounded-lg')}>
+                  <partner.Icon className={tw('w-44 h-16')} />
+                </div>
+              </a>
+            ))}
           </div>
-        </GridBox>
+        </div>
+        <div className={tw('shrink-0')}>
+          <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>{language.headingTeam}</h1>}>
+            <div className={tw('w-fit grid grid-cols-2 gap-16')}>
+              {teamMembers.map(({ name, role }, index) => <Person key={index} name={name} role={role} />)}
+            </div>
+          </GridBox>
+        </div>
       </div>
-      </Section>
+    </Section>
   )
 })
 
-export default TeamSection
+export default PartnersTeamSection

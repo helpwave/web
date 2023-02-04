@@ -4,7 +4,7 @@ import type { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } f
 const languages = ['en', 'de'] as const
 export type Languages = typeof languages[number]
 
-export const DEFAULT_LANGUAGE = 'en'
+export const DEFAULT_LANGUAGE = 'de'
 
 export type LanguageContextValue = {
   language: Languages,
@@ -19,6 +19,7 @@ export const ProvideLanguage: FunctionComponent<PropsWithChildren> = ({ children
   const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)
 
   useEffect(() => {
+    return // force DEFAULT_LANGUAGE by preventing browser language detection
     const languagesToTestAgainst = Object.values(languages)
 
     const matchingBrowserLanguages = window.navigator.languages

@@ -2,9 +2,9 @@ import { forwardRef } from 'react'
 import { tw } from '@twind/core'
 import GridBox from '../GridBox'
 import { Section } from '../Section'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 const roles = { /* eslint-disable key-spacing, no-multi-spaces */
   FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: 'hw-primary-300' },

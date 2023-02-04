@@ -75,6 +75,7 @@ importers:
 
   landing-page:
     specifiers:
+      '@helpwave/common': workspace:*
       '@next/font': ^13.0.6
       '@radix-ui/react-checkbox': ^1.0.1
       '@twind/core': ^1.1.2
@@ -102,6 +103,7 @@ importers:
       react-intersection-observer: ^9.4.1
       typescript: ^4.9.4
     dependencies:
+      '@helpwave/common': link:../lib
       '@next/font': 13.0.6
       '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@twind/core': 1.1.2_typescript@4.9.4

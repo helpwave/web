@@ -4,9 +4,9 @@ import { tw } from '@twind/core'
 import Header from '../Header'
 import Helpwave from '../../icons/HelpwaveRect'
 import { Checkbox } from '../Checkbox'
-import type { Languages } from '../../hooks/useLanguage'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 export type StartSectionLanguage = {
   HeroMessageComponent: ReactFC,

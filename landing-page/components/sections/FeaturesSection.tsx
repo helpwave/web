@@ -2,9 +2,9 @@ import { forwardRef } from 'react'
 import { Section } from '../Section'
 import { tw, tx } from '@twind/core'
 import { Checkbox } from '../Checkbox'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 export type FeaturesSectionLanguage = {
   heading: string,

@@ -8,9 +8,9 @@ import { Toast } from '../Toast'
 import Send from '../../icons/Send'
 import AlertCircle from '../../icons/AlertCircle'
 import { hubspotSubmitForm } from '../../utils/hubspot'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type ContactSectionLanguage = {
   heading: string,

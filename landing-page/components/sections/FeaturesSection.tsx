@@ -13,7 +13,7 @@ export type FeaturesSectionLanguage = {
 
 const defaultFeaturesSectionLanguage: Record<Languages, FeaturesSectionLanguage> = {
   en: {
-    heading: 'Solve real world problems',
+    heading: 'Solving real world problems',
     features: [
       { title: 'Intuitive', details: 'No training, no manuals. Sign up, get started. Safely through the clinical every day and less overtime. More time for the things that matter.' },
       { title: 'Collaborative', details: 'No more phone calls, no fax machines. Easy to use team organization on a single platform. Shareable SOPs across the entire team. No matter where, no matter when.' },
@@ -22,7 +22,7 @@ const defaultFeaturesSectionLanguage: Record<Languages, FeaturesSectionLanguage>
     ]
   },
   de: {
-    heading: 'DE: Solve real world problems', // TODO: translate
+    heading: 'Solving real world problems',
     features: [
       { title: 'Intuitiv', details: 'Keine Einarbeitung, keine Handbücher. Anmelden, loslegen. Sicher durch den Klinikalltag und pünktlicher in den Feierabend. Mehr Zeit für die Dinge auf die es ankommt.' },
       { title: 'Kollaborativ', details: 'Kein Telefon mehr, erst Recht kein Faxgerät. Einfache Teamorganisation auf einer gemeinsamen Plattform. Teilbare SOPs über das gesamte Team. Egal von wo, egal wann.' },
@@ -41,6 +41,7 @@ const Feature = ({ title, details }: { title: string, details: string }) => (
   </div>
 )
 
+// TODO: finally get rid of all the percentage-based styles and fix this mess
 const FeaturesSection = forwardRef<HTMLDivElement, PropsWithLanguage<FeaturesSectionLanguage, Record<string, unknown>>>(function FeaturesSection(props, ref) {
   const language = useTranslation(props.language, defaultFeaturesSectionLanguage)
 
@@ -48,7 +49,7 @@ const FeaturesSection = forwardRef<HTMLDivElement, PropsWithLanguage<FeaturesSec
     <div className={tw('relative')} id="features">
       <Section ref={ref} id="features">
         <h1 className={tw('text-5xl font-space font-bold pb-4')}>{language.heading}</h1>
-        <div className={tw('w-5/12 flex flex-col my-24')}>
+        <div className={tw('w-5/12 flex flex-col my-8')}>
           {language.features.map((value, index) => (
             <div key={index} className={tx('w-9/12 flex flex-col my-8', {
               'self-end mr-8': index % 2 === 0,
@@ -60,7 +61,7 @@ const FeaturesSection = forwardRef<HTMLDivElement, PropsWithLanguage<FeaturesSec
         </div>
       </Section>
       <div
-        className={tw('w-6/12 h-full flex flex-col absolute right-0 top-0 rounded-3xl pb-16 pt-32')}
+        className={tw('w-6/12 h-screen flex flex-col absolute right-0 top-0 rounded-3xl pb-16 pt-32')}
         style={{ background: 'radial-gradient(#6F387999 15%, #281c2000 60%)' }}
       >
         <div className={tw('w-full h-3/6 flex flex-row items-end justify-end mb-8')}>

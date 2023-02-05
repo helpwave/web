@@ -24,7 +24,10 @@ export const useTranslation = <Language extends Record<string, unknown>>(
 ) => {
   const { language: inferredLanguage } = useLanguage()
   if (languageProp === undefined) {
-    return defaults[inferredLanguage]
+    // TODO: force the usage of DEFAULT_LANGUAGE by preventing browser language detection
+    // TODO: this is only temporary, remove this later on
+    // return defaults[inferredLanguage]
+    return Object.assign(defaults[DEFAULT_LANGUAGE], {})
   } else if (typeof languageProp !== 'object') {
     return defaults[languageProp as Languages]
   } else {

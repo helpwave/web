@@ -3,9 +3,7 @@ import { tw } from '@helpwave/common/twind/index'
 
 const items = [
   { name: 'Features', link: '#features' },
-  { name: 'Team', link: '#team' },
-  { name: 'Partners', link: '#partner' },
-  { name: 'Roadmap', link: '#roadmap' },
+  { name: 'Partners & Team', link: '#partners_team' },
   { name: 'Contact', link: '#contact' },
 ]
 

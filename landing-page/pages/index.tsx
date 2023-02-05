@@ -1,18 +1,14 @@
 import type { NextPage } from 'next'
 import StartSection from '../components/sections/StartSection'
-import TeamSection from '../components/sections/TeamSection'
-import RoadmapSection from '../components/sections/RoadmapSection'
+import PartnersTeamSection from '../components/sections/TeamSection'
 import ContactSection from '../components/sections/ContactSection'
-import PartnerSection from '../components/sections/PartnerSection'
 import FeaturesSection from '../components/sections/FeaturesSection'
 import { Carousel } from '../components/Carousel'
 import { useInView } from 'react-intersection-observer'
 
 const items = [
   { link: '#features', label: 'Features' },
-  { link: '#team', label: 'Team' },
-  { link: '#partner', label: 'Partners' },
-  { link: '#roadmap', label: 'Roadmap' },
+  { link: '#partners_team', label: 'Partners & Team' },
   { link: '#contact', label: 'Contact' },
 ]
 
@@ -29,19 +25,15 @@ const determineBestFit = <Key extends string>(entries: Record<Key, IntersectionO
 
 const Home: NextPage = () => {
   /* eslint-disable key-spacing, no-multi-spaces */
-  const { ref: startRef,    entry: startEntry    } = useInView({ threshold: 0.1 })
-  const { ref: featuresRef, entry: featuresEntry } = useInView({ threshold: 0.1 })
-  const { ref: teamRef,     entry: teamEntry     } = useInView({ threshold: 0.1 })
-  const { ref: partnerRef,  entry: partnerEntry  } = useInView({ threshold: 0.1 })
-  const { ref: roadmapRef,  entry: roadmapEntry  } = useInView({ threshold: 0.1 })
-  const { ref: contactRef,  entry: contactEntry  } = useInView({ threshold: 0.1 })
+  const { ref: startRef,        entry: startEntry       } = useInView({ threshold: 0.1 })
+  const { ref: featuresRef,     entry: featuresEntry    } = useInView({ threshold: 0.1 })
+  const { ref: partnersteamRef, entry: partnerTeamEntry } = useInView({ threshold: 0.1 })
+  const { ref: contactRef,      entry: contactEntry     } = useInView({ threshold: 0.1 })
   /* eslint-enable key-spacing, no-multi-spaces */
   const active = determineBestFit({
     start: startEntry,
     features: featuresEntry,
-    team: teamEntry,
-    partner: partnerEntry,
-    roadmap: roadmapEntry,
+    partners_team: partnerTeamEntry,
     contact: contactEntry
   })
 
@@ -49,9 +41,7 @@ const Home: NextPage = () => {
       <>
         <StartSection ref={startRef} />
         <FeaturesSection ref={featuresRef} />
-        <TeamSection ref={teamRef} />
-        <PartnerSection ref={partnerRef} />
-        <RoadmapSection ref={roadmapRef} />
+        <PartnersTeamSection ref={partnersteamRef} />
         <ContactSection ref={contactRef} />
         <Carousel items={items} activeLink={active ? `#${active}` : undefined} hidden={active === 'start' || active === undefined} />
       </>

@@ -134,8 +134,19 @@ importers:
 
   lib:
     specifiers:
+      '@twind/core': ^1.1.2
+      '@twind/preset-autoprefix': ^1.0.6
+      '@twind/preset-tailwind': ^1.1.2
+      '@twind/preset-tailwind-forms': ^1.1.0
+      '@twind/preset-typography': ^1.0.6
       '@types/react': ^18.0.21
       '@types/react-dom': ^18.0.6
+    dependencies:
+      '@twind/core': 1.1.2
+      '@twind/preset-autoprefix': 1.0.6_@twind+core@1.1.2
+      '@twind/preset-tailwind': 1.1.2_@twind+core@1.1.2
+      '@twind/preset-tailwind-forms': 1.1.0_irpfsybkxj5xoet7df4dxv3g5i
+      '@twind/preset-typography': 1.0.6_@twind+core@1.1.2
     devDependencies:
       '@types/react': 18.0.21
       '@types/react-dom': 18.0.6
@@ -484,6 +495,18 @@ packages:
       tslib: 2.4.0
     dev: false
 
+  /@twind/core/1.1.2:
+    resolution: {integrity: sha512-jaw7eWnwpuTUcrtgfmND0b3rSRVgNH/m+xV5CuxSJ2cuVmlEt3ZucoXAoNwhwocAAnDbxhLGhlfVDfxnagflkA==}
+    engines: {node: '>=14.15.0'}
+    peerDependencies:
+      typescript: ^4.8.4
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      csstype: 3.1.1
+    dev: false
+
   /@twind/core/1.1.2_typescript@4.9.4:
     resolution: {integrity: sha512-jaw7eWnwpuTUcrtgfmND0b3rSRVgNH/m+xV5CuxSJ2cuVmlEt3ZucoXAoNwhwocAAnDbxhLGhlfVDfxnagflkA==}
     engines: {node: '>=14.15.0'}
@@ -495,6 +518,20 @@ packages:
     dependencies:
       csstype: 3.1.1
       typescript: 4.9.4
+    dev: false
+
+  /@twind/preset-autoprefix/1.0.6_@twind+core@1.1.2:
+    resolution: {integrity: sha512-CSa22PTAa8BocmEHJ0t6hj8I9MLaBUUQIYdeSuryB2rMwZplsTFnKhvxHIPP2gRdgCaABmpMeWOQlbmU8LXd3w==}
+    engines: {node: '>=14.15.0'}
+    peerDependencies:
+      '@twind/core': ^1.1.0
+      typescript: ^4.8.4
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@twind/core': 1.1.2
+      style-vendorizer: 2.2.3
     dev: false
 
   /@twind/preset-autoprefix/1.0.6_p7sborpglfnye65f3nd3ak7kdi:
@@ -528,6 +565,34 @@ packages:
       typescript: 4.9.4
     dev: false
 
+  /@twind/preset-tailwind-forms/1.1.0_irpfsybkxj5xoet7df4dxv3g5i:
+    resolution: {integrity: sha512-3pRnPUUCGYS3ht4rQCrdkDmraFzPy1dmLhRGpixbKCQ4DbJX5t/qlbJZEAo+b4xjDIPYwMNGMXzDncAhSaCUyg==}
+    engines: {node: '>=14.15.0'}
+    peerDependencies:
+      '@twind/core': ^1.1.0
+      '@twind/preset-tailwind': ^1.0.3
+      typescript: ^4.8.4
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@twind/core': 1.1.2
+      '@twind/preset-tailwind': 1.1.2_@twind+core@1.1.2
+    dev: false
+
+  /@twind/preset-tailwind/1.1.2_@twind+core@1.1.2:
+    resolution: {integrity: sha512-nCGzyIJyAFkMcOBoNYAb9Gi+HtNxt2yTgVVkMuxra/fBNKF109IDx5dLJ7VUh08FZJTuSIul2Uez+rZb6SkclA==}
+    engines: {node: '>=14.15.0'}
+    peerDependencies:
+      '@twind/core': ^1.1.0
+      typescript: ^4.8.4
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@twind/core': 1.1.2
+    dev: false
+
   /@twind/preset-tailwind/1.1.2_p7sborpglfnye65f3nd3ak7kdi:
     resolution: {integrity: sha512-nCGzyIJyAFkMcOBoNYAb9Gi+HtNxt2yTgVVkMuxra/fBNKF109IDx5dLJ7VUh08FZJTuSIul2Uez+rZb6SkclA==}
     engines: {node: '>=14.15.0'}
@@ -540,6 +605,19 @@ packages:
     dependencies:
       '@twind/core': 1.1.2_typescript@4.9.4
       typescript: 4.9.4
+    dev: false
+
+  /@twind/preset-typography/1.0.6_@twind+core@1.1.2:
+    resolution: {integrity: sha512-7vXpu32kQ4tgC22VuFuJ5gmXpBsKsUzOejIiuy45ibZhc4LcZRZULwj4lHdNMJYwTOVh00lqO9+bv3VtVMwPEg==}
+    engines: {node: '>=14.15.0'}
+    peerDependencies:
+      '@twind/core': ^1.1.0
+      typescript: ^4.8.4
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@twind/core': 1.1.2
     dev: false
 
   /@twind/preset-typography/1.0.6_p7sborpglfnye65f3nd3ak7kdi:

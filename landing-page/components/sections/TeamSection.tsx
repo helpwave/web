@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import GridBox from '../GridBox'
 import { Section } from '../Section'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'

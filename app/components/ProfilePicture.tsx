@@ -1,4 +1,4 @@
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/common/twind/index'
 
 export type ProfilePictureProps = {
   avatarUrl: string,

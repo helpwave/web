@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import { Header } from '../components/Header'
 
 const ContactPage: NextPage = () => {

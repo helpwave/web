@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 
 const items = [
   { name: 'Features', link: '#features' },

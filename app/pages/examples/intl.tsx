@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import Title from '../../components/examples/Title'
 import LanguageSwitcher from '../../components/LanguageSwitcher'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'

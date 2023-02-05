@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import toast from 'react-hot-toast'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import { TitleSection } from '../Section'
 import { Input } from '../Input'
 import { Toast } from '../Toast'

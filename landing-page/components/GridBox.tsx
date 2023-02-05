@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 
 const GridBox = ({ children, heading, childrenSurroundingClassName = '' }: PropsWithChildren<{ heading?: ReactNode, childrenSurroundingClassName?: string }>) => (
   <div className={tw('relative w-fit p-14')}>

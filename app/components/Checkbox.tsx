@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/common/twind/index'
 
 import CheckIcon from '../icons/Check'
 

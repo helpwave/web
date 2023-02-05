@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import type { FC as ReactFC } from 'react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import Header from '../Header'
 import Helpwave from '../../icons/HelpwaveRect'
 import { Checkbox } from '../Checkbox'

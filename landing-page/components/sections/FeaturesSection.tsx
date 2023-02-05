@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { Section } from '../Section'
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/common/twind/index'
 import { Checkbox } from '../Checkbox'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import type { PropsWithChildren, ReactNode, RefObject } from 'react'
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/common/twind/index'
 import { useOutsideClick } from '@helpwave/common/hooks/useOutsideClick'
 
 type MenuProps<T> = PropsWithChildren<{

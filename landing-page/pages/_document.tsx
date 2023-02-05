@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
-import withNextDocument from '../twind/next/document'
+import withNextDocument from '@helpwave/common/twind/next/document'
 import { config } from '@helpwave/common/twind/config'
 
 class MyDocument extends Document {

@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import { Menu, MenuItem } from './Menu'
 import { ProfilePicture } from './ProfilePicture'
 import type { User } from '../hooks/useAuth'

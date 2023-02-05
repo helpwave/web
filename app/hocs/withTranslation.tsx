@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
-import type { Languages } from '../hooks/useLanguage'
-import { useLanguage } from '../hooks/useLanguage'
-import { useTranslation } from '../hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useLanguage } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 /**
  * This is a higher order component, which might have some problems with ref passing.

@@ -1,4 +1,4 @@
-import { tw, css } from '@twind/core'
+import { tw, css } from '@helpwave/common/twind/index'
 
 type CarouselProps = {
   items: {

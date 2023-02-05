@@ -1,16 +1,16 @@
 import { forwardRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import toast from 'react-hot-toast'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import { TitleSection } from '../Section'
 import { Input } from '../Input'
 import { Toast } from '../Toast'
 import Send from '../../icons/Send'
 import AlertCircle from '../../icons/AlertCircle'
 import { hubspotSubmitForm } from '../../utils/hubspot'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type ContactSectionLanguage = {
   heading: string,
@@ -119,7 +119,7 @@ const ContactSection = forwardRef<HTMLDivElement, PropsWithLanguage<ContactSecti
           </form>
         </div>
         <div className={tw('w-64')}>
-          <h2 className={tw('text-2xl pt-5 pb-3')}>{language.MoreTitle}</h2>
+          <h2 className={tw('font-space font-bold text-3xl pt-5 pb-3')}>{language.MoreTitle}</h2>
           <span className={tw('block')}>{language.MoreText}</span>
           <span className={tw('text-hw-primary-400 text-xl inline-block mt-5')}>{language.MoreTextForCTA}</span>
         </div>

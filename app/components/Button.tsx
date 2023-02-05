@@ -1,6 +1,6 @@
 import React from 'react'
 import type { PropsWithChildren, ButtonHTMLAttributes } from 'react'
-import { tx } from '@twind/core'
+import { tx } from '@helpwave/common/twind/index'
 
 // TODO: add more variants
 // TODO: this could be matched to some kind of tailwind/twind custom colors

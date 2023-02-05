@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 
 // TODO: this is copied over from `app/components/Input.tsx` and only slightly modified
 

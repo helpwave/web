@@ -1,4 +1,4 @@
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import { ProfilePicture } from './ProfilePicture'
 import type { User } from '../hooks/useAuth'
 

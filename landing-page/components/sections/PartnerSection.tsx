@@ -1,12 +1,12 @@
 import { forwardRef } from 'react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import { TitleSection } from '../Section'
 import StadtWarendorf from '../../icons/partners/StadtWarendorf'
 import Ukm from '../../icons/partners/ukm'
 import MSHack from '../../icons/partners/MSHack'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 const partners = [
   { name: 'Muensterhack', Icon: MSHack, url: 'https://www.muensterhack.de/' },

@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Header } from '../components/Header'

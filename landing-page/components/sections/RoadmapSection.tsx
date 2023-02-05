@@ -1,9 +1,9 @@
 import { forwardRef } from 'react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind/index'
 import { TitleSection } from '../Section'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 export type RoadmapSectionLanguage = {
   heading: string

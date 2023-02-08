@@ -72,7 +72,7 @@ const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLa
       <div className={tw('py-8 px-16')}>
         <Header />
       </div>
-      <div className={tw('relative top-[30vh] m-auto w-[580px]')}>
+      <div className={tw('relative top-[20vh] m-auto w-[580px]')}>
         <div className={tw('flex justify-between')}>
           <div className={tw('font-space text-7xl font-bold')}>helpwave</div>
           <Helpwave className={tw('align-center')} height="72" width="96" />

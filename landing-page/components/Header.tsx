@@ -8,7 +8,7 @@ const items = [
 ]
 
 const socials = [
-  { name: 'GitHub', link: 'https://github.com/helpwave' },
+  { name: 'GitHub', link: 'https://github.com/helpwave/' },
   { name: 'LinkedIn', link: 'https://linkedin.com/company/helpwave/' },
   { name: 'Instagram', link: 'https://instagram.com/helpwave_de/' },
   { name: 'Twitter', link: 'https://twitter.com/helpwave_de/' },

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { tw } from '@helpwave/common/twind/index'
+import Helpwave from '../icons/HelpwaveRect'
 
 const items = [
   { name: 'Features', link: '#features' },
@@ -17,17 +18,8 @@ const socials = [
 const Header = () => {
   return (
     <div className={tw('flex flex-row justify-between')}>
-      <div className={tw('font-space text-xl py-2 px-4 flex justify-start')}>
-        <div className={tw('flex flex-row gap-8')}>
-          {socials.map(({ name, link }) => (
-            <div key={link} className={tw('group')}>
-              <Link href={link} className={tw('py-1')}>{name}</Link>
-              <div className={tw('mx-auto mt-1 h-[3px] w-[80%] bg-transparent group-hover:bg-current')} />
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className={tw('font-space text-xl py-2 px-4 flex justify-end')}>
+      <Helpwave className={tw('align-center')} height="72" width="96" />
+          <div className={tw('font-space text-xl py-2 px-4 flex justify-end')}>
         <div className={tw('flex flex-row gap-8')}>
           {items.map(({ name, link }) => (
             <div key={link} className={tw('group')}>

@@ -64,7 +64,7 @@ const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
 const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLanguage, Record<string, unknown>>>(function StartSection(props, ref) {
   const language = useTranslation(props.language, defaultStartSectionLanguage)
   return (
-    <div className={tw('w-full h-[85vh] bg-white bg-[length:25px_25px]')} style={{'background-image': 'linear-gradient(to right, #e1e1e1 1px, transparent 1px), linear-gradient(to bottom, #e1e1e1 1px, transparent 1px);'}} id="start" ref={ref}>
+    <div className={tw('w-full h-[85vh] bg-white bg-[length:25px_25px]')} style={{ 'background-image': 'linear-gradient(to right, #e1e1e1 1px, transparent 1px), linear-gradient(to bottom, #e1e1e1 1px, transparent 1px);' }} id="start" ref={ref}>
       <div className={tw('py-8 px-16')}>
         <Header />
       </div>

@@ -17,6 +17,8 @@
     "@twind/preset-tailwind": "^1.1.2",
     "@twind/preset-tailwind-forms": "^1.1.0",
     "@twind/preset-typography": "^1.0.6",
+    "google-protobuf": "^3.21.2",
+    "grpc-web": "^1.4.2",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "next": "^13.0.6",

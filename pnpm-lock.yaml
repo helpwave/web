@@ -30,6 +30,8 @@ importers:
       eslint-plugin-promise: ^6.0.1
       eslint-plugin-react: ^7.31.8
       eslint-plugin-react-hooks: ^4.6.0
+      google-protobuf: ^3.21.2
+      grpc-web: ^1.4.2
       js-cookie: ^3.0.1
       jsonwebtoken: ^8.5.1
       next: ^13.0.6
@@ -46,6 +48,8 @@ importers:
       '@twind/preset-tailwind': 1.1.2_p7sborpglfnye65f3nd3ak7kdi
       '@twind/preset-tailwind-forms': 1.1.0_ihtbjnu2hs3r6gexdlnkrttglq
       '@twind/preset-typography': 1.0.6_p7sborpglfnye65f3nd3ak7kdi
+      google-protobuf: 3.21.2
+      grpc-web: 1.4.2
       js-cookie: 3.0.1
       jsonwebtoken: 8.5.1
       next: 13.0.6_biqbaboplfbrettd7655fr4n2y
@@ -1690,9 +1694,17 @@ packages:
       csstype: ^3.0.10
     dev: false
 
+  /google-protobuf/3.21.2:
+    resolution: {integrity: sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA==}
+    dev: false
+
   /grapheme-splitter/1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: true
+
+  /grpc-web/1.4.2:
+    resolution: {integrity: sha512-gUxWq42l5ldaRplcKb4Pw5O4XBONWZgz3vxIIXnfIeJj8Jc3wYiq2O4c9xzx/NGbbPEej4rhI62C9eTENwLGNw==}
+    dev: false
 
   /has-bigints/1.0.2:
     resolution: {integrity: sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ==}

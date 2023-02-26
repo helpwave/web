@@ -5,10 +5,29 @@ import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
+import type * as grpcWeb from 'grpc-web'
+import { WardServiceClient } from '../generated/Ward-svcServiceClientPb'
+import type { GetWardResponse } from '../generated/ward-svc_pb'
+import { GetWardRequest } from '../generated/ward-svc_pb'
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+
+  const getWard = () => {
+    const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc', null, null)
+
+    const req = new GetWardRequest()
+    req.setId('11402cd5-4748-43b0-9868-cc0dd71244b3')
+
+    wardService.getWard(req, null, (err: grpcWeb.RpcError, res: GetWardResponse) => {
+      if (err) {
+        console.error('call failed', err)
+        return
+      }
+      console.log('call successful', res.getId(), res.getName())
+    })
+  }
 
   console.log(user, accessToken)
 
@@ -34,6 +53,8 @@ const Home: NextPage = () => {
         </h1>
 
         <button onClick={() => logout(() => window.location.reload())}>Logout</button>
+
+        <button onClick={() => getWard()}>Get ward (open console)</button>
       </div>
   )
 }

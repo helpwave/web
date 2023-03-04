@@ -11,7 +11,7 @@ const PillLabel = ({ count = 0, state = 'unscheduled' }: PillLabelProps) => {
   let text = 'unscheduled'
   switch (state) {
     case 'inProgress': labelNumber = '2'; text = 'in progress'; break
-    case 'done': labelNumber = '3'; text = 'in done'; break
+    case 'done': labelNumber = '3'; text = 'done'; break
     default: break
   }
   // TODO Translation

@@ -18,13 +18,14 @@ export type StartSectionLanguage = {
   }
 }
 
+// <Helpwave className={tw('align-center')} height="72" width="96" />
 const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
   en: {
     HeroMessageComponent: () => (
       <>
-        {'We develop '}
+        {'develops '}
         <span className={tw('text-hw-primary-400')}>{'real'}</span>
-        {' Solutions for '}
+        {' solutions for '}
         <span className={tw('text-hw-pool-red')}>{'real'}</span>
         {' people'}
       </>
@@ -64,13 +65,11 @@ const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
 const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLanguage, Record<string, unknown>>>(function StartSection(props, ref) {
   const language = useTranslation(props.language, defaultStartSectionLanguage)
   return (
-    <div className={tw('w-full h-[85vh] bg-white bg-[length:25px_25px]')} style={{ 'background-image': 'linear-gradient(to right, #e1e1e1 1px, transparent 1px), linear-gradient(to bottom, #e1e1e1 1px, transparent 1px);' }} id="start" ref={ref}>
-      <div className={tw('py-8 px-16')}>
-        <Header />
-      </div>
-      <div className={tw('relative top-[20vh] m-auto w-[580px]')}>
+    <div className={tw('w-screen h-screen bg-white')} id="start" ref={ref}>
+      <Header />
+      <div className={tw('relative top-[35vh] m-auto w-[500px]')}>
         <div className={tw('flex justify-center')}>
-          <div className={tw('font-space text-7xl font-bold')}>helpwave</div>
+          <div className={tw('font-space text-8xl font-bold')}>helpwave</div>
         </div>
 
         <div className={tw('font-sans text-2xl font-medium mt-4 text-center')}>

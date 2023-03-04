@@ -5,28 +5,26 @@ import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
-import type * as grpcWeb from 'grpc-web'
 import { WardServiceClient } from '../generated/Ward-svcServiceClientPb'
-import type { GetWardResponse } from '../generated/ward-svc_pb'
 import { GetWardRequest } from '../generated/ward-svc_pb'
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
-  const getWard = () => {
-    const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc', null, null)
+  const getWard = async () => {
+    const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc')
 
     const req = new GetWardRequest()
-    req.setId('11402cd5-4748-43b0-9868-cc0dd71244b3')
+    req.setId('067900e6-df05-42f1-9d3b-a70db9f91598')
 
-    wardService.getWard(req, null, (err: grpcWeb.RpcError, res: GetWardResponse) => {
-      if (err) {
+    wardService.getWard(req, null)
+      .then((res) => {
+        console.log('call successful', res.getId(), res.getName())
+      })
+      .catch((err) => {
         console.error('call failed', err)
-        return
-      }
-      console.log('call successful', res.getId(), res.getName())
-    })
+      })
   }
 
   console.log(user, accessToken)

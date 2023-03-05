@@ -23,7 +23,6 @@ type Role = keyof typeof roles
 const roleEnum = Object.fromEntries(Object.keys(roles).map((key) => [key, key])) as { [key in Role]: key }
 
 const teamMembers = [ /* eslint-disable key-spacing, no-multi-spaces */
-  { name: 'Jannik',    role: roleEnum.FRONTEND_DEVELOPER },
   { name: 'Felix',     role: roleEnum.PROJECT_MANAGER },
   { name: 'Max',       role: roleEnum.PROJECT_MANAGER },
   { name: 'Jonas',     role: roleEnum.PRODUCT_OWNER },

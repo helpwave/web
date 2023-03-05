@@ -67,12 +67,10 @@ const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLa
   return (
     <div className={tw('w-screen h-screen bg-white')} id="start" ref={ref}>
       <Header />
-      <div className={tw('relative top-[35vh] m-auto w-[500px]')}>
-        <div className={tw('flex justify-center')}>
-          <div className={tw('font-space text-8xl font-bold')}>helpwave</div>
-        </div>
+      <div className={tw('relative top-[35vh] m-auto')}>
+          <div className={tw('font-space text-6xl font-bold text-center')}>helpwave</div>
 
-        <div className={tw('font-sans text-2xl font-medium mt-4 text-center')}>
+        <div className={tw('font-sans text-2xl font-medium mt-2 text-center')}>
           <language.HeroMessageComponent />
         </div>
       </div>

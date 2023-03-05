@@ -1,23 +1,15 @@
 import Link from 'next/link'
 import { tw } from '@helpwave/common/twind/index'
-import Helpwave from '../icons/HelpwaveRect'
-
-const items = [
-  { name: 'Features', link: '#features' },
-  { name: 'Partners & Team', link: '#partners_team' },
-  { name: 'Contact', link: '#contact' },
-]
 
 const socials = [
   { name: 'GitHub', link: 'https://github.com/helpwave/' },
   { name: 'LinkedIn', link: 'https://linkedin.com/company/helpwave/' },
   { name: 'Instagram', link: 'https://instagram.com/helpwave_de/' },
-  { name: 'Twitter', link: 'https://twitter.com/helpwave_de/' },
 ]
 
 const Header = () => {
   return (
-      <div className={tw('absolute left-1/2 top-10 -translate-x-1/2')}>
+      <div className={tw('absolute left-1/2 bottom-10 -translate-x-1/2')}>
         <div className={tw('flex flex-row gap-8')}>
           {socials.map(({ name, link }) => (
             <div key={link} className={tw('group')}>

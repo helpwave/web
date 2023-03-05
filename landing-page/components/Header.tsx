@@ -9,7 +9,7 @@ const socials = [
 
 const Header = () => {
   return (
-      <div className={tw('absolute left-1/2 bottom-10 -translate-x-1/2')}>
+      <div className={tw('absolute left-1/2 bottom-[40px] -translate-x-1/2')}>
         <div className={tw('flex flex-row gap-8')}>
           {socials.map(({ name, link }) => (
             <div key={link} className={tw('group')}>

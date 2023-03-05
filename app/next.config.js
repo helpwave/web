@@ -3,9 +3,8 @@ const nextConfig = {
   distDir: 'build',
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    transpilePackages: ['@helpwave/common'],
-  }
+  transpilePackages: ['@helpwave/common'],
+  output: 'standalone',
 }
 
 module.exports = nextConfig

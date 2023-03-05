@@ -5,10 +5,27 @@ import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
+import { WardServiceClient } from '../generated/Ward-svcServiceClientPb'
+import { GetWardRequest } from '../generated/ward-svc_pb'
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+
+  const getWard = async () => {
+    const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc')
+
+    const req = new GetWardRequest()
+    req.setId('067900e6-df05-42f1-9d3b-a70db9f91598')
+
+    wardService.getWard(req, null)
+      .then((res) => {
+        console.log('call successful', res.getId(), res.getName())
+      })
+      .catch((err) => {
+        console.error('call failed', err)
+      })
+  }
 
   console.log(user, accessToken)
 
@@ -34,6 +51,8 @@ const Home: NextPage = () => {
         </h1>
 
         <button onClick={() => logout(() => window.location.reload())}>Logout</button>
+
+        <button onClick={() => getWard()}>Get ward (open console)</button>
       </div>
   )
 }

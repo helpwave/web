@@ -1,19 +1,21 @@
 import { tw } from '@helpwave/common/twind/index'
+import { TaskState } from '../enums/TaskState'
 
 export type PillLabelProps = {
   count?: number,
-  state?: 'unscheduled' | 'inProgress' | 'done'
+  state?: TaskState
 }
 
-const PillLabel = ({ count = 0, state = 'unscheduled' }: PillLabelProps) => {
-  // case 'unscheduled' is default
-  let labelNumber = '1'
-  let text = 'unscheduled'
-  switch (state) {
-    case 'inProgress': labelNumber = '2'; text = 'in progress'; break
-    case 'done': labelNumber = '3'; text = 'done'; break
-    default: break
+const PillLabel = ({ count = 0, state = TaskState.unscheduled }: PillLabelProps) => {
+  const textMap = {
+    [TaskState.unscheduled]: 'unscheduled',
+    [TaskState.inProgress]: 'in progress',
+    [TaskState.done]: 'done'
   }
+  const labelMap = { [TaskState.unscheduled]: '1', [TaskState.inProgress]: '2', [TaskState.done]: '3' }
+
+  const labelNumber = labelMap[state]
+  const text = textMap[state]
   // TODO Translation
   return (
     <div className={tw(`flex flex-row w-2/3 px-2 rounded-md justify-between bg-hw-label-${labelNumber}-background`)}>

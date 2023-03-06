@@ -4,7 +4,7 @@ import type { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } f
 const languages = ['en', 'de'] as const
 export type Languages = typeof languages[number]
 
-export const DEFAULT_LANGUAGE = 'de'
+export const DEFAULT_LANGUAGE = 'en'
 
 export type LanguageContextValue = {
   language: Languages,

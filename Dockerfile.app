@@ -21,6 +21,9 @@ COPY . .
 RUN pnpm --filter $WS run build
 
 FROM node:18.12.0-alpine
+
+LABEL maintainer="tech@helpwave.de"
+
 ENV NEXT_TELEMETRY_DISABLED 1
 WORKDIR /web
 

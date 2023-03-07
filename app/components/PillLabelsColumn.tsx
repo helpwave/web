@@ -1,6 +1,5 @@
 import { tw } from '@helpwave/common/twind/index'
-import { PillLabel } from './PillLabel'
-import { TaskState } from '../dataclasses/TaskState'
+import { PillLabel, TaskState } from './PillLabel'
 
 export type PillLabelsColumnProps = {
   unscheduledCount?: number,

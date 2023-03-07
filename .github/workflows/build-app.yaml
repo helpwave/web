@@ -2,15 +2,27 @@ name: Build app
 
 on:
   push:
+    branches:
+      - '*'
     paths:
       - 'app/**'
       - 'lib/**'
+      - 'pnpm*.yaml'
+      - 'package*.json'
+      - 'Dockerfile.app'
+      - '.dockerignore'
+      - '.github/workflows/**'
     tags:
       - 'v*'
   pull_request:
     paths:
       - 'app/**'
       - 'lib/**'
+      - 'pnpm*.yaml'
+      - 'package*.json'
+      - 'Dockerfile.app'
+      - '.dockerignore'
+      - '.github/workflows/**'
 
 jobs:
 

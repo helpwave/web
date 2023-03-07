@@ -1,12 +1,13 @@
 import { tw } from '@helpwave/common/twind/index'
-import { TaskStates } from '../dataclasses/TaskState'
+import type { TaskStateInformation } from '../dataclasses/TaskState'
+import { TaskState } from '../dataclasses/TaskState'
 
 export type PillLabelProps = {
   count?: number,
-  state?: {text: string, label: number}
+  state?: TaskStateInformation
 }
 
-const PillLabel = ({ count = 0, state = TaskStates.unscheduled }: PillLabelProps) => {
+const PillLabel = ({ count = 0, state = TaskState.unscheduled }: PillLabelProps) => {
   // TODO Translation
   return (
     <div className={tw(`flex flex-row w-2/3 px-2 rounded-md justify-between bg-hw-label-${state.label}-background`)}>

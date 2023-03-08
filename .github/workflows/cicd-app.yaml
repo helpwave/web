@@ -1,4 +1,4 @@
-name: Build app
+name: CICD app
 
 on:
   push:
@@ -26,11 +26,17 @@ on:
 
 jobs:
 
-  docker:
+  build:
+    name: Build docker image
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
+
+    outputs:
+      IMAGE: ${{ env.IMAGE_NAME }}@${{ steps.docker-build-and-push.outputs.digest }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -82,6 +88,7 @@ jobs:
 
       - name: Build
         uses: docker/build-push-action@v3
+        id: docker-build-and-push
         with:
           context: .
           file: Dockerfile.app
@@ -103,3 +110,37 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         run: |
           docker buildx imagetools inspect ${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+
+  deploy:
+    name: Deploy to cluster
+    runs-on: ubuntu-latest
+    environment: staging
+    needs: build
+    if: ${{ github.event_name != 'pull_request' }}
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Authenticate against GCP
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ vars.GKE_NAME }}
+          location: ${{ vars.GKE_ZONE }}
+
+      - name: Deploy
+        run: |-
+          kubectl patch --namespace $DEPLOYMENT_NAMESPACE deployment/$DEPLOYMENT_NAME --patch '{"spec":{"template":{"spec":{"containers":[{"name":"'$CONTAINER_NAME'", "image":"'$CONTAINER_IMAGE'"}]}}}}'
+          kubectl rollout status --namespace $DEPLOYMENT_NAMESPACE deployment/$DEPLOYMENT_NAME
+        env:
+          DEPLOYMENT_NAMESPACE: ${{ vars.DEPLOYMENT_NAMESPACE }}
+          DEPLOYMENT_NAME: ${{ vars.DEPLOYMENT_NAME }}
+          CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
+          CONTAINER_IMAGE: ${{ needs.build.outputs.IMAGE }}

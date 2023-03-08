@@ -81,6 +81,21 @@ export const config = defineConfig({
           green: '#7DED99',
           orange: '#FF9933'
         },
+        'hw-label-1': {
+          background: '#FEE0DD',
+          accent: '#D67268',
+          text: '#591917'
+        },
+        'hw-label-2': {
+          background: '#FEEACB',
+          accent: '#C79345',
+          text: '#412A1D'
+        },
+        'hw-label-3': {
+          background: '#E2E9DB',
+          accent: '#7A977E',
+          text: '#273429'
+        },
       },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],

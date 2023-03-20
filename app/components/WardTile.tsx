@@ -47,7 +47,7 @@ const WardTile = ({
     <div onClick={onTileClicked}
          className={tx('group cursor-pointer rounded-md py-2 px-4 border border-2 hover:border-hw-primary-700 w-full', { 'border-hw-primary-700': isSelected })}>
       <div className={tw('flex flex-row justify-between w-full')}>
-        <h5 className={tw('font-bold')}>{ward.name}</h5>
+        <span className={tw('font-bold font-space')}>{ward.name}</span>
         <button onClick={onEditClicked}
                 className={tw('hidden group-hover:block')}>{translation.edit}</button>
       </div>

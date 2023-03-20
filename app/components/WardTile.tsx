@@ -19,13 +19,17 @@ const defaultWardTileTranslations: Record<Languages, WardTileTranslation> = {
   }
 }
 
-export type WardTileProps = {
-  wardName: string,
+type WardDTO = {
+  name: string,
   roomNames: string[],
   bedCount: number,
   unscheduledTasks: number,
   inProgressTasks: number,
-  doneTasks: number,
+  doneTasks: number
+}
+
+export type WardTileProps = {
+  ward: WardDTO,
   isSelected: boolean,
   tileClickedCallback: () => void,
   editClickedCallback: () => void
@@ -39,20 +43,20 @@ const WardTile: FunctionComponent<PropsWithLanguage<WardTileTranslation, WardTil
     <div onClick={props.tileClickedCallback}
          className={tw(`${selectedBorderColor} group cursor-pointer rounded-md py-2 px-4 border hover:border-black w-full`)}>
       <div className={tw('flex flex-row justify-between w-full')}>
-        <h5 className={tw('font-bold')}>{props.wardName}</h5>
+        <h5 className={tw('font-bold')}>{props.ward.name}</h5>
         <button onClick={props.editClickedCallback}
                 className={tw('hidden group-hover:block')}>{translation.edit}</button>
       </div>
-      <div className={tw('text-left my-1')}>{props.roomNames.join(', ')}</div>
+      <div className={tw('text-left my-1')}>{props.ward.roomNames.join(', ')}</div>
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-row')}>
           <Bed/>
-          <div className={tw('pl-1')}>{props.bedCount}</div>
+          <div className={tw('pl-1')}>{props.ward.bedCount}</div>
         </div>
         <PillLabelBox
-          unscheduledCount={props.unscheduledTasks}
-          inProgressCount={props.inProgressTasks}
-          doneCount={props.doneTasks}/>
+          unscheduledCount={props.ward.unscheduledTasks}
+          inProgressCount={props.ward.inProgressTasks}
+          doneCount={props.ward.doneTasks}/>
       </div>
     </div>
   )

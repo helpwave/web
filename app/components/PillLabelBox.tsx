@@ -8,7 +8,7 @@ export type PillLabelBoxProps = {
 
 const PillLabelBox = ({ unscheduledCount, inProgressCount, doneCount }: PillLabelBoxProps) => {
   const between = '0.2rem'
-  const height = '0.75rem' // equivalent to 1.5rem / 2 = 24px = h-6 of tailwind
+  const height = '0.75rem' // equivalent to 1.5rem / 2 = 24px / 2 = h-6 / 2 of tailwind, half because border is set on both sides
   const borderWidth = `border-y-[${height}] border-x-[${between}]`
   return (
     <div className={tw('flex flex-row h-6')}>

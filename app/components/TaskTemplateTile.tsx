@@ -1,6 +1,5 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { FunctionComponent } from 'react'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
@@ -21,28 +20,32 @@ const defaultTaskTemplateTileTranslations: Record<Languages, TaskTemplateTileTra
 }
 
 export type TaskTemplateTileProps = {
-  templateName: string,
+  name: string,
   subtaskCount: number,
-  isSelected: boolean,
-  editClickedCallback: () => void,
-  tileClickedCallback: () => void
+  isSelected?: boolean,
+  onEditClicked?: () => void,
+  onTileClicked?: () => void
 }
 
-const TaskTemplateTile: FunctionComponent<PropsWithLanguage<TaskTemplateTileTranslation, TaskTemplateTileProps>> =
-  (props) => {
-    const translation = useTranslation(props.language, defaultTaskTemplateTileTranslations)
-    // TODO change border color for onHover and selected
-    const selectedBorderColor = props.isSelected ? 'border-black' : ''
+export const TaskTemplateTile =
+  ({
+    isSelected = false,
+    name,
+    subtaskCount,
+    language,
+    onTileClicked = () => undefined,
+    onEditClicked = () => undefined
+  }: PropsWithLanguage<TaskTemplateTileTranslation, TaskTemplateTileProps>) => {
+    const translation = useTranslation(language, defaultTaskTemplateTileTranslations)
     return (
-      <button onClick={props.tileClickedCallback}
-              className={tw(`${selectedBorderColor} group flex flex-row rounded-md py-2 px-4 border hover:border-black justify-between items-center w-full`)}>
+      <button onClick={onTileClicked}
+              className={tx('group flex flex-row rounded-md py-2 px-4 border-2 hover:border-hw-primary-700 justify-between items-center w-full', { 'border-hw-primary-700': isSelected })}>
         <div className={tw('flex flex-col items-start')}>
-          <h5 className={tw('font-bold')}>{props.templateName}</h5>
-          <p>{props.subtaskCount.toString() + ' ' + translation.subtask}</p>
+          <span className={tw('font-bold font-space')}>{name}</span>
+          <p>{subtaskCount + ' ' + translation.subtask}</p>
         </div>
-        <button onClick={props.editClickedCallback} className={tw('hidden group-hover:block')}>{translation.edit}</button>
+        <button onClick={onEditClicked}
+                className={tw('hidden group-hover:block')}>{translation.edit}</button>
       </button>
     )
   }
-
-export { TaskTemplateTile }

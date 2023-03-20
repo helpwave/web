@@ -34,15 +34,14 @@ export type WardTileProps = {
   onEditClicked?: () => void
 }
 
-const WardTile = ({
+export const WardTile = ({
   language,
   isSelected,
   ward,
   onTileClicked = () => undefined,
   onEditClicked = () => undefined
 }: PropsWithLanguage<WardTileTranslation, WardTileProps>) => {
-  const translation = useTranslation(language, defaultWardTileTranslations)
-  // TODO change border color for onHover and selected
+  const translation = useTranslation(language, defaultWardTileTranslations);
   return (
     <div onClick={onTileClicked}
          className={tx('group cursor-pointer rounded-md py-2 px-4 border border-2 hover:border-hw-primary-700 w-full', { 'border-hw-primary-700': isSelected })}>
@@ -65,5 +64,3 @@ const WardTile = ({
     </div>
   )
 }
-
-export { WardTile }

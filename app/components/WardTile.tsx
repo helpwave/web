@@ -50,9 +50,9 @@ const WardTile: FunctionComponent<PropsWithLanguage<WardTileTranslation, WardTil
           <div className={tw('pl-1')}>{props.bedCount}</div>
         </div>
         <PillLabelBox
-          unscheduledTasks={props.unscheduledTasks}
-          inProgressTasks={props.inProgressTasks}
-          doneTasks={props.doneTasks}/>
+          unscheduledCount={props.unscheduledTasks}
+          inProgressCount={props.inProgressTasks}
+          doneCount={props.doneTasks}/>
       </div>
     </div>
   )

@@ -50,15 +50,19 @@ export const config = defineConfig({
           800: '#4F3879'
         },
         'hw-positive': {
-          300: '#7DED99',
-          // TODO: 400 is still missing, see figma
-          500: '#52BC6D'
+          300: '#BCF5CB',
+          400: '#7DED99',
+          500: '#69D384',
+          600: '#52BC6D'
         },
         'hw-negative': {
-          300: '#D77585',
-          400: '#A97070',
-          500: '#A54F5C',
-          600: '#804D4D'
+          200: '#FCD4D9',
+          300: '#F8B0BF',
+          400: '#E890A0',
+          500: '#D77585',
+          600: '#A97070',
+          700: '#A54F5C',
+          800: '#804D4D'
         },
         'hw-neutral': {
           // TODO: 300 is still missing, see figma

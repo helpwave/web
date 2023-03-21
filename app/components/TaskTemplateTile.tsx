@@ -1,7 +1,9 @@
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { CardProps } from './Card'
+import { Card } from './Card'
 
 type TaskTemplateTileTranslation = {
   subtask: string,
@@ -22,10 +24,8 @@ const defaultTaskTemplateTileTranslations: Record<Languages, TaskTemplateTileTra
 export type TaskTemplateTileProps = {
   name: string,
   subtaskCount: number,
-  isSelected?: boolean,
-  onEditClicked?: () => void,
-  onTileClicked?: () => void
-}
+  onEditClicked?: () => void
+} & CardProps
 
 export const TaskTemplateTile =
   ({
@@ -38,14 +38,13 @@ export const TaskTemplateTile =
   }: PropsWithLanguage<TaskTemplateTileTranslation, TaskTemplateTileProps>) => {
     const translation = useTranslation(language, defaultTaskTemplateTileTranslations)
     return (
-      <button onClick={onTileClicked}
-              className={tx('group flex flex-row rounded-md py-2 px-4 border-2 hover:border-hw-primary-700 justify-between items-center w-full', { 'border-hw-primary-700': isSelected })}>
+      <Card onTileClicked={onTileClicked} isSelected={isSelected} classes={['group flex flex-row justify-between']}>
         <div className={tw('flex flex-col items-start')}>
           <span className={tw('font-bold font-space')}>{name}</span>
           <p>{subtaskCount + ' ' + translation.subtask}</p>
         </div>
         <button onClick={onEditClicked}
                 className={tw('hidden group-hover:block')}>{translation.edit}</button>
-      </button>
+      </Card>
     )
   }

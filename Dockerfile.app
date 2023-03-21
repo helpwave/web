@@ -7,16 +7,16 @@ RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
 WORKDIR /web
 
-# copy all dependency declerations inside the container
+# copy all dependency declarations inside the container
 COPY package*.json .
 COPY pnpm*.yaml .
-COPY app/package*.json ./app/
+COPY tasks/package*.json ./tasks/
 COPY lib/package*.json ./lib/
 
-# install depedencies
+# install dependencies
 RUN pnpm install --frozen-lockfile
 
-# build app
+# build tasks
 COPY . .
 RUN pnpm --filter $WS run build
 
@@ -31,10 +31,10 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # copy transpiled app
-COPY --from=build --chown=nextjs:nodejs /web/app/build/standalone ./
-COPY --from=build --chown=nextjs:nodejs /web/app/public ./app/public
-COPY --from=build --chown=nextjs:nodejs /web/app/build/static ./app/build/static
+COPY --from=build --chown=nextjs:nodejs /web/tasks/build/standalone ./
+COPY --from=build --chown=nextjs:nodejs /web/tasks/public ./tasks/public
+COPY --from=build --chown=nextjs:nodejs /web/tasks/build/static ./tasks/build/static
 
 EXPOSE 80
 ENV PORT 80
-CMD ["node", "app/server.js"]
+CMD ["node", "tasks/server.js"]

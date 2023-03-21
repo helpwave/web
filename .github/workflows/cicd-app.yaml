@@ -1,4 +1,4 @@
-name: CICD app
+name: CICD tasks
 
 on:
   push:

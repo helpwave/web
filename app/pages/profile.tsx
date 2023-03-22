@@ -77,7 +77,7 @@ const ProfilePage: NextPage = () => {
         <hr />
 
         <Section title="Update your avatar">
-          <ProfilePicture avatarUrl={avatarUrl} altText="profile picture" size="large" />
+          <ProfilePicture avatarUrl={avatarUrl} alt="profile picture" size="large" />
           {/* For now this is just a text input for a url, this should become some kind of file chooser in the future */}
           <Input id="profile:avatar-url" label="Avatar URL" value={avatarUrl} onChange={setAvatarUrl} />
         </Section>

@@ -2,10 +2,10 @@ import { tw, tx } from '@helpwave/common/twind/index'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import ChevronLast from '../icons/ChevronLast'
-import ChevronLeft from '../icons/ChevronLeft'
-import ChevronFirst from '../icons/ChevronFirst'
-import ChevronRight from '../icons/ChevronRight'
+import ChevronLast from '@helpwave/common/icons/ChevronLast'
+import ChevronLeft from '@helpwave/common/icons/ChevronLeft'
+import ChevronFirst from '@helpwave/common/icons/ChevronFirst'
+import ChevronRight from '@helpwave/common/icons/ChevronRight'
 
 type PageIndicatorTranslation = {
   of: string
@@ -25,7 +25,7 @@ export type PageIndicatorProps = {
   onPageChanged: (page: number) => void
 }
 
-export const PageIndicator = ({
+export const Pagination = ({
   language,
   page,
   numberOfPages,

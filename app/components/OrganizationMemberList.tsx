@@ -4,11 +4,12 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Dropdown from '../icons/TriangleDown'
-import { PageIndicator } from './PageIndicator'
+import { Pagination } from './Pagination'
 import { ProfilePicture } from './ProfilePicture'
 import { TriStateCheckbox } from './TriStateCheckbox'
 
-export enum Role {
+// TODO replace later
+export const enum Role {
   user,
   admin,
 }
@@ -23,7 +24,7 @@ type OrganizationMemberListTranslation = {
   saveChanges: string,
   role: string,
   of: string,
-  roleTypes: (role: Role) => string
+  roleTypes: Record<Role, string>
 }
 
 const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationMemberListTranslation> = {
@@ -37,9 +38,7 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     saveChanges: 'Save changes',
     role: 'Role',
     of: 'of',
-    roleTypes: (role: Role) => {
-      return { [Role.admin]: 'Admin', [Role.user]: 'User' }[role]
-    }
+    roleTypes: { [Role.admin]: 'Admin', [Role.user]: 'User' }
   },
   de: {
     edit: 'Bearbeiten',
@@ -51,9 +50,7 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     saveChanges: 'Speichern',
     role: 'Rolle',
     of: 'von',
-    roleTypes: (role: Role) => {
-      return { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' }[role]
-    }
+    roleTypes: { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' }
   }
 }
 
@@ -225,7 +222,7 @@ export const OrganizationMemberList = ({
               <div className={tw('flex flex-row justify-end items-center')}>
                 <button onClick={roleClicked} className={tw('flex flex-row justify-end items-center')}>
                     <span
-                      className={tw(`mr-2 font-semibold min-w-[${rowHeight}px] text-right`)}>{translation.roleTypes(member.role)}</span>
+                      className={tw(`mr-2 font-semibold min-w-[${rowHeight}px] text-right`)}>{translation.roleTypes[member.role]}</span>
                   <Dropdown className={tw('stroke-black')}/>
                 </button>
               </div>
@@ -246,7 +243,7 @@ export const OrganizationMemberList = ({
         </tbody>
       </table>
       <div className={tw('flex flex-row justify-center mt-2')}>
-        <PageIndicator page={currentPage} numberOfPages={pages} onPageChanged={(page) => setCurrentPage(page)}/>
+        <Pagination page={currentPage} numberOfPages={pages} onPageChanged={(page) => setCurrentPage(page)}/>
       </div>
     </div>
   )

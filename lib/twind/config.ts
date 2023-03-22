@@ -42,12 +42,16 @@ export const config = defineConfig({
       colors: {
         // TODO: custom helpwave (hw) colors go here
         'hw-primary': {
-          300: '#8E75CE',
-          400: '#B275CE',
-          500: '#8070A9',
-          600: '#694BB4',
-          700: '#5D4D80',
-          800: '#4F3879'
+          100: '#F5E2FD',
+          200: '#EFD5FB',
+          300: '#CDAFEF',
+          400: '#AA96DF',
+          500: '#B275CE',
+          600: '#8E75CE',
+          700: '#694BB4',
+          800: '#8070A9',
+          900: '#5D4D80',
+          1000: '#4F3879',
         },
         'hw-positive': {
           300: '#BCF5CB',

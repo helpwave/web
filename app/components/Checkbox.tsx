@@ -13,7 +13,7 @@ type CheckboxProps = {
   /**
    * @default false
    */
-  checked: boolean | undefined,
+  checked: boolean,
   disabled?: boolean,
   onChange: (checked: boolean) => void
 }

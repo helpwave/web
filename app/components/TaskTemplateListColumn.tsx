@@ -1,23 +1,26 @@
+import { useState } from 'react'
 import { tw } from '@helpwave/common/twind/index'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useState } from 'react'
+import Add from '@helpwave/common/icons/Add'
 import { TaskTemplateTile } from './TaskTemplateTile'
-import Add from '../icons/Add'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
-  columTitle: (isWardTemplate: boolean) => string
+  wardTemplate: string,
+  personalTemplate: string
 }
 
 const defaultTaskTemplateListColumnTranslation = {
   de: {
     addNewTaskTemplate: 'Neue Vorlage hinzufügen',
-    columTitle: (isWardTemplate: boolean) => isWardTemplate ? 'Stations Vorlagen' : 'Persönliche Vorlagen'
+    wardTemplate: 'Stations Vorlagen',
+    personalTemplate: 'Persönliche Vorlagen'
   },
   en: {
     addNewTaskTemplate: 'Add new template',
-    columTitle: (isWardTemplate: boolean) => isWardTemplate ? 'Ward Templates' : 'Personal Templates'
+    wardTemplate: 'Ward Templates',
+    personalTemplate: 'Personal Templates'
   }
 }
 
@@ -54,21 +57,25 @@ export const TaskTemplateListColumn = ({
     <div>
       <div className={tw('flex flex-row items-center')}>
         <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <span className={tw('font-bold')}>{translation.columTitle(isWardTemplateColumn)}</span>
+        <span className={tw('font-bold')}>
+          {isWardTemplateColumn ? translation.wardTemplate : translation.personalTemplate}
+        </span>
       </div>
       {taskTemplates.map(taskTemplate => (
           <div key={taskTemplate.name} className={tw('my-2')}>
-            <TaskTemplateTile name={taskTemplate.name}
-                              subtaskCount={taskTemplate.subtaskCount}
-                              isSelected={selected === taskTemplate}
-                              onEditClicked={() => onEditClicked(taskTemplate)}
-                              onTileClicked={() => onTileClicked(taskTemplate)}/>
+            <TaskTemplateTile
+              name={taskTemplate.name}
+              subtaskCount={taskTemplate.subtaskCount}
+              isSelected={selected === taskTemplate}
+              onEditClicked={() => onEditClicked(taskTemplate)}
+              onTileClicked={() => onTileClicked(taskTemplate)}
+            />
           </div>
       )
       )}
       <div onClick={addNewTask}
            className={tw('flex flex-row w-full h-16 rounded-md border-2 hover:border-hw-primary-700 items-center justify-center cursor-pointer mt-4')}>
-        <Add/>
+        <Add />
         <span className={tw('ml-2')}>{translation.addNewTaskTemplate}</span>
       </div>
     </div>

@@ -2,23 +2,24 @@ import { tw, tx } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { ProfilePicture } from './ProfilePicture'
 
 type StackedProfilesTranslation = {
-  others: (users: number) => string
+  others: (isMultipleUsers: boolean) => string
 }
 
 const defaultStackedProfilesTranslations: Record<Languages, StackedProfilesTranslation> = {
   en: {
-    others: (users: number) => users === 1 ? 'other' : 'others'
+    others: (isMultipleUsers: boolean) => isMultipleUsers ? 'other' : 'others'
   },
   de: {
-    others: (users: number) => users === 1 ? 'weiterer' : 'weitere'
+    others: (isMultipleUsers: boolean) => isMultipleUsers ? 'weiterer' : 'weitere'
   }
 }
 
 // TODO replace later
 type UserDTO = {
-  color: string,
+  avatarURL: string,
   name: string
 }
 
@@ -34,18 +35,24 @@ export const StackedProfiles = ({
 }: PropsWithLanguage<StackedProfilesTranslation, StackedProfilesProps>) => {
   const translation = useTranslation(language, defaultStackedProfilesTranslations)
   const displayedProfiles = users.length < maxShownProfiles ? users : users.slice(0, maxShownProfiles)
-  const height = 24 // 24px
+  const diameter = 24 // 24px
   const stackingOverlap = 0.5 // given as a percentage
-
+  const notDisplayedProfiles = users.length - maxShownProfiles
   return (
-    <div className={tw(`h-[${height + 'px'}] flex flex-row relative`)}>
+    <div className={tw(`h-[${diameter + 'px'}] flex flex-row relative`)}>
       {displayedProfiles.map((user, index) => (
-        <div key={user.name}
-             className={tx(`h-[${height + 'px'}] w-[${height + 'px'}] rounded-full border-1 bg-[${user.color}] absolute left-[${(index * height * stackingOverlap) + 'px'}] z-[${maxShownProfiles - index}]`)}/>
+        <div key={user.name} className={tx(`absolute left-[${(index * diameter * stackingOverlap) + 'px'}] z-[${maxShownProfiles - index}]`)}>
+          <ProfilePicture key={user.name} avatarUrl={user.avatarURL} altText="" size="tiny"/>
+        </div>
       ))}
-      <div className={tx(`ml-[${((maxShownProfiles + 1) * height * stackingOverlap + 4) + 'px'}]`, { hidden: users.length <= maxShownProfiles })}>
-        <span>{`+ ${(users.length - maxShownProfiles)} ${translation.others(users.length - maxShownProfiles)}`}</span>
-      </div>
+      {notDisplayedProfiles <= 0 ? null :
+          (
+          <div
+            className={tx(`ml-[${((maxShownProfiles + 1) * diameter * stackingOverlap + 4) + 'px'}]`)}>
+            <span>{`+ ${(notDisplayedProfiles)} ${translation.others(notDisplayedProfiles > 1)}`}</span>
+          </div>
+          )
+      }
     </div>
   )
 }

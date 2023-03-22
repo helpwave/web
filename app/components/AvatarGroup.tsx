@@ -2,14 +2,14 @@ import { tw, tx } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { ProfilePicture } from './ProfilePicture'
+import { Avatar } from './Avatar'
 
-type ProfileGroupTranslation = {
+type AvatarGroupTranslation = {
   other: string,
   others: string
 }
 
-const defaultProfileGroupTranslations: Record<Languages, ProfileGroupTranslation> = {
+const defaultAvatarGroupTranslations: Record<Languages, AvatarGroupTranslation> = {
   en: {
     other: 'other',
     others: 'others'
@@ -26,17 +26,17 @@ type UserDTO = {
   name: string
 }
 
-export type ProfileGroupProps = {
+export type AvatarGroupProps = {
   users: UserDTO[],
   maxShownProfiles?: number
 }
 
-export const ProfileGroup = ({
+export const AvatarGroup = ({
   language,
   users,
   maxShownProfiles = 5
-}: PropsWithLanguage<ProfileGroupTranslation, ProfileGroupProps>) => {
-  const translation = useTranslation(language, defaultProfileGroupTranslations)
+}: PropsWithLanguage<AvatarGroupTranslation, AvatarGroupProps>) => {
+  const translation = useTranslation(language, defaultAvatarGroupTranslations)
   const displayedProfiles = users.length < maxShownProfiles ? users : users.slice(0, maxShownProfiles)
   const diameter = 24 // 24px
   const stackingOverlap = 0.5 // given as a percentage
@@ -45,7 +45,7 @@ export const ProfileGroup = ({
     <div className={tw(`h-[${diameter + 'px'}] flex flex-row relative`)}>
       {displayedProfiles.map((user, index) => (
         <div key={user.name} className={tx(`absolute left-[${(index * diameter * stackingOverlap) + 'px'}] z-[${maxShownProfiles - index}]`)}>
-          <ProfilePicture key={user.name} avatarUrl={user.avatarURL} alt={user.name} size="tiny"/>
+          <Avatar key={user.name} avatarUrl={user.avatarURL} alt={user.name} size="tiny"/>
         </div>
       ))}
       {notDisplayedProfiles <= 0 ? null :

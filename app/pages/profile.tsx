@@ -9,7 +9,7 @@ import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
 import { Button } from '../components/Button'
 import { Input, noop } from '../components/Input'
-import { ProfilePicture } from '../components/ProfilePicture'
+import { Avatar } from '../components/Avatar'
 import { UserCard } from '../components/UserCard'
 
 const Section = ({ title, children }: PropsWithChildren<{ title: string }>) => (
@@ -77,7 +77,7 @@ const ProfilePage: NextPage = () => {
         <hr />
 
         <Section title="Update your avatar">
-          <ProfilePicture avatarUrl={avatarUrl} alt="profile picture" size="large" />
+          <Avatar avatarUrl={avatarUrl} alt="profile picture" size="large" />
           {/* For now this is just a text input for a url, this should become some kind of file chooser in the future */}
           <Input id="profile:avatar-url" label="Avatar URL" value={avatarUrl} onChange={setAvatarUrl} />
         </Section>

@@ -1,23 +1,25 @@
 FROM node:18.12.0 as build
 ENV NEXT_TELEMETRY_DISABLED 1
-ARG WS="@helpwave/web-dashboard"
+ARG WS="@helpwave/tasks"
 
 # install pnpm
-RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
+RUN curl --fail https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
 WORKDIR /web
 
 # copy all dependency declarations inside the container
-COPY package*.json .
-COPY pnpm*.yaml .
-COPY tasks/package*.json ./tasks/
-COPY lib/package*.json ./lib/
+COPY package.json .
+COPY pnpm-lock.yaml .
+COPY pnpm-workspace.yaml .
+COPY lib/package.json ./lib/
+COPY tasks/package.json ./tasks/
 
 # install dependencies
-RUN pnpm install --frozen-lockfile
+RUN CI=1 pnpm install --frozen-lockfile
 
 # build tasks app
-COPY . .
+COPY lib ./lib/
+COPY tasks ./tasks/
 RUN pnpm --filter $WS run build
 
 FROM node:18.12.0-alpine

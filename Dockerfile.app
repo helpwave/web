@@ -16,7 +16,7 @@ COPY lib/package*.json ./lib/
 # install dependencies
 RUN pnpm install --frozen-lockfile
 
-# build tasks
+# build tasks app
 COPY . .
 RUN pnpm --filter $WS run build
 

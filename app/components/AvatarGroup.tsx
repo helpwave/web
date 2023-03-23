@@ -49,7 +49,7 @@ export const AvatarGroup = ({
         </div>
       ))}
       {
-        notDisplayedProfiles <= 0 && (
+        notDisplayedProfiles > 0 && (
           <div
             className={tx(`ml-[${((maxShownProfiles + 1) * diameter * stackingOverlap + 4) + 'px'}]`)}>
             <span>{`+ ${(notDisplayedProfiles)} ${notDisplayedProfiles > 1 ? translation.others : translation.other}`}</span>

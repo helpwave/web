@@ -48,13 +48,13 @@ export const AvatarGroup = ({
           <Avatar key={user.name} avatarUrl={user.avatarURL} alt={user.name} size="tiny"/>
         </div>
       ))}
-      {notDisplayedProfiles <= 0 ? null :
-          (
+      {
+        notDisplayedProfiles <= 0 && (
           <div
             className={tx(`ml-[${((maxShownProfiles + 1) * diameter * stackingOverlap + 4) + 'px'}]`)}>
             <span>{`+ ${(notDisplayedProfiles)} ${notDisplayedProfiles > 1 ? translation.others : translation.other}`}</span>
           </div>
-          )
+        )
       }
     </div>
   )

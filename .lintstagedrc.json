@@ -1,3 +1,0 @@
-{
-  "app/*": "pnpm --dir run lint"
-}

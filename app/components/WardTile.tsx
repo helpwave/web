@@ -29,24 +29,24 @@ type WardDTO = {
   done: number
 }
 
-export type WardTileProps = {
+export type WardTileProps = CardProps & {
   ward: WardDTO,
-  onEditClicked?: () => void
-} & CardProps
+  onEditClick?: () => void
+}
 
 export const WardTile = ({
   language,
   isSelected,
   ward,
-  onTileClicked = () => undefined,
-  onEditClicked = () => undefined
+  onTileClick = () => undefined,
+  onEditClick = () => undefined
 }: PropsWithLanguage<WardTileTranslation, WardTileProps>) => {
   const translation = useTranslation(language, defaultWardTileTranslations)
   return (
-    <Card onTileClicked={onTileClicked} isSelected={isSelected} classes={['group cursor-pointer']}>
+    <Card onTileClick={onTileClick} isSelected={isSelected} classes={tw('group cursor-pointer')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <span className={tw('font-bold font-space')}>{ward.name}</span>
-        <button onClick={onEditClicked}
+        <button onClick={onEditClick}
                 className={tw('hidden group-hover:block')}>{translation.edit}</button>
       </div>
       <div className={tw('text-left my-1')}>{ward.roomNames.join(', ')}</div>

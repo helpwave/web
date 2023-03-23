@@ -21,11 +21,11 @@ const defaultTaskTemplateTileTranslations: Record<Languages, TaskTemplateTileTra
   }
 }
 
-export type TaskTemplateTileProps = {
+export type TaskTemplateTileProps = CardProps & {
   name: string,
   subtaskCount: number,
-  onEditClicked?: () => void
-} & CardProps
+  onEditClick?: () => void
+}
 
 export const TaskTemplateTile =
   ({
@@ -33,17 +33,17 @@ export const TaskTemplateTile =
     name,
     subtaskCount,
     language,
-    onTileClicked = () => undefined,
-    onEditClicked = () => undefined
+    onTileClick = () => undefined,
+    onEditClick = () => undefined
   }: PropsWithLanguage<TaskTemplateTileTranslation, TaskTemplateTileProps>) => {
     const translation = useTranslation(language, defaultTaskTemplateTileTranslations)
     return (
-      <Card onTileClicked={onTileClicked} isSelected={isSelected} classes={['group flex flex-row justify-between']}>
+      <Card onTileClick={onTileClick} isSelected={isSelected} classes={tw('group flex flex-row justify-between')}>
         <div className={tw('flex flex-col items-start')}>
           <span className={tw('font-bold font-space')}>{name}</span>
           <p>{subtaskCount + ' ' + translation.subtask}</p>
         </div>
-        <button onClick={onEditClicked}
+        <button onClick={onEditClick}
                 className={tw('hidden group-hover:block')}>{translation.edit}</button>
       </Card>
     )

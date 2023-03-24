@@ -38,7 +38,7 @@ export const TaskTemplateTile =
   }: PropsWithLanguage<TaskTemplateTileTranslation, TaskTemplateTileProps>) => {
     const translation = useTranslation(language, defaultTaskTemplateTileTranslations)
     return (
-      <Card onTileClick={onTileClick} isSelected={isSelected} classes={tw('group flex flex-row justify-between')}>
+      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between')}>
         <div className={tw('flex flex-col items-start')}>
           <span className={tw('font-bold font-space')}>{name}</span>
           <p>{subtaskCount + ' ' + translation.subtask}</p>

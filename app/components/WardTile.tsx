@@ -43,7 +43,7 @@ export const WardTile = ({
 }: PropsWithLanguage<WardTileTranslation, WardTileProps>) => {
   const translation = useTranslation(language, defaultWardTileTranslations)
   return (
-    <Card onTileClick={onTileClick} isSelected={isSelected} classes={tw('group cursor-pointer')}>
+    <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <span className={tw('font-bold font-space')}>{ward.name}</span>
         <button onClick={onEditClick}

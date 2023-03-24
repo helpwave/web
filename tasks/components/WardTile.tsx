@@ -1,9 +1,11 @@
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Bed from '../icons/Bed'
 import { PillLabelBox } from './PillLabelBox'
+import type { CardProps } from './Card'
+import { Card } from './Card'
 
 type WardTileTranslation = {
   edit: string
@@ -27,27 +29,24 @@ type WardDTO = {
   done: number
 }
 
-export type WardTileProps = {
+export type WardTileProps = CardProps & {
   ward: WardDTO,
-  isSelected: boolean,
-  onTileClicked?: () => void,
-  onEditClicked?: () => void
+  onEditClick?: () => void
 }
 
 export const WardTile = ({
   language,
   isSelected,
   ward,
-  onTileClicked = () => undefined,
-  onEditClicked = () => undefined
+  onTileClick = () => undefined,
+  onEditClick = () => undefined
 }: PropsWithLanguage<WardTileTranslation, WardTileProps>) => {
   const translation = useTranslation(language, defaultWardTileTranslations)
   return (
-    <div onClick={onTileClicked}
-         className={tx('group cursor-pointer rounded-md py-2 px-4 border border-2 hover:border-hw-primary-700 w-full', { 'border-hw-primary-700': isSelected })}>
+    <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <span className={tw('font-bold font-space')}>{ward.name}</span>
-        <button onClick={onEditClicked}
+        <button onClick={onEditClick}
                 className={tw('hidden group-hover:block')}>{translation.edit}</button>
       </div>
       <div className={tw('text-left my-1')}>{ward.roomNames.join(', ')}</div>
@@ -61,6 +60,6 @@ export const WardTile = ({
           inProgress={ward.inProgress}
           done={ward.done}/>
       </div>
-    </div>
+    </Card>
   )
 }

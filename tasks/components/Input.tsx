@@ -22,7 +22,7 @@ type InputProps = {
    * @default noop
    */
   onChange?: (text: string) => void
-} & Omit<InputHTMLAttributes<Element>, 'id' | 'value' | 'label' | 'type' | 'onChange'>
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 const ControlledInput = ({ id, type = 'text', value, label, onChange = noop, ...restProps }: InputProps) => {
   return (

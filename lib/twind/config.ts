@@ -50,9 +50,12 @@ export const config = defineConfig({
           800: '#4F3879'
         },
         'hw-positive': {
-          300: '#7DED99',
-          // TODO: 400 is still missing, see figma
-          500: '#52BC6D'
+          300: '#BCF5CB',
+          400: '#7DED99',
+          500: '#69D384',
+          600: '#52BC6D',
+          700: '#479E66',
+          800: '#4D8466'
         },
         'hw-negative': {
           300: '#D77585',

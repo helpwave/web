@@ -1,26 +1,26 @@
-name: CICD app
+name: CICD tasks
 
 on:
   push:
     branches:
       - '*'
     paths:
-      - 'app/**'
       - 'lib/**'
+      - 'tasks/**'
       - 'pnpm*.yaml'
       - 'package*.json'
-      - 'Dockerfile.app'
+      - 'Dockerfile.tasks'
       - '.dockerignore'
       - '.github/workflows/**'
     tags:
       - 'v*'
   pull_request:
     paths:
-      - 'app/**'
       - 'lib/**'
+      - 'tasks/**'
       - 'pnpm*.yaml'
       - 'package*.json'
-      - 'Dockerfile.app'
+      - 'Dockerfile.tasks'
       - '.dockerignore'
       - '.github/workflows/**'
 
@@ -91,7 +91,7 @@ jobs:
         id: docker-build-and-push
         with:
           context: .
-          file: Dockerfile.app
+          file: Dockerfile.tasks
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}

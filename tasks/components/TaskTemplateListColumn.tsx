@@ -67,8 +67,8 @@ export const TaskTemplateListColumn = ({
               name={taskTemplate.name}
               subtaskCount={taskTemplate.subtaskCount}
               isSelected={selected === taskTemplate}
-              onEditClicked={() => onEditClicked(taskTemplate)}
-              onTileClicked={() => onTileClicked(taskTemplate)}
+              onEditClick={() => onEditClicked(taskTemplate)}
+              onTileClick={() => onTileClicked(taskTemplate)}
             />
           </div>
       )

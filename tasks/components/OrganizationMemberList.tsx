@@ -11,9 +11,9 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Dropdown from '../icons/TriangleDown'
 import { Pagination } from './Pagination'
-import { ProfilePicture } from './ProfilePicture'
 import { TriStateCheckbox } from './TriStateCheckbox'
 import { Button } from './Button'
+import { Avatar } from './Avatar'
 
 // TODO replace later
 export const enum Role {
@@ -214,7 +214,7 @@ export const OrganizationMemberList = ({
                   ),
                   name: (
                     <div className={tw('flex flex-row items-center h-12')}>
-                      <ProfilePicture avatarUrl={cell.row.original.avatarURL} altText="" size="small"/>
+                      <Avatar avatarUrl={cell.row.original.avatarURL} alt={cell.row.original.name} size="small"/>
                       <div className={tw('flex flex-col ml-2')}>
                         <span className={tw('font-bold h-5')}>{cell.row.original.name}</span>
                         <span className={tw('text-sm text-gray-400')}>{cell.row.original.email}</span>

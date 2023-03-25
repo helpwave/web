@@ -7,10 +7,10 @@ import ChevronLeft from '@helpwave/common/icons/ChevronLeft'
 import ChevronFirst from '@helpwave/common/icons/ChevronFirst'
 import ChevronRight from '@helpwave/common/icons/ChevronRight'
 
-type PageIndicatorTranslation = {
+type PaginationTranslation = {
   of: string
 }
-const defaultOrganizationMemberListTranslations: Record<Languages, PageIndicatorTranslation> = {
+const defaultPaginationTranslations: Record<Languages, PaginationTranslation> = {
   en: {
     of: 'of'
   },
@@ -19,7 +19,7 @@ const defaultOrganizationMemberListTranslations: Record<Languages, PageIndicator
   }
 }
 
-export type PageIndicatorProps = {
+export type PaginationProps = {
   page: number, // starts with 0
   numberOfPages: number,
   onPageChanged: (page: number) => void
@@ -30,8 +30,8 @@ export const Pagination = ({
   page,
   numberOfPages,
   onPageChanged
-}: PropsWithLanguage<PageIndicatorTranslation, PageIndicatorProps>) => {
-  const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
+}: PropsWithLanguage<PaginationTranslation, PaginationProps>) => {
+  const translation = useTranslation(language, defaultPaginationTranslations)
 
   const changePage = (page:number) => {
     onPageChanged(page)

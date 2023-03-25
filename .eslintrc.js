@@ -3,14 +3,25 @@ module.exports = {
     'standard',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended'
+    'plugin:react-hooks/recommended',
+    'plugin:prettier/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: '2020'
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        tabWidth: 2,
+        printWidth: 140,
+        singleQuote: true,
+        trailingComma: 'none',
+        semi: false
+      }
+    ],
     'space-before-function-paren': 'off',
     // the behaviour of ternary operators is often more clear than using '||', '&&' or '??'
     'no-unneeded-ternary': 'off',
@@ -43,20 +54,6 @@ module.exports = {
     'quote-props': ['warn', 'consistent-as-needed'],
     '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     '@typescript-eslint/no-use-before-define': ['error'],
-    // use commas in typescript types as they are closely related to object literals
-    '@typescript-eslint/member-delimiter-style': [
-      'warn',
-      {
-        multiline: {
-          delimiter: 'comma',
-          requireLast: false
-        },
-        singleline: {
-          delimiter: 'comma',
-          requireLast: false
-        }
-      }
-    ],
     'jsx-quotes': ['error', 'prefer-double'],
     'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'ignore', propElementValues: 'always' }],
     'react/react-in-jsx-scope': 'off',

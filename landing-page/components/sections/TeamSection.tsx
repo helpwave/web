@@ -9,37 +9,37 @@ import StadtWarendorf from '../../icons/partners/StadtWarendorf'
 import Ukm from '../../icons/partners/ukm'
 import MSHack from '../../icons/partners/MSHack'
 
-const roles = { /* eslint-disable key-spacing, no-multi-spaces */
+const roles = {/* eslint-disable key-spacing, no-multi-spaces, prettier/prettier */
   FRONTEND_DEVELOPER: { id: 'FRONTEND_DEVELOPER', name: 'Frontend Developer', color: 'hw-primary-300' },
   BACKEND_DEVELOPER:  { id: 'BACKEND-DEVELOPER',  name: 'Backend Developer',  color: 'hw-pool-red'    },
-  MOBILE_DEVELOPER:  { id: 'MOBILE-DEVELOPER',  name: 'Mobile Developer',  color: 'hw-pool-orange'    },
+  MOBILE_DEVELOPER:   { id: 'MOBILE-DEVELOPER',   name: 'Mobile Developer',   color: 'hw-pool-orange' },
   PRODUCT_OWNER:      { id: 'PRODUCT_OWNER',      name: 'Product Owner',      color: 'hw-pool-green'  },
   PROJECT_MANAGER:    { id: 'PROJECT_MANAGER',    name: 'Project Manager',    color: 'hw-pool-green'  },
-  CUSTOMER_RELATIONS: { id: 'CUSTOMER_RELATIONS', name: 'Customer Relations', color: 'hw-pool-green'  },
-} /* eslint-enable key-spacing, no-multi-spaces */
+  CUSTOMER_RELATIONS: { id: 'CUSTOMER_RELATIONS', name: 'Customer Relations', color: 'hw-pool-green'  }
+} /* eslint-enable key-spacing, no-multi-spaces, prettier/prettier */
 
 type Role = keyof typeof roles
 
 const roleEnum = Object.fromEntries(Object.keys(roles).map((key) => [key, key])) as { [key in Role]: key }
 
-const teamMembers = [ /* eslint-disable key-spacing, no-multi-spaces */
+const teamMembers = [/* eslint-disable key-spacing, no-multi-spaces, prettier/prettier */
   { name: 'Felix',     role: roleEnum.PROJECT_MANAGER },
   { name: 'Max',       role: roleEnum.PROJECT_MANAGER },
   { name: 'Jonas',     role: roleEnum.PRODUCT_OWNER },
   { name: 'Felix',     role: roleEnum.MOBILE_DEVELOPER },
   { name: 'Christian', role: roleEnum.CUSTOMER_RELATIONS },
   { name: 'Max',       role: roleEnum.BACKEND_DEVELOPER },
-  { name: 'Florian',   role: roleEnum.MOBILE_DEVELOPER },
-] /* eslint-enable key-spacing, no-multi-spaces */
+  { name: 'Florian',   role: roleEnum.MOBILE_DEVELOPER }
+] /* eslint-enable key-spacing, no-multi-spaces, prettier/prettier */
 
-const partners = [ /* eslint-disable key-spacing, no-multi-spaces */
+const partners = [/* eslint-disable key-spacing, no-multi-spaces, prettier/prettier */
   { name: 'Muensterhack',      Icon: MSHack,         url: 'https://www.muensterhack.de/' },
   { name: 'Uniklinik Münster', Icon: Ukm,            url: 'https://www.ukm.de/' },
-  { name: 'Stadt Warendorf',   Icon: StadtWarendorf, url: 'https://www.warendorf.de/' },
-] /* eslint-enable key-spacing, no-multi-spaces */
+  { name: 'Stadt Warendorf',   Icon: StadtWarendorf, url: 'https://www.warendorf.de/' }
+] /* eslint-enable key-spacing, no-multi-spaces, prettier/prettier */
 
 export type PartnersTeamSectionLanguage = {
-  headingPartners: string,
+  headingPartners: string
   headingTeam: string
 }
 
@@ -50,46 +50,48 @@ const defaultPartnersTeamSectionTranslations: Record<Languages, PartnersTeamSect
   },
   de: {
     headingPartners: 'Unsere Partner',
-    headingTeam: 'Unser Team',
+    headingTeam: 'Unser Team'
   }
 }
 
-const Person = ({ name, role }: { name: string, role: Role }) => (
+const Person = ({ name, role }: { name: string; role: Role }) => (
   <div className={tw('w-48')}>
-    <div className={tw('font-semibold text-4xl text-white')}>
-      {name}
-    </div>
+    <div className={tw('font-semibold text-4xl text-white')}>{name}</div>
     <div className={tw(`font-medium text-xl text-${roles[role].color}`)}>{roles[role].name}</div>
   </div>
 )
 
-const PartnersTeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnersTeamSectionLanguage, Record<string, unknown>>>(function TeamSection(props, ref) {
-  const language = useTranslation(props.language, defaultPartnersTeamSectionTranslations)
-  return (
-    <Section ref={ref} id="partners_team">
-      <div className={tw('flex justify-between')}>
-        <div className={tw('')}>
-          <h1 className={tw('text-5xl font-space font-bold pb-4')}>{language.headingPartners}</h1>
-          <div className={tw('flex flex-col gap-4 pt-4')}>
-            {partners.map((partner) => (
-              <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer">
-                <div className={tw('flex justify-center py-2 px-8 bg-white rounded-lg')}>
-                  <partner.Icon className={tw('w-44 h-16')} />
-                </div>
-              </a>
-            ))}
+const PartnersTeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnersTeamSectionLanguage, Record<string, unknown>>>(
+  function TeamSection(props, ref) {
+    const language = useTranslation(props.language, defaultPartnersTeamSectionTranslations)
+    return (
+      <Section ref={ref} id="partners_team">
+        <div className={tw('flex justify-between')}>
+          <div className={tw('')}>
+            <h1 className={tw('text-5xl font-space font-bold pb-4')}>{language.headingPartners}</h1>
+            <div className={tw('flex flex-col gap-4 pt-4')}>
+              {partners.map((partner) => (
+                <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer">
+                  <div className={tw('flex justify-center py-2 px-8 bg-white rounded-lg')}>
+                    <partner.Icon className={tw('w-44 h-16')} />
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+          <div className={tw('shrink-0')}>
+            <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>{language.headingTeam}</h1>}>
+              <div className={tw('w-fit grid grid-cols-2 gap-16')}>
+                {teamMembers.map(({ name, role }, index) => (
+                  <Person key={index} name={name} role={role} />
+                ))}
+              </div>
+            </GridBox>
           </div>
         </div>
-        <div className={tw('shrink-0')}>
-          <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>{language.headingTeam}</h1>}>
-            <div className={tw('w-fit grid grid-cols-2 gap-16')}>
-              {teamMembers.map(({ name, role }, index) => <Person key={index} name={name} role={role} />)}
-            </div>
-          </GridBox>
-        </div>
-      </div>
-    </Section>
-  )
-})
+      </Section>
+    )
+  }
+)
 
 export default PartnersTeamSection

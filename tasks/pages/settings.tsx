@@ -10,11 +10,9 @@ import { UserMenu } from '../components/UserMenu'
 
 import CheckIcon from '../icons/Check'
 
-const tabs = [
-  'general', 'account'
-] as const
+const tabs = ['general', 'account'] as const
 
-const SidebarItem = ({ text, icon, active, onClick }: { text: string, icon: ReactNode, active: boolean, onClick: () => void }) => (
+const SidebarItem = ({ text, icon, active, onClick }: { text: string; icon: ReactNode; active: boolean; onClick: () => void }) => (
   <li
     onClick={onClick}
     className={tx('m-1 py-1 px-2 text-slate-700 rounded cursor-pointer hover:bg-slate-100', { 'bg-slate-100': active })}
@@ -29,7 +27,7 @@ const SidebarItem = ({ text, icon, active, onClick }: { text: string, icon: Reac
 const SettingsPage: NextPage = () => {
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
-  const [activeTab, setActiveTab] = useState<typeof tabs[number]>('general')
+  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>('general')
 
   if (!user) return null
 
@@ -39,12 +37,14 @@ const SettingsPage: NextPage = () => {
         <title>Settings</title>
       </Head>
 
-      <Header title="helpwave" navigation={[
-        { text: 'Dashboard', href: '/' },
-        { text: 'Contact', href: '/contact' },
-      ]} actions={[
-        <UserMenu key="user-menu" user={user} />
-      ]} />
+      <Header
+        title="helpwave"
+        navigation={[
+          { text: 'Dashboard', href: '/' },
+          { text: 'Contact', href: '/contact' }
+        ]}
+        actions={[<UserMenu key="user-menu" user={user} />]}
+      />
 
       <div className={tw('p-4 w-full h-full')}>
         <h1 className={tw('text-xl text-slate-700')}>Settings</h1>
@@ -56,9 +56,7 @@ const SettingsPage: NextPage = () => {
               <SidebarItem text="Account" icon={<CheckIcon />} active={activeTab === 'account'} onClick={() => setActiveTab('account')} />
             </ul>
           </div>
-          <div className={tw('main w-full h-full overflow-scroll px-4 py-2')}>
-            {activeTab}
-          </div>
+          <div className={tw('main w-full h-full overflow-scroll px-4 py-2')}>{activeTab}</div>
         </div>
       </div>
     </div>

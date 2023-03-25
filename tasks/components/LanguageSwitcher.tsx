@@ -9,10 +9,10 @@ type LanguageSwitcherTranslation = {
 
 const defaultLanguageSwitcherTranslations: Record<Languages, LanguageSwitcherTranslation> = {
   en: {
-    toggleLanguage: 'Toggle language',
+    toggleLanguage: 'Toggle language'
   },
   de: {
-    toggleLanguage: 'Sprache wechseln',
+    toggleLanguage: 'Sprache wechseln'
   }
 }
 
@@ -27,7 +27,9 @@ const LanguageSwitcher = () => {
   }
 
   return (
-    <button className={tw('border-2 m-2 p-1 border-gray-800 text-gray-800 w-44')} onClick={onClick}>{translation.toggleLanguage}</button>
+    <button className={tw('border-2 m-2 p-1 border-gray-800 text-gray-800 w-44')} onClick={onClick}>
+      {translation.toggleLanguage}
+    </button>
   )
 }
 

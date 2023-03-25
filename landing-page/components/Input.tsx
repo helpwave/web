@@ -4,25 +4,25 @@ import { tw } from '@helpwave/common/twind/index'
 
 // TODO: this is copied over from `app/components/Input.tsx` and only slightly modified
 
-const noop = () => { /* noop */ }
+const noop = () => undefined
 
 type InputProps = {
   /**
-  * used for the label's `for` attribute
-  */
-  id: string,
-  value: string,
-  label: string,
+   * used for the label's `for` attribute
+   */
+  id: string
+  value: string
+  label: string
   /**
    * @default 'text'
    */
-  type?: HTMLInputTypeAttribute,
+  type?: HTMLInputTypeAttribute
   /**
    * If this element is part of an input group, then should indicate which of the borders to collapse
    * For inputs that are part of a group the label is not rendered, rely on using placeholder text instead
    * @default []
    */
-  group?: ('top' | 'left' | 'bottom' | 'right')[],
+  group?: ('top' | 'left' | 'bottom' | 'right')[]
   /**
    * Callback for when the input's value changes
    * This is pretty much required but made optional for the rare cases where it actually isn't need such as when used with disabled
@@ -33,29 +33,37 @@ type InputProps = {
 } & Omit<InputHTMLAttributes<Element>, 'value' | 'type' | 'onChange'>
 
 const ControlledInput = ({ id, type = 'text', value, label, group = [], onChange = noop, ...restProps }: InputProps) => {
-  const borders = { /* eslint-disable key-spacing, no-multi-spaces */
+  const borders = {/* eslint-disable key-spacing, no-multi-spaces, prettier/prettier */
     top:    group.includes('top')    ? 'border-t-1 border-t-hw-dark-gray-700' : 'border-t-2 border-t-hw-primary-700 mt-1',
     left:   group.includes('left')   ? 'border-l-1 border-l-hw-dark-gray-700' : 'border-l-2 border-l-hw-primary-700',
     bottom: group.includes('bottom') ? 'border-b-1 border-b-hw-dark-gray-700' : 'border-b-2 border-b-hw-primary-700',
-    right:  group.includes('right')  ? 'border-r-1 border-r-hw-dark-gray-700' : 'border-r-2 border-r-hw-primary-700',
-  } /* eslint-enable key-spacing, no-multi-spaces */
+    right:  group.includes('right')  ? 'border-r-1 border-r-hw-dark-gray-700' : 'border-r-2 border-r-hw-primary-700'
+  } /* eslint-enable key-spacing, no-multi-spaces, prettier/prettier */
 
-  const corners = { /* eslint-disable key-spacing, no-multi-spaces */
+  const corners = {/* eslint-disable key-spacing, no-multi-spaces, prettier/prettier */
     tl: group.includes('top')    || group.includes('left')  ? '' : 'rounded-tl-md',
     bl: group.includes('bottom') || group.includes('left')  ? '' : 'rounded-bl-md',
     br: group.includes('bottom') || group.includes('right') ? '' : 'rounded-br-md',
-    tr: group.includes('top')    || group.includes('right') ? '' : 'rounded-tr-md',
-  } /* eslint-enable key-spacing, no-multi-spaces */
+    tr: group.includes('top')    || group.includes('right') ? '' : 'rounded-tr-md'
+  } /* eslint-enable key-spacing, no-multi-spaces, prettier/prettier */
 
   return (
     <div className={tw('w-full h-full')}>
-      {group.length === 0 ? <label htmlFor={id} className={tw('block font-medium text-white')}>{label}</label> : null}
+      {group.length === 0 ? (
+        <label htmlFor={id} className={tw('block font-medium text-white')}>
+          {label}
+        </label>
+      ) : null}
       <input
         value={value}
         id={id}
         type={type}
-        className={tw(`block w-full h-full bg-hw-dark-gray-800 placeholder:text-[#8E8E93] ${Object.values(borders).join(' ')} ${Object.values(corners).join(' ')} shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500`)}
-        onChange={e => onChange(e.target.value)}
+        className={tw(
+          `block w-full h-full bg-hw-dark-gray-800 placeholder:text-[#8E8E93] ${Object.values(borders).join(' ')} ${Object.values(
+            corners
+          ).join(' ')} shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500`
+        )}
+        onChange={(e) => onChange(e.target.value)}
         {...restProps}
       />
     </div>
@@ -77,17 +85,7 @@ const UncontrolledInput = ({ defaultValue = '', onChange = noop, ...props }: Unc
     onChange(text)
   }
 
-  return (
-    <ControlledInput
-      {...props}
-      value={value}
-      onChange={handleChange}
-    />
-  )
+  return <ControlledInput {...props} value={value} onChange={handleChange} />
 }
 
-export {
-  UncontrolledInput,
-  ControlledInput as Input,
-  noop
-}
+export { UncontrolledInput, ControlledInput as Input, noop }

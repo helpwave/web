@@ -5,9 +5,9 @@ import { PillLabelsColumn } from './PillLabelsColumn'
 
 // TODO replace later
 type PatientDTO = {
-  name: string,
-  unscheduled: number,
-  inProgress: number,
+  name: string
+  unscheduled: number
+  inProgress: number
   done: number
 }
 
@@ -17,16 +17,11 @@ type BedDTO = {
 }
 
 export type PatientCardProps = CardProps & {
-  bed: BedDTO,
+  bed: BedDTO
   patient: PatientDTO
 }
 
-export const PatientCard = ({
-  bed,
-  patient,
-  isSelected,
-  onTileClick,
-}: PatientCardProps) => {
+export const PatientCard = ({ bed, patient, isSelected, onTileClick }: PatientCardProps) => {
   return (
     <Card isSelected={isSelected} onTileClick={onTileClick}>
       <div className={tw('flex flex-row justify-between')}>
@@ -34,9 +29,7 @@ export const PatientCard = ({
         <span>{patient.name}</span>
       </div>
       <div className={tw('w-7/12 mt-1')}>
-        <PillLabelsColumn doneCount={patient.done}
-                          inProgressCount={patient.inProgress}
-                          unscheduledCount={patient.unscheduled}/>
+        <PillLabelsColumn doneCount={patient.done} inProgressCount={patient.inProgress} unscheduledCount={patient.unscheduled} />
       </div>
     </Card>
   )

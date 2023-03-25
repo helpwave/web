@@ -1,5 +1,4 @@
 import { forwardRef } from 'react'
-import { tw } from '@helpwave/common/twind/index'
 import { TitleSection } from '../Section'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -11,20 +10,18 @@ export type RoadmapSectionLanguage = {
 
 const defaultRoadmapSectionTranslations: Record<Languages, RoadmapSectionLanguage> = {
   en: {
-    heading: 'Roadmap',
+    heading: 'Roadmap'
   },
   de: {
-    heading: 'Roadmap',
+    heading: 'Roadmap'
   }
 }
 
-const RoadmapSection = forwardRef<HTMLDivElement, PropsWithLanguage<RoadmapSectionLanguage, Record<string, unknown>>>(function RoadmapSection(props, ref) {
-  const language = useTranslation(props.language, defaultRoadmapSectionTranslations)
-  return (
-    <TitleSection id="roadmap" ref={ref} title={language.heading}>
-
-    </TitleSection>
-  )
-})
+const RoadmapSection = forwardRef<HTMLDivElement, PropsWithLanguage<RoadmapSectionLanguage, Record<string, unknown>>>(
+  function RoadmapSection(props, ref) {
+    const language = useTranslation(props.language, defaultRoadmapSectionTranslations)
+    return <TitleSection id="roadmap" ref={ref} title={language.heading}></TitleSection>
+  }
+)
 
 export default RoadmapSection

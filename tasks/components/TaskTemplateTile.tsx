@@ -6,7 +6,7 @@ import type { CardProps } from './Card'
 import { Card } from './Card'
 
 type TaskTemplateTileTranslation = {
-  subtask: string,
+  subtask: string
   edit: string
 }
 
@@ -22,29 +22,29 @@ const defaultTaskTemplateTileTranslations: Record<Languages, TaskTemplateTileTra
 }
 
 export type TaskTemplateTileProps = CardProps & {
-  name: string,
-  subtaskCount: number,
+  name: string
+  subtaskCount: number
   onEditClick?: () => void
 }
 
-export const TaskTemplateTile =
-  ({
-    isSelected = false,
-    name,
-    subtaskCount,
-    language,
-    onTileClick = () => undefined,
-    onEditClick = () => undefined
-  }: PropsWithLanguage<TaskTemplateTileTranslation, TaskTemplateTileProps>) => {
-    const translation = useTranslation(language, defaultTaskTemplateTileTranslations)
-    return (
-      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between')}>
-        <div className={tw('flex flex-col items-start')}>
-          <span className={tw('font-bold font-space')}>{name}</span>
-          <p>{subtaskCount + ' ' + translation.subtask}</p>
-        </div>
-        <button onClick={onEditClick}
-                className={tw('hidden group-hover:block')}>{translation.edit}</button>
-      </Card>
-    )
-  }
+export const TaskTemplateTile = ({
+  isSelected = false,
+  name,
+  subtaskCount,
+  language,
+  onTileClick = () => undefined,
+  onEditClick = () => undefined
+}: PropsWithLanguage<TaskTemplateTileTranslation, TaskTemplateTileProps>) => {
+  const translation = useTranslation(language, defaultTaskTemplateTileTranslations)
+  return (
+    <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between')}>
+      <div className={tw('flex flex-col items-start')}>
+        <span className={tw('font-bold font-space')}>{name}</span>
+        <p>{subtaskCount + ' ' + translation.subtask}</p>
+      </div>
+      <button onClick={onEditClick} className={tw('hidden group-hover:block')}>
+        {translation.edit}
+      </button>
+    </Card>
+  )
+}

@@ -8,13 +8,13 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 export type StartSectionLanguage = {
-  HeroMessageComponent: ReactFC,
+  HeroMessageComponent: ReactFC
   features: {
-    intuitive: string,
-    collaborative: string,
-    practical: string,
-    secure: string,
-    interdisciplinary: string,
+    intuitive: string
+    collaborative: string
+    practical: string
+    secure: string
+    interdisciplinary: string
     openSource: string
   }
 }
@@ -42,8 +42,10 @@ const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
   de: {
     HeroMessageComponent: () => (
       <>
-        {'Bei helpwave entwickeln wir keine Software für das Gesundheitssystem, sondern mit ihm. '}<br />
-        {'In diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}<br />
+        {'Bei helpwave entwickeln wir keine Software für das Gesundheitssystem, sondern mit ihm. '}
+        <br />
+        {'In diesem Zusammenschluss aus Ärzten, Entwicklern und weiteren frischen Geistern, '}
+        <br />
         {'entstehen '}
         <span className={tw('text-hw-primary-400')}>{'echte'}</span>
         {' Lösungen für '}
@@ -62,14 +64,17 @@ const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
   }
 }
 
-const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLanguage, Record<string, unknown>>>(function StartSection(props, ref) {
+const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLanguage, Record<string, unknown>>>(function StartSection(
+  props,
+  ref
+) {
   const language = useTranslation(props.language, defaultStartSectionLanguage)
   return (
     <div className={tw('w-screen h-screen bg-white')} id="start" ref={ref}>
       <Helpwave className={tw('absolute top-[25px] left-1/2 -translate-x-1/2')} height="72" width="96" />
       <Header />
       <div className={tw('relative top-[40vh] m-auto')}>
-          <div className={tw('font-space text-6xl font-bold text-center')}>helpwave</div>
+        <div className={tw('font-space text-6xl font-bold text-center')}>helpwave</div>
 
         <div className={tw('font-sans text-2xl font-medium mt-2 text-center')}>
           <language.HeroMessageComponent />

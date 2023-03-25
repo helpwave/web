@@ -4,13 +4,13 @@ import { tw } from '@helpwave/common/twind/index'
 import HelpwaveLogo from '../icons/HelpwaveRect'
 
 type HeaderProps = {
-  title: string,
+  title: string
   navigation?: {
-    text: string,
-    href: string,
+    text: string
+    href: string
     active?: boolean
-  }[],
-  actions?: ReactNode[],
+  }[]
+  actions?: ReactNode[]
   /**
    * @default true
    */
@@ -32,13 +32,13 @@ const Header = ({ title, navigation = [], actions = [], withIcon = true }: Heade
             <nav className={tw('text-sm text-slate-700 font-semibold align-center')}>
               <ul className={tw('flex space-x-8')}>
                 {navigation.map((item) => (
-                  <Link href={item.href} key={item.href} passHref className={tw('hover:text-indigo-500')}>{item.text}</Link>
+                  <Link href={item.href} key={item.href} passHref className={tw('hover:text-indigo-500')}>
+                    {item.text}
+                  </Link>
                 ))}
               </ul>
             </nav>
-            <div className={tw('flex items-center border-l border-slate-200 ml-6 pl-6')}>
-              {actions}
-            </div>
+            <div className={tw('flex items-center border-l border-slate-200 ml-6 pl-6')}>{actions}</div>
           </div>
         </div>
       </div>

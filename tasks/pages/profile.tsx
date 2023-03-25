@@ -62,7 +62,7 @@ const ProfilePage: NextPage = () => {
         title="helpwave"
         navigation={[
           { text: 'Dashboard', href: '/' },
-          { text: 'Contact', href: '/contact' },
+          { text: 'Contact', href: '/contact' }
         ]}
         actions={[<UserMenu key="user-menu" user={user} />]}
       />
@@ -85,21 +85,19 @@ const ProfilePage: NextPage = () => {
         <hr />
 
         <Section title="Update your display name and full name">
-            <Input id="profile:displayname" label="Display name" value={displayName} onChange={setDisplayName} />
-            <Input id="profile:fullname" label="Full name" value={fullName} onChange={setFullName} />
-            <Input id="profile:email" label="Email" value={user.email} onChange={noop} disabled />
+          <Input id="profile:displayname" label="Display name" value={displayName} onChange={setDisplayName} />
+          <Input id="profile:fullname" label="Full name" value={fullName} onChange={setFullName} />
+          <Input id="profile:email" label="Email" value={user.email} onChange={noop} disabled />
 
-            <div className={tw('flex justify-end gap-2')}>
+          <div className={tw('flex justify-end gap-2')}>
+            <Button color="negative" variant="tertiary" onClick={discard}>
+              Discard changes
+            </Button>
 
-              <Button color="negative" variant="tertiary" onClick={discard}>
-                Discard changes
-              </Button>
-
-              <Button color="accent" variant="primary" onClick={save}>
-                Save
-              </Button>
-
-            </div>
+            <Button color="accent" variant="primary" onClick={save}>
+              Save
+            </Button>
+          </div>
         </Section>
 
         <hr />
@@ -111,7 +109,6 @@ const ProfilePage: NextPage = () => {
             </div>
           ))}
         </Section>
-
       </div>
     </div>
   )

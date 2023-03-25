@@ -13,7 +13,7 @@ type ButtonProps = PropsWithChildren<{
    * Color variant of the button
    * @default 'primary' // as in the primary accent color
    */
-  color?: typeof colors[number],
+  color?: (typeof colors)[number]
   /**
    * Importance, visibility, prominence, obtrusiveness of the button
    * E.g.
@@ -22,17 +22,18 @@ type ButtonProps = PropsWithChildren<{
    * - the **tertiary** button is the least obtrusive
    * @default 'primary'
    */
-  variant?: typeof variants[number],
+  variant?: (typeof variants)[number]
   /**
    * @default 'medium'
    */
-  size?: 'small' | 'medium' | 'large',
+  size?: 'small' | 'medium' | 'large'
   /**
    * Additional override for styling, this will get merged with the styles selected through variant and size.
    */
-  className?: string,
+  className?: string
   onClick?: () => void
-}> & Omit<ButtonHTMLAttributes<Element>, 'onClick' | 'className'>
+}> &
+  Omit<ButtonHTMLAttributes<Element>, 'onClick' | 'className'>
 
 const Button = ({
   children,
@@ -48,7 +49,6 @@ const Button = ({
     onClick={disabled ? undefined : onClick}
     disabled={disabled}
     className={tx('py-2 px-4 text-sm font-medium focus:outline-none', className, {
-
       // primary & {accent, accent-secondary, positive, negative, neutral}
       'text-white bg-indigo-500 hover:bg-indigo-600 focus:ring-indigo-500': variant === 'primary' && color === 'accent', // TODO use hw-primary instead of indigo
       'text-white bg-AAA-500    hover:bg-AAA-600    focus:ring-AAA-500': variant === 'primary' && color === 'accent-secondary', // TODO: what could this be?
@@ -71,6 +71,7 @@ const Button = ({
       'text-ZZZ-500    hover:underline focus:ring-ZZZ-200': variant === 'tertiary' && color === 'neutral', // TODO: maybe blue or yellow?
 
       // {small, medium, large}
+      // eslint-disable-next-line prettier/prettier
       'TODO1': size === 'small', // TODO: add styles for small buttons
       'rounded-md': size === 'medium', // TODO: add styles for medium buttons
       'rounded-md w-full focus:ring-2 focus:ring-offset-2': size === 'large'

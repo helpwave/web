@@ -6,8 +6,8 @@ import Add from '@helpwave/common/icons/Add'
 import { TaskTemplateTile } from './TaskTemplateTile'
 
 export type TaskTemplateListColumnTranslation = {
-  addNewTaskTemplate: string,
-  wardTemplate: string,
+  addNewTaskTemplate: string
+  wardTemplate: string
   personalTemplate: string
 }
 
@@ -25,12 +25,12 @@ const defaultTaskTemplateListColumnTranslation = {
 }
 
 type TaskTemplateDTO = {
-  name: string,
+  name: string
   subtaskCount: number
 }
 
 export type TaskTemplateListColumnProps = {
-  isWardTemplateColumn: boolean,
+  isWardTemplateColumn: boolean
   taskTemplates: TaskTemplateDTO[]
 }
 
@@ -56,25 +56,26 @@ export const TaskTemplateListColumn = ({
   return (
     <div>
       <div className={tw('flex flex-row items-center')}>
-        <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <span className={tw('font-bold')}>
-          {isWardTemplateColumn ? translation.wardTemplate : translation.personalTemplate}
-        </span>
+        <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')} />
+        <span className={tw('font-bold')}>{isWardTemplateColumn ? translation.wardTemplate : translation.personalTemplate}</span>
       </div>
-      {taskTemplates.map(taskTemplate => (
-          <div key={taskTemplate.name} className={tw('my-2')}>
-            <TaskTemplateTile
-              name={taskTemplate.name}
-              subtaskCount={taskTemplate.subtaskCount}
-              isSelected={selected === taskTemplate}
-              onEditClick={() => onEditClicked(taskTemplate)}
-              onTileClick={() => onTileClicked(taskTemplate)}
-            />
-          </div>
-      )
-      )}
-      <div onClick={addNewTask}
-           className={tw('flex flex-row w-full h-16 rounded-md border-2 hover:border-hw-primary-700 items-center justify-center cursor-pointer mt-4')}>
+      {taskTemplates.map((taskTemplate) => (
+        <div key={taskTemplate.name} className={tw('my-2')}>
+          <TaskTemplateTile
+            name={taskTemplate.name}
+            subtaskCount={taskTemplate.subtaskCount}
+            isSelected={selected === taskTemplate}
+            onEditClick={() => onEditClicked(taskTemplate)}
+            onTileClick={() => onTileClicked(taskTemplate)}
+          />
+        </div>
+      ))}
+      <div
+        onClick={addNewTask}
+        className={tw(
+          'flex flex-row w-full h-16 rounded-md border-2 hover:border-hw-primary-700 items-center justify-center cursor-pointer mt-4'
+        )}
+      >
         <Add />
         <span className={tw('ml-2')}>{translation.addNewTaskTemplate}</span>
       </div>

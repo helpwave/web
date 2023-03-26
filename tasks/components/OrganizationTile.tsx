@@ -44,21 +44,21 @@ type OrganizationDTO = {
 }
 
 export type OrganizationTileProps = CardProps & {
-  displayedAvatars?: number,
+  maxShownWards?: number,
   organization: OrganizationDTO,
   onEditClick?: () => void
 }
 
 export const OrganizationTile = ({
   language,
-  displayedAvatars = 5,
+  maxShownWards = 5,
   isSelected,
   organization,
   onTileClick = () => undefined,
   onEditClick = () => undefined
 }: PropsWithLanguage<OrganizationTileTranslation, OrganizationTileProps>) => {
   const translation = useTranslation(language, defaultOrganizationTileTranslations)
-  const notDisplayedWards = Math.max(0, organization.wards.length - displayedAvatars)
+  const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
@@ -70,7 +70,7 @@ export const OrganizationTile = ({
         </button>
       </div>
       <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm')}>
-        {organization.wards.slice(0, displayedAvatars).map(value => value.name).join(', ')}
+        {organization.wards.slice(0, maxShownWards).map(value => value.name).join(', ')}
         {notDisplayedWards > 0 && (<span className={tw('ml-1')}>{`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}</span>)}
       </div>
       <div className={tw('flex flex-row justify-between w-full')}>

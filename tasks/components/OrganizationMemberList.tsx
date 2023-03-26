@@ -99,7 +99,7 @@ export const OrganizationMemberList = ({
 }: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
   // State copy of the members, so discarding changes is possible
-  const [members, setMembers] = useState([...organization.members])
+  const [members, setMembers] = useState(organization.members)
 
   const table = useReactTable({
     data: members,

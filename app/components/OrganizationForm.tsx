@@ -73,7 +73,7 @@ export const OrganizationForm = ({
   onSave = () => undefined
 }: PropsWithLanguage<OrganizationFormTranslation, OrganizationFormProps>) => {
   const translation = useTranslation(language, defaultOrganizationFormTranslations)
-  const [newOrganization, setNewOrganization] = useState({ ...organization })
+  const [newOrganization, setNewOrganization] = useState(organization)
   const [touched, setTouched] = useState({ shortName: false, longName: false, email: false })
   const minShortNameLength = 2
   const minLongNameLength = 3

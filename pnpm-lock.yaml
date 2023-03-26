@@ -88,6 +88,7 @@ importers:
       '@helpwave/common': workspace:*
       '@next/font': ^13.0.6
       '@radix-ui/react-checkbox': ^1.0.1
+      '@tanstack/react-table': ^8.8.0
       '@twind/core': ^1.1.2
       '@twind/preset-autoprefix': ^1.0.6
       '@twind/preset-tailwind': ^1.1.2
@@ -121,6 +122,7 @@ importers:
       '@helpwave/common': link:../lib
       '@next/font': 13.0.6
       '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/react-table': 8.8.0_biqbaboplfbrettd7655fr4n2y
       '@twind/core': 1.1.2_typescript@4.9.4
       '@twind/preset-autoprefix': 1.0.6_p7sborpglfnye65f3nd3ak7kdi
       '@twind/preset-tailwind': 1.1.2_p7sborpglfnye65f3nd3ak7kdi
@@ -648,6 +650,23 @@ packages:
     resolution: {integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==}
     dependencies:
       tslib: 2.4.0
+    dev: false
+
+  /@tanstack/react-table/8.8.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-K55peZ4VNRA+Jk/rSI8+0Tj/T9q8SyysmnK08wO/5kgIX3MhGL7wl0858eEcvd/2eq+CPPmhQx9wYoWOWtFEhg==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.8.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/table-core/8.8.0:
+    resolution: {integrity: sha512-P8Vk9yngfai1GLEfyqtT0b+Dty8subPR8yl5r1z/z4Z8NtaCIL1n+OmMV1QBU8WojeSSsWgr+o1CTxnaaOBoyQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /@twind/core/1.1.2:

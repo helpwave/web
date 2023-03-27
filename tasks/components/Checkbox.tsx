@@ -33,7 +33,7 @@ const ControlledCheckbox = ({ id, label, checked, disabled, onChange }: Checkbox
         })}
       >
         <CheckboxPrimitive.Indicator>
-          <CheckIcon width={14} height={14} />
+          <CheckIcon width={14} height={14}/>
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
       <label className={tw('text-sm font-medium')} htmlFor={id}>{label}</label>

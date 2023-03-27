@@ -25,10 +25,10 @@ export const PatientCard = ({
   bed,
   patient,
   isSelected,
-  onTileClicked,
+  onTileClick,
 }: PatientCardProps) => {
   return (
-    <Card isSelected={isSelected} onTileClicked={onTileClicked}>
+    <Card isSelected={isSelected} onTileClick={onTileClick}>
       <div className={tw('flex flex-row justify-between')}>
         <span className={tw('font-bold font-space')}>{bed.name}</span>
         <span>{patient.name}</span>

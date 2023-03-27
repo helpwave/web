@@ -41,17 +41,20 @@ export const AvatarGroup = ({
   const diameter = 24 // 24px
   const stackingOverlap = 0.5 // given as a percentage
   const notDisplayedProfiles = users.length - maxShownProfiles
+  const avatarGroupWidth = diameter * (stackingOverlap * (displayedProfiles.length - 1) + 1)
   return (
     <div className={tw(`h-[${diameter + 'px'}] flex flex-row relative`)}>
-      {displayedProfiles.map((user, index) => (
-        <div key={user.name} className={tx(`absolute left-[${(index * diameter * stackingOverlap) + 'px'}] z-[${maxShownProfiles - index}]`)}>
-          <Avatar key={user.name} avatarUrl={user.avatarURL} alt={user.name} size="tiny"/>
-        </div>
-      ))}
+      <div className={tw(`w-[${avatarGroupWidth}px]`)}>
+        {displayedProfiles.map((user, index) => (
+          <div key={user.name} className={tx(`absolute left-[${(index * diameter * stackingOverlap) + 'px'}] z-[${maxShownProfiles - index}]`)}>
+            <Avatar key={user.name} avatarUrl={user.avatarURL} alt={user.name} size="tiny"/>
+          </div>
+        ))}
+      </div>
       {
         notDisplayedProfiles > 0 && (
           <div
-            className={tx(`ml-[${((maxShownProfiles + 1) * diameter * stackingOverlap + 4) + 'px'}]`)}>
+            className={tx('ml-1')}>
             <span>{`+ ${(notDisplayedProfiles)} ${notDisplayedProfiles > 1 ? translation.others : translation.other}`}</span>
           </div>
         )

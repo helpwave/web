@@ -3,7 +3,7 @@ import { tw } from '@helpwave/common/twind/index'
 export type ProgressIndicatorProps = {
   progress: number,
   strokeWidth?: number,
-  size?: 'small' | 'medium' | 'big',
+  size?: keyof typeof sizeMapping,
   direction?: 'clockwise' | 'counterclockwise',
   rotation?: number
 }

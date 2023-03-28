@@ -1,10 +1,19 @@
 import { tw } from '@helpwave/common/twind/index'
 
 export type ProgressIndicatorProps = {
+  /*
+    The amount of progress that has been made
+    Value form 0 to 1
+   */
   progress: number,
   strokeWidth?: number,
   size?: keyof typeof sizeMapping,
   direction?: 'clockwise' | 'counterclockwise',
+  /*
+    Rotation of the starting point of the indicator
+    default start at 3 o'clock
+    Given in degree
+   */
   rotation?: number
 }
 

@@ -3,7 +3,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ARG WS="@helpwave/tasks"
 
 # install pnpm
-RUN curl --fail https://get.pnpm.io/v6.16.js | node - add --global pnpm
+RUN npm install --global pnpm@7
 
 WORKDIR /web
 

@@ -19,7 +19,7 @@ export type ProgressIndicatorProps = {
 
 const sizeMapping = { small: 16, medium: 24, big: 48 }
 
-export const ProgressIndicator = ({ progress, strokeWidth = 4, size = 'small', direction = 'counterclockwise', rotation = 0 }: ProgressIndicatorProps) => {
+export const ProgressIndicator = ({ progress, strokeWidth = 5, size = 'medium', direction = 'counterclockwise', rotation = 0 }: ProgressIndicatorProps) => {
   const currentSize = sizeMapping[size]
   const center = currentSize / 2
   const radius = center - strokeWidth / 2

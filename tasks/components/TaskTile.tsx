@@ -22,9 +22,8 @@ export const TaskTile = ({
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected}>
       <div className={tw('flex flex-row justify-between w-full')}>
-        <div className={tw('overflow-hidden')}>
-          <span className={tw('font-bold font-space')}>{task.name}</span>
-          <br/>
+        <div className={tw('flex flex-col overflow-hidden')}>
+          <span className={tw('font-bold')}>{task.name}</span>
           <span className={tw('overflow-hidden w-full block text-gray-500 text-ellipsis whitespace-nowrap')}>{task.description}</span>
         </div>
         <div className={tw('w-fit mt-1 ml-2')}>

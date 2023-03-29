@@ -8,17 +8,17 @@ type TaskDTO = {
   description: string
 }
 
-export type SingleTaskTileProps = CardProps & {
+export type TaskTileProps = CardProps & {
   progress: number,
   task: TaskDTO
 }
 
-export const SingleTaskTile = ({
+export const TaskTile = ({
   progress,
   task,
   isSelected = false,
   onTileClick = () => undefined
-}: SingleTaskTileProps) => {
+}: TaskTileProps) => {
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected}>
       <div className={tw('flex flex-row justify-between w-full')}>

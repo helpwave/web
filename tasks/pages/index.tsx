@@ -7,10 +7,12 @@ import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
 import { WardServiceClient } from '../generated/Ward-svcServiceClientPb'
 import { GetWardRequest } from '../generated/ward-svc_pb'
+import { useStore } from '../hooks/useStore'
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+  const { state, setState } = useStore()
 
   const getWard = async () => {
     const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc')
@@ -53,6 +55,9 @@ const Home: NextPage = () => {
         <button onClick={() => logout(() => window.location.reload())}>Logout</button>
 
         <button onClick={() => getWard()}>Get ward (open console)</button>
+
+        {/* Update `time` via the global useStore() */}
+        <p onClick={() => setState(() => ({ time: Date.now().toString() }))}>{state.time}</p>
       </div>
   )
 }

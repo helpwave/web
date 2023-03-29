@@ -5,6 +5,7 @@ import { tw } from '@helpwave/common/twind/index'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '@helpwave/common/twind/next/app'
 import { config } from '@helpwave/common/twind/config'
+import { ProvideStore } from '../hooks/useStore';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,20 +20,22 @@ const spaceGrotesk = SpaceGrotesk({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <title>Dashboard</title>
-        <style>{`
+      <ProvideStore>
+        <Head>
+          <title>Dashboard</title>
+          <style>{`
           :root {
             --font-inter: ${inter.style.fontFamily};
             --font-space: ${spaceGrotesk.style.fontFamily};
           }
         `}</style>
-      </Head>
-      <ProvideLanguage>
-        <div className={tw('font-sans')}>
-          <Component {...pageProps} />
-        </div>
-      </ProvideLanguage>
+        </Head>
+        <ProvideLanguage>
+          <div className={tw('font-sans')}>
+            <Component {...pageProps} />
+          </div>
+        </ProvideLanguage>
+      </ProvideStore>
     </>
   )
 }

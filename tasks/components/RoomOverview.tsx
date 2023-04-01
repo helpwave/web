@@ -1,22 +1,6 @@
 import { tw } from '@helpwave/common/twind/index'
-import Add from '@helpwave/common/icons/Add'
 import { PatientCard } from './PatientCard'
-import { Card } from './Card'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-
-type RoomOverviewTranslation = {
-  nobody: string
-}
-
-const defaultRoomOverviewTranslation = {
-  de: {
-    nobody: 'frei'
-  },
-  en: {
-    nobody: 'nobody'
-  }
-}
+import { BedCard } from './BedCard'
 
 type PatientDTO = {
   name: string,
@@ -39,11 +23,7 @@ export type RoomOverviewProps = {
   room: RoomDTO
 }
 
-export const RoomOverview = ({
-  language,
-  room
-}: PropsWithLanguage<RoomOverviewTranslation, RoomOverviewProps>) => {
-  const translation = useTranslation(language, defaultRoomOverviewTranslation)
+export const RoomOverview = ({ room }: RoomOverviewProps) => {
   return (
     <div>
       <div className={tw('flex flex-row items-center mb-1')}>
@@ -56,19 +36,7 @@ export const RoomOverview = ({
               <PatientCard key={bed.name} patient={bed.patient} bed={bed} onTileClick={() => {
                 // TODO open bed/patient screen
               }}/>
-            ) : (
-              <Card key={bed.name} onTileClick={() => {
-                // TODO open create patient screen
-              }}>
-                <div className={tw('flex flex-row justify-between')}>
-                  <span className={tw('font-space font-bold')}>{bed.name}</span>
-                  <span>{translation.nobody}</span>
-                </div>
-                <div className={tw('flex h-full justify-center items-center')}>
-                  <Add/>
-                </div>
-              </Card>
-            )
+            ) : (<BedCard key={bed.name} bed={bed}/>)
         )}
       </div>
     </div>

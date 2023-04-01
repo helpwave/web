@@ -20,7 +20,7 @@ export const TaskTile = ({
   onTileClick = () => undefined
 }: TaskTileProps) => {
   return (
-    <Card onTileClick={onTileClick} isSelected={isSelected}>
+    <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('bg-white')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-col overflow-hidden')}>
           <span className={tw('font-bold')}>{task.name}</span>

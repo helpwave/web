@@ -28,10 +28,20 @@ const configSchema = z.object({
   NEXT_PUBLIC_API_URL: z.string(),
   NEXT_PUBLIC_MOCK: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_REQUEST_LOGGING: z.literal('true').or(z.literal('false')).optional(),
+  NEXT_PUBLIC_OAUTH_BASE_URL: z.string().url().default('https://auth.helpwave.de/'),
+  NEXT_PUBLIC_OAUTH_REDIRECT_URI: z.string().url().default('https://tasks.helpwave.de/auth/callback'),
+  NEXT_PUBLIC_OAUTH_CLIENT_ID: z.string().default('425f8b8d-c786-4ff7-b2bf-e52f505fb588'),
+  NEXT_PUBLIC_OAUTH_SCOPES: z.string().default('openid,offline')
 }).transform(obj => ({
   apiUrl: obj.NEXT_PUBLIC_API_URL,
   mock: obj.NEXT_PUBLIC_MOCK === 'true',
   requestLogging: obj.NEXT_PUBLIC_REQUEST_LOGGING === 'true',
+  oauth: {
+    baseUrl: obj.NEXT_PUBLIC_OAUTH_BASE_URL,
+    redirectUri: obj.NEXT_PUBLIC_OAUTH_REDIRECT_URI,
+    clientId: obj.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+    scopes: obj.NEXT_PUBLIC_OAUTH_SCOPES.split(',').map((scope) => scope.trim())
+  },
 }))
 
 const getConfig = () => {
@@ -43,7 +53,11 @@ const getConfig = () => {
   const maybeConfig = configSchema.safeParse({
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_MOCK: process.env.NEXT_PUBLIC_MOCK,
-    NEXT_PUBLIC_REQUEST_LOGGING: process.env.NEXT_PUBLIC_REQUEST_LOGGING
+    NEXT_PUBLIC_REQUEST_LOGGING: process.env.NEXT_PUBLIC_REQUEST_LOGGING,
+    NEXT_PUBLIC_OAUTH_BASE_URL: process.env.NEXT_PUBLIC_OAUTH_BASE_URL,
+    NEXT_PUBLIC_OAUTH_REDIRECT_URI: process.env.NEXT_PUBLIC_OAUTH_REDIRECT_URI,
+    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+    NEXT_PUBLIC_OAUTH_SCOPES: process.env.NEXT_PUBLIC_OAUTH_SCOPES,
   })
 
   if (!maybeConfig.success) {

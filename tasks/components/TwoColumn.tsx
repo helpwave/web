@@ -9,12 +9,12 @@ type TwoColumnProps = {
 export const TwoColumn = ({ right, left }: TwoColumnProps) => {
   const headerHeight = 64
   return (
-    <div className={tw(`flex flex-row h-[calc(100vh_-_${headerHeight}px)] py-4 overflow-hidden`)}>
-      <div className={tw('mx-4 overflow-auto w-7/12')}>
+    <div className={tw(`flex flex-row h-[calc(100vh_-_${headerHeight}px)]`)}>
+      <div className={tw('overflow-auto w-7/12')}>
         {left}
       </div>
-      <div className={tw(`h-full rounded-lg bg-gray-300 w-0.5`)}/>
-      <div className={tw('mx-4 overflow-auto flex-1')}>
+      <div className={tw(`my-4 rounded-lg bg-gray-300 w-0.5`)}/>
+      <div className={tw('overflow-auto flex-1')}>
         {right}
       </div>
     </div>

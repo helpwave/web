@@ -5,18 +5,18 @@ import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
-import { WardServiceClient } from '../generated/Ward-svcServiceClientPb'
-import { GetWardRequest } from '../generated/ward-svc_pb'
+import { WardServiceClient } from '../generated/Ward_svcServiceClientPb'
+import { CreateWardRequest, GetWardRequest } from '../generated/ward_svc_pb'
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
-  const getWard = async () => {
+  const getWard = async (id: string) => {
     const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc')
 
     const req = new GetWardRequest()
-    req.setId('067900e6-df05-42f1-9d3b-a70db9f91598')
+    req.setId(id)
 
     wardService.getWard(req, null)
       .then((res) => {
@@ -26,6 +26,23 @@ const Home: NextPage = () => {
         console.error('call failed', err)
       })
   }
+
+  const createWard = async (name: string) => {
+    const wardService = new WardServiceClient('https://staging-api.helpwave.de/tasks-svc')
+
+    const req = new CreateWardRequest()
+    req.setName(name)
+
+    wardService.createWard(req, null)
+      .then((res) => {
+        console.log('call successful', res.getId(), res.getName())
+      })
+      .catch((err) => {
+        console.error('call failed', err)
+      })
+  }
+
+  const createRandomWard = async () => createWard(`random_ward_${Date.now().toString()}`)
 
   console.log(user, accessToken)
 
@@ -52,7 +69,8 @@ const Home: NextPage = () => {
 
         <button onClick={() => logout(() => window.location.reload())}>Logout</button>
 
-        <button onClick={() => getWard()}>Get ward (open console)</button>
+        <button onClick={() => getWard('9af360fc-f612-4752-9982-a596c62e85c7')}>Get ward (open console)</button>
+        <button onClick={() => createRandomWard()}>Create random ward (open console)</button>
       </div>
   )
 }

@@ -38,8 +38,5 @@ To communicate with [`helpwave-services`](https://github.com/helpwave/services) 
 
 ```bash
 # Generate gRPC-web code for the ward-svc rpc service
-protoc
-  --proto_path=../../helpwave-services/services/task-svc/api ward-svc.proto
-  --js_out=import_style=commonjs:generated
-  --grpc-web_out=import_style=typescript,mode=grpcwebtext:generated
+protoc --proto_path=../../helpwave-services/proto/services/task_svc/v1 ward_svc.proto --js_out=import_style=commonjs:generated --grpc-web_out=import_style=typescript,mode=grpcwebtext:generated
 ```

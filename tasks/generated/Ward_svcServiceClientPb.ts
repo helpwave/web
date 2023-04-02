@@ -1,5 +1,5 @@
 /**
- * @fileoverview gRPC-Web generated client stub for 
+ * @fileoverview gRPC-Web generated client stub for proto.services.task_svc.v1
  * @enhanceable
  * @public
  */
@@ -8,7 +8,7 @@
 // versions:
 // 	protoc-gen-grpc-web v1.4.2
 // 	protoc              v3.20.3
-// source: ward-svc.proto
+// source: ward_svc.proto
 
 
 /* eslint-disable */
@@ -17,7 +17,7 @@
 
 import * as grpcWeb from 'grpc-web';
 
-import * as ward$svc_pb from './ward-svc_pb';
+import * as ward_svc_pb from './ward_svc_pb';
 
 
 export class WardServiceClient {
@@ -40,35 +40,35 @@ export class WardServiceClient {
   }
 
   methodDescriptorCreateWard = new grpcWeb.MethodDescriptor(
-    '/WardService/CreateWard',
+    '/proto.services.task_svc.v1.WardService/CreateWard',
     grpcWeb.MethodType.UNARY,
-    ward$svc_pb.CreateWardRequest,
-    ward$svc_pb.CreateWardResponse,
-    (request: ward$svc_pb.CreateWardRequest) => {
+    ward_svc_pb.CreateWardRequest,
+    ward_svc_pb.CreateWardResponse,
+    (request: ward_svc_pb.CreateWardRequest) => {
       return request.serializeBinary();
     },
-    ward$svc_pb.CreateWardResponse.deserializeBinary
+    ward_svc_pb.CreateWardResponse.deserializeBinary
   );
 
   createWard(
-    request: ward$svc_pb.CreateWardRequest,
-    metadata: grpcWeb.Metadata | null): Promise<ward$svc_pb.CreateWardResponse>;
+    request: ward_svc_pb.CreateWardRequest,
+    metadata: grpcWeb.Metadata | null): Promise<ward_svc_pb.CreateWardResponse>;
 
   createWard(
-    request: ward$svc_pb.CreateWardRequest,
+    request: ward_svc_pb.CreateWardRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-               response: ward$svc_pb.CreateWardResponse) => void): grpcWeb.ClientReadableStream<ward$svc_pb.CreateWardResponse>;
+               response: ward_svc_pb.CreateWardResponse) => void): grpcWeb.ClientReadableStream<ward_svc_pb.CreateWardResponse>;
 
   createWard(
-    request: ward$svc_pb.CreateWardRequest,
+    request: ward_svc_pb.CreateWardRequest,
     metadata: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-               response: ward$svc_pb.CreateWardResponse) => void) {
+               response: ward_svc_pb.CreateWardResponse) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/WardService/CreateWard',
+          '/proto.services.task_svc.v1.WardService/CreateWard',
         request,
         metadata || {},
         this.methodDescriptorCreateWard,
@@ -76,42 +76,42 @@ export class WardServiceClient {
     }
     return this.client_.unaryCall(
     this.hostname_ +
-      '/WardService/CreateWard',
+      '/proto.services.task_svc.v1.WardService/CreateWard',
     request,
     metadata || {},
     this.methodDescriptorCreateWard);
   }
 
   methodDescriptorGetWard = new grpcWeb.MethodDescriptor(
-    '/WardService/GetWard',
+    '/proto.services.task_svc.v1.WardService/GetWard',
     grpcWeb.MethodType.UNARY,
-    ward$svc_pb.GetWardRequest,
-    ward$svc_pb.GetWardResponse,
-    (request: ward$svc_pb.GetWardRequest) => {
+    ward_svc_pb.GetWardRequest,
+    ward_svc_pb.GetWardResponse,
+    (request: ward_svc_pb.GetWardRequest) => {
       return request.serializeBinary();
     },
-    ward$svc_pb.GetWardResponse.deserializeBinary
+    ward_svc_pb.GetWardResponse.deserializeBinary
   );
 
   getWard(
-    request: ward$svc_pb.GetWardRequest,
-    metadata: grpcWeb.Metadata | null): Promise<ward$svc_pb.GetWardResponse>;
+    request: ward_svc_pb.GetWardRequest,
+    metadata: grpcWeb.Metadata | null): Promise<ward_svc_pb.GetWardResponse>;
 
   getWard(
-    request: ward$svc_pb.GetWardRequest,
+    request: ward_svc_pb.GetWardRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-               response: ward$svc_pb.GetWardResponse) => void): grpcWeb.ClientReadableStream<ward$svc_pb.GetWardResponse>;
+               response: ward_svc_pb.GetWardResponse) => void): grpcWeb.ClientReadableStream<ward_svc_pb.GetWardResponse>;
 
   getWard(
-    request: ward$svc_pb.GetWardRequest,
+    request: ward_svc_pb.GetWardRequest,
     metadata: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-               response: ward$svc_pb.GetWardResponse) => void) {
+               response: ward_svc_pb.GetWardResponse) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/WardService/GetWard',
+          '/proto.services.task_svc.v1.WardService/GetWard',
         request,
         metadata || {},
         this.methodDescriptorGetWard,
@@ -119,42 +119,42 @@ export class WardServiceClient {
     }
     return this.client_.unaryCall(
     this.hostname_ +
-      '/WardService/GetWard',
+      '/proto.services.task_svc.v1.WardService/GetWard',
     request,
     metadata || {},
     this.methodDescriptorGetWard);
   }
 
   methodDescriptorUpdateWard = new grpcWeb.MethodDescriptor(
-    '/WardService/UpdateWard',
+    '/proto.services.task_svc.v1.WardService/UpdateWard',
     grpcWeb.MethodType.UNARY,
-    ward$svc_pb.UpdateWardRequest,
-    ward$svc_pb.UpdateWardResponse,
-    (request: ward$svc_pb.UpdateWardRequest) => {
+    ward_svc_pb.UpdateWardRequest,
+    ward_svc_pb.UpdateWardResponse,
+    (request: ward_svc_pb.UpdateWardRequest) => {
       return request.serializeBinary();
     },
-    ward$svc_pb.UpdateWardResponse.deserializeBinary
+    ward_svc_pb.UpdateWardResponse.deserializeBinary
   );
 
   updateWard(
-    request: ward$svc_pb.UpdateWardRequest,
-    metadata: grpcWeb.Metadata | null): Promise<ward$svc_pb.UpdateWardResponse>;
+    request: ward_svc_pb.UpdateWardRequest,
+    metadata: grpcWeb.Metadata | null): Promise<ward_svc_pb.UpdateWardResponse>;
 
   updateWard(
-    request: ward$svc_pb.UpdateWardRequest,
+    request: ward_svc_pb.UpdateWardRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-               response: ward$svc_pb.UpdateWardResponse) => void): grpcWeb.ClientReadableStream<ward$svc_pb.UpdateWardResponse>;
+               response: ward_svc_pb.UpdateWardResponse) => void): grpcWeb.ClientReadableStream<ward_svc_pb.UpdateWardResponse>;
 
   updateWard(
-    request: ward$svc_pb.UpdateWardRequest,
+    request: ward_svc_pb.UpdateWardRequest,
     metadata: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-               response: ward$svc_pb.UpdateWardResponse) => void) {
+               response: ward_svc_pb.UpdateWardResponse) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/WardService/UpdateWard',
+          '/proto.services.task_svc.v1.WardService/UpdateWard',
         request,
         metadata || {},
         this.methodDescriptorUpdateWard,
@@ -162,7 +162,7 @@ export class WardServiceClient {
     }
     return this.client_.unaryCall(
     this.hostname_ +
-      '/WardService/UpdateWard',
+      '/proto.services.task_svc.v1.WardService/UpdateWard',
     request,
     metadata || {},
     this.methodDescriptorUpdateWard);

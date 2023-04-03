@@ -33,8 +33,6 @@ type KanbanHeaderProps = {
 
 export const KanbanHeader = ({
   language,
-  sortingStatus,
-  sortingLabel,
   searchValue = '',
   onSearchChange
 }: PropsWithLanguage<KanbanHeaderTranslation, KanbanHeaderProps>) => {

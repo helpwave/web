@@ -108,6 +108,7 @@ export const KanbanBoard = ({ tasks }: KanbanBoardProps) => {
         ],
       }
     })
+    
     setBoardObject({ ...boardObject, overColumn })
   }
 

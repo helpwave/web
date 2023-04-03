@@ -76,10 +76,12 @@ export const OrganizationForm = ({
   const translation = useTranslation(language, defaultOrganizationFormTranslations)
   const [newOrganization, setNewOrganization] = useState(organization)
   const [touched, setTouched] = useState({ shortName: false, longName: false, email: false })
+
   const minShortNameLength = 2
-  const minLongNameLength = 3
+  const minLongNameLength = 4
   const maxShortNameLength = 16
   const maxLongNameLength = 64
+  const maxMailLength = 320
 
   const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
   const errorClasses = tw('text-hw-negative-500 text-sm')
@@ -143,7 +145,7 @@ export const OrganizationForm = ({
                  setNewOrganization({ ...newOrganization, longName: text })
                  setTouched({ ...touched, longName: true })
                }}
-               maxLength={maxShortNameLength}
+               maxLength={maxLongNameLength}
                className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
         {isDisplayingLongNameError && <span className={tw(errorClasses)}>{longNameErrorMessage}</span>}
@@ -157,7 +159,7 @@ export const OrganizationForm = ({
                      setNewOrganization({ ...newOrganization, email: text })
                      setTouched({ ...touched, email: true })
                    }}
-                   maxLength={maxShortNameLength}
+                   maxLength={maxMailLength}
                    className={tx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
             />
           </div>

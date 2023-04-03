@@ -135,11 +135,13 @@ const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<Organization
       // TODO create request for organization
       organizations = [...organizations, { ...organization, id: Math.random().toString() }]
       setSelectedOrganization(organization)
+      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
     },
     onMutate: async(organization: OrganizationDTO) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
       queryClient.setQueryData<OrganizationDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), organization])
+      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
       return { previousOrganizations }
     },
     onError: (_, newTodo, context) => {
@@ -155,6 +157,7 @@ const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<Organization
       // TODO create request for organization
       organizations = [...organizations.filter(value => value.id !== organization.id), organization]
       setSelectedOrganization(organization)
+      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
     },
     onMutate: async(organization: OrganizationDTO) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
@@ -162,6 +165,7 @@ const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<Organization
       queryClient.setQueryData<OrganizationDTO[]>(
         [queryKey],
         (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id)), organization])
+      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
       return { previousOrganizations }
     },
     onError: (_, newTodo, context) => {

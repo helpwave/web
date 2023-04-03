@@ -13,6 +13,7 @@ type OrganizationDetailTranslation = {
   organizationDetail: string,
   dangerZone: string,
   dangerZoneText: string,
+  deleteConfirmText: string,
   deleteOrganization: string,
   create: string
 }
@@ -22,6 +23,7 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
     organizationDetail: 'Organization Details',
     dangerZone: 'Danger Zone',
     dangerZoneText: 'Deleting the organization is a permanent action and cannot be undone. Be careful!',
+    deleteConfirmText: 'Do you really want to delete this organization?',
     deleteOrganization: 'Delete Organization',
     create: 'Create'
   },
@@ -29,6 +31,7 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
     organizationDetail: 'Organisations Details',
     dangerZone: 'Gefahren Zone',
     dangerZoneText: 'Das Löschen einer Organisation is permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+    deleteConfirmText: 'Wollen Sie wirklich diese Organisation löschen?',
     deleteOrganization: 'Organisation Löschen',
     create: 'Erstellen'
   }
@@ -109,7 +112,7 @@ export const OrganizationDetail = ({
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganisation })}>
         <span className={tw('font-space text-lg font-bold')}>{translation.dangerZone}</span>
         <span className={tw('text-gray-400')}>{translation.dangerZoneText}</span>
-        <button onClick={() => onDelete(newOrganization)} className={tw('text-hw-negative-400 text-left')}>{translation.deleteOrganization}</button>
+        <button onClick={() => confirm(translation.deleteConfirmText) && onDelete(newOrganization)} className={tw('text-hw-negative-400 font-bold text-left')}>{translation.deleteOrganization}</button>
       </div>
       {isCreatingNewOrganisation &&
         (

@@ -162,7 +162,7 @@ export const KanbanBoard = ({ tasks }: KanbanBoardProps) => {
           <KanbanColumn type="done" tasks={filterBySearch(sortedTasks.done)} draggedTileID={boardObject.draggedID}
                         isDraggedOver={boardObject.overColumn === 'done'}/>
           <DragOverlay dropAnimation={dropAnimation}>
-            {task ? <TaskTile task={task} progress={task.progress}/> : null}
+            {task && <TaskTile task={task} progress={task.progress}/>}
           </DragOverlay>
         </div>
       </DndContext>

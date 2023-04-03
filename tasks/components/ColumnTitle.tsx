@@ -6,7 +6,7 @@ type ColumnTitleProps = {
 
 export const ColumnTitle = ({ title }: ColumnTitleProps) => {
   return (
-    <div className={tw('mb-4')}>
+    <div className={tw('mb-8')}>
       <span className={tw('text-xl font-space font-bold')}>{title}</span>
     </div>
   )

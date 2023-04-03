@@ -17,8 +17,8 @@ type OrganizationFormTranslation = {
   contactEmailDescription: string,
   notVerified: string,
   required: string,
-  tooLong: (maxCharacters:number) => string,
-  tooShort: (minCharacters:number) => string,
+  tooLong: (maxCharacters: number) => string,
+  tooShort: (minCharacters: number) => string,
   invalidEmail: string
 }
 
@@ -62,9 +62,10 @@ type OrganizationDTO = {
   isVerified: boolean
 }
 
+// TODO make sure the Organization type only has the used values shortName, longName, email, isVerified
 export type OrganizationFormProps = {
   organization?: OrganizationDTO,
-  onSave?: (organization: OrganizationDTO) => void
+  onSave: (organization: OrganizationDTO) => void
 }
 
 export const OrganizationForm = ({
@@ -117,7 +118,12 @@ export const OrganizationForm = ({
     <form>
       <div className={tw('flex flex-row justify-between')}>
         <span className={tw('font-semibold')}>{translation.general}</span>
-        <Button type="button" color="positive" onClick={() => onSave(newOrganization)}>{translation.saveChanges}</Button>
+        <Button type="button"
+                color="positive"
+                onClick={() => onSave(newOrganization)}
+                disabled={emailErrorMessage !== undefined || longNameErrorMessage !== undefined || shortNameErrorMessage !== undefined}>
+          {translation.saveChanges}
+        </Button>
       </div>
       <div className={tw('mt-2 mb-1')}>
         <Input id="shortName" value={newOrganization.shortName} label={translation.shortName}
@@ -128,7 +134,7 @@ export const OrganizationForm = ({
                maxLength={maxShortNameLength}
                className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        { isDisplayingShortNameError && <span className={tw(errorClasses)}>{shortNameErrorMessage}</span>}
+        {isDisplayingShortNameError && <span className={tw(errorClasses)}>{shortNameErrorMessage}</span>}
       </div>
       <span className={tw('text-gray-500 text-sm')}>{translation.shortNameDescription}</span>
       <div className={tw('mt-2 mb-1')}>
@@ -140,7 +146,7 @@ export const OrganizationForm = ({
                maxLength={maxShortNameLength}
                className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
-        { isDisplayingLongNameError && <span className={tw(errorClasses)}>{longNameErrorMessage}</span>}
+        {isDisplayingLongNameError && <span className={tw(errorClasses)}>{longNameErrorMessage}</span>}
       </div>
       <span className={tw('text-gray-500 text-sm')}>{translation.longNameDescription}</span>
       <div className={tw('mt-2 mb-1')}>
@@ -160,7 +166,7 @@ export const OrganizationForm = ({
             <span className={tw('text-hw-negative-500 mb-3')}>{translation.notVerified}</span>
           }
         </div>
-        { isDisplayingEmailNameError && <span className={tw(errorClasses)}>{emailErrorMessage}</span>}
+        {isDisplayingEmailNameError && <span className={tw(errorClasses)}>{emailErrorMessage}</span>}
       </div>
       <span className={tw('text-gray-500 text-sm')}>{translation.contactEmailDescription}</span>
     </form>

@@ -5,6 +5,7 @@ import { tw } from '@helpwave/common/twind/index'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '@helpwave/common/twind/next/app'
 import { config } from '@helpwave/common/twind/config'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,9 +17,11 @@ const spaceGrotesk = SpaceGrotesk({
   variable: '--font-space-grotesk'
 })
 
+const queryClient = new QueryClient()
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Head>
         <title>Dashboard</title>
         <style>{`
@@ -33,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </div>
       </ProvideLanguage>
-    </>
+    </QueryClientProvider>
   )
 }
 

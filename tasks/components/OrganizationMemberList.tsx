@@ -65,14 +65,10 @@ type OrgMember = {
   role: Role
 }
 
-type OrganizationDTO = {
-  name: string,
-  members: OrgMember[]
-}
-
 export type OrganizationMemberListProps = {
-  organization: OrganizationDTO,
-  usersPerPage?: number
+  members: OrgMember[],
+  usersPerPage?: number,
+  onSave: (members: OrgMember[]) => void
 }
 
 const columnHelper = createColumnHelper<OrgMember>()
@@ -95,31 +91,28 @@ const columns = [
 export const OrganizationMemberList = ({
   language,
   usersPerPage = 5,
-  organization
+  members,
+  onSave
 }: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
   // State copy of the members, so discarding changes is possible
-  const [members, setMembers] = useState(organization.members)
+  const [newMembers, setNewMembers] = useState(members)
 
   const table = useReactTable({
-    data: members,
+    data: newMembers,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: { pagination: { pageSize: usersPerPage } }
   })
 
-  const saveChanges = () => {
-    // TODO api call
-  }
-
   const hasChanges = () => {
-    if (members.length !== organization.members.length) {
+    if (newMembers.length !== members.length) {
       return true
     }
-    for (let i = 0; i < members.length; i++) {
-      const mem1 = members[i]
-      const mem2 = organization.members[i]
+    for (let i = 0; i < newMembers.length; i++) {
+      const mem1 = newMembers[i]
+      const mem2 = members[i]
       // TODO replace later on with an equality check on the object
       if (mem1.role !== mem2.role || mem1.name !== mem2.name || mem1.email !== mem2.email || mem1.avatarURL !== mem2.avatarURL) {
         return true
@@ -133,21 +126,21 @@ export const OrganizationMemberList = ({
   const addUser = () => {
     // TODO remove below for an actual user add
     const newMember = {
-      name: 'user' + (members.length + 1),
+      name: 'user' + (newMembers.length + 1),
       role: Role.user,
-      email: `user${(members.length + 1)}@helpwave.de`,
+      email: `user${(newMembers.length + 1)}@helpwave.de`,
       isSelected: false,
       avatarURL: ''
     }
-    setMembers([...members, newMember])
+    setNewMembers([...newMembers, newMember])
     // Automatically go to the last page
-    table.setPageIndex((Math.ceil((members.length + 1) / usersPerPage)))
+    table.setPageIndex((Math.ceil((newMembers.length + 1) / usersPerPage)))
   }
 
   return (
     <div className={tw('flex flex-col')}>
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
+        <span className={tw('font-bold font-space')}>{translation.members + ` (${newMembers.length})`}</span>
         <div className={tw('flex flex-row')}>
           <Button onClick={addUser} color="positive" className={tw('mr-2')}>
             <div className={tw('flex flex-row items-center')}>
@@ -155,7 +148,7 @@ export const OrganizationMemberList = ({
               <Dropdown/>
             </div>
           </Button>
-          <Button onClick={saveChanges} disabled={disableSaveChanges} color="positive"
+          <Button onClick={() => onSave(newMembers)} disabled={disableSaveChanges} color="positive"
                   >{translation.saveChanges}</Button>
         </div>
       </div>
@@ -182,7 +175,7 @@ export const OrganizationMemberList = ({
                     </div>),
                       remove: (<div className={tw('flex flex-row justify-end')}>
                       <button onClick={() => {
-                        setMembers(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+                        setNewMembers(newMembers.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
                         // TODO at delete safety for owner later on
                         table.toggleAllRowsSelected(false)
                       }}>
@@ -223,7 +216,7 @@ export const OrganizationMemberList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => setMembers(members.filter(value => value !== cell.row.original))}>
+                      <button onClick={() => setNewMembers(newMembers.filter(value => value !== cell.row.original))}>
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>
@@ -235,7 +228,7 @@ export const OrganizationMemberList = ({
             ))}
           </tr>
         ))}
-        {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && (members.length % usersPerPage) !== 0 && ([...Array((usersPerPage - (members.length % usersPerPage)) % usersPerPage)].map((i, index) => (
+        {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && table.getPageCount() > 1 && (newMembers.length % usersPerPage) !== 0 && ([...Array((usersPerPage - (newMembers.length % usersPerPage)) % usersPerPage)].map((i, index) => (
           <tr key={index} className={tw('h-12')}>
             {[table.getAllColumns.length].map((j, index) => (
               <td key={index}/>
@@ -246,7 +239,7 @@ export const OrganizationMemberList = ({
       </table>
       <div className={tw('flex flex-row justify-center mt-2')}>
         <Pagination page={table.getState().pagination.pageIndex}
-                    numberOfPages={table.getPageCount()}
+                    numberOfPages={Math.max(table.getPageCount(), 1)}
                     onPageChanged={table.setPageIndex}
         />
       </div>

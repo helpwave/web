@@ -101,7 +101,7 @@ const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<Organization
         )}
         right={(
           <OrganizationDetail
-            key={selectedOrganization === undefined ? 'undefined' : selectedOrganization.longName}
+            key={selectedOrganization === undefined ? 'unselected' : selectedOrganization.id}
             organization={selectedOrganization}
             onCreate={createMutation.mutate}
             onUpdate={updateMutation.mutate}

@@ -9,11 +9,15 @@ import { UserMenu } from '../components/UserMenu'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/TwoColumn'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { OrganizationDisplay } from '../components/OrganizationDisplay'
 import type { Role } from '../components/OrganizationMemberList'
 import { OrganizationDetail } from '../components/OrganizationDetails'
-import { getCreateMutation, getDeleteMutation, getQuery, getUpdateMutation } from '../mutations/organization_mutations'
+import {
+  useCreateMutation,
+  useDeleteMutation,
+  useOrganizationQuery,
+  useUpdateMutation
+} from '../mutations/organization_mutations'
 
 type OrganizationPageTranslation = {
   organizations: string
@@ -50,21 +54,16 @@ type OrganizationDTO = {
 }
 
 const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<OrganizationPageTranslation>) => {
-  const queryClient = useQueryClient()
-
   const translation = useTranslation(language, defaultOrganizationPageTranslation)
   const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | undefined>(undefined)
 
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
-  const createMutation = useMutation(getCreateMutation(queryClient, setSelectedOrganization))
-
-  const updateMutation = useMutation(getUpdateMutation(queryClient, setSelectedOrganization))
-
-  const deleteMutation = useMutation(getDeleteMutation(queryClient, setSelectedOrganization))
-
-  const { isLoading, isError, data, error } = useQuery(getQuery())
+  const createMutation = useCreateMutation(setSelectedOrganization)
+  const updateMutation = useUpdateMutation(setSelectedOrganization)
+  const deleteMutation = useDeleteMutation(setSelectedOrganization)
+  const { isLoading, isError, data, error } = useOrganizationQuery()
 
   if (!user) return null
 

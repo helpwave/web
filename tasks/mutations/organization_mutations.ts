@@ -1,6 +1,6 @@
 import { Role } from '../components/OrganizationMemberList'
-import type { QueryClient, UseMutationOptions } from '@tanstack/react-query'
 import type { Dispatch, SetStateAction } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const queryKey = 'organizations'
 
@@ -95,90 +95,90 @@ let organizations: OrganizationDTO[] = [
   },
 ]
 
-export const getQuery = () => {
-  return {
+export const useOrganizationQuery = () => {
+  return useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
       // TODO fetch user organizations
       return organizations
     },
-  }
+  })
 }
 
-export const getUpdateMutation: (queryClient: QueryClient, setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => UseMutationOptions<void, unknown, OrganizationDTO, { previousOrganizations: OrganizationDTO[] | undefined }> =
-  (queryClient, setSelectedOrganization) => {
-    return {
-      mutationFn: async (organization) => {
-        // TODO create request for organization
-        organizations = [...organizations.filter(value => value.id !== organization.id), organization]
-        organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-        setSelectedOrganization(organization)
-      },
-      onMutate: async (organization) => {
-        await queryClient.cancelQueries({ queryKey: [queryKey] })
-        const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-        queryClient.setQueryData<OrganizationDTO[]>(
-          [queryKey],
-          (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id)), organization])
-        organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-        return { previousOrganizations }
-      },
-      onError: (_, newTodo, context) => {
-        queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-      }
+export const useUpdateMutation = (setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (organization: OrganizationDTO) => {
+      // TODO create request for organization
+      organizations = [...organizations.filter(value => value.id !== organization.id), organization]
+      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
+      setSelectedOrganization(organization)
+    },
+    onMutate: async (organization) => {
+      await queryClient.cancelQueries({ queryKey: [queryKey] })
+      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
+      queryClient.setQueryData<OrganizationDTO[]>(
+        [queryKey],
+        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id)), organization])
+      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
+      return { previousOrganizations }
+    },
+    onError: (_, newTodo, context) => {
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
     }
-  }
+  })
+}
 
-export const getCreateMutation: (queryClient: QueryClient, setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => UseMutationOptions<void, unknown, OrganizationDTO, { previousOrganizations: OrganizationDTO[] | undefined }> =
-  (queryClient, setSelectedOrganization) => {
-    return {
-      mutationFn: async (organization) => {
-        organization.id = Math.random().toString()
-        // TODO create request for organization
-        organizations = [...organizations, { ...organization, id: Math.random().toString() }]
-        setSelectedOrganization(organization)
-        organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-      },
-      onMutate: async(organization: OrganizationDTO) => {
-        await queryClient.cancelQueries({ queryKey: [queryKey] })
-        const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-        queryClient.setQueryData<OrganizationDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), organization])
-        organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-        return { previousOrganizations }
-      },
-      onError: (_, newTodo, context) => {
-        queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-      },
-    }
-  }
+export const useCreateMutation = (setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (organization) => {
+      organization.id = Math.random().toString()
+      // TODO create request for organization
+      organizations = [...organizations, { ...organization, id: Math.random().toString() }]
+      setSelectedOrganization(organization)
+      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
+    },
+    onMutate: async(organization: OrganizationDTO) => {
+      await queryClient.cancelQueries({ queryKey: [queryKey] })
+      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
+      queryClient.setQueryData<OrganizationDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), organization])
+      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
+      return { previousOrganizations }
+    },
+    onError: (_, newTodo, context) => {
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    },
+  })
+}
 
-export const getDeleteMutation: (queryClient: QueryClient, setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => UseMutationOptions<void, unknown, OrganizationDTO, { previousOrganizations: OrganizationDTO[] | undefined }> =
-  (queryClient, setSelectedOrganization) => {
-    return {
-      mutationFn: async (organization) => {
-        // TODO create request for organization
-        organizations = [...organizations.filter(value => value.id !== organization.id)]
-        setSelectedOrganization(undefined)
-      },
-      onMutate: async(organization: OrganizationDTO) => {
-        await queryClient.cancelQueries({ queryKey: [queryKey] })
-        const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-        queryClient.setQueryData<OrganizationDTO[]>(
-          [queryKey],
-          (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id))])
-        return { previousOrganizations }
-      },
-      onError: (_, newTodo, context) => {
-        queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-      },
-    }
-  }
+export const useDeleteMutation = (setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (organization) => {
+      // TODO create request for organization
+      organizations = [...organizations.filter(value => value.id !== organization.id)]
+      setSelectedOrganization(undefined)
+    },
+    onMutate: async(organization: OrganizationDTO) => {
+      await queryClient.cancelQueries({ queryKey: [queryKey] })
+      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
+      queryClient.setQueryData<OrganizationDTO[]>(
+        [queryKey],
+        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id))])
+      return { previousOrganizations }
+    },
+    onError: (_, newTodo, context) => {
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    },
+  })
+}

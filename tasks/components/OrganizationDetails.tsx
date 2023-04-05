@@ -76,9 +76,9 @@ export const OrganizationDetail = ({
   onDelete,
 }: PropsWithLanguage<OrganizationDetailTranslation, OrganizationDetailProps>) => {
   const translation = useTranslation(language, defaultOrganizationDetailTranslations)
-  const isCreatingNewOrganisation = organization === undefined
+  const isCreatingNewOrganization = organization === undefined
 
-  const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganisation)
+  const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
   const [newOrganization, setNewOrganization] = useState<OrganizationDTO>(organization ?? {
     id: '',
     shortName: '',
@@ -98,7 +98,7 @@ export const OrganizationDetail = ({
           setNewOrganization({ ...newOrganization, ...newOrganizationDetails })
           setFilledRequired(isValid)
         }}
-        isShowingErrorsDirectly={!isCreatingNewOrganisation}
+        isShowingErrorsDirectly={!isCreatingNewOrganization}
       />
       <div className={tw('mt-6')}>
         <OrganizationMemberList
@@ -106,7 +106,7 @@ export const OrganizationDetail = ({
           onChange={(members) => setNewOrganization({ ...newOrganization, members })}
         />
       </div>
-      <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganisation })}>
+      <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <span className={tw('font-space text-lg font-bold')}>{translation.dangerZone}</span>
         <span className={tw('text-gray-400')}>{translation.dangerZoneText}</span>
         <button onClick={() => confirm(translation.deleteConfirmText) && onDelete(newOrganization)}
@@ -115,9 +115,9 @@ export const OrganizationDetail = ({
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button
           className={tw('w-1/2')}
-          onClick={() => isCreatingNewOrganisation ? onCreate(newOrganization) : onUpdate(newOrganization)}
+          onClick={() => isCreatingNewOrganization ? onCreate(newOrganization) : onUpdate(newOrganization)}
           disabled={!filledRequired}>
-          {isCreatingNewOrganisation ? translation.create : translation.update}
+          {isCreatingNewOrganization ? translation.create : translation.update}
         </Button>
       </div>
     </div>

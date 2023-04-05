@@ -19,11 +19,11 @@ import {
   useUpdateMutation
 } from '../mutations/organization_mutations'
 
-type OrganizationPageTranslation = {
+type OrganizationsPageTranslation = {
   organizations: string
 }
 
-const defaultOrganizationPageTranslation = {
+const defaultOrganizationsPageTranslation = {
   de: {
     organizations: 'Organisationen'
   },
@@ -53,8 +53,8 @@ type OrganizationDTO = {
   members: OrgMember[]
 }
 
-const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<OrganizationPageTranslation>) => {
-  const translation = useTranslation(language, defaultOrganizationPageTranslation)
+const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsPageTranslation>) => {
+  const translation = useTranslation(language, defaultOrganizationsPageTranslation)
   const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | undefined>(undefined)
 
   const router = useRouter()
@@ -113,4 +113,4 @@ const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<Organization
   )
 }
 
-export default OrganizationPage
+export default OrganizationsPage

@@ -11,8 +11,9 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/TwoColumn'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { OrganizationDisplay } from '../components/OrganizationDisplay'
-import { Role } from '../components/OrganizationMemberList'
+import type { Role } from '../components/OrganizationMemberList'
 import { OrganizationDetail } from '../components/OrganizationDetails'
+import { getCreateMutation, getDeleteMutation, getQuery, getUpdateMutation } from '../mutations/organization_mutations'
 
 type OrganizationPageTranslation = {
   organizations: string
@@ -48,76 +49,6 @@ type OrganizationDTO = {
   members: OrgMember[]
 }
 
-// TODO remove once backend is implemented
-let organizations:OrganizationDTO[] = [
-  {
-    id: 'org1',
-    shortName: 'UKM',
-    longName: 'Uniklinkum Münster',
-    email: 'ukm@helpwave.de',
-    isVerified: false,
-    wards: [{ name: 'ICU' }, { name: 'Radiology' }, { name: 'Cardiology' }],
-    members: [
-      {
-        name: 'User1',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user1@helpwave.de',
-        role: Role.admin
-      }, {
-        name: 'User2',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user2@helpwave.de',
-        role: Role.user
-      },
-      {
-        name: 'User3',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user3@helpwave.de',
-        role: Role.user
-      },
-      {
-        name: 'User4',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user4@helpwave.de',
-        role: Role.user
-      }
-    ]
-  },
-  {
-    id: 'org2',
-    shortName: 'ORGA',
-    longName: 'Organame',
-    email: 'orga@helpwave.de',
-    isVerified: false,
-    wards: [{ name: 'ICU' }, { name: 'Radiology' }, { name: 'Cardiology' }],
-    members: [
-      {
-        name: 'User1',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user1@helpwave.de',
-        role: Role.admin
-      }, {
-        name: 'User2',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user2@helpwave.de',
-        role: Role.user
-      },
-      {
-        name: 'User3',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user3@helpwave.de',
-        role: Role.user
-      },
-      {
-        name: 'User4',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user4@helpwave.de',
-        role: Role.user
-      }
-    ]
-  },
-]
-
 const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<OrganizationPageTranslation>) => {
   const queryClient = useQueryClient()
 
@@ -127,84 +58,13 @@ const OrganizationPage: NextPage = ({ language }: PropsWithLanguage<Organization
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
-  const queryKey = 'organizations'
+  const createMutation = useMutation(getCreateMutation(queryClient, setSelectedOrganization))
 
-  const createMutation = useMutation({
-    mutationFn: async (organization) => {
-      organization.id = Math.random().toString()
-      // TODO create request for organization
-      organizations = [...organizations, { ...organization, id: Math.random().toString() }]
-      setSelectedOrganization(organization)
-      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-    },
-    onMutate: async(organization: OrganizationDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-      queryClient.setQueryData<OrganizationDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), organization])
-      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-      return { previousOrganizations }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
-  })
+  const updateMutation = useMutation(getUpdateMutation(queryClient, setSelectedOrganization))
 
-  const updateMutation = useMutation({
-    mutationFn: async (organization) => {
-      // TODO create request for organization
-      organizations = [...organizations.filter(value => value.id !== organization.id), organization]
-      setSelectedOrganization(organization)
-      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-    },
-    onMutate: async(organization: OrganizationDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-      queryClient.setQueryData<OrganizationDTO[]>(
-        [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id)), organization])
-      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-      return { previousOrganizations }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
-  })
+  const deleteMutation = useMutation(getDeleteMutation(queryClient, setSelectedOrganization))
 
-  const deleteMutation = useMutation({
-    mutationFn: async (organization) => {
-      // TODO create request for organization
-      organizations = [...organizations.filter(value => value.id !== organization.id)]
-      setSelectedOrganization(undefined)
-    },
-    onMutate: async(organization: OrganizationDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-      queryClient.setQueryData<OrganizationDTO[]>(
-        [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id))])
-      return { previousOrganizations }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
-  })
-
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: [queryKey],
-    queryFn: async () => {
-      // TODO fetch user organizations
-      return organizations
-    },
-  })
+  const { isLoading, isError, data, error } = useQuery(getQuery())
 
   if (!user) return null
 

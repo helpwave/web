@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   useReactTable,
   createColumnHelper,
@@ -68,7 +67,7 @@ type OrgMember = {
 export type OrganizationMemberListProps = {
   members: OrgMember[],
   usersPerPage?: number,
-  onSave: (members: OrgMember[]) => void
+  onChange: (members: OrgMember[]) => void
 }
 
 const columnHelper = createColumnHelper<OrgMember>()
@@ -92,65 +91,40 @@ export const OrganizationMemberList = ({
   language,
   usersPerPage = 5,
   members,
-  onSave
+  onChange
 }: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
-  // State copy of the members, so discarding changes is possible
-  const [newMembers, setNewMembers] = useState(members)
 
   const table = useReactTable({
-    data: newMembers,
+    data: members,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: { pagination: { pageSize: usersPerPage } }
   })
 
-  const hasChanges = () => {
-    if (newMembers.length !== members.length) {
-      return true
-    }
-    for (let i = 0; i < newMembers.length; i++) {
-      const mem1 = newMembers[i]
-      const mem2 = members[i]
-      // TODO replace later on with an equality check on the object
-      if (mem1.role !== mem2.role || mem1.name !== mem2.name || mem1.email !== mem2.email || mem1.avatarURL !== mem2.avatarURL) {
-        return true
-      }
-    }
-    return false
-  }
-
-  const disableSaveChanges = !hasChanges()
-
   const addUser = () => {
     // TODO remove below for an actual user add
     const newMember = {
-      name: 'user' + (newMembers.length + 1),
+      name: 'user' + (members.length + 1),
       role: Role.user,
-      email: `user${(newMembers.length + 1)}@helpwave.de`,
+      email: `user${(members.length + 1)}@helpwave.de`,
       isSelected: false,
       avatarURL: ''
     }
-    setNewMembers([...newMembers, newMember])
-    // Automatically go to the last page
-    table.setPageIndex((Math.ceil((newMembers.length + 1) / usersPerPage)))
+    onChange([...members, newMember])
   }
 
   return (
     <div className={tw('flex flex-col')}>
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <span className={tw('font-bold font-space')}>{translation.members + ` (${newMembers.length})`}</span>
-        <div className={tw('flex flex-row')}>
-          <Button onClick={addUser} color="positive" className={tw('mr-2')}>
-            <div className={tw('flex flex-row items-center')}>
-              <span className={tw('mr-2')}>{translation.addMember}</span>
-              <Dropdown/>
-            </div>
-          </Button>
-          <Button onClick={() => onSave(newMembers)} disabled={disableSaveChanges} color="positive"
-                  >{translation.saveChanges}</Button>
-        </div>
+        <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
+        <Button onClick={addUser} color="positive" className={tw('mr-2')}>
+          <div className={tw('flex flex-row items-center')}>
+            <span className={tw('mr-2')}>{translation.addMember}</span>
+            <Dropdown/>
+          </div>
+        </Button>
       </div>
       <table>
         <thead>
@@ -175,9 +149,9 @@ export const OrganizationMemberList = ({
                     </div>),
                       remove: (<div className={tw('flex flex-row justify-end')}>
                       <button onClick={() => {
-                        setNewMembers(newMembers.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-                        // TODO at delete safety for owner later on
                         table.toggleAllRowsSelected(false)
+                        onChange(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+                        // TODO at delete safety for owner later on
                       }}>
                         <span>{translation.remove}</span>
                       </button>
@@ -197,7 +171,8 @@ export const OrganizationMemberList = ({
                 {{
                   role: (
                     <div className={tw('flex flex-row justify-end items-center mr-2')}>
-                      <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */ }}>
+                      <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
+                      }}>
                       <span className={tw(`mr-2 font-semibold text-right`)}>
                         {translation.roleTypes[cell.row.original.role]}
                       </span>
@@ -216,7 +191,7 @@ export const OrganizationMemberList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => setNewMembers(newMembers.filter(value => value !== cell.row.original))}>
+                      <button onClick={() => onChange(members.filter(value => value !== cell.row.original))}>
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>
@@ -228,13 +203,15 @@ export const OrganizationMemberList = ({
             ))}
           </tr>
         ))}
-        {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && table.getPageCount() > 1 && (newMembers.length % usersPerPage) !== 0 && ([...Array((usersPerPage - (newMembers.length % usersPerPage)) % usersPerPage)].map((i, index) => (
+        {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && table.getPageCount() > 1
+          && (members.length % usersPerPage) !== 0
+          && ([...Array((usersPerPage - (members.length % usersPerPage)) % usersPerPage)].map((i, index) => (
           <tr key={index} className={tw('h-12')}>
             {[table.getAllColumns.length].map((j, index) => (
               <td key={index}/>
             ))}
           </tr>
-        )))}
+          )))}
         </tbody>
       </table>
       <div className={tw('flex flex-row justify-center mt-2')}>

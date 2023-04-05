@@ -15,7 +15,8 @@ type OrganizationDetailTranslation = {
   dangerZoneText: string,
   deleteConfirmText: string,
   deleteOrganization: string,
-  create: string
+  create: string,
+  update: string
 }
 
 const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetailTranslation> = {
@@ -25,7 +26,8 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
     dangerZoneText: 'Deleting the organization is a permanent action and cannot be undone. Be careful!',
     deleteConfirmText: 'Do you really want to delete this organization?',
     deleteOrganization: 'Delete Organization',
-    create: 'Create'
+    create: 'Create',
+    update: 'Update'
   },
   de: {
     organizationDetail: 'Organisations Details',
@@ -33,7 +35,8 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
     dangerZoneText: 'Das Löschen einer Organisation is permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
     deleteConfirmText: 'Wollen Sie wirklich diese Organisation löschen?',
     deleteOrganization: 'Organisation Löschen',
-    create: 'Erstellen'
+    create: 'Erstellen',
+    update: 'Ändern'
   }
 }
 
@@ -49,7 +52,7 @@ type OrgMember = {
 }
 
 type OrganizationDTO = {
-  id:string,
+  id: string,
   shortName: string,
   longName: string,
   email: string,
@@ -73,7 +76,9 @@ export const OrganizationDetail = ({
   onDelete,
 }: PropsWithLanguage<OrganizationDetailTranslation, OrganizationDetailProps>) => {
   const translation = useTranslation(language, defaultOrganizationDetailTranslations)
-  const [filledRequired, setFilledRequired] = useState(false)
+  const isCreatingNewOrganisation = organization === undefined
+
+  const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganisation)
   const [newOrganization, setNewOrganization] = useState<OrganizationDTO>(organization ?? {
     id: '',
     shortName: '',
@@ -84,43 +89,37 @@ export const OrganizationDetail = ({
     members: []
   })
 
-  const isCreatingNewOrganisation = organization === undefined
-
   return (
     <div className={tw('flex flex-col py-4 px-6 w-5/6')}>
       <ColumnTitle title={translation.organizationDetail}/>
-      <OrganizationForm organization={organization}
-                        onSave={newOrganizationDetails => {
-                          if (isCreatingNewOrganisation) {
-                            setNewOrganization({ ...newOrganization, ...newOrganizationDetails })
-                            setFilledRequired(true)
-                          } else {
-                            onUpdate({ ...newOrganization, ...newOrganizationDetails })
-                          }
-                        }}
+      <OrganizationForm
+        organization={newOrganization}
+        onChange={(newOrganizationDetails, isValid) => {
+          setNewOrganization({ ...newOrganization, ...newOrganizationDetails })
+          setFilledRequired(isValid)
+        }}
+        isShowingErrorsDirectly={!isCreatingNewOrganisation}
       />
       <div className={tw('mt-6')}>
-        <OrganizationMemberList members={organization?.members ?? []}
-                                onSave={(members) => {
-                                  if (isCreatingNewOrganisation) {
-                                    setNewOrganization({ ...newOrganization, members })
-                                  } else {
-                                    onUpdate({ ...newOrganization, members })
-                                  }
-                                }}/>
+        <OrganizationMemberList
+          members={newOrganization.members}
+          onChange={(members) => setNewOrganization({ ...newOrganization, members })}
+        />
       </div>
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganisation })}>
         <span className={tw('font-space text-lg font-bold')}>{translation.dangerZone}</span>
         <span className={tw('text-gray-400')}>{translation.dangerZoneText}</span>
-        <button onClick={() => confirm(translation.deleteConfirmText) && onDelete(newOrganization)} className={tw('text-hw-negative-400 font-bold text-left')}>{translation.deleteOrganization}</button>
+        <button onClick={() => confirm(translation.deleteConfirmText) && onDelete(newOrganization)}
+                className={tw('text-hw-negative-400 font-bold text-left')}>{translation.deleteOrganization}</button>
       </div>
-      {isCreatingNewOrganisation &&
-        (
-          <div className={tw('flex flex-row justify-end mt-6')}>
-            <Button className={tw('w-1/2')} onClick={() => onCreate(newOrganization)} disabled={!filledRequired}>{translation.create}</Button>
-          </div>
-        )
-      }
+      <div className={tw('flex flex-row justify-end mt-6')}>
+        <Button
+          className={tw('w-1/2')}
+          onClick={() => isCreatingNewOrganisation ? onCreate(newOrganization) : onUpdate(newOrganization)}
+          disabled={!filledRequired}>
+          {isCreatingNewOrganisation ? translation.create : translation.update}
+        </Button>
+      </div>
     </div>
   )
 }

@@ -2,7 +2,6 @@ import { tw, tx } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from './Button'
 import { Input } from './Input'
 import { useState } from 'react'
 
@@ -55,7 +54,7 @@ const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTra
   }
 }
 
-type OrganizationDTO = {
+type OrganizationGeneralInfoDTO = {
   shortName: string,
   longName: string,
   email: string,
@@ -64,18 +63,19 @@ type OrganizationDTO = {
 
 // TODO make sure the Organization type only has the used values shortName, longName, email, isVerified
 export type OrganizationFormProps = {
-  organization?: OrganizationDTO,
-  onSave: (organization: OrganizationDTO) => void
+  organization?: OrganizationGeneralInfoDTO,
+  onChange: (organization: OrganizationGeneralInfoDTO, isValid: boolean) => void,
+  isShowingErrorsDirectly?: boolean
 }
 
 export const OrganizationForm = ({
   language,
   organization = { shortName: '', longName: '', email: '', isVerified: false },
-  onSave = () => undefined
+  onChange = () => undefined,
+  isShowingErrorsDirectly = false
 }: PropsWithLanguage<OrganizationFormTranslation, OrganizationFormProps>) => {
   const translation = useTranslation(language, defaultOrganizationFormTranslations)
-  const [newOrganization, setNewOrganization] = useState(organization)
-  const [touched, setTouched] = useState({ shortName: false, longName: false, email: false })
+  const [touched, setTouched] = useState({ shortName: isShowingErrorsDirectly, longName: isShowingErrorsDirectly, email: isShowingErrorsDirectly })
 
   const minShortNameLength = 2
   const minLongNameLength = 4
@@ -87,30 +87,42 @@ export const OrganizationForm = ({
   const errorClasses = tw('text-hw-negative-500 text-sm')
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
-  let shortNameErrorMessage: string | undefined
-  if (newOrganization.shortName === '') {
-    shortNameErrorMessage = translation.required
-  } else if (newOrganization.shortName.length < minShortNameLength) {
-    shortNameErrorMessage = translation.tooShort(minShortNameLength)
-  } else if (newOrganization.shortName.length > maxShortNameLength) {
-    shortNameErrorMessage = translation.tooLong(maxShortNameLength)
+  function validateShortName(organization: OrganizationGeneralInfoDTO): string | undefined {
+    if (organization.shortName === '') {
+      return translation.required
+    } else if (organization.shortName.length < minShortNameLength) {
+      return translation.tooShort(minShortNameLength)
+    } else if (organization.shortName.length > maxShortNameLength) {
+      return translation.tooLong(maxShortNameLength)
+    }
   }
 
-  let longNameErrorMessage: string | undefined
-  if (newOrganization.longName === '') {
-    longNameErrorMessage = translation.required
-  } else if (newOrganization.longName.length < minLongNameLength) {
-    longNameErrorMessage = translation.tooShort(minLongNameLength)
-  } else if (newOrganization.longName.length > maxLongNameLength) {
-    longNameErrorMessage = translation.tooLong(maxLongNameLength)
+  function validateLongName(organization: OrganizationGeneralInfoDTO): string | undefined {
+    if (organization.longName === '') {
+      return translation.required
+    } else if (organization.longName.length < minLongNameLength) {
+      return translation.tooShort(minLongNameLength)
+    } else if (organization.longName.length > maxLongNameLength) {
+      return translation.tooLong(maxLongNameLength)
+    }
   }
 
-  let emailErrorMessage: string | undefined
-  if (newOrganization.email === '') {
-    emailErrorMessage = translation.required
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(newOrganization.email)) {
-    emailErrorMessage = translation.invalidEmail
+  function validateEmail(organization: OrganizationGeneralInfoDTO): string | undefined {
+    if (organization.email === '') {
+      return translation.required
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(organization.email)) {
+      return translation.invalidEmail
+    }
   }
+
+  function triggerOnChange(newOrganization: OrganizationGeneralInfoDTO) {
+    const isValid = validateShortName(newOrganization) === undefined && validateLongName(newOrganization) === undefined && validateEmail(newOrganization) === undefined
+    onChange(newOrganization, isValid)
+  }
+
+  const shortNameErrorMessage: string | undefined = validateShortName(organization)
+  const longNameErrorMessage: string | undefined = validateLongName(organization)
+  const emailErrorMessage: string | undefined = validateEmail(organization)
 
   const isDisplayingShortNameError = shortNameErrorMessage && touched.shortName
   const isDisplayingLongNameError = longNameErrorMessage && touched.longName
@@ -118,21 +130,11 @@ export const OrganizationForm = ({
 
   return (
     <form>
-      <div className={tw('flex flex-row justify-between')}>
-        <span className={tw('font-semibold')}>{translation.general}</span>
-        <Button type="button"
-                color="positive"
-                onClick={() => onSave(newOrganization)}
-                disabled={emailErrorMessage !== undefined || longNameErrorMessage !== undefined || shortNameErrorMessage !== undefined}>
-          {translation.saveChanges}
-        </Button>
-      </div>
+      <span className={tw('font-semibold')}>{translation.general}</span>
       <div className={tw('mt-2 mb-1')}>
-        <Input id="shortName" value={newOrganization.shortName} label={translation.shortName}
-               onChange={text => {
-                 setNewOrganization({ ...newOrganization, shortName: text })
-                 setTouched({ ...touched, shortName: true })
-               }}
+        <Input id="shortName" value={organization.shortName} label={translation.shortName}
+               onBlur={() => setTouched({ ...touched, shortName: true })}
+               onChange={text => triggerOnChange({ ...organization, shortName: text })}
                maxLength={maxShortNameLength}
                className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
@@ -140,11 +142,9 @@ export const OrganizationForm = ({
       </div>
       <span className={tw('text-gray-500 text-sm')}>{translation.shortNameDescription}</span>
       <div className={tw('mt-2 mb-1')}>
-        <Input id="longName" value={newOrganization.longName} label={translation.longName}
-               onChange={text => {
-                 setNewOrganization({ ...newOrganization, longName: text })
-                 setTouched({ ...touched, longName: true })
-               }}
+        <Input id="longName" value={organization.longName} label={translation.longName}
+               onBlur={() => setTouched({ ...touched, longName: true })}
+               onChange={text => triggerOnChange({ ...organization, longName: text })}
                maxLength={maxLongNameLength}
                className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
@@ -154,11 +154,9 @@ export const OrganizationForm = ({
       <div className={tw('mt-2 mb-1')}>
         <div className={tw('flex flex-row items-end')}>
           <div className={tw('flex-1 mr-2')}>
-            <Input id="email" value={newOrganization.email} label={translation.contactEmail} type="email"
-                   onChange={text => {
-                     setNewOrganization({ ...newOrganization, email: text })
-                     setTouched({ ...touched, email: true })
-                   }}
+            <Input id="email" value={organization.email} label={translation.contactEmail} type="email"
+                   onBlur={() => setTouched({ ...touched, email: true })}
+                   onChange={text => triggerOnChange({ ...organization, email: text })}
                    maxLength={maxMailLength}
                    className={tx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
             />

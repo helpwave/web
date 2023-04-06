@@ -3,7 +3,7 @@ import { tw } from '@helpwave/common/twind/index'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Add from '@helpwave/common/icons/Add'
-import { TaskTemplateTile } from './TaskTemplateTile'
+import { TaskTemplateCard } from './cards/TaskTemplateCard'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
@@ -63,7 +63,7 @@ export const TaskTemplateListColumn = ({
       </div>
       {taskTemplates.map(taskTemplate => (
           <div key={taskTemplate.name} className={tw('my-2')}>
-            <TaskTemplateTile
+            <TaskTemplateCard
               name={taskTemplate.name}
               subtaskCount={taskTemplate.subtaskCount}
               isSelected={selected === taskTemplate}

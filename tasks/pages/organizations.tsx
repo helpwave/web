@@ -8,10 +8,10 @@ import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TwoColumn } from '../components/TwoColumn'
-import { OrganizationDisplay } from '../components/OrganizationDisplay'
+import { TwoColumn } from '../components/layout/TwoColumn'
+import { OrganizationDisplay } from '../components/layout/OrganizationDisplay'
 import type { Role } from '../components/OrganizationMemberList'
-import { OrganizationDetail } from '../components/OrganizationDetails'
+import { OrganizationDetail } from '../components/layout/OrganizationDetails'
 import {
   useCreateMutation,
   useDeleteMutation,

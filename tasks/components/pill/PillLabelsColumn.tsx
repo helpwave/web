@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { PillLabel, TaskState } from './PillLabel'
 
 export type PillLabelsColumnProps = {

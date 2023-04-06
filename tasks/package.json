@@ -14,6 +14,7 @@
     "@helpwave/common": "workspace:*",
     "@next/font": "^13.0.6",
     "@radix-ui/react-checkbox": "^1.0.1",
+    "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-table": "^8.8.0",
     "@twind/core": "^1.1.2",
     "@twind/preset-autoprefix": "^1.0.6",

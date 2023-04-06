@@ -7,13 +7,13 @@ import { Card } from './Card'
 import Email from '@helpwave/common/icons/Email'
 import { AvatarGroup } from './AvatarGroup'
 
-type OrganizationTileTranslation = {
+type OrganizationCardTranslation = {
   edit: string,
   other: string,
   others: string
 }
 
-const defaultOrganizationTileTranslations: Record<Languages, OrganizationTileTranslation> = {
+const defaultOrganizationCardTranslations: Record<Languages, OrganizationCardTranslation> = {
   en: {
     edit: 'Edit',
     other: 'other',
@@ -43,25 +43,25 @@ type OrganizationDTO = {
   members: UserDTO[]
 }
 
-export type OrganizationTileProps = CardProps & {
+export type OrganizationCardProps = CardProps & {
   maxShownWards?: number,
   organization: OrganizationDTO,
   onEditClick?: () => void
 }
 
-export const OrganizationTile = ({
+export const OrganizationCard = ({
   language,
   maxShownWards = 5,
   isSelected,
   organization,
   onTileClick = () => undefined,
   onEditClick = () => undefined
-}: PropsWithLanguage<OrganizationTileTranslation, OrganizationTileProps>) => {
-  const translation = useTranslation(language, defaultOrganizationTileTranslations)
+}: PropsWithLanguage<OrganizationCardTranslation, OrganizationCardProps>) => {
+  const translation = useTranslation(language, defaultOrganizationCardTranslations)
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (
-    <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
+    <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer justify-between flex flex-col')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <span className={tw('font-bold font-space')}>{`${organization.longName} (${organization.shortName})`}</span>
         <button onClick={onEditClick}

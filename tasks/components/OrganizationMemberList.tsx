@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   useReactTable,
   createColumnHelper,
@@ -65,14 +64,10 @@ type OrgMember = {
   role: Role
 }
 
-type OrganizationDTO = {
-  name: string,
-  members: OrgMember[]
-}
-
 export type OrganizationMemberListProps = {
-  organization: OrganizationDTO,
-  usersPerPage?: number
+  members: OrgMember[],
+  usersPerPage?: number,
+  onChange: (members: OrgMember[]) => void
 }
 
 const columnHelper = createColumnHelper<OrgMember>()
@@ -95,11 +90,10 @@ const columns = [
 export const OrganizationMemberList = ({
   language,
   usersPerPage = 5,
-  organization
+  members,
+  onChange
 }: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
-  // State copy of the members, so discarding changes is possible
-  const [members, setMembers] = useState(organization.members)
 
   const table = useReactTable({
     data: members,
@@ -108,27 +102,6 @@ export const OrganizationMemberList = ({
     getPaginationRowModel: getPaginationRowModel(),
     initialState: { pagination: { pageSize: usersPerPage } }
   })
-
-  const saveChanges = () => {
-    // TODO api call
-  }
-
-  const hasChanges = () => {
-    if (members.length !== organization.members.length) {
-      return true
-    }
-    for (let i = 0; i < members.length; i++) {
-      const mem1 = members[i]
-      const mem2 = organization.members[i]
-      // TODO replace later on with an equality check on the object
-      if (mem1.role !== mem2.role || mem1.name !== mem2.name || mem1.email !== mem2.email || mem1.avatarURL !== mem2.avatarURL) {
-        return true
-      }
-    }
-    return false
-  }
-
-  const disableSaveChanges = !hasChanges()
 
   const addUser = () => {
     // TODO remove below for an actual user add
@@ -139,25 +112,19 @@ export const OrganizationMemberList = ({
       isSelected: false,
       avatarURL: ''
     }
-    setMembers([...members, newMember])
-    // Automatically go to the last page
-    table.setPageIndex((Math.ceil((members.length + 1) / usersPerPage)))
+    onChange([...members, newMember])
   }
 
   return (
     <div className={tw('flex flex-col')}>
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
-        <div className={tw('flex flex-row')}>
-          <Button onClick={addUser} color="positive" className={tw('mr-2')}>
-            <div className={tw('flex flex-row items-center')}>
-              <span className={tw('mr-2')}>{translation.addMember}</span>
-              <Dropdown/>
-            </div>
-          </Button>
-          <Button onClick={saveChanges} disabled={disableSaveChanges} color="positive"
-                  >{translation.saveChanges}</Button>
-        </div>
+        <Button onClick={addUser} color="positive" className={tw('mr-2')}>
+          <div className={tw('flex flex-row items-center')}>
+            <span className={tw('mr-2')}>{translation.addMember}</span>
+            <Dropdown/>
+          </div>
+        </Button>
       </div>
       <table>
         <thead>
@@ -182,9 +149,9 @@ export const OrganizationMemberList = ({
                     </div>),
                       remove: (<div className={tw('flex flex-row justify-end')}>
                       <button onClick={() => {
-                        setMembers(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-                        // TODO at delete safety for owner later on
                         table.toggleAllRowsSelected(false)
+                        onChange(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+                        // TODO at delete safety for owner later on
                       }}>
                         <span>{translation.remove}</span>
                       </button>
@@ -204,7 +171,8 @@ export const OrganizationMemberList = ({
                 {{
                   role: (
                     <div className={tw('flex flex-row justify-end items-center mr-2')}>
-                      <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */ }}>
+                      <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
+                      }}>
                       <span className={tw(`mr-2 font-semibold text-right`)}>
                         {translation.roleTypes[cell.row.original.role]}
                       </span>
@@ -223,7 +191,7 @@ export const OrganizationMemberList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => setMembers(members.filter(value => value !== cell.row.original))}>
+                      <button onClick={() => onChange(members.filter(value => value !== cell.row.original))}>
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>
@@ -235,18 +203,20 @@ export const OrganizationMemberList = ({
             ))}
           </tr>
         ))}
-        {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && (members.length % usersPerPage) !== 0 && ([...Array((usersPerPage - (members.length % usersPerPage)) % usersPerPage)].map((i, index) => (
+        {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && table.getPageCount() > 1
+          && (members.length % usersPerPage) !== 0
+          && ([...Array((usersPerPage - (members.length % usersPerPage)) % usersPerPage)].map((i, index) => (
           <tr key={index} className={tw('h-12')}>
             {[table.getAllColumns.length].map((j, index) => (
               <td key={index}/>
             ))}
           </tr>
-        )))}
+          )))}
         </tbody>
       </table>
       <div className={tw('flex flex-row justify-center mt-2')}>
         <Pagination page={table.getState().pagination.pageIndex}
-                    numberOfPages={table.getPageCount()}
+                    numberOfPages={Math.max(table.getPageCount(), 1)}
                     onPageChanged={table.setPageIndex}
         />
       </div>

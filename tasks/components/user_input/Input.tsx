@@ -10,7 +10,7 @@ type InputProps = {
    */
   id: string,
   value: string,
-  label: string,
+  label?: string,
   /**
    * @default 'text'
    */
@@ -27,7 +27,7 @@ type InputProps = {
 const ControlledInput = ({ id, type = 'text', value, label, onChange = noop, ...restProps }: InputProps) => {
   return (
     <div className={tw('w-full')}>
-      <label htmlFor={id} className={tw('block text-sm font-medium text-gray-700')}>{label}</label>
+      {label && <label htmlFor={id} className={tw('block text-sm font-medium text-gray-700')}>{label}</label>}
       <input
         value={value}
         id={id}

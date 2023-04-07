@@ -32,7 +32,7 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     selectAll: 'Select All',
     rooms: 'Rooms',
     addRoom: 'Add Room',
-    bedCount: 'Bedcount'
+    bedCount: 'Number of Beds'
   },
   de: {
     edit: 'Bearbeiten',

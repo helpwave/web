@@ -138,9 +138,10 @@ export const useCreateMutation = (setSelectedOrganization: Dispatch<SetStateActi
     mutationFn: async (organization) => {
       organization.id = Math.random().toString()
       // TODO create request for organization
-      organizations = [...organizations, { ...organization, id: Math.random().toString() }]
-      setSelectedOrganization(organization)
+      const newOrganization = { ...organization, id: Math.random().toString() }
+      organizations = [...organizations, newOrganization]
       organizations.sort((a, b) => a.longName.localeCompare(b.longName))
+      setSelectedOrganization(newOrganization)
     },
     onMutate: async(organization: OrganizationDTO) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })

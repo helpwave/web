@@ -63,7 +63,7 @@ export const OrganizationDisplay = ({
           <OrganizationCard
             key={organization.longName}
             organization={organization}
-            isSelected={selectedOrganization === organization}
+            isSelected={selectedOrganization?.id === organization.id}
             onEditClick={() => onSelectionChange(organization)}
             onTileClick={() => {
               // TODO open ward view for organization

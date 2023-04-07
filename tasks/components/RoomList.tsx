@@ -133,7 +133,7 @@ export const RoomList = ({
                         <span>{table.getIsAllRowsSelected() ? translation.deselectAll : translation.selectAll}</span>
                       </div>),
                       bedCount:
-                      (<div className={tw('flex flex-row justify-end items-center')}>
+                      (<div className={tw('flex flex-row')}>
                         {translation.bedCount}
                       </div>),
                       remove:
@@ -174,7 +174,7 @@ export const RoomList = ({
                     </div>
                   ),
                   name: (
-                    <div className={tw('flex flex-row items-center w-1/2 min-w-[50px]')}>
+                    <div className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
                       <Input
                         value={cell.row.original.name}
                         type="text"

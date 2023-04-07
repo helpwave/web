@@ -1,11 +1,11 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { ColumnTitle } from './ColumnTitle'
-import { OrganizationCard } from './OrganizationCard'
-import { OrganizationAddCard } from './OrganizationAddCard'
-import type { Role } from './OrganizationMemberList'
+import { ColumnTitle } from '../ColumnTitle'
+import { OrganizationCard } from '../cards/OrganizationCard'
+import { OrganizationAddCard } from '../cards/OrganizationAddCard'
+import type { Role } from '../OrganizationMemberList'
 
 type OrganizationDisplayTranslation = {
   yourOrganizations: string

@@ -10,7 +10,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Dropdown from '../icons/TriangleDown'
 import { Pagination } from './Pagination'
-import { TriStateCheckbox } from './TriStateCheckbox'
+import { TriStateCheckbox } from './user_input/TriStateCheckbox'
 import { Button } from './Button'
 import { Avatar } from './Avatar'
 

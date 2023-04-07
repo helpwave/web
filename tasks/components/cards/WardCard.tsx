@@ -1,17 +1,17 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Bed from '../icons/Bed'
-import { PillLabelBox } from './PillLabelBox'
+import Bed from '../../icons/Bed'
+import { PillLabelBox } from '../pill/PillLabelBox'
 import type { CardProps } from './Card'
 import { Card } from './Card'
 
-type WardTileTranslation = {
+type WardCardTranslation = {
   edit: string
 }
 
-const defaultWardTileTranslations: Record<Languages, WardTileTranslation> = {
+const defaultWardCardTranslations: Record<Languages, WardCardTranslation> = {
   en: {
     edit: 'Edit'
   },
@@ -29,19 +29,19 @@ type WardDTO = {
   done: number
 }
 
-export type WardTileProps = CardProps & {
+export type WardCardProps = CardProps & {
   ward: WardDTO,
   onEditClick?: () => void
 }
 
-export const WardTile = ({
+export const WardCard = ({
   language,
   isSelected,
   ward,
   onTileClick = () => undefined,
   onEditClick = () => undefined
-}: PropsWithLanguage<WardTileTranslation, WardTileProps>) => {
-  const translation = useTranslation(language, defaultWardTileTranslations)
+}: PropsWithLanguage<WardCardTranslation, WardCardProps>) => {
+  const translation = useTranslation(language, defaultWardCardTranslations)
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
       <div className={tw('flex flex-row justify-between w-full')}>

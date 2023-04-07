@@ -1,24 +1,24 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { CardProps } from './Card'
 import { Card } from './Card'
-import { ProgressIndicator } from './ProgressIndicator'
+import { ProgressIndicator } from '../ProgressIndicator'
 
 type TaskDTO = {
   name: string,
   description: string
 }
 
-export type TaskTileProps = CardProps & {
+export type TaskCardProps = CardProps & {
   progress: number,
   task: TaskDTO
 }
 
-export const TaskTile = ({
+export const TaskCard = ({
   progress,
   task,
   isSelected = false,
   onTileClick = () => undefined
-}: TaskTileProps) => {
+}: TaskCardProps) => {
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('bg-white')}>
       <div className={tw('flex flex-row justify-between w-full')}>

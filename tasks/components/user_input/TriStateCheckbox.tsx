@@ -1,5 +1,5 @@
 import { tx } from '@helpwave/common/twind'
-import Check from '../icons/Check'
+import Check from '../../icons/Check'
 import Minus from '@helpwave/common/icons/Minus'
 
 type TriStateCheckboxProps = {

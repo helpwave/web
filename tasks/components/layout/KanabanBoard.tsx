@@ -17,10 +17,10 @@ import {
 } from '@dnd-kit/core'
 import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
-import type { TaskStatus } from './KanbanColumn'
-import { KanbanColumn } from './KanbanColumn'
-import { TaskTile } from './TaskTile'
-import { KanbanHeader } from './KanbanHeader'
+import type { TaskStatus } from '../KanbanColumn'
+import { KanbanColumn } from '../KanbanColumn'
+import { TaskCard } from '../cards/TaskCard'
+import { KanbanHeader } from '../KanbanHeader'
 
 type KanbanBoardObject = {
   draggedID?: string,
@@ -162,7 +162,7 @@ export const KanbanBoard = ({ tasks }: KanbanBoardProps) => {
           <KanbanColumn type="done" tasks={filterBySearch(sortedTasks.done)} draggedTileID={boardObject.draggedID}
                         isDraggedOver={boardObject.overColumn === 'done'}/>
           <DragOverlay dropAnimation={dropAnimation}>
-            {task && <TaskTile task={task} progress={task.progress}/>}
+            {task && <TaskCard task={task} progress={task.progress}/>}
           </DragOverlay>
         </div>
       </DndContext>

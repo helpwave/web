@@ -1,6 +1,6 @@
-import { tw } from '@helpwave/common/twind/index'
-import { Avatar } from './Avatar'
-import type { User } from '../hooks/useAuth'
+import { tw } from '@helpwave/common/twind'
+import { Avatar } from '../Avatar'
+import type { User } from '../../hooks/useAuth'
 
 export type UserCardProps = {
   user: User

@@ -8,13 +8,13 @@ type TextareaProps = {
 }
 export const Textarea = ({ placeholder, headline, message, id } : TextareaProps) => {
   return (
-    <div className={tw('mb-4 relative')}>
-      <textarea defaultValue={message} className={tw('h-32 resize-none rounded-md shadow appearance-none border rounded w-full py-8 px-3  border-gray-300 text-gray-700 leading-tight focus:outline-none')} id={id} placeholder={placeholder}>
-
-      </textarea>
-      <label className={tw('absolute top-0 left-0 py-2 px-3 text-gray-700 font-bold')} htmlFor={id}>
+    <div className={tw('relative shadow border-1 border-gray-300 rounded-lg')}>
+      <label className={tw('mx-3 mt-3  block text-gray-700 font-bold')} htmlFor={id}>
         {headline}
       </label>
+      <textarea defaultValue={message} className={tw('pt-0 border-transparent focus:border-transparent focus:ring-0 h-32 resize-none  appearance-none border w-full text-gray-700 leading-tight focus:outline-none')} id={id} placeholder={placeholder}>
+
+      </textarea>
     </div>
   )
 }

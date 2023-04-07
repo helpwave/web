@@ -1,16 +1,16 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { CardProps } from './Card'
 import { Card } from './Card'
 
-type TaskTemplateTileTranslation = {
+type TaskTemplateCardTranslation = {
   subtask: string,
   edit: string
 }
 
-const defaultTaskTemplateTileTranslations: Record<Languages, TaskTemplateTileTranslation> = {
+const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTranslation> = {
   en: {
     subtask: 'Subtasks',
     edit: 'Edit'
@@ -21,13 +21,13 @@ const defaultTaskTemplateTileTranslations: Record<Languages, TaskTemplateTileTra
   }
 }
 
-export type TaskTemplateTileProps = CardProps & {
+export type TaskTemplateCardProps = CardProps & {
   name: string,
   subtaskCount: number,
   onEditClick?: () => void
 }
 
-export const TaskTemplateTile =
+export const TaskTemplateCard =
   ({
     isSelected = false,
     name,
@@ -35,8 +35,8 @@ export const TaskTemplateTile =
     language,
     onTileClick = () => undefined,
     onEditClick = () => undefined
-  }: PropsWithLanguage<TaskTemplateTileTranslation, TaskTemplateTileProps>) => {
-    const translation = useTranslation(language, defaultTaskTemplateTileTranslations)
+  }: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
+    const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
     return (
       <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between')}>
         <div className={tw('flex flex-col items-start')}>

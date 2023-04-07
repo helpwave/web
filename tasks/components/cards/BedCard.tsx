@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import Add from '@helpwave/common/icons/Add'
 import { Card } from './Card'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'

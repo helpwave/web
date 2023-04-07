@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind/index'
-import { PillLabel, TaskState } from './PillLabel'
-import { TaskTile } from './TaskTile'
+import { PillLabel, TaskState } from './pill/PillLabel'
+import { TaskCard } from './cards/TaskCard'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -72,7 +72,7 @@ export const KanbanColumn = ({
         <div ref={setNodeRef} className="flex flex-col gap-y-4">
           {tasks.map((task) => (
             <Sortable key={task.id} id={task.id}>
-              <TaskTile progress={task.progress} task={task} isSelected={draggedTileID === task.id}/>
+              <TaskCard progress={task.progress} task={task} isSelected={draggedTileID === task.id}/>
             </Sortable>
           ))}
         </div>

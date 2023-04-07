@@ -1,13 +1,13 @@
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useState } from 'react'
-import { OrganizationForm } from './OrganizationForm'
-import type { Role } from './OrganizationMemberList'
-import { OrganizationMemberList } from './OrganizationMemberList'
-import { ColumnTitle } from './ColumnTitle'
-import { Button } from './Button'
+import { OrganizationForm } from '../OrganizationForm'
+import type { Role } from '../OrganizationMemberList'
+import { OrganizationMemberList } from '../OrganizationMemberList'
+import { ColumnTitle } from '../ColumnTitle'
+import { Button } from '../Button'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,

@@ -1,11 +1,11 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { CardProps } from './Card'
 import { Card } from './Card'
 import Email from '@helpwave/common/icons/Email'
-import { AvatarGroup } from './AvatarGroup'
+import { AvatarGroup } from '../AvatarGroup'
 
 type OrganizationCardTranslation = {
   edit: string,

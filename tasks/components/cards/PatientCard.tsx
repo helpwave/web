@@ -1,7 +1,7 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { CardProps } from './Card'
 import { Card } from './Card'
-import { PillLabelsColumn } from './PillLabelsColumn'
+import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 
 // TODO replace later
 type PatientDTO = {

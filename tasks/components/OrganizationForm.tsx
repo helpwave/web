@@ -2,7 +2,7 @@ import { tw, tx } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Input } from './Input'
+import { Input } from './user_input/Input'
 import { useState } from 'react'
 
 type OrganizationFormTranslation = {

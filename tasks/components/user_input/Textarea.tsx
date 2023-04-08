@@ -11,21 +11,20 @@ type TextareaProps = {
 }
 
 const globalStyles = css`
+  /* onfocus textarea border color */
   .textarea-wrapper:focus-within {
-    @apply border-hw-primary-700;
+    @apply border-hw-primary-600;
   }
 
-  /* Style der Scrollbar */
+  /* style of the scrollbar of the textarea */
   textarea::-webkit-scrollbar {
     @apply w-1;
 
   }
 
-  /* Style des Scrollbalkens */
   textarea::-webkit-scrollbar-thumb {
     @apply rounded-lg bg-hw-primary-600;
   }
-
 `
 export const Textarea = ({ headline, placeholder, message, id } : TextareaProps) => {
   return (

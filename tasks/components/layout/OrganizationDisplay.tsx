@@ -4,18 +4,21 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
-import { OrganizationAddCard } from '../cards/OrganizationAddCard'
+import { AddCard } from '../cards/AddCard'
 import type { Role } from '../OrganizationMemberList'
 
 type OrganizationDisplayTranslation = {
+  addOrganization: string,
   yourOrganizations: string
 }
 
 const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisplayTranslation> = {
   en: {
+    addOrganization: 'Add new Organization',
     yourOrganizations: 'Your Organizations'
   },
   de: {
+    addOrganization: 'Organisation hinzufügen',
     yourOrganizations: 'Deine Organizationen'
   }
 }
@@ -70,7 +73,12 @@ export const OrganizationDisplay = ({
             }}
           />
         ))}
-        <OrganizationAddCard onTileClick={() => onSelectionChange(undefined)} isSelected={selectedOrganization === undefined} />
+        <AddCard
+          text={translation.addOrganization}
+          onTileClick={() => onSelectionChange(undefined)}
+          isSelected={selectedOrganization === undefined}
+          className={tw('h-24')}
+        />
       </div>
     </div>
   )

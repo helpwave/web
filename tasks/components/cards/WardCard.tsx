@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tx, tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -8,22 +8,30 @@ import type { CardProps } from './Card'
 import { Card } from './Card'
 
 type WardCardTranslation = {
-  edit: string
+  edit: string,
+  noRoomsYet: string
 }
 
 const defaultWardCardTranslations: Record<Languages, WardCardTranslation> = {
   en: {
-    edit: 'Edit'
+    edit: 'Edit',
+    noRoomsYet: 'No Rooms have been added yet'
   },
   de: {
-    edit: 'Bearbeiten'
+    edit: 'Bearbeiten',
+    noRoomsYet: 'Es wurden noch keine Räume hinzugefügt'
   }
 }
 
-type WardDTO = {
-  name: string,
-  roomNames: string[],
+type Room = {
   bedCount: number,
+  name: string
+}
+
+type WardDTO = {
+  id: string,
+  name: string,
+  rooms: Room[],
   unscheduled: number,
   inProgress: number,
   done: number
@@ -42,6 +50,9 @@ export const WardCard = ({
   onEditClick = () => undefined
 }: PropsWithLanguage<WardCardTranslation, WardCardProps>) => {
   const translation = useTranslation(language, defaultWardCardTranslations)
+  const numberOfBeds = ward.rooms.map(value => value.bedCount).reduce((previousValue, currentValue) => currentValue + previousValue, 0)
+  const hasRooms = ward.rooms.length > 0
+
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
       <div className={tw('flex flex-row justify-between w-full')}>
@@ -49,11 +60,12 @@ export const WardCard = ({
         <button onClick={onEditClick}
                 className={tw('hidden group-hover:block')}>{translation.edit}</button>
       </div>
-      <div className={tw('text-left my-1')}>{ward.roomNames.join(', ')}</div>
+      <div
+        className={tx('text-left my-1', { 'text-gray-400': !hasRooms })}>{hasRooms ? ward.rooms.map(value => value.name).join(', ') : translation.noRoomsYet}</div>
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-row')}>
           <Bed/>
-          <div className={tw('pl-1')}>{ward.bedCount}</div>
+          <div className={tw('pl-1')}>{numberOfBeds}</div>
         </div>
         <PillLabelBox
           unscheduled={ward.unscheduled}

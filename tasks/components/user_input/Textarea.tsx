@@ -14,6 +14,18 @@ const globalStyles = css`
   .textarea-wrapper:focus-within {
     @apply border-hw-primary-700;
   }
+
+  /* Style der Scrollbar */
+  textarea::-webkit-scrollbar {
+    @apply w-1;
+
+  }
+
+  /* Style des Scrollbalkens */
+  textarea::-webkit-scrollbar-thumb {
+    @apply rounded-lg bg-hw-primary-600;
+  }
+
 `
 export const Textarea = ({ headline, placeholder, message, id } : TextareaProps) => {
   return (

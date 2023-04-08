@@ -19,7 +19,6 @@ const globalStyles = css`
   /* style of the scrollbar of the textarea */
   textarea::-webkit-scrollbar {
     @apply w-1;
-
   }
 
   textarea::-webkit-scrollbar-thumb {

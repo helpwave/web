@@ -5,41 +5,29 @@ import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
-import { WardServiceClient } from '../generated/Ward_svcServiceClientPb'
-import { CreateWardRequest, GetWardRequest } from '../generated/ward_svc_pb'
+import { WardServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_grpc_web_pb'
+import { GetWardRequest, CreateWardRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
   const getWard = async (id: string) => {
-    const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc')
+    const wardService = new WardServicePromiseClient('https://staging-api.helpwave.de/task-svc')
 
     const req = new GetWardRequest()
     req.setId(id)
 
-    wardService.getWard(req, null)
-      .then((res) => {
-        console.log('call successful', res.getId(), res.getName())
-      })
-      .catch((err) => {
-        console.error('call failed', err)
-      })
+    wardService.getWard(req).then(response => console.log(response))
   }
 
   const createWard = async (name: string) => {
-    const wardService = new WardServiceClient('https://staging-api.helpwave.de/tasks-svc')
+    const wardService = new WardServicePromiseClient('https://staging-api.helpwave.de/tasks-svc')
 
     const req = new CreateWardRequest()
     req.setName(name)
 
-    wardService.createWard(req, null)
-      .then((res) => {
-        console.log('call successful', res.getId(), res.getName())
-      })
-      .catch((err) => {
-        console.error('call failed', err)
-      })
+    wardService.createWard(req).then(response => console.log(response))
   }
 
   const createRandomWard = async () => createWard(`random_ward_${Date.now().toString()}`)

@@ -15,11 +15,11 @@ type WardCardTranslation = {
 const defaultWardCardTranslations: Record<Languages, WardCardTranslation> = {
   en: {
     edit: 'Edit',
-    noRoomsYet: 'No Rooms have been added yet'
+    noRoomsYet: 'no rooms yet'
   },
   de: {
     edit: 'Bearbeiten',
-    noRoomsYet: 'Es wurden noch keine Räume hinzugefügt'
+    noRoomsYet: 'noch keine Räume'
   }
 }
 
@@ -57,11 +57,19 @@ export const WardCard = ({
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <span className={tw('font-bold font-space')}>{ward.name}</span>
-        <button onClick={onEditClick}
-                className={tw('hidden group-hover:block')}>{translation.edit}</button>
+        <button
+          onClick={event => {
+            onEditClick()
+            event.stopPropagation()
+          }}
+          className={tw('hidden group-hover:block')}
+        >
+          {translation.edit}
+        </button>
       </div>
-      <div
-        className={tx('text-left my-1', { 'text-gray-400': !hasRooms })}>{hasRooms ? ward.rooms.map(value => value.name).join(', ') : translation.noRoomsYet}</div>
+      <div className={tx('text-left my-1', { 'text-gray-400 text-sm': !hasRooms })}>
+        {hasRooms ? ward.rooms.map(value => value.name).join(', ') : translation.noRoomsYet}
+      </div>
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-row')}>
           <Bed/>
@@ -70,7 +78,8 @@ export const WardCard = ({
         <PillLabelBox
           unscheduled={ward.unscheduled}
           inProgress={ward.inProgress}
-          done={ward.done}/>
+          done={ward.done}
+        />
       </div>
     </Card>
   )

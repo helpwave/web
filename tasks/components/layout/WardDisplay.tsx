@@ -5,6 +5,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
+import { useRouter } from 'next/router'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -49,6 +50,7 @@ export const WardDisplay = ({
   onSelectionChange
 }: PropsWithLanguage<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation(language, defaultWardDisplayTranslations)
+  const router = useRouter()
 
   return (
     <div className={tw('py-4 px-6')}>
@@ -60,9 +62,7 @@ export const WardDisplay = ({
             ward={ward}
             isSelected={selectedWard?.id === ward.id}
             onEditClick={() => onSelectionChange(ward)}
-            onTileClick={() => {
-              // TODO open room view for wards
-            }}
+            onTileClick={async () => await router.push(`/ward/${ward.id}`)}
           />
         ))}
         <AddCard

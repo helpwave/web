@@ -43,8 +43,12 @@ export const TaskTemplateCard =
           <span className={tw('font-bold font-space')}>{name}</span>
           <p>{subtaskCount + ' ' + translation.subtask}</p>
         </div>
-        <button onClick={onEditClick}
-                className={tw('hidden group-hover:block')}>{translation.edit}</button>
+        <button
+          onClick={event => {
+            onEditClick()
+            event.stopPropagation()
+          }}
+          className={tw('hidden group-hover:block')}>{translation.edit}</button>
       </Card>
     )
   }

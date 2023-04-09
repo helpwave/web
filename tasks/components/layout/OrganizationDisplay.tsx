@@ -70,9 +70,7 @@ export const OrganizationDisplay = ({
             organization={organization}
             isSelected={selectedOrganization?.id === organization.id}
             onEditClick={() => onSelectionChange(organization)}
-            onTileClick={async () => {
-              await router.push(`/organizations/${organization.id}`)
-            }}
+            onTileClick={async () => await router.push(`/organizations/${organization.id}`)}
           />
         ))}
         <AddCard

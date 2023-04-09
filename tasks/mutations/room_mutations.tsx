@@ -1,0 +1,249 @@
+import type { Dispatch, SetStateAction } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
+const queryKey = 'rooms'
+
+type TaskDTO = {
+  id: string,
+  name: string,
+  description: string,
+  status: 'unscheduled' | 'inProgress' | 'done',
+  progress: number
+}
+
+type PatientDTO = {
+  id: string,
+  note: string,
+  humanReadableIdentifier: string,
+  tasks: TaskDTO[]
+}
+
+type BedDTO = {
+  id: string,
+  name: string,
+  patient?: PatientDTO
+}
+
+type RoomDTO = {
+  id: string,
+  name: string,
+  beds: BedDTO[]
+}
+
+// TODO remove once backend is implemented
+let rooms: RoomDTO[] = [
+  {
+    id: 'room1',
+    name: 'room name 1',
+    beds: [
+      {
+        id: 'bed1',
+        name: 'bed 1',
+        patient: {
+          id: 'patient1',
+          note: 'Note',
+          humanReadableIdentifier: 'Patient A',
+          tasks: [
+            {
+              id: 'task1',
+              name: 'Task 1',
+              description: 'Description',
+              status: 'unscheduled',
+              progress: 0.2
+            },
+            {
+              id: 'task2',
+              name: 'Task 2',
+              description: 'Description',
+              status: 'unscheduled',
+              progress: 0.4
+            },
+            {
+              id: 'task3',
+              name: 'Task 3',
+              description: 'Description',
+              status: 'unscheduled',
+              progress: 0.7
+            },
+            {
+              id: 'task4',
+              name: 'Task 4',
+              description: 'Description',
+              status: 'inProgress',
+              progress: 0.2
+            },
+            {
+              id: 'task5',
+              name: 'Task 5',
+              description: 'Description',
+              status: 'done',
+              progress: 0.1
+            },
+            {
+              id: 'task6',
+              name: 'Task 6',
+              description: 'Description',
+              status: 'done',
+              progress: 0.2
+            }
+          ]
+        }
+      },
+      {
+        id: 'bed2',
+        name: 'bed 2',
+        patient: {
+          id: 'patient2',
+          note: 'Note',
+          humanReadableIdentifier: 'Patient B',
+          tasks: [
+            {
+              id: 'task1',
+              name: 'Task 1',
+              description: 'Description',
+              status: 'unscheduled',
+              progress: 0.2
+            },
+            {
+              id: 'task2',
+              name: 'Task 2',
+              description: 'Description',
+              status: 'unscheduled',
+              progress: 0.4
+            },
+            {
+              id: 'task3',
+              name: 'Task 3',
+              description: 'Description',
+              status: 'unscheduled',
+              progress: 0.7
+            },
+            {
+              id: 'task4',
+              name: 'Task 4',
+              description: 'Description',
+              status: 'inProgress',
+              progress: 0.2
+            },
+            {
+              id: 'task5',
+              name: 'Task 5',
+              description: 'Description',
+              status: 'done',
+              progress: 0.1
+            },
+            {
+              id: 'task6',
+              name: 'Task 6',
+              description: 'Description',
+              status: 'done',
+              progress: 0.2
+            }
+          ]
+        }
+      },
+      {
+        id: 'bed3',
+        name: 'bed 3',
+      },
+      {
+        id: 'bed4',
+        name: 'bed 4',
+      },
+      {
+        id: 'bed5',
+        name: 'bed 5',
+      }
+    ]
+  }
+]
+
+export const useRoomQuery = () => {
+  return useQuery({
+    queryKey: [queryKey],
+    queryFn: async () => {
+      // TODO fetch user rooms
+      return rooms
+    },
+  })
+}
+
+export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDTO | undefined>>, roomUUID: string) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (bed: BedDTO) => {
+      // TODO create request for bed
+      const currentRoom = rooms.find(value => value.id === roomUUID)
+      const newRoom: RoomDTO = { ...currentRoom, beds: [...currentRoom.beds.filter(value => value.id !== bed.id), bed] }
+      rooms = [...rooms.filter(value => value.id !== roomUUID)]
+      rooms.sort((a, b) => a.id.localeCompare(b.id))
+      setSelectedWard(bed)
+    },
+    onMutate: async (ward) => {
+      await queryClient.cancelQueries({ queryKey: [queryKey] })
+      const previousWards = queryClient.getQueryData<BedDTO[]>([queryKey])
+      queryClient.setQueryData<BedDTO[]>(
+        [queryKey],
+        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== ward.id)), ward])
+      rooms.sort((a, b) => a.id.localeCompare(b.id))
+      return { previousWards }
+    },
+    onError: (_, newTodo, context) => {
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    }
+  })
+}
+
+export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDTO | undefined>>, roomUUID: string) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (room) => {
+      // TODO create request for Ward
+      const newRoom = { ...room, id: Math.random().toString() }
+      rooms = [...rooms, newRoom]
+      rooms.sort((a, b) => a.id.localeCompare(b.id))
+      setSelectedWard({ newRoom })
+    },
+    onMutate: async (ward: BedDTO) => {
+      await queryClient.cancelQueries({ queryKey: [queryKey] })
+      const previousWards = queryClient.getQueryData<BedDTO[]>([queryKey])
+      queryClient.setQueryData<BedDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), ward])
+      rooms.sort((a, b) => a.id.localeCompare(b.id))
+      return { previousWards }
+    },
+    onError: (_, newTodo, context) => {
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    },
+  })
+}
+
+export const useDeleteMutation = (setSelectedWard: Dispatch<SetStateAction<BedDTO | undefined>>, roomUUID: string) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (ward) => {
+      // TODO create request for ward
+      rooms = [...rooms.filter(value => value.id !== ward.id)]
+      setSelectedWard(undefined)
+    },
+    onMutate: async (Ward: BedDTO) => {
+      await queryClient.cancelQueries({ queryKey: [queryKey] })
+      const previousWards = queryClient.getQueryData<BedDTO[]>([queryKey])
+      queryClient.setQueryData<BedDTO[]>(
+        [queryKey],
+        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== Ward.id))])
+      return { previousWards }
+    },
+    onError: (_, newTodo, context) => {
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    },
+  })
+}

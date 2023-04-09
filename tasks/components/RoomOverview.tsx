@@ -2,11 +2,19 @@ import { tw } from '@helpwave/common/twind/index'
 import { PatientCard } from './cards/PatientCard'
 import { BedCard } from './cards/BedCard'
 
-type PatientDTO = {
+type TaskDTO = {
+  id: string,
   name: string,
-  unscheduled: number,
-  inProgress: number,
-  done: number
+  description: string,
+  status: 'unscheduled' | 'inProgress' | 'done',
+  progress: number
+}
+
+type PatientDTO = {
+  id: string,
+  note: string,
+  humanReadableIdentifier: string,
+  tasks: TaskDTO[]
 }
 
 type BedDTO = {
@@ -15,6 +23,7 @@ type BedDTO = {
 }
 
 type RoomDTO = {
+  id: string,
   name: string,
   beds: BedDTO[]
 }

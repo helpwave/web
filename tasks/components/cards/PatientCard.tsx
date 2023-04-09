@@ -3,17 +3,24 @@ import type { CardProps } from './Card'
 import { Card } from './Card'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 
-// TODO replace later
-type PatientDTO = {
+type TaskDTO = {
+  id: string,
   name: string,
-  unscheduled: number,
-  inProgress: number,
-  done: number
+  description: string,
+  status: 'unscheduled' | 'inProgress' | 'done',
+  progress: number
 }
 
-// TODO replace later
+type PatientDTO = {
+  id: string,
+  note: string,
+  humanReadableIdentifier: string,
+  tasks: TaskDTO[]
+}
+
 type BedDTO = {
-  name: string
+  name: string,
+  patient?: PatientDTO
 }
 
 export type PatientCardProps = CardProps & {
@@ -31,12 +38,14 @@ export const PatientCard = ({
     <Card isSelected={isSelected} onTileClick={onTileClick}>
       <div className={tw('flex flex-row justify-between')}>
         <span className={tw('font-bold font-space')}>{bed.name}</span>
-        <span>{patient.name}</span>
+        <span>{patient.humanReadableIdentifier}</span>
       </div>
       <div className={tw('w-7/12 mt-1')}>
-        <PillLabelsColumn doneCount={patient.done}
-                          inProgressCount={patient.inProgress}
-                          unscheduledCount={patient.unscheduled}/>
+        <PillLabelsColumn
+          doneCount={patient.tasks.filter(value => value.status === 'done').length}
+          inProgressCount={patient.tasks.filter(value => value.status === 'inProgress').length}
+          unscheduledCount={patient.tasks.filter(value => value.status === 'unscheduled').length}
+        />
       </div>
     </Card>
   )

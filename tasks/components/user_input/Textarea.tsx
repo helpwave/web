@@ -13,7 +13,7 @@ type TextareaProps = {
 const globalStyles = css`
   /* onfocus textarea border color */
   .textarea-wrapper:focus-within {
-    @apply border-hw-primary-600;
+    @apply border-hw-primary-700;
   }
 
   /* style of the scrollbar of the textarea */
@@ -28,7 +28,7 @@ const globalStyles = css`
 export const Textarea = ({ headline, placeholder, message, id } : TextareaProps) => {
   return (
     <div className={tw(globalStyles)}>
-      <div className={`textarea-wrapper ${tw('relative shadow border-1 border-gray-300 rounded-lg')}`}>
+      <div className={`textarea-wrapper ${tw('relative shadow border-2 border-gray-300 rounded-lg')}`}>
         <label className={tw('mx-3 mt-3 block text-gray-700 font-bold')} htmlFor={id}>
           {headline}
         </label>

@@ -8,6 +8,7 @@ import { Button } from '../Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '../user_input/Textarea'
 import { KanbanBoard } from './KanabanBoard'
+import { noop } from '../user_input/Input'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -54,7 +55,7 @@ export type PatientDetailProps = {
   bedsInRoom: number,
   patient: PatientDTO,
   onUpdate: (patientDTO: PatientDTO) => void,
-  onDelete: (patientDTO: PatientDTO) => void
+  onDischarge?: (patientDTO: PatientDTO) => void
 }
 
 export const PatientDetail = ({
@@ -63,12 +64,10 @@ export const PatientDetail = ({
   bedsInRoom,
   patient,
   onUpdate,
-  onDelete,
+  onDischarge = noop,
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
   const translation = useTranslation(language, defaultPatientDetailTranslations)
   const [newPatient, setNewPatient] = useState<PatientDTO>(patient)
-  const ref = React.createRef()
-  console.log(ref)
 
   return (
     <div className={tw('flex flex-col py-4 px-6')}>
@@ -91,7 +90,7 @@ export const PatientDetail = ({
         <div>
           <Button color="positive" onClick={() => {
             if (confirm(translation.dischargeConfirm)) {
-              onDelete(patient)
+              onDischarge(patient)
             }
           }} className={tw('mr-4')}>{translation.dischargePatient}</Button>
           <Button color="accent" onClick={() => onUpdate(patient)}>{translation.saveChanges}</Button>

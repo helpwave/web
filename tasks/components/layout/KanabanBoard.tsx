@@ -21,6 +21,7 @@ import type { TaskStatus } from '../KanbanColumn'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
+import { noop } from '../user_input/Input'
 
 type KanbanBoardObject = {
   draggedID?: string,
@@ -41,7 +42,10 @@ type KanbanBoardProps = {
   onChange: (tasks: TaskDTO[]) => void
 }
 
-export const KanbanBoard = ({ tasks, onChange }: KanbanBoardProps) => {
+export const KanbanBoard = ({
+  tasks,
+  onChange = noop
+}: KanbanBoardProps) => {
   const [sortedTasks, setSortedTasks] = useState(
     {
       unscheduled: tasks.filter(value => value.status === 'unscheduled'),

@@ -37,10 +37,11 @@ type TaskDTO = {
 }
 
 type KanbanBoardProps = {
-  tasks: TaskDTO[]
+  tasks: TaskDTO[],
+  onChange: (tasks: TaskDTO[]) => void
 }
 
-export const KanbanBoard = ({ tasks }: KanbanBoardProps) => {
+export const KanbanBoard = ({ tasks, onChange }: KanbanBoardProps) => {
   const [sortedTasks, setSortedTasks] = useState(
     {
       unscheduled: tasks.filter(value => value.status === 'unscheduled'),
@@ -86,9 +87,9 @@ export const KanbanBoard = ({ tasks }: KanbanBoardProps) => {
       return
     }
 
-    setSortedTasks((boardSection) => {
-      const activeItems = boardSection[activeColumn]
-      const overItems = boardSection[overColumn]
+    setSortedTasks((sortedTasks) => {
+      const activeItems = sortedTasks[activeColumn]
+      const overItems = sortedTasks[overColumn]
 
       // Find the indexes for the items
       const activeIndex = activeItems.findIndex(item => item.id === active.id)
@@ -97,14 +98,14 @@ export const KanbanBoard = ({ tasks }: KanbanBoardProps) => {
       sortedTasks[activeColumn][activeIndex].status = overColumn
 
       return {
-        ...boardSection,
+        ...sortedTasks,
         [activeColumn]: [
-          ...boardSection[activeColumn].filter(item => item.id !== active.id),
+          ...sortedTasks[activeColumn].filter(item => item.id !== active.id),
         ],
         [overColumn]: [
-          ...boardSection[overColumn].slice(0, overIndex),
+          ...sortedTasks[overColumn].slice(0, overIndex),
           sortedTasks[activeColumn][activeIndex],
-          ...boardSection[overColumn].slice(overIndex, boardSection[overColumn].length),
+          ...sortedTasks[overColumn].slice(overIndex, sortedTasks[overColumn].length),
         ],
       }
     })
@@ -123,13 +124,17 @@ export const KanbanBoard = ({ tasks }: KanbanBoardProps) => {
     const activeIndex = sortedTasks[activeColumn].findIndex(task => task.id === active.id)
     const overIndex = sortedTasks[overColumn].findIndex(task => task.id === over?.id)
 
-    if (activeIndex !== overIndex) {
-      setSortedTasks((boardSection) => ({
-        ...boardSection,
-        [overColumn]: arrayMove(boardSection[overColumn], activeIndex, overIndex),
-      }))
-    }
     setBoardObject({ ...boardObject, draggedID: undefined, overColumn: undefined })
+    if (activeIndex !== overIndex) {
+      const newSortedTasks = {
+        ...sortedTasks,
+        [overColumn]: arrayMove(sortedTasks[overColumn], activeIndex, overIndex),
+      }
+      setSortedTasks(newSortedTasks)
+      onChange([...newSortedTasks.unscheduled, ...newSortedTasks.inProgress, ...newSortedTasks.done])
+    } else {
+      onChange([...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done])
+    }
   }
 
   const dropAnimation: DropAnimation = {

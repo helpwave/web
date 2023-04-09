@@ -15,15 +15,6 @@ const globalStyles = css`
   .textarea-wrapper:focus-within {
     @apply border-hw-primary-700;
   }
-
-  /* style of the scrollbar of the textarea */
-  textarea::-webkit-scrollbar {
-    @apply w-1;
-  }
-
-  textarea::-webkit-scrollbar-thumb {
-    @apply rounded-lg bg-hw-primary-600;
-  }
 `
 export const Textarea = ({ headline, id, resizable = false, onChange = noop, ...props }: TextareaProps) => {
   return (

@@ -1,14 +1,14 @@
-import { css, tw } from '@helpwave/common/twind'
+import { css, tw, tx } from '@helpwave/common/twind'
 import type { TextareaHTMLAttributes } from 'react'
 
 type TextareaProps = {
   headline?: string,
-  placeholder?: string,
-  message?: string,
   id?: string,
-  onChange: (text: string) => void,
-  props?: TextareaHTMLAttributes<HTMLTextAreaElement>
-}
+  resizable?: boolean,
+  onChange?: (text: string) => void
+} & Omit<TextareaHTMLAttributes<Element>, 'id' | 'onChange'>
+
+const noop = () => { /* noop */ }
 
 const globalStyles = css`
   /* onfocus textarea border color */
@@ -25,7 +25,7 @@ const globalStyles = css`
     @apply rounded-lg bg-hw-primary-600;
   }
 `
-export const Textarea = ({ headline, placeholder, message, id } : TextareaProps) => {
+export const Textarea = ({ headline, id, resizable = false, onChange = noop, ...props }: TextareaProps) => {
   return (
     <div className={tw(globalStyles)}>
       <div className={`textarea-wrapper ${tw('relative shadow border-2 border-gray-300 rounded-lg')}`}>
@@ -33,10 +33,10 @@ export const Textarea = ({ headline, placeholder, message, id } : TextareaProps)
           {headline}
         </label>
         <textarea
-          defaultValue={message}
-          className={tw('pt-0 border-transparent focus:border-transparent focus:ring-0 h-32 resize-none appearance-none border w-full text-gray-700 leading-tight focus:outline-none')}
           id={id}
-          placeholder={placeholder}
+          className={tx('pt-0 border-transparent focus:border-transparent focus:ring-0 h-32 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable })}
+          onChange={(event) => onChange(event.target.value)}
+          {...props}
         >
       </textarea>
       </div>

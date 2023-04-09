@@ -106,7 +106,7 @@ export const useWardQuery = () => {
   })
 }
 
-export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>) => {
+export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>, organizationUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward: WardDTO) => {
@@ -133,7 +133,7 @@ export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<WardD
   })
 }
 
-export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>) => {
+export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>, organizationUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward) => {
@@ -159,7 +159,7 @@ export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<WardD
   })
 }
 
-export const useDeleteMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>) => {
+export const useDeleteMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>, organizationUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward) => {

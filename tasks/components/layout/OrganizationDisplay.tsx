@@ -6,6 +6,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
 import type { Role } from '../OrganizationMemberList'
+import { useRouter } from 'next/router'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -57,6 +58,7 @@ export const OrganizationDisplay = ({
   onSelectionChange
 }: PropsWithLanguage<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
   const translation = useTranslation(language, defaultOrganizationDisplayTranslations)
+  const router = useRouter()
 
   return (
     <div className={tw('py-4 px-6')}>
@@ -68,8 +70,8 @@ export const OrganizationDisplay = ({
             organization={organization}
             isSelected={selectedOrganization?.id === organization.id}
             onEditClick={() => onSelectionChange(organization)}
-            onTileClick={() => {
-              // TODO open ward view for organization
+            onTileClick={async () => {
+              await router.push(`/organizations/${organization.id}`)
             }}
           />
         ))}

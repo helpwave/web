@@ -16,7 +16,7 @@ import {
   useUpdateMutation
 } from '../../mutations/room_mutations'
 import { RoomOverview } from '../../components/RoomOverview'
-import {PatientDetail} from "../../components/layout/PatientDetails";
+import { PatientDetail } from '../../components/layout/PatientDetails'
 
 type BedsPageTranslation = {
   beds: string,
@@ -61,14 +61,9 @@ type RoomDTO = {
   beds: BedDTO[]
 }
 
-type SelectType = {
-  room?: RoomDTO,
-  bed?: BedDTO
-}
-
 const BedsPage: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>) => {
   const translation = useTranslation(language, defaultBedsPageTranslation)
-  const [selectedBed, setSelectedBed] = useState<SelectType>({})
+  const [selectedBed, setSelectedBed] = useState<BedDTO | undefined>(undefined)
 
   const router = useRouter()
   const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
@@ -81,11 +76,15 @@ const BedsPage: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>
   const { isLoading, isError, data, error } = useRoomQuery()
 
   const rooms = data as RoomDTO[]
-  let roomOfSelected = undefined
-  for(let room of rooms){
-    if(room.beds.findIndex(value => value.id === selectedBed?.id)){
-      roomOfSelected = room;
-      break;
+  let roomOfSelected: RoomDTO | undefined
+  let numberOfBeds = 0
+  let bedPosition = 0
+  for (const room of rooms) {
+    bedPosition = room.beds.findIndex(value => value.id === selectedBed?.id)
+    if (bedPosition !== -1) {
+      roomOfSelected = room
+      numberOfBeds = room.beds.length
+      break
     }
   }
 
@@ -121,10 +120,19 @@ const BedsPage: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>
             {rooms.map(room => (<RoomOverview key={room.id} room={room}/>))}
           </div>
         )}
-        right={(
-          <PatientDetail bedPosition={} bedsInRoom={} patient={} onUpdate={}>
-        )}
-      />
+        right={
+          selectedBed === undefined || selectedBed.patient === undefined ?
+              (<div>No Room or Patient Selected</div>) :
+              (
+              <div>
+                <PatientDetail
+                  bedPosition={bedPosition}
+                  bedsInRoom={numberOfBeds}
+                  patient={selectedBed.patient}
+                  onUpdate={patient => createMutation.mutate({ ...selectedBed, patient })}/>
+              </div>
+              )
+        }/>
     </div>
   )
 }

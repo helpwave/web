@@ -174,17 +174,21 @@ export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDT
     mutationFn: async (bed: BedDTO) => {
       // TODO create request for bed
       const currentRoom = rooms.find(value => value.id === roomUUID)
-      const newRoom: RoomDTO = { ...currentRoom, beds: [...currentRoom.beds.filter(value => value.id !== bed.id), bed] }
-      rooms = [...rooms.filter(value => value.id !== roomUUID)]
-      rooms.sort((a, b) => a.id.localeCompare(b.id))
-      setSelectedWard(bed)
+      if (currentRoom) {
+        const newBeds = [...currentRoom.beds.filter(value => value.id !== bed.id), bed]
+        newBeds.sort((a, b) => a.name.localeCompare(b.name))
+        const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
+        rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]
+        rooms.sort((a, b) => a.id.localeCompare(b.id))
+        setSelectedWard(bed)
+      }
     },
-    onMutate: async (ward) => {
+    onMutate: async (bed) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousWards = queryClient.getQueryData<BedDTO[]>([queryKey])
       queryClient.setQueryData<BedDTO[]>(
         [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== ward.id)), ward])
+        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== bed.id)), bed])
       rooms.sort((a, b) => a.id.localeCompare(b.id))
       return { previousWards }
     },
@@ -200,12 +204,18 @@ export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDT
 export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDTO | undefined>>, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (room) => {
-      // TODO create request for Ward
-      const newRoom = { ...room, id: Math.random().toString() }
-      rooms = [...rooms, newRoom]
-      rooms.sort((a, b) => a.id.localeCompare(b.id))
-      setSelectedWard({ newRoom })
+    mutationFn: async (bed) => {
+      // TODO create request for bed
+      bed.id = Math.random().toString()
+      const currentRoom = rooms.find(value => value.id === roomUUID)
+      if (currentRoom) {
+        const newBeds = [...currentRoom.beds, bed]
+        newBeds.sort((a, b) => a.name.localeCompare(b.name))
+        const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
+        rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]
+        rooms.sort((a, b) => a.id.localeCompare(b.id))
+        setSelectedWard(newRoom)
+      }
     },
     onMutate: async (ward: BedDTO) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })

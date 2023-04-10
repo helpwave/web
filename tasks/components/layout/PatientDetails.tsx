@@ -8,7 +8,7 @@ import { Button } from '../Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '../user_input/Textarea'
 import { KanbanBoard } from './KanabanBoard'
-import { noop } from '../user_input/Input'
+import type { PatientDTO } from '../../mutations/room_mutations'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -35,27 +35,12 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
   }
 }
 
-type TaskDTO = {
-  id: string,
-  name: string,
-  description: string,
-  status: 'unscheduled' | 'inProgress' | 'done',
-  progress: number
-}
-
-type PatientDTO = {
-  id: string,
-  note: string,
-  humanReadableIdentifier: string,
-  tasks: TaskDTO[]
-}
-
 export type PatientDetailProps = {
   bedPosition: number,
   bedsInRoom: number,
   patient: PatientDTO,
-  onUpdate: (patientDTO: PatientDTO) => void,
-  onDischarge?: (patientDTO: PatientDTO) => void
+  onUpdate: (patient: PatientDTO) => void,
+  onDischarge: (patient: PatientDTO) => void
 }
 
 export const PatientDetail = ({
@@ -64,7 +49,7 @@ export const PatientDetail = ({
   bedsInRoom,
   patient,
   onUpdate,
-  onDischarge = noop,
+  onDischarge
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
   const translation = useTranslation(language, defaultPatientDetailTranslations)
   const [newPatient, setNewPatient] = useState<PatientDTO>(patient)
@@ -90,10 +75,10 @@ export const PatientDetail = ({
         <div>
           <Button color="positive" onClick={() => {
             if (confirm(translation.dischargeConfirm)) {
-              onDischarge(patient)
+              onDischarge(newPatient)
             }
           }} className={tw('mr-4')}>{translation.dischargePatient}</Button>
-          <Button color="accent" onClick={() => onUpdate(patient)}>{translation.saveChanges}</Button>
+          <Button color="accent" onClick={() => onUpdate(newPatient)}>{translation.saveChanges}</Button>
         </div>
       </div>
     </div>

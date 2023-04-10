@@ -40,7 +40,7 @@ export const PatientCard = ({
         <span className={tw('font-bold font-space')}>{bed.name}</span>
         <span>{patient.humanReadableIdentifier}</span>
       </div>
-      <div className={tw('w-7/12 mt-1')}>
+      <div className={tw('w-7/12 min-w-[150px] mt-1')}>
         <PillLabelsColumn
           doneCount={patient.tasks.filter(value => value.status === 'done').length}
           inProgressCount={patient.tasks.filter(value => value.status === 'inProgress').length}

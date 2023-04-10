@@ -9,10 +9,11 @@ import { UserMenu } from '../../components/UserMenu'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
+import type { BedDTO, RoomDTO } from '../../mutations/room_mutations'
 import {
   useRoomQuery,
   useCreateMutation,
-  useDeleteMutation,
+  useDischargeMutation,
   useUpdateMutation
 } from '../../mutations/room_mutations'
 import { RoomOverview } from '../../components/RoomOverview'
@@ -34,33 +35,6 @@ const defaultBedsPageTranslation = {
   }
 }
 
-type TaskDTO = {
-  id: string,
-  name: string,
-  description: string,
-  status: 'unscheduled' | 'inProgress' | 'done',
-  progress: number
-}
-
-type PatientDTO = {
-  id: string,
-  note: string,
-  humanReadableIdentifier: string,
-  tasks: TaskDTO[]
-}
-
-type BedDTO = {
-  id: string,
-  name: string,
-  patient?: PatientDTO
-}
-
-type RoomDTO = {
-  id: string,
-  name: string,
-  beds: BedDTO[]
-}
-
 const BedsPage: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>) => {
   const translation = useTranslation(language, defaultBedsPageTranslation)
   const [selectedBed, setSelectedBed] = useState<BedDTO | undefined>(undefined)
@@ -70,23 +44,26 @@ const BedsPage: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>
   const { uuid } = router.query
   const wardUUID = uuid as string
 
-  const createMutation = useCreateMutation(setSelectedBed, wardUUID)
-  const updateMutation = useUpdateMutation(setSelectedBed, wardUUID)
-  const deleteMutation = useDeleteMutation(setSelectedBed, wardUUID)
   const { isLoading, isError, data, error } = useRoomQuery()
 
   const rooms = data as RoomDTO[]
   let roomOfSelected: RoomDTO | undefined
   let numberOfBeds = 0
   let bedPosition = 0
-  for (const room of rooms) {
-    bedPosition = room.beds.findIndex(value => value.id === selectedBed?.id)
-    if (bedPosition !== -1) {
-      roomOfSelected = room
-      numberOfBeds = room.beds.length
-      break
+  if (rooms) {
+    for (const room of rooms) {
+      bedPosition = room.beds.findIndex(value => value.id === selectedBed?.id)
+      if (bedPosition !== -1) {
+        roomOfSelected = room
+        numberOfBeds = room.beds.length
+        break
+      }
     }
   }
+
+  const createMutation = useCreateMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
+  const updateMutation = useUpdateMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
+  const dischargeMutation = useDischargeMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
 
   if (!user) return null
 
@@ -116,8 +93,8 @@ const BedsPage: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>
       />
       <TwoColumn
         left={(
-          <div className={tw('flex flex-col')}>
-            {rooms.map(room => (<RoomOverview key={room.id} room={room}/>))}
+          <div className={tw('flex flex-col px-6 py-8')}>
+            {rooms.map(room => (<RoomOverview key={room.id} room={room} onSelect={setSelectedBed} selected={selectedBed}/>))}
           </div>
         )}
         right={
@@ -126,10 +103,13 @@ const BedsPage: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>
               (
               <div>
                 <PatientDetail
+                  key={selectedBed.id}
                   bedPosition={bedPosition}
                   bedsInRoom={numberOfBeds}
                   patient={selectedBed.patient}
-                  onUpdate={patient => createMutation.mutate({ ...selectedBed, patient })}/>
+                  onUpdate={patient => updateMutation.mutate({ ...selectedBed, patient })}
+                  onDischarge={patient => dischargeMutation.mutate({ ...selectedBed, patient })}
+                />
               </div>
               )
         }/>

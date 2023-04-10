@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const queryKey = 'rooms'
 
-type TaskDTO = {
+export type TaskDTO = {
   id: string,
   name: string,
   description: string,
@@ -11,20 +11,20 @@ type TaskDTO = {
   progress: number
 }
 
-type PatientDTO = {
+export type PatientDTO = {
   id: string,
   note: string,
   humanReadableIdentifier: string,
   tasks: TaskDTO[]
 }
 
-type BedDTO = {
+export type BedDTO = {
   id: string,
   name: string,
   patient?: PatientDTO
 }
 
-type RoomDTO = {
+export type RoomDTO = {
   id: string,
   name: string,
   beds: BedDTO[]
@@ -168,7 +168,7 @@ export const useRoomQuery = () => {
   })
 }
 
-export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDTO | undefined>>, roomUUID: string) => {
+export const useUpdateMutation = (setSelectedBed: Dispatch<SetStateAction<BedDTO | undefined>>, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed: BedDTO) => {
@@ -180,20 +180,21 @@ export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDT
         const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
         rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]
         rooms.sort((a, b) => a.id.localeCompare(b.id))
-        setSelectedWard(bed)
+        setSelectedBed(bed)
       }
     },
     onMutate: async (bed) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<BedDTO[]>([queryKey])
-      queryClient.setQueryData<BedDTO[]>(
+      const previousRooms = queryClient.getQueryData<RoomDTO[]>([queryKey])
+      queryClient.setQueryData<RoomDTO[]>(
         [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== bed.id)), bed])
+        // TODO do optimistic update here
+        (old) => old)
       rooms.sort((a, b) => a.id.localeCompare(b.id))
-      return { previousWards }
+      return { previousRooms }
     },
     onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
@@ -201,7 +202,7 @@ export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDT
   })
 }
 
-export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDTO | undefined>>, roomUUID: string) => {
+export const useCreateMutation = (setSelectedBed: Dispatch<SetStateAction<BedDTO | undefined>>, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed) => {
@@ -214,18 +215,19 @@ export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDT
         const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
         rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]
         rooms.sort((a, b) => a.id.localeCompare(b.id))
-        setSelectedWard(newRoom)
+        setSelectedBed(newRoom)
       }
     },
-    onMutate: async (ward: BedDTO) => {
+    onMutate: async (bed: BedDTO) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<BedDTO[]>([queryKey])
-      queryClient.setQueryData<BedDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), ward])
+      const previousRooms = queryClient.getQueryData<RoomDTO[]>([queryKey])
+      // TODO do optimistic update here
+      queryClient.setQueryData<RoomDTO[]>([queryKey], (old) => old)
       rooms.sort((a, b) => a.id.localeCompare(b.id))
-      return { previousWards }
+      return { previousRooms }
     },
     onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
@@ -233,24 +235,32 @@ export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<BedDT
   })
 }
 
-export const useDeleteMutation = (setSelectedWard: Dispatch<SetStateAction<BedDTO | undefined>>, roomUUID: string) => {
+export const useDischargeMutation = (setSelectedBed: Dispatch<SetStateAction<BedDTO | undefined>>, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (ward) => {
-      // TODO create request for ward
-      rooms = [...rooms.filter(value => value.id !== ward.id)]
-      setSelectedWard(undefined)
+    mutationFn: async (bed) => {
+      // TODO create request for bed
+      const currentRoom: RoomDTO| undefined = rooms.find(value => value.id === roomUUID)
+      if (currentRoom) {
+        const newBeds: BedDTO[] = [...currentRoom?.beds.filter(value => value.id !== bed.id), { ...bed, patient: undefined }]
+        newBeds.sort((a, b) => a.name.localeCompare(b.name))
+        const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
+        rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]
+        rooms.sort((a, b) => a.id.localeCompare(b.id))
+        setSelectedBed(newRoom)
+      }
     },
-    onMutate: async (Ward: BedDTO) => {
+    onMutate: async (bed: BedDTO) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<BedDTO[]>([queryKey])
-      queryClient.setQueryData<BedDTO[]>(
+      const previousRooms = queryClient.getQueryData<RoomDTO[]>([queryKey])
+      queryClient.setQueryData<RoomDTO[]>(
         [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== Ward.id))])
-      return { previousWards }
+        // TODO do optimistic update here
+        (old) => old)
+      return { previousRooms }
     },
     onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
+      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] }).then()

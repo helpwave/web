@@ -35,7 +35,7 @@ const defaultBedsPageTranslation = {
   }
 }
 
-const BedsPage: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>) => {
+const WardOverview: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>) => {
   const translation = useTranslation(language, defaultBedsPageTranslation)
   const [selectedBed, setSelectedBed] = useState<BedDTO | undefined>(undefined)
 

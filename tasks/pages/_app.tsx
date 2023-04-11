@@ -6,6 +6,8 @@ import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '@helpwave/common/twind/next/app'
 import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserView, MobileView } from 'react-device-detect'
+import { MobileInterceptor } from '../components/MobileInterceptor'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,7 +23,7 @@ const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
+    <ProvideLanguage>
       <Head>
         <title>Dashboard</title>
         <style>{`
@@ -31,12 +33,17 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}</style>
       </Head>
-      <ProvideLanguage>
-        <div className={tw('font-sans')}>
-          <Component {...pageProps} />
-        </div>
-      </ProvideLanguage>
-    </QueryClientProvider>
+      <BrowserView>
+        <QueryClientProvider client={queryClient}>
+          <div className={tw('font-sans')}>
+            <Component {...pageProps} />
+          </div>
+        </QueryClientProvider>
+      </BrowserView>
+      <MobileView>
+        <MobileInterceptor/>
+      </MobileView>
+    </ProvideLanguage>
   )
 }
 

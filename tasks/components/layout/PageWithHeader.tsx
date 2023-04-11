@@ -6,11 +6,15 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../../hooks/useAuth'
 import { UserMenu } from '../UserMenu'
 
-type PageWithHeaderProps = {
-  headerProps?: HeaderProps
-}
+type PageWithHeaderProps = Partial<HeaderProps>
 
-export const PageWithHeader = ({ children, headerProps = { withIcon: true } }: PropsWithChildren<PageWithHeaderProps>) => {
+export const PageWithHeader = ({
+  children,
+  title,
+  withIcon = true,
+  leftSide,
+  rightSide
+}: PropsWithChildren<PageWithHeaderProps>) => {
   const router = useRouter()
   const user = useAuth(() => router.push({ pathname: '/login', query: { back: true } })).user
 
@@ -19,10 +23,10 @@ export const PageWithHeader = ({ children, headerProps = { withIcon: true } }: P
   return (
     <div className={tw('w-screen h-screen flex flex-col')}>
       <Header
-        title={headerProps.title}
-        withIcon={headerProps.withIcon}
-        leftSide={[...(headerProps?.leftSide ?? [])]}
-        rightSide={[...(headerProps?.rightSide ?? []), (<UserMenu key={user.id} user={user}/>)]}
+        title={title}
+        withIcon={withIcon}
+        leftSide={[...(leftSide ?? [])]}
+        rightSide={[...(rightSide ?? []), (<UserMenu key={user.id} user={user}/>)]}
       />
       {children}
     </div>

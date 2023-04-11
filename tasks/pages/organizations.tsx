@@ -14,6 +14,7 @@ import {
   useUpdateMutation
 } from '../mutations/organization_mutations'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
+import { BreadCrumb } from '../components/BreadCrumb'
 
 type OrganizationsPageTranslation = {
   organizations: string
@@ -69,7 +70,9 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
   }
 
   return (
-    <PageWithHeader>
+    <PageWithHeader
+      leftSide={[(<BreadCrumb key="crumbs" crumbs={[{ display: translation.organizations, link: '/organizations' }]}/>)]}
+    >
       <Head>
         <title>{translation.organizations}</title>
       </Head>

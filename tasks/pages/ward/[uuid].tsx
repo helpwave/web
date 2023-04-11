@@ -117,4 +117,4 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslat
   )
 }
 
-export default BedsPage
+export default WardOverview

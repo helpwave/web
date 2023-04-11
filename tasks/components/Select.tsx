@@ -5,13 +5,15 @@ type SelectProps = {
   label: string;
   value: string;
   options: string[];
+  onChange: (value: string) => void;
 };
 
-export const Select = ({ label, value, options }: SelectProps) => {
+export const Select = ({ label, value, onChange, options }: SelectProps) => {
   const [selected, setSelected] = useState<string>(value);
 
   const handleChange = (value: string) => {
     setSelected(value);
+    onChange(value);
   };
 
   return (
@@ -25,7 +27,7 @@ export const Select = ({ label, value, options }: SelectProps) => {
         onChange={(e) => handleChange(e.target.value)}
       >
         {options.map((option) => (
-          <option key={option} value={option}>
+          <option key={option} value={option} className={tw("text-slate-700")}>
             {option}
           </option>
         ))}

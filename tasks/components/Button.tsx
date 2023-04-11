@@ -55,7 +55,7 @@ const Button = ({
       'text-white bg-hw-primary-400 hover:bg-hw-primary-600 focus:hw-primary-600': variant === 'primary' && color === 'accent' && !disabled,
       'text-white bg-AAA-500    hover:bg-AAA-600    focus:ring-AAA-500': variant === 'primary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
       'text-white bg-hw-positive-400    hover:bg-hw-positive-500    focus:ring-hw-positive-400': variant === 'primary' && color === 'positive' && !disabled,
-      'text-white bg-YYY-500    hover:bg-YYY-600    focus:ring-YYY-500': variant === 'primary' && color === 'negative' && !disabled, // TODO: red
+      'text-white bg-hw-negative-400    hover:bg-hw-negative-500    focus:ring-hw-negative-400': variant === 'primary' && color === 'negative' && !disabled,
       'text-white bg-ZZZ-500    hover:bg-ZZZ-600    focus:ring-ZZZ-500': variant === 'primary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
 
       // secondary & {accent, accent-secondary, positive, negative, neutral}

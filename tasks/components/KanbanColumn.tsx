@@ -62,7 +62,7 @@ export const KanbanColumn = ({
   const taskState = { unscheduled: TaskState.unscheduled, inProgress: TaskState.inProgress, done: TaskState.done }
 
   return (
-    <div className={tx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver }, 'flex flex-col gap-y-4 border-2 border-dashed rounded-lg')}>
+    <div className={tx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver }, 'flex flex-col gap-y-4 border-2 border-dashed rounded-lg p-2')}>
       <PillLabel count={tasks.length} state={taskState[type]}/>
       <SortableContext
         id={type}

@@ -73,7 +73,7 @@ export const PatientDetail = ({
       <KanbanBoard key={newPatient.id + newPatient.tasks.toString()} tasks={newPatient.tasks} onChange={tasks => setNewPatient({ ...newPatient, tasks })}/>
       <div className={tw('flex flex-row justify-end mt-8')}>
         <div>
-          <Button color="positive" onClick={() => {
+          <Button color="negative" onClick={() => {
             if (confirm(translation.dischargeConfirm)) {
               onDischarge(newPatient)
             }

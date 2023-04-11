@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind/index'
-import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
-import { Header } from '../../components/Header'
-import { UserMenu } from '../../components/UserMenu'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
@@ -17,6 +13,7 @@ import {
 } from '../../mutations/ward_mutations'
 import { WardDisplay } from '../../components/layout/WardDisplay'
 import { WardDetail } from '../../components/layout/WardDetails'
+import { PageWithHeader } from '../../components/layout/PageWithHeader'
 
 type WardsPageTranslation = {
   wards: string
@@ -50,16 +47,13 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
   const [selectedWard, setSelectedWard] = useState<WardDTO | undefined>(undefined)
 
   const router = useRouter()
-  const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
   const { uuid } = router.query
   const organizationUUID = uuid as string
 
   const createMutation = useCreateMutation(setSelectedWard, organizationUUID)
   const updateMutation = useUpdateMutation(setSelectedWard, organizationUUID)
   const deleteMutation = useDeleteMutation(setSelectedWard, organizationUUID)
-  const { isLoading, isError, data, error } = useWardQuery()
-
-  if (!user) return null
+  const { isLoading, isError, data } = useWardQuery()
 
   // TODO add view for loading
   if (isLoading) {
@@ -72,19 +66,11 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
   }
 
   return (
-    <div className={tw('w-screen h-screen flex flex-col')}>
+    <PageWithHeader>
       <Head>
         <title>{translation.wards}</title>
       </Head>
 
-      <Header
-        title="helpwave"
-        navigation={[
-          { text: 'Dashboard', href: '/' },
-          { text: 'Contact', href: '/contact' },
-        ]}
-        actions={[<UserMenu key="user-menu" user={user}/>]}
-      />
       <TwoColumn
         left={(
           <WardDisplay
@@ -103,7 +89,7 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
           />
         )}
       />
-    </div>
+    </PageWithHeader>
   )
 }
 

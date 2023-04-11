@@ -91,7 +91,6 @@ const Home: NextPage = () => {
       <button onClick={() => createRandomWard()}>
         Create random ward (open console)
       </button>
-      {/* put select in restrained box */}
       <div className={tw("w-1/4")}>
         <Select
           label="Test"

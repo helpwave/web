@@ -59,14 +59,14 @@ const Button = ({
       'text-white bg-ZZZ-500    hover:bg-ZZZ-600    focus:ring-ZZZ-500': variant === 'primary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
 
       // secondary & {accent, accent-secondary, positive, negative, neutral}
-      'text-indigo-500 bg-indigo-200 hover:bg-indigo-300 focus:ring-indigo-200': variant === 'secondary' && color === 'accent' && !disabled, // TODO use hw-primary instead of indigo
+      'text-hw-primary-400 bg-hw-primary-100 hover:bg-hw-primary-200 focus:ring-hw-primary-100': variant === 'secondary' && color === 'accent' && !disabled,
       'text-AAA-500 bg-AAA-200       hover:bg-AAA-300    focus:ring-AAA-200': variant === 'secondary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
       'text-green-500 bg-green-200   hover:bg-green-300  focus:ring-green-200': variant === 'secondary' && color === 'positive' && !disabled, // TODO: green
       'text-rose-500 bg-rose-200     hover:bg-rose-300   focus:ring-rose-200': variant === 'secondary' && color === 'negative' && !disabled, // TODO: red
       'text-ZZZ-500 bg-ZZZ-200       hover:bg-ZZZ-300    focus:ring-ZZZ-200': variant === 'secondary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
 
       // tertiary & {accent, accent-secondary, positive, negative, neutral}
-      'text-indigo-500 hover:underline focus:ring-indigo-200': variant === 'tertiary' && color === 'accent' && !disabled, // TODO use hw-primary instead of indigo
+      'text-hw-primary-400 hover:underline focus:ring-hw-primary-100': variant === 'tertiary' && color === 'accent' && !disabled,
       'text-AAA-500    hover:underline focus:ring-AAA-200': variant === 'tertiary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
       'text-green-500  hover:underline focus:ring-green-200': variant === 'tertiary' && color === 'positive' && !disabled, // TODO: green
       'text-rose-500   hover:underline focus:ring-rose-200': variant === 'tertiary' && color === 'negative' && !disabled, // TODO: red

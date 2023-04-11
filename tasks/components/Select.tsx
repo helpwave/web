@@ -15,8 +15,10 @@ export const Select = ({ label, value, options }: SelectProps) => {
   };
 
   return (
-    <div className={tw("flex flex-col")}>
-      <label className={tw("text-sm font-bold")}>{label}</label>
+    <div className={tw("flex flex-col mx-2")}>
+      <label className={tw("text-sm font-bold mb-3 text-slate-700")}>
+        {label}
+      </label>
       <select
         className={tw("border border-gray-300 rounded-md")}
         value={selected}

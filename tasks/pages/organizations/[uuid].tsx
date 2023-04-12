@@ -14,7 +14,6 @@ import {
 import { WardDisplay } from '../../components/layout/WardDisplay'
 import { WardDetail } from '../../components/layout/WardDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
-import { BreadCrumb } from '../../components/BreadCrumb'
 
 type WardsPageTranslation = {
   wards: string,
@@ -71,15 +70,10 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
 
   return (
     <PageWithHeader
-      leftSide={[(
-        <BreadCrumb
-          key="crumbs"
-          crumbs={[
-            { display: translation.organizations, link: '/organizations' },
-            { display: translation.wards, link: `/organizations/${organizationUUID}` }
-          ]}
-        />
-      )]}
+      crumbs={[
+        { display: translation.organizations, link: '/organizations' },
+        { display: translation.wards, link: `/organizations/${organizationUUID}` }
+      ]}
     >
       <Head>
         <title>{translation.wards}</title>

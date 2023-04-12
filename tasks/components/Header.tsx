@@ -23,7 +23,7 @@ const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: Heade
             </div>
           )}
           {title && <span className={tw('text-xl font-medium leading-relaxed')}>{title}</span>}
-          {leftSide?.map((value, index) => (
+          {leftSide?.filter(value => value !== undefined).map((value, index) => (
             <div key={'leftAction' + index} className={tw('flex flex-row items-center')}>
               {(index !== 0 || title || withIcon) && <div className={tw('bg-gray-300 rounded h-8 w-0.5 mx-4')}/>}
               {value}
@@ -31,7 +31,7 @@ const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: Heade
           ))}
         </div>
         <div className={tw('w-full flex items-center justify-end')}>
-          {rightSide?.map((value, index) => (
+          {rightSide?.filter(value => value !== undefined).map((value, index) => (
             <div key={'rightAction' + index} className={tw('flex flex-row items-center')}>
               {value}
               {index !== rightSide?.length - 1 && <div className={tw('bg-gray-300 rounded h-8 w-0.5 mx-3')}/>}

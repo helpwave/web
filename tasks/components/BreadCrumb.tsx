@@ -1,7 +1,7 @@
 import { tw, tx } from '@helpwave/common/twind'
 import Link from 'next/link'
 
-type Crumb = {
+export type Crumb = {
   display: string,
   link: string
 }

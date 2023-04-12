@@ -5,15 +5,20 @@ import type { PropsWithChildren } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../hooks/useAuth'
 import { UserMenu } from '../UserMenu'
+import type { Crumb } from '../BreadCrumb'
+import { BreadCrumb } from '../BreadCrumb'
 
-type PageWithHeaderProps = Partial<HeaderProps>
+type PageWithHeaderProps = Partial<HeaderProps> & {
+  crumbs?: Crumb[]
+}
 
 export const PageWithHeader = ({
   children,
   title,
   withIcon = true,
   leftSide,
-  rightSide
+  rightSide,
+  crumbs
 }: PropsWithChildren<PageWithHeaderProps>) => {
   const router = useRouter()
   const user = useAuth(() => router.push({ pathname: '/login', query: { back: true } })).user
@@ -25,7 +30,7 @@ export const PageWithHeader = ({
       <Header
         title={title}
         withIcon={withIcon}
-        leftSide={[...(leftSide ?? [])]}
+        leftSide={[(crumbs ? <BreadCrumb crumbs={crumbs}/> : undefined), ...(leftSide ?? [])]}
         rightSide={[...(rightSide ?? []), (<UserMenu key={user.id} user={user}/>)]}
       />
       {children}

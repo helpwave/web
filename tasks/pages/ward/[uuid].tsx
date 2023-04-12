@@ -4,27 +4,24 @@ import Head from 'next/head'
 import { tw } from '@helpwave/common/twind/index'
 import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
-import { Header } from '../../components/Header'
-import { UserMenu } from '../../components/UserMenu'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
 import type { BedDTO, RoomDTO } from '../../mutations/room_mutations'
 import {
   useRoomQuery,
-  useCreateMutation,
   useDischargeMutation,
   useUpdateMutation
 } from '../../mutations/room_mutations'
 import { RoomOverview } from '../../components/RoomOverview'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 
-type BedsPageTranslation = {
+type WardOverviewTranslation = {
   beds: string,
   roomOverview: string
 }
 
-const defaultBedsPageTranslation = {
+const defaultWardOverviewTranslation = {
   en: {
     beds: 'Betten',
     roomOverview: 'Room Overview'
@@ -35,16 +32,16 @@ const defaultBedsPageTranslation = {
   }
 }
 
-const WardOverview: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslation>) => {
-  const translation = useTranslation(language, defaultBedsPageTranslation)
+const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
+  const translation = useTranslation(language, defaultWardOverviewTranslation)
   const [selectedBed, setSelectedBed] = useState<BedDTO | undefined>(undefined)
 
   const router = useRouter()
-  const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+  const { user } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
   const { uuid } = router.query
   const wardUUID = uuid as string
 
-  const { isLoading, isError, data, error } = useRoomQuery()
+  const { isLoading, isError, data } = useRoomQuery()
 
   const rooms = data as RoomDTO[]
   let roomOfSelected: RoomDTO | undefined
@@ -61,7 +58,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslat
     }
   }
 
-  const createMutation = useCreateMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
+  // TODO add create later on
+  // const createMutation = useCreateMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
   const updateMutation = useUpdateMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
   const dischargeMutation = useDischargeMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
 
@@ -82,15 +80,6 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<BedsPageTranslat
       <Head>
         <title>{translation.roomOverview}</title>
       </Head>
-
-      <Header
-        title="helpwave"
-        navigation={[
-          { text: 'Dashboard', href: '/' },
-          { text: 'Contact', href: '/contact' },
-        ]}
-        actions={[<UserMenu key="user-menu" user={user}/>]}
-      />
       <TwoColumn
         left={(
           <div className={tw('flex flex-col px-6 py-8')}>

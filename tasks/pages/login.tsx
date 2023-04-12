@@ -90,7 +90,7 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
 
   return (
     <div>
-      <MobileView>
+      <BrowserView>
         <Head>
           <title>Login</title>
         </Head>
@@ -139,10 +139,10 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
             </form>
           </div>
         </div>
-      </MobileView>
-      <BrowserView>
-        <MobileInterceptor/>
       </BrowserView>
+      <MobileView>
+        <MobileInterceptor/>
+      </MobileView>
     </div>
   )
 }

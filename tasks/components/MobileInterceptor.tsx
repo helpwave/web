@@ -21,11 +21,11 @@ const defaultMobileInterceptorTranslation = {
 
 export const MobileInterceptor = ({ language }:PropsWithLanguage<MobileInterceptorTranslation>) => {
   const translation = useTranslation(language, defaultMobileInterceptorTranslation)
-  const playstoreLink = ''
+  const playstoreLink = 'https://play.google.com/store/apps'
   return (
-    <div className={tw('flex flex-col items-center justify-center')}>
-      <span>{translation.pleaseDownloadApp}</span>
-      <Link href={playstoreLink}>{translation.pleaseDownloadApp}</Link>
+    <div className={tw('w-screen h-screen flex flex-col items-center justify-center')}>
+      <span className={tw('text-lg font-bold mb-8')}>{translation.pleaseDownloadApp}</span>
+      <Link href={playstoreLink}>{translation.playstore}</Link>
     </div>
   )
 }

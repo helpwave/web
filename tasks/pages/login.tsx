@@ -12,10 +12,7 @@ import { Button } from '../components/Button'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-
 import HelpwaveLogo from '../icons/Helpwave'
-import { BrowserView, MobileView } from 'react-device-detect'
-import { MobileInterceptor } from '../components/MobileInterceptor'
 
 type LoginTranslation = {
   signInHeader: string,
@@ -90,7 +87,6 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
 
   return (
     <div>
-      <BrowserView>
         <Head>
           <title>Login</title>
         </Head>
@@ -129,7 +125,6 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
                     </Link>
                   </div>
                 </div>
-
                 <div className={tw('w-80')}>
                   <Button color="accent" variant="primary" size="large" onClick={handleLogin} type="submit">
                     {translation.signIn}
@@ -139,10 +134,6 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
             </form>
           </div>
         </div>
-      </BrowserView>
-      <MobileView>
-        <MobileInterceptor/>
-      </MobileView>
     </div>
   )
 }

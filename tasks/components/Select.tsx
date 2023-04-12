@@ -35,15 +35,6 @@ export const Select = ({ label, onChange, options }: SelectProps) => {
             <span>{selected}</span>
             <ChevronDownIcon className={tw('-mr-1 ml-2 h-5 w-5')} aria-hidden="true" />
           </Menu.Button>
-          <Transition
-              show={open}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform scale-95 opacity-0"
-              enterTo="transform scale-100 opacity-100"
-              leave="transition duration-75 ease-out"
-              leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0"
-            >
           <Menu.Items className={tw('absolute z-10 mt-1 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none')}>
           {options.map(option => (
                   <Menu.Item key={option.value}>
@@ -60,7 +51,6 @@ export const Select = ({ label, onChange, options }: SelectProps) => {
                   </Menu.Item>
           ))}
               </Menu.Items>
-              </Transition>
           </>
         )}
         </Menu>

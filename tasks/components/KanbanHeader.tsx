@@ -41,11 +41,11 @@ export const KanbanHeader = ({
     <div className={tw('flex flex-row justify-between items-center')}>
       <span className={tw('font-bold font-space text-lg')}>{translation.tasks}</span>
       <div className={tw('flex flex-row gap-x-6')}>
-        <div className={tw('flex flex-row gap-x-2 items-center')}>
+        <div className={tw('flex flex-row gap-x-2 items-center hidden')}>
           {translation.status}
           <TriangleDown className={tw('stroke-black')}/>
         </div>
-        <div className={tw('flex flex-row gap-x-2 items-center')}>
+        <div className={tw('flex flex-row gap-x-2 items-center hidden')}>
           {translation.label}
           <TriangleDown className={tw('stroke-black')}/>
         </div>

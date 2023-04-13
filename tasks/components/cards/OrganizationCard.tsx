@@ -61,21 +61,30 @@ export const OrganizationCard = ({
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (
-    <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer justify-between flex flex-col')}>
+    <Card onTileClick={onTileClick} isSelected={isSelected}
+          className={tw('group cursor-pointer justify-between flex flex-col')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <span className={tw('font-bold font-space')}>{`${organization.longName} (${organization.shortName})`}</span>
-        <button onClick={onEditClick}
-                className={tw('hidden group-hover:block')}>
-            {translation.edit}
+        <button
+          onClick={event => {
+            onEditClick()
+            event.stopPropagation()
+          }}
+          className={tw('hidden group-hover:block')}
+        >
+          {translation.edit}
         </button>
       </div>
       <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm')}>
         {organization.wards.slice(0, maxShownWards).map(value => value.name).join(', ')}
-        {notDisplayedWards > 0 && (<span className={tw('ml-1')}>{`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}</span>)}
+        {notDisplayedWards > 0 && (
+<span
+          className={tw('ml-1')}>{`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}</span>
+        )}
       </div>
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-row items-center')}>
-          <Email />
+          <Email/>
           <span className={tw('ml-2 text-sm')}>{organization.email}</span>
         </div>
         <AvatarGroup users={organization.members}/>

@@ -1,29 +1,15 @@
 import { tw } from '@helpwave/common/twind/index'
 import { PatientCard } from './cards/PatientCard'
 import { BedCard } from './cards/BedCard'
-
-type PatientDTO = {
-  name: string,
-  unscheduled: number,
-  inProgress: number,
-  done: number
-}
-
-type BedDTO = {
-  name: string,
-  patient?: PatientDTO
-}
-
-type RoomDTO = {
-  name: string,
-  beds: BedDTO[]
-}
+import type { BedDTO, RoomDTO } from '../mutations/room_mutations'
 
 export type RoomOverviewProps = {
-  room: RoomDTO
+  room: RoomDTO,
+  selected: BedDTO|undefined,
+  onSelect: (bed: BedDTO) => void
 }
 
-export const RoomOverview = ({ room }: RoomOverviewProps) => {
+export const RoomOverview = ({ room, onSelect, selected }: RoomOverviewProps) => {
   return (
     <div>
       <div className={tw('flex flex-row items-center mb-1')}>
@@ -33,10 +19,8 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
       <div className={tw('grid grid-cols-3 gap-4')}>
         {room.beds.map(bed => bed.patient !== undefined ?
             (
-              <PatientCard key={bed.name} patient={bed.patient} bed={bed} onTileClick={() => {
-                // TODO open bed/patient screen
-              }}/>
-            ) : (<BedCard key={bed.name} bed={bed}/>)
+              <PatientCard key={bed.name} patient={bed.patient} bed={bed} onTileClick={() => onSelect(bed)} isSelected={selected?.id === bed.id} />
+            ) : (<BedCard key={bed.name} bed={bed} onTileClick={() => onSelect(bed)} isSelected={selected?.id === bed.id} />)
         )}
       </div>
     </div>

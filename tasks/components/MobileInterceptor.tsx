@@ -16,13 +16,13 @@ type MobileInterceptorTranslation = {
 const defaultMobileInterceptorTranslation = {
   en: {
     pleaseDownloadApp: 'Please download the app',
-    playstore: 'Playstore',
-    appstore: 'Appstore'
+    playstore: 'Google Play Store',
+    appstore: 'Apple App Store'
   },
   de: {
-    pleaseDownloadApp: 'Bitte laden sie die App herunter',
-    playstore: 'Playstore',
-    appstore: 'Appstore'
+    pleaseDownloadApp: 'Bitte laden Sie die App herunter',
+    playstore: 'Google Play Store',
+    appstore: 'Apple App Store'
   }
 }
 

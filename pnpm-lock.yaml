@@ -89,7 +89,6 @@ importers:
       '@dnd-kit/sortable': ^7.0.2
       '@headlessui/react': ^1.7.13
       '@helpwave/common': workspace:*
-      '@heroicons/react': ^1.0.6
       '@next/font': ^13.0.6
       '@radix-ui/react-checkbox': ^1.0.1
       '@tanstack/react-query': ^4.28.0
@@ -128,7 +127,6 @@ importers:
       '@dnd-kit/sortable': 7.0.2_52scne4zmdeyjh2otzkgz2xfvu
       '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
       '@helpwave/common': link:../lib
-      '@heroicons/react': 1.0.6_react@18.2.0
       '@next/font': 13.0.6
       '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@tanstack/react-query': 4.28.0_biqbaboplfbrettd7655fr4n2y
@@ -272,14 +270,6 @@ packages:
       client-only: 0.0.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /@heroicons/react/1.0.6_react@18.2.0:
-    resolution: {integrity: sha512-JJCXydOFWMDpCP4q13iEplA503MQO3xLoZiKum+955ZCtHINWnx26CUxVxxFQu/uLb4LW3ge15ZpzIkXKkJ8oQ==}
-    peerDependencies:
-      react: '>= 16'
-    dependencies:
-      react: 18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.10.7:

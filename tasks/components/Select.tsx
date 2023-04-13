@@ -1,59 +1,63 @@
-import { tw } from '@helpwave/common/twind/index'
-import { useState } from 'react'
+import { tw, tx } from '@helpwave/common/twind/index'
 import { Menu } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/solid'
+import ChevronDown from '@helpwave/common/icons/ChevronDown'
+import ChevronUp from '@helpwave/common/icons/ChevronUp'
 
-type Option = {
+type Option<T> = {
   label: string,
-  value: string
+  value: T
 }
 
-type SelectProps = {
-  value: string,
-  label: string,
-  options: Option[],
-  onChange: (value: string) => void
+type SelectProps<T> = {
+  value?: T,
+  label?: string,
+  options: Option<T>[],
+  onChange: (value: T) => void,
+  isHidingCurrentValue?: boolean,
+  className?: string
 };
 
-export const Select = ({ label, onChange, options }: SelectProps) => {
-  const [selected, setSelected] = useState<string>(options[0].value)
-
-  const handleChange = (value: string, label: string) => {
-    setSelected(label)
-    onChange(value)
-  }
-
+export const Select = <T, >({ value, label, options, onChange, isHidingCurrentValue = true, className }: SelectProps<T>) => {
+  // Notice: for more complex types this check here might need an additional compare method
+  const filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
   return (
-    <div className={tw('relative mx-1 min-w-full ')}>
-      <label htmlFor={label} className={tw('block font-semibold mb-1')}>
-        {label}
-      </label>
-      <Menu as="div" className={tw('relative inline-block text-left min-w-full')}>
-        {
+    <div className={tx(className)}>
+      {label && (
+        <label htmlFor={label} className={tw('text-lg font-semibold mb-1')}>
+          {label}
+        </label>
+      )}
+      <Menu as="div" className={tw('relative w-full text-gray-700')}>
+        {({ open }) => (
           <>
-          <Menu.Button className={tw('inline-flex min-w-[50%] max-w-full justify-between rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500')}>
-            <span>{selected}</span>
-            <ChevronDownIcon className={tw('-mr-1 ml-2 h-5 w-5')} aria-hidden="true" />
-          </Menu.Button>
-          <Menu.Items className={tw('absolute z-10 mt-1 w-1/2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none max-w-full')}>
-          {options.map((option, index) => (
-                  <Menu.Item key={option.value}>
-                    {
-                      <div
-                        className={tw(`px-4 py-2 cursor-pointer hover:bg-gray-100 overflow-hidden whitespace-nowrap text-ellipsis ${
-                          option.value === selected ? 'bg-gray-200' : ''
-                        } ${index % 2 === 1 ? 'bg-gray-50' : ''}`)}
-                        onClick={() => handleChange(option.value, option.label)}
-                      >
-                        {option.label}
-                      </div>
-                    }
-                  </Menu.Item>
-          ))}
-              </Menu.Items>
+            <Menu.Button
+              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-3 hover:bg-gray-100 font-medium', { 'rounded-b-lg': !open })}
+            >
+              <span>{options.find(option => option.value === value)?.label ?? ''}</span>
+              {open ? <ChevronUp/> : <ChevronDown/>}
+            </Menu.Button>
+            <Menu.Items
+              className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg')}>
+              {filteredOptions.map((option, index) => (
+                <Menu.Item key={option.label}>
+                  {
+                    <div
+                      className={tx('px-4 py-2 cursor-pointer overflow-hidden whitespace-nowrap text-ellipsis hover:bg-gray-100 border-2 border-t-0', {
+                        'bg-gray-100 ': option.value === value,
+                        'bg-gray-50': index % 2 === 1,
+                        'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
+                      })}
+                      onClick={() => onChange(option.value)}
+                    >
+                      {option.label}
+                    </div>
+                  }
+                </Menu.Item>
+              ))}
+            </Menu.Items>
           </>
-        }
-        </Menu>
-      </div>
+        )}
+      </Menu>
+    </div>
   )
 }

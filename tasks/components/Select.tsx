@@ -24,36 +24,36 @@ export const Select = ({ label, onChange, options }: SelectProps) => {
   }
 
   return (
-    <div className={tw('relative mx-1')}>
+    <div className={tw('relative mx-1 min-w-full ')}>
       <label htmlFor={label} className={tw('block font-semibold mb-1')}>
         {label}
       </label>
-      <Menu as="div" className={tw('relative inline-block text-left')}>
-        {({ open }) => (
+      <Menu as="div" className={tw('relative inline-block text-left min-w-full')}>
+        {
           <>
-          <Menu.Button className={tw('inline-flex justify-between w-max rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500')}>
+          <Menu.Button className={tw('inline-flex min-w-[50%] max-w-full justify-between rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500')}>
             <span>{selected}</span>
             <ChevronDownIcon className={tw('-mr-1 ml-2 h-5 w-5')} aria-hidden="true" />
           </Menu.Button>
-          <Menu.Items className={tw('absolute z-10 mt-1 w-max rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none')}>
+          <Menu.Items className={tw('absolute z-10 mt-1 w-1/2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none max-w-full')}>
           {options.map((option, index) => (
                   <Menu.Item key={option.value}>
-                    {({ active }) => (
+                    {
                       <div
-                        className={tw(`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+                        className={tw(`px-4 py-2 cursor-pointer hover:bg-gray-100 overflow-hidden whitespace-nowrap text-ellipsis ${
                           option.value === selected ? 'bg-gray-200' : ''
                         } ${index % 2 === 1 ? 'bg-gray-50' : ''}`)}
                         onClick={() => handleChange(option.value, option.label)}
                       >
                         {option.label}
                       </div>
-                    )}
+                    }
                   </Menu.Item>
           ))}
               </Menu.Items>
           </>
-        )}
+        }
         </Menu>
       </div>
-  );
-};
+  )
+}

@@ -95,7 +95,14 @@ const Home: NextPage = () => {
         <Select
           label="Test"
           value="test"
-          options={["test", "test2", "test3", "test4"]}
+          options={[
+            { value: "test", label: "Test" },
+            { value: "test2", label: "Test 2" },
+            { value: "test3", label: "Test 3"},
+            { value: "test4", label: "Test 4" },
+            { value: "thisisareallylongoptionwithareallylongvalue", label: "thisisareallylongoptionxxxxxxxxxxxxxxxxxxxxxwithareallylonglabel" },
+          ]}
+          onChange={(value) => console.log(value)}
         />
       </div>
     </div>

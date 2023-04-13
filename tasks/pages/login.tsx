@@ -12,7 +12,6 @@ import { Button } from '../components/Button'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-
 import HelpwaveLogo from '../icons/Helpwave'
 
 type LoginTranslation = {
@@ -88,50 +87,53 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
 
   return (
     <div>
-      <Head>
-        <title>Login</title>
-      </Head>
+        <Head>
+          <title>Login</title>
+        </Head>
+        <div className={tw('flex items-center justify-center py-12 px-4')}>
+          <div className={tw('w-full max-w-md space-y-8')}>
+            <div>
+              <HelpwaveLogo className={tw('mx-auto h-12 w-auto')}/>
+              <h2
+                className={tw('mt-6 text-center text-3xl font-bold tracking-tight text-gray-900')}>{translation.signInHeader}</h2>
+              <p className={tw('mt-4 text-center text-sm text-gray-600')}>
+                {translation.contactSubheader.or}
+                <Link href="/contact" passHref className={tw('font-medium text-indigo-600 hover:text-indigo-500')}>
+                  {translation.contactSubheader.contactUs}
+                </Link>
+                {translation.contactSubheader.getAccess}
+              </p>
+            </div>
+            <form onSubmit={e => e.preventDefault()}>
+              <div className={tw('flex flex-col mt-8 space-y-4 items-center')}>
+                <div className={tw('w-80')}>
+                  <Input id="login:username" required autoComplete="username" placeholder={translation.username}
+                         label={translation.username} value={username} onChange={setUsername}/>
+                </div>
+                <div className={tw('w-80')}>
+                  <Input id="login:password" required autoComplete="current-password" placeholder={translation.password}
+                         label={translation.password} value={password} onChange={setPassword}/>
+                </div>
 
-      <div className={tw('flex items-center justify-center py-12 px-4')}>
-        <div className={tw('w-full max-w-md space-y-8')}>
-          <div>
-            <HelpwaveLogo className={tw('mx-auto h-12 w-auto')} />
-            <h2 className={tw('mt-6 text-center text-3xl font-bold tracking-tight text-gray-900')}>{translation.signInHeader}</h2>
-            <p className={tw('mt-4 text-center text-sm text-gray-600')}>
-              {translation.contactSubheader.or}
-              <Link href="/contact" passHref className={tw('font-medium text-indigo-600 hover:text-indigo-500')}>
-                {translation.contactSubheader.contactUs}
-              </Link>
-              {translation.contactSubheader.getAccess}
-            </p>
-          </div>
-          <form onSubmit={e => e.preventDefault()}>
-            <div className={tw('flex flex-col mt-8 space-y-4 items-center')}>
-              <div className={tw('w-80')}>
-                <Input id="login:username" required autoComplete="username" placeholder={translation.username} label={translation.username} value={username} onChange={setUsername} />
-              </div>
-              <div className={tw('w-80')}>
-                <Input id="login:password" required autoComplete="current-password" placeholder={translation.password} label={translation.password} value={password} onChange={setPassword} />
-              </div>
-
-              <div className={tw('flex items-center justify-between w-80')}>
-                <Checkbox id="login:remember-me" label={translation.stayLoggedIn} onChange={setRememberMe} checked={rememberMe} />
-                <div className={tw('text-sm')}>
-                  <Link href="/forgot-password" passHref className={tw('font-medium text-indigo-600 hover:text-indigo-500')}>
-                    {translation.forgotPassword}
-                  </Link>
+                <div className={tw('flex items-center justify-between w-80')}>
+                  <Checkbox id="login:remember-me" label={translation.stayLoggedIn} onChange={setRememberMe}
+                            checked={rememberMe}/>
+                  <div className={tw('text-sm')}>
+                    <Link href="/forgot-password" passHref
+                          className={tw('font-medium text-indigo-600 hover:text-indigo-500')}>
+                      {translation.forgotPassword}
+                    </Link>
+                  </div>
+                </div>
+                <div className={tw('w-80')}>
+                  <Button color="accent" variant="primary" size="large" onClick={handleLogin} type="submit">
+                    {translation.signIn}
+                  </Button>
                 </div>
               </div>
-
-              <div className={tw('w-80')}>
-                <Button color="accent" variant="primary" size="large" onClick={handleLogin} type="submit">
-                  {translation.signIn}
-                </Button>
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
     </div>
   )
 }

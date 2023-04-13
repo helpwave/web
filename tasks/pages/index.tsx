@@ -3,10 +3,9 @@ import Head from 'next/head'
 import { tw } from '@helpwave/common/twind/index'
 import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/router'
-import { Header } from '../components/Header'
-import { UserMenu } from '../components/UserMenu'
 import { WardServiceClient } from '../generated/Ward_svcServiceClientPb'
 import { CreateWardRequest, GetWardRequest } from '../generated/ward_svc_pb'
+import { PageWithHeader } from '../components/layout/PageWithHeader'
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -50,28 +49,20 @@ const Home: NextPage = () => {
 
   // TODO: proper navigation links in header (what should they be?)
   return (
-      <div className={tw('w-screen h-screen flex flex-col')}>
+      <PageWithHeader>
         <Head>
           <title>Create Next App</title>
         </Head>
 
-        {/* all of these links are to be determined, these are just some placeholders */}
-        <Header title="helpwave" navigation={[
-          { text: 'Dashboard', href: '/' },
-          { text: 'Contact', href: '/contact' },
-        ]} actions={[
-          <UserMenu key="user-menu" user={user} />
-        ]} />
-
         <h1 className={tw('text-3xl font-bold underline')}>
-          {user === null ? 'Redirecting to log in page..' : `Hello ${user.displayName}`}
+          {`Hello ${user.displayName}`}
         </h1>
 
         <button onClick={() => logout(() => window.location.reload())}>Logout</button>
 
         <button onClick={() => getWard('9af360fc-f612-4752-9982-a596c62e85c7')}>Get ward (open console)</button>
         <button onClick={() => createRandomWard()}>Create random ward (open console)</button>
-      </div>
+      </PageWithHeader>
   )
 }
 

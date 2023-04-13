@@ -7,7 +7,6 @@ import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
 import { WardServiceClient } from '../generated/Ward_svcServiceClientPb'
 import { CreateWardRequest, GetWardRequest } from '../generated/ward_svc_pb'
-import { Select } from '../components/Select'
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -91,20 +90,6 @@ const Home: NextPage = () => {
       <button onClick={() => createRandomWard()}>
         Create random ward (open console)
       </button>
-      <div className={tw('w-1/4')}>
-        <Select
-          label="Test"
-          value="test"
-          options={[
-            { value: 'test', label: 'Test' },
-            { value: 'test2', label: 'Test 2' },
-            { value: 'test3', label: 'Test 3' },
-            { value: 'test4', label: 'Test 4' },
-            { value: 'thisisareallylongoptionwithareallylongvalue', label: 'thisisareallylongoptionxxxxxxxxxxxxxxxxxxxxxwithareallylonglabel' },
-          ]}
-          onChange={(value) => console.log(value)}
-        />
-      </div>
     </div>
   )
 }

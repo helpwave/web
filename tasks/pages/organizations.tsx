@@ -1,11 +1,6 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind/index'
-import { useAuth } from '../hooks/useAuth'
-import { useRouter } from 'next/router'
-import { Header } from '../components/Header'
-import { UserMenu } from '../components/UserMenu'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/layout/TwoColumn'
@@ -18,6 +13,7 @@ import {
   useOrganizationQuery,
   useUpdateMutation
 } from '../mutations/organization_mutations'
+import { PageWithHeader } from '../components/layout/PageWithHeader'
 
 type OrganizationsPageTranslation = {
   organizations: string
@@ -57,15 +53,10 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
   const translation = useTranslation(language, defaultOrganizationsPageTranslation)
   const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | undefined>(undefined)
 
-  const router = useRouter()
-  const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
-
   const createMutation = useCreateMutation(setSelectedOrganization)
   const updateMutation = useUpdateMutation(setSelectedOrganization)
   const deleteMutation = useDeleteMutation(setSelectedOrganization)
-  const { isLoading, isError, data, error } = useOrganizationQuery()
-
-  if (!user) return null
+  const { isLoading, isError, data } = useOrganizationQuery()
 
   // TODO add view for loading
   if (isLoading) {
@@ -78,19 +69,12 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
   }
 
   return (
-    <div className={tw('w-screen h-screen flex flex-col')}>
+    <PageWithHeader
+      crumbs={[{ display: translation.organizations, link: '/organizations' }]}
+    >
       <Head>
         <title>{translation.organizations}</title>
       </Head>
-
-      <Header
-        title="helpwave"
-        navigation={[
-          { text: 'Dashboard', href: '/' },
-          { text: 'Contact', href: '/contact' },
-        ]}
-        actions={[<UserMenu key="user-menu" user={user}/>]}
-      />
       <TwoColumn
         left={(
           <OrganizationDisplay
@@ -109,7 +93,7 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
           />
         )}
       />
-    </div>
+    </PageWithHeader>
   )
 }
 

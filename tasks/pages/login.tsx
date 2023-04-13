@@ -98,13 +98,13 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
             <HelpwaveLogo className={tw('mx-auto h-12 w-auto')} />
             <h2 className={tw('mt-6 text-center text-3xl font-bold tracking-tight text-gray-900')}>{translation.signInHeader}</h2>
             <p className={tw('mt-4 text-center text-sm text-gray-600')}>
-                {translation.contactSubheader.or}
-                <Link href="/contact" passHref className={tw('font-medium text-indigo-600 hover:text-indigo-500')}>
-                  {translation.contactSubheader.contactUs}
-                </Link>
-                {translation.contactSubheader.getAccess}
-              </p>
-            </div>
+              {translation.contactSubheader.or}
+              <Link href="/contact" passHref className={tw('font-medium text-indigo-600 hover:text-indigo-500')}>
+                {translation.contactSubheader.contactUs}
+              </Link>
+              {translation.contactSubheader.getAccess}
+            </p>
+          </div>
           <form onSubmit={e => e.preventDefault()}>
             <div className={tw('flex flex-col mt-8 space-y-4 items-center')}>
               <div className={tw('w-80')}>
@@ -124,9 +124,9 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
               </div>
 
               <div className={tw('w-80')}>
-              <Button color="accent" variant="primary" size="large" onClick={handleLogin} type="submit">
-                {translation.signIn}
-              </Button>
+                <Button color="accent" variant="primary" size="large" onClick={handleLogin} type="submit">
+                  {translation.signIn}
+                </Button>
               </div>
             </div>
           </form>

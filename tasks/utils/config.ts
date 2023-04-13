@@ -28,10 +28,16 @@ const configSchema = z.object({
   NEXT_PUBLIC_API_URL: z.string(),
   NEXT_PUBLIC_MOCK: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_REQUEST_LOGGING: z.literal('true').or(z.literal('false')).optional(),
+  NEXT_PUBLIC_PLAYSTORE_LINK: z.string().url().default('https://play.google.com/store/apps'),
+  NEXT_PUBLIC_APPSTORE_LINK: z.string().url().default('https://www.apple.com/de/app-store/'),
 }).transform(obj => ({
   apiUrl: obj.NEXT_PUBLIC_API_URL,
   mock: obj.NEXT_PUBLIC_MOCK === 'true',
   requestLogging: obj.NEXT_PUBLIC_REQUEST_LOGGING === 'true',
+  appstoreLinks: {
+    playStore: obj.NEXT_PUBLIC_PLAYSTORE_LINK,
+    appStore: obj.NEXT_PUBLIC_APPSTORE_LINK
+  }
 }))
 
 const getConfig = () => {
@@ -43,7 +49,9 @@ const getConfig = () => {
   const maybeConfig = configSchema.safeParse({
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_MOCK: process.env.NEXT_PUBLIC_MOCK,
-    NEXT_PUBLIC_REQUEST_LOGGING: process.env.NEXT_PUBLIC_REQUEST_LOGGING
+    NEXT_PUBLIC_REQUEST_LOGGING: process.env.NEXT_PUBLIC_REQUEST_LOGGING,
+    NEXT_PUBLIC_PLAYSTORE_LINK: process.env.NEXT_PUBLIC_PLAYSTORE_LINK,
+    NEXT_PUBLIC_APPSTORE_LINK: process.env.NEXT_PUBLIC_APPSTORE_LINK,
   })
 
   if (!maybeConfig.success) {

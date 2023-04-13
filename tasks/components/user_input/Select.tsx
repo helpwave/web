@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind'
 import { Menu } from '@headlessui/react'
 import ChevronDown from '@helpwave/common/icons/ChevronDown'
 import ChevronUp from '@helpwave/common/icons/ChevronUp'
@@ -14,10 +14,11 @@ type SelectProps<T> = {
   options: Option<T>[],
   onChange: (value: T) => void,
   isHidingCurrentValue?: boolean,
+  hintText?: string,
   className?: string
 };
 
-export const Select = <T, >({ value, label, options, onChange, isHidingCurrentValue = true, className }: SelectProps<T>) => {
+export const Select = <T, >({ value, label, options, onChange, isHidingCurrentValue = true, hintText = '', className }: SelectProps<T>) => {
   // Notice: for more complex types this check here might need an additional compare method
   const filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
   return (
@@ -33,7 +34,7 @@ export const Select = <T, >({ value, label, options, onChange, isHidingCurrentVa
             <Menu.Button
               className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-3 hover:bg-gray-100 font-medium', { 'rounded-b-lg': !open })}
             >
-              <span>{options.find(option => option.value === value)?.label ?? ''}</span>
+              <span>{options.find(option => option.value === value)?.label ?? hintText}</span>
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items

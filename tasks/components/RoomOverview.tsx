@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind/index'
-import { PatientCard } from './PatientCard'
-import { BedCard } from './BedCard'
+import { PatientCard } from './cards/PatientCard'
+import { BedCard } from './cards/BedCard'
 
 type PatientDTO = {
   name: string,

@@ -8,9 +8,9 @@ import { useRouter } from 'next/router'
 import { Header } from '../components/Header'
 import { UserMenu } from '../components/UserMenu'
 import { Button } from '../components/Button'
-import { Input, noop } from '../components/Input'
+import { Input, noop } from '../components/user_input/Input'
 import { Avatar } from '../components/Avatar'
-import { UserCard } from '../components/UserCard'
+import { UserCard } from '../components/cards/UserCard'
 
 const Section = ({ title, children }: PropsWithChildren<{ title: string }>) => (
   <div className={tw('flex')}>

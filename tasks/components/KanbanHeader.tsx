@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import TriangleDown from '../icons/TriangleDown'
-import { Input } from './Input'
+import { Input } from './user_input/Input'
 
 type KanbanHeaderTranslation = {
   tasks: string,

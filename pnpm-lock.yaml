@@ -87,6 +87,7 @@ importers:
     specifiers:
       '@dnd-kit/core': ^6.0.8
       '@dnd-kit/sortable': ^7.0.2
+      '@headlessui/react': ^1.7.13
       '@helpwave/common': workspace:*
       '@next/font': ^13.0.6
       '@radix-ui/react-checkbox': ^1.0.1
@@ -125,6 +126,7 @@ importers:
     dependencies:
       '@dnd-kit/core': 6.0.8_biqbaboplfbrettd7655fr4n2y
       '@dnd-kit/sortable': 7.0.2_52scne4zmdeyjh2otzkgz2xfvu
+      '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
       '@helpwave/common': link:../lib
       '@next/font': 13.0.6
       '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
@@ -259,6 +261,18 @@ packages:
     resolution: {integrity: sha512-JXdzbRiWclLVoD8sNUjR443VVlYqiYmDVT6rGUEIEHU5YJW0gaVZwV2xgM7D4arkvASqD0IlLUVjHiFuxaftRw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@headlessui/react/1.7.13_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-9n+EQKRtD9266xIHXdY5MfiXPDfYwl7zBM7KOx2Ae3Gdgxy8QML1FkCMjq6AsOf0l6N9uvI4HcFtuFlenaldKg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16 || ^17 || ^18
+      react-dom: ^16 || ^17 || ^18
+    dependencies:
+      client-only: 0.0.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
 
   /@humanwhocodes/config-array/0.10.7:
     resolution: {integrity: sha512-MDl6D6sBsaV452/QSdX+4CXIjZhIcI0PELsxUjk4U828yd58vk3bTIvk/6w5FY+4hIy9sLW0sfrV7K7Kc++j/w==}

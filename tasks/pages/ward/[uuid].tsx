@@ -101,8 +101,6 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         left={(
           <div className={tw('flex flex-col px-6 py-8')}>
             {rooms.map(room => (
-              <RoomOverview key={room.id} room={room} onSelect={setSelectedBed} selected={selectedBed}/>))}
-            {rooms.map(room => (
               <RoomOverview
                 key={room.id}
                 room={room}

@@ -60,14 +60,17 @@ export const PatientDetail = ({
       <ColumnTitle title={translation.patientDetails}/>
       <div className={tw('flex flex-row justify-between gap-x-8 mb-8')}>
         <div className={tw('flex flex-col gap-y-4')}>
-          <ToggleableInput
-            id="humanReadableIdentifier"
-            value={newPatient.humanReadableIdentifier}
-            onChange={humanReadableIdentifier => setNewPatient({
-              ...newPatient,
-              humanReadableIdentifier
-            })}
-          />
+          <div className={tw('h-12')}>
+            <ToggleableInput
+              className={tw('text-lg font-semibold')}
+              id="humanReadableIdentifier"
+              value={newPatient.humanReadableIdentifier}
+              onChange={humanReadableIdentifier => setNewPatient({
+                ...newPatient,
+                humanReadableIdentifier
+              })}
+            />
+          </div>
           <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
         </div>
         <div className={tw('min-w-[50%] max-w-[50%]')}>

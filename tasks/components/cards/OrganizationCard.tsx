@@ -6,6 +6,7 @@ import type { CardProps } from './Card'
 import { Card } from './Card'
 import Email from '@helpwave/common/icons/Email'
 import { AvatarGroup } from '../AvatarGroup'
+import { FaEdit } from 'react-icons/fa';
 
 type OrganizationCardTranslation = {
   edit: string,
@@ -72,7 +73,7 @@ export const OrganizationCard = ({
           }}
           className={tw('hidden group-hover:block')}
         >
-          {translation.edit}
+          <FaEdit/>
         </button>
       </div>
       <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm')}>

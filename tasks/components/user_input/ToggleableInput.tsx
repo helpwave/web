@@ -31,7 +31,7 @@ export const ToggleableInput = ({
   value,
   label,
   onChange = noop,
-  labelClassName,
+  labelClassName = '',
   ...restProps
 }: InputProps) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -40,22 +40,25 @@ export const ToggleableInput = ({
       className={tw('flex flex-row justify-between items-center')}
       onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
     >
-      {isEditing ? (
-        <Input
-          autoFocus
-          {...restProps}
-          value={value}
-          type={type}
-          id={id}
-          label={label}
-          onChange={onChange}
-          onBlur={() => {
+      <Input
+        autoFocus
+        {...restProps}
+        value={value}
+        type={type}
+        id={id}
+        label={label}
+        onChange={onChange}
+        onBlur={() => {
+          setIsEditing(false)
+        }}
+        onKeyPress={event => {
+          if (event.key === 'Enter') {
             setIsEditing(false)
-          }}
-        />
-      ) :
-        <span className={tx(labelClassName ? labelClassName : 'text-xl font-semibold')}>{value}</span>
-      }
+          }
+        }}
+        readOnly={!isEditing}
+        className={tx('text-xl font-semibold border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0', { underline: isEditing })}
+      />
       {!isEditing && <Edit className={tw('ml-2 scale-[80%] cursor-pointer')}/>}
     </div>
   )

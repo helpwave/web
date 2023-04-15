@@ -88,7 +88,7 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
   return (
     <div>
         <Head>
-          <title>Login</title>
+          <title>Login - helpwave tasks</title>
         </Head>
         <div className={tw('flex items-center justify-center py-12 px-4')}>
           <div className={tw('w-full max-w-md space-y-8')}>

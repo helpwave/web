@@ -54,7 +54,7 @@ const ProfilePage: NextPage = () => {
   return (
     <PageWithHeader>
       <Head>
-        <title>Settings</title>
+        <title>Profile ~ helpwave tasks</title>
       </Head>
 
       <div className={tw('p-4 w-full h-full')}>

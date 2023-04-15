@@ -95,7 +95,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       ]}
     >
       <Head>
-        <title>{translation.roomOverview}</title>
+        <title>{translation.roomOverview} ~ helpwave tasks</title>
       </Head>
       <TwoColumn
         left={(

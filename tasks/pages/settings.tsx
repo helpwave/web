@@ -28,7 +28,7 @@ const SettingsPage: NextPage = () => {
   return (
     <PageWithHeader>
       <Head>
-        <title>Settings</title>
+        <title>Settings ~ helpwave tasks</title>
       </Head>
 
       <div className={tw('p-4 w-full h-full')}>

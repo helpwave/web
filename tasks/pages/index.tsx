@@ -51,7 +51,7 @@ const Home: NextPage = () => {
   return (
       <PageWithHeader>
         <Head>
-          <title>Create Next App</title>
+          <title>helpwave tasks</title>
         </Head>
 
         <h1 className={tw('text-3xl font-bold underline')}>

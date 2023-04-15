@@ -73,7 +73,7 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
       crumbs={[{ display: translation.organizations, link: '/organizations' }]}
     >
       <Head>
-        <title>{translation.organizations}</title>
+        <title>{translation.organizations} ~ helpwave tasks</title>
       </Head>
       <TwoColumn
         left={(

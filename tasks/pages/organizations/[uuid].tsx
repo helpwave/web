@@ -76,7 +76,7 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
       ]}
     >
       <Head>
-        <title>{translation.wards}</title>
+        <title>{translation.wards} ~ helpwave tasks</title>
       </Head>
 
       <TwoColumn

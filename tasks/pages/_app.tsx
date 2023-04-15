@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ProvideLanguage>
       <BrowserView>
         <Head>
-          <title>Dashboard</title>
+          <title>helpwave tasks</title>
           <style>{`
           :root {
             --font-inter: ${inter.style.fontFamily};

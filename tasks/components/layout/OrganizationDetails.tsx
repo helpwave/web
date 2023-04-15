@@ -8,6 +8,7 @@ import type { Role } from '../OrganizationMemberList'
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '../Button'
+import { ConfirmDialog } from '../modals/ConfirmDialog'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -78,6 +79,7 @@ export const OrganizationDetail = ({
   const translation = useTranslation(language, defaultOrganizationDetailTranslations)
   const isCreatingNewOrganization = organization === undefined
 
+  const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
   const [newOrganization, setNewOrganization] = useState<OrganizationDTO>(organization ?? {
     id: '',
@@ -91,6 +93,17 @@ export const OrganizationDetail = ({
 
   return (
     <div className={tw('flex flex-col py-4 px-6 w-5/6')}>
+      <ConfirmDialog
+        title={translation.deleteConfirmText}
+        description={translation.dangerZoneText}
+        isOpen={isShowingConfirmDialog}
+        onClose={operation => {
+          if (operation === 'confirm') {
+            onDelete(newOrganization)
+          }
+          setIsShowingConfirmDialog(false)
+        }}
+      />
       <ColumnTitle title={translation.organizationDetail}/>
       <OrganizationForm
         organization={newOrganization}
@@ -109,8 +122,12 @@ export const OrganizationDetail = ({
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <span className={tw('font-space text-lg font-bold')}>{translation.dangerZone}</span>
         <span className={tw('text-gray-400')}>{translation.dangerZoneText}</span>
-        <button onClick={() => confirm(translation.deleteConfirmText) && onDelete(newOrganization)}
-                className={tw('text-hw-negative-400 font-bold text-left')}>{translation.deleteOrganization}</button>
+        <button
+          onClick={() => setIsShowingConfirmDialog(true)}
+          className={tw('text-hw-negative-400 font-bold text-left')}
+        >
+          {translation.deleteOrganization}
+        </button>
       </div>
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button

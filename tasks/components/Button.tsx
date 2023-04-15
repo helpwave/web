@@ -1,5 +1,5 @@
 import React from 'react'
-import type { PropsWithChildren, ButtonHTMLAttributes } from 'react'
+import type { PropsWithChildren, ButtonHTMLAttributes, MouseEventHandler } from 'react'
 import { tx } from '@helpwave/common/twind/index'
 
 // TODO: add more variants
@@ -31,7 +31,7 @@ type ButtonProps = PropsWithChildren<{
    * Additional override for styling, this will get merged with the styles selected through variant and size.
    */
   className?: string,
-  onClick?: () => void
+  onClick?: MouseEventHandler<HTMLButtonElement>
 }> & Omit<ButtonHTMLAttributes<Element>, 'onClick' | 'className'>
 
 const Button = ({

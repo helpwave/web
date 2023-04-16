@@ -6,7 +6,7 @@ import Bed from '../../icons/Bed'
 import { PillLabelBox } from '../pill/PillLabelBox'
 import type { CardProps } from './Card'
 import { Card } from './Card'
-import { FaEdit } from 'react-icons/fa';
+import Edit from '../../icons/Edit'
 
 type WardCardTranslation = {
   edit: string,
@@ -65,7 +65,7 @@ export const WardCard = ({
           }}
           className={tw('hidden group-hover:block')}
         >
-          <FaEdit/>
+          <Edit/>
         </button>
       </div>
       <div className={tx('text-left my-1', { 'text-gray-400 text-sm': !hasRooms })}>

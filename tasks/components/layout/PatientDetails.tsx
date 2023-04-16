@@ -9,6 +9,7 @@ import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '../user_input/Textarea'
 import { KanbanBoard } from './KanabanBoard'
 import type { PatientDTO } from '../../mutations/room_mutations'
+import { ToggleableInput } from '../user_input/ToggleableInput'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -59,10 +60,20 @@ export const PatientDetail = ({
       <ColumnTitle title={translation.patientDetails}/>
       <div className={tw('flex flex-row justify-between gap-x-8 mb-8')}>
         <div className={tw('flex flex-col gap-y-4')}>
-          <span className={tw('text-xl font-semibold')}>{newPatient.humanReadableIdentifier}</span>
+          <div className={tw('h-12')}>
+            <ToggleableInput
+              className={tw('text-lg font-semibold')}
+              id="humanReadableIdentifier"
+              value={newPatient.humanReadableIdentifier}
+              onChange={humanReadableIdentifier => setNewPatient({
+                ...newPatient,
+                humanReadableIdentifier
+              })}
+            />
+          </div>
           <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
         </div>
-        <div className={tw('flex-1')}>
+        <div className={tw('min-w-[50%] max-w-[50%]')}>
           <Textarea
             headline={translation.notes}
             value={newPatient.note}
@@ -70,7 +81,11 @@ export const PatientDetail = ({
           />
         </div>
       </div>
-      <KanbanBoard key={newPatient.id + newPatient.tasks.toString()} tasks={newPatient.tasks} onChange={tasks => setNewPatient({ ...newPatient, tasks })}/>
+      <KanbanBoard
+        key={newPatient.id + newPatient.tasks.toString()}
+        tasks={newPatient.tasks}
+        onChange={tasks => setNewPatient({ ...newPatient, tasks })}
+      />
       <div className={tw('flex flex-row justify-end mt-8')}>
         <div>
           <Button color="negative" onClick={() => {

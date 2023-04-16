@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@helpwave/common": "workspace:*",
+    "@helpwave/proto-ts": "0.3.0-1f277ee.0",
     "@next/font": "^13.0.6",
     "@radix-ui/react-checkbox": "^1.0.1",
     "@tanstack/react-table": "^8.8.0",

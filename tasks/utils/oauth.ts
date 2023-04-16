@@ -1,5 +1,5 @@
 import { getConfig } from './config'
-import type { AuthorizationServer, Client, OpenIDTokenEndpointResponse } from 'oauth4webapi'
+import type { AuthorizationServer, Client } from 'oauth4webapi'
 import * as oauth from 'oauth4webapi'
 import {
   authorizationCodeGrantRequest,
@@ -17,8 +17,8 @@ const codeChallengeMethod = 'S256'
 const LOCALSTORAGE_KEY_STATE = 'oauth_state'
 const LOCALSTORAGE_KEY_CODE_VERIFIER = 'oauth_code_verifier'
 
-const getAuthorizationServer = async (baseUrl: string): Promise<AuthorizationServer> => {
-  const issuer = new URL(baseUrl)
+const getAuthorizationServer = async (issuerUrl: string): Promise<AuthorizationServer> => {
+  const issuer = new URL(issuerUrl)
   const authorizationServer = await discoveryRequest(issuer)
     .then((res) => processDiscoveryResponse(issuer, res))
 
@@ -29,10 +29,10 @@ const getAuthorizationServer = async (baseUrl: string): Promise<AuthorizationSer
   return authorizationServer
 }
 
-const getCommonOAuthEntities = async (): Promise<{ authorizationServer: AuthorizationServer, client: Client }> => {
-  const { baseUrl, clientId } = config.oauth
+const getCommonOAuthEntities = async (overrideConfig?: Partial<typeof config.oauth>): Promise<{ authorizationServer: AuthorizationServer, client: Client }> => {
+  const { issuerUrl, clientId } = { ...config.oauth, ...overrideConfig }
 
-  const authorizationServer = await getAuthorizationServer(baseUrl)
+  const authorizationServer = await getAuthorizationServer(issuerUrl)
   const client: Client = {
     client_id: clientId,
     token_endpoint_auth_method: 'none',
@@ -85,6 +85,13 @@ const buildAuthorizationUrl = (params: {
 }
 
 export const getAuthorizationUrl = async (): Promise<string> => {
+  if (config.fakeTokenEnable) {
+    const url = new URL(window.location.toString())
+    url.pathname = '/auth/callback'
+    url.searchParams.set('fake_token', config.fakeToken)
+    return url.toString()
+  }
+
   const { authorizationServer } = await getCommonOAuthEntities()
 
   if (!authorizationServer.authorization_endpoint) {
@@ -106,7 +113,14 @@ export const getAuthorizationUrl = async (): Promise<string> => {
   }).toString()
 }
 
-export const handleCodeExchange = async (): Promise<OpenIDTokenEndpointResponse> => {
+export const handleCodeExchange = async (): Promise<string> => {
+  if (config.fakeTokenEnable) {
+    const currentUrl = new URL(window.location.toString())
+    const fakeToken = currentUrl.searchParams.get('fake_token')
+    if (fakeToken) return fakeToken
+  }
+
+  // issuerUrl -> WORK AROUND - Ory does not set the "iss"-Claim of the ID Token to "auth.helpwave.de". We will ask Ory about this.
   const { authorizationServer, client } = await getCommonOAuthEntities()
 
   const state = retrieveState()
@@ -120,5 +134,5 @@ export const handleCodeExchange = async (): Promise<OpenIDTokenEndpointResponse>
   const result = await processAuthorizationCodeOpenIDResponse(authorizationServer, client, response)
   if (isOAuth2Error(result)) throw new Error(`OAuth error: ${result.error}`)
 
-  return result
+  return result.id_token
 }

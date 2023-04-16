@@ -86,6 +86,7 @@ importers:
   tasks:
     specifiers:
       '@helpwave/common': workspace:*
+      '@helpwave/proto-ts': 0.3.0-1f277ee.0
       '@next/font': ^13.0.6
       '@radix-ui/react-checkbox': ^1.0.1
       '@tanstack/react-table': ^8.8.0
@@ -121,6 +122,7 @@ importers:
       zod: ^3.19.1
     dependencies:
       '@helpwave/common': link:../lib
+      '@helpwave/proto-ts': 0.3.0-1f277ee.0
       '@next/font': 13.0.6
       '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@tanstack/react-table': 8.8.0_biqbaboplfbrettd7655fr4n2y
@@ -210,6 +212,10 @@ packages:
     resolution: {integrity: sha512-JXdzbRiWclLVoD8sNUjR443VVlYqiYmDVT6rGUEIEHU5YJW0gaVZwV2xgM7D4arkvASqD0IlLUVjHiFuxaftRw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@helpwave/proto-ts/0.3.0-1f277ee.0:
+    resolution: {integrity: sha512-HOgE0KM8CU94qnNTF9zhjz6DpxW36gKjveNJ7jMHzp98MpZ/RlFRYRFdgIOHYKsN6KWC3FEjhHORgDWnD8VYmg==}
+    dev: false
 
   /@humanwhocodes/config-array/0.10.7:
     resolution: {integrity: sha512-MDl6D6sBsaV452/QSdX+4CXIjZhIcI0PELsxUjk4U828yd58vk3bTIvk/6w5FY+4hIy9sLW0sfrV7K7Kc++j/w==}

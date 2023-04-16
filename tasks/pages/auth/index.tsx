@@ -1,20 +1,10 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
-import { getAuthorizationUrl } from '../../utils/oauth'
+import SignInButton from '../../components/SignInButton'
 
 const Auth: NextPage = () => {
-  const [authorizationUrl, setAuthorizationUrl] = useState<string>()
-
-  useEffect(() => {
-    getAuthorizationUrl().then((url) => {
-      console.log(url)
-      setAuthorizationUrl(url)
-    })
-  }, [])
-
   return (
     <>
-      { authorizationUrl && <a href={authorizationUrl}>{authorizationUrl}</a> }
+      <SignInButton/>
     </>
   )
 }

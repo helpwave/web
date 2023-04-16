@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { WardServiceClient } from '../generated/Ward_svcServiceClientPb'
 import { CreateWardRequest, GetWardRequest } from '../generated/ward_svc_pb'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
+import titleWrapper from '../utils/titleWrapper';
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -51,7 +52,7 @@ const Home: NextPage = () => {
   return (
       <PageWithHeader>
         <Head>
-          <title>helpwave tasks</title>
+          <title>{titleWrapper()}</title>
         </Head>
 
         <h1 className={tw('text-3xl font-bold underline')}>

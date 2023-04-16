@@ -16,6 +16,7 @@ import {
 import { RoomOverview } from '../../components/RoomOverview'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
+import titleWrapper from '../../utils/titleWrapper';
 
 type WardOverviewTranslation = {
   beds: string,
@@ -95,7 +96,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       ]}
     >
       <Head>
-        <title>{translation.roomOverview} ~ helpwave tasks</title>
+        <title>{titleWrapper(translation.roomOverview)}</title>
       </Head>
       <TwoColumn
         left={(

@@ -3,7 +3,7 @@
 1. Execute the following commands
 ```
 pnpm install
-cd ./tasks/
+cd tasks/
 pnpm run dev
 ```
 2. open http://localhost:3000

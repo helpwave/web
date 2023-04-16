@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { WardServiceClient } from '../generated/Ward_svcServiceClientPb'
 import { CreateWardRequest, GetWardRequest } from '../generated/ward_svc_pb'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
-import titleWrapper from '../utils/titleWrapper';
+import titleWrapper from '../utils/titleWrapper'
 
 const Home: NextPage = () => {
   const router = useRouter()

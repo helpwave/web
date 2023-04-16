@@ -5,8 +5,9 @@ import Head from 'next/head'
 import { tw, tx } from '@helpwave/common/twind/index'
 import CheckIcon from '../icons/Check'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
-import titleWrapper from '../utils/titleWrapper';
-import { PropsWithLanguage, useTranslation } from '@helpwave/common/hooks/useTranslation';
+import titleWrapper from '../utils/titleWrapper'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 const tabs = [
   'general', 'account'

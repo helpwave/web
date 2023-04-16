@@ -14,7 +14,7 @@ import {
 import { WardDisplay } from '../../components/layout/WardDisplay'
 import { WardDetail } from '../../components/layout/WardDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
-import titleWrapper from '../../utils/titleWrapper';
+import titleWrapper from '../../utils/titleWrapper'
 
 type WardsPageTranslation = {
   wards: string,

@@ -14,7 +14,7 @@ import {
   useUpdateMutation
 } from '../mutations/organization_mutations'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
-import titleWrapper from '../utils/titleWrapper';
+import titleWrapper from '../utils/titleWrapper'
 
 type OrganizationsPageTranslation = {
   organizations: string

@@ -10,7 +10,7 @@ import { Input, noop } from '../components/user_input/Input'
 import { Avatar } from '../components/Avatar'
 import { UserCard } from '../components/cards/UserCard'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
-import titleWrapper from '../utils/titleWrapper';
+import titleWrapper from '../utils/titleWrapper'
 
 const Section = ({ title, children }: PropsWithChildren<{ title: string }>) => (
   <div className={tw('flex')}>

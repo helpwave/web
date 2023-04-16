@@ -8,7 +8,7 @@ import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserView, MobileView } from 'react-device-detect'
 import MobileInterceptor from '../components/MobileInterceptor'
-import titleWrapper from '../utils/titleWrapper';
+import titleWrapper from '../utils/titleWrapper'
 
 const inter = Inter({
   subsets: ['latin'],

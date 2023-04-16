@@ -16,7 +16,7 @@ import {
 import { RoomOverview } from '../../components/RoomOverview'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
-import titleWrapper from '../../utils/titleWrapper';
+import titleWrapper from '../../utils/titleWrapper'
 
 type WardOverviewTranslation = {
   beds: string,

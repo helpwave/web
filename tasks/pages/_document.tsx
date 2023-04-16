@@ -1,7 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import withNextDocument from '@helpwave/common/twind/next/document'
 import { config } from '@helpwave/common/twind/config'
-import titleWrapper from '../utils/titleWrapper';
+import titleWrapper from '../utils/titleWrapper'
 
 class MyDocument extends Document {
   render() {

@@ -16,6 +16,7 @@ import {
 import { RoomOverview } from '../../components/RoomOverview'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
+import titleWrapper from '../../utils/titleWrapper'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -95,13 +96,11 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       ]}
     >
       <Head>
-        <title>{translation.roomOverview}</title>
+        <title>{titleWrapper(translation.roomOverview)}</title>
       </Head>
       <TwoColumn
         left={(
           <div className={tw('flex flex-col px-6 py-8')}>
-            {rooms.map(room => (
-              <RoomOverview key={room.id} room={room} onSelect={setSelectedBed} selected={selectedBed}/>))}
             {rooms.map(room => (
               <RoomOverview
                 key={room.id}

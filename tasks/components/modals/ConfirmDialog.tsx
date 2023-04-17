@@ -1,5 +1,6 @@
 import { tw } from '@helpwave/common/twind/index'
 import type { PropsWithChildren } from 'react'
+import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
 import { Button } from '../Button'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -24,48 +25,42 @@ const defaultConfirmDialogTranslation = {
   }
 }
 
-type ConfirmDialogProps = {
-  isOpen: boolean,
-  title?: string,
-  description?: string,
-  isShowingDecline?: string,
+type ConfirmDialogProps = Omit<ModalProps, 'onBackgroundClick'> & {
+  isShowingDecline?: boolean,
+  requireAnswer?: boolean,
   onClose: (operation: 'confirm' | 'decline' | 'closed') => void
 }
+
 export const ConfirmDialog = ({
   language,
   children,
   isOpen,
   title,
   description,
+  requireAnswer = false,
   isShowingDecline,
   onClose
 }: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
   return (
-    <Modal isOpen={isOpen} title={title} description={description} onClose={event => {
-      event.stopPropagation()
-      onClose('closed')
-    }}>
+    <Modal
+      isOpen={isOpen}
+      title={title} description={description}
+      onBackgroundClick={requireAnswer ? undefined : () => { onClose('closed') }}
+    >
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-        <Button color="accent" onClick={event => {
-          event.stopPropagation()
-          onClose('closed')
-        }}>
-          {translation.cancel}
-        </Button>
+        {!requireAnswer && (
+          <Button color="neutral" onClick={() => onClose('closed')}>
+            {translation.cancel}
+          </Button>
+        )}
         {isShowingDecline && (
-          <Button color="negative" onClick={event => {
-            event.stopPropagation()
-            onClose('decline')
-          }}>
+          <Button color="negative" onClick={() => onClose('decline')}>
             {translation.decline}
           </Button>
         )}
-        <Button autoFocus color="positive" onClick={event => {
-          event.stopPropagation()
-          onClose('confirm')
-        }}>
+        <Button autoFocus color="positive" onClick={() => onClose('confirm')}>
           {translation.confirm}
         </Button>
       </div>

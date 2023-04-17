@@ -6,7 +6,7 @@ import type { CardProps } from './Card'
 import { Card } from './Card'
 import Email from '@helpwave/common/icons/Email'
 import { AvatarGroup } from '../AvatarGroup'
-import Edit from '../../icons/Edit'
+import { Edit } from "lucide-react";
 
 type OrganizationCardTranslation = {
   edit: string,
@@ -73,7 +73,7 @@ export const OrganizationCard = ({
           }}
           className={tw('hidden group-hover:block')}
         >
-          <Edit/>
+          <Edit color="black" size={24} />
         </button>
       </div>
       <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm')}>

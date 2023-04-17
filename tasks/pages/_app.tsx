@@ -8,6 +8,7 @@ import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserView, MobileView } from 'react-device-detect'
 import MobileInterceptor from '../components/MobileInterceptor'
+import titleWrapper from '../utils/titleWrapper'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ProvideLanguage>
       <BrowserView>
         <Head>
-          <title>Dashboard</title>
+          <title>{titleWrapper()}</title>
           <style>{`
           :root {
             --font-inter: ${inter.style.fontFamily};

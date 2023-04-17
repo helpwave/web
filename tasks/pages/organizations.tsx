@@ -14,6 +14,7 @@ import {
   useUpdateMutation
 } from '../mutations/organization_mutations'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
+import titleWrapper from '../utils/titleWrapper'
 
 type OrganizationsPageTranslation = {
   organizations: string
@@ -73,7 +74,7 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
       crumbs={[{ display: translation.organizations, link: '/organizations' }]}
     >
       <Head>
-        <title>{translation.organizations}</title>
+        <title>{titleWrapper(translation.organizations)}</title>
       </Head>
       <TwoColumn
         left={(

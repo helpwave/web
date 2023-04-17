@@ -13,6 +13,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import HelpwaveLogo from '../icons/Helpwave'
+import titleWrapper from '../utils/titleWrapper'
 
 type LoginTranslation = {
   signInHeader: string,
@@ -88,7 +89,7 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
   return (
     <div>
         <Head>
-          <title>Login</title>
+          <title>{titleWrapper('Login')}</title>
         </Head>
         <div className={tw('flex items-center justify-center py-12 px-4')}>
           <div className={tw('w-full max-w-md space-y-8')}>

@@ -117,6 +117,7 @@ importers:
       grpc-web: ^1.4.2
       js-cookie: ^3.0.1
       jsonwebtoken: ^8.5.1
+      lucide-react: ^0.145.0
       next: ^13.2.3
       react: ^18.2.0
       react-device-detect: ^2.2.3
@@ -142,6 +143,7 @@ importers:
       grpc-web: 1.4.2
       js-cookie: 3.0.1
       jsonwebtoken: 8.5.1
+      lucide-react: 0.145.0_react@18.2.0
       next: 13.2.3_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-device-detect: 2.2.3_biqbaboplfbrettd7655fr4n2y
@@ -2957,6 +2959,14 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /lucide-react/0.145.0_react@18.2.0:
+    resolution: {integrity: sha512-0bwi3T/DVe0Gn7HRDmtuf88j6m/+GFbQgnsoYnLX1jKnEJ/tGnP1KQY58Nfxp2gih1lOkwekJ4Hw141TNInLzA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /merge2/1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}

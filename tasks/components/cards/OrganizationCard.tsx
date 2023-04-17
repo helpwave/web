@@ -6,7 +6,7 @@ import type { CardProps } from './Card'
 import { Card } from './Card'
 import Email from '@helpwave/common/icons/Email'
 import { AvatarGroup } from '../AvatarGroup'
-import { Edit } from "lucide-react";
+import { Edit } from 'lucide-react'
 
 type OrganizationCardTranslation = {
   edit: string,

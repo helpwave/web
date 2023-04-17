@@ -6,7 +6,7 @@ import Bed from '../../icons/Bed'
 import { PillLabelBox } from '../pill/PillLabelBox'
 import type { CardProps } from './Card'
 import { Card } from './Card'
-import { Edit } from "lucide-react";
+import { Edit } from 'lucide-react'
 
 type WardCardTranslation = {
   edit: string,

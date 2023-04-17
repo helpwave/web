@@ -97,11 +97,10 @@ export const OrganizationDetail = ({
         title={translation.deleteConfirmText}
         description={translation.dangerZoneText}
         isOpen={isShowingConfirmDialog}
-        onClose={operation => {
-          if (operation === 'confirm') {
-            onDelete(newOrganization)
-          }
+        onCancel={() => setIsShowingConfirmDialog(false)}
+        onConfirm={() => {
           setIsShowingConfirmDialog(false)
+          onDelete(newOrganization)
         }}
       />
       <ColumnTitle title={translation.organizationDetail}/>

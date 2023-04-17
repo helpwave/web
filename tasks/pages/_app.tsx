@@ -35,10 +35,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         `}</style>
         </Head>
         <QueryClientProvider client={queryClient}>
-          <div className={tw('font-sans')}>
-            <div id="headlessui-portal-root">
-              <Component {...pageProps} />
-            </div>
+          <div className={tw('font-sans')} id="headlessui-portal-root">
+            <Component {...pageProps} />
           </div>
         </QueryClientProvider>
       </BrowserView>

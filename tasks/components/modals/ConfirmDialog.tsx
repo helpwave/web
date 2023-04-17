@@ -25,10 +25,12 @@ const defaultConfirmDialogTranslation = {
   }
 }
 
-type ConfirmDialogProps = Omit<ModalProps, 'onBackgroundClick'> & {
+type ConfirmDialogProps = ModalProps & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
-  onClose: (operation: 'confirm' | 'decline' | 'closed') => void
+  onCancel?: () => void,
+  onConfirm: () => void,
+  onDecline?: () => void
 }
 
 export const ConfirmDialog = ({
@@ -37,30 +39,31 @@ export const ConfirmDialog = ({
   isOpen,
   title,
   description,
-  requireAnswer = false,
-  isShowingDecline,
-  onClose
+  onCancel,
+  onConfirm,
+  onDecline,
+  onBackgroundClick,
 }: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
   return (
     <Modal
       isOpen={isOpen}
       title={title} description={description}
-      onBackgroundClick={requireAnswer ? undefined : () => { onClose('closed') }}
+      onBackgroundClick={onBackgroundClick}
     >
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-        {!requireAnswer && (
-          <Button color="neutral" onClick={() => onClose('closed')}>
+        {onCancel && (
+          <Button color="neutral" onClick={onCancel}>
             {translation.cancel}
           </Button>
         )}
-        {isShowingDecline && (
-          <Button color="negative" onClick={() => onClose('decline')}>
+        {onDecline && (
+          <Button color="negative" onClick={onDecline}>
             {translation.decline}
           </Button>
         )}
-        <Button autoFocus color="positive" onClick={() => onClose('confirm')}>
+        <Button autoFocus color="positive" onClick={() => onConfirm()}>
           {translation.confirm}
         </Button>
       </div>

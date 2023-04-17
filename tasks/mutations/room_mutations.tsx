@@ -3,11 +3,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const queryKey = 'rooms'
 
+export type TaskStatus = 'unscheduled' | 'inProgress' | 'done'
+
 export type TaskDTO = {
   id: string,
   name: string,
+  assignee: string,
   description: string,
-  status: 'unscheduled' | 'inProgress' | 'done',
+  status: TaskStatus,
   progress: number
 }
 
@@ -47,6 +50,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task1',
               name: 'Task 1',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
               progress: 0.2
@@ -54,6 +58,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task2',
               name: 'Task 2',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
               progress: 0.4
@@ -61,6 +66,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task3',
               name: 'Task 3',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
               progress: 0.7
@@ -68,6 +74,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task4',
               name: 'Task 4',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'inProgress',
               progress: 0.2
@@ -75,6 +82,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task5',
               name: 'Task 5',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
               progress: 0.1
@@ -82,6 +90,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task6',
               name: 'Task 6',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
               progress: 0.2
@@ -100,6 +109,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task1',
               name: 'Task 1',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
               progress: 0.2
@@ -107,6 +117,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task2',
               name: 'Task 2',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
               progress: 0.4
@@ -114,6 +125,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task3',
               name: 'Task 3',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
               progress: 0.7
@@ -121,6 +133,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task4',
               name: 'Task 4',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'inProgress',
               progress: 0.2
@@ -128,6 +141,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task5',
               name: 'Task 5',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
               progress: 0.1
@@ -135,6 +149,7 @@ let rooms: RoomDTO[] = [
             {
               id: 'task6',
               name: 'Task 6',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
               progress: 0.2

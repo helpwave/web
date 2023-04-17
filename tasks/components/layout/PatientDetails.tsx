@@ -59,8 +59,8 @@ export const PatientDetail = ({
     <div className={tw('flex flex-col py-4 px-6')}>
       <ColumnTitle title={translation.patientDetails}/>
       <div className={tw('flex flex-row justify-between gap-x-8 mb-8')}>
-        <div className={tw('flex flex-col gap-y-4')}>
-          <div className={tw('h-12')}>
+        <div className={tw('flex flex-col gap-y-4 w-1/2')}>
+          <div className={tw('h-12 w-full')}>
             <ToggleableInput
               className={tw('text-lg font-semibold')}
               id="humanReadableIdentifier"
@@ -73,7 +73,7 @@ export const PatientDetail = ({
           </div>
           <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
         </div>
-        <div className={tw('min-w-[50%] max-w-[50%]')}>
+        <div className={tw('w-1/2')}>
           <Textarea
             headline={translation.notes}
             value={newPatient.note}

@@ -22,19 +22,12 @@ import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
 import { noop } from '../user_input/Input'
+import type { TaskDTO } from '../../mutations/room_mutations'
 
 type KanbanBoardObject = {
   draggedID?: string,
   searchValue: string,
   overColumn?: string
-}
-
-type TaskDTO = {
-  id: string,
-  name: string,
-  description: string,
-  status: 'unscheduled' | 'inProgress' | 'done',
-  progress: number
 }
 
 type KanbanBoardProps = {

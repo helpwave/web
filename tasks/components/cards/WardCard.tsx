@@ -6,7 +6,7 @@ import Bed from '../../icons/Bed'
 import { PillLabelBox } from '../pill/PillLabelBox'
 import type { CardProps } from './Card'
 import { Card } from './Card'
-import Edit from '../../icons/Edit'
+import { Edit } from "lucide-react";
 
 type WardCardTranslation = {
   edit: string,
@@ -65,7 +65,7 @@ export const WardCard = ({
           }}
           className={tw('hidden group-hover:block')}
         >
-          <Edit/>
+          <Edit color="black" size={24} />
         </button>
       </div>
       <div className={tx('text-left my-1', { 'text-gray-400 text-sm': !hasRooms })}>

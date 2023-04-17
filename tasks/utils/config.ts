@@ -25,6 +25,7 @@ import z from 'zod'
 */
 
 const configSchema = z.object({
+  NODE_ENV: z.literal('production').or(z.literal('development')).default('production'),
   NEXT_PUBLIC_API_URL: z.string(),
   NEXT_PUBLIC_MOCK: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_REQUEST_LOGGING: z.literal('true').or(z.literal('false')).optional(),
@@ -35,6 +36,7 @@ const configSchema = z.object({
   NEXT_PUBLIC_FAKE_TOKEN_ENABLE: z.literal('true').or(z.literal('false')).default('true'),
   NEXT_PUBLIC_FAKE_TOKEN: z.object({ sub: z.string().uuid(), email: z.string().email() }).default({ sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984', email: 'testine.test@helpwave.de' })
 }).transform(obj => ({
+  env: obj.NODE_ENV,
   apiUrl: obj.NEXT_PUBLIC_API_URL,
   mock: obj.NEXT_PUBLIC_MOCK === 'true',
   requestLogging: obj.NEXT_PUBLIC_REQUEST_LOGGING === 'true',
@@ -55,6 +57,7 @@ const getConfig = () => {
   }
 
   const maybeConfig = configSchema.safeParse({
+    NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_MOCK: process.env.NEXT_PUBLIC_MOCK,
     NEXT_PUBLIC_REQUEST_LOGGING: process.env.NEXT_PUBLIC_REQUEST_LOGGING,

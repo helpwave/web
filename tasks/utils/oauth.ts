@@ -10,6 +10,7 @@ import {
   processDiscoveryResponse,
   validateAuthResponse
 } from 'oauth4webapi'
+import { getCookie, setCookie } from 'cookies-next'
 
 const config = getConfig()
 const codeChallengeMethod = 'S256'
@@ -41,26 +42,38 @@ const getCommonOAuthEntities = async (overrideConfig?: Partial<typeof config.oau
   return { authorizationServer, client }
 }
 
+const storeValue = (key: string, value: string) => {
+  const expiresAt = new Date()
+  expiresAt.setHours(expiresAt.getHours() + 1)
+  const secureCookie = config.env === 'production'
+  setCookie(key, value, { expires: expiresAt, sameSite: 'lax', secure: secureCookie })
+}
+
+const retrieveValue = (key: string): string|null => {
+  const value = getCookie(key)
+  return typeof value === 'string' ? value : null
+}
+
 const setupState = (): string => {
   const state = generateRandomState()
-  window.localStorage.setItem(LOCALSTORAGE_KEY_STATE, state)
+  storeValue(LOCALSTORAGE_KEY_STATE, state)
   return state
 }
 
 const retrieveState = (): string => {
-  const state = window.localStorage.getItem(LOCALSTORAGE_KEY_STATE)
+  const state = retrieveValue(LOCALSTORAGE_KEY_STATE)
   if (!state) throw new Error('State not set')
   return state
 }
 
 const setupCodeVerifier = (): string => {
   const codeVerifier = oauth.generateRandomCodeVerifier()
-  window.localStorage.setItem(LOCALSTORAGE_KEY_CODE_VERIFIER, codeVerifier)
+  storeValue(LOCALSTORAGE_KEY_CODE_VERIFIER, codeVerifier)
   return codeVerifier
 }
 
 const retrieveCodeVerifier = (): string => {
-  const codeVerifier = window.localStorage.getItem(LOCALSTORAGE_KEY_CODE_VERIFIER)
+  const codeVerifier = retrieveValue(LOCALSTORAGE_KEY_CODE_VERIFIER)
   if (!codeVerifier) throw new Error('Code verifier not set')
   return codeVerifier
 }

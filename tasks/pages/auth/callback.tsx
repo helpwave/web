@@ -1,9 +1,8 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { handleCodeExchange } from '../../utils/oauth'
-import type { OpenIDTokenEndpointResponse } from 'oauth4webapi'
 import { PatientServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_grpc_web_pb'
-import { CreatePatientRequest, GetPatientRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
+import { CreatePatientRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 
 const AuthCallback: NextPage = () => {
   const [token, setToken] = useState<string>()

@@ -63,7 +63,7 @@ export const ConfirmDialog = ({
             {translation.decline}
           </Button>
         )}
-        <Button autoFocus color="positive" onClick={() => onConfirm()}>
+        <Button autoFocus color="positive" onClick={onConfirm}>
           {translation.confirm}
         </Button>
       </div>

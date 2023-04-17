@@ -98,6 +98,7 @@ export const OrganizationDetail = ({
         description={translation.dangerZoneText}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
+        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
           onDelete(newOrganization)

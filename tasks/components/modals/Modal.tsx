@@ -19,7 +19,7 @@ export const Modal = ({
     <div className={tx('fixed inset-0 overflow-y-auto z-[99]', { hidden: !isOpen })}>
       <div
         className={tw('fixed inset-0 flex items-center justify-center bg-black/70')}
-        onClick={event => onBackgroundClick && onBackgroundClick(event)}
+        onClick={onBackgroundClick}
       >
         <div
           className={tw('absolute flex flex-col p-4 bg-white rounded-xl')}

@@ -17,12 +17,11 @@ import {
 } from '@dnd-kit/core'
 import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
-import type { TaskStatus } from '../KanbanColumn'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
 import { noop } from '../user_input/Input'
-import type { TaskDTO } from '../../mutations/room_mutations'
+import type { TaskDTO, TaskStatus } from '../../mutations/room_mutations'
 
 type KanbanBoardObject = {
   draggedID?: string,
@@ -32,12 +31,16 @@ type KanbanBoardObject = {
 
 type KanbanBoardProps = {
   tasks: TaskDTO[],
-  onChange: (tasks: TaskDTO[]) => void
+  onChange: (tasks: TaskDTO[]) => void,
+  onEditTask: (task: TaskDTO) => void,
+  editedTaskID?: string
 }
 
 export const KanbanBoard = ({
   tasks,
-  onChange = noop
+  onChange = noop,
+  onEditTask,
+  editedTaskID
 }: KanbanBoardProps) => {
   const [sortedTasks, setSortedTasks] = useState(
     {
@@ -50,7 +53,7 @@ export const KanbanBoard = ({
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -142,13 +145,16 @@ export const KanbanBoard = ({
       [...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done].find(value => value && value.id === boardObject.draggedID)
     : null
 
-  function filterBySearch(tasks: TaskDTO[]) : TaskDTO[] {
+  function filterBySearch(tasks: TaskDTO[]): TaskDTO[] {
     return tasks.filter(value => value.name.toLowerCase().startsWith(boardObject.searchValue.toLowerCase()))
   }
 
   return (
     <div>
-      <KanbanHeader searchValue={boardObject.searchValue} onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}/>
+      <KanbanHeader
+        searchValue={boardObject.searchValue}
+        onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}
+      />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -157,14 +163,29 @@ export const KanbanBoard = ({
         onDragEnd={handleDragEnd}
       >
         <div className={tw('grid grid-cols-3 gap-x-4 mt-6')}>
-          <KanbanColumn type="unscheduled" tasks={filterBySearch(sortedTasks.unscheduled)} draggedTileID={boardObject.draggedID}
-                        isDraggedOver={boardObject.overColumn === 'unscheduled'}/>
-          <KanbanColumn type="inProgress" tasks={filterBySearch(sortedTasks.inProgress)} draggedTileID={boardObject.draggedID}
-                        isDraggedOver={boardObject.overColumn === 'inProgress'}/>
-          <KanbanColumn type="done" tasks={filterBySearch(sortedTasks.done)} draggedTileID={boardObject.draggedID}
-                        isDraggedOver={boardObject.overColumn === 'done'}/>
+          <KanbanColumn
+            type="unscheduled"
+            tasks={filterBySearch(sortedTasks.unscheduled)}
+            draggedTileID={boardObject.draggedID ?? editedTaskID}
+            isDraggedOver={boardObject.overColumn === 'unscheduled'}
+            onEditTask={onEditTask}
+          />
+          <KanbanColumn
+            type="inProgress"
+            tasks={filterBySearch(sortedTasks.inProgress)}
+            draggedTileID={boardObject.draggedID ?? editedTaskID}
+            isDraggedOver={boardObject.overColumn === 'inProgress'}
+            onEditTask={onEditTask}
+          />
+          <KanbanColumn
+            type="done"
+            tasks={filterBySearch(sortedTasks.done)}
+            draggedTileID={boardObject.draggedID ?? editedTaskID}
+            isDraggedOver={boardObject.overColumn === 'done'}
+            onEditTask={onEditTask}
+          />
           <DragOverlay dropAnimation={dropAnimation}>
-            {task && <TaskCard task={task} progress={task.progress}/>}
+            {task && <TaskCard task={task} />}
           </DragOverlay>
         </div>
       </DndContext>

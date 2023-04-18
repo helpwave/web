@@ -8,7 +8,7 @@ type InputProps = {
   /**
    * used for the label's `for` attribute
    */
-  id: string,
+  id?: string,
   value: string,
   label?: string,
   /**
@@ -36,12 +36,12 @@ const ControlledInput = ({
 }: InputProps) => {
   return (
     <div className={tw('w-full')}>
-      {label && <label htmlFor={id} className={tw('block text-sm font-medium text-gray-700')}>{label}</label>}
+      {label && <label htmlFor={id} className={tw('block text-sm font-medium text-gray-700 mb-1')}>{label}</label>}
       <input
         value={value}
         id={id}
         type={type}
-        className={tx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500', className)}
+        className={tx('block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500', className)}
         onChange={e => onChange(e.target.value)}
         {...restProps}
       />

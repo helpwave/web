@@ -22,7 +22,8 @@ type InputProps = {
    * @default noop
    */
   onChange?: (text: string) => void,
-  labelClassName?: string
+  labelClassName?: string,
+  initialState?: 'editing' | 'display'
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 export const ToggleableInput = ({
@@ -31,9 +32,11 @@ export const ToggleableInput = ({
   value,
   label,
   onChange = noop,
+  labelClassName = '',
+  initialState = 'display',
   ...restProps
 }: InputProps) => {
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(initialState !== 'display')
   return (
     <div
       className={tw('flex flex-row justify-between items-center')}
@@ -56,7 +59,7 @@ export const ToggleableInput = ({
           }
         }}
         readOnly={!isEditing}
-        className={tx('text-xl font-semibold border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4', { underline: isEditing })}
+        className={tx(labelClassName, ' border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4', { underline: isEditing })}
       />
       {!isEditing && <Edit className={tw('ml-2 scale-[80%] cursor-pointer')}/>}
     </div>

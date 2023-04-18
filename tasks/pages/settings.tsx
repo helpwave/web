@@ -5,6 +5,9 @@ import Head from 'next/head'
 import { tw, tx } from '@helpwave/common/twind/index'
 import CheckIcon from '../icons/Check'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
+import titleWrapper from '../utils/titleWrapper'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 const tabs = [
   'general', 'account'
@@ -22,13 +25,27 @@ const SidebarItem = ({ text, icon, active, onClick }: { text: string, icon: Reac
   </li>
 )
 
-const SettingsPage: NextPage = () => {
+type SettingsTranslation = {
+  settings: string
+}
+
+const defaultSettingsPageTranslation = {
+  en: {
+    settings: 'Settings'
+  },
+  de: {
+    settings: 'Einstellungen'
+  }
+}
+
+const SettingsPage: NextPage = ({ language }: PropsWithLanguage<SettingsTranslation>) => {
+  const translation = useTranslation(language, defaultSettingsPageTranslation)
   const [activeTab, setActiveTab] = useState<typeof tabs[number]>('general')
 
   return (
     <PageWithHeader>
       <Head>
-        <title>Settings</title>
+        <title>{titleWrapper(translation.settings)}</title>
       </Head>
 
       <div className={tw('p-4 w-full h-full')}>

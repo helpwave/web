@@ -1,0 +1,46 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "dependencyDashboard": false,
+  "labels": [ "deps" ],
+  "packageRules": [
+    {
+      "groupName": "non-major dependencies of lib",
+      "addLabels": [ "lib" ],
+      "matchUpdateTypes": [ "minor", "patch" ],
+      "matchPaths": [ "lib/**" ]
+    },
+    {
+      "groupName": "major dependencies of lib",
+      "addLabels": [ "lib" ],
+      "matchUpdateTypes": [ "major" ],
+      "matchPaths": [ "lib/**" ]
+    },
+    {
+      "groupName": "non-major dependencies of landing-page",
+      "addLabels": [ "landing-page" ],
+      "matchUpdateTypes": [ "minor", "patch" ],
+      "matchPaths": [ "landing-page/**" ]
+    },
+    {
+      "groupName": "major dependencies of landing-page",
+      "addLabels": [ "landing-page" ],
+      "matchUpdateTypes": [ "major" ],
+      "matchPaths": [ "landing-page/**" ]
+    },
+    {
+      "groupName": "non-major dependencies of tasks",
+      "addLabels": [ "tasks" ],
+      "matchUpdateTypes": [ "minor", "patch" ],
+      "matchPaths": [ "tasks/**" ]
+    },
+    {
+      "groupName": "major dependencies of tasks",
+      "addLabels": [ "tasks" ],
+      "matchUpdateTypes": [ "major" ],
+      "matchPaths": [ "tasks/**" ]
+    }
+  ]
+}

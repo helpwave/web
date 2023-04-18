@@ -1,6 +1,5 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { MouseEventHandler, PropsWithChildren } from 'react'
-import { noop } from '../user_input/Input'
 
 export type ModalProps = {
   isOpen: boolean,
@@ -13,28 +12,22 @@ export const Modal = ({
   isOpen,
   title,
   description,
-  onBackgroundClick = noop
+  onBackgroundClick
 }: PropsWithChildren<ModalProps>) => {
   return (
     <div className={tx('fixed inset-0 overflow-y-auto z-[99]', { hidden: !isOpen })}>
       <div
-        className={tw('fixed inset-0 flex items-center justify-center bg-black/70')}
+        className={tw('fixed inset-0 h-screen w-screen bg-black/70')}
         onClick={onBackgroundClick}
-      >
-        <div
-          className={tw('absolute flex flex-col p-4 bg-white rounded-xl')}
-          onClick={event => event.stopPropagation()}
-        >
-          {title && (
-            <span
-              className={tx('text-lg font-semibold', { 'mb-1': description, 'mb-3': !description })}
-            >
+      />
+      <div className={tw('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl')}>
+        {title && (
+          <span className={tx('text-lg font-semibold', { 'mb-1': description, 'mb-3': !description })}>
               {title}
-            </span>
-          )}
-          {description && <span className={tw('mb-3 text-gray-400')}>{description}</span>}
-          {children}
-        </div>
+          </span>
+        )}
+        {description && <span className={tw('mb-3 text-gray-400')}>{description}</span>}
+        {children}
       </div>
     </div>
   )

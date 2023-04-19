@@ -83,10 +83,10 @@ export const OrganizationCard = ({
           className={tw('ml-1')}>{`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}</span>
         )}
       </div>
-      <div className={tw('flex flex-row justify-between w-full')}>
-        <div className={tw('flex flex-row items-center')}>
+      <div className={tw('flex flex-row justify-between')}>
+        <div className={tw('truncate flex flex-row items-center')}>
           <Email/>
-          <span className={tw('ml-2 text-sm')}>{organization.email}</span>
+          <span className={tw('w-full truncate ml-2 bg-red-500 text-sm')}>{organization.email}</span>
         </div>
         <AvatarGroup users={organization.members}/>
       </div>

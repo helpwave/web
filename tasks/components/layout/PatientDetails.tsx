@@ -69,6 +69,7 @@ export const PatientDetail = ({
     <div className={tw('flex flex-col py-4 px-6')}>
       <Modal
         isOpen={newTask !== undefined}
+        onBackgroundClick={() => setNewTask(undefined)}
       >
         {newTask !== undefined && (
           <TaskDetailView

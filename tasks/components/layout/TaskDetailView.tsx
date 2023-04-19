@@ -71,24 +71,27 @@ export const TaskDetailView = ({
   onFinishClick
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
+  const labelClassName = 'font-bold text-medium text-gray-600'
   return (
     <div className={tw('flex flex-col h-full p-2')}>
-      <div className={tw('flex flex-row justify-between items-center')}>
-        <ToggleableInput
-          autoFocus
-          initialState="editing"
-          id={task.id}
-          value={task.name}
-          onChange={name => onChange({ ...task, name })}
-          labelClassName={tw('text-xl font-semibold')}
-        />
+      <div className={tw('flex flex-row justify-between')}>
+        <div className={tw('w-3/4 mr-2')}>
+          <ToggleableInput
+            autoFocus
+            initialState="editing"
+            id={task.id}
+            value={task.name}
+            onChange={name => onChange({ ...task, name })}
+            labelClassName={tw('text-2xl font-bold')}
+          />
+        </div>
         <button className={tw('flex flex-row gap-x-2')} onClick={onClose}>
           <span>{translation.close}</span>
           <X />
         </button>
       </div>
       <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
-        <div className={tw('flex flex-col gap-y-4 min-w-[500px]')}>
+        <div className={tw('flex flex-col gap-y-4 w-[60%] min-w-[500px]')}>
           <div className={tw('min-h-1/4')}>
             <Textarea
               headline={translation.notes}
@@ -101,7 +104,7 @@ export const TaskDetailView = ({
         <div className={tw('flex flex-col justify-between min-w-[250px]')}>
           <div className={tw('flex flex-col gap-y-4')}>
             <div>
-              <label>{translation.assignee}</label>
+              <label className={tw(labelClassName)}>{translation.assignee}</label>
               <Select
                 value={task.assignee}
                 options={[
@@ -114,7 +117,7 @@ export const TaskDetailView = ({
               />
             </div>
             <div>
-              <label>{translation.dueDate}</label>
+              <label className={tw(labelClassName)}>{translation.dueDate}</label>
               {/* TODO use some date picker component */}
               <Select
                 value={task.dueDate}
@@ -128,11 +131,11 @@ export const TaskDetailView = ({
               />
             </div>
             <div>
-              <label>{translation.status}</label>
+              <label className={tw(labelClassName)}>{translation.status}</label>
               <TaskStatusSelect value={task.status} onChange={status => onChange({ ...task, status })}/>
             </div>
             <div>
-              <label>{translation.visibility}</label>
+              <label className={tw(labelClassName)}>{translation.visibility}</label>
               <Select
                 value={task.isPublicVisible}
                 options={[

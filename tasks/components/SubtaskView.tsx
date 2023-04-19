@@ -3,10 +3,9 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind/index'
 import type { SubTaskDTO } from '../mutations/room_mutations'
 import SimpleBarReact from 'simplebar-react'
-import { Input } from './user_input/Input'
 import { Button } from './Button'
 import Add from '@helpwave/common/icons/Add'
-import { Checkbox } from './user_input/Checkbox'
+import { SubtaskTile } from './SubtaskTile'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -49,33 +48,16 @@ export const SubtaskView = ({
         <SimpleBarReact style={{ maxHeight: 500 }}>
           <div className={tw('grid grid-cols-1 gap-y-2')}>
             {subtasks.map((subtask, index) => (
-              <div key={index} className={tw('flex flex-row justify-between gap-x-2')}>
-                <Checkbox
-                  id={subtask.name + 'Checkbox' + index}
-                  onChange={checked => {
-                    const newSubtasks = [...subtasks]
-                    newSubtasks[index].isDone = checked
-                    onChange(newSubtasks)
-                  }}
-                  checked={subtask.isDone}
-                  label=""
-                />
-                <Input
-                  value={subtask.name}
-                  className={tw('focus:outline-none')}
-                  onChange={text => {
-                    const newSubtasks = [...subtasks]
-                    newSubtasks[index].name = text
-                    onChange(newSubtasks)
-                  }}
-                />
-                <button
-                  className={tw('text-hw-negative-400 hover:text-hw-negative-500 ml-4')}
-                  onClick={() => onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))}
-                >
-                  {translation.remove}
-                </button>
-              </div>
+              <SubtaskTile
+                key={index}
+                subtask={subtask}
+                onChange={newSubtask => {
+                  const newSubtasks = [...subtasks]
+                  newSubtasks[index] = newSubtask
+                  onChange(newSubtasks)
+                }}
+                onRemoveClick={() => onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))}
+              />
             ))}
           </div>
         </SimpleBarReact>

@@ -82,8 +82,8 @@ export const TaskDetailView = ({
           onChange={name => onChange({ ...task, name })}
           labelClassName={tw('text-xl font-semibold')}
         />
-        <button className={tw('flex flex-row hover:text-hw-negative-500 gap-x-2')} onClick={onClose}>
-          <span className={tw('text-black')}>{translation.close}</span>
+        <button className={tw('flex flex-row gap-x-2')} onClick={onClose}>
+          <span>{translation.close}</span>
           <X />
         </button>
       </div>

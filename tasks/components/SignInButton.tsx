@@ -2,7 +2,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { getAuthorizationUrl } from '../utils/oauth'
-import { Button } from './Button';
+import { Button } from './Button'
 
 type SignInButtonTranslation = {
   signInWithHelpwave: string

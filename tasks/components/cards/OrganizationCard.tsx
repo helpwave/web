@@ -86,7 +86,7 @@ export const OrganizationCard = ({
       <div className={tw('flex flex-row justify-between')}>
         <div className={tw('truncate flex flex-row items-center')}>
           <Email/>
-          <span className={tw('w-full truncate ml-2 bg-red-500 text-sm')}>{organization.email}</span>
+          <span className={tw('w-full truncate ml-2 text-sm')}>{organization.email}</span>
         </div>
         <AvatarGroup users={organization.members}/>
       </div>

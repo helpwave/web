@@ -20,7 +20,7 @@ export const Modal = ({
         className={tw('fixed inset-0 h-screen w-screen bg-black/70')}
         onClick={onBackgroundClick}
       />
-      <div className={tw('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl')}>
+      <div className={tw('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl')}>
         {title && (
           <span className={tx('text-lg font-semibold', { 'mb-1': description, 'mb-3': !description })}>
               {title}

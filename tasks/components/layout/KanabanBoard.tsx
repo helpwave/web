@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import type {
   DragEndEvent,
   DragStartEvent,
@@ -23,35 +22,35 @@ import { KanbanHeader } from '../KanbanHeader'
 import { noop } from '../user_input/Input'
 import type { TaskDTO, TaskStatus } from '../../mutations/room_mutations'
 
-type KanbanBoardObject = {
+export type KanbanBoardObject = {
   draggedID?: string,
   searchValue: string,
   overColumn?: string
 }
 
+export type SortedTasks = {
+  unscheduled: TaskDTO[],
+  inProgress: TaskDTO[],
+  done: TaskDTO[]
+}
+
 type KanbanBoardProps = {
-  tasks: TaskDTO[],
-  onChange: (tasks: TaskDTO[]) => void,
+  sortedTasks: SortedTasks,
+  onChange: (sortedTasks: SortedTasks) => void,
+  boardObject: KanbanBoardObject,
+  onBoardChange: (board: KanbanBoardObject) => void,
   onEditTask: (task: TaskDTO) => void,
   editedTaskID?: string
 }
 
 export const KanbanBoard = ({
-  tasks,
+  sortedTasks,
+  boardObject,
+  onBoardChange,
   onChange = noop,
   onEditTask,
   editedTaskID
 }: KanbanBoardProps) => {
-  const [sortedTasks, setSortedTasks] = useState(
-    {
-      unscheduled: tasks.filter(value => value.status === 'unscheduled'),
-      inProgress: tasks.filter(value => value.status === 'inProgress'),
-      done: tasks.filter(value => value.status === 'done'),
-    }
-  )
-
-  const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
-
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
@@ -76,7 +75,7 @@ export const KanbanBoard = ({
   }
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    setBoardObject({ ...boardObject, draggedID: active.id as string })
+    onBoardChange({ ...boardObject, draggedID: active.id as string })
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -87,30 +86,27 @@ export const KanbanBoard = ({
       return
     }
 
-    setSortedTasks((sortedTasks) => {
-      const activeItems = sortedTasks[activeColumn]
-      const overItems = sortedTasks[overColumn]
+    const activeItems = sortedTasks[activeColumn]
+    const overItems = sortedTasks[overColumn]
 
-      // Find the indexes for the items
-      const activeIndex = activeItems.findIndex(item => item.id === active.id)
-      const overIndex = overItems.findIndex(item => item.id !== over?.id)
+    // Find the indexes for the items
+    const activeIndex = activeItems.findIndex(item => item.id === active.id)
+    const overIndex = overItems.findIndex(item => item.id !== over?.id)
 
-      sortedTasks[activeColumn][activeIndex].status = overColumn
-
-      return {
-        ...sortedTasks,
-        [activeColumn]: [
-          ...sortedTasks[activeColumn].filter(item => item.id !== active.id),
-        ],
-        [overColumn]: [
-          ...sortedTasks[overColumn].slice(0, overIndex),
-          sortedTasks[activeColumn][activeIndex],
-          ...sortedTasks[overColumn].slice(overIndex, sortedTasks[overColumn].length),
-        ],
-      }
+    sortedTasks[activeColumn][activeIndex].status = overColumn
+    onChange({
+      ...sortedTasks,
+      [activeColumn]: [
+        ...sortedTasks[activeColumn].filter(item => item.id !== active.id),
+      ],
+      [overColumn]: [
+        ...sortedTasks[overColumn].slice(0, overIndex),
+        sortedTasks[activeColumn][activeIndex],
+        ...sortedTasks[overColumn].slice(overIndex, sortedTasks[overColumn].length),
+      ],
     })
 
-    setBoardObject({ ...boardObject, overColumn })
+    onBoardChange({ ...boardObject, overColumn })
   }
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
@@ -124,16 +120,13 @@ export const KanbanBoard = ({
     const activeIndex = sortedTasks[activeColumn].findIndex(task => task.id === active.id)
     const overIndex = sortedTasks[overColumn].findIndex(task => task.id === over?.id)
 
-    setBoardObject({ ...boardObject, draggedID: undefined, overColumn: undefined })
+    onBoardChange({ ...boardObject, draggedID: undefined, overColumn: undefined })
     if (activeIndex !== overIndex) {
       const newSortedTasks = {
         ...sortedTasks,
         [overColumn]: arrayMove(sortedTasks[overColumn], activeIndex, overIndex),
       }
-      setSortedTasks(newSortedTasks)
-      onChange([...newSortedTasks.unscheduled, ...newSortedTasks.inProgress, ...newSortedTasks.done])
-    } else {
-      onChange([...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done])
+      onChange(newSortedTasks)
     }
   }
 
@@ -153,7 +146,7 @@ export const KanbanBoard = ({
     <div>
       <KanbanHeader
         searchValue={boardObject.searchValue}
-        onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}
+        onSearchChange={text => onBoardChange({ ...boardObject, searchValue: text })}
       />
       <DndContext
         sensors={sensors}
@@ -185,7 +178,7 @@ export const KanbanBoard = ({
             onEditTask={onEditTask}
           />
           <DragOverlay dropAnimation={dropAnimation}>
-            {task && <TaskCard task={task} />}
+            {task && <TaskCard task={task}/>}
           </DragOverlay>
         </div>
       </DndContext>

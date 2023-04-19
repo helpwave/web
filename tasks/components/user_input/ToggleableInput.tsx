@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
-import { Input, noop } from './Input'
-import Edit from '@helpwave/common/icons/Edit'
+import { noop } from './Input'
+import { Pencil } from 'lucide-react'
 
 type InputProps = {
   /**
@@ -10,7 +10,6 @@ type InputProps = {
    */
   id: string,
   value: string,
-  label?: string,
   /**
    * @default 'text'
    */
@@ -30,7 +29,6 @@ export const ToggleableInput = ({
   id,
   type = 'text',
   value,
-  label,
   onChange = noop,
   labelClassName = '',
   initialState = 'display',
@@ -39,29 +37,39 @@ export const ToggleableInput = ({
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
   return (
     <div
-      className={tw('flex flex-row justify-between items-center')}
+      className={tw('flex flex-row items-center w-full')}
       onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
     >
-      <Input
-        autoFocus
-        {...restProps}
-        value={value}
-        type={type}
-        id={id}
-        label={label}
-        onChange={onChange}
-        onBlur={() => {
-          setIsEditing(false)
-        }}
-        onKeyPress={event => {
-          if (event.key === 'Enter') {
+      {isEditing ? (
+        <input
+          autoFocus
+          {...restProps}
+          value={value}
+          type={type}
+          id={id}
+          onChange={event => onChange(event.target.value)}
+          onBlur={() => {
             setIsEditing(false)
-          }
-        }}
-        readOnly={!isEditing}
-        className={tx(labelClassName, ' border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4', { underline: isEditing })}
-      />
-      {!isEditing && <Edit className={tw('ml-2 scale-[80%] cursor-pointer')}/>}
+          }}
+          onKeyPress={event => {
+            if (event.key === 'Enter') {
+              setIsEditing(false)
+            }
+          }}
+          readOnly={!isEditing}
+          className={tx(labelClassName, 'max-w-[calc(100%_-_28px)] border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4', {
+            underline: isEditing
+          })}
+        />
+      ) : (
+        <span
+          className={tx(labelClassName, 'max-w-[calc(100%_-_28px)] overflow-hidden text-ellipsis')}
+        >
+        {value}
+        </span>
+      )}
+
+      {!isEditing && <Pencil className={tw('ml-[8px] cursor-pointer')} size={20}/>}
     </div>
   )
 }

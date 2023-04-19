@@ -3,12 +3,12 @@ import type { TaskDTO } from '../../mutations/room_mutations'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind/index'
 import { ToggleableInput } from '../user_input/ToggleableInput'
-import Close from '@helpwave/common/icons/Close'
 import { Textarea } from '../user_input/Textarea'
 import { Select } from '../user_input/Select'
 import { TaskStatusSelect } from '../user_input/TaskStatusSelect'
 import { Button } from '../Button'
 import { SubtaskView } from '../SubtaskView'
+import { X } from 'lucide-react'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -72,17 +72,19 @@ export const TaskDetailView = ({
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   return (
-    <div className={tw('flex flex-col h-full')}>
+    <div className={tw('flex flex-col h-full p-2')}>
       <div className={tw('flex flex-row justify-between items-center')}>
         <ToggleableInput
+          autoFocus
+          initialState="editing"
           id={task.id}
           value={task.name}
           onChange={name => onChange({ ...task, name })}
           labelClassName={tw('text-xl font-semibold')}
         />
-        <div className={tw('flex flex-row')} onClick={onClose}>
-          <Close/>
-          <span className={tw('ml-2 hover:text-negative-500')}>{translation.close}</span>
+        <div className={tw('flex flex-row hover:text-negative-500')} onClick={onClose}>
+          <span className={tw('mr-2')}>{translation.close}</span>
+          <X />
         </div>
       </div>
       <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
@@ -149,7 +151,7 @@ export const TaskDetailView = ({
               </div>
               <Button color="accent" onClick={onFinishClick}>{translation.update}</Button>
             </div>
-          ) : <Button color="accent" onClick={onFinishClick}>{translation.create}</Button>}
+          ) : <Button color="accent" onClick={onFinishClick} className={tw('mt-16')}>{translation.create}</Button>}
         </div>
       </div>
     </div>

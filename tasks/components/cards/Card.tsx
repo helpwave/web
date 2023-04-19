@@ -1,4 +1,4 @@
-import { tx } from '@helpwave/common/twind/index'
+import { tx } from '@helpwave/common/twind'
 import type { PropsWithChildren } from 'react'
 
 export type CardProps = {

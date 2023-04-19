@@ -3,12 +3,11 @@ import type { ReactNode } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { tw, tx } from '@helpwave/common/twind/index'
-import { useAuth } from '../hooks/useAuth'
-import { useRouter } from 'next/router'
-import { Header } from '../components/Header'
-import { UserMenu } from '../components/UserMenu'
-
 import CheckIcon from '../icons/Check'
+import { PageWithHeader } from '../components/layout/PageWithHeader'
+import titleWrapper from '../utils/titleWrapper'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 const tabs = [
   'general', 'account'
@@ -26,25 +25,28 @@ const SidebarItem = ({ text, icon, active, onClick }: { text: string, icon: Reac
   </li>
 )
 
-const SettingsPage: NextPage = () => {
-  const router = useRouter()
-  const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+type SettingsTranslation = {
+  settings: string
+}
+
+const defaultSettingsPageTranslation = {
+  en: {
+    settings: 'Settings'
+  },
+  de: {
+    settings: 'Einstellungen'
+  }
+}
+
+const SettingsPage: NextPage = ({ language }: PropsWithLanguage<SettingsTranslation>) => {
+  const translation = useTranslation(language, defaultSettingsPageTranslation)
   const [activeTab, setActiveTab] = useState<typeof tabs[number]>('general')
 
-  if (!user) return null
-
   return (
-    <div className={tw('w-screen h-screen flex flex-col')}>
+    <PageWithHeader>
       <Head>
-        <title>Settings</title>
+        <title>{titleWrapper(translation.settings)}</title>
       </Head>
-
-      <Header title="helpwave" navigation={[
-        { text: 'Dashboard', href: '/' },
-        { text: 'Contact', href: '/contact' },
-      ]} actions={[
-        <UserMenu key="user-menu" user={user} />
-      ]} />
 
       <div className={tw('p-4 w-full h-full')}>
         <h1 className={tw('text-xl text-slate-700')}>Settings</h1>
@@ -61,7 +63,7 @@ const SettingsPage: NextPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageWithHeader>
   )
 }
 

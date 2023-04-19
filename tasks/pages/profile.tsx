@@ -5,12 +5,12 @@ import Head from 'next/head'
 import { tw } from '@helpwave/common/twind/index'
 import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/router'
-import { Header } from '../components/Header'
-import { UserMenu } from '../components/UserMenu'
 import { Button } from '../components/Button'
-import { Input, noop } from '../components/Input'
+import { Input, noop } from '../components/user_input/Input'
 import { Avatar } from '../components/Avatar'
-import { UserCard } from '../components/UserCard'
+import { UserCard } from '../components/cards/UserCard'
+import { PageWithHeader } from '../components/layout/PageWithHeader'
+import titleWrapper from '../utils/titleWrapper'
 
 const Section = ({ title, children }: PropsWithChildren<{ title: string }>) => (
   <div className={tw('flex')}>
@@ -21,7 +21,7 @@ const Section = ({ title, children }: PropsWithChildren<{ title: string }>) => (
 
 const ProfilePage: NextPage = () => {
   const router = useRouter()
-  const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+  const { user } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
   const [fullName, setFullName] = useState('')
   const [displayName, setDisplayName] = useState('')
@@ -53,19 +53,10 @@ const ProfilePage: NextPage = () => {
   if (!user) return null
 
   return (
-    <div className={tw('w-screen h-screen flex flex-col')}>
+    <PageWithHeader>
       <Head>
-        <title>Settings</title>
+        <title>{titleWrapper('Profile')}</title>
       </Head>
-
-      <Header
-        title="helpwave"
-        navigation={[
-          { text: 'Dashboard', href: '/' },
-          { text: 'Contact', href: '/contact' },
-        ]}
-        actions={[<UserMenu key="user-menu" user={user} />]}
-      />
 
       <div className={tw('p-4 w-full h-full')}>
         <h1 className={tw('text-xl text-slate-700 font-medium pb-2')}>Profile</h1>
@@ -113,7 +104,7 @@ const ProfilePage: NextPage = () => {
         </Section>
 
       </div>
-    </div>
+    </PageWithHeader>
   )
 }
 

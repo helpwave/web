@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
-import { tw } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind'
 
 const noop = () => { /* noop */ }
 
@@ -10,7 +10,7 @@ type InputProps = {
    */
   id: string,
   value: string,
-  label: string,
+  label?: string,
   /**
    * @default 'text'
    */
@@ -21,18 +21,27 @@ type InputProps = {
    * That could be enforced through a union type but that seems a bit overkill
    * @default noop
    */
-  onChange?: (text: string) => void
+  onChange?: (text: string) => void,
+  className?: string
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
-const ControlledInput = ({ id, type = 'text', value, label, onChange = noop, ...restProps }: InputProps) => {
+const ControlledInput = ({
+  id,
+  type = 'text',
+  value,
+  label,
+  onChange = noop,
+  className = '',
+  ...restProps
+}: InputProps) => {
   return (
     <div className={tw('w-full')}>
-      <label htmlFor={id} className={tw('block text-sm font-medium text-gray-700')}>{label}</label>
+      {label && <label htmlFor={id} className={tw('block text-sm font-medium text-gray-700')}>{label}</label>}
       <input
         value={value}
         id={id}
         type={type}
-        className={tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500')}
+        className={tx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500', className)}
         onChange={e => onChange(e.target.value)}
         {...restProps}
       />

@@ -29,6 +29,8 @@ const configSchema = z.object({
   NEXT_PUBLIC_API_URL: z.string(),
   NEXT_PUBLIC_MOCK: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_REQUEST_LOGGING: z.literal('true').or(z.literal('false')).optional(),
+  NEXT_PUBLIC_PLAYSTORE_LINK: z.string().url().default('https://play.google.com/store/apps'),
+  NEXT_PUBLIC_APPSTORE_LINK: z.string().url().default('https://www.apple.com/de/app-store/'),
   NEXT_PUBLIC_OAUTH_ISSUER_URL: z.string().url().default('https://auth.helpwave.de'),
   NEXT_PUBLIC_OAUTH_REDIRECT_URI: z.string().url().default('https://tasks.helpwave.de/auth/callback'),
   NEXT_PUBLIC_OAUTH_CLIENT_ID: z.string().default('425f8b8d-c786-4ff7-b2bf-e52f505fb588'),
@@ -40,6 +42,10 @@ const configSchema = z.object({
   apiUrl: obj.NEXT_PUBLIC_API_URL,
   mock: obj.NEXT_PUBLIC_MOCK === 'true',
   requestLogging: obj.NEXT_PUBLIC_REQUEST_LOGGING === 'true',
+  appstoreLinks: {
+    playStore: obj.NEXT_PUBLIC_PLAYSTORE_LINK,
+    appStore: obj.NEXT_PUBLIC_APPSTORE_LINK
+  },
   oauth: {
     issuerUrl: obj.NEXT_PUBLIC_OAUTH_ISSUER_URL,
     redirectUri: obj.NEXT_PUBLIC_OAUTH_REDIRECT_URI,
@@ -61,6 +67,8 @@ const getConfig = () => {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_MOCK: process.env.NEXT_PUBLIC_MOCK,
     NEXT_PUBLIC_REQUEST_LOGGING: process.env.NEXT_PUBLIC_REQUEST_LOGGING,
+    NEXT_PUBLIC_PLAYSTORE_LINK: process.env.NEXT_PUBLIC_PLAYSTORE_LINK,
+    NEXT_PUBLIC_APPSTORE_LINK: process.env.NEXT_PUBLIC_APPSTORE_LINK,
     NEXT_PUBLIC_OAUTH_ISSUER_URL: process.env.NEXT_PUBLIC_OAUTH_ISSUER_URL,
     NEXT_PUBLIC_OAUTH_REDIRECT_URI: process.env.NEXT_PUBLIC_OAUTH_REDIRECT_URI,
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,

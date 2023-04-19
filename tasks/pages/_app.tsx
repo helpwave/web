@@ -5,6 +5,10 @@ import { tw } from '@helpwave/common/twind/index'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '@helpwave/common/twind/next/app'
 import { config } from '@helpwave/common/twind/config'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserView, MobileView } from 'react-device-detect'
+import MobileInterceptor from '../components/MobileInterceptor'
+import titleWrapper from '../utils/titleWrapper'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,24 +20,31 @@ const spaceGrotesk = SpaceGrotesk({
   variable: '--font-space-grotesk'
 })
 
+const queryClient = new QueryClient()
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <Head>
-        <title>Dashboard</title>
-        <style>{`
+    <ProvideLanguage>
+      <BrowserView>
+        <Head>
+          <title>{titleWrapper()}</title>
+          <style>{`
           :root {
             --font-inter: ${inter.style.fontFamily};
             --font-space: ${spaceGrotesk.style.fontFamily};
           }
         `}</style>
-      </Head>
-      <ProvideLanguage>
-        <div className={tw('font-sans')}>
-          <Component {...pageProps} />
-        </div>
-      </ProvideLanguage>
-    </>
+        </Head>
+        <QueryClientProvider client={queryClient}>
+          <div className={tw('font-sans')} id="headlessui-portal-root">
+            <Component {...pageProps} />
+          </div>
+        </QueryClientProvider>
+      </BrowserView>
+      <MobileView>
+        <MobileInterceptor {...pageProps} />
+      </MobileView>
+    </ProvideLanguage>
   )
 }
 

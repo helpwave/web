@@ -2,9 +2,9 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind/index'
 import type { SubTaskDTO } from '../mutations/room_mutations'
-import { TriStateCheckbox } from './user_input/TriStateCheckbox'
 import { Trash } from 'lucide-react'
 import { ToggleableInput } from './user_input/ToggleableInput'
+import { Checkbox } from './user_input/Checkbox'
 
 type SubtaskTileTranslation = {
   subtasks: string,
@@ -39,8 +39,8 @@ export const SubtaskTile = ({
   return (
     <div className={tw('flex flex-row gap-x-2 items-center')}>
       <div>
-        <TriStateCheckbox
-          onChanged={value => onChange({ ...subtask, isDone: value ?? false })}
+        <Checkbox
+          onChange={value => onChange({ ...subtask, isDone: value })}
           checked={subtask.isDone}
         />
       </div>

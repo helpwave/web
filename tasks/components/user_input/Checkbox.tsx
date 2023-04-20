@@ -1,58 +1,77 @@
 import { useState } from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import { tw, tx } from '@helpwave/common/twind'
-
-import CheckIcon from '../../icons/Check'
+import { Check, Minus } from 'lucide-react'
+import type { CheckedState } from '@radix-ui/react-checkbox'
 
 type CheckboxProps = {
   /**
    * used for the label's `for` attribute
    */
-  id: string,
-  label: string,
+  id?: string,
+  label?: string,
   /**
    * @default false
    */
-  checked: boolean,
+  checked: CheckedState,
   disabled?: boolean,
-  onChange: (checked: boolean) => void
+  onChange?: (checked: boolean) => void,
+  onChangeTristate?: (checked: CheckedState) => void
 }
 
-const ControlledCheckbox = ({ id, label, checked, disabled, onChange }: CheckboxProps) => {
+const ControlledCheckbox = ({ id, label, checked, disabled, onChange, onChangeTristate }: CheckboxProps) => {
   return (
     <div className={tw('flex justify-center items-center space-x-2')}>
       <CheckboxPrimitive.Root
-        onCheckedChange={onChange}
+        onCheckedChange={checked => {
+          if (onChangeTristate) {
+            onChangeTristate(checked)
+          }
+          if (onChange) {
+            onChange(checked === 'indeterminate' ? false : checked)
+          }
+        }}
         checked={checked}
         disabled={disabled}
         id={id}
-        className={tx('w-4 h-4 flex items-center mx-[1px] border border-gray-300 rounded focus:outline-none focus:border-indigo-500 focus:border-2 focus:w-[18px] focus:h-[18px] focus:mx-0', {
+        className={tx('w-[18px] h-[18px] flex items-center border border-2 border-gray-300 rounded outline-none focus:border-hw-primary-500', {
           'text-gray-400': disabled,
-          'bg-indigo-600 text-white': checked,
-          'bg-white text-indigo-600': !checked
+          'bg-hw-primary-300 border-hw-primary-500 hover:border-hw-primary-700 text-hw-primary-500': checked === true || checked === 'indeterminate',
+          'bg-white hover:border-gray-400 focus:hover:border-hw-primary-700': !checked
         })}
       >
         <CheckboxPrimitive.Indicator>
-          <CheckIcon width={14} height={14}/>
+          {checked === true && <Check width={14} height={14}/>}
+          {checked === 'indeterminate' && <Minus width={14} height={14}/>}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
-      <label className={tw('text-sm font-medium')} htmlFor={id}>{label}</label>
+      {label && <label className={tw('text-sm font-medium')} htmlFor={id}>{label}</label>}
     </div>
   )
 }
 
-type UncontrolledCheckboxProps = Omit<CheckboxProps, 'value'> & {
+type UncontrolledCheckboxProps = Omit<CheckboxProps, 'value' | 'checked'> & {
   /**
    * @default false
    */
-  defaultValue?: boolean
+  defaultValue?: CheckedState
 }
 
-const UncontrolledCheckbox = ({ onChange, defaultValue = false, ...props }: UncontrolledCheckboxProps) => {
+const UncontrolledCheckbox = ({
+  onChange,
+  onChangeTristate,
+  defaultValue = false,
+  ...props
+}: UncontrolledCheckboxProps) => {
   const [checked, setChecked] = useState(defaultValue)
 
-  const handleChange = (checked: boolean) => {
-    onChange(checked)
+  const handleChange = (checked: CheckedState) => {
+    if (onChangeTristate) {
+      onChangeTristate(checked)
+    }
+    if (onChange) {
+      onChange(checked === 'indeterminate' ? false : checked)
+    }
     setChecked(checked)
   }
 
@@ -60,7 +79,7 @@ const UncontrolledCheckbox = ({ onChange, defaultValue = false, ...props }: Unco
     <ControlledCheckbox
       {...props}
       checked={checked}
-      onChange={handleChange}
+      onChangeTristate={handleChange}
     />
   )
 }

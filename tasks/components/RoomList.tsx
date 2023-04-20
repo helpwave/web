@@ -10,9 +10,9 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Dropdown from '../icons/TriangleDown'
 import { Pagination } from './Pagination'
-import { TriStateCheckbox } from './user_input/TriStateCheckbox'
 import { Button } from './Button'
 import { Input } from './user_input/Input'
+import { Checkbox } from './user_input/Checkbox'
 
 type RoomListTranslation = {
   edit: string,
@@ -122,9 +122,9 @@ export const RoomList = ({
                   : {
                       select:
                       (<div className={tw('pr-4')}>
-                          <TriStateCheckbox
-                            checked={table.getIsSomePageRowsSelected() ? null : table.getIsAllRowsSelected()}
-                            onChanged={() => table.toggleAllRowsSelected()}
+                          <Checkbox
+                            checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
+                            onChange={() => table.toggleAllRowsSelected()}
                           />
                         </div>
                       ),
@@ -193,8 +193,12 @@ export const RoomList = ({
                       </button>
                     </div>
                   ),
-                  select: <TriStateCheckbox checked={cell.row.getIsSelected()}
-                                            onChanged={() => cell.row.toggleSelected()}/>
+                  select: (
+                    <Checkbox
+                      checked={cell.row.getIsSelected()}
+                      onChange={() => cell.row.toggleSelected()}
+                    />
+                  )
                 }[cell.column.id]}
               </td>
             ))}

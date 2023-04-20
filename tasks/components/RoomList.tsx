@@ -1,3 +1,6 @@
+import type {
+  Cell, CoreCell
+} from '@tanstack/react-table'
 import {
   useReactTable,
   createColumnHelper,
@@ -13,6 +16,8 @@ import { Pagination } from './Pagination'
 import { Button } from './Button'
 import { Input } from './user_input/Input'
 import { Checkbox } from './user_input/Checkbox'
+import { useState } from 'react'
+import { ConfirmDialog } from './modals/ConfirmDialog'
 
 type RoomListTranslation = {
   edit: string,
@@ -21,7 +26,10 @@ type RoomListTranslation = {
   selectAll: string,
   rooms: string,
   addRoom: string,
-  bedCount: string
+  bedCount: string,
+  dangerZoneText: string,
+  deleteConfirmText: string,
+  deleteRoom: string
 }
 
 const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
@@ -32,7 +40,10 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     selectAll: 'Select All',
     rooms: 'Rooms',
     addRoom: 'Add Room',
-    bedCount: 'Number of Beds'
+    bedCount: 'Number of Beds',
+    dangerZoneText: 'Deleting room(s) is a permanent action and cannot be undone. Be careful!',
+    deleteConfirmText: 'Do you really want to delete the selected room(s)?',
+    deleteRoom: 'Delete Room(s)',
   },
   de: {
     edit: 'Bearbeiten',
@@ -41,7 +52,10 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     selectAll: 'Alle auswählen',
     rooms: 'Räume',
     addRoom: 'Raum hinzufügen',
-    bedCount: 'Bettenanzahl'
+    bedCount: 'Bettenanzahl',
+    dangerZoneText: 'Das Löschen von Räumen ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+    deleteConfirmText: 'Wollen Sie wirklich die ausgewählten Räume löschen?',
+    deleteRoom: 'Räume löschen',
   }
 }
 
@@ -81,6 +95,14 @@ export const RoomList = ({
 }: PropsWithLanguage<RoomListTranslation, RoomListProps>) => {
   const translation = useTranslation(language, defaultRoomListTranslations)
 
+  type ConfirmDialogState = {
+      display: boolean,
+      single: CoreCell<Room, unknown> | null
+  }
+  const defaultState: ConfirmDialogState = { display: false, single: null }
+  const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
+  const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
+
   const table = useReactTable({
     data: rooms,
     columns,
@@ -102,6 +124,23 @@ export const RoomList = ({
 
   return (
     <div className={tw('flex flex-col')}>
+
+  <ConfirmDialog
+    title={translation.deleteConfirmText}
+    description={translation.dangerZoneText}
+    isOpen={stateDeletionConfirmDialog.display}
+    onCancel={() => resetDeletionConfirmDialogState()}
+    onBackgroundClick={() => resetDeletionConfirmDialogState()}
+    onConfirm={() => {
+      if (stateDeletionConfirmDialog.single) {
+        onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+      } else {
+        table.toggleAllRowsSelected(false)
+        onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+      }
+      resetDeletionConfirmDialogState()
+    }}
+  />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
         <Button onClick={addRoom} color="positive">
@@ -138,11 +177,10 @@ export const RoomList = ({
                       </div>),
                       remove:
                       (<div className={tw('flex flex-row justify-end pl-8')}>
-                        <button
-                          onClick={() => {
-                            table.toggleAllRowsSelected(false)
-                            onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-                          }}>
+                      <button onClick={() => setDeletionConfirmDialogState({
+                        display: true,
+                        single: null
+                      }) }>
                           <span>{translation.remove}</span>
                         </button>
                       </div>),
@@ -188,7 +226,10 @@ export const RoomList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => onChange(rooms.filter(value => value !== cell.row.original))}>
+                      <button onClick={() => setDeletionConfirmDialogState({
+                        display: true,
+                        single: cell
+                      }) }>
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>

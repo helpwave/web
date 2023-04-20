@@ -27,7 +27,7 @@ const defaultWardsPageTranslation = {
     organizations: 'Organization'
   },
   de: {
-    wards: 'Station',
+    wards: 'Stationen',
     organizations: 'Organisation'
   }
 }

@@ -139,7 +139,7 @@ export const KanbanBoard = ({
     : null
 
   function filterBySearch(tasks: TaskDTO[]): TaskDTO[] {
-    return tasks.filter(value => value.name.toLowerCase().indexOf(boardObject.searchValue.toLowerCase()) !== -1)
+    return tasks.filter(value => value.name.replaceAll(' ', '').toLowerCase().indexOf(boardObject.searchValue.replaceAll(' ', '').toLowerCase()) !== -1)
   }
 
   return (

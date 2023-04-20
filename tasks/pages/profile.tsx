@@ -44,7 +44,7 @@ const ProfilePage: NextPage = () => {
   }
 
   const save = () => {
-    console.log('saving the following changes', {
+    console.info('saving the following changes', {
       fullName,
       displayName
     })

@@ -21,7 +21,7 @@ const AuthCallback: NextPage = () => {
     const patientService = new PatientServicePromiseClient('https://staging-api.helpwave.de/task-svc')
     const createPatientResponse = await patientService.createPatient(createPatientRequest, { authorization: `bearer ${token}` })
 
-    console.log('patient created', createPatientResponse.getId())
+    console.info('patient created', createPatientResponse.getId())
   }
 
   return (

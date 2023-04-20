@@ -4,9 +4,8 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { CardProps } from './Card'
 import { Card } from './Card'
-import Email from '@helpwave/common/icons/Email'
+import { Edit, Mail } from 'lucide-react'
 import { AvatarGroup } from '../AvatarGroup'
-import { Edit } from 'lucide-react'
 
 type OrganizationCardTranslation = {
   edit: string,
@@ -85,7 +84,7 @@ export const OrganizationCard = ({
       </div>
       <div className={tw('flex flex-row justify-between')}>
         <div className={tw('truncate flex flex-row items-center')}>
-          <Email/>
+          <Mail/>
           <span className={tw('w-full truncate ml-2 text-sm')}>{organization.email}</span>
         </div>
         <AvatarGroup users={organization.members}/>

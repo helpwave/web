@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { tw } from '@helpwave/common/twind/index'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Add from '@helpwave/common/icons/Add'
+import { Plus as Add } from 'lucide-react'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 
 export type TaskTemplateListColumnTranslation = {

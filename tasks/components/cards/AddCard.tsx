@@ -1,5 +1,5 @@
 import { tx, tw } from '@helpwave/common/twind'
-import Add from '@helpwave/common/icons/Add'
+import { Plus as Add } from 'lucide-react'
 import type { CardProps } from './Card'
 import { Card } from './Card'
 import type { Class } from '@twind/core'

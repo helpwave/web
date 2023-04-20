@@ -8,11 +8,11 @@ import { tw } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Dropdown from '../icons/TriangleDown'
 import { Pagination } from './Pagination'
 import { Button } from './Button'
 import { Avatar } from './Avatar'
 import { Checkbox } from './user_input/Checkbox'
+import { ChevronDown as Dropdown } from 'lucide-react'
 
 // TODO replace later
 export const enum Role {

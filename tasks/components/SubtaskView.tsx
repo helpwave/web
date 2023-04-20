@@ -4,7 +4,7 @@ import { tw } from '@helpwave/common/twind/index'
 import type { SubTaskDTO } from '../mutations/room_mutations'
 import SimpleBarReact from 'simplebar-react'
 import { Button } from './Button'
-import Add from '@helpwave/common/icons/Add'
+import { Plus as Add } from 'lucide-react'
 import { SubtaskTile } from './SubtaskTile'
 
 type SubtaskViewTranslation = {

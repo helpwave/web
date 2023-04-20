@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { tw } from '@helpwave/common/twind/index'
 import HelpwaveLogo from '../icons/HelpwaveRect'
+import Link from 'next/link'
 
 export type HeaderProps = {
   title?: string,
@@ -19,7 +20,9 @@ const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: Heade
         <div className={tw('w-full relative flex items-center align-center')}>
           {withIcon && (
             <div className={tw('relative flex gap-2 align-center')}>
-              <HelpwaveLogo className={tw('mx-auto h-8 w-auto')}/>
+              <Link href="/">
+                <HelpwaveLogo className={tw('mx-auto h-8 w-auto')}/>
+              </Link>
             </div>
           )}
           {title && <span className={tw('text-xl font-medium leading-relaxed')}>{title}</span>}

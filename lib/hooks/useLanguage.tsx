@@ -28,6 +28,7 @@ export const ProvideLanguage: FunctionComponent<PropsWithChildren> = ({ children
     if (matchingBrowserLanguages.length === 0) return
 
     const firstMatch = matchingBrowserLanguages[0] as Languages
+    console.info(`Setting language to: ${firstMatch}`)
     setLanguage(firstMatch)
   }, [])
 

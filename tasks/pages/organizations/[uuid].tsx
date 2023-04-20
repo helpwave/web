@@ -24,11 +24,11 @@ type WardsPageTranslation = {
 const defaultWardsPageTranslation = {
   en: {
     wards: 'Wards',
-    organizations: 'Organizations'
+    organizations: 'Organization'
   },
   de: {
-    wards: 'Stationen',
-    organizations: 'Organisationen'
+    wards: 'Station',
+    organizations: 'Organisation'
   }
 }
 

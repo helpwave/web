@@ -3,12 +3,23 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const queryKey = 'rooms'
 
+export type TaskStatus = 'unscheduled' | 'inProgress' | 'done'
+
+export type SubTaskDTO = {
+  name: string,
+  isDone: boolean
+}
+
 export type TaskDTO = {
   id: string,
   name: string,
+  assignee: string,
   description: string,
-  status: 'unscheduled' | 'inProgress' | 'done',
-  progress: number
+  status: TaskStatus,
+  subtasks: SubTaskDTO[],
+  dueDate: string,
+  creationDate?: string,
+  isPublicVisible: boolean
 }
 
 export type PatientDTO = {
@@ -47,44 +58,68 @@ let rooms: RoomDTO[] = [
             {
               id: 'task1',
               name: 'Task 1',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              progress: 0.2
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: false
             },
             {
               id: 'task2',
               name: 'Task 2',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              progress: 0.4
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: true }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task3',
               name: 'Task 3',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              progress: 0.7
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task4',
               name: 'Task 4',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'inProgress',
-              progress: 0.2
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task5',
               name: 'Task 5',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
-              progress: 0.1
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task6',
               name: 'Task 6',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
-              progress: 0.2
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             }
           ]
         }
@@ -100,44 +135,68 @@ let rooms: RoomDTO[] = [
             {
               id: 'task1',
               name: 'Task 1',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              progress: 0.2
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: true }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task2',
               name: 'Task 2',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              progress: 0.4
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task3',
               name: 'Task 3',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              progress: 0.7
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task4',
               name: 'Task 4',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'inProgress',
-              progress: 0.2
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task5',
               name: 'Task 5',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
-              progress: 0.1
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             },
             {
               id: 'task6',
               name: 'Task 6',
+              assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
-              progress: 0.2
+              creationDate: Date(),
+              subtasks: [{ name: 'Subtask 1', isDone: false }],
+              dueDate: '01.06.2025',
+              isPublicVisible: true
             }
           ]
         }

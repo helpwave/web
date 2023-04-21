@@ -103,6 +103,7 @@ export const OrganizationDetail = ({
           setIsShowingConfirmDialog(false)
           onDelete(newOrganization)
         }}
+        type="negative"
       />
       <ColumnTitle title={translation.organizationDetail}/>
       <OrganizationForm

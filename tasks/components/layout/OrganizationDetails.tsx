@@ -8,7 +8,7 @@ import type { Role } from '../OrganizationMemberList'
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '../Button'
-import { ConfirmDialog } from '../modals/ConfirmDialog'
+import { ConfirmDialog, ConfirmDialogType } from '../modals/ConfirmDialog'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -103,6 +103,7 @@ export const OrganizationDetail = ({
           setIsShowingConfirmDialog(false)
           onDelete(newOrganization)
         }}
+        type={ConfirmDialogType.Negative}
       />
       <ColumnTitle title={translation.organizationDetail}/>
       <OrganizationForm

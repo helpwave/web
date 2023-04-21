@@ -3,6 +3,7 @@ import type { Languages } from '../hooks/useLanguage'
 import type { PropsWithLanguage } from '../hooks/useTranslation'
 import { tw, tx } from '../twind'
 import { useTranslation } from '../hooks/useTranslation'
+import { noop } from '@twind/core'
 
 type SignInButtonTranslation = {
   signIn: string
@@ -19,16 +20,18 @@ const defaultSignInButtonTranslations: Record<Languages, SignInButtonTranslation
 
 export type SignInButtonProps = {
   color?: 'dark' | 'light',
-  onClick: () => void
+  onClick?: () => void
 }
 
 export const SignInButton = ({
   language,
-  color = 'light'
+  color = 'light',
+  onClick = noop
 }: PropsWithLanguage<SignInButtonTranslation, SignInButtonProps>) => {
   const translation = useTranslation(language, defaultSignInButtonTranslations)
   return (
     <button
+      onClick={onClick}
       className={tx('flex flex-row gap-x-1 py-3 pl-3 pr-4 rounded-2xl items-center', {
         'bg-black text-white hover:bg-gray-800': color === 'dark',
         'bg-white text-black hover:bg-gray-100': color === 'light'

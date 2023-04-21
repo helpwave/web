@@ -12,11 +12,7 @@ type ConfirmDialogTranslation = {
   decline: string
 }
 
-export enum ConfirmDialogType{
-  Positive = 'Positive',
-  Neutral = 'Neutral',
-  Negative = 'Negative'
-}
+export type ConfirmDialogType = 'positive' | 'negative' | 'neutral'
 
 const defaultConfirmDialogTranslation = {
   en: {
@@ -50,10 +46,9 @@ export const ConfirmDialog = ({
   onConfirm,
   onDecline,
   onBackgroundClick,
-  type = ConfirmDialogType.Positive
+  type = 'positive'
 }: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
-  const confirmationButtonColor = type === ConfirmDialogType.Positive ? 'positive' : type === ConfirmDialogType.Negative ? 'negative' : 'neutral'
   return (
     <Modal
       isOpen={isOpen}
@@ -72,7 +67,7 @@ export const ConfirmDialog = ({
             {translation.decline}
           </Button>
         )}
-        <Button autoFocus color={confirmationButtonColor} onClick={onConfirm}>
+        <Button autoFocus color={type} onClick={onConfirm}>
           {translation.confirm}
         </Button>
       </div>

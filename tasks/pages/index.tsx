@@ -7,10 +7,31 @@ import { WardServiceClient } from '../generated/Ward_svcServiceClientPb'
 import { CreateWardRequest, GetWardRequest } from '../generated/ward_svc_pb'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
 import titleWrapper from '../utils/titleWrapper'
+import { loginWithCredentials } from '../utils/login'
+import Cookies from 'js-cookie'
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { user, logout } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+
+  // TODO: replace with ory.sh
+  loginWithCredentials({ username: '', password: '', shouldRetrieveRefreshToken: true })
+    .then(({ accessToken, refreshToken }) => {
+      if (refreshToken !== null) {
+        Cookies.set('jwt-refresh-token', refreshToken)
+      }
+      Cookies.set('jwt-access-token', accessToken)
+
+      if (router.query.back) {
+        router.back()
+      } else {
+        router.push('/')
+      }
+    })
+    .catch(err => {
+      // TODO: somehow display error messages
+      console.error(err)
+    })
 
   const getWard = async (id: string) => {
     const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc')

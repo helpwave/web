@@ -82,7 +82,7 @@ const LoginPage: NextPage<PropsWithLanguage<LoginTranslation>> = (props) => {
       })
       .catch(err => {
         // TODO: somehow display error messages
-        console.log(err)
+        console.error(err)
       })
   }
 

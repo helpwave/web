@@ -10,7 +10,7 @@ import titleWrapper from '../utils/titleWrapper'
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const { user, logout, accessToken } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+  const { user, logout } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
   const getWard = async (id: string) => {
     const wardService = new WardServiceClient('https://staging-api.helpwave.de/task-svc')
@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 
     wardService.getWard(req, null)
       .then((res) => {
-        console.log('call successful', res.getId(), res.getName())
+        console.info('call successful', res.getId(), res.getName())
       })
       .catch((err) => {
         console.error('call failed', err)
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
 
     wardService.createWard(req, null)
       .then((res) => {
-        console.log('call successful', res.getId(), res.getName())
+        console.info('call successful', res.getId(), res.getName())
       })
       .catch((err) => {
         console.error('call failed', err)
@@ -43,8 +43,6 @@ const Home: NextPage = () => {
   }
 
   const createRandomWard = async () => createWard(`random_ward_${Date.now().toString()}`)
-
-  console.log(user, accessToken)
 
   if (!user) return null
 

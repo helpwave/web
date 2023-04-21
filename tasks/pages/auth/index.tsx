@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import SignInButton from '../../components/SignInButton'
+import { SignInButton } from '@helpwave/common/components/SignInButton'
 
 const Auth: NextPage = () => {
   return (

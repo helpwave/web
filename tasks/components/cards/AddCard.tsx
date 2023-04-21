@@ -1,5 +1,5 @@
 import { tx, tw } from '@helpwave/common/twind'
-import { Plus as Add } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import type { CardProps } from './Card'
 import { Card } from './Card'
 import type { Class } from '@twind/core'
@@ -18,7 +18,7 @@ export const AddCard = ({
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tx('cursor-pointer', className)}>
       <div className={tw('flex flex-row justify-center items-center gap-x-1 text-gray-400 h-full')}>
-        <Add/>
+        <Plus/>
         {text && <span>{text}</span>}
       </div>
     </Card>

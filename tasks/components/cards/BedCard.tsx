@@ -1,5 +1,5 @@
 import { tw } from '@helpwave/common/twind'
-import { Plus as Add } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import type { CardProps } from './Card'
 import { Card } from './Card'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -41,7 +41,7 @@ export const BedCard = ({
           <span>{translation.nobody}</span>
         </div>
         <div className={tw('flex flex-1 justify-center items-center')}>
-          <Add/>
+          <Plus/>
         </div>
       </Card>
     )

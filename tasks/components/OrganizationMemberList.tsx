@@ -12,7 +12,7 @@ import { Pagination } from './Pagination'
 import { Button } from './Button'
 import { Avatar } from './Avatar'
 import { Checkbox } from './user_input/Checkbox'
-import { ChevronDown as Dropdown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 
 // TODO replace later
 export const enum Role {
@@ -122,7 +122,7 @@ export const OrganizationMemberList = ({
         <Button onClick={addUser} color="positive" className={tw('mr-2')}>
           <div className={tw('flex flex-row items-center')}>
             <span className={tw('mr-2')}>{translation.addMember}</span>
-            <Dropdown/>
+            <ChevronDown/>
           </div>
         </Button>
       </div>
@@ -145,7 +145,7 @@ export const OrganizationMemberList = ({
                     </div>),
                       role: (<div className={tw('flex flex-row justify-end items-center pr-2')}>
                       {translation.role}
-                      <Dropdown className={tw('stroke-black ml-2')}/>
+                      <ChevronDown className={tw('stroke-black ml-2')}/>
                     </div>),
                       remove: (<div className={tw('flex flex-row justify-end')}>
                       <button onClick={() => {
@@ -176,7 +176,7 @@ export const OrganizationMemberList = ({
                       <span className={tw(`mr-2 font-semibold text-right`)}>
                         {translation.roleTypes[cell.row.original.role]}
                       </span>
-                        <Dropdown className={tw('stroke-black')}/>
+                        <ChevronDown className={tw('stroke-black')}/>
                       </button>
                     </div>
                   ),

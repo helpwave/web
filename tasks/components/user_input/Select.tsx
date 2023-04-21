@@ -1,8 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import { Menu } from '@headlessui/react'
-import { ChevronDown } from 'lucide-react'
-import { ChevronUp } from 'lucide-react'
-
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 type Option<T> = {
   label: string,

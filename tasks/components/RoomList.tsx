@@ -4,15 +4,15 @@ import {
   getCoreRowModel,
   getPaginationRowModel
 } from '@tanstack/react-table'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Dropdown from '../icons/TriangleDown'
-import { Pagination } from './Pagination'
-import { Button } from './Button'
-import { Input } from './user_input/Input'
-import { Checkbox } from './user_input/Checkbox'
+import { Pagination } from '@helpwave/common/components/Pagination'
+import { Button } from '@helpwave/common/components/Button'
+import { Input } from '@helpwave/common/components/user_input/Input'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
 type RoomListTranslation = {
   edit: string,

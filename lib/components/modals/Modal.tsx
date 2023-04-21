@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '../../twind'
 import type { MouseEventHandler, PropsWithChildren } from 'react'
 
 export type ModalProps = {

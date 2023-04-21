@@ -1,7 +1,7 @@
 import { tx, tw } from '@helpwave/common/twind'
 import Add from '@helpwave/common/icons/Add'
-import type { CardProps } from './Card'
-import { Card } from './Card'
+import type { CardProps } from '@helpwave/common/components/Card'
+import { Card } from '@helpwave/common/components/Card'
 import type { Class } from '@twind/core'
 
 export type AddCardProps = CardProps & {

@@ -4,15 +4,15 @@ import {
   getCoreRowModel,
   getPaginationRowModel
 } from '@tanstack/react-table'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Dropdown from '../icons/TriangleDown'
-import { Pagination } from './Pagination'
-import { Button } from './Button'
+import { Pagination } from '@helpwave/common/components/Pagination'
+import { Button } from '@helpwave/common/components/Button'
 import { Avatar } from './Avatar'
-import { Checkbox } from './user_input/Checkbox'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
 // TODO replace later
 export const enum Role {

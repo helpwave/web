@@ -3,7 +3,18 @@ lockfileVersion: 5.4
 importers:
 
   .:
-    specifiers: {}
+    specifiers:
+      '@headlessui/react': ^1.7.13
+      '@radix-ui/react-checkbox': ^1.0.1
+      lucide-react: ^0.145.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
+      '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      lucide-react: 0.145.0_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
 
   landing-page:
     specifiers:
@@ -272,10 +283,6 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@helpwave/proto-ts/0.3.0-1f277ee.0:
-    resolution: {integrity: sha512-HOgE0KM8CU94qnNTF9zhjz6DpxW36gKjveNJ7jMHzp98MpZ/RlFRYRFdgIOHYKsN6KWC3FEjhHORgDWnD8VYmg==}
-    dev: false
-
   /@headlessui/react/1.7.13_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-9n+EQKRtD9266xIHXdY5MfiXPDfYwl7zBM7KOx2Ae3Gdgxy8QML1FkCMjq6AsOf0l6N9uvI4HcFtuFlenaldKg==}
     engines: {node: '>=10'}
@@ -286,6 +293,10 @@ packages:
       client-only: 0.0.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@helpwave/proto-ts/0.3.0-1f277ee.0:
+    resolution: {integrity: sha512-HOgE0KM8CU94qnNTF9zhjz6DpxW36gKjveNJ7jMHzp98MpZ/RlFRYRFdgIOHYKsN6KWC3FEjhHORgDWnD8VYmg==}
     dev: false
 
   /@humanwhocodes/config-array/0.10.7:
@@ -931,10 +942,6 @@ packages:
       '@types/node': 18.7.23
     dev: true
 
-  /@types/node/16.18.23:
-    resolution: {integrity: sha512-XAMpaw1s1+6zM+jn2tmw8MyaRDIJfXxqmIQIS0HfoGYPuf7dUWeiUKopwq13KFX9lEp1+THGtlaaYx39Nxr58g==}
-    dev: false
-
   /@types/lodash-es/4.17.7:
     resolution: {integrity: sha512-z0ptr6UI10VlU6l5MYhGwS4mC8DZyYer2mCoyysZtSF7p26zOX8UpbrV0YpNYLGS8K4PUFIyEr62IMFFjveSiQ==}
     dependencies:
@@ -943,6 +950,10 @@ packages:
 
   /@types/lodash/4.14.194:
     resolution: {integrity: sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==}
+    dev: false
+
+  /@types/node/16.18.23:
+    resolution: {integrity: sha512-XAMpaw1s1+6zM+jn2tmw8MyaRDIJfXxqmIQIS0HfoGYPuf7dUWeiUKopwq13KFX9lEp1+THGtlaaYx39Nxr58g==}
     dev: false
 
   /@types/node/18.7.23:

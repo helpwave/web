@@ -1,7 +1,7 @@
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '../../twind'
 import { Menu } from '@headlessui/react'
-import ChevronDown from '@helpwave/common/icons/ChevronDown'
-import ChevronUp from '@helpwave/common/icons/ChevronUp'
+import ChevronDown from '../../icons/ChevronDown'
+import ChevronUp from '../../icons/ChevronUp'
 
 type Option<T> = {
   label: string,

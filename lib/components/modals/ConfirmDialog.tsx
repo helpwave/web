@@ -1,10 +1,10 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '../../twind'
 import type { PropsWithChildren } from 'react'
 import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
 import { Button } from '../Button'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
 
 type ConfirmDialogTranslation = {
   confirm: string,

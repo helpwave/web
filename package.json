@@ -9,5 +9,12 @@
   "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/helpwave/web/issues"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.13",
+    "@radix-ui/react-checkbox": "^1.0.1",
+    "lucide-react": "^0.145.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

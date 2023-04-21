@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
-import type { CardProps } from './Card'
-import { Card } from './Card'
+import type { CardProps } from '@helpwave/common/components/Card'
+import { Card } from '@helpwave/common/components/Card'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import type { PatientDTO } from '../../mutations/room_mutations'
 

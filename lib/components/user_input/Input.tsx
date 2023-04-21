@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '../../twind'
 
 const noop = () => { /* noop */ }
 

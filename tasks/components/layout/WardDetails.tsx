@@ -4,7 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
-import { Button } from '../Button'
+import { Button } from '@helpwave/common/components/Button'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
 

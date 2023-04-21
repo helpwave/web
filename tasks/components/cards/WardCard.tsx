@@ -4,8 +4,8 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Bed from '../../icons/Bed'
 import { PillLabelBox } from '../pill/PillLabelBox'
-import type { CardProps } from './Card'
-import { Card } from './Card'
+import type { CardProps } from '@helpwave/common/components/Card'
+import { Card } from '@helpwave/common/components/Card'
 import { Edit } from 'lucide-react'
 
 type WardCardTranslation = {

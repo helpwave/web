@@ -50,7 +50,7 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
       console.error(err)
     })
 
-  const { user } = useAuth(() => router.push({pathname: '/login', query: {back: true}}))
+  const { user } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
   if (!user) return null
 

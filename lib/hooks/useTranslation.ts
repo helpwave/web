@@ -14,9 +14,12 @@ import { useLanguage, DEFAULT_LANGUAGE } from '../hooks/useLanguage'
  *              is `SomeType` which means that adding back props (like `ref` etc.)
  *              works properly
  */
-export type PropsWithLanguage<Translation, Props = Record<string, never>> = Props & {
+export type PropsWithLanguage<
+  Translation,
+  Props = Record<string, never>
+> = Props & {
   language?: Partial<Translation> | Languages
-}
+};
 
 export const useTranslation = <Language extends Record<string, unknown>>(
   languageProp: PropsWithLanguage<Language>['language'],
@@ -24,13 +27,13 @@ export const useTranslation = <Language extends Record<string, unknown>>(
 ) => {
   const { language: inferredLanguage } = useLanguage()
   if (languageProp === undefined) {
-    // TODO: force the usage of DEFAULT_LANGUAGE by preventing browser language detection
-    // TODO: this is only temporary, remove this later on
-    // return defaults[inferredLanguage]
-    return Object.assign(defaults[DEFAULT_LANGUAGE], {})
+    return defaults[inferredLanguage]
   } else if (typeof languageProp !== 'object') {
     return defaults[languageProp as Languages]
   } else {
-    return Object.assign(defaults[DEFAULT_LANGUAGE], languageProp as Partial<Language>)
+    return Object.assign(
+      defaults[DEFAULT_LANGUAGE],
+      languageProp as Partial<Language>
+    )
   }
 }

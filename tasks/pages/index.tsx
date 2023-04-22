@@ -77,7 +77,6 @@ const Home: NextPage = () => {
         </h1>
 
         <button onClick={() => logout(() => window.location.reload())}>Logout</button>
-
         <button onClick={() => getWard('9af360fc-f612-4752-9982-a596c62e85c7')}>Get ward (open console)</button>
         <button onClick={() => createRandomWard()}>Create random ward (open console)</button>
       </PageWithHeader>

@@ -25,19 +25,19 @@ const userSchema = z.object({
   // TODO: should enfore https (or localhost?)
   avatarUrl: z.string().url(),
   role: z.enum(['admin', 'user']),
-  organizations: z.array(
-    organizationSchema.merge(z.object({ role: z.string() }))
-  ),
+  organizations: z.array(organizationSchema.merge(z.object({ role: z.string() }))),
 })
 
 // TODO: we may or may not have some differentiating features between the actual user data and what is stored in the jwt
 // TODO: for the time being we will just add things here regardless but we may have to revisit this in the future
 const jwtUserPayload = userSchema
 
-export type User = z.output<typeof userSchema>;
+export type User = z.output<typeof userSchema>
 
 // TODO: decide on some sensible options
-const jwtDefaultOptions: VerifyOptions = {}
+const jwtDefaultOptions: VerifyOptions = {
+
+}
 
 // TODO: this will have to be set somehow; maybe fetch this at startup or bake it in at build time
 // TODO: could also use something like .well-known / jwks
@@ -57,15 +57,12 @@ const jwt = {
       return z.object({ user: jwtUserPayload }).safeParse(decode(jwt)).success
     }
     try {
-      const payload = verify(jwt, cert, {
-        ...jwtDefaultOptions,
-        complete: false,
-      })
+      const payload = verify(jwt, cert, { ...jwtDefaultOptions, complete: false })
       return z.object({ user: jwtUserPayload }).safeParse(payload).success
     } catch (error) {
       return false
     }
-  },
+  }
 }
 
 type UseAuthOptions = {
@@ -73,34 +70,24 @@ type UseAuthOptions = {
     accessTokenName: string,
     refreshTokenName: string
   }
-};
+}
 
 const defaultUseAuthOptions: UseAuthOptions = {
   cookies: {
     accessTokenName: 'jwt-access-token',
-    refreshTokenName: 'jwt-refresh-token',
-  },
+    refreshTokenName: 'jwt-refresh-token'
+  }
 }
 
-export const useAuth = (
-  redirect: () => void,
-  options = defaultUseAuthOptions
-) => {
+export const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const mockToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJhY2Nlc3MtdG9rZW4iLCJpc3MiOiJkZXYuYXV0aC5oZWxwd2F2ZS5kZSIsImF1ZCI6ImRldi53ZWIuaGVscHdhdmUuZGUiLCJzdWIiOjEyMzQ1Njc4OSwiZXhwIjoxMjA5NjAwLCJpYXQiOjE2ODIxNjQwMDUuOTk5LCJ1c2VyIjp7ImlkIjoiZDc3MWJlNjYtMjI1Mi00NmJkLTk2ODEtODEzYmFhYzVhZTNmIiwiZnVsbE5hbWUiOiJNYXggTXVzdGVybWFubiIsImRpc3BsYXlOYW1lIjoiTWF4IiwiZW1haWwiOiJ1c2VyQGRldi5oZWxwd2F2ZS5kZSIsImF2YXRhclVybCI6Imh0dHBzOi8vc291cmNlLmJvcmluZ2F2YXRhcnMuY29tLyIsInJvbGUiOiJhZG1pbiIsIm9yZ2FuaXphdGlvbnMiOlt7ImlkIjoiZDQ1ZGRmYzAtMWZjMy00ZmE3LTk1ZTktZWRkN2QxMzQxMDNhIiwic2hvcnROYW1lIjoiQUJDIiwibG9uZ05hbWUiOiJIb3NwaXRhbCBBQkMiLCJhdmF0YXJVcmwiOm51bGwsImNvbnRhY3RFbWFpbCI6ImluZm9AaG9zcGl0YWwtYWJjLmV4YW1wbGUiLCJyb2xlIjoiIn1dfX0.invalid'
-    Cookies.set(options.cookies.accessTokenName, mockToken)
-    Cookies.set(options.cookies.refreshTokenName, 'refreshing')
-
     const accessToken = Cookies.get(options.cookies.accessTokenName)
     const refreshToken = Cookies.get(options.cookies.refreshTokenName)
 
-    const accessTokenValid =
-      (accessToken !== undefined && jwt.verify(accessToken)) || true // TODO apply ory auth
-    const refreshTokenValid =
-      (refreshToken !== undefined && jwt.verify(refreshToken)) || true // TODO apply ory auth
+    const accessTokenValid = accessToken !== undefined && jwt.verify(accessToken)
+    const refreshTokenValid = refreshToken !== undefined && jwt.verify(refreshToken)
 
     // remove tokens if invalid
     if (accessToken !== undefined && !accessTokenValid) {
@@ -114,26 +101,21 @@ export const useAuth = (
     // success, set user data extracted from jwt (if user isn't already set)
     if (accessTokenValid) {
       if (user === null) {
-        if (accessToken) {
-          setUser(jwt.parse(accessToken))
-        }
+        setUser(jwt.parse(accessToken))
       }
       return
     }
 
     // access token expired, use refresh token to acquire new access token and set user data afterwards
     if (refreshTokenValid) {
-      if (refreshToken) {
-        loginWithRefreshToken(refreshToken).then(
-          ({ accessToken, refreshToken }) => {
-            if (refreshToken !== null) {
-              Cookies.set('jwt-refresh-token', refreshToken)
-            }
-            Cookies.set('jwt-access-token', accessToken)
-            setUser(jwt.parse(accessToken))
+      loginWithRefreshToken(refreshToken)
+        .then(({ accessToken, refreshToken }) => {
+          if (refreshToken !== null) {
+            Cookies.set('jwt-refresh-token', refreshToken)
           }
-        )
-      }
+          Cookies.set('jwt-access-token', accessToken)
+          setUser(jwt.parse(accessToken))
+        })
       return
     }
     redirect()
@@ -145,9 +127,5 @@ export const useAuth = (
     redirect()
   }
 
-  return {
-    user,
-    logout,
-    accessToken: Cookies.get(options.cookies.accessTokenName),
-  }
+  return { user, logout, accessToken: Cookies.get(options.cookies.accessTokenName) }
 }

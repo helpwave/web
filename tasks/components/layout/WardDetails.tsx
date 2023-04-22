@@ -104,6 +104,7 @@ export const WardDetail = ({
           setIsShowingConfirmDialog(false)
           onDelete(newWard)
         }}
+        confirmType="negative"
       />
       <ColumnTitle
         title={isCreatingNewOrganization ? translation.createWard : translation.updateWard}

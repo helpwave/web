@@ -78,6 +78,7 @@ export const PatientDetail = ({
           setIsShowingConfirmDialog(false)
           onDischarge(newPatient)
         }}
+        confirmType="negative"
       />
       <Modal
         isOpen={newTask !== undefined}

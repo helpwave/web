@@ -25,13 +25,15 @@ export const PageWithHeader = ({
 
   if (!user) return null
 
+  const userMenu = <UserMenu />
+
   return (
     <div className={tw('w-screen h-screen flex flex-col')}>
       <Header
         title={title}
         withIcon={withIcon}
         leftSide={[(crumbs ? <BreadCrumb crumbs={crumbs}/> : undefined), ...(leftSide ?? [])]}
-        rightSide={[...(rightSide ?? []), (<UserMenu key={user.id} user={user}/>)]}
+        rightSide={[...(rightSide ?? []), userMenu]}
       />
       {children}
     </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -99,7 +99,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         <title>{titleWrapper(translation.roomOverview)}</title>
       </Head>
       <TwoColumn
-        left={(
+        left={() => (
           <div className={tw('flex flex-col px-6 py-8')}>
             {rooms.map(room => (
               <RoomOverview
@@ -113,7 +113,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
             )}
           </div>
         )}
-        right={
+        right={() =>
           selectedBed === undefined || selectedBed.patient === undefined ?
             <div>No Room or Patient Selected</div> :
               (

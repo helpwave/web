@@ -53,15 +53,17 @@ export const LanguageModal = ({
         }
       }}
     >
-      <Select
-        value={language}
-        options={Object.entries(languageDetails).map(([tag, name]) => ({ label: name, value: tag }))}
-        onChange={(language: string) => setLanguage(language as Languages)}
-      />
-      <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-        <Button autoFocus color="positive" onClick={onDone}>
-          {translation.done}
-        </Button>
+      <div className={tw('w-[320px]')}>
+        <Select
+            value={language}
+            options={Object.entries(languageDetails).map(([tag, name]) => ({ label: name, value: tag }))}
+            onChange={(language: string) => setLanguage(language as Languages)}
+          />
+          <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
+            <Button autoFocus color="positive" onClick={onDone}>
+              {translation.done}
+            </Button>
+          </div>
       </div>
     </Modal>
   )

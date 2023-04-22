@@ -12,7 +12,7 @@ type FeatureDetailsTranslation = {
 
 const defaultFeatureDetailsTranslations: Record<Languages, FeatureDetailsTranslation> = {
   en: {
-    title: 'What\'s new in helpwave tasks'
+    title: 'What\'s new in helpwave tasks?'
   },
   de: {
     title: 'Was ist neu in helpwave tasks?'

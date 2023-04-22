@@ -7,8 +7,27 @@ import { WardServiceClient } from '../generated/Ward_svcServiceClientPb'
 import { CreateWardRequest, GetWardRequest } from '../generated/ward_svc_pb'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
 import titleWrapper from '../utils/titleWrapper'
+import Cookies from 'js-cookie'
+import { loginWithCredentials } from '../utils/login'
 
 const Home: NextPage = () => {
+  // TODO remove this on real auth
+  loginWithCredentials({
+    username: '',
+    password: '',
+    shouldRetrieveRefreshToken: true,
+  })
+    .then(({ accessToken, refreshToken }) => {
+      if (refreshToken !== null) {
+        Cookies.set('jwt-refresh-token', refreshToken)
+      }
+      Cookies.set('jwt-access-token', accessToken)
+    })
+    .catch((err) => {
+      // TODO: somehow display error messages
+      console.error(err)
+    })
+
   const router = useRouter()
   const { user, logout } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 

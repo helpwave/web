@@ -5,17 +5,17 @@ import {
   getCoreRowModel,
   getPaginationRowModel
 } from '@tanstack/react-table'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/common/twind'
+import { ChevronDown } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Dropdown from '../icons/TriangleDown'
-import { Pagination } from './Pagination'
-import { Button } from './Button'
+import { Pagination } from '@helpwave/common/components/Pagination'
+import { Button } from '@helpwave/common/components/Button'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Avatar } from './Avatar'
-import { Checkbox } from './user_input/Checkbox'
-import { ConfirmDialog } from './modals/ConfirmDialog'
-import React, { useState } from 'react'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { useState } from 'react'
 
 // TODO replace later
 export const enum Role {
@@ -158,7 +158,7 @@ export const OrganizationMemberList = ({
         <Button onClick={addUser} color="positive" className={tw('mr-2')}>
           <div className={tw('flex flex-row items-center')}>
             <span className={tw('mr-2')}>{translation.addMember}</span>
-            <Dropdown/>
+            <ChevronDown/>
           </div>
         </Button>
       </div>
@@ -181,7 +181,7 @@ export const OrganizationMemberList = ({
                     </div>),
                       role: (<div className={tw('flex flex-row justify-end items-center pr-2')}>
                       {translation.role}
-                      <Dropdown className={tw('stroke-black ml-2')}/>
+                      <ChevronDown className={tw('stroke-black ml-2')}/>
                     </div>),
                       remove: <div className={tw('flex flex-row justify-end')}>
                       <button onClick={() => {
@@ -213,7 +213,7 @@ export const OrganizationMemberList = ({
                       <span className={tw(`mr-2 font-semibold text-right`)}>
                         {translation.roleTypes[cell.row.original.role]}
                       </span>
-                        <Dropdown className={tw('stroke-black')}/>
+                        <ChevronDown className={tw('stroke-black')}/>
                       </button>
                     </div>
                   ),

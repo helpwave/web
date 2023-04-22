@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import { tw } from '@helpwave/common/twind/index'
-import { Menu, MenuItem } from './Menu'
+import { tw } from '@helpwave/common/twind'
+import { Menu, MenuItem } from '@helpwave/common/components/user_input/Menu'
 import { Avatar } from './Avatar'
 import type { User } from '../hooks/useAuth'
 
@@ -19,8 +19,8 @@ const UserMenu = ({ user }: UserMenuProps) => {
           <Avatar avatarUrl={user.avatarUrl} alt={user.displayName} size="small" />
       </div>
       )}>
-        <Link href="/profile"><MenuItem alignment="left">Profile</MenuItem></Link>
-        <Link href="/settings"><MenuItem alignment="left">Settings</MenuItem></Link>
+        <Link href="https://auth.helpwave.de/ui/settings"><MenuItem alignment="left">Profile</MenuItem></Link>
+        <Link href="https://auth.helpwave.de/ui/settings"><MenuItem alignment="left">Settings</MenuItem></Link>
       </Menu>
     </div>
   )

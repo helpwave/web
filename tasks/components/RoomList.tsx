@@ -1,23 +1,21 @@
-import type {
-  Cell, CoreCell
-} from '@tanstack/react-table'
+import type { CoreCell } from '@tanstack/react-table'
 import {
   useReactTable,
   createColumnHelper,
   getCoreRowModel,
   getPaginationRowModel
 } from '@tanstack/react-table'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Dropdown from '../icons/TriangleDown'
-import { Pagination } from './Pagination'
-import { Button } from './Button'
-import { Input } from './user_input/Input'
-import { Checkbox } from './user_input/Checkbox'
+import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
-import { ConfirmDialog } from './modals/ConfirmDialog'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { Pagination } from '@helpwave/common/components/Pagination'
+import { Button } from '@helpwave/common/components/Button'
+import { Input } from '@helpwave/common/components/user_input/Input'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
 type RoomListTranslation = {
   edit: string,
@@ -124,29 +122,29 @@ export const RoomList = ({
 
   return (
     <div className={tw('flex flex-col')}>
-
-  <ConfirmDialog
-    title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
-    description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
-    isOpen={stateDeletionConfirmDialog.display}
-    onCancel={() => resetDeletionConfirmDialogState()}
-    onBackgroundClick={() => resetDeletionConfirmDialogState()}
-    onConfirm={() => {
-      if (stateDeletionConfirmDialog.single) {
-        onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
-      } else {
-        table.toggleAllRowsSelected(false)
-        onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-      }
-      resetDeletionConfirmDialogState()
-    }}
-  />
+      <ConfirmDialog
+        title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        isOpen={stateDeletionConfirmDialog.display}
+        onCancel={() => resetDeletionConfirmDialogState()}
+        onBackgroundClick={() => resetDeletionConfirmDialogState()}
+        onConfirm={() => {
+          if (stateDeletionConfirmDialog.single) {
+            onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+          } else {
+            table.toggleAllRowsSelected(false)
+            onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+          }
+          resetDeletionConfirmDialogState()
+        }}
+        confirmType="negative"
+      />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
         <Button onClick={addRoom} color="positive">
           <div className={tw('flex flex-row items-center')}>
             <span className={tw('mr-2')}>{translation.addRoom}</span>
-            <Dropdown/>
+            <ChevronDown/>
           </div>
         </Button>
       </div>

@@ -1,10 +1,10 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { SubTaskDTO } from '../mutations/room_mutations'
 import SimpleBarReact from 'simplebar-react'
-import { Button } from './Button'
-import Add from '@helpwave/common/icons/Add'
+import { Plus } from 'lucide-react'
+import { Button } from '@helpwave/common/components/Button'
 import { SubtaskTile } from './SubtaskTile'
 
 type SubtaskViewTranslation = {
@@ -66,7 +66,7 @@ export const SubtaskView = ({
         onClick={() => onChange([...subtasks, { name: translation.newSubtask, isDone: false }])}
         className={tw('flex flex-row items-center gap-x-2 mt-4 max-w-[200px] justify-center')}
       >
-        <Add/>
+        <Plus/>
         {translation.addSubtask}
       </Button>
     </div>

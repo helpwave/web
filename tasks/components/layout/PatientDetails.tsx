@@ -4,16 +4,16 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import React, { useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
-import { Button } from '../Button'
+import { Button } from '@helpwave/common/components/Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
-import { Textarea } from '../user_input/Textarea'
+import { Textarea } from '@helpwave/common/components/user_input/Textarea'
 import type { KanbanBoardObject } from './KanabanBoard'
 import { KanbanBoard } from './KanabanBoard'
 import type { PatientDTO, TaskDTO } from '../../mutations/room_mutations'
-import { ToggleableInput } from '../user_input/ToggleableInput'
-import { Modal } from '../modals/Modal'
+import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
+import { Modal } from '@helpwave/common/components/modals/Modal'
 import { TaskDetailView } from './TaskDetailView'
-import { ConfirmDialog } from '../modals/ConfirmDialog'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -78,6 +78,7 @@ export const PatientDetail = ({
           setIsShowingConfirmDialog(false)
           onDischarge(newPatient)
         }}
+        confirmType="negative"
       />
       <Modal
         isOpen={newTask !== undefined}

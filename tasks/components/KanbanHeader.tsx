@@ -1,9 +1,9 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import TriangleDown from '../icons/TriangleDown'
-import { Input } from './user_input/Input'
+import { Input } from '@helpwave/common/components/user_input/Input'
 
 type KanbanHeaderTranslation = {
   tasks: string,

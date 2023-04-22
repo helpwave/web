@@ -1,16 +1,18 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '../../twind'
 import type { PropsWithChildren } from 'react'
 import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
 import { Button } from '../Button'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
 
 type ConfirmDialogTranslation = {
   confirm: string,
   cancel: string,
   decline: string
 }
+
+export type ConfirmDialogType = 'positive' | 'negative' | 'neutral'
 
 const defaultConfirmDialogTranslation = {
   en: {
@@ -30,7 +32,8 @@ type ConfirmDialogProps = ModalProps & {
   requireAnswer?: boolean,
   onCancel?: () => void,
   onConfirm: () => void,
-  onDecline?: () => void
+  onDecline?: () => void,
+  confirmType?: ConfirmDialogType
 }
 
 export const ConfirmDialog = ({
@@ -43,6 +46,7 @@ export const ConfirmDialog = ({
   onConfirm,
   onDecline,
   onBackgroundClick,
+  confirmType = 'positive'
 }: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
   return (
@@ -63,7 +67,7 @@ export const ConfirmDialog = ({
             {translation.decline}
           </Button>
         )}
-        <Button autoFocus color="positive" onClick={onConfirm}>
+        <Button autoFocus color={confirmType} onClick={onConfirm}>
           {translation.confirm}
         </Button>
       </div>

@@ -19,8 +19,8 @@ const UserMenu = ({ user }: UserMenuProps) => {
           <Avatar avatarUrl={user.avatarUrl} alt={user.displayName} size="small" />
       </div>
       )}>
-        <Link href="/profile"><MenuItem alignment="left">Profile</MenuItem></Link>
-        <Link href="/settings"><MenuItem alignment="left">Settings</MenuItem></Link>
+        <Link href="https://auth.helpwave.de/ui/settings"><MenuItem alignment="left">Profile</MenuItem></Link>
+        <Link href="https://auth.helpwave.de/ui/settings"><MenuItem alignment="left">Settings</MenuItem></Link>
       </Menu>
     </div>
   )

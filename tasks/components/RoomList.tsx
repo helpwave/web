@@ -122,24 +122,23 @@ export const RoomList = ({
 
   return (
     <div className={tw('flex flex-col')}>
-
-  <ConfirmDialog
-    title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
-    description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
-    isOpen={stateDeletionConfirmDialog.display}
-    onCancel={() => resetDeletionConfirmDialogState()}
-    onBackgroundClick={() => resetDeletionConfirmDialogState()}
-    onConfirm={() => {
-      if (stateDeletionConfirmDialog.single) {
-        onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
-      } else {
-        table.toggleAllRowsSelected(false)
-        onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-      }
-      resetDeletionConfirmDialogState()
-    }}
-    confirmType="negative"
-  />
+      <ConfirmDialog
+        title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        isOpen={stateDeletionConfirmDialog.display}
+        onCancel={() => resetDeletionConfirmDialogState()}
+        onBackgroundClick={() => resetDeletionConfirmDialogState()}
+        onConfirm={() => {
+          if (stateDeletionConfirmDialog.single) {
+            onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+          } else {
+            table.toggleAllRowsSelected(false)
+            onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+          }
+          resetDeletionConfirmDialogState()
+        }}
+        confirmType="negative"
+      />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
         <Button onClick={addRoom} color="positive">

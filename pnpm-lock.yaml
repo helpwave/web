@@ -3,18 +3,7 @@ lockfileVersion: 5.4
 importers:
 
   .:
-    specifiers:
-      '@headlessui/react': ^1.7.13
-      '@radix-ui/react-checkbox': ^1.0.1
-      lucide-react: ^0.145.0
-      react: ^18.2.0
-      react-dom: ^18.2.0
-    dependencies:
-      '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
-      '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
-      lucide-react: 0.145.0_react@18.2.0
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
+    specifiers: {}
 
   landing-page:
     specifiers:
@@ -77,6 +66,8 @@ importers:
 
   lib:
     specifiers:
+      '@headlessui/react': ^1.7.13
+      '@radix-ui/react-checkbox': ^1.0.1
       '@twind/core': ^1.1.2
       '@twind/preset-autoprefix': ^1.0.6
       '@twind/preset-tailwind': ^1.1.2
@@ -84,12 +75,22 @@ importers:
       '@twind/preset-typography': ^1.0.6
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.11
+      csstype: ^3.0.10
+      lucide-react: ^0.145.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
     dependencies:
+      '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@twind/core': 1.1.2
       '@twind/preset-autoprefix': 1.0.6_@twind+core@1.1.2
       '@twind/preset-tailwind': 1.1.2_@twind+core@1.1.2
       '@twind/preset-tailwind-forms': 1.1.0_irpfsybkxj5xoet7df4dxv3g5i
       '@twind/preset-typography': 1.0.6_@twind+core@1.1.2
+      csstype: 3.1.1
+      lucide-react: 0.145.0_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.11

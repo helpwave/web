@@ -33,7 +33,7 @@ type ConfirmDialogProps = ModalProps & {
   onCancel?: () => void,
   onConfirm: () => void,
   onDecline?: () => void,
-  confirmType: ConfirmDialogType
+  confirmType?: ConfirmDialogType
 }
 
 export const ConfirmDialog = ({

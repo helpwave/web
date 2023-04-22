@@ -13,7 +13,7 @@ import type { PatientDTO, TaskDTO } from '../../mutations/room_mutations'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { TaskDetailView } from './TaskDetailView'
-import { ConfirmDialog } from '../modals/ConfirmDialog'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 
 type PatientDetailTranslation = {
   patientDetails: string,

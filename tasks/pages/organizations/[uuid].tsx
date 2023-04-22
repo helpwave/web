@@ -81,14 +81,14 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
       </Head>
 
       <TwoColumn
-        left={(
+        left={() => (
           <WardDisplay
             selectedWard={selectedWard}
             wards={data as WardDTO[]}
             onSelectionChange={setSelectedWard}
           />
         )}
-        right={(
+        right={() => (
           <WardDetail
             key={selectedWard === undefined ? 'unselected' : selectedWard.name}
             ward={selectedWard}

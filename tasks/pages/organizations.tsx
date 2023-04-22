@@ -15,6 +15,7 @@ import {
 } from '../mutations/organization_mutations'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
 import titleWrapper from '../utils/titleWrapper'
+import { DiscardChangesDialog } from '@helpwave/common/components/modals/DiscardChangesDialog'
 
 type OrganizationsPageTranslation = {
   organizations: string
@@ -29,6 +30,17 @@ const defaultOrganizationsPageTranslation = {
   }
 }
 
+export type OrganizationFormType = {
+  isValid: boolean,
+  hasChanges: boolean,
+  organization: OrganizationDTO
+}
+
+type DiscardChangesInfo = {
+  isShowing: boolean,
+  organization: OrganizationDTO | undefined
+}
+
 type WardDTO = {
   name: string
 }
@@ -40,7 +52,7 @@ type OrgMember = {
   role: Role
 }
 
-type OrganizationDTO = {
+export type OrganizationDTO = {
   id: string,
   shortName: string,
   longName: string,
@@ -48,6 +60,16 @@ type OrganizationDTO = {
   isVerified: boolean,
   wards: WardDTO[],
   members: OrgMember[]
+}
+
+const emptyOrganization: OrganizationDTO = {
+  id: '',
+  shortName: '',
+  longName: '',
+  email: '',
+  isVerified: false,
+  wards: [],
+  members: []
 }
 
 const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsPageTranslation>) => {
@@ -58,6 +80,38 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
   const updateMutation = useUpdateMutation(setSelectedOrganization)
   const deleteMutation = useDeleteMutation(setSelectedOrganization)
   const { isLoading, isError, data } = useOrganizationQuery()
+  const [discardDialogInfo, setDiscardDialogInfo] = useState<DiscardChangesInfo>({ isShowing: false, organization: undefined })
+  const isCreatingNewOrganization = selectedOrganization === undefined
+  const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>({
+    isValid: !isCreatingNewOrganization,
+    hasChanges: false,
+    organization: selectedOrganization ?? emptyOrganization
+  })
+
+  const changeOrganization = (organization: OrganizationDTO | undefined) => {
+    if (selectedOrganization === undefined) {
+      setSelectedOrganization(organization)
+      setOrganizationForm({
+        isValid: organization !== undefined,
+        hasChanges: false,
+        organization: organization ?? emptyOrganization
+      })
+      return
+    }
+    // Same ID don't change anything
+    if (selectedOrganization.id === organization?.id) return
+
+    if (organizationForm.hasChanges) {
+      setDiscardDialogInfo({ isShowing: true, organization })
+    } else {
+      setSelectedOrganization(organization)
+      setOrganizationForm({
+        isValid: organization !== undefined,
+        hasChanges: false,
+        organization: organization ?? emptyOrganization
+      })
+    }
+  }
 
   // TODO add view for loading
   if (isLoading) {
@@ -76,21 +130,45 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
       <Head>
         <title>{titleWrapper(translation.organizations)}</title>
       </Head>
+      <DiscardChangesDialog
+        isOpen={discardDialogInfo.isShowing}
+        onCancel={() => {
+          setDiscardDialogInfo({ isShowing: false, organization: undefined })
+        }}
+        onDontSave={() => {
+          setSelectedOrganization(discardDialogInfo.organization)
+          setDiscardDialogInfo({ isShowing: false, organization: undefined })
+        }}
+        onSave={() => {
+          if (!organizationForm.isValid) {
+            setDiscardDialogInfo({ isShowing: false, organization: undefined })
+          } else {
+            setSelectedOrganization(discardDialogInfo.organization)
+            setOrganizationForm({
+              isValid: discardDialogInfo.organization !== undefined,
+              hasChanges: false,
+              organization: discardDialogInfo.organization ?? emptyOrganization
+            })
+            setDiscardDialogInfo({ isShowing: false, organization: undefined })
+          }
+        }}
+      />
       <TwoColumn
         left={(
           <OrganizationDisplay
             selectedOrganization={selectedOrganization}
             organizations={data as OrganizationDTO[]}
-            onSelectionChange={setSelectedOrganization}
+            onSelectionChange={changeOrganization}
           />
         )}
         right={(
           <OrganizationDetail
             key={selectedOrganization === undefined ? 'unselected' : selectedOrganization.id}
-            organization={selectedOrganization}
+            organizationForm={organizationForm}
             onCreate={createMutation.mutate}
             onUpdate={updateMutation.mutate}
             onDelete={deleteMutation.mutate}
+            setOrganization={setOrganizationForm}
           />
         )}
       />

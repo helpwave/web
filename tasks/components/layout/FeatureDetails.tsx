@@ -15,7 +15,7 @@ const defaultFeatureDetailsTranslations: Record<Languages, FeatureDetailsTransla
     title: 'What\'s new in helpwave tasks'
   },
   de: {
-    title: 'Änderungen in helpwave tasks'
+    title: 'Was ist neu in helpwave tasks?'
   }
 }
 

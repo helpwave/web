@@ -7,8 +7,8 @@ import { OrganizationForm } from '../OrganizationForm'
 import type { Role } from '../OrganizationMemberList'
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
-import { Button } from '../Button'
-import { ConfirmDialog } from '../modals/ConfirmDialog'
+import { Button } from '@helpwave/common/components/Button'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,

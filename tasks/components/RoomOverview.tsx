@@ -1,8 +1,8 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { PatientCard } from './cards/PatientCard'
 import { BedCard } from './cards/BedCard'
 import type { BedDTO, RoomDTO } from '../mutations/room_mutations'
-import { noop } from './user_input/Input'
+import { noop } from '@helpwave/common/components/user_input/Input'
 
 export type RoomOverviewProps = {
   room: RoomDTO,

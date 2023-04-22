@@ -2,9 +2,9 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { CardProps } from './Card'
-import { Card } from './Card'
 import { Edit, Mail } from 'lucide-react'
+import type { CardProps } from '@helpwave/common/components/Card'
+import { Card } from '@helpwave/common/components/Card'
 import { AvatarGroup } from '../AvatarGroup'
 
 type OrganizationCardTranslation = {

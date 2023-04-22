@@ -4,10 +4,10 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
-import { Button } from '../Button'
+import { Button } from '@helpwave/common/components/Button'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
-import { ConfirmDialog } from '../modals/ConfirmDialog'
 
 type WardDetailTranslation = {
   updateWard: string,

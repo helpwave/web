@@ -1,10 +1,10 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { SubTaskDTO } from '../mutations/room_mutations'
 import { Trash } from 'lucide-react'
-import { ToggleableInput } from './user_input/ToggleableInput'
-import { Checkbox } from './user_input/Checkbox'
+import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
 type SubtaskTileTranslation = {
   subtasks: string,

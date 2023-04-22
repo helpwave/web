@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
+    "@headlessui/react": "^1.7.13",
+    "@radix-ui/react-checkbox": "^1.0.1",
     "@twind/core": "^1.1.2",
     "@twind/preset-autoprefix": "^1.0.6",
     "@twind/preset-tailwind": "^1.1.2",
     "@twind/preset-tailwind-forms": "^1.1.0",
-    "@twind/preset-typography": "^1.0.6"
+    "@twind/preset-typography": "^1.0.6",
+    "csstype": "^3.0.10",
+    "lucide-react": "^0.145.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '../../twind'
 import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 

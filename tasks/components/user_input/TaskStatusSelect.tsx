@@ -1,5 +1,5 @@
 import type { TaskStatus } from '../../mutations/room_mutations'
-import { Select } from './Select'
+import { Select } from '@helpwave/common/components/user_input/Select'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 

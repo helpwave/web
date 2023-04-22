@@ -1,10 +1,10 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { SubTaskDTO } from '../mutations/room_mutations'
 import SimpleBarReact from 'simplebar-react'
-import { Button } from './Button'
 import { Plus } from 'lucide-react'
+import { Button } from '@helpwave/common/components/Button'
 import { SubtaskTile } from './SubtaskTile'
 
 type SubtaskViewTranslation = {

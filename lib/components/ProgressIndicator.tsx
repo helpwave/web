@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '../twind'
 
 export type ProgressIndicatorProps = {
   /*

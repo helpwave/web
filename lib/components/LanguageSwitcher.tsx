@@ -1,7 +1,7 @@
-import { tw } from '@helpwave/common/twind/index'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { tw } from '../twind'
+import { useTranslation } from '../hooks/useTranslation'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Languages } from '../hooks/useLanguage'
 
 type LanguageSwitcherTranslation = {
   toggleLanguage: string

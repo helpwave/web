@@ -1,7 +1,7 @@
 import { tw } from '@helpwave/common/twind'
-import type { CardProps } from './Card'
-import { Card } from './Card'
-import { ProgressIndicator } from '../ProgressIndicator'
+import type { CardProps } from '@helpwave/common/components/Card'
+import { Card } from '@helpwave/common/components/Card'
+import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator'
 import type { SubTaskDTO } from '../../mutations/room_mutations'
 
 type TaskDTO = {

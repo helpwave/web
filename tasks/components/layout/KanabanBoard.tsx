@@ -19,7 +19,7 @@ import { tw } from '@helpwave/common/twind'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import { noop } from '../user_input/Input'
+import { noop } from '@helpwave/common/components/user_input/Input'
 import type { TaskDTO, TaskStatus } from '../../mutations/room_mutations'
 
 export type KanbanBoardObject = {

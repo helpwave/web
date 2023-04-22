@@ -1,8 +1,8 @@
-import { tw, tx } from '@helpwave/common/twind/index'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { tw, tx } from '../twind'
 import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
+import type { PropsWithLanguage } from '../hooks/useTranslation'
+import { useTranslation } from '../hooks/useTranslation'
+import type { Languages } from '../hooks/useLanguage'
 
 type PaginationTranslation = {
   of: string

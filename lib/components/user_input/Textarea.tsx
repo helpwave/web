@@ -1,4 +1,4 @@
-import { css, tw, tx } from '@helpwave/common/twind'
+import { tw, tx, css } from '../../twind'
 import type { TextareaHTMLAttributes } from 'react'
 
 type TextareaProps = {

@@ -1,9 +1,9 @@
 import { tw } from '@helpwave/common/twind'
-import { Plus } from 'lucide-react'
-import type { CardProps } from './Card'
-import { Card } from './Card'
+import type { CardProps } from '@helpwave/common/components/Card'
+import { Card } from '@helpwave/common/components/Card'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Plus } from 'lucide-react'
 
 type BedCardTranslation = {
   nobody: string

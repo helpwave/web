@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import { tw } from '@helpwave/common/twind/index'
-import { Menu, MenuItem } from './Menu'
+import { tw } from '@helpwave/common/twind'
+import { Menu, MenuItem } from '@helpwave/common/components/user_input/Menu'
 import { Avatar } from './Avatar'
 import type { User } from '../hooks/useAuth'
 

@@ -99,8 +99,7 @@ const buildAuthorizationUrl = (params: {
 
 export const getAuthorizationUrl = async (): Promise<string> => {
   if (config.fakeTokenEnable) {
-    const url = new URL(window.location.toString())
-    url.pathname = '/auth/callback'
+    const url = new URL(config.oauth.redirectUri)
     url.searchParams.set('fake_token', config.fakeToken)
     return url.toString()
   }

@@ -12,7 +12,7 @@ import { Button } from '../components/Button'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import HelpwaveLogo from '../icons/Helpwave'
+import HelpwaveLogo from '@helpwave/common/icons/Helpwave'
 import titleWrapper from '../utils/titleWrapper'
 
 type LoginTranslation = {

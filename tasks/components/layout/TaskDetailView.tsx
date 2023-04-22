@@ -1,7 +1,7 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import type { TaskDTO } from '../../mutations/room_mutations'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { ToggleableInput } from '../user_input/ToggleableInput'
 import { Textarea } from '../user_input/Textarea'
 import { Select } from '../user_input/Select'
@@ -9,6 +9,7 @@ import { TaskStatusSelect } from '../user_input/TaskStatusSelect'
 import { Button } from '../Button'
 import { SubtaskView } from '../SubtaskView'
 import { X } from 'lucide-react'
+import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -150,7 +151,7 @@ export const TaskDetailView = ({
             <div className={tw('flex flex-col gap-y-8 mt-16')}>
               <div className={tw('flex flex-col')}>
                 <span className={tw('font-bold text-gray-800 mb-1')}>{translation.creationTime}</span>
-                <span>{task.creationDate.toString()}</span>
+                <TimeDisplay date={new Date(task.creationDate)} />
               </div>
               <Button color="accent" onClick={onFinishClick}>{translation.update}</Button>
             </div>

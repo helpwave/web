@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { tw } from '@helpwave/common/twind/index'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Add from '@helpwave/common/icons/Add'
+import { Plus } from 'lucide-react'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 
 export type TaskTemplateListColumnTranslation = {
@@ -75,7 +75,7 @@ export const TaskTemplateListColumn = ({
       )}
       <div onClick={addNewTask}
            className={tw('flex flex-row w-full h-16 rounded-md border-2 hover:border-hw-primary-700 items-center justify-center cursor-pointer mt-4')}>
-        <Add />
+        <Plus/>
         <span className={tw('ml-2')}>{translation.addNewTaskTemplate}</span>
       </div>
     </div>

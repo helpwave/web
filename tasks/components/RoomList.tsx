@@ -11,7 +11,7 @@ import { tw } from '@helpwave/common/twind/index'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Dropdown from '../icons/TriangleDown'
+import { ChevronDown } from 'lucide-react'
 import { Pagination } from './Pagination'
 import { Button } from './Button'
 import { Input } from './user_input/Input'
@@ -147,7 +147,7 @@ export const RoomList = ({
         <Button onClick={addRoom} color="positive">
           <div className={tw('flex flex-row items-center')}>
             <span className={tw('mr-2')}>{translation.addRoom}</span>
-            <Dropdown/>
+            <ChevronDown/>
           </div>
         </Button>
       </div>

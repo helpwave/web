@@ -61,13 +61,13 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
         <title>{titleWrapper()}</title>
       </Head>
       <TwoColumn
-        left={(
+        left={() => (
           <DashboardDisplay
             organizations={organizations}
             wards={wards}
           />
         )}
-        right={(
+        right={() => (
           <FeatureDetails
             features={[
               {

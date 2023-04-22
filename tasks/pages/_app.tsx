@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from '@next/font/google'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '@helpwave/common/twind/next/app'
 import { config } from '@helpwave/common/twind/config'
@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         `}</style>
         </Head>
         <QueryClientProvider client={queryClient}>
-          <div className={tw('font-sans')} id="headlessui-portal-root">
+          <div className={tw('font-sans')} id="modal-root">
             <Component {...pageProps} />
           </div>
         </QueryClientProvider>

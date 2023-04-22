@@ -7,6 +7,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
+import { ConfirmDialog } from '../modals/ConfirmDialog'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -79,6 +80,8 @@ export const WardDetail = ({
   const translation = useTranslation(language, defaultWardDetailTranslations)
   const isCreatingNewOrganization = ward === undefined
 
+  const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
+
   const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
   const [newWard, setNewWard] = useState<WardDTO>(ward ?? {
     id: '',
@@ -91,6 +94,18 @@ export const WardDetail = ({
 
   return (
     <div className={tw('flex flex-col py-4 px-6 w-5/6')}>
+      <ConfirmDialog
+        title={translation.deleteConfirmText}
+        description={translation.dangerZoneText}
+        isOpen={isShowingConfirmDialog}
+        onCancel={() => setIsShowingConfirmDialog(false)}
+        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+        onConfirm={() => {
+          setIsShowingConfirmDialog(false)
+          onDelete(newWard)
+        }}
+        confirmType="negative"
+      />
       <ColumnTitle
         title={isCreatingNewOrganization ? translation.createWard : translation.updateWard}
         subtitle={isCreatingNewOrganization ? translation.createWardSubtitle : translation.updateWardSubtitle}
@@ -113,7 +128,7 @@ export const WardDetail = ({
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <span className={tw('font-space text-lg font-bold')}>{translation.dangerZone}</span>
         <span className={tw('text-gray-400')}>{translation.dangerZoneText}</span>
-        <button onClick={() => confirm(translation.deleteConfirmText) && onDelete(newWard)}
+        <button onClick={() => setIsShowingConfirmDialog(true)}
                 className={tw('text-hw-negative-400 font-bold text-left')}>{translation.deleteWard}</button>
       </div>
       <div className={tw('flex flex-row justify-end mt-6')}>

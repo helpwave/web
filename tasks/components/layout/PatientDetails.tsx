@@ -13,29 +13,30 @@ import type { PatientDTO, TaskDTO } from '../../mutations/room_mutations'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { TaskDetailView } from './TaskDetailView'
+import { ConfirmDialog } from '../modals/ConfirmDialog'
 
 type PatientDetailTranslation = {
   patientDetails: string,
   notes: string,
-  dischargePatient: string,
   saveChanges: string,
-  dischargeConfirm: string
+  dischargeConfirmText: string,
+  dischargePatient: string
 }
 
 const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
   en: {
     patientDetails: 'Patient Details',
     notes: 'Notes',
-    dischargePatient: 'Discharge Patient',
     saveChanges: 'Save Changes',
-    dischargeConfirm: 'Do you really want to discharge the patient?'
+    dischargeConfirmText: 'Do you really want to discharge the patient?',
+    dischargePatient: 'Discharge Patient',
   },
   de: {
     patientDetails: 'Patienten Details',
     notes: 'Notizen',
-    dischargePatient: 'Patienten entlassen',
     saveChanges: 'Speichern',
-    dischargeConfirm: 'Willst du den Patienten wirklich entlassen?'
+    dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
+    dischargePatient: 'Patienten entlassen',
   }
 }
 
@@ -55,6 +56,7 @@ export const PatientDetail = ({
   onUpdate,
   onDischarge
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
+  const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const translation = useTranslation(language, defaultPatientDetailTranslations)
   const [newPatient, setNewPatient] = useState<PatientDTO>(patient)
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
@@ -67,6 +69,17 @@ export const PatientDetail = ({
 
   return (
     <div className={tw('flex flex-col py-4 px-6')}>
+      <ConfirmDialog
+        title={translation.dischargeConfirmText}
+        isOpen={isShowingConfirmDialog}
+        onCancel={() => setIsShowingConfirmDialog(false)}
+        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+        onConfirm={() => {
+          setIsShowingConfirmDialog(false)
+          onDischarge(newPatient)
+        }}
+        confirmType="negative"
+      />
       <Modal
         isOpen={newTask !== undefined}
         onBackgroundClick={() => setNewTask(undefined)}
@@ -136,11 +149,7 @@ export const PatientDetail = ({
       />
       <div className={tw('flex flex-row justify-end mt-8')}>
         <div>
-          <Button color="negative" onClick={() => {
-            if (confirm(translation.dischargeConfirm)) {
-              onDischarge(newPatient)
-            }
-          }} className={tw('mr-4')}>{translation.dischargePatient}</Button>
+          <Button color="negative" onClick={() => setIsShowingConfirmDialog(true)} className={tw('mr-4')}>{translation.dischargePatient}</Button>
           <Button color="accent" onClick={() => onUpdate(newPatient)}>{translation.saveChanges}</Button>
         </div>
       </div>

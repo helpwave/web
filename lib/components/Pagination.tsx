@@ -1,11 +1,8 @@
 import { tw, tx } from '../twind'
+import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
 import type { PropsWithLanguage } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import type { Languages } from '../hooks/useLanguage'
-import ChevronLast from '../icons/ChevronLast'
-import ChevronLeft from '../icons/ChevronLeft'
-import ChevronFirst from '../icons/ChevronFirst'
-import ChevronRight from '../icons/ChevronRight'
 
 type PaginationTranslation = {
   of: string

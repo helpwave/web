@@ -1,7 +1,6 @@
 import { tw, tx } from '../../twind'
 import { Menu } from '@headlessui/react'
-import ChevronDown from '../../icons/ChevronDown'
-import ChevronUp from '../../icons/ChevronUp'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 type Option<T> = {
   label: string,

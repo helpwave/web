@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { tw } from '@helpwave/common/twind'
-import HelpwaveLogo from '../../lib/icons/HelpwaveRect'
 import Link from 'next/link'
+import HelpwaveLogo from '@helpwave/common/icons/HelpwaveRect'
 
 export type HeaderProps = {
   title?: string,

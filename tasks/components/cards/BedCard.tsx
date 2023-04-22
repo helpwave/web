@@ -1,5 +1,4 @@
 import { tw } from '@helpwave/common/twind'
-import Add from '@helpwave/common/icons/Add'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -41,7 +40,7 @@ export const BedCard = ({
           <span>{translation.nobody}</span>
         </div>
         <div className={tw('flex flex-1 justify-center items-center')}>
-          <Add/>
+          <Plus/>
         </div>
       </Card>
     )

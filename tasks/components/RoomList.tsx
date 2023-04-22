@@ -1,3 +1,4 @@
+import type { CoreCell } from '@tanstack/react-table'
 import {
   useReactTable,
   createColumnHelper,
@@ -8,7 +9,9 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Dropdown from '../icons/TriangleDown'
+import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Pagination } from '@helpwave/common/components/Pagination'
 import { Button } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user_input/Input'
@@ -19,9 +22,12 @@ type RoomListTranslation = {
   remove: string,
   deselectAll: string,
   selectAll: string,
+  room: string,
   rooms: string,
   addRoom: string,
-  bedCount: string
+  bedCount: string,
+  dangerZoneText: (single: boolean) => string,
+  deleteConfirmText: (single: boolean) => string
 }
 
 const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
@@ -30,18 +36,24 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     remove: 'Remove',
     deselectAll: 'Deselect All',
     selectAll: 'Select All',
+    room: 'Room',
     rooms: 'Rooms',
     addRoom: 'Add Room',
-    bedCount: 'Number of Beds'
+    bedCount: 'Number of Beds',
+    dangerZoneText: (single) => `Deleting ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms} is a permanent action and cannot be undone. Be careful!`,
+    deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms}?`,
   },
   de: {
     edit: 'Bearbeiten',
     remove: 'Entfernen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
+    room: 'Raum',
     rooms: 'Räume',
     addRoom: 'Raum hinzufügen',
-    bedCount: 'Bettenanzahl'
+    bedCount: 'Bettenanzahl',
+    dangerZoneText: (single) => `Das Löschen von ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
+    deleteConfirmText: (single) => `Wollen Sie wirklich die ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
   }
 }
 
@@ -81,6 +93,14 @@ export const RoomList = ({
 }: PropsWithLanguage<RoomListTranslation, RoomListProps>) => {
   const translation = useTranslation(language, defaultRoomListTranslations)
 
+  type ConfirmDialogState = {
+      display: boolean,
+      single: CoreCell<Room, unknown> | null
+  }
+  const defaultState: ConfirmDialogState = { display: false, single: null }
+  const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
+  const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
+
   const table = useReactTable({
     data: rooms,
     columns,
@@ -102,12 +122,30 @@ export const RoomList = ({
 
   return (
     <div className={tw('flex flex-col')}>
+
+  <ConfirmDialog
+    title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+    description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+    isOpen={stateDeletionConfirmDialog.display}
+    onCancel={() => resetDeletionConfirmDialogState()}
+    onBackgroundClick={() => resetDeletionConfirmDialogState()}
+    onConfirm={() => {
+      if (stateDeletionConfirmDialog.single) {
+        onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+      } else {
+        table.toggleAllRowsSelected(false)
+        onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+      }
+      resetDeletionConfirmDialogState()
+    }}
+    confirmType="negative"
+  />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
         <Button onClick={addRoom} color="positive">
           <div className={tw('flex flex-row items-center')}>
             <span className={tw('mr-2')}>{translation.addRoom}</span>
-            <Dropdown/>
+            <ChevronDown/>
           </div>
         </Button>
       </div>
@@ -138,11 +176,10 @@ export const RoomList = ({
                       </div>),
                       remove:
                       (<div className={tw('flex flex-row justify-end pl-8')}>
-                        <button
-                          onClick={() => {
-                            table.toggleAllRowsSelected(false)
-                            onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-                          }}>
+                      <button onClick={() => setDeletionConfirmDialogState({
+                        display: true,
+                        single: null
+                      }) }>
                           <span>{translation.remove}</span>
                         </button>
                       </div>),
@@ -188,7 +225,10 @@ export const RoomList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => onChange(rooms.filter(value => value !== cell.row.original))}>
+                      <button onClick={() => setDeletionConfirmDialogState({
+                        display: true,
+                        single: cell
+                      }) }>
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>

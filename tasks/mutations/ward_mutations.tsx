@@ -8,7 +8,7 @@ type Room = {
   name: string
 }
 
-type WardDTO = {
+export type WardDTO = {
   id: string,
   name: string,
   rooms: Room[],
@@ -18,7 +18,7 @@ type WardDTO = {
 }
 
 // TODO remove once backend is implemented
-let wards: WardDTO[] = [
+export let wards: WardDTO[] = [
   {
     id: 'ward1',
     name: 'Cardiology',

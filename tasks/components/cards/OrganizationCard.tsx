@@ -55,7 +55,7 @@ export const OrganizationCard = ({
   isSelected,
   organization,
   onTileClick = () => undefined,
-  onEditClick = () => undefined
+  onEditClick
 }: PropsWithLanguage<OrganizationCardTranslation, OrganizationCardProps>) => {
   const translation = useTranslation(language, defaultOrganizationCardTranslations)
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
@@ -65,21 +65,24 @@ export const OrganizationCard = ({
           className={tw('group cursor-pointer justify-between flex flex-col')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <span className={tw('font-bold font-space')}>{`${organization.longName} (${organization.shortName})`}</span>
-        <button
-          onClick={event => {
-            onEditClick()
-            event.stopPropagation()
-          }}
-          className={tw('hidden group-hover:block')}
-        >
-          <Edit color="black" size={24} />
-        </button>
+        {onEditClick && (
+          <button
+            onClick={event => {
+              onEditClick()
+              event.stopPropagation()
+            }}
+            className={tw('hidden group-hover:block')}
+          >
+            <Edit color="black" size={24}/>
+          </button>
+        )}
       </div>
       <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm')}>
         {organization.wards.slice(0, maxShownWards).map(value => value.name).join(', ')}
         {notDisplayedWards > 0 && (
-<span
-          className={tw('ml-1')}>{`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}</span>
+          <span className={tw('ml-1')}>
+            {`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}
+          </span>
         )}
       </div>
       <div className={tw('flex flex-row justify-between')}>

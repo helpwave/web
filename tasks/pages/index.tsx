@@ -13,6 +13,8 @@ import { FeatureDetails } from '../components/layout/FeatureDetails'
 import { DashboardDisplay } from '../components/layout/DashboardDisplay'
 import { organizations } from '../mutations/organization_mutations'
 import { wards } from '../mutations/ward_mutations'
+import Cookies from 'js-cookie'
+import { loginWithCredentials } from '../utils/login'
 
 type DashboardTranslation = {
   dashboard: string
@@ -30,11 +32,28 @@ const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
 const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslation>) => {
   const translation = useTranslation(language, defaultDashboardTranslations)
   const router = useRouter()
-  const { user } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+
+  // TODO remove this on real auth
+  loginWithCredentials({
+    username: '',
+    password: '',
+    shouldRetrieveRefreshToken: true,
+  })
+    .then(({ accessToken, refreshToken }) => {
+      if (refreshToken !== null) {
+        Cookies.set('jwt-refresh-token', refreshToken)
+      }
+      Cookies.set('jwt-access-token', accessToken)
+    })
+    .catch((err) => {
+      // TODO: somehow display error messages
+      console.error(err)
+    })
+
+  const { user } = useAuth(() => router.push({pathname: '/login', query: {back: true}}))
 
   if (!user) return null
 
-  // TODO: proper navigation links in header (what should they be?)
   return (
     <PageWithHeader
       leftSide={[<span key="headerTitle" className={tw('font-space font-bold text-xl')}>{translation.dashboard}</span>]}

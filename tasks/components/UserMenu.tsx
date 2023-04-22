@@ -39,7 +39,7 @@ export const UserMenu = ({
   const auth = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
 
   const user = auth.user
-  if (!user) return
+  if (!user) return <></>
 
   const logout = () => auth.logout(() => router.replace('/'))
 
@@ -56,7 +56,7 @@ export const UserMenu = ({
           <Avatar avatarUrl={user.avatarUrl} alt={user.displayName} size="small" />
       </div>
       )}>
-        <Link href={settingsURL}><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
+        <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
         <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem alignment="left">{translation.language}</MenuItem></div>
         <div className="cursor-pointer" onClick={logout}><MenuItem alignment="left">{translation.signOut}</MenuItem></div>
       </Menu>

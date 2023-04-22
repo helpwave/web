@@ -33,7 +33,7 @@ type ConfirmDialogProps = ModalProps & {
   onCancel?: () => void,
   onConfirm: () => void,
   onDecline?: () => void,
-  type: ConfirmDialogType
+  confirmType: ConfirmDialogType
 }
 
 export const ConfirmDialog = ({
@@ -46,7 +46,7 @@ export const ConfirmDialog = ({
   onConfirm,
   onDecline,
   onBackgroundClick,
-  type = 'positive'
+  confirmType = 'positive'
 }: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
   return (
@@ -67,7 +67,7 @@ export const ConfirmDialog = ({
             {translation.decline}
           </Button>
         )}
-        <Button autoFocus color={type} onClick={onConfirm}>
+        <Button autoFocus color={confirmType} onClick={onConfirm}>
           {translation.confirm}
         </Button>
       </div>

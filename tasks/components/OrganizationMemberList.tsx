@@ -152,6 +152,7 @@ export const OrganizationMemberList = ({
           }
           resetDeletionConfirmDialogState()
         }}
+        confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>

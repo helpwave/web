@@ -21,9 +21,9 @@ export const FeatureDisplay = ({ feature }: FeatureDisplayProps) => {
         <span className={tw('text-hw-primary-700 text-xl font-bold font-space')}>{feature.title}</span>
       </div>
       <div className={tw('flex flex-col gap-y-2 flex-1')}>
-        {feature.description.map(value => value instanceof URL ?
-          <img src={value.href} alt="" className={tw('h-auto w-full rounded-xl')}/> :
-          <span className={tw('font-medium')}>{value}</span>)
+        {feature.description.map((value, index) => value instanceof URL ?
+          <img key={index} src={value.href} alt="" className={tw('h-auto w-full rounded-xl')}/> :
+          <span key={index} className={tw('font-medium')}>{value}</span>)
         }
       </div>
     </Link>

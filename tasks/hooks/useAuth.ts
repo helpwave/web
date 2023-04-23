@@ -1,131 +1,96 @@
 import { useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
-import type { VerifyOptions } from 'jsonwebtoken'
-import { decode, verify } from 'jsonwebtoken'
 import { z } from 'zod'
-import { loginWithRefreshToken } from '../utils/login'
+import Cookies from 'js-cookie'
 import { getConfig } from '../utils/config'
+import { getAuthorizationUrl } from '../utils/oauth'
 
 const config = getConfig()
 
-const organizationSchema = z.object({
-  id: z.string().uuid(),
-  shortName: z.string(),
-  longName: z.string(),
-  avatarUrl: z.string().url().nullable(), // TODO: make this required once we have a default avatar, should enforce https (or localhost) as well
-  contactEmail: z.string().email().nullable(), // TODO: in the rfc this is currently named "contact"
-})
+export const COOKIE_ID_TOKEN_KEY = 'id-token'
+export const COOKIE_REFRESH_TOKEN_KEY = 'refresh-token'
+export const LOCALSTORAGE_HREF_AFTER_AUTH_KEY = 'href-after-auth'
 
-const userSchema = z.object({
-  id: z.string().uuid(),
-  fullName: z.string(),
-  displayName: z.string(),
-  email: z.string().email(),
-  // TODO: in the distant future we might want to use s3 or something, this could require a change here possibly?;
-  // TODO: should enfore https (or localhost?)
-  avatarUrl: z.string().url(),
-  role: z.enum(['admin', 'user']),
-  organizations: z.array(organizationSchema.merge(z.object({ role: z.string() }))),
-})
+const IdTokenClaimsSchema = z.object({
+  sub: z.string().uuid(),
+  email: z.string().email()
+}).transform((obj) => ({
+  id: obj.sub,
+  email: obj.email,
+  name: 'Max Mustermann',
+  nickname: 'max.mustermann',
+  avatarUrl: `https://source.boringavatars.com/beam`
+}))
 
-// TODO: we may or may not have some differentiating features between the actual user data and what is stored in the jwt
-// TODO: for the time being we will just add things here regardless but we may have to revisit this in the future
-const jwtUserPayload = userSchema
+export type User = z.output<typeof IdTokenClaimsSchema>
 
-export type User = z.output<typeof userSchema>
-
-// TODO: decide on some sensible options
-const jwtDefaultOptions: VerifyOptions = {
-
+const parseJwtPayload = (token: string) => {
+  const payloadBase64 = token.split('.')[1]
+  const decodedPayload = Buffer.from(payloadBase64, 'base64').toString()
+  return JSON.parse(decodedPayload)
 }
 
-// TODO: this will have to be set somehow; maybe fetch this at startup or bake it in at build time
-// TODO: could also use something like .well-known / jwks
-const cert = ''
-
-const jwt = {
-  parse: (jwt: string): User => {
-    const decoded = decode(jwt, jwtDefaultOptions)
-    const parsed = z.object({ user: jwtUserPayload }).safeParse(decoded)
-    if (decoded === null || !parsed.success) {
-      throw new Error('Failed to decode token')
-    }
-    return parsed.data.user
-  },
-  verify: (jwt: string): boolean => {
-    if (config.mock) {
-      return z.object({ user: jwtUserPayload }).safeParse(decode(jwt)).success
-    }
-    try {
-      const payload = verify(jwt, cert, { ...jwtDefaultOptions, complete: false })
-      return z.object({ user: jwtUserPayload }).safeParse(payload).success
-    } catch (error) {
-      return false
-    }
+const tokenToUser = (token: string): User | null => {
+  let decoded: string
+  if (config.fakeTokenEnable) {
+    decoded = JSON.parse(Buffer.from(config.fakeToken, 'base64').toString())
+  } else {
+    decoded = parseJwtPayload(token)
   }
+  const parsed = IdTokenClaimsSchema.safeParse(decoded)
+  return parsed.success ? parsed.data : null
 }
 
-type UseAuthOptions = {
-  cookies: {
-    accessTokenName: string,
-    refreshTokenName: string
+const isJwtExpired = (token: string) => {
+  if (config.fakeTokenEnable) {
+    return tokenToUser(token) === null
   }
+  const payloadBase64 = token.split('.')[1]
+  const decodedPayload = Buffer.from(payloadBase64, 'base64').toString()
+  const parsedPayload = JSON.parse(decodedPayload)
+  const exp = parsedPayload.exp
+  return (Date.now() >= exp * 1000)
 }
 
-const defaultUseAuthOptions: UseAuthOptions = {
-  cookies: {
-    accessTokenName: 'jwt-access-token',
-    refreshTokenName: 'jwt-refresh-token'
+/**
+ * The useAuth hook resolves the current user by handling the auth process.
+ * In combination with '/auth/callback', this hook handles all
+ * the redirections necessary to resolve the user.
+ * The flow gets started when rendering the hook.
+ *
+ * TODO: Refresh tokens
+ * TODO: Adopt more dynamic claims (name, nickname)
+ */
+export const useAuth = () => {
+  const [user, setUser] = useState<User>()
+
+  const signOut = () => {
+    Cookies.remove(COOKIE_ID_TOKEN_KEY)
+    Cookies.remove(COOKIE_REFRESH_TOKEN_KEY)
+    window.location.reload()
   }
-}
-
-export const useAuth = (redirect: () => void, options = defaultUseAuthOptions) => {
-  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const accessToken = Cookies.get(options.cookies.accessTokenName)
-    const refreshToken = Cookies.get(options.cookies.refreshTokenName)
+    const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
 
-    const accessTokenValid = accessToken !== undefined && jwt.verify(accessToken)
-    const refreshTokenValid = refreshToken !== undefined && jwt.verify(refreshToken)
+    const idTokenValid = idToken !== undefined && !isJwtExpired(idToken)
 
-    // remove tokens if invalid
-    if (accessToken !== undefined && !accessTokenValid) {
-      Cookies.remove(options.cookies.accessTokenName)
-    }
+    if (!idTokenValid) Cookies.remove(COOKIE_ID_TOKEN_KEY)
 
-    if (refreshToken !== undefined && !refreshTokenValid) {
-      Cookies.remove(options.cookies.refreshTokenName)
-    }
-
-    // success, set user data extracted from jwt (if user isn't already set)
-    if (accessTokenValid) {
-      if (user === null) {
-        setUser(jwt.parse(accessToken))
-      }
+    if (idTokenValid) {
+      const user = tokenToUser(idToken)
+      if (!user) throw new Error('Cannot parse idToken to user')
+      setUser(user)
       return
     }
 
-    // access token expired, use refresh token to acquire new access token and set user data afterwards
-    if (refreshTokenValid) {
-      loginWithRefreshToken(refreshToken)
-        .then(({ accessToken, refreshToken }) => {
-          if (refreshToken !== null) {
-            Cookies.set('jwt-refresh-token', refreshToken)
-          }
-          Cookies.set('jwt-access-token', accessToken)
-          setUser(jwt.parse(accessToken))
-        })
-      return
-    }
-    redirect()
-  }, [redirect, options, user, setUser])
+    // Both tokens are invalid. User needs to sign in again.
+    getAuthorizationUrl()
+      .then((url) => {
+        // Store current href into localStorage. Will be used by /auth/callback.
+        window.localStorage.setItem(LOCALSTORAGE_HREF_AFTER_AUTH_KEY, window.location.href)
+        window.location.assign(url)
+      })
+  }, [])
 
-  const logout = (redirect: () => void) => {
-    Cookies.remove(options.cookies.accessTokenName)
-    Cookies.remove(options.cookies.refreshTokenName)
-    redirect()
-  }
-
-  return { user, logout, accessToken: Cookies.get(options.cookies.accessTokenName) }
+  return { user, signOut }
 }

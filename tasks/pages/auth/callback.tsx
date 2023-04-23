@@ -1,34 +1,24 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
 import { handleCodeExchange } from '../../utils/oauth'
-import { PatientServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_grpc_web_pb'
-import { CreatePatientRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
+import { COOKIE_ID_TOKEN_KEY, LOCALSTORAGE_HREF_AFTER_AUTH_KEY } from '../../hooks/useAuth'
+import Cookies from 'js-cookie'
+import { useEffect } from 'react'
 
 const AuthCallback: NextPage = () => {
-  const [token, setToken] = useState<string>()
-
   useEffect(() => {
-    if (token) return
-    handleCodeExchange().then(setToken)
-  }, [])
+    handleCodeExchange().then((tokens) => {
+      Cookies.set(COOKIE_ID_TOKEN_KEY, tokens.id_token)
 
-  const doReq = async () => {
-    if (!token) return
+      const hrefAfterAuth = window.localStorage.getItem(LOCALSTORAGE_HREF_AFTER_AUTH_KEY)
+      if (hrefAfterAuth) {
+        window.localStorage.removeItem(LOCALSTORAGE_HREF_AFTER_AUTH_KEY)
+        // .replace: The user should not be able to navigate back to the auth callback
+        window.location.replace(hrefAfterAuth)
+      }
+    })
+  })
 
-    const createPatientRequest = new CreatePatientRequest()
-    createPatientRequest.setHumanReadableIdentifier('Patient A')
-
-    const patientService = new PatientServicePromiseClient('https://staging-api.helpwave.de/task-svc')
-    const createPatientResponse = await patientService.createPatient(createPatientRequest, { authorization: `bearer ${token}` })
-
-    console.info('patient created', createPatientResponse.getId())
-  }
-
-  return (
-    <>
-      { token && <p onClick={doReq}>{token}</p> }
-    </>
-  )
+  return null
 }
 
 export default AuthCallback

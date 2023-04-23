@@ -8,6 +8,9 @@ import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { getConfig } from '../utils/config';
+
+const config = getConfig()
 
 type UserMenuTranslation = {
   profile: string,
@@ -37,8 +40,8 @@ export const UserMenu = ({
 
   if (!user) return null
 
-  // TODO update this when introducing proper auth
-  const settingsURL = 'https://auth.helpwave.de/ui/settings'
+  // The settings path "/ui/settings" is hardcoded. It depends strongly on the implementation of the Ory UI.
+  const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
 
   return (
     <div className={tw('relative')}>

@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
+import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
 import type { BedDTO, RoomDTO } from '../../mutations/room_mutations'
-import { useDischargeMutation, useRoomQuery, useUpdateMutation } from '../../mutations/room_mutations'
+import {
+  useRoomQuery,
+  useDischargeMutation,
+  useUpdateMutation
+} from '../../mutations/room_mutations'
 import { RoomOverview } from '../../components/RoomOverview'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
-import { useAuth } from '../../hooks/useAuth'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -44,7 +48,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const [selectedBed, setSelectedBed] = useState<BedDTO | undefined>(undefined)
 
   const router = useRouter()
-  const { user } = useAuth()
+  const { user } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
   const { uuid } = router.query
   const wardUUID = uuid as string
   const organizationUUID = 'org1' // TODO get this information somewhere
@@ -95,7 +99,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         <title>{titleWrapper(translation.roomOverview)}</title>
       </Head>
       <TwoColumn
-        left={(
+        left={() => (
           <div className={tw('flex flex-col px-6 py-8')}>
             {rooms.map(room => (
               <RoomOverview
@@ -109,7 +113,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
             )}
           </div>
         )}
-        right={
+        right={() =>
           selectedBed === undefined || selectedBed.patient === undefined ?
             <div>No Room or Patient Selected</div> :
               (

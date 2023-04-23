@@ -19,7 +19,7 @@ export const TaskCard = ({
   isSelected = false,
   onTileClick = () => undefined
 }: TaskCardProps) => {
-  const progress = task.subtasks.length === 0 ? 0 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
+  const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('bg-white')}>
       <div className={tw('flex flex-row justify-between w-full')}>

@@ -42,13 +42,13 @@ const tokenToUser = (token: string): User | null => {
 
 const isJwtExpired = (token: string) => {
   if (config.fakeTokenEnable) {
-    return !!tokenToUser(token)
+    return tokenToUser(token) === null
   }
   const payloadBase64 = token.split('.')[1]
   const decodedPayload = Buffer.from(payloadBase64, 'base64').toString()
   const parsedPayload = JSON.parse(decodedPayload)
   const exp = parsedPayload.exp
-  return true
+  return (Date.now() >= exp * 1000)
 }
 
 /**
@@ -72,7 +72,7 @@ export const useAuth = () => {
   useEffect(() => {
     const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
 
-    const idTokenValid = idToken !== undefined && isJwtExpired(idToken)
+    const idTokenValid = idToken !== undefined && !isJwtExpired(idToken)
 
     if (!idTokenValid) Cookies.remove(COOKIE_ID_TOKEN_KEY)
 

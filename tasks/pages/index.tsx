@@ -61,6 +61,8 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
         <title>{titleWrapper()}</title>
       </Head>
       <TwoColumn
+        initialLayoutState="smallSidebar"
+        disableResize={false}
         left={() => (
           <DashboardDisplay
             organizations={organizations}

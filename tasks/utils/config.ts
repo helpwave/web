@@ -35,7 +35,7 @@ const configSchema = z.object({
   NEXT_PUBLIC_OAUTH_REDIRECT_URI: z.string().url().default('https://staging-tasks.helpwave.de/auth/callback'),
   NEXT_PUBLIC_OAUTH_CLIENT_ID: z.string().default('425f8b8d-c786-4ff7-b2bf-e52f505fb588'),
   NEXT_PUBLIC_OAUTH_SCOPES: z.string().default('openid,offline_access,email'),
-  NEXT_PUBLIC_FAKE_TOKEN_ENABLE: z.literal('true').or(z.literal('false')).default('false'),
+  NEXT_PUBLIC_FAKE_TOKEN_ENABLE: z.literal('true').or(z.literal('false')).default('true'),
   NEXT_PUBLIC_FAKE_TOKEN: z.object({ sub: z.string().uuid(), email: z.string().email() }).default({ sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984', email: 'testine.test@helpwave.de' })
 }).transform(obj => ({
   env: obj.NODE_ENV,

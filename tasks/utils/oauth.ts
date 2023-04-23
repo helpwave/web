@@ -125,11 +125,11 @@ export const getAuthorizationUrl = async (): Promise<string> => {
   }).toString()
 }
 
-export const handleCodeExchange = async (): Promise<string> => {
+export const handleCodeExchange = async (): Promise<{ id_token: string, refresh_token: string }> => {
   if (config.fakeTokenEnable) {
     const currentUrl = new URL(window.location.toString())
     const fakeToken = currentUrl.searchParams.get('fake_token')
-    if (fakeToken) return fakeToken
+    if (fakeToken) return { id_token: fakeToken, refresh_token: fakeToken }
   }
 
   // issuerUrl -> WORK AROUND - Ory does not set the "iss"-Claim of the ID Token to "auth.helpwave.de". We will ask Ory about this.
@@ -146,5 +146,7 @@ export const handleCodeExchange = async (): Promise<string> => {
   const result = await processAuthorizationCodeOpenIDResponse(authorizationServer, client, response)
   if (isOAuth2Error(result)) throw new Error(`OAuth error: ${result.error}`)
 
-  return result.id_token
+  if (!result.refresh_token) throw new Error('No refresh_token in token response')
+
+  return { id_token: result.id_token, refresh_token: result.refresh_token }
 }

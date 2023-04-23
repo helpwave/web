@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { tw } from '@helpwave/common/twind'
 import { Menu, MenuItem } from '@helpwave/common/components/user_input/Menu'
 import { Avatar } from './Avatar'
-import type { User } from '../hooks/useAuth'
+import type { User } from '../hooks/useAuthOld'
 
 type UserMenuProps = {
   user: User

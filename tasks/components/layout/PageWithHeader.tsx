@@ -3,10 +3,11 @@ import type { HeaderProps } from '../Header'
 import { Header } from '../Header'
 import type { PropsWithChildren } from 'react'
 import { useRouter } from 'next/router'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuthOld } from '../../hooks/useAuthOld'
 import { UserMenu } from '../UserMenu'
 import type { Crumb } from '../BreadCrumb'
 import { BreadCrumb } from '../BreadCrumb'
+import { useAuth } from '../../hooks/useAuth'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[]
@@ -20,8 +21,7 @@ export const PageWithHeader = ({
   rightSide,
   crumbs
 }: PropsWithChildren<PageWithHeaderProps>) => {
-  const router = useRouter()
-  const user = useAuth(() => router.push({ pathname: '/login', query: { back: true } })).user
+  const user = useAuth().user
 
   if (!user) return null
 

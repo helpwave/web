@@ -15,7 +15,10 @@ const IdTokenClaimsSchema = z.object({
   email: z.string().email()
 }).transform((obj) => ({
   id: obj.sub,
-  email: obj.email
+  email: obj.email,
+  name: 'Max Mustermann',
+  nickname: 'max.mustermann',
+  avatarUrl: `https://source.boringavatars.com/beam`
 }))
 
 export type User = z.output<typeof IdTokenClaimsSchema>
@@ -34,13 +37,11 @@ const tokenToUser = (token: string): User | null => {
     decoded = parseJwtPayload(token)
   }
   const parsed = IdTokenClaimsSchema.safeParse(decoded)
-  console.log(parsed)
   return parsed.success ? parsed.data : null
 }
 
 const isJwtExpired = (token: string) => {
   if (config.fakeTokenEnable) {
-    console.log(tokenToUser(token), token)
     return !!tokenToUser(token)
   }
   const payloadBase64 = token.split('.')[1]
@@ -50,6 +51,15 @@ const isJwtExpired = (token: string) => {
   return true
 }
 
+/**
+ * The useAuth hook resolves the current user by handling the auth process.
+ * In combination with '/auth/callback', this hook handles all
+ * the redirections necessary to resolve the user.
+ * The flow gets started when rendering the hook.
+ *
+ * TODO: Refresh tokens
+ * TODO: Adopt more dynamic claims (name, nickname)
+ */
 export const useAuth = () => {
   const [user, setUser] = useState<User>()
 

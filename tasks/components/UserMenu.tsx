@@ -46,8 +46,8 @@ export const UserMenu = ({
 
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick} className={tw('flex gap-2 relative items-center group cursor-pointer select-none')}>
-          <div className={tw('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.email}</div>
-          <Avatar avatarUrl="" alt={user.email} size="small" />
+          <div className={tw('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.name}</div>
+          <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small" />
       </div>
       )}>
         <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>

@@ -2,8 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { HeaderProps } from '../Header'
 import { Header } from '../Header'
 import type { PropsWithChildren } from 'react'
-import { useRouter } from 'next/router'
-import { useAuthOld } from '../../hooks/useAuthOld'
 import { UserMenu } from '../UserMenu'
 import type { Crumb } from '../BreadCrumb'
 import { BreadCrumb } from '../BreadCrumb'
@@ -21,7 +19,7 @@ export const PageWithHeader = ({
   rightSide,
   crumbs
 }: PropsWithChildren<PageWithHeaderProps>) => {
-  const user = useAuth().user
+  const { user } = useAuth()
 
   if (!user) return null
 

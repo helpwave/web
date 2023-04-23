@@ -48,7 +48,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const [selectedBed, setSelectedBed] = useState<BedDTO | undefined>(undefined)
 
   const router = useRouter()
-  const { user } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+  const { user } = useAuth()
   const { uuid } = router.query
   const wardUUID = uuid as string
   const organizationUUID = 'org1' // TODO get this information somewhere

@@ -62,7 +62,7 @@ export type OrganizationDTO = {
   members: OrgMember[]
 }
 
-const emptyOrganization: OrganizationDTO = {
+export const emptyOrganization: OrganizationDTO = {
   id: '',
   shortName: '',
   longName: '',
@@ -74,23 +74,44 @@ const emptyOrganization: OrganizationDTO = {
 
 const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsPageTranslation>) => {
   const translation = useTranslation(language, defaultOrganizationsPageTranslation)
-  const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | undefined>(undefined)
-
-  const createMutation = useCreateMutation(setSelectedOrganization)
-  const updateMutation = useUpdateMutation(setSelectedOrganization)
-  const deleteMutation = useDeleteMutation(setSelectedOrganization)
-  const { isLoading, isError, data } = useOrganizationQuery()
-  const [discardDialogInfo, setDiscardDialogInfo] = useState<DiscardChangesInfo>({ isShowing: false, organization: undefined })
-  const isCreatingNewOrganization = selectedOrganization === undefined
-  const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>({
-    isValid: !isCreatingNewOrganization,
-    hasChanges: false,
-    organization: selectedOrganization ?? emptyOrganization
+  const [discardDialogInfo, setDiscardDialogInfo] = useState<DiscardChangesInfo>({
+    isShowing: false,
+    organization: emptyOrganization
   })
 
-  const changeOrganization = (organization: OrganizationDTO | undefined) => {
-    if (selectedOrganization === undefined) {
-      setSelectedOrganization(organization)
+  const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>({
+    isValid: false,
+    hasChanges: false,
+    organization: emptyOrganization
+  })
+  const createMutation = useCreateMutation(organization => {
+    setOrganizationForm({
+      isValid: true,
+      hasChanges: false,
+      organization: discardDialogInfo.organization !== undefined ? discardDialogInfo.organization : organization ?? emptyOrganization
+    })
+    setDiscardDialogInfo({ isShowing: false, organization: undefined })
+  })
+  const updateMutation = useUpdateMutation(organization => {
+    setOrganizationForm({
+      isValid: true,
+      hasChanges: false,
+      organization: discardDialogInfo.organization !== undefined ? discardDialogInfo.organization : organization ?? emptyOrganization
+    })
+    setDiscardDialogInfo({ isShowing: false, organization: undefined })
+  })
+  const deleteMutation = useDeleteMutation(() => {
+    setOrganizationForm({
+      isValid: false,
+      hasChanges: false,
+      organization: emptyOrganization
+    })
+    setDiscardDialogInfo({ isShowing: false, organization: undefined })
+  })
+  const { isLoading, isError, data } = useOrganizationQuery()
+
+  const changeOrganization = (organization: OrganizationDTO) => {
+    if (organizationForm.organization.id === '' && !organizationForm.hasChanges) {
       setOrganizationForm({
         isValid: organization !== undefined,
         hasChanges: false,
@@ -99,12 +120,11 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
       return
     }
     // Same ID don't change anything
-    if (selectedOrganization.id === organization?.id) return
+    if (organizationForm.organization.id === organization?.id) return
 
     if (organizationForm.hasChanges) {
       setDiscardDialogInfo({ isShowing: true, organization })
     } else {
-      setSelectedOrganization(organization)
       setOrganizationForm({
         isValid: organization !== undefined,
         hasChanges: false,
@@ -136,34 +156,41 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
           setDiscardDialogInfo({ isShowing: false, organization: undefined })
         }}
         onDontSave={() => {
-          setSelectedOrganization(discardDialogInfo.organization)
+          setOrganizationForm({
+            isValid: discardDialogInfo.organization !== undefined && discardDialogInfo.organization?.id !== '',
+            hasChanges: false,
+            organization: discardDialogInfo.organization ?? emptyOrganization
+          })
           setDiscardDialogInfo({ isShowing: false, organization: undefined })
         }}
         onSave={() => {
           if (!organizationForm.isValid) {
             setDiscardDialogInfo({ isShowing: false, organization: undefined })
           } else {
-            setSelectedOrganization(discardDialogInfo.organization)
+            if (organizationForm.organization.id === '') {
+              createMutation.mutate(organizationForm.organization)
+            } else {
+              updateMutation.mutate(organizationForm.organization)
+            }
             setOrganizationForm({
-              isValid: discardDialogInfo.organization !== undefined,
+              isValid: discardDialogInfo.organization !== undefined && discardDialogInfo.organization?.id !== '',
               hasChanges: false,
               organization: discardDialogInfo.organization ?? emptyOrganization
             })
-            setDiscardDialogInfo({ isShowing: false, organization: undefined })
           }
         }}
       />
       <TwoColumn
         left={() => (
           <OrganizationDisplay
-            selectedOrganization={selectedOrganization}
+            selectedOrganization={organizationForm.organization}
             organizations={data as OrganizationDTO[]}
             onSelectionChange={changeOrganization}
           />
         )}
         right={() => (
           <OrganizationDetail
-            key={selectedOrganization === undefined ? 'unselected' : selectedOrganization.id}
+            key={organizationForm.organization.id}
             organizationForm={organizationForm}
             onCreate={createMutation.mutate}
             onUpdate={updateMutation.mutate}

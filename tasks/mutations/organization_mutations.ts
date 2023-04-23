@@ -1,5 +1,4 @@
 import { Role } from '../components/OrganizationMemberList'
-import type { Dispatch, SetStateAction } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const queryKey = 'organizations'
@@ -105,7 +104,7 @@ export const useOrganizationQuery = () => {
   })
 }
 
-export const useUpdateMutation = (setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => {
+export const useUpdateMutation = (setSelectedOrganization: (organization: OrganizationDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organization: OrganizationDTO) => {
@@ -132,7 +131,7 @@ export const useUpdateMutation = (setSelectedOrganization: Dispatch<SetStateActi
   })
 }
 
-export const useCreateMutation = (setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => {
+export const useCreateMutation = (setSelectedOrganization: (organization: OrganizationDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organization) => {
@@ -159,7 +158,7 @@ export const useCreateMutation = (setSelectedOrganization: Dispatch<SetStateActi
   })
 }
 
-export const useDeleteMutation = (setSelectedOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>) => {
+export const useDeleteMutation = (setSelectedOrganization: (organization: OrganizationDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organization) => {

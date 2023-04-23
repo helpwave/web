@@ -59,7 +59,7 @@ export const OrganizationDetail = ({
   setOrganization
 }: PropsWithLanguage<OrganizationDetailTranslation, OrganizationDetailProps>) => {
   const translation = useTranslation(language, defaultOrganizationDetailTranslations)
-  const isCreatingNewOrganization = organizationForm.organization.id !== undefined
+  const isCreatingNewOrganization = organizationForm.organization.id === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
 
   return (

@@ -47,7 +47,7 @@ export const WardCard = ({
   isSelected,
   ward,
   onTileClick = () => undefined,
-  onEditClick = () => undefined
+  onEditClick
 }: PropsWithLanguage<WardCardTranslation, WardCardProps>) => {
   const translation = useTranslation(language, defaultWardCardTranslations)
   const numberOfBeds = ward.rooms.map(value => value.bedCount).reduce((previousValue, currentValue) => currentValue + previousValue, 0)
@@ -57,15 +57,17 @@ export const WardCard = ({
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
       <div className={tw('flex flex-row justify-between w-full')}>
         <span className={tw('font-bold font-space')}>{ward.name}</span>
-        <button
-          onClick={event => {
-            onEditClick()
-            event.stopPropagation()
-          }}
-          className={tw('hidden group-hover:block')}
-        >
-          <Edit color="black" size={24} />
-        </button>
+        {onEditClick && (
+          <button
+            onClick={event => {
+              onEditClick()
+              event.stopPropagation()
+            }}
+            className={tw('hidden group-hover:block')}
+          >
+            <Edit color="black" size={24}/>
+          </button>
+        )}
       </div>
       <div className={tx('text-left my-1', { 'text-gray-400 text-sm': !hasRooms })}>
         {hasRooms ? ward.rooms.map(value => value.name).join(', ') : translation.noRoomsYet}

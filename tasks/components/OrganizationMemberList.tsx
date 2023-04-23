@@ -1,3 +1,4 @@
+import type { CoreCell } from '@tanstack/react-table'
 import {
   useReactTable,
   createColumnHelper,
@@ -13,6 +14,8 @@ import { Pagination } from '@helpwave/common/components/Pagination'
 import { Button } from '@helpwave/common/components/Button'
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Avatar } from './Avatar'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { useState } from 'react'
 
 // TODO replace later
 export const enum Role {
@@ -26,10 +29,13 @@ type OrganizationMemberListTranslation = {
   deselectAll: string,
   selectAll: string,
   members: string,
+  member: string,
   addMember: string,
   saveChanges: string,
   role: string,
-  roleTypes: Record<Role, string>
+  roleTypes: Record<Role, string>,
+  dangerZoneText: (single: boolean) => string,
+  deleteConfirmText: (single: boolean) => string
 }
 
 const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationMemberListTranslation> = {
@@ -39,21 +45,27 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     deselectAll: 'Deselect all',
     selectAll: 'Select all',
     members: 'Members',
+    member: 'Member',
     addMember: 'Add member',
     saveChanges: 'Save changes',
     role: 'Role',
-    roleTypes: { [Role.admin]: 'Admin', [Role.user]: 'User' }
+    roleTypes: { [Role.admin]: 'Admin', [Role.user]: 'User' },
+    dangerZoneText: (single) => `Deleting ${single ? `a ${defaultOrganizationMemberListTranslations.en.member}` : defaultOrganizationMemberListTranslations.en.members} is a permanent action and cannot be undone. Be careful!`,
+    deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultOrganizationMemberListTranslations.en.member : defaultOrganizationMemberListTranslations.en.members}?`,
   },
   de: {
     edit: 'Bearbeiten',
     remove: 'Entfernen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
-    members: 'Mitglieder',
+    members: 'Mitgliedern',
+    member: 'Mitglied',
     addMember: 'Miglied hinzufügen',
     saveChanges: 'Speichern',
     role: 'Rolle',
-    roleTypes: { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' }
+    roleTypes: { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' },
+    dangerZoneText: (single) => `Das Löschen ${single ? `eines ${defaultOrganizationMemberListTranslations.de.member}` : `von ${defaultOrganizationMemberListTranslations.de.member}`} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
+    deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? `das ausgewählte ${defaultOrganizationMemberListTranslations.de.member}` : `die ausgewählten ${defaultOrganizationMemberListTranslations.de.members}`}  löschen?`,
   }
 }
 
@@ -115,8 +127,33 @@ export const OrganizationMemberList = ({
     onChange([...members, newMember])
   }
 
+  type ConfirmDialogState = {
+    display: boolean,
+    single: CoreCell<OrgMember, unknown> | null
+  }
+  const defaultState: ConfirmDialogState = { display: false, single: null }
+  const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
+  const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
+
   return (
     <div className={tw('flex flex-col')}>
+      <ConfirmDialog
+        title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        isOpen={stateDeletionConfirmDialog.display}
+        onCancel={() => resetDeletionConfirmDialogState()}
+        onBackgroundClick={() => resetDeletionConfirmDialogState()}
+        onConfirm={() => {
+          if (stateDeletionConfirmDialog.single) {
+            onChange(members.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+          } else {
+            table.toggleAllRowsSelected(false)
+            onChange(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+          }
+          resetDeletionConfirmDialogState()
+        }}
+        confirmType="negative"
+      />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
         <Button onClick={addUser} color="positive" className={tw('mr-2')}>
@@ -147,15 +184,16 @@ export const OrganizationMemberList = ({
                       {translation.role}
                       <ChevronDown className={tw('stroke-black ml-2')}/>
                     </div>),
-                      remove: (<div className={tw('flex flex-row justify-end')}>
+                      remove: <div className={tw('flex flex-row justify-end')}>
                       <button onClick={() => {
-                        table.toggleAllRowsSelected(false)
-                        onChange(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-                        // TODO at delete safety for owner later on
+                        setDeletionConfirmDialogState({
+                          display: true,
+                          single: null
+                        })
                       }}>
                         <span>{translation.remove}</span>
                       </button>
-                    </div>),
+                    </div>,
                     }[header.column.id]
                 }
               </th>
@@ -191,7 +229,10 @@ export const OrganizationMemberList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => onChange(members.filter(value => value !== cell.row.original))}>
+                      <button onClick={() => setDeletionConfirmDialogState({
+                        display: true,
+                        single: cell
+                      })}>
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>

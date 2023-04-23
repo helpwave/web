@@ -154,14 +154,14 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
         }}
       />
       <TwoColumn
-        left={(
+        left={() => (
           <OrganizationDisplay
             selectedOrganization={selectedOrganization}
             organizations={data as OrganizationDTO[]}
             onSelectionChange={changeOrganization}
           />
         )}
-        right={(
+        right={() => (
           <OrganizationDetail
             key={selectedOrganization === undefined ? 'unselected' : selectedOrganization.id}
             organizationForm={organizationForm}

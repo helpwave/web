@@ -8,14 +8,14 @@ type WardDTO = {
   name: string
 }
 
-type OrgMember = {
+export type OrgMember = {
   email: string,
   name: string,
   avatarURL: string,
   role: Role
 }
 
-type OrganizationDTO = {
+export type OrganizationDTO = {
   id: string,
   shortName: string,
   longName: string,
@@ -26,7 +26,7 @@ type OrganizationDTO = {
 }
 
 // TODO remove once backend is implemented
-let organizations: OrganizationDTO[] = [
+export let organizations: OrganizationDTO[] = [
   {
     id: 'org1',
     shortName: 'UKM',

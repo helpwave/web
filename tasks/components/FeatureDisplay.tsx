@@ -15,7 +15,7 @@ export type FeatureDisplayProps = {
 
 export const FeatureDisplay = ({ feature }: FeatureDisplayProps) => {
   return (
-    <Link href={feature.externResource} className={tw('flex flex-row gap-x-8 hover:bg-gray-100 rounded-xl p-3')}>
+    <Link target="_blank" href={feature.externResource} className={tw('flex flex-row gap-x-8 hover:bg-gray-100 rounded-xl p-3')}>
       <div className={tw('flex flex-col gap-x-2 w-1/3')}>
         <TimeDisplay date={feature.date} mode="date" />
         <span className={tw('text-hw-primary-700 text-xl font-bold font-space')}>{feature.title}</span>

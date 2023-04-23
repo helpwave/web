@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { tw } from '@helpwave/common/twind'
 import { Menu, MenuItem } from '@helpwave/common/components/user_input/Menu'
 import { Avatar } from './Avatar'
-import { useAuth } from '.././hooks/useAuth'
+import { useAuth } from '../hooks/useAuth'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { getConfig } from '../utils/config';
+import { getConfig } from '../utils/config'
 
 const config = getConfig()
 

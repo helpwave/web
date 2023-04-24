@@ -55,7 +55,7 @@ export const SubtaskTile = ({
         onClick={onRemoveClick}
         aria-label={translation.remove}
       >
-        <Trash/>
+        <span>{translation.remove}</span>
       </button>
     </div>
   )

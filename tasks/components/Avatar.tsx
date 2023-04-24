@@ -24,7 +24,7 @@ const Avatar = ({ avatarUrl, alt, size = 'medium' }: AvatarProps) => {
           'h-12 w-12': size === 'medium',
           'h-16 w-16': size === 'large'
         })} src={avatarUrl} alt={alt} />
-      </div>  
+      </div>
     </div>
   )
 }

@@ -99,6 +99,9 @@ const columns = [
   }),
 ]
 
+/**
+ * A table for showing and editing the members of an organization
+ */
 export const OrganizationMemberList = ({
   language,
   usersPerPage = 5,

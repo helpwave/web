@@ -85,6 +85,9 @@ const columns = [
   }),
 ]
 
+/**
+ * A table for showing and editing the rooms within a ward
+ */
 export const RoomList = ({
   language,
   roomsPerPage = 5,

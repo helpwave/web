@@ -14,6 +14,10 @@ type TwoColumnProps = {
   disableResize?: boolean
 }
 
+/**
+ * The layout component for most pages main content. It creates two columns with a divider in between. The size
+ * of the columns can be change via the initialLayoutState
+ */
 export const TwoColumn = ({
   right,
   left,

@@ -6,6 +6,9 @@ export type AvatarProps = {
   size?: 'tiny' | 'small' | 'medium' | 'large'
 }
 
+/**
+ * A component for showing a profile picture
+ */
 const Avatar = ({ avatarUrl, alt, size = 'medium' }: AvatarProps) => {
   return (
     <div className={tw('rounded-full')}>

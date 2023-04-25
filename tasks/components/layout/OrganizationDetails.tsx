@@ -69,6 +69,9 @@ export type OrganizationDetailProps = {
   onDelete: (organization: OrganizationDTO) => void
 }
 
+/**
+ * The left side of the organizations page
+ */
 export const OrganizationDetail = ({
   language,
   organization,

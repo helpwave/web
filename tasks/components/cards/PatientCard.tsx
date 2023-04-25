@@ -14,6 +14,9 @@ export type PatientCardProps = CardProps & {
   patient: PatientDTO
 }
 
+/**
+ * A Card for displaying a Patient and the tasks
+ */
 export const PatientCard = ({
   bed,
   patient,

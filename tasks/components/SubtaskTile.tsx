@@ -28,6 +28,9 @@ type SubtaskTileProps = {
   onChange: (subtask: SubTaskDTO) => void
 }
 
+/**
+ * A tile for showing and editing a subtask used in the SubtaskView
+ */
 export const SubtaskTile = ({
   language,
   subtask,

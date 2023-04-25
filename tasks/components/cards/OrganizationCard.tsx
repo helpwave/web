@@ -49,6 +49,9 @@ export type OrganizationCardProps = CardProps & {
   onEditClick?: () => void
 }
 
+/**
+ * A Card displaying a Organization
+ */
 export const OrganizationCard = ({
   language,
   maxShownWards = 5,

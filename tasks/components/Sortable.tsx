@@ -5,6 +5,11 @@ type SortableProps = {
   id: string
 }
 
+/**
+ * A component for the dnd-kit sortable context
+ *
+ * Makes the children draggable within the sortable context
+ */
 export const Sortable = ({ children, id }: PropsWithChildren<SortableProps>) => {
   const { attributes, listeners, setNodeRef, transform } = useSortable({
     id,

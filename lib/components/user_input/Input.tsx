@@ -25,6 +25,11 @@ type InputProps = {
   className?: string
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
+/**
+ * A Component for inputting text or other information
+ *
+ * It's state is managed must be managed by the parent
+ */
 const ControlledInput = ({
   id,
   type = 'text',
@@ -56,6 +61,11 @@ type UncontrolledInputProps = Omit<InputProps, 'value'> & {
   defaultValue?: string
 }
 
+/**
+ * A Component for inputting text or other information
+ *
+ * It's state is managed by the component itself
+ */
 const UncontrolledInput = ({ defaultValue = '', onChange = noop, ...props }: UncontrolledInputProps) => {
   const [value, setValue] = useState(defaultValue)
 

@@ -11,6 +11,11 @@ type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[]
 }
 
+/**
+ * The base of every page. It creates the configurable header
+ *
+ * The page content will be passed as the children
+ */
 export const PageWithHeader = ({
   children,
   title,

@@ -23,6 +23,9 @@ export type SignInButtonProps = {
   onClick?: () => void
 }
 
+/**
+ * The helpwave SSO sign in button coming in a light and dark mode coloring
+ */
 export const SignInButton = ({
   language,
   color = 'light',

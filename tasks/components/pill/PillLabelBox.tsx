@@ -6,6 +6,11 @@ export type PillLabelBoxProps = {
   done: number
 }
 
+/**
+ * A Label for showing all TaskState information like the state name and the count of all Tasks in this state.
+ *
+ * For each state unscheduled, in progress and done there will be a number
+ */
 const PillLabelBox = ({ unscheduled, inProgress, done }: PillLabelBoxProps) => {
   const between = '3.2px'
   const height = '12px' // equivalent to 1.5rem / 2 = 24px / 2 = h-6 / 2 of tailwind

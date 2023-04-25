@@ -42,6 +42,9 @@ export type WardCardProps = CardProps & {
   onEditClick?: () => void
 }
 
+/**
+ * A Card showing the information about a ward
+ */
 export const WardCard = ({
   language,
   isSelected,

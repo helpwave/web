@@ -19,6 +19,11 @@ type CheckboxProps = {
   onChangeTristate?: (checked: CheckedState) => void
 }
 
+/**
+ * A Tristate checkbox
+ *
+ * The state is managed by the parent
+ */
 const ControlledCheckbox = ({ id, label, checked, disabled, onChange, onChangeTristate }: CheckboxProps) => {
   return (
     <div className={tw('flex justify-center items-center space-x-2')}>
@@ -57,6 +62,11 @@ type UncontrolledCheckboxProps = Omit<CheckboxProps, 'value' | 'checked'> & {
   defaultValue?: CheckedState
 }
 
+/**
+ * A Tristate checkbox
+ *
+ * The state is managed by this component
+ */
 const UncontrolledCheckbox = ({
   onChange,
   onChangeTristate,

@@ -68,6 +68,11 @@ export type OrganizationFormProps = {
   isShowingErrorsDirectly?: boolean
 }
 
+/**
+ * The form to change information about an organization.
+ *
+ * The state is manged by the parent
+ */
 export const OrganizationForm = ({
   language,
   organization = { shortName: '', longName: '', email: '', isVerified: false },

@@ -13,6 +13,15 @@ export type HeaderProps = {
   withIcon?: boolean
 }
 
+/**
+ * The basic header for most pages
+ *
+ * Structure:
+ *
+ * Logo Title | left <space> right
+ *
+ * each element in left and right is also seperated by the divider
+ */
 const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: HeaderProps) => {
   return (
     <div className={tw('h-16 py-4 relative flex items-center justify-between border-b border-slate-900/10')}>

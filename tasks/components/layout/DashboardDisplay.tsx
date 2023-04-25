@@ -36,6 +36,9 @@ export type DashboardDisplayProps = {
   organizations: OrganizationDTO[]
 }
 
+/**
+ * The left side of the DashboardPage
+ */
 export const DashboardDisplay = ({
   language,
   wards,

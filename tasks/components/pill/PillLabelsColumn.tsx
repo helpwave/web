@@ -7,6 +7,9 @@ export type PillLabelsColumnProps = {
   doneCount?: number
 }
 
+/**
+ * A column showing the all TaskStates with a PillLabel for each
+ */
 const PillLabelsColumn = ({ unscheduledCount = 0, inProgressCount = 0, doneCount = 0 }: PillLabelsColumnProps) => {
   return (
     <div className={tw('grid grid-rows-3 gap-y-2')}>

@@ -19,6 +19,9 @@ const MenuItem = ({ children, onClick, alignment = 'left' }: PropsWithChildren<{
 )
 
 // TODO: it is quite annoying that the type for the ref has to be specified manually, is there some solution around this?
+/**
+ * A Menu Component to allow the user to see different functions
+ */
 const Menu = <T extends HTMLElement>({ trigger, children, alignment = 'tl' }: MenuProps<T>) => {
   const [open, setOpen] = React.useState(false)
   const triggerRef = useRef<T>(null)

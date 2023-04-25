@@ -1,20 +1,20 @@
-import type {CoreCell} from '@tanstack/react-table'
+import type { CoreCell } from '@tanstack/react-table'
 import {
   useReactTable,
   createColumnHelper,
   getCoreRowModel,
   getPaginationRowModel
 } from '@tanstack/react-table'
-import {tw} from '@helpwave/common/twind'
-import type {Languages} from '@helpwave/common/hooks/useLanguage'
-import type {PropsWithLanguage} from '@helpwave/common/hooks/useTranslation'
-import {useTranslation} from '@helpwave/common/hooks/useTranslation'
-import {useState} from 'react'
-import {ConfirmDialog} from '@helpwave/common/components/modals/ConfirmDialog'
-import {Pagination} from '@helpwave/common/components/Pagination'
-import {Button} from '@helpwave/common/components/Button'
-import {Input} from '@helpwave/common/components/user_input/Input'
-import {Checkbox} from '@helpwave/common/components/user_input/Checkbox'
+import { tw } from '@helpwave/common/twind'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useState } from 'react'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { Pagination } from '@helpwave/common/components/Pagination'
+import { Button } from '@helpwave/common/components/Button'
+import { Input } from '@helpwave/common/components/user_input/Input'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
 type RoomListTranslation = {
   edit: string,
@@ -147,7 +147,8 @@ export const RoomList = ({
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
         <div className={tw('flex flex-row gap-x-2')}>
-          {table.getIsSomePageRowsSelected() && <Button
+          {table.getIsSomePageRowsSelected() && (
+<Button
             onClick={() => setDeletionConfirmDialogState({
               display: true,
               single: null
@@ -155,7 +156,8 @@ export const RoomList = ({
             color="negative"
           >
             {translation.removeSelection}
-          </Button>}
+          </Button>
+          )}
           <Button onClick={addRoom} color="positive">
             {translation.addRoom}
           </Button>
@@ -170,7 +172,7 @@ export const RoomList = ({
                 {header.isPlaceholder
                   ? null
                   : {
-                    select:
+                      select:
                       (<div className={tw('pr-4')}>
                           <Checkbox
                             checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
@@ -178,16 +180,16 @@ export const RoomList = ({
                           />
                         </div>
                       ),
-                    name:
+                      name:
                       (<div className={tw('flex flex-row')}>
                         <span>{translation.roomName}</span>
                       </div>),
-                    bedCount:
+                      bedCount:
                       (<div className={tw('flex flex-row')}>
                         {translation.bedCount}
                       </div>),
-                    remove: (<div />),
-                  }[header.column.id]
+                      remove: (<div />),
+                    }[header.column.id]
                 }
               </th>
             ))}

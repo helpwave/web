@@ -50,7 +50,7 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     addMember: 'Add member',
     saveChanges: 'Save changes',
     role: 'Role',
-    roleTypes: {[Role.admin]: 'Admin', [Role.user]: 'User'},
+    roleTypes: { [Role.admin]: 'Admin', [Role.user]: 'User' },
     dangerZoneText: (single) => `Deleting ${single ? `a ${defaultOrganizationMemberListTranslations.en.member}` : defaultOrganizationMemberListTranslations.en.members} is a permanent action and cannot be undone. Be careful!`,
     deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultOrganizationMemberListTranslations.en.member : defaultOrganizationMemberListTranslations.en.members}?`,
   },
@@ -65,7 +65,7 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     addMember: 'Miglied hinzufügen',
     saveChanges: 'Speichern',
     role: 'Rolle',
-    roleTypes: {[Role.admin]: 'Administrator', [Role.user]: 'Nutzer'},
+    roleTypes: { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' },
     dangerZoneText: (single) => `Das Löschen ${single ? `eines ${defaultOrganizationMemberListTranslations.de.member}` : `von ${defaultOrganizationMemberListTranslations.de.member}`} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
     deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? `das ausgewählte ${defaultOrganizationMemberListTranslations.de.member}` : `die ausgewählten ${defaultOrganizationMemberListTranslations.de.members}`}  löschen?`,
   }
@@ -114,7 +114,7 @@ export const OrganizationMemberList = ({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    initialState: {pagination: {pageSize: usersPerPage}}
+    initialState: { pagination: { pageSize: usersPerPage } }
   })
 
   const addUser = () => {
@@ -159,15 +159,17 @@ export const OrganizationMemberList = ({
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
         <div className={tw('flex flex-row gap-x-2')}>
-          {table.getIsSomePageRowsSelected() && <Button
-            onClick={() => setDeletionConfirmDialogState({
-              display: true,
-              single: null
-            })}
-            color="negative"
-          >
-            {translation.removeSelection}
-          </Button>}
+          {table.getIsSomePageRowsSelected() && (
+            <Button
+              onClick={() => setDeletionConfirmDialogState({
+                display: true,
+                single: null
+              })}
+              color="negative"
+            >
+              {translation.removeSelection}
+            </Button>
+          )}
           <Button onClick={addUser} color="positive">
             <div className={tw('flex flex-row items-center')}>
               <span className={tw('mr-2')}>{translation.addMember}</span>
@@ -184,21 +186,21 @@ export const OrganizationMemberList = ({
                 {header.isPlaceholder
                   ? null
                   : {
-                    select:
-                      (<Checkbox
+                      select: (
+                      <Checkbox
                         checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
                         onChange={() => table.toggleAllRowsSelected()}
                       />),
-                    name: (
+                      name: (
                       <div className={tw('flex flex-row pl-10')}>
                         <span>{translation.member}</span>
                       </div>),
-                    role: (
+                      role: (
                       <div className={tw('flex flex-row justify-end items-center pr-2')}>
                         {translation.role}
                       </div>),
-                    remove: <div/>,
-                  }[header.column.id]
+                      remove: <div/>,
+                    }[header.column.id]
                 }
               </th>
             ))}

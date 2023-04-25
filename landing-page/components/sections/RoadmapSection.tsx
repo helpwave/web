@@ -1,5 +1,4 @@
 import { forwardRef } from 'react'
-import { tw } from '@helpwave/common/twind/index'
 import { TitleSection } from '../Section'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'

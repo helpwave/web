@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind'
 import { PillLabel, TaskState } from './pill/PillLabel'
 import { TaskCard } from './cards/TaskCard'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'

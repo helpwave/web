@@ -16,6 +16,12 @@ const globalStyles = css`
     @apply border-hw-primary-700;
   }
 `
+
+/**
+ * A Textarea component for inputting longer texts
+ *
+ * The State is managed by the parent
+ */
 export const Textarea = ({ headline, id, resizable = false, onChange = noop, ...props }: TextareaProps) => {
   return (
     <div className={tw(globalStyles)}>

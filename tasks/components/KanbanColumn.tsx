@@ -34,6 +34,9 @@ type KanbanColumnProps = {
   onEditTask: (task: TaskDTO) => void
 }
 
+/**
+ * The Column of the KanbanBoard showing tasks and affording a reorder of these
+ */
 export const KanbanColumn = ({
   language,
   tasks,

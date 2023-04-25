@@ -26,6 +26,12 @@ const defaultMobileInterceptorTranslation = {
   }
 }
 
+/**
+ * The component shown when the user is looking at the app form a mobile
+ *
+ * Currently, the user is prevented from using the application from mobile and the link to
+ * the helpwave app will be shown
+ */
 const MobileInterceptor: NextPage = ({ language }: PropsWithLanguage<MobileInterceptorTranslation>) => {
   const translation = useTranslation(language, defaultMobileInterceptorTranslation)
   const config = getConfig()

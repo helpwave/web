@@ -36,6 +36,11 @@ type ConfirmDialogProps = ModalProps & {
   confirmType?: ConfirmDialogType
 }
 
+/**
+ * A Dialog for asking the user for Confirmation
+ *
+ * To require an answer omit the onBackgroundClick
+ */
 export const ConfirmDialog = ({
   language,
   children,

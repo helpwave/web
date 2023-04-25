@@ -27,6 +27,9 @@ export type TaskTemplateCardProps = CardProps & {
   onEditClick?: () => void
 }
 
+/**
+ * A Card showing a TaskTemplate
+ */
 export const TaskTemplateCard =
   ({
     isSelected = false,

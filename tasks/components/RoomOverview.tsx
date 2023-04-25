@@ -11,6 +11,9 @@ export type RoomOverviewProps = {
   onUpdate?: (bed: BedDTO) => void
 }
 
+/**
+ * A component to show all beds and patients within a room in a ward
+ */
 export const RoomOverview = ({ room, onSelect, selected, onUpdate = noop }: RoomOverviewProps) => {
   return (
     <div>

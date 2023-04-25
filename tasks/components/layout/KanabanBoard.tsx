@@ -43,6 +43,11 @@ type KanbanBoardProps = {
   editedTaskID?: string
 }
 
+/**
+ * A Kanbanboard for showing and changing tasks
+ *
+ * The State is managed by the parent component
+ */
 export const KanbanBoard = ({
   sortedTasks,
   boardObject,

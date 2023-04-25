@@ -25,6 +25,12 @@ type InputProps = {
   initialState?: 'editing' | 'display'
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
+/**
+ * A Text input component for inputting text. It changes appearance upon entering the edit mode and switches
+ * back to display mode on loss of focus or on enter
+ *
+ * The State is managed by the parent
+ */
 export const ToggleableInput = ({
   id,
   type = 'text',

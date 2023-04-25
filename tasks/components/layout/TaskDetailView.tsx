@@ -64,6 +64,9 @@ type TaskDetailViewProps = {
   onFinishClick: () => void
 }
 
+/**
+ * The view for changing or creating a task and it's information
+ */
 export const TaskDetailView = ({
   language,
   task,

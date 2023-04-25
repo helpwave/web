@@ -34,6 +34,9 @@ export type TaskTemplateListColumnProps = {
   taskTemplates: TaskTemplateDTO[]
 }
 
+/**
+ * A column for showing TaskTemplates either for Ward or Private templates
+ */
 export const TaskTemplateListColumn = ({
   language,
   taskTemplates,

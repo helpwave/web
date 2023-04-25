@@ -34,6 +34,9 @@ type KanbanHeaderProps = {
   onSearchChange: (search: string) => void
 }
 
+/**
+ * The header of the KanbanBoard affording a search
+ */
 export const KanbanHeader = ({
   language,
   searchValue = '',

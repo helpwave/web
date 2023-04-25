@@ -178,7 +178,7 @@ export const OrganizationMemberList = ({
         </div>
       </div>
       <table>
-        <thead>
+        <thead className={tw('after:block after:h-1 border-b-2 after:w-full')}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map(header => (
@@ -196,7 +196,7 @@ export const OrganizationMemberList = ({
                         <span>{translation.member}</span>
                       </div>),
                       role: (
-                      <div className={tw('flex flex-row justify-end items-center pr-2')}>
+                      <div className={tw('flex flex-row items-center pr-2')}>
                         {translation.role}
                       </div>),
                       remove: <div/>,
@@ -207,17 +207,17 @@ export const OrganizationMemberList = ({
           </tr>
         ))}
         </thead>
-        <tbody>
+        <tbody className={tw('before:h-2 before:block before:text-transparent')}>
         {table.getRowModel().rows.map(row => (
           <tr key={row.id}>
             {row.getVisibleCells().map(cell => (
               <td key={cell.id}>
                 {{
                   role: (
-                    <div className={tw('flex flex-row justify-end items-center mr-2')}>
+                    <div className={tw('flex flex-row items-center mr-2')}>
                       <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
                       }}>
-                        <span className={tw(`font-semibold text-right`)}>
+                        <span className={tw(`font-semibold`)}>
                           {translation.roleTypes[cell.row.original.role]}
                         </span>
                       </button>

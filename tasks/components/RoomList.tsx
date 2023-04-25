@@ -164,7 +164,7 @@ export const RoomList = ({
         </div>
       </div>
       <table>
-        <thead>
+        <thead className={tw('after:block after:h-1 border-b-2 after:w-full')}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map(header => (
@@ -173,7 +173,7 @@ export const RoomList = ({
                   ? null
                   : {
                       select:
-                      (<div className={tw('pr-4')}>
+                      (<div className={tw('flex flex-row pr-4')}>
                           <Checkbox
                             checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
                             onChange={() => table.toggleAllRowsSelected()}
@@ -196,7 +196,7 @@ export const RoomList = ({
           </tr>
         ))}
         </thead>
-        <tbody>
+        <tbody className={tw('before:h-2 before:block before:text-transparent')}>
         {table.getRowModel().rows.map(row => (
           <tr key={row.id}>
             {row.getVisibleCells().map(cell => (

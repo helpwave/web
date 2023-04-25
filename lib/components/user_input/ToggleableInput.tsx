@@ -37,7 +37,7 @@ export const ToggleableInput = ({
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
   return (
     <div
-      className={tw('flex flex-row items-center w-full')}
+      className={tw('flex flex-row items-center overflow-hidden w-full')}
       onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
     >
       {isEditing ? (
@@ -56,19 +56,17 @@ export const ToggleableInput = ({
               setIsEditing(false)
             }
           }}
-          readOnly={!isEditing}
-          className={tx(labelClassName, 'max-w-[calc(100%_-_28px)] border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4', {
+          className={tx(labelClassName, 'w-[calc(100%_-_28px)] border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4', {
             underline: isEditing
           })}
         />
       ) : (
         <span
-          className={tx(labelClassName, 'max-w-[calc(100%_-_28px)] break-words overflow-hidden text-ellipsis')}
+          className={tx(labelClassName, 'w-[calc(100%_-_28px)] break-words overflow-hidden text-ellipsis whitespace-nowrap')}
         >
         {value}
         </span>
       )}
-
       {!isEditing && <Pencil className={tw('ml-[8px] cursor-pointer')} size={20}/>}
     </div>
   )

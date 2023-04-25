@@ -81,7 +81,7 @@ export const OrganizationCard = ({
         {organization.wards.slice(0, maxShownWards).map(value => value.name).join(', ')}
         {notDisplayedWards > 0 && (
           <span className={tw('ml-1')}>
-            {`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}
+            {`+ ${notDisplayedWards}`}
           </span>
         )}
       </div>

@@ -84,6 +84,7 @@ export const TaskDetailView = ({
             value={task.name}
             onChange={name => onChange({ ...task, name })}
             labelClassName={tw('text-2xl font-bold')}
+            size={24}
           />
         </div>
         <button className={tw('flex flex-row gap-x-2')} onClick={onClose}>

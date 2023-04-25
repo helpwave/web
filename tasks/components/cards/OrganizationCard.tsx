@@ -61,19 +61,25 @@ export const OrganizationCard = ({
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (
-    <Card onTileClick={onTileClick} isSelected={isSelected}
-          className={tw('group cursor-pointer justify-between flex flex-col')}>
-      <div className={tw('flex flex-row justify-between w-full')}>
-        <span className={tw('font-bold font-space')}>{`${organization.longName} (${organization.shortName})`}</span>
+    <Card
+      onTileClick={onTileClick}
+      isSelected={isSelected}
+      className={tw('group cursor-pointer justify-between flex flex-col')}
+    >
+      <div className={tw('flex flex-row justify-between w-full gap-x-2 items-start')}>
+        <div className={tw('flex flex-row gap-x-1 font-bold font-space overflow-hidden')}>
+          <span className={tw('text-ellipsis whitespace-nowrap overflow-hidden flex-1')}>{`${organization.longName}`}</span>
+          <span>{`(${organization.shortName})`}</span>
+        </div>
         {onEditClick && (
           <button
             onClick={event => {
               onEditClick()
               event.stopPropagation()
             }}
-            className={tw('hidden group-hover:block')}
+            className={tw('text-transparent group-hover:text-black')}
           >
-            <Edit color="black" size={24}/>
+            <Edit size={24}/>
           </button>
         )}
       </div>

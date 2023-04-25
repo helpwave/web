@@ -1,4 +1,4 @@
-import { tw, css } from '@helpwave/common/twind/index'
+import { tw, css } from '@helpwave/common/twind'
 
 type CarouselProps = {
   items: {
@@ -126,9 +126,9 @@ export const Carousel = ({ items, activeLink, hidden = false } : CarouselProps) 
   return (
     <div className={tw(globalStyles)}>
       <div className={cx({ 'toc': true, 'toc--visible': !hidden })}>
-        <div className="toc-bar"></div>
-        <div className="toc-background"></div>
-        <div className="toc-hitbox"></div>
+        <div className="toc-bar" />
+        <div className="toc-background" />
+        <div className="toc-hitbox" />
         <div className="toc-items">
           {items.map(({ link, label }) => (
             <a key={link} href={link} className={cx({

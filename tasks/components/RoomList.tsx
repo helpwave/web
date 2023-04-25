@@ -101,7 +101,7 @@ export const RoomList = ({
   const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
   const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
 
-  const minRoomNameLength = 2
+  const minRoomNameLength = 1
   const maxRoomNameLength = 32
 
   const table = useReactTable({

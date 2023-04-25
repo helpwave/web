@@ -133,6 +133,32 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
     }
   }
 
+  const onSave = () => {
+    if (!organizationForm.isValid) {
+      setDiscardDialogInfo({ isShowing: false, organization: undefined })
+    } else {
+      if (organizationForm.organization.id === '') {
+        createMutation.mutate(organizationForm.organization)
+      } else {
+        updateMutation.mutate(organizationForm.organization)
+      }
+      setOrganizationForm({
+        isValid: discardDialogInfo.organization !== undefined && discardDialogInfo.organization?.id !== '',
+        hasChanges: false,
+        organization: discardDialogInfo.organization ?? emptyOrganization
+      })
+    }
+  }
+
+  const onDontSave = () => {
+    setOrganizationForm({
+      isValid: discardDialogInfo.organization !== undefined && discardDialogInfo.organization?.id !== '',
+      hasChanges: false,
+      organization: discardDialogInfo.organization ?? emptyOrganization
+    })
+    setDiscardDialogInfo({ isShowing: false, organization: undefined })
+  }
+
   // TODO add view for loading
   if (isLoading) {
     return <div>Loading Widget</div>
@@ -155,30 +181,8 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
         onCancel={() => {
           setDiscardDialogInfo({ isShowing: false, organization: undefined })
         }}
-        onDontSave={() => {
-          setOrganizationForm({
-            isValid: discardDialogInfo.organization !== undefined && discardDialogInfo.organization?.id !== '',
-            hasChanges: false,
-            organization: discardDialogInfo.organization ?? emptyOrganization
-          })
-          setDiscardDialogInfo({ isShowing: false, organization: undefined })
-        }}
-        onSave={() => {
-          if (!organizationForm.isValid) {
-            setDiscardDialogInfo({ isShowing: false, organization: undefined })
-          } else {
-            if (organizationForm.organization.id === '') {
-              createMutation.mutate(organizationForm.organization)
-            } else {
-              updateMutation.mutate(organizationForm.organization)
-            }
-            setOrganizationForm({
-              isValid: discardDialogInfo.organization !== undefined && discardDialogInfo.organization?.id !== '',
-              hasChanges: false,
-              organization: discardDialogInfo.organization ?? emptyOrganization
-            })
-          }
-        }}
+        onDontSave={onDontSave}
+        onSave={onSave}
       />
       <TwoColumn
         left={() => (

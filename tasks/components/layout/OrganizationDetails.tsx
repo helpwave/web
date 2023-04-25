@@ -79,28 +79,24 @@ export const OrganizationDetail = ({
       <ColumnTitle title={translation.organizationDetail}/>
       <OrganizationForm
         organization={organizationForm.organization}
-        onChange={(newOrganizationDetails, isValid) => {
-          setOrganization({
-            hasChanges: true,
-            isValid,
-            organization: { ...organizationForm.organization, ...newOrganizationDetails },
-          })
-        }}
+        onChange={(newOrganizationDetails, isValid) => setOrganization({
+          hasChanges: true,
+          isValid,
+          organization: { ...organizationForm.organization, ...newOrganizationDetails },
+        })}
         isShowingErrorsDirectly={!isCreatingNewOrganization}
       />
       <div className={tw('mt-6')}>
         <OrganizationMemberList
           members={organizationForm.organization.members}
-          onChange={(members) => setOrganization((prevState) => {
-            return {
-              hasChanges: true,
-              isValid: prevState.isValid,
-              organization: {
-                ...prevState.organization,
-                members
-              }
+          onChange={(members) => setOrganization((prevState) => ({
+            hasChanges: true,
+            isValid: prevState.isValid,
+            organization: {
+              ...prevState.organization,
+              members
             }
-          })}
+          }))}
         />
       </div>
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>

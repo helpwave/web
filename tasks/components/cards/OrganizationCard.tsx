@@ -1,24 +1,8 @@
 import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Edit, Mail } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { AvatarGroup } from '../AvatarGroup'
-
-type OrganizationCardTranslation = {
-  edit: string
-}
-
-const defaultOrganizationCardTranslations: Record<Languages, OrganizationCardTranslation> = {
-  en: {
-    edit: 'Edit',
-  },
-  de: {
-    edit: 'Bearbeiten',
-  }
-}
 
 type WardDTO = {
   name: string
@@ -47,14 +31,12 @@ export type OrganizationCardProps = CardProps & {
  * A Card displaying a Organization
  */
 export const OrganizationCard = ({
-  language,
   maxShownWards = 5,
   isSelected,
   organization,
   onTileClick = () => undefined,
   onEditClick
-}: PropsWithLanguage<OrganizationCardTranslation, OrganizationCardProps>) => {
-  useTranslation(language, defaultOrganizationCardTranslations)
+}: OrganizationCardProps) => {
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (

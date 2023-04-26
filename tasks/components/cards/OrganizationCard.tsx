@@ -8,7 +8,7 @@ import { Card } from '@helpwave/common/components/Card'
 import { AvatarGroup } from '../AvatarGroup'
 
 type OrganizationCardTranslation = {
-  edit: string,
+  edit: string
 }
 
 const defaultOrganizationCardTranslations: Record<Languages, OrganizationCardTranslation> = {
@@ -54,7 +54,7 @@ export const OrganizationCard = ({
   onTileClick = () => undefined,
   onEditClick
 }: PropsWithLanguage<OrganizationCardTranslation, OrganizationCardProps>) => {
-  useTranslation(language, defaultOrganizationCardTranslations);
+  useTranslation(language, defaultOrganizationCardTranslations)
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (

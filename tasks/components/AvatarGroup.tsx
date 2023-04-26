@@ -55,7 +55,7 @@ export const AvatarGroup = ({
         notDisplayedProfiles > 0 && (
           <div
             className={tx('truncate ml-1')}>
-            <span>{`+ ${(notDisplayedProfiles)}`}</span>
+            <span>+ {notDisplayedProfiles}</span>
           </div>
         )
       }

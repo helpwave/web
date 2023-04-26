@@ -178,7 +178,7 @@ export const OrganizationMemberList = ({
         </div>
       </div>
       <table>
-        <thead className={tw('after:block after:h-1 border-b-2 after:w-full')}>
+        <thead className={tw('after:block after:h-1 after:w-full')}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map(header => (
@@ -207,7 +207,7 @@ export const OrganizationMemberList = ({
           </tr>
         ))}
         </thead>
-        <tbody className={tw('before:h-2 before:block before:text-transparent')}>
+        <tbody className={tw('before:h-2 before:block border-t-2 before:w-full')}>
         {table.getRowModel().rows.map(row => (
           <tr key={row.id}>
             {row.getVisibleCells().map(cell => (

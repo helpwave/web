@@ -23,6 +23,9 @@ export type FeatureDetailsProps = {
   features: Feature[]
 }
 
+/**
+ * The right side of the dashboard page
+ */
 export const FeatureDetails = ({
   language,
   features

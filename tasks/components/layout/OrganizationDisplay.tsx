@@ -51,6 +51,9 @@ export type OrganizationDisplayProps = {
   onSelectionChange: (organization: OrganizationDTO | undefined) => void
 }
 
+/**
+ * The right side of the organizations page showing the list of organizations
+ */
 export const OrganizationDisplay = ({
   language,
   selectedOrganization,

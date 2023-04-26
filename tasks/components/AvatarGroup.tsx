@@ -17,6 +17,9 @@ export type AvatarGroupProps = {
   maxShownProfiles?: number
 }
 
+/**
+ * A component for showing a group of Avatar's
+ */
 export const AvatarGroup = ({
   users,
   maxShownProfiles = 5

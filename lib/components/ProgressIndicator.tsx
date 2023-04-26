@@ -19,6 +19,13 @@ export type ProgressIndicatorProps = {
 
 const sizeMapping = { small: 16, medium: 24, big: 48 }
 
+/**
+ * A progress indicator
+ *
+ * Start rotation is 3 o'clock and fills counterclockwise
+ *
+ * Progress is given from 0 to 1
+ */
 export const ProgressIndicator = ({ progress, strokeWidth = 5, size = 'medium', direction = 'counterclockwise', rotation = 0 }: ProgressIndicatorProps) => {
   const currentSize = sizeMapping[size]
   const center = currentSize / 2

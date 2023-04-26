@@ -70,6 +70,10 @@ export type WardDetailProps = {
   onDelete: (ward: WardDTO) => void
 }
 
+/**
+ * The right side of the organizations/[uuid].tsx page showing the ward. This screen also affords to edit
+ * the Ward
+ */
 export const WardDetail = ({
   language,
   ward,

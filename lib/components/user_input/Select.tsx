@@ -17,6 +17,11 @@ type SelectProps<T> = {
   className?: string
 };
 
+/**
+ * A Select Component for selecting form a list of options
+ *
+ * The State is managed by the parent
+ */
 export const Select = <T, >({ value, label, options, onChange, isHidingCurrentValue = true, hintText = '', className }: SelectProps<T>) => {
   // Notice: for more complex types this check here might need an additional compare method
   const filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options

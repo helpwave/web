@@ -39,6 +39,9 @@ export type PillLabelProps = {
   state?: TaskStateInformation
 }
 
+/**
+ * A Label for showing a TaskState's information like the state name and the count of Tasks in this state
+ */
 const PillLabel: FunctionComponent<PropsWithLanguage<PillLabelTranslation, PillLabelProps>> =
   (props) => {
     props.state ??= TaskState.unscheduled

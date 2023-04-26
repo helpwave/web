@@ -30,6 +30,11 @@ type TaskStatusSelectProps = {
   onChange: (status: TaskStatus) => void
 }
 
+/**
+ * A component for selecting a TaskStatus
+ *
+ * The state is managed by the parent
+ */
 export const TaskStatusSelect = ({
   language,
   value,

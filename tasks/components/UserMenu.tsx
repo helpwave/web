@@ -31,6 +31,9 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
   }
 }
 
+/**
+ * A component showing a menu for user actions. For example editing the profile, language and logout.
+ */
 export const UserMenu = ({
   language,
 }: PropsWithLanguage<UserMenuTranslation>) => {

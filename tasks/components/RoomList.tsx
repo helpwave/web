@@ -85,6 +85,9 @@ const columns = [
   }),
 ]
 
+/**
+ * A table for showing and editing the rooms within a ward
+ */
 export const RoomList = ({
   language,
   roomsPerPage = 5,
@@ -100,6 +103,9 @@ export const RoomList = ({
   const defaultState: ConfirmDialogState = { display: false, single: null }
   const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
   const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
+
+  const minRoomNameLength = 1
+  const maxRoomNameLength = 32
 
   const table = useReactTable({
     data: rooms,
@@ -219,6 +225,8 @@ export const RoomList = ({
                           name: text
                         } : value))}
                         id={cell.row.original.name}
+                        minLength={minRoomNameLength}
+                        maxLength={maxRoomNameLength}
                       />
                     </div>
                   ),

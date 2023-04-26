@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'

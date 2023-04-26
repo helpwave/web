@@ -1,10 +1,13 @@
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind'
 
 type ColumnTitleProps = {
   title: string,
   subtitle?: string
 }
 
+/**
+ * A component for creating a uniform column title with the same bottom padding
+ */
 export const ColumnTitle = ({ title, subtitle }: ColumnTitleProps) => {
   return (
     <div className={tx('flex flex-col', { 'mb-8': subtitle === undefined, 'mb-4': subtitle !== undefined })}>

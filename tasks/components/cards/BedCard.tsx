@@ -26,6 +26,11 @@ export type BedCardProps = CardProps & {
   bed: BedDTO
 }
 
+/**
+ * A Card for showing the Bed for Patient
+ *
+ * Shown instead of a PatientCard, if there is no patient assigned to the bed
+ */
 export const BedCard = ({
   language,
   bed,

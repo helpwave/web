@@ -7,6 +7,9 @@ export type CardProps = {
   className?: string
 }
 
+/**
+ * A Card component with click call back
+ */
 export const Card = ({
   children,
   isSelected = false,

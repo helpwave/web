@@ -48,6 +48,9 @@ export type PatientDetailProps = {
   onDischarge: (patient: PatientDTO) => void
 }
 
+/**
+ * The right side of the ward/[uuid].tsx page showing the detailed information about the patient
+ */
 export const PatientDetail = ({
   language,
   bedPosition,

@@ -13,6 +13,9 @@ export type FeatureDisplayProps = {
   feature: Feature
 }
 
+/**
+ * A component for showing a feature with a title, date of release and a link to a blog post on click
+ */
 export const FeatureDisplay = ({ feature }: FeatureDisplayProps) => {
   return (
     <Link target="_blank" href={feature.externResource} className={tw('flex flex-row gap-x-8 hover:bg-gray-100 rounded-xl p-3')}>

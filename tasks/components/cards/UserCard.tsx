@@ -6,6 +6,9 @@ export type UserCardProps = {
   user: User
 }
 
+/**
+ * A Card showing the Avatar and name of a user
+ */
 const UserCard = ({ user }: UserCardProps) => {
   return (
     <div className={tw('flex flex-row w-80 h-22 rounded-lg border-2')}>

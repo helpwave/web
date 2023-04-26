@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
@@ -34,6 +34,9 @@ export type TaskTemplateListColumnProps = {
   taskTemplates: TaskTemplateDTO[]
 }
 
+/**
+ * A column for showing TaskTemplates either for Ward or Private templates
+ */
 export const TaskTemplateListColumn = ({
   language,
   taskTemplates,

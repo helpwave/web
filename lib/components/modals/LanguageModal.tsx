@@ -34,6 +34,11 @@ type LanguageModalProps = ModalProps & {
     onDone: () => void
 }
 
+/**
+ * A Modal for selecting the Language
+ *
+ * The State of open needs to be managed by the parent
+ */
 export const LanguageModal = ({
   isOpen,
   onDone,

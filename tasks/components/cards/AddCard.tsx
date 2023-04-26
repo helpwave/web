@@ -9,6 +9,9 @@ export type AddCardProps = CardProps & {
   className?: Class[] | string
 }
 
+/**
+ * A Card for adding something the text shown is configurable
+ */
 export const AddCard = ({
   text,
   isSelected,

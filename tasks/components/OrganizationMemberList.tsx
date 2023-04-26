@@ -99,6 +99,9 @@ const columns = [
   }),
 ]
 
+/**
+ * A table for showing and editing the members of an organization
+ */
 export const OrganizationMemberList = ({
   language,
   usersPerPage = 5,
@@ -220,7 +223,7 @@ export const OrganizationMemberList = ({
                   ),
                   name: (
                     <div className={tw('flex flex-row items-center h-12')}>
-                      <Avatar avatarUrl={cell.row.original.avatarURL} alt={cell.row.original.name} size="small"/>
+                      <Avatar avatarUrl={cell.row.original.avatarURL} alt={cell.row.original.name.charAt(0)} size="small"/>
                       <div className={tw('flex flex-col ml-2')}>
                         <span className={tw('font-bold h-5')}>{cell.row.original.name}</span>
                         <span className={tw('text-sm text-gray-400')}>{cell.row.original.email}</span>

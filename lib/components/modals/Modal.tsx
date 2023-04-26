@@ -10,6 +10,12 @@ export type ModalProps = {
   onBackgroundClick?: MouseEventHandler<HTMLDivElement>,
   portalRootName?: string
 }
+
+/**
+ * A Generic Modal Window
+ *
+ * The state needs to be managed by the parent of this component
+ */
 export const Modal = ({
   children,
   isOpen,

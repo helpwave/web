@@ -34,6 +34,9 @@ type SubtaskViewProps = {
   onChange: (subtasks: SubTaskDTO[]) => void
 }
 
+/**
+ * A view for editing and showing all subtasks of a task
+ */
 export const SubtaskView = ({
   language,
   subtasks,

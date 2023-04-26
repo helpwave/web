@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import type { PropsWithChildren } from 'react'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 
 type Section = PropsWithChildren<{ id?: string }>
 

@@ -42,6 +42,9 @@ export type WardCardProps = CardProps & {
   onEditClick?: () => void
 }
 
+/**
+ * A Card showing the information about a ward
+ */
 export const WardCard = ({
   language,
   isSelected,
@@ -69,7 +72,7 @@ export const WardCard = ({
           </button>
         )}
       </div>
-      <div className={tx('text-left my-1', { 'text-gray-400 text-sm': !hasRooms })}>
+      <div className={tx('text-left my-1 truncate', { 'text-gray-400 text-sm': !hasRooms })}>
         {hasRooms ? ward.rooms.map(value => value.name).join(', ') : translation.noRoomsYet}
       </div>
       <div className={tw('flex flex-row justify-between w-full')}>

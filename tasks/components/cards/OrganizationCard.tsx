@@ -9,20 +9,14 @@ import { AvatarGroup } from '../AvatarGroup'
 
 type OrganizationCardTranslation = {
   edit: string,
-  other: string,
-  others: string
 }
 
 const defaultOrganizationCardTranslations: Record<Languages, OrganizationCardTranslation> = {
   en: {
     edit: 'Edit',
-    other: 'other',
-    others: 'others'
   },
   de: {
     edit: 'Bearbeiten',
-    other: 'weiterer',
-    others: 'othere'
   }
 }
 
@@ -57,7 +51,7 @@ export const OrganizationCard = ({
   onTileClick = () => undefined,
   onEditClick
 }: PropsWithLanguage<OrganizationCardTranslation, OrganizationCardProps>) => {
-  const translation = useTranslation(language, defaultOrganizationCardTranslations)
+  useTranslation(language, defaultOrganizationCardTranslations);
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (

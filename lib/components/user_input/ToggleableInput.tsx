@@ -22,7 +22,8 @@ type InputProps = {
    */
   onChange?: (text: string) => void,
   labelClassName?: string,
-  initialState?: 'editing' | 'display'
+  initialState?: 'editing' | 'display',
+  size?: number
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 /**
@@ -38,44 +39,45 @@ export const ToggleableInput = ({
   onChange = noop,
   labelClassName = '',
   initialState = 'display',
+  size = 20,
   ...restProps
 }: InputProps) => {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
   return (
     <div
-      className={tw('flex flex-row items-center w-full')}
+      className={tw('flex flex-row items-center w-full gap-x-2 overflow-hidden')}
       onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
     >
-      {isEditing ? (
-        <input
-          autoFocus
-          {...restProps}
-          value={value}
-          type={type}
-          id={id}
-          onChange={event => onChange(event.target.value)}
-          onBlur={() => {
-            setIsEditing(false)
-          }}
-          onKeyPress={event => {
-            if (event.key === 'Enter') {
+      <div className={tx('flex flex-row overflow-hidden', { 'flex-1': isEditing })}>
+        {isEditing ? (
+          <input
+            autoFocus
+            {...restProps}
+            value={value}
+            type={type}
+            id={id}
+            onChange={event => onChange(event.target.value)}
+            onBlur={() => {
               setIsEditing(false)
-            }
-          }}
-          readOnly={!isEditing}
-          className={tx(labelClassName, 'max-w-[calc(100%_-_28px)] border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4', {
-            underline: isEditing
-          })}
-        />
-      ) : (
-        <span
-          className={tx(labelClassName, 'max-w-[calc(100%_-_28px)] break-words overflow-hidden text-ellipsis')}
-        >
+            }}
+            onKeyPress={event => {
+              if (event.key === 'Enter') {
+                setIsEditing(false)
+              }
+            }}
+            className={tx(labelClassName, `w-full border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4`, {
+              underline: isEditing
+            })}
+          />
+        ) : (
+          <span
+            className={tx(labelClassName, 'w-full break-words overflow-hidden text-ellipsis whitespace-nowrap')}
+          >
         {value}
         </span>
-      )}
-
-      {!isEditing && <Pencil className={tw('ml-[8px] cursor-pointer')} size={20}/>}
+        )}
+      </div>
+     <Pencil className={tx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size} />
     </div>
   )
 }

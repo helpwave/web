@@ -93,6 +93,7 @@ export const TaskDetailView = ({
             labelClassName={tw('text-2xl font-bold')}
             minLength={minTaskNameLength}
             maxLength={maxTaskNameLength}
+            size={24}
           />
         </div>
         <button className={tw('flex flex-row gap-x-2')} onClick={onClose}>

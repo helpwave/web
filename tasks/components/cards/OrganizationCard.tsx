@@ -1,30 +1,8 @@
 import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Edit, Mail } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { AvatarGroup } from '../AvatarGroup'
-
-type OrganizationCardTranslation = {
-  edit: string,
-  other: string,
-  others: string
-}
-
-const defaultOrganizationCardTranslations: Record<Languages, OrganizationCardTranslation> = {
-  en: {
-    edit: 'Edit',
-    other: 'other',
-    others: 'others'
-  },
-  de: {
-    edit: 'Bearbeiten',
-    other: 'weiterer',
-    others: 'othere'
-  }
-}
 
 type WardDTO = {
   name: string
@@ -53,14 +31,12 @@ export type OrganizationCardProps = CardProps & {
  * A Card displaying a Organization
  */
 export const OrganizationCard = ({
-  language,
   maxShownWards = 5,
   isSelected,
   organization,
   onTileClick = () => undefined,
   onEditClick
-}: PropsWithLanguage<OrganizationCardTranslation, OrganizationCardProps>) => {
-  const translation = useTranslation(language, defaultOrganizationCardTranslations)
+}: OrganizationCardProps) => {
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (
@@ -90,7 +66,7 @@ export const OrganizationCard = ({
         {organization.wards.slice(0, maxShownWards).map(value => value.name).join(', ')}
         {notDisplayedWards > 0 && (
           <span className={tw('ml-1')}>
-            {`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}
+            + {notDisplayedWards}
           </span>
         )}
       </div>

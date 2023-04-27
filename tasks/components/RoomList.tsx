@@ -9,7 +9,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Pagination } from '@helpwave/common/components/Pagination'
@@ -20,8 +19,10 @@ import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 type RoomListTranslation = {
   edit: string,
   remove: string,
+  removeSelection: string,
   deselectAll: string,
   selectAll: string,
+  roomName: string,
   room: string,
   rooms: string,
   addRoom: string,
@@ -34,8 +35,10 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
   en: {
     edit: 'Edit',
     remove: 'Remove',
+    removeSelection: 'Remove Selection',
     deselectAll: 'Deselect All',
     selectAll: 'Select All',
+    roomName: 'Room Name',
     room: 'Room',
     rooms: 'Rooms',
     addRoom: 'Add Room',
@@ -46,8 +49,10 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
   de: {
     edit: 'Bearbeiten',
     remove: 'Entfernen',
+    removeSelection: 'Auswahl entfernen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
+    roomName: 'Raum Name',
     room: 'Raum',
     rooms: 'Räume',
     addRoom: 'Raum hinzufügen',
@@ -97,8 +102,8 @@ export const RoomList = ({
   const translation = useTranslation(language, defaultRoomListTranslations)
 
   type ConfirmDialogState = {
-      display: boolean,
-      single: CoreCell<Room, unknown> | null
+    display: boolean,
+    single: CoreCell<Room, unknown> | null
   }
   const defaultState: ConfirmDialogState = { display: false, single: null }
   const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
@@ -147,15 +152,25 @@ export const RoomList = ({
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
-        <Button onClick={addRoom} color="positive">
-          <div className={tw('flex flex-row items-center')}>
-            <span className={tw('mr-2')}>{translation.addRoom}</span>
-            <ChevronDown/>
-          </div>
-        </Button>
+        <div className={tw('flex flex-row gap-x-2')}>
+          {table.getIsSomePageRowsSelected() && (
+<Button
+            onClick={() => setDeletionConfirmDialogState({
+              display: true,
+              single: null
+            })}
+            color="negative"
+          >
+            {translation.removeSelection}
+          </Button>
+          )}
+          <Button onClick={addRoom} color="positive">
+            {translation.addRoom}
+          </Button>
+        </div>
       </div>
       <table>
-        <thead>
+        <thead className={tw('after:block after:h-1 after:w-full')}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map(header => (
@@ -164,7 +179,7 @@ export const RoomList = ({
                   ? null
                   : {
                       select:
-                      (<div className={tw('pr-4')}>
+                      (<div className={tw('flex flex-row pr-4')}>
                           <Checkbox
                             checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
                             onChange={() => table.toggleAllRowsSelected()}
@@ -173,21 +188,13 @@ export const RoomList = ({
                       ),
                       name:
                       (<div className={tw('flex flex-row')}>
-                        <span>{table.getIsAllRowsSelected() ? translation.deselectAll : translation.selectAll}</span>
+                        <span>{translation.roomName}</span>
                       </div>),
                       bedCount:
                       (<div className={tw('flex flex-row')}>
                         {translation.bedCount}
                       </div>),
-                      remove:
-                      (<div className={tw('flex flex-row justify-end pl-8')}>
-                      <button onClick={() => setDeletionConfirmDialogState({
-                        display: true,
-                        single: null
-                      }) }>
-                          <span>{translation.remove}</span>
-                        </button>
-                      </div>),
+                      remove: (<div />),
                     }[header.column.id]
                 }
               </th>
@@ -195,7 +202,7 @@ export const RoomList = ({
           </tr>
         ))}
         </thead>
-        <tbody>
+        <tbody className={tw('before:h-2 before:block border-t-2 before:w-full')}>
         {table.getRowModel().rows.map(row => (
           <tr key={row.id}>
             {row.getVisibleCells().map(cell => (
@@ -232,19 +239,23 @@ export const RoomList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => setDeletionConfirmDialogState({
-                        display: true,
-                        single: cell
-                      }) }>
+                      <button
+                        onClick={() => setDeletionConfirmDialogState({
+                          display: true,
+                          single: cell
+                        })}
+                      >
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>
                   ),
                   select: (
-                    <Checkbox
-                      checked={cell.row.getIsSelected()}
-                      onChange={() => cell.row.toggleSelected()}
-                    />
+                    <div className={tw('flex flex-row')}>
+                      <Checkbox
+                        checked={cell.row.getIsSelected()}
+                        onChange={() => cell.row.toggleSelected()}
+                      />
+                    </div>
                   )
                 }[cell.column.id]}
               </td>

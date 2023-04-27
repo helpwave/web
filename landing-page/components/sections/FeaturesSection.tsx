@@ -6,12 +6,12 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
-export type FeaturesSectionLanguage = {
+export type FeaturesSectionTranslation = {
   heading: string,
   features: { title: string, details: string }[]
 }
 
-const defaultFeaturesSectionLanguage: Record<Languages, FeaturesSectionLanguage> = {
+const defaultFeaturesSectionTranslations: Record<Languages, FeaturesSectionTranslation> = {
   en: {
     heading: 'Solving real world problems',
     features: [
@@ -42,15 +42,15 @@ const Feature = ({ title, details }: { title: string, details: string }) => (
 )
 
 // TODO: finally get rid of all the percentage-based styles and fix this mess
-const FeaturesSection = forwardRef<HTMLDivElement, PropsWithLanguage<FeaturesSectionLanguage, Record<string, unknown>>>(function FeaturesSection(props, ref) {
-  const language = useTranslation(props.language, defaultFeaturesSectionLanguage)
+const FeaturesSection = forwardRef<HTMLDivElement, PropsWithLanguage<FeaturesSectionTranslation>>(function FeaturesSection({ language }, ref) {
+  const translation = useTranslation(language, defaultFeaturesSectionTranslations)
 
   return (
     <div className={tw('relative')} id="features">
       <Section ref={ref} id="features">
-        <h1 className={tw('text-5xl font-space font-bold pb-4')}>{language.heading}</h1>
+        <h1 className={tw('text-5xl font-space font-bold pb-4')}>{translation.heading}</h1>
         <div className={tw('w-5/12 flex flex-col my-8')}>
-          {language.features.map((value, index) => (
+          {translation.features.map((value, index) => (
             <div key={index} className={tx('w-9/12 flex flex-col my-8', {
               'self-end mr-8': index % 2 === 0,
               'self-start ml-8': index % 2 === 1

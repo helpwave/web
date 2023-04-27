@@ -30,6 +30,11 @@ export type BedInRoomIndicatorProps = {
   roomName?: string
 }
 
+/**
+ * A component for showing the position of a bed within a room
+ *
+ * Currently, assumes linear ordering
+ */
 export const BedInRoomIndicator =
   ({
     language,

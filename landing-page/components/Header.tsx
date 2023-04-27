@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 
 const socials = [
   { name: 'GitHub', link: 'https://github.com/helpwave/' },

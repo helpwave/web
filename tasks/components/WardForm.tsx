@@ -47,6 +47,9 @@ export type WardFormProps = {
   isShowingErrorsDirectly?: boolean
 }
 
+/**
+ * A form for editing the information of a Ward
+ */
 export const WardForm = ({
   language,
   ward = { name: '' },

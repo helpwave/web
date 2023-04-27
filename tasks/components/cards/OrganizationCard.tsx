@@ -1,30 +1,8 @@
 import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Edit, Mail } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { AvatarGroup } from '../AvatarGroup'
-
-type OrganizationCardTranslation = {
-  edit: string,
-  other: string,
-  others: string
-}
-
-const defaultOrganizationCardTranslations: Record<Languages, OrganizationCardTranslation> = {
-  en: {
-    edit: 'Edit',
-    other: 'other',
-    others: 'others'
-  },
-  de: {
-    edit: 'Bearbeiten',
-    other: 'weiterer',
-    others: 'othere'
-  }
-}
 
 type WardDTO = {
   name: string
@@ -49,31 +27,38 @@ export type OrganizationCardProps = CardProps & {
   onEditClick?: () => void
 }
 
+/**
+ * A Card displaying a Organization
+ */
 export const OrganizationCard = ({
-  language,
   maxShownWards = 5,
   isSelected,
   organization,
   onTileClick = () => undefined,
   onEditClick
-}: PropsWithLanguage<OrganizationCardTranslation, OrganizationCardProps>) => {
-  const translation = useTranslation(language, defaultOrganizationCardTranslations)
+}: OrganizationCardProps) => {
   const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
 
   return (
-    <Card onTileClick={onTileClick} isSelected={isSelected}
-          className={tw('group cursor-pointer justify-between flex flex-col')}>
-      <div className={tw('flex flex-row justify-between w-full')}>
-        <span className={tw('font-bold font-space')}>{`${organization.longName} (${organization.shortName})`}</span>
+    <Card
+      onTileClick={onTileClick}
+      isSelected={isSelected}
+      className={tw('group cursor-pointer justify-between flex flex-col')}
+    >
+      <div className={tw('flex flex-row justify-between w-full gap-x-2 items-start')}>
+        <div className={tw('flex flex-row gap-x-1 font-bold font-space overflow-hidden')}>
+          <span className={tw('text-ellipsis whitespace-nowrap overflow-hidden flex-1')}>{`${organization.longName}`}</span>
+          <span>{`(${organization.shortName})`}</span>
+        </div>
         {onEditClick && (
           <button
             onClick={event => {
               onEditClick()
               event.stopPropagation()
             }}
-            className={tw('hidden group-hover:block')}
+            className={tw('text-transparent group-hover:text-black')}
           >
-            <Edit color="black" size={24}/>
+            <Edit size={24}/>
           </button>
         )}
       </div>
@@ -81,7 +66,7 @@ export const OrganizationCard = ({
         {organization.wards.slice(0, maxShownWards).map(value => value.name).join(', ')}
         {notDisplayedWards > 0 && (
           <span className={tw('ml-1')}>
-            {`+ ${notDisplayedWards} ${notDisplayedWards === 1 ? translation.other : translation.others}`}
+            + {notDisplayedWards}
           </span>
         )}
       </div>

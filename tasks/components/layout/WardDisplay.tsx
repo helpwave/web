@@ -43,6 +43,9 @@ export type WardDisplayProps = {
   onSelectionChange: (organization: WardDTO | undefined) => void
 }
 
+/**
+ * The left side of the organizations/[uuid].tsx page showing the wards within the organizations
+ */
 export const WardDisplay = ({
   language,
   selectedWard,

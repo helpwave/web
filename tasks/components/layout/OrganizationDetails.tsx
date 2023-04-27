@@ -2,13 +2,14 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Dispatch, SetStateAction } from 'react'
 import { useState } from 'react'
 import { OrganizationForm } from '../OrganizationForm'
-import type { Role } from '../OrganizationMemberList'
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import type { OrganizationDTO, OrganizationFormType } from '../../pages/organizations'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -41,55 +42,28 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
   }
 }
 
-type WardDTO = {
-  name: string
-}
-
-type OrgMember = {
-  email: string,
-  name: string,
-  avatarURL: string,
-  role: Role
-}
-
-type OrganizationDTO = {
-  id: string,
-  shortName: string,
-  longName: string,
-  email: string,
-  isVerified: boolean,
-  wards: WardDTO[],
-  members: OrgMember[]
-}
-
 export type OrganizationDetailProps = {
-  organization?: OrganizationDTO,
+  organizationForm: OrganizationFormType,
   onCreate: (organization: OrganizationDTO) => void,
   onUpdate: (organization: OrganizationDTO) => void,
-  onDelete: (organization: OrganizationDTO) => void
+  onDelete: (organization: OrganizationDTO) => void,
+  setOrganization: Dispatch<SetStateAction<OrganizationFormType>>
 }
 
+/**
+ * The left side of the organizations page
+ */
 export const OrganizationDetail = ({
   language,
-  organization,
+  organizationForm,
   onCreate,
   onUpdate,
   onDelete,
+  setOrganization
 }: PropsWithLanguage<OrganizationDetailTranslation, OrganizationDetailProps>) => {
   const translation = useTranslation(language, defaultOrganizationDetailTranslations)
-  const isCreatingNewOrganization = organization === undefined
-
+  const isCreatingNewOrganization = organizationForm.organization.id === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
-  const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
-  const [newOrganization, setNewOrganization] = useState<OrganizationDTO>(organization ?? {
-    id: '',
-    shortName: '',
-    longName: '',
-    email: '',
-    isVerified: false,
-    wards: [],
-    members: []
-  })
 
   return (
     <div className={tw('flex flex-col py-4 px-6 w-5/6')}>
@@ -101,23 +75,31 @@ export const OrganizationDetail = ({
         onBackgroundClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          onDelete(newOrganization)
+          onDelete(organizationForm.organization)
         }}
         confirmType="negative"
       />
       <ColumnTitle title={translation.organizationDetail}/>
       <OrganizationForm
-        organization={newOrganization}
-        onChange={(newOrganizationDetails, isValid) => {
-          setNewOrganization({ ...newOrganization, ...newOrganizationDetails })
-          setFilledRequired(isValid)
-        }}
+        organization={organizationForm.organization}
+        onChange={(newOrganizationDetails, isValid) => setOrganization({
+          hasChanges: true,
+          isValid,
+          organization: { ...organizationForm.organization, ...newOrganizationDetails },
+        })}
         isShowingErrorsDirectly={!isCreatingNewOrganization}
       />
       <div className={tw('mt-6')}>
         <OrganizationMemberList
-          members={newOrganization.members}
-          onChange={(members) => setNewOrganization({ ...newOrganization, members })}
+          members={organizationForm.organization.members}
+          onChange={(members) => setOrganization((prevState) => ({
+            hasChanges: true,
+            isValid: prevState.isValid,
+            organization: {
+              ...prevState.organization,
+              members
+            }
+          }))}
         />
       </div>
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
@@ -133,8 +115,8 @@ export const OrganizationDetail = ({
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button
           className={tw('w-1/2')}
-          onClick={() => isCreatingNewOrganization ? onCreate(newOrganization) : onUpdate(newOrganization)}
-          disabled={!filledRequired}>
+          onClick={() => isCreatingNewOrganization ? onCreate(organizationForm.organization) : onUpdate(organizationForm.organization)}
+          disabled={!organizationForm.isValid}>
           {isCreatingNewOrganization ? translation.create : translation.update}
         </Button>
       </div>

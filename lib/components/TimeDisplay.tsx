@@ -70,6 +70,9 @@ type TimeDisplayProps = {
   mode?: TimeDisplayMode
 }
 
+/**
+ * A Component for displaying time and dates in a unified fashion
+ */
 export const TimeDisplay = ({
   language,
   date,

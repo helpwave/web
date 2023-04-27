@@ -14,6 +14,9 @@ export type TaskCardProps = CardProps & {
   task: TaskDTO
 }
 
+/**
+ * A Card displaying the information about
+ */
 export const TaskCard = ({
   task,
   isSelected = false,

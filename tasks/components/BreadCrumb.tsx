@@ -10,6 +10,11 @@ type BreadCrumbProps = {
   crumbs: Crumb[]
 }
 
+/**
+ * A component for showing a hierarchical link structure with an independent link on each element
+ *
+ * e.g. Organizations/Ward/uuid
+ */
 export const BreadCrumb = ({ crumbs }: BreadCrumbProps) => {
   return (
     <div className={tw('flex flex-row')}>

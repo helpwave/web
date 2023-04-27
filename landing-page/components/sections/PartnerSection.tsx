@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { TitleSection } from '../Section'
 import StadtWarendorf from '../../icons/partners/StadtWarendorf'
 import Ukm from '../../icons/partners/ukm'

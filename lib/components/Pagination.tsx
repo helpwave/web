@@ -22,6 +22,9 @@ export type PaginationProps = {
   onPageChanged: (page: number) => void
 }
 
+/**
+ * A Component showing the pagination allowing first, before, next and last page navigation
+ */
 export const Pagination = ({
   language,
   page,

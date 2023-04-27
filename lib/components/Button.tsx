@@ -34,6 +34,9 @@ type ButtonProps = PropsWithChildren<{
   onClick?: MouseEventHandler<HTMLButtonElement>
 }> & Omit<ButtonHTMLAttributes<Element>, 'onClick' | 'className'>
 
+/**
+ * A button with different styling options determined by the color, variant and size options
+ */
 const Button = ({
   children,
   disabled = false,

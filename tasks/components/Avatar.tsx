@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind'
 
 export type AvatarProps = {
   avatarUrl: string,
@@ -6,10 +6,13 @@ export type AvatarProps = {
   size?: 'tiny' | 'small' | 'medium' | 'large'
 }
 
+/**
+ * A component for showing a profile picture
+ */
 const Avatar = ({ avatarUrl, alt, size = 'medium' }: AvatarProps) => {
   return (
     <div className={tw('rounded-full')}>
-      <img className={tx('rounded-full border border-slate-200 group-hover:border-indigo-200', {
+      <img className={tx('rounded-full border border-slate-200 group-hover:border-indigo-200  flex justify-evenly items-center', {
         'h-6 w-6': size === 'tiny',
         'h-8 w-8': size === 'small',
         'h-12 w-12': size === 'medium',

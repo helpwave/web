@@ -64,6 +64,9 @@ type TaskDetailViewProps = {
   onFinishClick: () => void
 }
 
+/**
+ * The view for changing or creating a task and it's information
+ */
 export const TaskDetailView = ({
   language,
   task,
@@ -73,6 +76,10 @@ export const TaskDetailView = ({
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const labelClassName = 'font-bold text-medium text-gray-600'
+
+  const minTaskNameLength = 4
+  const maxTaskNameLength = 32
+
   return (
     <div className={tw('flex flex-col h-full p-2')}>
       <div className={tw('flex flex-row justify-between')}>
@@ -84,6 +91,8 @@ export const TaskDetailView = ({
             value={task.name}
             onChange={name => onChange({ ...task, name })}
             labelClassName={tw('text-2xl font-bold')}
+            minLength={minTaskNameLength}
+            maxLength={maxTaskNameLength}
             size={24}
           />
         </div>

@@ -2,7 +2,6 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
 import type { SubTaskDTO } from '../mutations/room_mutations'
-import { Trash } from 'lucide-react'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
@@ -28,6 +27,9 @@ type SubtaskTileProps = {
   onChange: (subtask: SubTaskDTO) => void
 }
 
+/**
+ * A tile for showing and editing a subtask used in the SubtaskView
+ */
 export const SubtaskTile = ({
   language,
   subtask,
@@ -35,6 +37,9 @@ export const SubtaskTile = ({
   onChange
 }: PropsWithLanguage<SubtaskTileTranslation, SubtaskTileProps>) => {
   const translation = useTranslation(language, defaultSubtaskTileTranslation)
+
+  const minTaskNameLength = 2
+  const maxTaskNameLength = 64
 
   return (
     <div className={tw('flex flex-row gap-x-2 items-center')}>
@@ -49,6 +54,8 @@ export const SubtaskTile = ({
         className={tw('')}
         onChange={text => onChange({ ...subtask, name: text })}
         id={subtask.name}
+        minLength={minTaskNameLength}
+        maxLength={maxTaskNameLength}
       />
       <button
         className={tw('text-hw-negative-400 hover:text-hw-negative-500 ml-4')}

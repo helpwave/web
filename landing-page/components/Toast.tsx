@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind'
 
 type ToastProps = {
   message: string,

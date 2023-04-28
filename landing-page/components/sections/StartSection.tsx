@@ -7,7 +7,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
-export type StartSectionLanguage = {
+export type StartSectionTranslation = {
   HeroMessageComponent: ReactFC,
   features: {
     intuitive: string,
@@ -19,7 +19,7 @@ export type StartSectionLanguage = {
   }
 }
 
-const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
+const defaultStartSectionTranslations: Record<Languages, StartSectionTranslation> = {
   en: {
     HeroMessageComponent: () => (
       <>
@@ -62,8 +62,8 @@ const defaultStartSectionLanguage: Record<Languages, StartSectionLanguage> = {
   }
 }
 
-const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLanguage, Record<string, unknown>>>(function StartSection(props, ref) {
-  const language = useTranslation(props.language, defaultStartSectionLanguage)
+const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionTranslation>>(function StartSection({ language }, ref) {
+  const translation = useTranslation(language, defaultStartSectionTranslations)
   return (
     <div className={tw('w-screen h-screen bg-white')} id="start" ref={ref}>
       <Helpwave className={tw('absolute top-[25px] left-1/2 -translate-x-1/2')} height="72" width="96" />
@@ -72,7 +72,7 @@ const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionLa
           <div className={tw('font-space text-6xl font-bold text-center')}>helpwave</div>
 
         <div className={tw('font-sans text-2xl font-medium mt-2 text-center')}>
-          <language.HeroMessageComponent />
+          <translation.HeroMessageComponent />
         </div>
       </div>
     </div>

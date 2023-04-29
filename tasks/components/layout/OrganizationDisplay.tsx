@@ -21,7 +21,7 @@ const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisp
   },
   de: {
     addOrganization: 'Organisation hinzufügen',
-    yourOrganizations: 'Deine Organizationen'
+    yourOrganizations: 'Deine Organisationen'
   }
 }
 

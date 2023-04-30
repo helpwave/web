@@ -1,26 +1,29 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import TriangleDown from '../icons/TriangleDown'
-import { Input } from './user_input/Input'
+import { Input } from '@helpwave/common/components/user_input/Input'
 
 type KanbanHeaderTranslation = {
   tasks: string,
   status: string,
-  label: string
+  label: string,
+  search: string
 }
 
 const defaultKanbanHeaderTranslations: Record<Languages, KanbanHeaderTranslation> = {
   en: {
     tasks: 'Tasks',
     status: 'Status',
-    label: 'Label'
+    label: 'Label',
+    search: 'Search'
   },
   de: {
     tasks: 'Aufgaben',
     status: 'Status',
-    label: 'Label'
+    label: 'Label',
+    search: 'Suchen'
   }
 }
 
@@ -31,6 +34,9 @@ type KanbanHeaderProps = {
   onSearchChange: (search: string) => void
 }
 
+/**
+ * The header of the KanbanBoard affording a search
+ */
 export const KanbanHeader = ({
   language,
   searchValue = '',
@@ -49,7 +55,7 @@ export const KanbanHeader = ({
           {translation.label}
           <TriangleDown className={tw('stroke-black')}/>
         </div>
-        <Input id="search" value={searchValue} label="" onChange={onSearchChange}/>
+        <Input id="search" value={searchValue} label="" placeholder={translation.search} onChange={onSearchChange}/>
       </div>
     </div>
   )

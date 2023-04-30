@@ -1,9 +1,9 @@
 import { tw } from '@helpwave/common/twind'
-import Add from '@helpwave/common/icons/Add'
-import type { CardProps } from './Card'
-import { Card } from './Card'
+import type { CardProps } from '@helpwave/common/components/Card'
+import { Card } from '@helpwave/common/components/Card'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Plus } from 'lucide-react'
 
 type BedCardTranslation = {
   nobody: string
@@ -26,6 +26,11 @@ export type BedCardProps = CardProps & {
   bed: BedDTO
 }
 
+/**
+ * A Card for showing the Bed for Patient
+ *
+ * Shown instead of a PatientCard, if there is no patient assigned to the bed
+ */
 export const BedCard = ({
   language,
   bed,
@@ -41,7 +46,7 @@ export const BedCard = ({
           <span>{translation.nobody}</span>
         </div>
         <div className={tw('flex flex-1 justify-center items-center')}>
-          <Add/>
+          <Plus/>
         </div>
       </Card>
     )

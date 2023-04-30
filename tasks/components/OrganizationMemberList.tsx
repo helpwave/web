@@ -1,18 +1,20 @@
+import type { CoreCell } from '@tanstack/react-table'
 import {
   useReactTable,
   createColumnHelper,
   getCoreRowModel,
   getPaginationRowModel
 } from '@tanstack/react-table'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Dropdown from '../icons/TriangleDown'
-import { Pagination } from './Pagination'
-import { TriStateCheckbox } from './user_input/TriStateCheckbox'
-import { Button } from './Button'
+import { Pagination } from '@helpwave/common/components/Pagination'
+import { Button } from '@helpwave/common/components/Button'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Avatar } from './Avatar'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { useState } from 'react'
 
 // TODO replace later
 export const enum Role {
@@ -23,37 +25,49 @@ export const enum Role {
 type OrganizationMemberListTranslation = {
   edit: string,
   remove: string,
+  removeSelection: string,
   deselectAll: string,
   selectAll: string,
   members: string,
+  member: string,
   addMember: string,
   saveChanges: string,
   role: string,
-  roleTypes: Record<Role, string>
+  roleTypes: Record<Role, string>,
+  dangerZoneText: (single: boolean) => string,
+  deleteConfirmText: (single: boolean) => string
 }
 
 const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationMemberListTranslation> = {
   en: {
     edit: 'Edit',
     remove: 'Remove',
+    removeSelection: 'Remove Selection',
     deselectAll: 'Deselect all',
     selectAll: 'Select all',
     members: 'Members',
+    member: 'Member',
     addMember: 'Add member',
     saveChanges: 'Save changes',
     role: 'Role',
-    roleTypes: { [Role.admin]: 'Admin', [Role.user]: 'User' }
+    roleTypes: { [Role.admin]: 'Admin', [Role.user]: 'User' },
+    dangerZoneText: (single) => `Deleting ${single ? `a ${defaultOrganizationMemberListTranslations.en.member}` : defaultOrganizationMemberListTranslations.en.members} is a permanent action and cannot be undone. Be careful!`,
+    deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultOrganizationMemberListTranslations.en.member : defaultOrganizationMemberListTranslations.en.members}?`,
   },
   de: {
     edit: 'Bearbeiten',
     remove: 'Entfernen',
+    removeSelection: 'Auswahl entfernen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
-    members: 'Mitglieder',
+    members: 'Mitgliedern',
+    member: 'Mitglied',
     addMember: 'Miglied hinzufügen',
     saveChanges: 'Speichern',
     role: 'Rolle',
-    roleTypes: { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' }
+    roleTypes: { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' },
+    dangerZoneText: (single) => `Das Löschen ${single ? `eines ${defaultOrganizationMemberListTranslations.de.member}` : `von ${defaultOrganizationMemberListTranslations.de.member}`} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
+    deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? `das ausgewählte ${defaultOrganizationMemberListTranslations.de.member}` : `die ausgewählten ${defaultOrganizationMemberListTranslations.de.members}`}  löschen?`,
   }
 }
 
@@ -87,6 +101,9 @@ const columns = [
   }),
 ]
 
+/**
+ * A table for showing and editing the members of an organization
+ */
 export const OrganizationMemberList = ({
   language,
   usersPerPage = 5,
@@ -115,19 +132,56 @@ export const OrganizationMemberList = ({
     onChange([...members, newMember])
   }
 
+  type ConfirmDialogState = {
+    display: boolean,
+    single: CoreCell<OrgMember, unknown> | null
+  }
+  const defaultState: ConfirmDialogState = { display: false, single: null }
+  const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
+  const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
+
   return (
     <div className={tw('flex flex-col')}>
+      <ConfirmDialog
+        title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        isOpen={stateDeletionConfirmDialog.display}
+        onCancel={() => resetDeletionConfirmDialogState()}
+        onBackgroundClick={() => resetDeletionConfirmDialogState()}
+        onConfirm={() => {
+          if (stateDeletionConfirmDialog.single) {
+            onChange(members.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+          } else {
+            table.toggleAllRowsSelected(false)
+            onChange(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+          }
+          resetDeletionConfirmDialogState()
+        }}
+        confirmType="negative"
+      />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
-        <Button onClick={addUser} color="positive" className={tw('mr-2')}>
-          <div className={tw('flex flex-row items-center')}>
-            <span className={tw('mr-2')}>{translation.addMember}</span>
-            <Dropdown/>
-          </div>
-        </Button>
+        <div className={tw('flex flex-row gap-x-2')}>
+          {table.getIsSomePageRowsSelected() && (
+            <Button
+              onClick={() => setDeletionConfirmDialogState({
+                display: true,
+                single: null
+              })}
+              color="negative"
+            >
+              {translation.removeSelection}
+            </Button>
+          )}
+          <Button onClick={addUser} color="positive">
+            <div className={tw('flex flex-row items-center')}>
+              <span className={tw('mr-2')}>{translation.addMember}</span>
+            </div>
+          </Button>
+        </div>
       </div>
       <table>
-        <thead>
+        <thead className={tw('after:block after:h-1 after:w-full')}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map(header => (
@@ -135,27 +189,20 @@ export const OrganizationMemberList = ({
                 {header.isPlaceholder
                   ? null
                   : {
-                      select:
-                      (<TriStateCheckbox
-                        checked={table.getIsSomePageRowsSelected() ? null : table.getIsAllRowsSelected()}
-                        onChanged={() => table.toggleAllRowsSelected()}
+                      select: (
+                      <Checkbox
+                        checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
+                        onChange={() => table.toggleAllRowsSelected()}
                       />),
-                      name: (<div>
-                      <span>{table.getIsAllRowsSelected() ? translation.deselectAll : translation.selectAll}</span>
-                    </div>),
-                      role: (<div className={tw('flex flex-row justify-end items-center pr-2')}>
-                      {translation.role}
-                      <Dropdown className={tw('stroke-black ml-2')}/>
-                    </div>),
-                      remove: (<div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => {
-                        table.toggleAllRowsSelected(false)
-                        onChange(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-                        // TODO at delete safety for owner later on
-                      }}>
-                        <span>{translation.remove}</span>
-                      </button>
-                    </div>),
+                      name: (
+                      <div className={tw('flex flex-row pl-10')}>
+                        <span>{translation.member}</span>
+                      </div>),
+                      role: (
+                      <div className={tw('flex flex-row items-center pr-2')}>
+                        {translation.role}
+                      </div>),
+                      remove: <div/>,
                     }[header.column.id]
                 }
               </th>
@@ -163,26 +210,25 @@ export const OrganizationMemberList = ({
           </tr>
         ))}
         </thead>
-        <tbody>
+        <tbody className={tw('before:h-2 before:block border-t-2 before:w-full')}>
         {table.getRowModel().rows.map(row => (
           <tr key={row.id}>
             {row.getVisibleCells().map(cell => (
               <td key={cell.id}>
                 {{
                   role: (
-                    <div className={tw('flex flex-row justify-end items-center mr-2')}>
+                    <div className={tw('flex flex-row items-center mr-2')}>
                       <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
                       }}>
-                      <span className={tw(`mr-2 font-semibold text-right`)}>
-                        {translation.roleTypes[cell.row.original.role]}
-                      </span>
-                        <Dropdown className={tw('stroke-black')}/>
+                        <span className={tw(`font-semibold`)}>
+                          {translation.roleTypes[cell.row.original.role]}
+                        </span>
                       </button>
                     </div>
                   ),
                   name: (
                     <div className={tw('flex flex-row items-center h-12')}>
-                      <Avatar avatarUrl={cell.row.original.avatarURL} alt={cell.row.original.name} size="small"/>
+                      <Avatar avatarUrl={cell.row.original.avatarURL} alt={cell.row.original.name.charAt(0)} size="small"/>
                       <div className={tw('flex flex-col ml-2')}>
                         <span className={tw('font-bold h-5')}>{cell.row.original.name}</span>
                         <span className={tw('text-sm text-gray-400')}>{cell.row.original.email}</span>
@@ -191,13 +237,20 @@ export const OrganizationMemberList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => onChange(members.filter(value => value !== cell.row.original))}>
+                      <button onClick={() => setDeletionConfirmDialogState({
+                        display: true,
+                        single: cell
+                      })}>
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>
                   ),
-                  select: <TriStateCheckbox checked={cell.row.getIsSelected()}
-                                            onChanged={() => cell.row.toggleSelected()}/>
+                  select: (
+                    <Checkbox
+                      checked={cell.row.getIsSelected()}
+                      onChange={() => cell.row.toggleSelected()}
+                    />
+                  )
                 }[cell.column.id]}
               </td>
             ))}
@@ -206,11 +259,11 @@ export const OrganizationMemberList = ({
         {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && table.getPageCount() > 1
           && (members.length % usersPerPage) !== 0
           && ([...Array((usersPerPage - (members.length % usersPerPage)) % usersPerPage)].map((i, index) => (
-          <tr key={index} className={tw('h-12')}>
-            {[table.getAllColumns.length].map((j, index) => (
-              <td key={index}/>
-            ))}
-          </tr>
+            <tr key={index} className={tw('h-12')}>
+              {[table.getAllColumns.length].map((j, index) => (
+                <td key={index}/>
+              ))}
+            </tr>
           )))}
         </tbody>
       </table>

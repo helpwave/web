@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import type {
   DragEndEvent,
   DragStartEvent,
@@ -17,47 +16,48 @@ import {
 } from '@dnd-kit/core'
 import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
-import type { TaskStatus } from '../KanbanColumn'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import { noop } from '../user_input/Input'
+import { noop } from '@helpwave/common/components/user_input/Input'
+import type { TaskDTO, TaskStatus } from '../../mutations/room_mutations'
 
-type KanbanBoardObject = {
+export type KanbanBoardObject = {
   draggedID?: string,
   searchValue: string,
   overColumn?: string
 }
 
-type TaskDTO = {
-  id: string,
-  name: string,
-  description: string,
-  status: 'unscheduled' | 'inProgress' | 'done',
-  progress: number
+export type SortedTasks = {
+  unscheduled: TaskDTO[],
+  inProgress: TaskDTO[],
+  done: TaskDTO[]
 }
 
 type KanbanBoardProps = {
-  tasks: TaskDTO[],
-  onChange: (tasks: TaskDTO[]) => void
+  sortedTasks: SortedTasks,
+  onChange: (sortedTasks: SortedTasks) => void,
+  boardObject: KanbanBoardObject,
+  onBoardChange: (board: KanbanBoardObject) => void,
+  onEditTask: (task: TaskDTO) => void,
+  editedTaskID?: string
 }
 
+/**
+ * A Kanbanboard for showing and changing tasks
+ *
+ * The State is managed by the parent component
+ */
 export const KanbanBoard = ({
-  tasks,
-  onChange = noop
+  sortedTasks,
+  boardObject,
+  onBoardChange,
+  onChange = noop,
+  onEditTask,
+  editedTaskID
 }: KanbanBoardProps) => {
-  const [sortedTasks, setSortedTasks] = useState(
-    {
-      unscheduled: tasks.filter(value => value.status === 'unscheduled'),
-      inProgress: tasks.filter(value => value.status === 'inProgress'),
-      done: tasks.filter(value => value.status === 'done'),
-    }
-  )
-
-  const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
-
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -80,7 +80,7 @@ export const KanbanBoard = ({
   }
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    setBoardObject({ ...boardObject, draggedID: active.id as string })
+    onBoardChange({ ...boardObject, draggedID: active.id as string })
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -91,30 +91,27 @@ export const KanbanBoard = ({
       return
     }
 
-    setSortedTasks((sortedTasks) => {
-      const activeItems = sortedTasks[activeColumn]
-      const overItems = sortedTasks[overColumn]
+    const activeItems = sortedTasks[activeColumn]
+    const overItems = sortedTasks[overColumn]
 
-      // Find the indexes for the items
-      const activeIndex = activeItems.findIndex(item => item.id === active.id)
-      const overIndex = overItems.findIndex(item => item.id !== over?.id)
+    // Find the indexes for the items
+    const activeIndex = activeItems.findIndex(item => item.id === active.id)
+    const overIndex = overItems.findIndex(item => item.id !== over?.id)
 
-      sortedTasks[activeColumn][activeIndex].status = overColumn
-
-      return {
-        ...sortedTasks,
-        [activeColumn]: [
-          ...sortedTasks[activeColumn].filter(item => item.id !== active.id),
-        ],
-        [overColumn]: [
-          ...sortedTasks[overColumn].slice(0, overIndex),
-          sortedTasks[activeColumn][activeIndex],
-          ...sortedTasks[overColumn].slice(overIndex, sortedTasks[overColumn].length),
-        ],
-      }
+    sortedTasks[activeColumn][activeIndex].status = overColumn
+    onChange({
+      ...sortedTasks,
+      [activeColumn]: [
+        ...sortedTasks[activeColumn].filter(item => item.id !== active.id),
+      ],
+      [overColumn]: [
+        ...sortedTasks[overColumn].slice(0, overIndex),
+        sortedTasks[activeColumn][activeIndex],
+        ...sortedTasks[overColumn].slice(overIndex, sortedTasks[overColumn].length),
+      ],
     })
 
-    setBoardObject({ ...boardObject, overColumn })
+    onBoardChange({ ...boardObject, overColumn })
   }
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
@@ -128,16 +125,13 @@ export const KanbanBoard = ({
     const activeIndex = sortedTasks[activeColumn].findIndex(task => task.id === active.id)
     const overIndex = sortedTasks[overColumn].findIndex(task => task.id === over?.id)
 
-    setBoardObject({ ...boardObject, draggedID: undefined, overColumn: undefined })
+    onBoardChange({ ...boardObject, draggedID: undefined, overColumn: undefined })
     if (activeIndex !== overIndex) {
       const newSortedTasks = {
         ...sortedTasks,
         [overColumn]: arrayMove(sortedTasks[overColumn], activeIndex, overIndex),
       }
-      setSortedTasks(newSortedTasks)
-      onChange([...newSortedTasks.unscheduled, ...newSortedTasks.inProgress, ...newSortedTasks.done])
-    } else {
-      onChange([...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done])
+      onChange(newSortedTasks)
     }
   }
 
@@ -149,13 +143,16 @@ export const KanbanBoard = ({
       [...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done].find(value => value && value.id === boardObject.draggedID)
     : null
 
-  function filterBySearch(tasks: TaskDTO[]) : TaskDTO[] {
-    return tasks.filter(value => value.name.toLowerCase().startsWith(boardObject.searchValue.toLowerCase()))
+  function filterBySearch(tasks: TaskDTO[]): TaskDTO[] {
+    return tasks.filter(value => value.name.replaceAll(' ', '').toLowerCase().indexOf(boardObject.searchValue.replaceAll(' ', '').toLowerCase()) !== -1)
   }
 
   return (
     <div>
-      <KanbanHeader searchValue={boardObject.searchValue} onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}/>
+      <KanbanHeader
+        searchValue={boardObject.searchValue}
+        onSearchChange={text => onBoardChange({ ...boardObject, searchValue: text })}
+      />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -164,14 +161,29 @@ export const KanbanBoard = ({
         onDragEnd={handleDragEnd}
       >
         <div className={tw('grid grid-cols-3 gap-x-4 mt-6')}>
-          <KanbanColumn type="unscheduled" tasks={filterBySearch(sortedTasks.unscheduled)} draggedTileID={boardObject.draggedID}
-                        isDraggedOver={boardObject.overColumn === 'unscheduled'}/>
-          <KanbanColumn type="inProgress" tasks={filterBySearch(sortedTasks.inProgress)} draggedTileID={boardObject.draggedID}
-                        isDraggedOver={boardObject.overColumn === 'inProgress'}/>
-          <KanbanColumn type="done" tasks={filterBySearch(sortedTasks.done)} draggedTileID={boardObject.draggedID}
-                        isDraggedOver={boardObject.overColumn === 'done'}/>
+          <KanbanColumn
+            type="unscheduled"
+            tasks={filterBySearch(sortedTasks.unscheduled)}
+            draggedTileID={boardObject.draggedID ?? editedTaskID}
+            isDraggedOver={boardObject.overColumn === 'unscheduled'}
+            onEditTask={onEditTask}
+          />
+          <KanbanColumn
+            type="inProgress"
+            tasks={filterBySearch(sortedTasks.inProgress)}
+            draggedTileID={boardObject.draggedID ?? editedTaskID}
+            isDraggedOver={boardObject.overColumn === 'inProgress'}
+            onEditTask={onEditTask}
+          />
+          <KanbanColumn
+            type="done"
+            tasks={filterBySearch(sortedTasks.done)}
+            draggedTileID={boardObject.draggedID ?? editedTaskID}
+            isDraggedOver={boardObject.overColumn === 'done'}
+            onEditTask={onEditTask}
+          />
           <DragOverlay dropAnimation={dropAnimation}>
-            {task && <TaskCard task={task} progress={task.progress}/>}
+            {task && <TaskCard task={task}/>}
           </DragOverlay>
         </div>
       </DndContext>

@@ -7,6 +7,7 @@ import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
 import type { Role } from '../OrganizationMemberList'
 import { useRouter } from 'next/router'
+import { emptyOrganization } from '../../pages/organizations'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -20,7 +21,7 @@ const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisp
   },
   de: {
     addOrganization: 'Organisation hinzufügen',
-    yourOrganizations: 'Deine Organizationen'
+    yourOrganizations: 'Deine Organisationen'
   }
 }
 
@@ -46,11 +47,14 @@ type OrganizationDTO = {
 }
 
 export type OrganizationDisplayProps = {
-  selectedOrganization: OrganizationDTO | undefined,
+  selectedOrganization: OrganizationDTO,
   organizations: OrganizationDTO[],
-  onSelectionChange: (organization: OrganizationDTO | undefined) => void
+  onSelectionChange: (organization: OrganizationDTO) => void
 }
 
+/**
+ * The right side of the organizations page showing the list of organizations
+ */
 export const OrganizationDisplay = ({
   language,
   selectedOrganization,
@@ -68,15 +72,15 @@ export const OrganizationDisplay = ({
           <OrganizationCard
             key={organization.longName}
             organization={organization}
-            isSelected={selectedOrganization?.id === organization.id}
+            isSelected={selectedOrganization.id === organization.id}
             onEditClick={() => onSelectionChange(organization)}
             onTileClick={async () => await router.push(`/organizations/${organization.id}`)}
           />
         ))}
         <AddCard
           text={translation.addOrganization}
-          onTileClick={() => onSelectionChange(undefined)}
-          isSelected={selectedOrganization === undefined}
+          onTileClick={() => onSelectionChange(emptyOrganization)}
+          isSelected={selectedOrganization.id === ''}
           className={tw('h-24')}
         />
       </div>

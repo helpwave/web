@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { FunctionComponent } from 'react'
 
 type PillLabelTranslation = {
   text: string
@@ -39,23 +38,26 @@ export type PillLabelProps = {
   state?: TaskStateInformation
 }
 
-const PillLabel: FunctionComponent<PropsWithLanguage<PillLabelTranslation, PillLabelProps>> =
-  (props) => {
-    props.state ??= TaskState.unscheduled
-    props.count ??= 0
-    const translation = useTranslation(props.language, props.state.translation)
-
-    return (
-      <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between
-       bg-${props.state.colorLabel}-background text-${props.state.colorLabel}-text text-sm`)}>
-        <div className={tw(`flex flex-row items-center text-${props.state.colorLabel}-text`)}>
-          <div className={tw(`rounded-full w-2 h-2 bg-${props.state.colorLabel}-accent`)} />
-          <div className={tw('w-2')} />
-          {translation.text}
-        </div>
-        {props.count}
+/**
+ * A Label for showing a TaskState's information like the state name and the count of Tasks in this state
+ */
+const PillLabel = ({
+  language,
+  count = 0,
+  state = TaskState.unscheduled
+}: PropsWithLanguage<PillLabelTranslation, PillLabelProps>) => {
+  const translation = useTranslation(language, state.translation)
+  return (
+    <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between
+       bg-${state.colorLabel}-background text-${state.colorLabel}-text text-sm`)}>
+      <div className={tw(`flex flex-row items-center text-${state.colorLabel}-text`)}>
+        <div className={tw(`rounded-full w-2 h-2 bg-${state.colorLabel}-accent`)}/>
+        <div className={tw('w-2')}/>
+        {translation.text}
       </div>
-    )
-  }
+      {count}
+    </div>
+  )
+}
 
 export { PillLabel, TaskState }

@@ -7,9 +7,9 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/favicon.svg" />
           <meta name="description" content="Next generation healthcare software approach!" />
-          <meta name="og:title" property="og:title" content="helpwave" />
+          <meta name="og:title" property="og:title" content="helpwave tasks" />
           <meta property="og:description" content="Next generation healthcare software approach!" />
         </Head>
         <body>

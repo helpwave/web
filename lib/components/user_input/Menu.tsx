@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import type { PropsWithChildren, ReactNode, RefObject } from 'react'
-import { tw, tx } from '@helpwave/common/twind/index'
-import { useOutsideClick } from '@helpwave/common/hooks/useOutsideClick'
+import { tw, tx } from '../../twind'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
 
 type MenuProps<T> = PropsWithChildren<{
   trigger: (onClick: () => void, ref: RefObject<T>) => ReactNode,
@@ -19,6 +19,9 @@ const MenuItem = ({ children, onClick, alignment = 'left' }: PropsWithChildren<{
 )
 
 // TODO: it is quite annoying that the type for the ref has to be specified manually, is there some solution around this?
+/**
+ * A Menu Component to allow the user to see different functions
+ */
 const Menu = <T extends HTMLElement>({ trigger, children, alignment = 'tl' }: MenuProps<T>) => {
   const [open, setOpen] = React.useState(false)
   const triggerRef = useRef<T>(null)
@@ -29,7 +32,7 @@ const Menu = <T extends HTMLElement>({ trigger, children, alignment = 'tl' }: Me
     <div className={tw('relative')}>
       {trigger(() => setOpen(!open), triggerRef)}
       {open ? (
-          <div ref={menuRef} onClick={e => e.stopPropagation()} className={tx('absolute top-full mt-1 py-2 w-40 rounded-lg bg-white ring-1 ring-slate-900/5 text-sm leading-6 font-semibold text-slate-700 shadow-md', {
+          <div ref={menuRef} onClick={e => e.stopPropagation()} className={tx('absolute top-full mt-1 py-2 w-40 rounded-lg bg-white ring-1 ring-slate-900/5 text-sm leading-6 font-semibold text-slate-700 shadow-md z-[1]', {
             '    top-[8px]': alignment[0] === 't',
             ' bottom-[8px]': alignment[0] === 'b',
             '  left-[-8px]': alignment[1] === 'l',

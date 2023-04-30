@@ -1,11 +1,8 @@
-import { tw, tx } from '@helpwave/common/twind/index'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import ChevronLast from '@helpwave/common/icons/ChevronLast'
-import ChevronLeft from '@helpwave/common/icons/ChevronLeft'
-import ChevronFirst from '@helpwave/common/icons/ChevronFirst'
-import ChevronRight from '@helpwave/common/icons/ChevronRight'
+import { tw, tx } from '../twind'
+import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
+import type { PropsWithLanguage } from '../hooks/useTranslation'
+import { useTranslation } from '../hooks/useTranslation'
+import type { Languages } from '../hooks/useLanguage'
 
 type PaginationTranslation = {
   of: string
@@ -25,6 +22,9 @@ export type PaginationProps = {
   onPageChanged: (page: number) => void
 }
 
+/**
+ * A Component showing the pagination allowing first, before, next and last page navigation
+ */
 export const Pagination = ({
   language,
   page,

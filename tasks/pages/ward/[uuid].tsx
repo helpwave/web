@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -15,20 +15,31 @@ import {
 } from '../../mutations/room_mutations'
 import { RoomOverview } from '../../components/RoomOverview'
 import { PatientDetail } from '../../components/layout/PatientDetails'
+import { PageWithHeader } from '../../components/layout/PageWithHeader'
+import titleWrapper from '../../utils/titleWrapper'
 
 type WardOverviewTranslation = {
   beds: string,
-  roomOverview: string
+  roomOverview: string,
+  organization: string,
+  ward: string,
+  bed: string
 }
 
 const defaultWardOverviewTranslation = {
   en: {
     beds: 'Betten',
-    roomOverview: 'Room Overview'
+    roomOverview: 'Room Overview',
+    organization: 'Organization',
+    ward: 'Ward',
+    bed: 'Bed'
   },
   de: {
     beds: 'Bett',
-    roomOverview: 'Raum Übersicht'
+    roomOverview: 'Raum Übersicht',
+    organization: 'Organisation',
+    ward: 'Station',
+    bed: 'Bett'
   }
 }
 
@@ -37,9 +48,10 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const [selectedBed, setSelectedBed] = useState<BedDTO | undefined>(undefined)
 
   const router = useRouter()
-  const { user } = useAuth(() => router.push({ pathname: '/login', query: { back: true } }))
+  const { user } = useAuth()
   const { uuid } = router.query
   const wardUUID = uuid as string
+  const organizationUUID = 'org1' // TODO get this information somewhere
 
   const { isLoading, isError, data } = useRoomQuery()
 
@@ -76,19 +88,34 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   }
 
   return (
-    <div className={tw('w-screen h-screen flex flex-col')}>
+    <PageWithHeader
+      crumbs={[
+        { display: translation.organization, link: '/organizations' },
+        { display: translation.ward, link: `/organizations/${organizationUUID}` },
+        { display: translation.bed, link: `/ward/${wardUUID}` }
+      ]}
+    >
       <Head>
-        <title>{translation.roomOverview}</title>
+        <title>{titleWrapper(translation.roomOverview)}</title>
       </Head>
       <TwoColumn
-        left={(
+        left={() => (
           <div className={tw('flex flex-col px-6 py-8')}>
-            {rooms.map(room => (<RoomOverview key={room.id} room={room} onSelect={setSelectedBed} selected={selectedBed}/>))}
+            {rooms.map(room => (
+              <RoomOverview
+                key={room.id}
+                room={room}
+                onSelect={setSelectedBed}
+                selected={selectedBed}
+                onUpdate={bed => updateMutation.mutate({ ...bed }) }
+              />
+            )
+            )}
           </div>
         )}
-        right={
+        right={() =>
           selectedBed === undefined || selectedBed.patient === undefined ?
-              (<div>No Room or Patient Selected</div>) :
+            <div>No Room or Patient Selected</div> :
               (
               <div>
                 <PatientDetail
@@ -101,8 +128,9 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
                 />
               </div>
               )
-        }/>
-    </div>
+        }
+      />
+    </PageWithHeader>
   )
 }
 

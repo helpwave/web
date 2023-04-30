@@ -1,29 +1,65 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { tw } from '@helpwave/common/twind/index'
-import { Menu, MenuItem } from './Menu'
+import { tw } from '@helpwave/common/twind'
+import { Menu, MenuItem } from '@helpwave/common/components/user_input/Menu'
 import { Avatar } from './Avatar'
-import type { User } from '../hooks/useAuth'
+import { useAuth } from '../hooks/useAuth'
+import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { getConfig } from '../utils/config'
 
-type UserMenuProps = {
-  user: User
+const config = getConfig()
+
+type UserMenuTranslation = {
+  profile: string,
+  language: string,
+  signOut: string
 }
 
-const UserMenu = ({ user }: UserMenuProps) => {
-  // TODO: meaningful menu content
+const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
+  en: {
+    profile: 'Profile',
+    language: 'Language',
+    signOut: 'Sign Out',
+  },
+  de: {
+    profile: 'Profil',
+    language: 'Sprache',
+    signOut: 'Ausloggen',
+  }
+}
+
+/**
+ * A component showing a menu for user actions. For example editing the profile, language and logout.
+ */
+export const UserMenu = ({
+  language,
+}: PropsWithLanguage<UserMenuTranslation>) => {
+  const translation = useTranslation(language, defaultUserMenuTranslations)
+  const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
+  const { user, signOut } = useAuth()
+
+  if (!user) return null
+
+  // The settings path "/ui/settings" is hardcoded. It depends strongly on the implementation of the Ory UI.
+  const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
+
   return (
-    <div className={tw('relative w-40')}>
+    <div className={tw('relative')}>
+      <LanguageModal onDone={() => setLanguageModalOpen(false)} isOpen={isLanguageModalOpen}></LanguageModal>
+
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick} className={tw('flex gap-2 relative items-center group cursor-pointer select-none')}>
-          <Avatar avatarUrl={user.avatarUrl} alt={user.displayName} size="small" />
-          <div className={tw('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.displayName}</div>
+          <div className={tw('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.name}</div>
+          <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small" />
       </div>
       )}>
-        <Link href="/profile"><MenuItem alignment="left">Profile</MenuItem></Link>
-        <Link href="/settings"><MenuItem alignment="left">Settings</MenuItem></Link>
+        <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
+        <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem alignment="left">{translation.language}</MenuItem></div>
+        <div className="cursor-pointer" onClick={() => signOut()}><MenuItem alignment="left">{translation.signOut}</MenuItem></div>
       </Menu>
     </div>
   )
 }
-
-export { UserMenu }

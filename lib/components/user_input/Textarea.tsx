@@ -1,4 +1,4 @@
-import { css, tw, tx } from '@helpwave/common/twind'
+import { tw, tx, css } from '../../twind'
 import type { TextareaHTMLAttributes } from 'react'
 
 type TextareaProps = {
@@ -16,6 +16,12 @@ const globalStyles = css`
     @apply border-hw-primary-700;
   }
 `
+
+/**
+ * A Textarea component for inputting longer texts
+ *
+ * The State is managed by the parent
+ */
 export const Textarea = ({ headline, id, resizable = false, onChange = noop, ...props }: TextareaProps) => {
   return (
     <div className={tw(globalStyles)}>

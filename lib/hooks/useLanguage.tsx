@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import type { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
+import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 
 const languages = ['en', 'de'] as const
 export type Languages = typeof languages[number]
@@ -15,7 +15,7 @@ export const LanguageContext = createContext<LanguageContextValue>({ language: D
 
 export const useLanguage = () => useContext(LanguageContext)
 
-export const ProvideLanguage: FunctionComponent<PropsWithChildren> = ({ children }) => {
+export const ProvideLanguage = ({ children }: PropsWithChildren) => {
   const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)
 
   useEffect(() => {
@@ -28,7 +28,6 @@ export const ProvideLanguage: FunctionComponent<PropsWithChildren> = ({ children
     if (matchingBrowserLanguages.length === 0) return
 
     const firstMatch = matchingBrowserLanguages[0] as Languages
-    console.log(`setting language to: ${firstMatch}`)
     setLanguage(firstMatch)
   }, [])
 

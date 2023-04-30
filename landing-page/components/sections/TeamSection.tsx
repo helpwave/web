@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import GridBox from '../GridBox'
 import { Section } from '../Section'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -38,12 +38,12 @@ const partners = [ /* eslint-disable key-spacing, no-multi-spaces */
   { name: 'Stadt Warendorf',   Icon: StadtWarendorf, url: 'https://www.warendorf.de/' },
 ] /* eslint-enable key-spacing, no-multi-spaces */
 
-export type PartnersTeamSectionLanguage = {
+export type PartnersTeamSectionTranslation = {
   headingPartners: string,
   headingTeam: string
 }
 
-const defaultPartnersTeamSectionTranslations: Record<Languages, PartnersTeamSectionLanguage> = {
+const defaultPartnersTeamSectionTranslations: Record<Languages, PartnersTeamSectionTranslation> = {
   en: {
     headingPartners: 'Our Partners',
     headingTeam: 'Our Team'
@@ -63,13 +63,13 @@ const Person = ({ name, role }: { name: string, role: Role }) => (
   </div>
 )
 
-const PartnersTeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnersTeamSectionLanguage, Record<string, unknown>>>(function TeamSection(props, ref) {
-  const language = useTranslation(props.language, defaultPartnersTeamSectionTranslations)
+const PartnersTeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnersTeamSectionTranslation>>(function TeamSection({ language }, ref) {
+  const translation = useTranslation(language, defaultPartnersTeamSectionTranslations)
   return (
     <Section ref={ref} id="partners_team">
       <div className={tw('flex justify-between')}>
         <div className={tw('')}>
-          <h1 className={tw('text-5xl font-space font-bold pb-4')}>{language.headingPartners}</h1>
+          <h1 className={tw('text-5xl font-space font-bold pb-4')}>{translation.headingPartners}</h1>
           <div className={tw('flex flex-col gap-4 pt-4')}>
             {partners.map((partner) => (
               <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer">
@@ -81,7 +81,7 @@ const PartnersTeamSection = forwardRef<HTMLDivElement, PropsWithLanguage<Partner
           </div>
         </div>
         <div className={tw('shrink-0')}>
-          <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>{language.headingTeam}</h1>}>
+          <GridBox heading={<h1 className={tw('text-white text-5xl font-space font-bold pl-4 pb-4')}>{translation.headingTeam}</h1>}>
             <div className={tw('w-fit grid grid-cols-2 gap-16')}>
               {teamMembers.map(({ name, role }, index) => <Person key={index} name={name} role={role} />)}
             </div>

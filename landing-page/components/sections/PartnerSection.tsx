@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import { TitleSection } from '../Section'
 import StadtWarendorf from '../../icons/partners/StadtWarendorf'
 import Ukm from '../../icons/partners/ukm'
@@ -14,11 +14,11 @@ const partners = [
   { name: 'Stadt Warendorf', Icon: StadtWarendorf, url: 'https://www.warendorf.de/' },
 ]
 
-export type PartnerSectionLanguage = {
+export type PartnerSectionTranslation = {
   heading: string
 }
 
-const defaultPartnerSectionTranslations: Record<Languages, PartnerSectionLanguage> = {
+const defaultPartnerSectionTranslations: Record<Languages, PartnerSectionTranslation> = {
   en: {
     heading: 'Our Partners',
   },
@@ -27,10 +27,10 @@ const defaultPartnerSectionTranslations: Record<Languages, PartnerSectionLanguag
   }
 }
 
-const PartnerSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnerSectionLanguage, Record<string, unknown>>>(function PartnerSection(props, ref) {
-  const language = useTranslation(props.language, defaultPartnerSectionTranslations)
+const PartnerSection = forwardRef<HTMLDivElement, PropsWithLanguage<PartnerSectionTranslation>>(function PartnerSection({ language }, ref) {
+  const translation = useTranslation(language, defaultPartnerSectionTranslations)
   return (
-    <TitleSection id="partner" ref={ref} title={language.heading}>
+    <TitleSection id="partner" ref={ref} title={translation.heading}>
       <div className={tw('flex gap-4 pt-4')}>
       {partners.map((partner) => (
         <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer">

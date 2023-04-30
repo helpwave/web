@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind/index'
+import { tw, tx } from '@helpwave/common/twind'
 import { PillLabel, TaskState } from './pill/PillLabel'
 import { TaskCard } from './cards/TaskCard'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -11,6 +11,7 @@ import {
   SortableContext,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable'
+import type { TaskDTO, TaskStatus } from '../mutations/room_mutations'
 
 type KanbanColumnsTranslation = {
   addTask: string
@@ -25,35 +26,26 @@ const defaultKanbanColumnsTranslations: Record<Languages, KanbanColumnsTranslati
   }
 }
 
-export type TaskStatus = 'unscheduled' | 'inProgress' | 'done'
-
-type TaskDTO = {
-  id: string,
-  name: string,
-  description: string,
-  status: TaskStatus,
-  progress: number
-}
-
 type KanbanColumnProps = {
   tasks: TaskDTO[],
   type: TaskStatus,
   isDraggedOver: boolean,
-  draggedTileID?: string
+  draggedTileID?: string,
+  onEditTask: (task: TaskDTO) => void
 }
 
+/**
+ * The Column of the KanbanBoard showing tasks and affording a reorder of these
+ */
 export const KanbanColumn = ({
   language,
   tasks,
   type,
   isDraggedOver,
-  draggedTileID
+  draggedTileID,
+  onEditTask
 }: PropsWithLanguage<KanbanColumnsTranslation, KanbanColumnProps>) => {
   const translation = useTranslation(language, defaultKanbanColumnsTranslations)
-
-  const addNewTask = (taskStatus: TaskStatus) => {
-    // TODO open dialog to add a new task
-  }
 
   const { setNodeRef } = useDroppable({
     id: type,
@@ -62,7 +54,10 @@ export const KanbanColumn = ({
   const taskState = { unscheduled: TaskState.unscheduled, inProgress: TaskState.inProgress, done: TaskState.done }
 
   return (
-    <div className={tx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver }, 'flex flex-col gap-y-4 border-2 border-dashed rounded-lg p-2')}>
+    <div
+      className={tx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver },
+        'flex flex-col gap-y-4 border-2 border-dashed rounded-lg p-2')}
+    >
       <PillLabel count={tasks.length} state={taskState[type]}/>
       <SortableContext
         id={type}
@@ -72,12 +67,28 @@ export const KanbanColumn = ({
         <div ref={setNodeRef} className="flex flex-col gap-y-4">
           {tasks.map((task) => (
             <Sortable key={task.id} id={task.id}>
-              <TaskCard progress={task.progress} task={task} isSelected={draggedTileID === task.id}/>
+              <TaskCard
+                task={task}
+                isSelected={draggedTileID === task.id}
+                onTileClick={() => onEditTask(task)}
+              />
             </Sortable>
           ))}
         </div>
       </SortableContext>
-      <button onClick={() => addNewTask(type)} className={tw('flex flex-row ml-1 gap-x-1 text-gray-300')}>
+      <button
+        onClick={() => onEditTask({
+          status: type,
+          id: '',
+          name: 'New Task',
+          description: '',
+          subtasks: [],
+          assignee: '',
+          isPublicVisible: false,
+          dueDate: ''
+        })}
+        className={tw('flex flex-row ml-1 gap-x-1 text-gray-300')}
+      >
         <Add/>
         {translation.addTask}
       </button>

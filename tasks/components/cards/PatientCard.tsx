@@ -1,22 +1,8 @@
 import { tw } from '@helpwave/common/twind'
-import type { CardProps } from './Card'
-import { Card } from './Card'
+import type { CardProps } from '@helpwave/common/components/Card'
+import { Card } from '@helpwave/common/components/Card'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
-
-type TaskDTO = {
-  id: string,
-  name: string,
-  description: string,
-  status: 'unscheduled' | 'inProgress' | 'done',
-  progress: number
-}
-
-type PatientDTO = {
-  id: string,
-  note: string,
-  humanReadableIdentifier: string,
-  tasks: TaskDTO[]
-}
+import type { PatientDTO } from '../../mutations/room_mutations'
 
 type BedDTO = {
   name: string,
@@ -28,6 +14,9 @@ export type PatientCardProps = CardProps & {
   patient: PatientDTO
 }
 
+/**
+ * A Card for displaying a Patient and the tasks
+ */
 export const PatientCard = ({
   bed,
   patient,

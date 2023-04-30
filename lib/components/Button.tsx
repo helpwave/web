@@ -1,6 +1,6 @@
 import React from 'react'
-import type { PropsWithChildren, ButtonHTMLAttributes } from 'react'
-import { tx } from '@helpwave/common/twind/index'
+import type { PropsWithChildren, ButtonHTMLAttributes, MouseEventHandler } from 'react'
+import { tx } from '../twind'
 
 // TODO: add more variants
 // TODO: this could be matched to some kind of tailwind/twind custom colors
@@ -31,9 +31,12 @@ type ButtonProps = PropsWithChildren<{
    * Additional override for styling, this will get merged with the styles selected through variant and size.
    */
   className?: string,
-  onClick?: () => void
+  onClick?: MouseEventHandler<HTMLButtonElement>
 }> & Omit<ButtonHTMLAttributes<Element>, 'onClick' | 'className'>
 
+/**
+ * A button with different styling options determined by the color, variant and size options
+ */
 const Button = ({
   children,
   disabled = false,
@@ -56,21 +59,21 @@ const Button = ({
       'text-white bg-AAA-500    hover:bg-AAA-600    focus:ring-AAA-500': variant === 'primary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
       'text-white bg-hw-positive-400    hover:bg-hw-positive-500    focus:ring-hw-positive-400': variant === 'primary' && color === 'positive' && !disabled,
       'text-white bg-hw-negative-400    hover:bg-hw-negative-500    focus:ring-hw-negative-400': variant === 'primary' && color === 'negative' && !disabled,
-      'text-white bg-ZZZ-500    hover:bg-ZZZ-600    focus:ring-ZZZ-500': variant === 'primary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
+      'text-white bg-gray-400    hover:bg-gray-500    focus:ring-gray-400': variant === 'primary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
 
       // secondary & {accent, accent-secondary, positive, negative, neutral}
       'text-hw-primary-400 bg-hw-primary-100 hover:bg-hw-primary-200 focus:ring-hw-primary-100': variant === 'secondary' && color === 'accent' && !disabled,
       'text-AAA-500 bg-AAA-200       hover:bg-AAA-300    focus:ring-AAA-200': variant === 'secondary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
       'text-hw-positive-400 bg-hw-positive-100   hover:bg-hw-positive-200  focus:ring-hw-positive-100': variant === 'secondary' && color === 'positive' && !disabled,
       'text-hw-negative-400 bg-hw-negative-100   hover:bg-hw-negative-200  focus:ring-hw-negative-100': variant === 'secondary' && color === 'negative' && !disabled,
-      'text-ZZZ-500 bg-ZZZ-200       hover:bg-ZZZ-300    focus:ring-ZZZ-200': variant === 'secondary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
+      'text-gray-500 bg-gray-200       hover:bg-gray-300    focus:ring-gray-200': variant === 'secondary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
 
       // tertiary & {accent, accent-secondary, positive, negative, neutral}
       'text-hw-primary-400 hover:underline focus:ring-hw-primary-100': variant === 'tertiary' && color === 'accent' && !disabled,
       'text-AAA-500    hover:underline focus:ring-AAA-200': variant === 'tertiary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
       'text-hw-positive-400  hover:underline focus:ring-hw-positive-200': variant === 'tertiary' && color === 'positive' && !disabled,
       'text-hw-negative-400  hover:underline focus:ring-hw-negative-200': variant === 'tertiary' && color === 'negative' && !disabled,
-      'text-ZZZ-500    hover:underline focus:ring-ZZZ-200': variant === 'tertiary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
+      'text-gray-500    hover:underline focus:ring-gray-300': variant === 'tertiary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
 
       // {small, medium, large}
       'TODO1': size === 'small', // TODO: add styles for small buttons

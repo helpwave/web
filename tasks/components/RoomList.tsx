@@ -1,47 +1,64 @@
+import type { CoreCell } from '@tanstack/react-table'
 import {
   useReactTable,
   createColumnHelper,
   getCoreRowModel,
   getPaginationRowModel
 } from '@tanstack/react-table'
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Dropdown from '../icons/TriangleDown'
-import { Pagination } from './Pagination'
-import { TriStateCheckbox } from './user_input/TriStateCheckbox'
-import { Button } from './Button'
-import { Input } from './user_input/Input'
+import { useState } from 'react'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { Pagination } from '@helpwave/common/components/Pagination'
+import { Button } from '@helpwave/common/components/Button'
+import { Input } from '@helpwave/common/components/user_input/Input'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
 type RoomListTranslation = {
   edit: string,
   remove: string,
+  removeSelection: string,
   deselectAll: string,
   selectAll: string,
+  roomName: string,
+  room: string,
   rooms: string,
   addRoom: string,
-  bedCount: string
+  bedCount: string,
+  dangerZoneText: (single: boolean) => string,
+  deleteConfirmText: (single: boolean) => string
 }
 
 const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
   en: {
     edit: 'Edit',
     remove: 'Remove',
+    removeSelection: 'Remove Selection',
     deselectAll: 'Deselect All',
     selectAll: 'Select All',
+    roomName: 'Room Name',
+    room: 'Room',
     rooms: 'Rooms',
     addRoom: 'Add Room',
-    bedCount: 'Number of Beds'
+    bedCount: 'Number of Beds',
+    dangerZoneText: (single) => `Deleting ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms} is a permanent action and cannot be undone. Be careful!`,
+    deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms}?`,
   },
   de: {
     edit: 'Bearbeiten',
     remove: 'Entfernen',
+    removeSelection: 'Auswahl entfernen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
+    roomName: 'Raum Name',
+    room: 'Raum',
     rooms: 'Räume',
     addRoom: 'Raum hinzufügen',
-    bedCount: 'Bettenanzahl'
+    bedCount: 'Bettenanzahl',
+    dangerZoneText: (single) => `Das Löschen von ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
+    deleteConfirmText: (single) => `Wollen Sie wirklich die ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
   }
 }
 
@@ -73,6 +90,9 @@ const columns = [
   }),
 ]
 
+/**
+ * A table for showing and editing the rooms within a ward
+ */
 export const RoomList = ({
   language,
   roomsPerPage = 5,
@@ -80,6 +100,17 @@ export const RoomList = ({
   onChange
 }: PropsWithLanguage<RoomListTranslation, RoomListProps>) => {
   const translation = useTranslation(language, defaultRoomListTranslations)
+
+  type ConfirmDialogState = {
+    display: boolean,
+    single: CoreCell<Room, unknown> | null
+  }
+  const defaultState: ConfirmDialogState = { display: false, single: null }
+  const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
+  const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
+
+  const minRoomNameLength = 1
+  const maxRoomNameLength = 32
 
   const table = useReactTable({
     data: rooms,
@@ -102,17 +133,44 @@ export const RoomList = ({
 
   return (
     <div className={tw('flex flex-col')}>
+      <ConfirmDialog
+        title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
+        isOpen={stateDeletionConfirmDialog.display}
+        onCancel={() => resetDeletionConfirmDialogState()}
+        onBackgroundClick={() => resetDeletionConfirmDialogState()}
+        onConfirm={() => {
+          if (stateDeletionConfirmDialog.single) {
+            onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+          } else {
+            table.toggleAllRowsSelected(false)
+            onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+          }
+          resetDeletionConfirmDialogState()
+        }}
+        confirmType="negative"
+      />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
-        <Button onClick={addRoom} color="positive">
-          <div className={tw('flex flex-row items-center')}>
-            <span className={tw('mr-2')}>{translation.addRoom}</span>
-            <Dropdown/>
-          </div>
-        </Button>
+        <div className={tw('flex flex-row gap-x-2')}>
+          {table.getIsSomePageRowsSelected() && (
+<Button
+            onClick={() => setDeletionConfirmDialogState({
+              display: true,
+              single: null
+            })}
+            color="negative"
+          >
+            {translation.removeSelection}
+          </Button>
+          )}
+          <Button onClick={addRoom} color="positive">
+            {translation.addRoom}
+          </Button>
+        </div>
       </div>
       <table>
-        <thead>
+        <thead className={tw('after:block after:h-1 after:w-full')}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map(header => (
@@ -121,31 +179,22 @@ export const RoomList = ({
                   ? null
                   : {
                       select:
-                      (<div className={tw('pr-4')}>
-                          <TriStateCheckbox
-                            checked={table.getIsSomePageRowsSelected() ? null : table.getIsAllRowsSelected()}
-                            onChanged={() => table.toggleAllRowsSelected()}
+                      (<div className={tw('flex flex-row pr-4')}>
+                          <Checkbox
+                            checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
+                            onChange={() => table.toggleAllRowsSelected()}
                           />
                         </div>
                       ),
                       name:
                       (<div className={tw('flex flex-row')}>
-                        <span>{table.getIsAllRowsSelected() ? translation.deselectAll : translation.selectAll}</span>
+                        <span>{translation.roomName}</span>
                       </div>),
                       bedCount:
                       (<div className={tw('flex flex-row')}>
                         {translation.bedCount}
                       </div>),
-                      remove:
-                      (<div className={tw('flex flex-row justify-end pl-8')}>
-                        <button
-                          onClick={() => {
-                            table.toggleAllRowsSelected(false)
-                            onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-                          }}>
-                          <span>{translation.remove}</span>
-                        </button>
-                      </div>),
+                      remove: (<div />),
                     }[header.column.id]
                 }
               </th>
@@ -153,7 +202,7 @@ export const RoomList = ({
           </tr>
         ))}
         </thead>
-        <tbody>
+        <tbody className={tw('before:h-2 before:block border-t-2 before:w-full')}>
         {table.getRowModel().rows.map(row => (
           <tr key={row.id}>
             {row.getVisibleCells().map(cell => (
@@ -183,18 +232,31 @@ export const RoomList = ({
                           name: text
                         } : value))}
                         id={cell.row.original.name}
+                        minLength={minRoomNameLength}
+                        maxLength={maxRoomNameLength}
                       />
                     </div>
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => onChange(rooms.filter(value => value !== cell.row.original))}>
+                      <button
+                        onClick={() => setDeletionConfirmDialogState({
+                          display: true,
+                          single: cell
+                        })}
+                      >
                         <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
                       </button>
                     </div>
                   ),
-                  select: <TriStateCheckbox checked={cell.row.getIsSelected()}
-                                            onChanged={() => cell.row.toggleSelected()}/>
+                  select: (
+                    <div className={tw('flex flex-row')}>
+                      <Checkbox
+                        checked={cell.row.getIsSelected()}
+                        onChange={() => cell.row.toggleSelected()}
+                      />
+                    </div>
+                  )
                 }[cell.column.id]}
               </td>
             ))}

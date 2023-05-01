@@ -22,6 +22,14 @@ export type TaskDTO = {
   isPublicVisible: boolean
 }
 
+export type TaskTemplateDTO = {
+  id: string,
+  name: string,
+  notes: string,
+  subtasks: SubTaskDTO[],
+  isPublicVisible: boolean
+}
+
 export type PatientDTO = {
   id: string,
   note: string,

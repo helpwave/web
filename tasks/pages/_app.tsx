@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </div>
           </QueryClientProvider>
         </div>
-        <div className="mobile-wrapper">
+        <div className={tw('mobile-wrapper font-sans')}>
           <MobileInterceptor {...pageProps} />
         </div>S
       </ProvideLanguage>

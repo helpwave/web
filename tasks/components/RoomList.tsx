@@ -15,6 +15,7 @@ import { Pagination } from '@helpwave/common/components/Pagination'
 import { Button } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
+import { Span } from '@helpwave/common/components/Span'
 
 type RoomListTranslation = {
   edit: string,
@@ -151,7 +152,7 @@ export const RoomList = ({
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
+        <Span type="subsectionTitle">{translation.rooms + ` (${rooms.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {table.getIsSomePageRowsSelected() && (
 <Button
@@ -188,11 +189,11 @@ export const RoomList = ({
                       ),
                       name:
                       (<div className={tw('flex flex-row')}>
-                        <span>{translation.roomName}</span>
+                        <Span type="accent">{translation.roomName}</Span>
                       </div>),
                       bedCount:
                       (<div className={tw('flex flex-row')}>
-                        {translation.bedCount}
+                        <Span type="accent">{translation.bedCount}</Span>
                       </div>),
                       remove: (<div />),
                     }[header.column.id]
@@ -239,14 +240,16 @@ export const RoomList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button
+                      <Button
                         onClick={() => setDeletionConfirmDialogState({
                           display: true,
                           single: cell
                         })}
+                        color="negative"
+                        variant="textButton"
                       >
-                        <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
-                      </button>
+                        {translation.remove}
+                      </Button>
                     </div>
                   ),
                   select: (

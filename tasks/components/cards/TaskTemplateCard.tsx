@@ -4,6 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
+import { Span } from '@helpwave/common/components/Span'
 
 type TaskTemplateCardTranslation = {
   subtask: string,
@@ -43,7 +44,7 @@ export const TaskTemplateCard =
     return (
       <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between')}>
         <div className={tw('flex flex-col items-start')}>
-          <span className={tw('font-bold font-space')}>{name}</span>
+          <Span type="subsubsectionTitle">{name}</Span>
           <p>{subtaskCount + ' ' + translation.subtask}</p>
         </div>
         <button

@@ -15,6 +15,7 @@ import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Avatar } from './Avatar'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { useState } from 'react'
+import { Span } from '@helpwave/common/components/Span'
 
 // TODO replace later
 export const enum Role {
@@ -160,7 +161,7 @@ export const OrganizationMemberList = ({
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
+        <Span type="subsectionTitle">{translation.members + ` (${members.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {table.getIsSomePageRowsSelected() && (
             <Button

@@ -152,7 +152,7 @@ export const RoomList = ({
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <Span type="subsectionTitle">{translation.rooms + ` (${rooms.length})`}</Span>
+        <Span type="tableName">{translation.rooms + ` (${rooms.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {table.getIsSomePageRowsSelected() && (
 <Button

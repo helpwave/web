@@ -10,6 +10,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { SubtaskView } from '../SubtaskView'
 import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
+import { Span } from '@helpwave/common/components/Span'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -97,7 +98,7 @@ export const TaskDetailView = ({
           />
         </div>
         <button className={tw('flex flex-row gap-x-2')} onClick={onClose}>
-          <span>{translation.close}</span>
+          <Span>{translation.close}</Span>
           <X />
         </button>
       </div>
@@ -159,8 +160,8 @@ export const TaskDetailView = ({
           </div>
           {task.creationDate !== undefined ? (
             <div className={tw('flex flex-col gap-y-8 mt-16')}>
-              <div className={tw('flex flex-col')}>
-                <span className={tw('font-bold text-gray-800 mb-1')}>{translation.creationTime}</span>
+              <div className={tw('flex flex-col gap-y-1')}>
+                <Span className={tw(labelClassName)}>{translation.creationTime}</Span>
                 <TimeDisplay date={new Date(task.creationDate)} />
               </div>
               <Button color="accent" onClick={onFinishClick}>{translation.update}</Button>

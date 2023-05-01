@@ -161,7 +161,7 @@ export const OrganizationMemberList = ({
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <Span type="subsectionTitle">{translation.members + ` (${members.length})`}</Span>
+        <Span type="tableName">{translation.members + ` (${members.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {table.getIsSomePageRowsSelected() && (
             <Button
@@ -238,12 +238,16 @@ export const OrganizationMemberList = ({
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => setDeletionConfirmDialogState({
-                        display: true,
-                        single: cell
-                      })}>
-                        <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
-                      </button>
+                      <Button
+                        onClick={() => setDeletionConfirmDialogState({
+                          display: true,
+                          single: cell
+                        })}
+                        color="negative"
+                        variant="textButton"
+                      >
+                        {translation.remove}
+                      </Button>
                     </div>
                   ),
                   select: (

@@ -8,6 +8,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
+import { Span } from '@helpwave/common/components/Span'
 
 type DashboardDisplayTranslation = {
   organizations: string,
@@ -51,8 +52,8 @@ export const DashboardDisplay = ({
       <div className={tw('flex flex-col')}>
         <div className={tw('flex flex-row justify-between mb-1')}>
           <div className={tw('flex flex-col')}>
-            <span className={tw('font-bold text-gray-700')}>{translation.recent}</span>
-            <span className={tw('font-semibold text-lg')}>{translation.organizations}</span>
+            <Span className={tw('font-bold text-gray-700')}>{translation.recent}</Span>
+            <Span type="subsectionTitle">{translation.organizations}</Span>
           </div>
           <div>
             <Button
@@ -73,8 +74,8 @@ export const DashboardDisplay = ({
           ))}
         </div>
       </div>
-      <div className={tw('flex flex-col')}>
-        <span className={tw('font-semibold text-lg mb-1')}>{translation.wards}</span>
+      <div className={tw('flex flex-col gap-y-1')}>
+        <Span type="subsectionTitle">{translation.wards}</Span>
         <div className={tw('grid grid-cols-2 gap-6')}>
           {wards.map(ward => <WardCard key={ward.id} ward={ward} onTileClick={() => router.push(`/ward/${ward.id}`)}/>)}
         </div>

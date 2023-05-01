@@ -50,7 +50,9 @@ const Button = ({
   <button
     onClick={disabled ? undefined : onClick}
     disabled={disabled}
-    className={tx('py-2 px-4 text-sm font-medium focus:outline-none', className, {
+    className={tx('py-2 font-medium focus:outline-none', className, {
+      'px-4 text-sm': variant !== 'textButton',
+
       // disabled
       'text-white bg-gray-400 hover:bg-gray-400 focus:bg-gray-400': disabled,
 

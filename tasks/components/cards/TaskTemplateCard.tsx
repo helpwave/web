@@ -45,7 +45,7 @@ export const TaskTemplateCard =
       <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between')}>
         <div className={tw('flex flex-col items-start')}>
           <Span type="subsubsectionTitle">{name}</Span>
-          <p>{subtaskCount + ' ' + translation.subtask}</p>
+          <Span>{subtaskCount + ' ' + translation.subtask}</Span>
         </div>
         <button
           onClick={event => {

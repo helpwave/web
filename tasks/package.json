@@ -27,7 +27,7 @@
     "google-protobuf": "^3.21.2",
     "grpc-web": "^1.4.2",
     "js-cookie": "^3.0.1",
-    "lucide-react": "^0.183.0",
+    "lucide-react": "^0.188.0",
     "next": "^13.2.3",
     "oauth4webapi": "^2.2.0",
     "react": "^18.2.0",

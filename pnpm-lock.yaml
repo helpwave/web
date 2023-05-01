@@ -47,8 +47,8 @@ importers:
         version: 9.4.1(react@18.2.0)
     devDependencies:
       '@types/node':
-        specifier: 18.16.1
-        version: 18.16.1
+        specifier: 18.16.3
+        version: 18.16.3
       '@types/react':
         specifier: 18.2.0
         version: 18.2.0
@@ -116,8 +116,8 @@ importers:
         specifier: ^3.0.10
         version: 3.1.1
       lucide-react:
-        specifier: ^0.183.0
-        version: 0.183.0(react@18.2.0)
+        specifier: ^0.187.0
+        version: 0.187.0(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -189,8 +189,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       lucide-react:
-        specifier: ^0.183.0
-        version: 0.183.0(react@18.2.0)
+        specifier: ^0.188.0
+        version: 0.188.0(react@18.2.0)
       next:
         specifier: ^13.2.3
         version: 13.2.3(react-dom@18.2.0)(react@18.2.0)
@@ -957,12 +957,12 @@ packages:
     resolution: {integrity: sha512-XAMpaw1s1+6zM+jn2tmw8MyaRDIJfXxqmIQIS0HfoGYPuf7dUWeiUKopwq13KFX9lEp1+THGtlaaYx39Nxr58g==}
     dev: false
 
-  /@types/node@18.16.1:
-    resolution: {integrity: sha512-DZxSZWXxFfOlx7k7Rv4LAyiMroaxa3Ly/7OOzZO8cBNho0YzAi4qlbrx8W27JGqG57IgR/6J7r+nOJWw6kcvZA==}
-    dev: true
-
   /@types/node@18.16.2:
     resolution: {integrity: sha512-GQW/JL/5Fz/0I8RpeBG9lKp0+aNcXEaVL71c0D2Q0QHDTFvlYKT7an0onCUXj85anv7b4/WesqdfchLc0jtsCg==}
+    dev: true
+
+  /@types/node@18.16.3:
+    resolution: {integrity: sha512-OPs5WnnT1xkCBiuQrZA4+YAV4HEJejmHneyraIaxsbev5yCEr6KMwINNFP9wQeFIw8FWcoTqF3vQsa5CDaI+8Q==}
     dev: true
 
   /@types/prop-types@15.7.5:
@@ -2804,8 +2804,16 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /lucide-react@0.183.0(react@18.2.0):
-    resolution: {integrity: sha512-oYKPEqrMXM+Lovi2a1kqxk9e6QC5d0t07dTYo9Mu/g5Malu66nb/UqxO/jKoer3Z/El8jz7l088JBt34f3lgOA==}
+  /lucide-react@0.187.0(react@18.2.0):
+    resolution: {integrity: sha512-+k/2djo5opeq22Bb68sA0rjQbI3ToC3nNmsHmaahJ+/6EF2dbWcJ4eWzQZe/97dxndUQ6F2/VqvVXmKHACFnfw==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /lucide-react@0.188.0(react@18.2.0):
+    resolution: {integrity: sha512-c27NaQoiGp1Spz2NPcCjV1EFAOWICPq0Wq+uxyXUUAzgSC0jCMJCztcyZ5ABr2RO/ivd9ZEnFEldSX50ZYAKkQ==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:

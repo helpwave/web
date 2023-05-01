@@ -44,7 +44,7 @@ const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTra
     shortNameDescription: 'Häufig verwendet, sollte kurz und beschreibend sein.',
     longName: 'Ausgeschriebener Name',
     longNameDescription: 'Selten verwendet, falls der Platz zur Darstellung reicht.',
-    contactEmail: 'Kontkct email',
+    contactEmail: 'Kontakt E-Mail',
     contactEmailDescription: 'Sichtbar für Nicht-Mitglieder.',
     notVerified: 'Noch nicht bestätigt!',
     required: 'Benötigter Wert, darf nicht leer sein',

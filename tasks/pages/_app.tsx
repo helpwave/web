@@ -22,14 +22,15 @@ const spaceGrotesk = SpaceGrotesk({
 const queryClient = new QueryClient()
 
 const globalStyles = css`
-  @media (max-width: 1350px) {
-    .desktop-wrapper{
+
+  @media (max-width: 1150px) {
+    #desktop-wrapper{
       display: none;
     }
   }
 
-  @media (min-width: 1350px) {
-    .mobile-wrapper{
+  @media (min-width: 1150px) {
+    #mobile-wrapper{
       display: none;
     }
   }
@@ -37,9 +38,9 @@ const globalStyles = css`
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className={tw(globalStyles)}>
+    <div id={tw(globalStyles)}>
       <ProvideLanguage>
-        <div className="desktop-wrapper">
+        <div id="desktop-wrapper">
           <Head>
             <title>{titleWrapper()}</title>
             <style>{`
@@ -55,9 +56,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             </div>
           </QueryClientProvider>
         </div>
-        <div className={tw('mobile-wrapper font-sans')}>
+        <div id="mobile-wrapper" className={tw('font-sans')}>
           <MobileInterceptor {...pageProps} />
-        </div>S
+        </div>
       </ProvideLanguage>
     </div>
   )

@@ -35,7 +35,7 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
   en: {
     edit: 'Edit',
     remove: 'Remove',
-    removeSelection: 'Remove Selection',
+    removeSelection: 'Remove Selected',
     deselectAll: 'Deselect All',
     selectAll: 'Select All',
     roomName: 'Room Name',
@@ -153,8 +153,8 @@ export const RoomList = ({
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.rooms + ` (${rooms.length})`}</span>
         <div className={tw('flex flex-row gap-x-2')}>
-          {table.getIsSomePageRowsSelected() && (
-<Button
+          {(table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected()) && (
+          <Button
             onClick={() => setDeletionConfirmDialogState({
               display: true,
               single: null

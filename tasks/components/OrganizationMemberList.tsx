@@ -42,7 +42,7 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
   en: {
     edit: 'Edit',
     remove: 'Remove',
-    removeSelection: 'Remove Selection',
+    removeSelection: 'Remove Selected',
     deselectAll: 'Deselect all',
     selectAll: 'Select all',
     members: 'Members',
@@ -162,7 +162,7 @@ export const OrganizationMemberList = ({
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
         <div className={tw('flex flex-row gap-x-2')}>
-          {table.getIsSomePageRowsSelected() && (
+          {(table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected()) && (
             <Button
               onClick={() => setDeletionConfirmDialogState({
                 display: true,

@@ -6,8 +6,9 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
-import type { TaskTemplateDTO } from '../../mutations/room_mutations'
-import { useQuery } from '@tanstack/react-query'
+import { TaskTemplateDisplay } from '../../components/layout/TaskTemplateDisplay'
+import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
+import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 
 type WardTaskTemplateTranslation = {
   taskTemplates: string,
@@ -31,7 +32,7 @@ const defaultWardTaskTemplateTranslations = {
   }
 }
 
-export type WardTaskTemplateFormType = {
+export type TaskTemplateFormType = {
   isValid: boolean,
   hasChanges: boolean,
   template: TaskTemplateDTO
@@ -48,13 +49,13 @@ const emptyTaskTemplate: TaskTemplateDTO = {
 const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
 
-  const [taskTemplateForm, setTaskTemplateForm] = useState<WardTaskTemplateFormType>({
+  const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
     isValid: false,
     hasChanges: false,
     template: emptyTaskTemplate
   })
 
-  const { isLoading, isError, data } = useQuery([''])
+  const { isLoading, isError, data } = useTaskTemplateQuery()
 
   // TODO add view for loading
   if (isLoading) {
@@ -77,7 +78,16 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
       </Head>
       <TwoColumn
         left={() => (
-          <div/>
+          <TaskTemplateDisplay
+            onSelectChange={taskTemplate => setTaskTemplateForm({
+              template: taskTemplate ?? emptyTaskTemplate,
+              hasChanges: false,
+              isValid: taskTemplate !== undefined,
+            })}
+            selectedID={taskTemplateForm.template.id}
+            taskTemplates={data}
+            variant="wardTemplates"
+          />
         )}
         right={() => (
           <div/>

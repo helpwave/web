@@ -1,3 +1,4 @@
+import { Span } from '@helpwave/common/components/Span'
 import { tw, tx } from '@helpwave/common/twind'
 import Link from 'next/link'
 
@@ -23,7 +24,7 @@ export const BreadCrumb = ({ crumbs }: BreadCrumbProps) => {
           <Link href={crumb.link} className={tx({ 'text-gray-500 hover:text-black': index !== crumbs.length - 1 })}>
             {crumb.display}
           </Link>
-          {index !== crumbs.length - 1 && <span className={tw('px-2 text-gray-500')}>/</span>}
+          {index !== crumbs.length - 1 && <Span className={tw('px-2 text-gray-500')}>/</Span>}
         </div>
       ))}
     </div>

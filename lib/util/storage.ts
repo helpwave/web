@@ -21,4 +21,8 @@ class StorageSerice {
   }
 }
 
-export default new StorageSerice(window.localStorage);
+export class LocalStorageService extends StorageSerice {
+  constructor() {
+    super(window.localStorage)
+  }
+}

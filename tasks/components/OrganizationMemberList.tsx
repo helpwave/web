@@ -57,7 +57,7 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
   de: {
     edit: 'Bearbeiten',
     remove: 'Entfernen',
-    removeSelection: 'Auswahl entfernen',
+    removeSelection: 'Ausgewählte löschen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
     members: 'Mitgliedern',

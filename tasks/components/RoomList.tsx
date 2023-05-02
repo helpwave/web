@@ -49,7 +49,7 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
   de: {
     edit: 'Bearbeiten',
     remove: 'Entfernen',
-    removeSelection: 'Auswahl entfernen',
+    removeSelection: 'Ausgewählte löschen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
     roomName: 'Raum Name',

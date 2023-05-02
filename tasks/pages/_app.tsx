@@ -21,15 +21,16 @@ const spaceGrotesk = SpaceGrotesk({
 
 const queryClient = new QueryClient()
 
+const maxWidth = 1150
 const globalStyles = css`
 
-  @media (max-width: 1150px) {
+  @media (max-width: ${maxWidth}px) {
     #desktop-wrapper{
       display: none;
     }
   }
 
-  @media (min-width: 1150px) {
+  @media (min-width: ${maxWidth}px) {
     #mobile-wrapper{
       display: none;
     }

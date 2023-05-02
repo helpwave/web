@@ -3,6 +3,7 @@ import { PatientCard } from './cards/PatientCard'
 import { BedCard } from './cards/BedCard'
 import type { BedDTO, RoomDTO } from '../mutations/room_mutations'
 import { noop } from '@helpwave/common/components/user_input/Input'
+import { Span } from '@helpwave/common/components/Span'
 
 export type RoomOverviewProps = {
   room: RoomDTO,
@@ -19,7 +20,7 @@ export const RoomOverview = ({ room, onSelect, selected, onUpdate = noop }: Room
     <div>
       <div className={tw('flex flex-row items-center mb-1')}>
         <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <span className={tw('font-bold')}>{room.name}</span>
+        <Span type="subsectionTitle">{room.name}</Span>
       </div>
       <div className={tw('grid grid-cols-3 gap-4')}>
         {room.beds.map(bed => bed.patient !== undefined ?

@@ -6,6 +6,7 @@ import HelpwaveLogo from '@helpwave/common/icons/HelpwaveRect'
 import type { NextPage } from 'next'
 import { AndroidView, IOSView } from 'react-device-detect'
 import { getConfig } from '../utils/config'
+import { Span } from '@helpwave/common/components/Span'
 
 type MobileInterceptorTranslation = {
   pleaseDownloadApp: string,
@@ -40,7 +41,7 @@ const MobileInterceptor: NextPage = ({ language }: PropsWithLanguage<MobileInter
   return (
     <div className={tw('w-screen h-[80vh] flex flex-col items-center justify-center')}>
       <HelpwaveLogo className={tw('w-1/3 mx-auto h-auto mb-2 text-black')}/>
-      <span className={tw('text-lg font-semibold mb-8')}>{translation.pleaseDownloadApp}</span>
+      <Span type="subsectionTitle" className={tw('mb-8')}>{translation.pleaseDownloadApp}</Span>
       <AndroidView>
         <Link href={playStoreLink}>{translation.playStore}</Link>
       </AndroidView>

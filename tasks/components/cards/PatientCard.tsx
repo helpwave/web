@@ -3,6 +3,7 @@ import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import type { PatientDTO } from '../../mutations/room_mutations'
+import { Span } from '@helpwave/common/components/Span'
 
 type BedDTO = {
   name: string,
@@ -26,8 +27,8 @@ export const PatientCard = ({
   return (
     <Card isSelected={isSelected} onTileClick={onTileClick}>
       <div className={tw('flex flex-row justify-between')}>
-        <span className={tw('font-bold font-space')}>{bed.name}</span>
-        <span>{patient.humanReadableIdentifier}</span>
+        <Span type="subsubsectionTitle">{bed.name}</Span>
+        <Span>{patient.humanReadableIdentifier}</Span>
       </div>
       <div className={tw('w-7/12 min-w-[150px] mt-1')}>
         <PillLabelsColumn

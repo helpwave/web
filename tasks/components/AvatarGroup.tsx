@@ -1,24 +1,6 @@
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Span } from '@helpwave/common/components/Span'
+import { tw, tx } from '@twind/core'
 import { Avatar } from './Avatar'
-
-type AvatarGroupTranslation = {
-  other: string,
-  others: string
-}
-
-const defaultAvatarGroupTranslations: Record<Languages, AvatarGroupTranslation> = {
-  en: {
-    other: 'other',
-    others: 'others'
-  },
-  de: {
-    other: 'weiterer',
-    others: 'weitere'
-  }
-}
 
 // TODO replace later
 type UserDTO = {
@@ -35,11 +17,9 @@ export type AvatarGroupProps = {
  * A component for showing a group of Avatar's
  */
 export const AvatarGroup = ({
-  language,
   users,
   maxShownProfiles = 5
-}: PropsWithLanguage<AvatarGroupTranslation, AvatarGroupProps>) => {
-  const translation = useTranslation(language, defaultAvatarGroupTranslations)
+}: AvatarGroupProps) => {
   const displayedProfiles = users.length < maxShownProfiles ? users : users.slice(0, maxShownProfiles)
   const diameter = 24 // 24px
   const stackingOverlap = 0.5 // given as a percentage
@@ -58,7 +38,7 @@ export const AvatarGroup = ({
         notDisplayedProfiles > 0 && (
           <div
             className={tx('truncate ml-1')}>
-            <span>{`+ ${(notDisplayedProfiles)} ${notDisplayedProfiles > 1 ? translation.others : translation.other}`}</span>
+            <Span>+ {notDisplayedProfiles}</Span>
           </div>
         )
       }

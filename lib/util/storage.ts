@@ -26,3 +26,9 @@ export class LocalStorageService extends StorageSerice {
     super(window.localStorage)
   }
 }
+
+export class SessionStorageService extends StorageSerice {
+  constructor() {
+    super(window.sessionStorage)
+  }
+}

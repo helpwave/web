@@ -1,8 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
+import { LocalStorageService } from "../util/storage"
 
 const languages = ['en', 'de'] as const
 export type Languages = typeof languages[number]
+export interface LanguageDTO {
+  code: Languages
+}
 
 export const DEFAULT_LANGUAGE = 'en'
 
@@ -19,6 +23,13 @@ export const ProvideLanguage: FunctionComponent<PropsWithChildren> = ({ children
   const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)
 
   useEffect(() => {
+    const storageService = new LocalStorageService()
+    let lang = storageService.get<LanguageDTO>("lang")
+    if (lang !== null) {
+      setLanguage(lang.code)
+      return
+    }
+    
     const languagesToTestAgainst = Object.values(languages)
 
     const matchingBrowserLanguages = window.navigator.languages

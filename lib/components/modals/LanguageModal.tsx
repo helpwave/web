@@ -1,13 +1,14 @@
-import type { PropsWithChildren } from 'react'
+import { useEffect, type PropsWithChildren } from 'react'
 import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user_input/Select'
-import type { Languages } from '../../hooks/useLanguage'
+import type { LanguageDTO, Languages } from '../../hooks/useLanguage'
 import { useLanguage } from '../../hooks/useLanguage'
 import { Button } from '../Button'
 import { tw } from '@twind/core'
+import { LocalStorageService } from '../../util/storage'
 
 const languageDetails = {
   en: 'English',
@@ -46,6 +47,12 @@ export const LanguageModal = ({
 }: PropsWithLanguage<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
+
+  useEffect(() => {
+    const storageService = new LocalStorageService()
+    storageService.set<LanguageDTO>("lang", {"code": language as Languages})
+  }, [language])
+
   return (
     <Modal
       isOpen={isOpen}

@@ -13,7 +13,7 @@ import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 
 type TaskDetailViewTranslation = {
   close: string,
-  notes: string,
+  description: string,
   subtasks: string,
   assignee: string,
   dueDate: string,
@@ -29,7 +29,7 @@ type TaskDetailViewTranslation = {
 const defaultTaskDetailViewTranslation = {
   en: {
     close: 'Close',
-    notes: 'Notes',
+    description: 'Description',
     subtasks: 'Subtasks',
     assignee: 'Assignee',
     dueDate: 'Due-Date',
@@ -43,7 +43,7 @@ const defaultTaskDetailViewTranslation = {
   },
   de: {
     close: 'Schließen',
-    notes: 'Notizen',
+    description: 'Beschreibung',
     subtasks: 'Unteraufgaben',
     assignee: 'Veranwortlich',
     dueDate: 'Fälligkeits-Datum',
@@ -105,7 +105,7 @@ export const TaskDetailView = ({
         <div className={tw('flex flex-col gap-y-4 w-[60%] min-w-[500px]')}>
           <div className={tw('min-h-1/4')}>
             <Textarea
-              headline={translation.notes}
+              headline={translation.description}
               value={task.description}
               onChange={description => onChange({ ...task, description })}
             />

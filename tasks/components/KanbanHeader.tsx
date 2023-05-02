@@ -4,6 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import TriangleDown from '../icons/TriangleDown'
 import { Input } from '@helpwave/common/components/user_input/Input'
+import { Span } from '@helpwave/common/components/Span'
 
 type KanbanHeaderTranslation = {
   tasks: string,
@@ -45,7 +46,7 @@ export const KanbanHeader = ({
   const translation = useTranslation(language, defaultKanbanHeaderTranslations)
   return (
     <div className={tw('flex flex-row justify-between items-center')}>
-      <span className={tw('font-bold font-space text-lg')}>{translation.tasks}</span>
+      <Span type="tableName">{translation.tasks}</Span>
       <div className={tw('flex flex-row gap-x-6')}>
         <div className={tw('flex flex-row gap-x-2 items-center hidden')}>
           {translation.status}

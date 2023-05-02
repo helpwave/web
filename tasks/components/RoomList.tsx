@@ -155,15 +155,15 @@ export const RoomList = ({
         <Span type="tableName">{translation.rooms + ` (${rooms.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {table.getIsSomePageRowsSelected() && (
-<Button
-            onClick={() => setDeletionConfirmDialogState({
-              display: true,
-              single: null
-            })}
-            color="negative"
-          >
-            {translation.removeSelection}
-          </Button>
+            <Button
+              onClick={() => setDeletionConfirmDialogState({
+                display: true,
+                single: null
+              })}
+              color="negative"
+            >
+              {translation.removeSelection}
+            </Button>
           )}
           <Button onClick={addRoom} color="positive">
             {translation.addRoom}
@@ -189,11 +189,11 @@ export const RoomList = ({
                       ),
                       name:
                       (<div className={tw('flex flex-row')}>
-                        <Span type="accent">{translation.roomName}</Span>
+                        <Span type="tableHeader">{translation.roomName}</Span>
                       </div>),
                       bedCount:
                       (<div className={tw('flex flex-row')}>
-                        <Span type="accent">{translation.bedCount}</Span>
+                        <Span type="tableHeader">{translation.bedCount}</Span>
                       </div>),
                       remove: (<div />),
                     }[header.column.id]

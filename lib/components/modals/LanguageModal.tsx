@@ -5,10 +5,11 @@ import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user_input/Select'
 import type { LanguageDTO, Languages } from '../../hooks/useLanguage'
-import { useLanguage } from '../../hooks/useLanguage'
+import { DEFAULT_LANGUAGE, useLanguage } from '../../hooks/useLanguage'
 import { Button } from '../Button'
 import { tw } from '@twind/core'
 import { LocalStorageService } from '../../util/storage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 const languageDetails = {
   en: 'English',
@@ -47,10 +48,10 @@ export const LanguageModal = ({
 }: PropsWithLanguage<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
+  const [stordeLang, setStoredLang] = useLocalStorage<LanguageDTO>("lang", {"code": DEFAULT_LANGUAGE})
 
   useEffect(() => {
-    const storageService = new LocalStorageService()
-    storageService.set<LanguageDTO>("lang", {"code": language as Languages})
+    setStoredLang({"code": language as Languages} as LanguageDTO)
   }, [language])
 
   return (

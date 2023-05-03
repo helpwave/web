@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
 import { LocalStorageService } from "../util/storage"
+import useLocalStorage from './useLocalStorage'
 
 const languages = ['en', 'de'] as const
 export type Languages = typeof languages[number]
@@ -21,12 +22,11 @@ export const useLanguage = () => useContext(LanguageContext)
 
 export const ProvideLanguage: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)
+  const [stordeLang, setStoredLang] = useLocalStorage<LanguageDTO>("lang", {"code": DEFAULT_LANGUAGE})
 
   useEffect(() => {
-    const storageService = new LocalStorageService()
-    let lang = storageService.get<LanguageDTO>("lang")
-    if (lang !== null) {
-      setLanguage(lang.code)
+    if (stordeLang !== null) {
+      setLanguage(stordeLang.code)
       return
     }
     

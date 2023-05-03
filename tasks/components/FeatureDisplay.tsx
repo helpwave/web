@@ -6,7 +6,7 @@ export type Feature = {
   title: string,
   date: Date,
   description: (string | URL)[],
-  externResource?: URL
+  externalResource?: URL
 }
 
 export type FeatureDisplayProps = {
@@ -32,8 +32,8 @@ export const FeatureDisplay = ({ feature }: FeatureDisplayProps) => {
   )
   const tileStyle = 'flex flex-row gap-x-8 hover:bg-gray-100 rounded-xl p-3'
 
-  return feature.externResource !== undefined ? (
-        <Link target="_blank" href={feature.externResource}
+  return feature.externalResource !== undefined ? (
+        <Link target="_blank" href={feature.externalResource}
               className={tw(tileStyle)}>
           {content}
         </Link>

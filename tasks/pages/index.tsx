@@ -61,7 +61,7 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
               {
                 title: 'Feature 2',
                 date: new Date('2022-12-31T14:09:58+00:00'),
-                externResource: new URL('https://helpwave.de'),
+                externalResource: new URL('https://helpwave.de'),
                 description: [
                   'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
                 ]

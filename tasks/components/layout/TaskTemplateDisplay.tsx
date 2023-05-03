@@ -7,6 +7,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { AddCard } from '../cards/AddCard'
 import { useRouter } from 'next/router'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
+import { Span } from '@helpwave/common/components/Span'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,
@@ -53,10 +54,9 @@ export const TaskTemplateDisplay = ({
   return (
     <div className={tw('py-4 px-6')}>
       <div className={tw('flex flex-row items-center justify-between mb-4')}>
-        {/* TODO replace with Span title */}
-        <span className={tw('font-bold text-xl font-space')}>
+        <Span type="subsectionTitle">
           {translation.taskTemplates}
-        </span>
+        </Span>
         <div>
           <Button
             onClick={() => {

@@ -86,12 +86,12 @@ export const useCreateMutation = (setTemplate: (taskTemplate:TaskTemplateDTO | u
   })
 }
 
-export const useDischargeMutation = (setTemplate: (task:TaskTemplateDTO | undefined) => void) => {
+export const useDeleteMutation = (setTemplate: (task:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskTemplate) => {
       // TODO create request for taskTemplate
-      taskTemplates = taskTemplates.filter(value => value.id === taskTemplate.id)
+      taskTemplates = taskTemplates.filter(value => value.id !== taskTemplate.id)
       taskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       setTemplate(undefined)
     },

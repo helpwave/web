@@ -9,6 +9,9 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
 import type { TaskTemplateFormType } from '../../pages/ward/templates'
 import { SubtaskView } from '../SubtaskView'
+import { Input } from '@helpwave/common/components/user_input/Input'
+import { Span } from '@helpwave/common/components/Span'
+import { Textarea } from '@helpwave/common/components/user_input/Textarea'
 
 type TaskTemplateDetailsTranslation = {
   updateTaskTemplate: string,
@@ -19,7 +22,10 @@ type TaskTemplateDetailsTranslation = {
   deleteTaskTemplate: string,
   deleteConfirmText: string,
   create: string,
-  update: string
+  update: string,
+  tooLong: (maxCharacters: number) => string,
+  tooShort: (minCharacters: number) => string,
+  required: string
 }
 
 const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDetailsTranslation> = {
@@ -32,7 +38,10 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
     deleteTaskTemplate: 'Delete Template',
     deleteConfirmText: 'Do you really want to delete this templates?',
     create: 'Create',
-    update: 'Update'
+    update: 'Update',
+    tooLong: (maxCharacters) => `Too long, at most ${maxCharacters} characters`,
+    tooShort: (minCharacters) => `Too short, at least ${minCharacters} characters`,
+    required: 'Required Field, cannot be empty'
   },
   de: {
     updateTaskTemplate: 'Task Vorlage bearbeiten',
@@ -43,7 +52,10 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
     deleteTaskTemplate: 'Vorlage löschen',
     deleteConfirmText: 'Wollen Sie wirklich diese Vorlage löschen?',
     create: 'Erstellen',
-    update: 'Ändern'
+    update: 'Ändern',
+    tooLong: (maxCharacters) => `Zu lang, maximal ${maxCharacters} Zeichen`,
+    tooShort: (minCharacters) => `Zu kurz, mindestens ${minCharacters} Zeichen`,
+    required: 'Benötigter Wert, darf nicht leer sein'
   }
 }
 
@@ -69,6 +81,28 @@ export const TaskTemplateDetails = ({
   const translation = useTranslation(language, defaultTaskTemplateDetailsTranslations)
   const isCreatingNewTemplate = taskTemplateForm.template.id === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
+  const [touched, setTouched] = useState({
+    name: !isCreatingNewTemplate
+  })
+
+  const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
+  const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
+
+  const minNameLength = 2
+  const maxNameLength = 64
+
+  function validateName(name: string) {
+    if (name === '') {
+      return translation.required
+    } else if (name.length < minNameLength) {
+      return translation.tooShort(minNameLength)
+    } else if (name.length > maxNameLength) {
+      return translation.tooLong(maxNameLength)
+    }
+  }
+
+  const nameErrorMessage: string | undefined = validateName(taskTemplateForm.template.name)
+  const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
 
   return (
     <div className={tw('flex flex-col py-4 px-6 w-5/6')}>
@@ -84,8 +118,42 @@ export const TaskTemplateDetails = ({
         }}
         confirmType="negative"
       />
-      <ColumnTitle title={isCreatingNewTemplate ? translation.createTaskTemplate : translation.updateTaskTemplate}/>
-
+      <ColumnTitle
+        title={isCreatingNewTemplate ? translation.createTaskTemplate : translation.updateTaskTemplate}
+        subtitle={!isCreatingNewTemplate ? translation.updateTaskTemplateDescription : undefined}
+      />
+      <div className={tw('mb-4')}>
+        <Input
+          id="name"
+          value={taskTemplateForm.template.name}
+          label={translation.name}
+          type="text"
+          onBlur={() => setTouched({ name: true })}
+          onChange={text => {
+            setTaskTemplateForm({
+              template: { ...taskTemplateForm.template, name: text },
+              isValid: validateName(text) === undefined,
+              hasChanges: true
+            })
+          }}
+          maxLength={maxNameLength}
+          className={tx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
+        />
+        {isDisplayingNameError && <Span type="formError">{nameErrorMessage}</Span>}
+      </div>
+      <div className={tw('mb-4')}>
+        <Textarea
+          headline={translation.notes}
+          id="notes"
+          onChange={text => {
+            setTaskTemplateForm({
+              template: { ...taskTemplateForm.template, notes: text },
+              isValid: taskTemplateForm.isValid,
+              hasChanges: true
+            })
+          }}
+        />
+      </div>
       <SubtaskView
         subtasks={taskTemplateForm.template.subtasks}
         onChange={subtasks => setTaskTemplateForm({
@@ -94,7 +162,7 @@ export const TaskTemplateDetails = ({
           template: { ...taskTemplateForm.template, subtasks }
         })}
       />
-      <div className={tx('flex flex-row mt-6',
+      <div className={tx('flex flex-row mt-12',
         {
           'justify-between': !isCreatingNewTemplate,
           'justify-end': isCreatingNewTemplate,
@@ -107,8 +175,8 @@ export const TaskTemplateDetails = ({
         >
           {isCreatingNewTemplate ? translation.create : translation.update}
         </Button>
-        {
-          <Button>{translation.deleteTaskTemplate}</Button>
+        { !isCreatingNewTemplate &&
+          (<Button variant="textButton" color="negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</Button>)
         }
       </div>
     </div>

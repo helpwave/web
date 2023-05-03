@@ -8,8 +8,14 @@ import { PageWithHeader } from '../components/layout/PageWithHeader'
 import titleWrapper from '../utils/titleWrapper'
 import { TaskTemplateDisplay } from '../components/layout/TaskTemplateDisplay'
 import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
-import { useTaskTemplateQuery } from '../mutations/task_template_mutations'
+import {
+  useCreateMutation,
+  useDeleteMutation,
+  useTaskTemplateQuery,
+  useUpdateMutation
+} from '../mutations/task_template_mutations'
 import type { TaskTemplateFormType } from './ward/templates'
+import { TaskTemplateDetails } from '../components/layout/TaskTemplateDetails'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,
@@ -50,6 +56,24 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
   })
 
   const { isLoading, isError, data } = useTaskTemplateQuery()
+  const createMutation = useCreateMutation(taskTemplate =>
+    setTaskTemplateForm({
+      hasChanges: false,
+      isValid: taskTemplate !== undefined,
+      template: taskTemplate ?? emptyTaskTemplate
+    }))
+  const updateMutation = useUpdateMutation(taskTemplate =>
+    setTaskTemplateForm({
+      hasChanges: false,
+      isValid: taskTemplate !== undefined,
+      template: taskTemplate ?? emptyTaskTemplate
+    }))
+  const deleteMutation = useDeleteMutation(taskTemplate =>
+    setTaskTemplateForm({
+      hasChanges: false,
+      isValid: taskTemplate !== undefined,
+      template: taskTemplate ?? emptyTaskTemplate
+    }))
 
   // TODO add view for loading
   if (isLoading) {
@@ -61,6 +85,9 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
     return <div>Error Message</div>
   }
 
+  console.log(taskTemplateForm)
+
+  // TODO update breadcrumbs
   return (
     <PageWithHeader
       crumbs={[{ display: translation.organization, link: '/organizations' },
@@ -84,7 +111,14 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
           />
         )}
         right={() => (
-          <div/>
+          <TaskTemplateDetails
+            key={taskTemplateForm.template.id}
+            taskTemplateForm={taskTemplateForm}
+            onCreate={createMutation.mutate}
+            onUpdate={updateMutation.mutate}
+            onDelete={deleteMutation.mutate}
+            setTaskTemplateForm={setTaskTemplateForm}
+          />
         )}
       />
     </PageWithHeader>

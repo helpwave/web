@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
+import { Span } from '../Span'
 
 const noop = () => { /* noop */ }
 
@@ -41,7 +42,7 @@ const ControlledInput = ({
 }: InputProps) => {
   return (
     <div className={tw('w-full')}>
-      {label && <label htmlFor={id} className={tw('block text-sm font-medium text-gray-700 mb-1')}>{label}</label>}
+      {label && <label htmlFor={id} className={tw('mb-1')}><Span type="label">{label}</Span></label>}
       <input
         value={value}
         id={id}

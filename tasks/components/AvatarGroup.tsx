@@ -1,3 +1,4 @@
+import { Span } from '@helpwave/common/components/Span'
 import { tw, tx } from '@twind/core'
 import { Avatar } from './Avatar'
 
@@ -37,7 +38,7 @@ export const AvatarGroup = ({
         notDisplayedProfiles > 0 && (
           <div
             className={tx('truncate ml-1')}>
-            <span>+ {notDisplayedProfiles}</span>
+            <Span>+ {notDisplayedProfiles}</Span>
           </div>
         )
       }

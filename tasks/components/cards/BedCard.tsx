@@ -4,6 +4,7 @@ import { Card } from '@helpwave/common/components/Card'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
+import { Span } from '@helpwave/common/components/Span'
 
 type BedCardTranslation = {
   nobody: string
@@ -42,8 +43,8 @@ export const BedCard = ({
     (
       <Card key={bed.name} onTileClick={onTileClick} isSelected={isSelected} className={tw('h-[148px] flex flex-col')}>
         <div className={tw('flex flex-row justify-between')}>
-          <span className={tw('font-space font-bold')}>{bed.name}</span>
-          <span>{translation.nobody}</span>
+          <Span type="subsubsectionTitle">{bed.name}</Span>
+          <Span>{translation.nobody}</Span>
         </div>
         <div className={tw('flex flex-1 justify-center items-center')}>
           <Plus/>

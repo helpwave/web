@@ -21,47 +21,30 @@ const spaceGrotesk = SpaceGrotesk({
 
 const queryClient = new QueryClient()
 
-const maxWidth = 1150
-const globalStyles = css`
-
-  @media (max-width: ${maxWidth}px) {
-    #desktop-wrapper{
-      display: none;
-    }
-  }
-
-  @media (min-width: ${maxWidth}px) {
-    #mobile-wrapper{
-      display: none;
-    }
-  }
-`
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div id={tw(globalStyles)}>
-      <ProvideLanguage>
-        <div id="desktop-wrapper">
-          <Head>
-            <title>{titleWrapper()}</title>
-            <style>{`
-          :root {
-            --font-inter: ${inter.style.fontFamily};
-            --font-space: ${spaceGrotesk.style.fontFamily};
-          }
-        `}</style>
-          </Head>
-          <QueryClientProvider client={queryClient}>
-            <div className={tw('font-sans')} id="modal-root">
-              <Component {...pageProps} />
-            </div>
-          </QueryClientProvider>
-        </div>
-        <div id="mobile-wrapper" className={tw('font-sans')}>
-          <MobileInterceptor {...pageProps} />
-        </div>
-      </ProvideLanguage>
-    </div>
+    <ProvideLanguage>
+      <div className={tw('mobile:hidden')}>
+        <Head>
+          <title>{titleWrapper()}</title>
+          <style>{`
+        :root {
+          --font-inter: ${inter.style.fontFamily};
+          --font-space: ${spaceGrotesk.style.fontFamily};
+        }
+      `}</style>
+        </Head>
+        <QueryClientProvider client={queryClient}>
+          <div className={tw('font-sans')} id="modal-root">
+            <Component {...pageProps} />
+          </div>
+        </QueryClientProvider>
+      </div>
+
+      <div className={tw('desktop:hidden font-sans')}>
+        <MobileInterceptor {...pageProps} />
+      </div>
+    </ProvideLanguage>
   )
 }
 

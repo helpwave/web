@@ -1,6 +1,7 @@
-import { tw } from '@helpwave/common/twind/index'
+import { tw } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Span } from '@helpwave/common/components/Span'
 
 type BedInRoomIndicatorTranslation = {
   bed: string,
@@ -46,7 +47,11 @@ export const BedInRoomIndicator =
 
     return (
       <div>
-        {roomName !== undefined && <span className={tw('mb-1')}>{`${translation.bed} ${bedPosition + 1} ${translation.in} ${roomName}`}</span>}
+        {roomName !== undefined && (
+          <Span className={tw('mb-1')}>
+            {`${translation.bed} ${bedPosition + 1} ${translation.in} ${roomName}`}
+          </Span>
+        )}
         <div className={tw(`flex flex-row gap-3`)}>
           {Array.from(Array(bedsInRoom).keys()).map((_, index) => (
             <div key={bedPosition + index}

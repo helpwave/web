@@ -20,7 +20,7 @@ export const LanguageContext = createContext<LanguageContextValue>({ language: D
 
 export const useLanguage = () => useContext(LanguageContext)
 
-export const ProvideLanguage: FunctionComponent<PropsWithChildren> = ({ children }) => {
+export const ProvideLanguage = ({ children }: PropsWithChildren) => {
   const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)
   const [stordeLang, setStoredLang] = useLocalStorage<LanguageDTO>("lang", {"code": DEFAULT_LANGUAGE})
 

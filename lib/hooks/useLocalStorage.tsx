@@ -3,9 +3,7 @@ import type { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } f
 import { LocalStorageService } from "../util/storage"
 
 type SetValue<T> = Dispatch<SetStateAction<T>>
-type FunctionType = <T>(key: string, initValue: T) => [T, SetValue<T>]
-
-const useLocalStorage: FunctionType = <T, >(key: string, initValue: T) => {
+const useLocalStorage = <T, >(key: string, initValue: T): [T, SetValue<T>] => {
   const get = useCallback((): T => {
     if (typeof window === 'undefined') { 
       return initValue

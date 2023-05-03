@@ -26,7 +26,7 @@ export const ProvideLanguage = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (storedLanguage !== null) {
-      setLanguage(storedLanguage.code)
+      setLanguage(storedLanguage)
       return
     }
     

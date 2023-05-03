@@ -51,7 +51,7 @@ export const LanguageModal = ({
   const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', DEFAULT_LANGUAGE)
 
   useEffect(() => {
-    setStoredLanguage({"code": language as Languages} as LanguageDTO)
+    setStoredLanguage(language as Languages)
   }, [language])
 
   return (

@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </QueryClientProvider>
       </div>
 
-      <div className={tw('desktop:hidden font-sans')}>
+      <div className={tw('desktop:hidden')}>
         <MobileInterceptor {...pageProps} />
       </div>
     </ProvideLanguage>

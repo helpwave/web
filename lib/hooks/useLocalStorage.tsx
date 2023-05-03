@@ -2,12 +2,6 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import type { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
 import { LocalStorageService } from "../util/storage"
 
-declare global {
-  interface WindowEventMap {
-    'local-storage': CustomEvent
-  }
-}
-
 type SetValue<T> = Dispatch<SetStateAction<T>>
 type FunctionType = <T>(key: string, initValue: T) => [T, SetValue<T>]
 

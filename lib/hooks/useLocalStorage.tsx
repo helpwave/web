@@ -7,7 +7,7 @@ type FunctionType = <T>(key: string, initValue: T) => [T, SetValue<T>]
 
 const useLocalStorage: FunctionType = <T, >(key: string, initValue: T) => {
   const get = useCallback((): T => {
-    if (typeof window === "undefined") { 
+    if (typeof window === 'undefined') { 
       return initValue
     }
     const storageService = new LocalStorageService()

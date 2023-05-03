@@ -48,10 +48,10 @@ export const LanguageModal = ({
 }: PropsWithLanguage<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
-  const [stordeLang, setStoredLang] = useLocalStorage<LanguageDTO>("lang", {"code": DEFAULT_LANGUAGE})
+  const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', DEFAULT_LANGUAGE)
 
   useEffect(() => {
-    setStoredLang({"code": language as Languages} as LanguageDTO)
+    setStoredLanguage({"code": language as Languages} as LanguageDTO)
   }, [language])
 
   return (

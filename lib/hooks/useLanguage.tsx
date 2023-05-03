@@ -22,11 +22,11 @@ export const useLanguage = () => useContext(LanguageContext)
 
 export const ProvideLanguage = ({ children }: PropsWithChildren) => {
   const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)
-  const [stordeLang, setStoredLang] = useLocalStorage<LanguageDTO>("lang", {"code": DEFAULT_LANGUAGE})
+  const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', DEFAULT_LANGUAGE)
 
   useEffect(() => {
-    if (stordeLang !== null) {
-      setLanguage(stordeLang.code)
+    if (storedLanguage !== null) {
+      setLanguage(storedLanguage.code)
       return
     }
     

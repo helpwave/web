@@ -25,11 +25,16 @@ export const ProvideLanguage = ({ children }: PropsWithChildren) => {
   const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', DEFAULT_LANGUAGE)
 
   useEffect(() => {
+    setStoredLanguage(language)
+  }, [language, setStoredLanguage])
+
+  useEffect(() => {
+    console.log('abc')
     if (storedLanguage !== null) {
       setLanguage(storedLanguage)
       return
     }
-    
+
     const languagesToTestAgainst = Object.values(languages)
 
     const matchingBrowserLanguages = window.navigator.languages

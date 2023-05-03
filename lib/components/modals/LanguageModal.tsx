@@ -48,11 +48,6 @@ export const LanguageModal = ({
 }: PropsWithLanguage<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
-  const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', DEFAULT_LANGUAGE)
-
-  useEffect(() => {
-    setStoredLanguage(language as Languages)
-  }, [language])
 
   return (
     <Modal

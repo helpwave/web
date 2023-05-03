@@ -1,15 +1,13 @@
-import { useEffect, type PropsWithChildren } from 'react'
+import { type PropsWithChildren } from 'react'
 import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user_input/Select'
-import type { LanguageDTO, Languages } from '../../hooks/useLanguage'
-import { DEFAULT_LANGUAGE, useLanguage } from '../../hooks/useLanguage'
+import type { Languages } from '../../hooks/useLanguage'
+import { useLanguage } from '../../hooks/useLanguage'
 import { Button } from '../Button'
 import { tw } from '@twind/core'
-import { LocalStorageService } from '../../util/storage'
-import useLocalStorage from '../../hooks/useLocalStorage'
 
 const languageDetails = {
   en: 'English',

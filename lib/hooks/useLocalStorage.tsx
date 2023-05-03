@@ -1,11 +1,11 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import type { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
-import { LocalStorageService } from "../util/storage"
+import type { Dispatch, SetStateAction } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { LocalStorageService } from '../util/storage'
 
 type SetValue<T> = Dispatch<SetStateAction<T>>
 const useLocalStorage = <T, >(key: string, initValue: T): [T, SetValue<T>] => {
   const get = useCallback((): T => {
-    if (typeof window === 'undefined') { 
+    if (typeof window === 'undefined') {
       return initValue
     }
     const storageService = new LocalStorageService()

@@ -15,6 +15,7 @@ import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Avatar } from './Avatar'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { useState } from 'react'
+import { Span } from '@helpwave/common/components/Span'
 
 // TODO replace later
 export const enum Role {
@@ -160,7 +161,7 @@ export const OrganizationMemberList = ({
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <span className={tw('font-bold font-space')}>{translation.members + ` (${members.length})`}</span>
+        <Span type="tableName">{translation.members + ` (${members.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {(table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected()) && (
             <Button
@@ -175,7 +176,7 @@ export const OrganizationMemberList = ({
           )}
           <Button onClick={addUser} color="positive">
             <div className={tw('flex flex-row items-center')}>
-              <span className={tw('mr-2')}>{translation.addMember}</span>
+              <Span className={tw('mr-2')}>{translation.addMember}</Span>
             </div>
           </Button>
         </div>
@@ -190,18 +191,21 @@ export const OrganizationMemberList = ({
                   ? null
                   : {
                       select: (
-                      <Checkbox
-                        checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
-                        onChange={() => table.toggleAllRowsSelected()}
-                      />),
+                        <Checkbox
+                          checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
+                          onChange={() => table.toggleAllRowsSelected()}
+                        />
+                      ),
                       name: (
-                      <div className={tw('flex flex-row pl-10')}>
-                        <span>{translation.member}</span>
-                      </div>),
+                        <div className={tw('flex flex-row pl-10')}>
+                          <Span type="tableHeader">{translation.member}</Span>
+                        </div>
+                      ),
                       role: (
-                      <div className={tw('flex flex-row items-center pr-2')}>
-                        {translation.role}
-                      </div>),
+                        <div className={tw('flex flex-row')}>
+                          <Span type="tableHeader">{translation.role}</Span>
+                        </div>
+                      ),
                       remove: <div/>,
                     }[header.column.id]
                 }
@@ -220,29 +224,34 @@ export const OrganizationMemberList = ({
                     <div className={tw('flex flex-row items-center mr-2')}>
                       <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
                       }}>
-                        <span className={tw(`font-semibold`)}>
+                        <Span className={tw(`font-semibold`)}>
                           {translation.roleTypes[cell.row.original.role]}
-                        </span>
+                        </Span>
                       </button>
                     </div>
                   ),
                   name: (
                     <div className={tw('flex flex-row items-center h-12')}>
-                      <Avatar avatarUrl={cell.row.original.avatarURL} alt={cell.row.original.name.charAt(0)} size="small"/>
+                      <Avatar avatarUrl={cell.row.original.avatarURL} alt={cell.row.original.name.charAt(0)}
+                              size="small"/>
                       <div className={tw('flex flex-col ml-2')}>
-                        <span className={tw('font-bold h-5')}>{cell.row.original.name}</span>
-                        <span className={tw('text-sm text-gray-400')}>{cell.row.original.email}</span>
+                        <Span className={tw('font-bold h-5')}>{cell.row.original.name}</Span>
+                        <Span type="description" className={tw('text-sm')}>{cell.row.original.email}</Span>
                       </div>
                     </div>
                   ),
                   remove: (
                     <div className={tw('flex flex-row justify-end')}>
-                      <button onClick={() => setDeletionConfirmDialogState({
-                        display: true,
-                        single: cell
-                      })}>
-                        <span className={tw('text-hw-negative-500')}>{translation.remove}</span>
-                      </button>
+                      <Button
+                        onClick={() => setDeletionConfirmDialogState({
+                          display: true,
+                          single: cell
+                        })}
+                        color="negative"
+                        variant="textButton"
+                      >
+                        {translation.remove}
+                      </Button>
                     </div>
                   ),
                   select: (

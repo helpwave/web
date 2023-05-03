@@ -8,6 +8,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
+import { Span } from '@helpwave/common/components/Span'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -130,10 +131,18 @@ export const WardDetail = ({
         />
       </div>
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
-        <span className={tw('font-space text-lg font-bold')}>{translation.dangerZone}</span>
-        <span className={tw('text-gray-400')}>{translation.dangerZoneText}</span>
-        <button onClick={() => setIsShowingConfirmDialog(true)}
-                className={tw('text-hw-negative-400 font-bold text-left')}>{translation.deleteWard}</button>
+        <Span type="subsectionTitle">{translation.dangerZone}</Span>
+        <Span type="description">{translation.dangerZoneText}</Span>
+        <div>
+          <Button
+            onClick={() => setIsShowingConfirmDialog(true)}
+            className={tw('px-0 font-bold text-left')}
+            color="negative"
+            variant="textButton"
+          >
+            {translation.deleteWard}
+          </Button>
+        </div>
       </div>
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button

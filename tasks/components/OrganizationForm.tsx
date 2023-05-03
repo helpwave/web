@@ -4,6 +4,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user_input/Input'
+import { Span } from '@helpwave/common/components/Span'
 
 type OrganizationFormTranslation = {
   general: string,
@@ -80,7 +81,11 @@ export const OrganizationForm = ({
   isShowingErrorsDirectly = false
 }: PropsWithLanguage<OrganizationFormTranslation, OrganizationFormProps>) => {
   const translation = useTranslation(language, defaultOrganizationFormTranslations)
-  const [touched, setTouched] = useState({ shortName: isShowingErrorsDirectly, longName: isShowingErrorsDirectly, email: isShowingErrorsDirectly })
+  const [touched, setTouched] = useState({
+    shortName: isShowingErrorsDirectly,
+    longName: isShowingErrorsDirectly,
+    email: isShowingErrorsDirectly
+  })
 
   const minShortNameLength = 2
   const minLongNameLength = 4
@@ -89,7 +94,6 @@ export const OrganizationForm = ({
   const maxMailLength = 320
 
   const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
-  const errorClasses = tw('text-hw-negative-500 text-sm')
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateShortName(organization: OrganizationGeneralInfoDTO) {
@@ -135,45 +139,54 @@ export const OrganizationForm = ({
 
   return (
     <form>
-      <span className={tw('font-semibold')}>{translation.general}</span>
+      <Span type="subsectionTitle">{translation.general}</Span>
       <div className={tw('mt-2 mb-1')}>
-        <Input id="shortName" value={organization.shortName} label={translation.shortName}
-               onBlur={() => setTouched({ ...touched, shortName: true })}
-               onChange={text => triggerOnChange({ ...organization, shortName: text })}
-               maxLength={maxShortNameLength}
-               className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
+        <Input
+          id="shortName"
+          value={organization.shortName}
+          label={translation.shortName}
+          onBlur={() => setTouched({ ...touched, shortName: true })}
+          onChange={text => triggerOnChange({ ...organization, shortName: text })}
+          maxLength={maxShortNameLength}
+          className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <span className={tw(errorClasses)}>{shortNameErrorMessage}</span>}
+        {isDisplayingShortNameError && <Span type="formError">{shortNameErrorMessage}</Span>}
       </div>
-      <span className={tw('text-gray-500 text-sm')}>{translation.shortNameDescription}</span>
+      <Span type="formDescription">{translation.shortNameDescription}</Span>
       <div className={tw('mt-2 mb-1')}>
-        <Input id="longName" value={organization.longName} label={translation.longName}
-               onBlur={() => setTouched({ ...touched, longName: true })}
-               onChange={text => triggerOnChange({ ...organization, longName: text })}
-               maxLength={maxLongNameLength}
-               className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
+        <Input
+          id="longName"
+          value={organization.longName}
+          label={translation.longName}
+          onBlur={() => setTouched({ ...touched, longName: true })}
+          onChange={text => triggerOnChange({ ...organization, longName: text })}
+          maxLength={maxLongNameLength}
+          className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
-        {isDisplayingLongNameError && <span className={tw(errorClasses)}>{longNameErrorMessage}</span>}
+        {isDisplayingLongNameError && <Span type="formError">{longNameErrorMessage}</Span>}
       </div>
-      <span className={tw('text-gray-500 text-sm')}>{translation.longNameDescription}</span>
+      <Span type="formDescription">{translation.longNameDescription}</Span>
       <div className={tw('mt-2 mb-1')}>
         <div className={tw('flex flex-row items-end')}>
           <div className={tw('flex-1 mr-2')}>
-            <Input id="email" value={organization.email} label={translation.contactEmail} type="email"
-                   onBlur={() => setTouched({ ...touched, email: true })}
-                   onChange={text => triggerOnChange({ ...organization, email: text })}
-                   maxLength={maxMailLength}
-                   className={tx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
+            <Input
+              id="email"
+              value={organization.email}
+              label={translation.contactEmail} type="email"
+              onBlur={() => setTouched({ ...touched, email: true })}
+              onChange={text => triggerOnChange({ ...organization, email: text })}
+              maxLength={maxMailLength}
+              className={tx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
             />
           </div>
           {
             !organization.isVerified &&
-            <span className={tw('text-hw-negative-500 mb-3')}>{translation.notVerified}</span>
+            <Span className={tw('text-hw-negative-500 mb-3')}>{translation.notVerified}</Span>
           }
         </div>
-        {isDisplayingEmailNameError && <span className={tw(errorClasses)}>{emailErrorMessage}</span>}
+        {isDisplayingEmailNameError && <Span type="formError">{emailErrorMessage}</Span>}
       </div>
-      <span className={tw('text-gray-500 text-sm')}>{translation.contactEmailDescription}</span>
+      <Span type="formDescription">{translation.contactEmailDescription}</Span>
     </form>
   )
 }

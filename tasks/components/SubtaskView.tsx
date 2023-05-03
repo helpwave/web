@@ -6,6 +6,7 @@ import SimpleBarReact from 'simplebar-react'
 import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskTile } from './SubtaskTile'
+import { Span } from '@helpwave/common/components/Span'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -46,7 +47,7 @@ export const SubtaskView = ({
 
   return (
     <div className={tw('flex flex-col')}>
-      <span className={tw('font-semibold text-lg mb-1')}>{translation.subtasks}</span>
+      <Span type="subsectionTitle" className={tw('mb-1')}>{translation.subtasks}</Span>
       <div className={tw('max-h-[500px] overflow-hidden mr-4')}>
         <SimpleBarReact style={{ maxHeight: 500 }}>
           <div className={tw('grid grid-cols-1 gap-y-2')}>

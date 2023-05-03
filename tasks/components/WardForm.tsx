@@ -4,6 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { useState } from 'react'
+import { Span } from '@helpwave/common/components/Span'
 
 type WardFormTranslation = {
   general: string,
@@ -64,7 +65,6 @@ export const WardForm = ({
   const maxWardNameLength = 32
 
   const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
-  const errorClasses = tw('text-hw-negative-500 text-sm')
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateName(ward: WardFormInfoDTO) {
@@ -98,9 +98,9 @@ export const WardForm = ({
                maxLength={maxWardNameLength}
                className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <span className={tw(errorClasses)}>{nameErrorMessage}</span>}
+        {isDisplayingShortNameError && <Span type="formError">{nameErrorMessage}</Span>}
       </div>
-      <span className={tw('text-gray-500 text-sm')}>{translation.nameDescription}</span>
+      <Span type="formDescription">{translation.nameDescription}</Span>
     </form>
   )
 }

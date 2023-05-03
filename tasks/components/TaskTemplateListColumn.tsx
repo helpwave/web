@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Plus } from 'lucide-react'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
+import { Span } from '@helpwave/common/components/Span'
+import { AddCard } from './cards/AddCard'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
@@ -60,9 +61,9 @@ export const TaskTemplateListColumn = ({
     <div>
       <div className={tw('flex flex-row items-center')}>
         <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <span className={tw('font-bold')}>
+        <Span type="subsubsectionTitle">
           {isWardTemplateColumn ? translation.wardTemplate : translation.personalTemplate}
-        </span>
+        </Span>
       </div>
       {taskTemplates.map(taskTemplate => (
           <div key={taskTemplate.name} className={tw('my-2')}>
@@ -76,11 +77,7 @@ export const TaskTemplateListColumn = ({
           </div>
       )
       )}
-      <div onClick={addNewTask}
-           className={tw('flex flex-row w-full h-16 rounded-md border-2 hover:border-hw-primary-700 items-center justify-center cursor-pointer mt-4')}>
-        <Plus/>
-        <span className={tw('ml-2')}>{translation.addNewTaskTemplate}</span>
-      </div>
+      <AddCard onTileClick={addNewTask} text={translation.addNewTaskTemplate}/>
     </div>
   )
 }

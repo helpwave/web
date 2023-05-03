@@ -4,6 +4,7 @@ import { tw } from '@helpwave/common/twind'
 import type { SubTaskDTO } from '../mutations/room_mutations'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
+import { Button } from '@helpwave/common/components/Button'
 
 type SubtaskTileTranslation = {
   subtasks: string,
@@ -57,13 +58,15 @@ export const SubtaskTile = ({
         minLength={minTaskNameLength}
         maxLength={maxTaskNameLength}
       />
-      <button
-        className={tw('text-hw-negative-400 hover:text-hw-negative-500 ml-4')}
+      <Button
+        className={tw('ml-4')}
         onClick={onRemoveClick}
         aria-label={translation.remove}
+        variant="textButton"
+        color="negative"
       >
-        <span>{translation.remove}</span>
-      </button>
+        {translation.remove}
+      </Button>
     </div>
   )
 }

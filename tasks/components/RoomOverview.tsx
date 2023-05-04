@@ -9,13 +9,13 @@ export type RoomOverviewProps = {
   room: RoomDTO,
   selected: BedDTO | undefined,
   onSelect: (bed: BedDTO) => void,
-  onUpdate?: (bed: BedDTO) => void
+  onAddPatient?: (bed: BedDTO) => void
 }
 
 /**
  * A component to show all beds and patients within a room in a ward
  */
-export const RoomOverview = ({ room, onSelect, selected, onUpdate = noop }: RoomOverviewProps) => {
+export const RoomOverview = ({ room, onSelect, selected, onAddPatient = noop }: RoomOverviewProps) => {
   return (
     <div>
       <div className={tw('flex flex-row items-center mb-1')}>
@@ -25,25 +25,18 @@ export const RoomOverview = ({ room, onSelect, selected, onUpdate = noop }: Room
       <div className={tw('grid grid-cols-3 gap-4')}>
         {room.beds.map(bed => bed.patient !== undefined ?
             (
-            <PatientCard key={bed.name} patient={bed.patient} bed={bed} onTileClick={() => onSelect(bed)}
-                         isSelected={selected?.id === bed.id}/>
+            <PatientCard
+              key={bed.name}
+              patient={bed.patient}
+              bed={bed}
+              onTileClick={() => onSelect(bed)}
+              isSelected={selected?.id === bed.id}
+            />
             ) : (
             <BedCard
               key={bed.name}
               bed={bed}
-              onTileClick={() => {
-                // TODO update this later on with a create mutation for the patient
-                onSelect(bed)
-                onUpdate({
-                  ...bed,
-                  patient: {
-                    id: Math.random().toString(),
-                    note: '',
-                    humanReadableIdentifier: 'Patient ' + (room.beds.findIndex(value => value.id === bed?.id) + 1),
-                    tasks: []
-                  }
-                })
-              }}
+              onTileClick={() => onAddPatient(bed)}
               isSelected={selected?.id === bed.id}/>
             )
         )}

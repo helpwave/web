@@ -98,8 +98,6 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     return <div>Error Message</div>
   }
 
-  console.log(rooms, roomOfSelected)
-
   return (
     <PageWithHeader
       crumbs={[

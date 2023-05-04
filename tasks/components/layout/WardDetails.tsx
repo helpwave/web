@@ -9,7 +9,7 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
 import { Span } from '@helpwave/common/components/Span'
-import { TaskTemplateWardView } from '../TaskTemplateWardView'
+import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -142,7 +142,7 @@ export const WardDetail = ({
         />
       </div>
       <div className={tw('mt-6')}>
-        <TaskTemplateWardView taskTemplates={taskTemplates} />
+        <TaskTemplateWardPreview taskTemplates={taskTemplates} />
       </div>
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <Span type="subsectionTitle">{translation.dangerZone}</Span>

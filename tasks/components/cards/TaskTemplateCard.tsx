@@ -38,7 +38,7 @@ export const TaskTemplateCard =
     subtaskCount,
     language,
     onTileClick = () => undefined,
-    onEditClick = () => undefined
+    onEditClick
   }: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
     const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
     return (
@@ -47,12 +47,17 @@ export const TaskTemplateCard =
           <Span type="subsubsectionTitle">{name}</Span>
           <Span>{subtaskCount + ' ' + translation.subtask}</Span>
         </div>
-        <button
-          onClick={event => {
-            onEditClick()
-            event.stopPropagation()
-          }}
-          className={tw('hidden group-hover:block')}>{translation.edit}</button>
+        {onEditClick && (
+          <button
+            onClick={event => {
+              onEditClick()
+              event.stopPropagation()
+            }}
+            className={tw('hidden group-hover:block')}
+          >
+            {translation.edit}
+          </button>
+        )}
       </Card>
     )
   }

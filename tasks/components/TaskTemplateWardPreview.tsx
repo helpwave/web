@@ -8,12 +8,12 @@ import { Button } from '@helpwave/common/components/Button'
 import { useRouter } from 'next/router'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 
-type ComponentTranslation = {
+type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
   taskTemplates: (numberOfTemplates: number) => string
 }
 
-const defaultComponentTranslation: Record<Languages, ComponentTranslation> = {
+const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateWardPreviewTranslation> = {
   en: {
     showAllTaskTemplates: 'Show all Task Templates',
     taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
@@ -33,18 +33,18 @@ type TaskTemplateDTO = {
   isPublicVisible: boolean
 }
 
-export type ComponentProps = {
+export type TaskTemplateWardPreviewProps = {
   taskTemplates: TaskTemplateDTO[]
 }
 
 /**
- * A Component for showing all TaskTemplate within a ward
+ * A TaskTemplateWardPreview for showing all TaskTemplate within a ward
  */
-export const TaskTemplateWardView = ({
+export const TaskTemplateWardPreview = ({
   language,
   taskTemplates
-}: PropsWithLanguage<ComponentTranslation, ComponentProps>) => {
-  const translation = useTranslation(language, defaultComponentTranslation)
+}: PropsWithLanguage<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
+  const translation = useTranslation(language, defaultTaskTemplateWardPreviewTranslation)
   const router = useRouter()
 
   return (

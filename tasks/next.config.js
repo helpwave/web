@@ -5,6 +5,9 @@ const nextConfig = {
   swcMinify: true,
   transpilePackages: ['@helpwave/common'],
   output: 'standalone',
+  experimental: {
+    runtime: 'edge',
+  }
 }
 
 module.exports = nextConfig

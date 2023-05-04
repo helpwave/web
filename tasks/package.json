@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cf:pages": "next-on-pages"
   },
   "dependencies": {
+    "@cloudflare/next-on-pages": "1",
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/sortable": "^7.0.2",
     "@headlessui/react": "^1.7.13",
@@ -23,6 +25,7 @@
     "@twind/preset-tailwind": "^1.1.2",
     "@twind/preset-tailwind-forms": "^1.1.0",
     "@twind/preset-typography": "^1.0.6",
+    "buffer": "^6.0.3",
     "cookies-next": "^2.1.1",
     "google-protobuf": "^3.21.2",
     "grpc-web": "^1.4.2",
@@ -50,6 +53,8 @@
     "eslint-plugin-n": "^15.6.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "next-on-pages-vercel-cli": "29.3.0-next-on-pages-fix-3",
+    "wrangler": "^2.20.0"
   }
 }

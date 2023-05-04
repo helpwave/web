@@ -68,7 +68,7 @@ export type TaskTemplateDetailsProps = {
 }
 
 /**
- * The left side of the organizations page
+ * The right side of the task templates page
  */
 export const TaskTemplateDetails = ({
   language,

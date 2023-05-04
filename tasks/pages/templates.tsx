@@ -14,28 +14,22 @@ import {
   useTaskTemplateQuery,
   useUpdateMutation
 } from '../mutations/task_template_mutations'
-import type { TaskTemplateFormType } from './ward/templates'
+import type { TaskTemplateFormType } from './ward/[uuid]/templates'
 import { TaskTemplateDetails } from '../components/layout/TaskTemplateDetails'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,
-  organization: string,
-  ward: string,
   personalTaskTemplates: string
 }
 
 const defaultPersonalTaskTemplateTranslations = {
   en: {
     taskTemplates: 'Task Templates',
-    organization: 'Organizations',
-    ward: 'Ward',
     personalTaskTemplates: 'Personal Task Templates'
   },
   de: {
     taskTemplates: 'Task Vorlagen',
-    organization: 'Organisationen',
-    ward: 'Station',
-    personalTaskTemplates: 'Persönliche Task Vorlagen'
+    personalTaskTemplates: 'Persönliche Task Templates'
   }
 }
 
@@ -85,14 +79,10 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
     return <div>Error Message</div>
   }
 
-  console.log(taskTemplateForm)
-
   // TODO update breadcrumbs
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.organization, link: '/organizations' },
-        { display: translation.ward, link: '/organizations' },
-        { display: translation.taskTemplates, link: '/organizations' }]}
+      crumbs={[{ display: translation.taskTemplates, link: '/templates' }]}
     >
       <Head>
         <title>{titleWrapper(translation.personalTaskTemplates)}</title>

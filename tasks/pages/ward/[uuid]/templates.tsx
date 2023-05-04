@@ -3,18 +3,19 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TwoColumn } from '../../components/layout/TwoColumn'
-import { PageWithHeader } from '../../components/layout/PageWithHeader'
-import titleWrapper from '../../utils/titleWrapper'
-import { TaskTemplateDisplay } from '../../components/layout/TaskTemplateDisplay'
-import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
+import { TwoColumn } from '../../../components/layout/TwoColumn'
+import { PageWithHeader } from '../../../components/layout/PageWithHeader'
+import titleWrapper from '../../../utils/titleWrapper'
+import { TaskTemplateDisplay } from '../../../components/layout/TaskTemplateDisplay'
+import type { TaskTemplateDTO } from '../../../mutations/task_template_mutations'
 import {
   useCreateMutation,
   useDeleteMutation,
   useTaskTemplateQuery,
   useUpdateMutation
-} from '../../mutations/task_template_mutations'
-import { TaskTemplateDetails } from '../../components/layout/TaskTemplateDetails'
+} from '../../../mutations/task_template_mutations'
+import { TaskTemplateDetails } from '../../../components/layout/TaskTemplateDetails'
+import { useRouter } from 'next/router'
 
 type WardTaskTemplateTranslation = {
   taskTemplates: string,
@@ -34,7 +35,7 @@ const defaultWardTaskTemplateTranslations = {
     taskTemplates: 'Task Vorlagen',
     organization: 'Organisationen',
     ward: 'Station',
-    wardTaskTemplates: 'Stations Task Vorlagen'
+    wardTaskTemplates: 'Stations Task Templates'
   }
 }
 
@@ -54,6 +55,8 @@ const emptyTaskTemplate: TaskTemplateDTO = {
 
 const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
+  const router = useRouter()
+  const { uuid } = router.query
 
   const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
     isValid: false,
@@ -81,6 +84,9 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
       template: taskTemplate ?? emptyTaskTemplate
     }))
 
+  // TODO load organization id of ward
+  const organizationID = 'org1'
+
   // TODO add view for loading
   if (isLoading) {
     return <div>Loading Widget</div>
@@ -94,9 +100,9 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
   // TODO update breadcrumbs
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.organization, link: '/organizations' },
-        { display: translation.ward, link: '/organizations' },
-        { display: translation.taskTemplates, link: '/organizations' }]}
+      crumbs={[{ display: translation.organization, link: `/organizations/${organizationID}` },
+        { display: translation.ward, link: `/ward/${uuid}` },
+        { display: translation.taskTemplates, link: `/ward/${uuid}/templates` }]}
     >
       <Head>
         <title>{titleWrapper(translation.wardTaskTemplates)}</title>

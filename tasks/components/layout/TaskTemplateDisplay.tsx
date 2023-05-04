@@ -20,14 +20,12 @@ const defaultTaskTemplateDisplayTranslation = {
   en: {
     addNewTaskTemplate: 'Add new template',
     switchToPersonal: 'Personal Task Templates',
-    switchToWardView: 'Ward Task Templates',
-    taskTemplates: 'Task Templates'
+    switchToWardView: 'Ward Task Templates'
   },
   de: {
     addNewTaskTemplate: 'Neue Vorlage hinzufügen',
     switchToPersonal: 'Persönliche Task Vorlagen',
-    switchToWardView: 'Stations Task Vorlagen',
-    taskTemplates: 'Task Vorlagen'
+    switchToWardView: 'Stations Task Vorlagen'
   }
 }
 
@@ -50,18 +48,19 @@ export const TaskTemplateDisplay = ({
 }: PropsWithLanguage<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateDisplayTranslation)
   const router = useRouter()
+  const { uuid } = router.query
 
   return (
     <div className={tw('py-4 px-6')}>
       <div className={tw('flex flex-row items-center justify-between mb-4')}>
         <Span type="subsectionTitle">
-          {translation.taskTemplates}
+          {variant === 'personalTemplates' ? translation.switchToPersonal : translation.switchToWardView}
         </Span>
         <div>
           <Button
             onClick={() => {
               // TODO maybe replace with something else later
-              router.push(variant === 'personalTemplates' ? '/ward/templates' : '/templates').then()
+              router.push(variant === 'personalTemplates' ? `/ward/${uuid}/templates` : '/templates').then()
             }}
             className={tw('flex flex-row gap-x-1 items-center')}
           >

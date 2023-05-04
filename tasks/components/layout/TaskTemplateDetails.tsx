@@ -7,7 +7,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import type { TaskTemplateFormType } from '../../pages/ward/templates'
+import type { TaskTemplateFormType } from '../../pages/ward/[uuid]/templates'
 import { SubtaskView } from '../SubtaskView'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
@@ -35,7 +35,7 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
     createTaskTemplate: 'Create Task Template',
     name: 'Name',
     notes: 'Notes',
-    deleteTaskTemplate: 'Delete Template',
+    deleteTaskTemplate: 'Delete Task Template',
     deleteConfirmText: 'Do you really want to delete this templates?',
     create: 'Create',
     update: 'Update',
@@ -44,13 +44,13 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
     required: 'Required Field, cannot be empty'
   },
   de: {
-    updateTaskTemplate: 'Task Vorlage bearbeiten',
-    updateTaskTemplateDescription: 'Hier kannst du deine Task Vorlage bearbeiten',
-    createTaskTemplate: 'Task Vorlage erstellen',
+    updateTaskTemplate: 'Task Template bearbeiten',
+    updateTaskTemplateDescription: 'Hier kannst du deine Task Templates bearbeiten',
+    createTaskTemplate: 'Task Template erstellen',
     name: 'Name',
     notes: 'Notizen',
-    deleteTaskTemplate: 'Vorlage löschen',
-    deleteConfirmText: 'Wollen Sie wirklich diese Vorlage löschen?',
+    deleteTaskTemplate: 'Task Template löschen',
+    deleteConfirmText: 'Wollen Sie wirklich dieses Task Template löschen?',
     create: 'Erstellen',
     update: 'Ändern',
     tooLong: (maxCharacters) => `Zu lang, maximal ${maxCharacters} Zeichen`,
@@ -145,6 +145,7 @@ export const TaskTemplateDetails = ({
         <Textarea
           headline={translation.notes}
           id="notes"
+          value={taskTemplateForm.template.notes}
           onChange={text => {
             setTaskTemplateForm({
               template: { ...taskTemplateForm.template, notes: text },

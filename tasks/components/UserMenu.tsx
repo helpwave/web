@@ -25,13 +25,13 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     profile: 'Profile',
     language: 'Language',
     signOut: 'Sign Out',
-    taskTemplates: 'Templates'
+    taskTemplates: 'Task Templates'
   },
   de: {
     profile: 'Profil',
     language: 'Sprache',
     signOut: 'Ausloggen',
-    taskTemplates: 'Vorlagen'
+    taskTemplates: 'Task Templates'
   }
 }
 

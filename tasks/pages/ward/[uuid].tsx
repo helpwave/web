@@ -17,13 +17,15 @@ import { RoomOverview } from '../../components/RoomOverview'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 
 type WardOverviewTranslation = {
   beds: string,
   roomOverview: string,
   organization: string,
   ward: string,
-  bed: string
+  bed: string,
+  addPatientDialogTitle: string
 }
 
 const defaultWardOverviewTranslation = {
@@ -32,20 +34,29 @@ const defaultWardOverviewTranslation = {
     roomOverview: 'Room Overview',
     organization: 'Organization',
     ward: 'Ward',
-    bed: 'Bed'
+    bed: 'Bed',
+    addPatientDialogTitle: 'Do you want to add a new patient?'
   },
   de: {
     beds: 'Bett',
     roomOverview: 'Raum Übersicht',
     organization: 'Organisation',
     ward: 'Station',
-    bed: 'Bett'
+    bed: 'Bett',
+    addPatientDialogTitle: 'Willst du einen neuen Patienten hinzufügen?'
   }
+}
+
+const emptyBed: BedDTO = {
+  id: '',
+  name: '',
+  patient: { id: '', humanReadableIdentifier: '', note: '', tasks: [] },
 }
 
 const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
-  const [selectedBed, setSelectedBed] = useState<BedDTO | undefined>(undefined)
+  const [selectedBed, setSelectedBed] = useState<BedDTO>(emptyBed)
+  const [isShowingPatientDialog, setIsShowingPatientDialog] = useState<boolean>(false)
 
   const router = useRouter()
   const { user } = useAuth()
@@ -98,6 +109,22 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       <Head>
         <title>{titleWrapper(translation.roomOverview)}</title>
       </Head>
+      <ConfirmDialog
+        isOpen={isShowingPatientDialog}
+        title={translation.addPatientDialogTitle}
+        onConfirm={() => {
+          updateMutation.mutate(selectedBed)
+          setIsShowingPatientDialog(false)
+        }}
+        onCancel={() => {
+          setIsShowingPatientDialog(false)
+          setSelectedBed(emptyBed)
+        }}
+        onBackgroundClick={() => {
+          setIsShowingPatientDialog(false)
+          setSelectedBed(emptyBed)
+        }}
+      />
       <TwoColumn
         left={() => (
           <div className={tw('flex flex-col px-6 py-8')}>
@@ -107,14 +134,25 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
                 room={room}
                 onSelect={setSelectedBed}
                 selected={selectedBed}
-                onUpdate={bed => updateMutation.mutate({ ...bed }) }
+                onAddPatient={bed => {
+                  setSelectedBed({
+                    ...bed,
+                    patient: {
+                      id: Math.random().toString(),
+                      note: '',
+                      humanReadableIdentifier: 'Patient ' + (room.beds.findIndex(value => value.id === bed?.id) + 1),
+                      tasks: []
+                    }
+                  })
+                  setIsShowingPatientDialog(true)
+                }}
               />
             )
             )}
           </div>
         )}
         right={() =>
-          selectedBed === undefined || selectedBed.patient === undefined ?
+          selectedBed.id === '' || selectedBed.patient === undefined || isShowingPatientDialog ?
             <div>No Room or Patient Selected</div> :
               (
               <div>

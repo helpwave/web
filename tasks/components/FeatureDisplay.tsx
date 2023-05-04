@@ -7,7 +7,7 @@ export type Feature = {
   title: string,
   date: Date,
   description: (string | URL)[],
-  externResource: URL
+  externalResource?: URL
 }
 
 export type FeatureDisplayProps = {
@@ -18,8 +18,8 @@ export type FeatureDisplayProps = {
  * A component for showing a feature with a title, date of release and a link to a blog post on click
  */
 export const FeatureDisplay = ({ feature }: FeatureDisplayProps) => {
-  return (
-    <Link target="_blank" href={feature.externResource} className={tw('flex flex-row gap-x-8 hover:bg-gray-100 rounded-xl p-3')}>
+  const content = (
+    <>
       <div className={tw('flex flex-col gap-x-2 w-1/3')}>
         <TimeDisplay date={feature.date} mode="date" />
         <Span type="title" className={tw('text-hw-primary-700')}>{feature.title}</Span>
@@ -30,6 +30,14 @@ export const FeatureDisplay = ({ feature }: FeatureDisplayProps) => {
           <Span key={index} className={tw('font-medium')}>{value}</Span>)
         }
       </div>
-    </Link>
+    </>
   )
+  const tileStyle = 'flex flex-row gap-x-8 hover:bg-gray-100 rounded-xl p-3'
+
+  return feature.externalResource !== undefined ? (
+        <Link target="_blank" href={feature.externalResource}
+              className={tw(tileStyle)}>
+          {content}
+        </Link>
+  ) : <div className={tw(tileStyle)}>{content}</div>
 }

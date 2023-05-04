@@ -119,6 +119,10 @@ export const config = defineConfig({
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],
         space: ['var(--font-space)', ...fontFamily.sans]
+      },
+      screens: {
+        desktop: { min: '1350px' },
+        mobile: { max: '1350px' },
       }
     }
   },

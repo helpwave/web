@@ -19,7 +19,7 @@ const defaultComponentTranslation: Record<Languages, ComponentTranslation> = {
     taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
   },
   de: {
-    showAllTaskTemplates: 'Show all Task Vorlagen',
+    showAllTaskTemplates: 'Alle Task Vorlagen anzeigen',
     taskTemplates: (numberOfTemplates) => `Task Vorlagen (${numberOfTemplates})`
   }
 }

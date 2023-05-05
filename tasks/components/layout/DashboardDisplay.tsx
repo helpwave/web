@@ -28,7 +28,7 @@ const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTra
     organizations: 'Organisationen',
     wards: 'Stationen',
     recent: 'Kürzlich Benutzt',
-    showAllOrganizations: 'Show all organizations'
+    showAllOrganizations: 'Alle Organisationen anzeigen'
   }
 }
 

@@ -14,14 +14,14 @@ export type TaskTemplateListColumnTranslation = {
 
 const defaultTaskTemplateListColumnTranslation = {
   de: {
-    addNewTaskTemplate: 'Neue Vorlage hinzufügen',
-    wardTemplate: 'Stations Vorlagen',
-    personalTemplate: 'Persönliche Vorlagen'
+    addNewTaskTemplate: 'Neues Task Template hinzufügen',
+    wardTemplate: 'Stations Task Templates',
+    personalTemplate: 'Persönliche Task Templates'
   },
   en: {
-    addNewTaskTemplate: 'Add new template',
-    wardTemplate: 'Ward Templates',
-    personalTemplate: 'Personal Templates'
+    addNewTaskTemplate: 'Add new Task template',
+    wardTemplate: 'Ward Task Templates',
+    personalTemplate: 'Personal Task Templates'
   }
 }
 

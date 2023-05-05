@@ -37,6 +37,7 @@ export type SortedTasks = {
 type KanbanBoardProps = {
   sortedTasks: SortedTasks,
   onChange: (sortedTasks: SortedTasks) => void,
+  onEndChanging: (sortedTasks: SortedTasks) => void,
   boardObject: KanbanBoardObject,
   onBoardChange: (board: KanbanBoardObject) => void,
   onEditTask: (task: TaskDTO) => void,
@@ -53,6 +54,7 @@ export const KanbanBoard = ({
   boardObject,
   onBoardChange,
   onChange = noop,
+  onEndChanging = noop,
   onEditTask,
   editedTaskID
 }: KanbanBoardProps) => {
@@ -132,6 +134,9 @@ export const KanbanBoard = ({
         [overColumn]: arrayMove(sortedTasks[overColumn], activeIndex, overIndex),
       }
       onChange(newSortedTasks)
+      onEndChanging(newSortedTasks)
+    } else {
+      onEndChanging(sortedTasks)
     }
   }
 

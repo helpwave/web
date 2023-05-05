@@ -141,9 +141,13 @@ export const WardDetail = ({
           onChange={(rooms) => setNewWard({ ...newWard, rooms })}
         />
       </div>
-      <div className={tw('mt-6')}>
-        <TaskTemplateWardPreview taskTemplates={taskTemplates} />
-      </div>
+      { newWard.id !== '' &&
+        (
+          <div className={tw('mt-6')}>
+            <TaskTemplateWardPreview taskTemplates={taskTemplates} wardID={newWard.id} />
+          </div>
+        )
+      }
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <Span type="subsectionTitle">{translation.dangerZone}</Span>
         <Span type="description">{translation.dangerZoneText}</Span>

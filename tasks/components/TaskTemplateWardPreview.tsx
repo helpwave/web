@@ -19,8 +19,8 @@ const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateW
     taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
   },
   de: {
-    showAllTaskTemplates: 'Alle Task Vorlagen anzeigen',
-    taskTemplates: (numberOfTemplates) => `Task Vorlagen (${numberOfTemplates})`
+    showAllTaskTemplates: 'Alle Task Templates anzeigen',
+    taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
   }
 }
 
@@ -34,6 +34,7 @@ type TaskTemplateDTO = {
 }
 
 export type TaskTemplateWardPreviewProps = {
+  wardID: string,
   taskTemplates: TaskTemplateDTO[]
 }
 
@@ -42,6 +43,7 @@ export type TaskTemplateWardPreviewProps = {
  */
 export const TaskTemplateWardPreview = ({
   language,
+  wardID,
   taskTemplates
 }: PropsWithLanguage<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateWardPreviewTranslation)
@@ -51,10 +53,9 @@ export const TaskTemplateWardPreview = ({
     <div className={tw('flex flex-col')}>
       <div className={tw('flex flex-row justify-between items-center mb-4')}>
         <Span type="tableName">{translation.taskTemplates(taskTemplates.length)}</Span>
-        { /* TODO Change link below later on */}
         <Button
           className={tw('w-auto')}
-          onClick={() => router.push('/ward/templates')}
+          onClick={() => router.push(`/ward/${wardID}/templates`)}
         >
           {translation.showAllTaskTemplates}
         </Button>
@@ -65,7 +66,7 @@ export const TaskTemplateWardPreview = ({
             key={index}
             name={taskTemplate.name}
             subtaskCount={taskTemplate.subtasks.length}
-            onTileClick={() => { /* TODO do something onClick */ }}
+            onTileClick={() => { router.push(`/ward/${wardID}/templates?templateID=${taskTemplate.id}`).then() }}
           />
         ))}
       </div>

@@ -57,14 +57,13 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
   const router = useRouter()
   const { uuid, templateID } = router.query
-
-  const { isLoading, isError, data } = useTaskTemplateQuery()
-
+  const [usedQueryParam, setUsedQueryParam] = useState(false)
   const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
     isValid: false,
     hasChanges: false,
-    template: data?.find(value => value.id === templateID) ?? emptyTaskTemplate
+    template: emptyTaskTemplate
   })
+  const { isLoading, isError, data } = useTaskTemplateQuery()
 
   const createMutation = useCreateMutation(taskTemplate =>
     setTaskTemplateForm({
@@ -85,6 +84,16 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
       template: taskTemplate ?? emptyTaskTemplate
     }))
 
+  if (!taskTemplateForm.hasChanges && templateID && !usedQueryParam) {
+    const newSelected = data?.find(value => value.id === templateID) ?? emptyTaskTemplate
+    setTaskTemplateForm({
+      isValid: newSelected.id !== '',
+      hasChanges: false,
+      template: newSelected
+    })
+    setUsedQueryParam(true)
+  }
+
   // TODO load organization id of ward
   const organizationID = 'org1'
 
@@ -101,9 +110,11 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
   // TODO update breadcrumbs
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.organization, link: `/organizations/${organizationID}` },
-        { display: translation.ward, link: `/ward/${uuid}` },
-        { display: translation.taskTemplates, link: `/ward/${uuid}/templates` }]}
+      crumbs={[
+        { display: translation.organization, link: `/organizations` },
+        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${uuid}` },
+        { display: translation.taskTemplates, link: `/ward/${uuid}/templates` }
+      ]}
     >
       <Head>
         <title>{titleWrapper(translation.wardTaskTemplates)}</title>

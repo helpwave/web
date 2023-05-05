@@ -65,7 +65,7 @@ export const TaskTemplateDisplay = ({
             className={tw('flex flex-row gap-x-1 items-center')}
           >
             <LucideArrowLeftRight/>
-            {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
+            {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}
           </Button>
         </div>
       </div>

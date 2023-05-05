@@ -1,4 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const queryKey = 'wards'
@@ -106,7 +105,7 @@ export const useWardQuery = () => {
   })
 }
 
-export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>, organizationUUID: string) => {
+export const useUpdateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void, organizationUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward: WardDTO) => {
@@ -133,7 +132,7 @@ export const useUpdateMutation = (setSelectedWard: Dispatch<SetStateAction<WardD
   })
 }
 
-export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>, organizationUUID: string) => {
+export const useCreateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void, organizationUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward) => {
@@ -159,7 +158,7 @@ export const useCreateMutation = (setSelectedWard: Dispatch<SetStateAction<WardD
   })
 }
 
-export const useDeleteMutation = (setSelectedWard: Dispatch<SetStateAction<WardDTO | undefined>>, organizationUUID: string) => {
+export const useDeleteMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void, organizationUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward) => {

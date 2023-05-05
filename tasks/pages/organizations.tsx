@@ -16,6 +16,7 @@ import {
 import { PageWithHeader } from '../components/layout/PageWithHeader'
 import titleWrapper from '../utils/titleWrapper'
 import { DiscardChangesDialog } from '@helpwave/common/components/modals/DiscardChangesDialog'
+import { useRouter } from 'next/router'
 
 type OrganizationsPageTranslation = {
   organizations: string
@@ -72,23 +73,32 @@ export const emptyOrganization: OrganizationDTO = {
   members: []
 }
 
+/**
+ * The page for showing all organizations a user is part of
+ */
 const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsPageTranslation>) => {
   const translation = useTranslation(language, defaultOrganizationsPageTranslation)
+  const router = useRouter()
+  const { organizationID } = router.query
+  const [usedQueryParam, setUsedQueryParam] = useState(false)
+
   const [discardDialogInfo, setDiscardDialogInfo] = useState<DiscardChangesInfo>({
     isShowing: false,
     organization: emptyOrganization
   })
-
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>({
     isValid: false,
     hasChanges: false,
     organization: emptyOrganization
   })
+
+  const { isLoading, isError, data } = useOrganizationQuery()
+
   const createMutation = useCreateMutation(organization => {
     setOrganizationForm({
       isValid: true,
       hasChanges: false,
-      organization: discardDialogInfo.organization !== undefined ? discardDialogInfo.organization : organization ?? emptyOrganization
+      organization: discardDialogInfo.organization !== undefined ? organization ?? discardDialogInfo.organization : organization ?? emptyOrganization
     })
     setDiscardDialogInfo({ isShowing: false, organization: undefined })
   })
@@ -108,7 +118,16 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
     })
     setDiscardDialogInfo({ isShowing: false, organization: undefined })
   })
-  const { isLoading, isError, data } = useOrganizationQuery()
+
+  if (organizationID && !usedQueryParam) {
+    const newSelected = data?.find(value => value.id === organizationID) ?? emptyOrganization
+    setOrganizationForm({
+      isValid: newSelected.id !== '',
+      hasChanges: false,
+      organization: newSelected
+    })
+    setUsedQueryParam(true)
+  }
 
   const changeOrganization = (organization: OrganizationDTO) => {
     if (organizationForm.organization.id === '' && !organizationForm.hasChanges) {

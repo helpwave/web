@@ -46,23 +46,13 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
   const translation = useTranslation(language, defaultPersonalTaskTemplateTranslations)
   const router = useRouter()
   const { templateID } = router.query
+  const [usedQueryParam, setUsedQueryParam] = useState(false)
   const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
     isValid: false,
     hasChanges: false,
     template: emptyTaskTemplate
   })
-
-  const { isLoading, isError, data } = useTaskTemplateQuery(data1 => {
-    // TODO templateID is undefined on first load therefore no element is found
-    if (!taskTemplateForm.hasChanges && templateID) {
-      const newSelected = data1.find(value => value.id === templateID) ?? emptyTaskTemplate
-      setTaskTemplateForm({
-        isValid: newSelected.id === '',
-        hasChanges: false,
-        template: newSelected
-      })
-    }
-  })
+  const { isLoading, isError, data } = useTaskTemplateQuery()
 
   const createMutation = useCreateMutation(taskTemplate =>
     setTaskTemplateForm({
@@ -82,6 +72,16 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
     }))
+
+  if (!taskTemplateForm.hasChanges && templateID && !usedQueryParam) {
+    const newSelected = data?.find(value => value.id === templateID) ?? emptyTaskTemplate
+    setTaskTemplateForm({
+      isValid: newSelected.id !== '',
+      hasChanges: false,
+      template: newSelected
+    })
+    setUsedQueryParam(true)
+  }
 
   // TODO add view for loading
   if (isLoading) {

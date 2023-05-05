@@ -9,6 +9,7 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
 import { Span } from '@helpwave/common/components/Span'
+import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -71,6 +72,16 @@ export type WardDetailProps = {
   onDelete: (ward: WardDTO) => void
 }
 
+// TODO delete later
+const taskTemplates = [
+  { id: 'id1', subtasks: [{ name: 'Subtask', isDone: false }], name: 'Template 1', notes: '', isPublicVisible: false },
+  { id: 'id2', subtasks: [], name: 'Template 2', notes: '', isPublicVisible: false },
+  { id: 'id3', subtasks: [], name: 'Template 3', notes: '', isPublicVisible: false },
+  { id: 'id4', subtasks: [], name: 'Template 4', notes: '', isPublicVisible: false },
+  { id: 'id5', subtasks: [], name: 'Template 5', notes: '', isPublicVisible: false },
+  { id: 'id6', subtasks: [], name: 'Template 6', notes: '', isPublicVisible: false }
+]
+
 /**
  * The right side of the organizations/[uuid].tsx page showing the ward. This screen also affords to edit
  * the Ward
@@ -123,6 +134,13 @@ export const WardDetail = ({
           onChange={(rooms) => setNewWard({ ...newWard, rooms })}
         />
       </div>
+      { newWard.id !== '' &&
+        (
+          <div className={tw('mt-6')}>
+            <TaskTemplateWardPreview taskTemplates={taskTemplates} wardID={newWard.id} />
+          </div>
+        )
+      }
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <Span type="subsectionTitle">{translation.dangerZone}</Span>
         <Span type="description">{translation.dangerZoneText}</Span>
@@ -139,7 +157,7 @@ export const WardDetail = ({
       </div>
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button
-          className={tw('w-1/2')}
+          className={tw('w-auto')}
           onClick={() => isCreatingNewOrganization ? onCreate(newWard) : onUpdate(newWard)}
           disabled={!filledRequired}>
           {isCreatingNewOrganization ? translation.create : translation.update}

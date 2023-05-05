@@ -39,7 +39,7 @@ export const TaskTemplateCard =
     subtaskCount,
     language,
     onTileClick = () => undefined,
-    onEditClick = () => undefined
+    onEditClick
   }: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
     const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
     return (

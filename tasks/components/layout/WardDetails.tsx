@@ -130,6 +130,14 @@ export const WardDetail = ({
           onChange={(rooms) => setNewWard({ ...newWard, rooms })}
         />
       </div>
+      <div className={tw('flex flex-row justify-end mt-6')}>
+        <Button
+          className={tw('w-1/2')}
+          onClick={() => isCreatingNewOrganization ? onCreate(newWard) : onUpdate(newWard)}
+          disabled={!filledRequired}>
+          {isCreatingNewOrganization ? translation.create : translation.update}
+        </Button>
+      </div>
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <Span type="subsectionTitle">{translation.dangerZone}</Span>
         <Span type="description">{translation.dangerZoneText}</Span>
@@ -143,14 +151,6 @@ export const WardDetail = ({
             {translation.deleteWard}
           </Button>
         </div>
-      </div>
-      <div className={tw('flex flex-row justify-end mt-6')}>
-        <Button
-          className={tw('w-1/2')}
-          onClick={() => isCreatingNewOrganization ? onCreate(newWard) : onUpdate(newWard)}
-          disabled={!filledRequired}>
-          {isCreatingNewOrganization ? translation.create : translation.update}
-        </Button>
       </div>
     </div>
   )

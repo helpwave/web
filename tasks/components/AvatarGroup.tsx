@@ -1,5 +1,5 @@
 import { Span } from '@helpwave/common/components/Span'
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/common/twind'
 import { Avatar } from './Avatar'
 
 // TODO replace later

@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react'
+import { type PropsWithChildren } from 'react'
 import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
@@ -46,6 +46,7 @@ export const LanguageModal = ({
 }: PropsWithLanguage<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
+
   return (
     <Modal
       isOpen={isOpen}

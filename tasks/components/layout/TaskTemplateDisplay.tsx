@@ -48,38 +48,38 @@ export const TaskTemplateDisplay = ({
 }: PropsWithLanguage<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateDisplayTranslation)
   const router = useRouter()
-  const { uuid } = router.query
+  const { uuid, wardID } = router.query
 
+  const switchToPersonalLink = uuid ? `/templates?wardID=${uuid}` : '/templates'
   return (
     <div className={tw('py-4 px-6')}>
       <div className={tw('flex flex-row items-center justify-between mb-4')}>
         <Span type="subsectionTitle">
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
         </Span>
-        <div>
+        { (variant === 'wardTemplates' || wardID) && (
           <Button
             onClick={() => {
-              // TODO maybe replace with something else later
-              router.push(variant === 'personalTemplates' ? `/ward/${uuid}/templates` : '/templates').then()
+              router.push(variant === 'personalTemplates' ? `/ward/${wardID}/templates` : switchToPersonalLink).then()
             }}
-            className={tw('flex flex-row gap-x-1 items-center')}
+            className={tw('flex flex-row gap-x-1 items-center w-auto')}
           >
             <LucideArrowLeftRight/>
             {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}
           </Button>
-        </div>
+        )}
       </div>
       {/* TODO replace onClick function to something different */}
       <div className={tw('grid grid-cols-4 gap-6')}>
         {taskTemplates.map(taskTemplate => (
-            <TaskTemplateCard
-              key={taskTemplate.name}
-              name={taskTemplate.name}
-              subtaskCount={taskTemplate.subtasks.length}
-              isSelected={selectedID === taskTemplate.id}
-              onEditClick={() => onSelectChange(taskTemplate)}
-              onTileClick={() => onSelectChange(taskTemplate)}
-            />
+          <TaskTemplateCard
+            key={taskTemplate.name}
+            name={taskTemplate.name}
+            subtaskCount={taskTemplate.subtasks.length}
+            isSelected={selectedID === taskTemplate.id}
+            onEditClick={() => onSelectChange(taskTemplate)}
+            onTileClick={() => onSelectChange(taskTemplate)}
+          />
         ))}
         <AddCard
           isSelected={selectedID === ''}

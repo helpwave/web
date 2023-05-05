@@ -1,5 +1,6 @@
 import type { SubTaskDTO } from './room_mutations'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { noop } from '@helpwave/common/components/user_input/Input'
 
 export type TaskTemplateDTO = {
   id: string,
@@ -21,13 +22,14 @@ let taskTemplates: TaskTemplateDTO[] = [
   { id: 'id6', subtasks: [], name: 'Template 6', notes: '', isPublicVisible: false }
 ]
 
-export const useTaskTemplateQuery = () => {
+export const useTaskTemplateQuery = (onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
   return useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
       // TODO fetch task templates
       return taskTemplates
     },
+    onSuccess
   })
 }
 

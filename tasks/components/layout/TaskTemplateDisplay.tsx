@@ -8,24 +8,24 @@ import { AddCard } from '../cards/AddCard'
 import { useRouter } from 'next/router'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
 import { Span } from '@helpwave/common/components/Span'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,
-  switchToPersonal: string,
-  switchToWardView: string,
-  taskTemplates: string
+  personalTaskTemplates: string,
+  wardTaskTemplates: string
 }
 
-const defaultTaskTemplateDisplayTranslation = {
+const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDisplayTranslation> = {
   en: {
     addNewTaskTemplate: 'Add new template',
-    switchToPersonal: 'Personal Task Templates',
-    switchToWardView: 'Ward Task Templates'
+    personalTaskTemplates: 'Personal Task Templates',
+    wardTaskTemplates: 'Ward Task Templates'
   },
   de: {
-    addNewTaskTemplate: 'Neue Vorlage hinzufügen',
-    switchToPersonal: 'Persönliche Task Vorlagen',
-    switchToWardView: 'Stations Task Vorlagen'
+    addNewTaskTemplate: 'Neues Template hinzufügen',
+    personalTaskTemplates: 'Persönliche Task Templates',
+    wardTaskTemplates: 'Stations Task Templates'
   }
 }
 
@@ -54,7 +54,7 @@ export const TaskTemplateDisplay = ({
     <div className={tw('py-4 px-6')}>
       <div className={tw('flex flex-row items-center justify-between mb-4')}>
         <Span type="subsectionTitle">
-          {variant === 'personalTemplates' ? translation.switchToPersonal : translation.switchToWardView}
+          {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
         </Span>
         <div>
           <Button
@@ -65,7 +65,7 @@ export const TaskTemplateDisplay = ({
             className={tw('flex flex-row gap-x-1 items-center')}
           >
             <LucideArrowLeftRight/>
-            {variant === 'personalTemplates' ? translation.switchToWardView : translation.switchToPersonal}
+            {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
           </Button>
         </div>
       </div>

@@ -16,6 +16,7 @@ import {
 } from '../mutations/task_template_mutations'
 import type { TaskTemplateFormType } from './ward/[uuid]/templates'
 import { TaskTemplateDetails } from '../components/layout/TaskTemplateDetails'
+import { useRouter } from 'next/router'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,
@@ -43,13 +44,26 @@ const emptyTaskTemplate: TaskTemplateDTO = {
 
 const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<PersonalTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultPersonalTaskTemplateTranslations)
+  const router = useRouter()
+  const { templateID } = router.query
   const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
     isValid: false,
     hasChanges: false,
     template: emptyTaskTemplate
   })
 
-  const { isLoading, isError, data } = useTaskTemplateQuery()
+  const { isLoading, isError, data } = useTaskTemplateQuery(data1 => {
+    // TODO templateID is undefined on first load therefore no element is found
+    if (!taskTemplateForm.hasChanges && templateID) {
+      const newSelected = data1.find(value => value.id === templateID) ?? emptyTaskTemplate
+      setTaskTemplateForm({
+        isValid: newSelected.id === '',
+        hasChanges: false,
+        template: newSelected
+      })
+    }
+  })
+
   const createMutation = useCreateMutation(taskTemplate =>
     setTaskTemplateForm({
       hasChanges: false,

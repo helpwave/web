@@ -56,15 +56,16 @@ const emptyTaskTemplate: TaskTemplateDTO = {
 const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
   const router = useRouter()
-  const { uuid } = router.query
+  const { uuid, templateID } = router.query
+
+  const { isLoading, isError, data } = useTaskTemplateQuery()
 
   const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
     isValid: false,
     hasChanges: false,
-    template: emptyTaskTemplate
+    template: data?.find(value => value.id === templateID) ?? emptyTaskTemplate
   })
 
-  const { isLoading, isError, data } = useTaskTemplateQuery()
   const createMutation = useCreateMutation(taskTemplate =>
     setTaskTemplateForm({
       hasChanges: false,

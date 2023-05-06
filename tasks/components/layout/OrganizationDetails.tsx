@@ -105,7 +105,7 @@ export const OrganizationDetail = ({
       </div>
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button
-          className={tw('w-1/2')}
+          className={tw('w-auto')}
           onClick={() => isCreatingNewOrganization ? onCreate(organizationForm.organization) : onUpdate(organizationForm.organization)}
           disabled={!organizationForm.isValid}>
           {isCreatingNewOrganization ? translation.create : translation.update}

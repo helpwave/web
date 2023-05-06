@@ -20,7 +20,7 @@ export const BreadCrumb = ({ crumbs }: BreadCrumbProps) => {
   return (
     <div className={tw('flex flex-row')}>
       {crumbs.map((crumb, index) => (
-        <div key={crumb.link}>
+        <div key={index}>
           <Link href={crumb.link} className={tx({ 'text-gray-500 hover:text-black': index !== crumbs.length - 1 })}>
             {crumb.display}
           </Link>

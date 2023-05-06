@@ -20,7 +20,7 @@ export const Span = ({ children, type = 'normal', className = '', ...restProps }
         'font-space font-bold': type === 'subsubsectionTitle',
         'text-sm text-gray-600 font-bold': type === 'accent',
         'text-gray-400': type === 'description',
-        'text-sm text-gray-700 font-medium': type === 'label',
+        'text-sm text-gray-700 font-semibold': type === 'label',
         'text-lg font-space font-medium': type === 'tableName',
         'text-gray-600 font-bold': type === 'tableHeader',
         'text-hw-negative-500 text-sm': type === 'formError',

@@ -4,6 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
+import { Edit } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
 
 type TaskTemplateCardTranslation = {
@@ -42,7 +43,7 @@ export const TaskTemplateCard =
   }: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
     const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
     return (
-      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between')}>
+      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between items-start')}>
         <div className={tw('flex flex-col items-start')}>
           <Span type="subsubsectionTitle">{name}</Span>
           <Span>{subtaskCount + ' ' + translation.subtask}</Span>
@@ -53,9 +54,9 @@ export const TaskTemplateCard =
               onEditClick()
               event.stopPropagation()
             }}
-            className={tw('hidden group-hover:block')}
+            className={tw('text-transparent group-hover:text-black')}
           >
-            {translation.edit}
+            <Edit size={24}/>
           </button>
         )}
       </Card>

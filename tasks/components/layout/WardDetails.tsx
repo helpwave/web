@@ -66,7 +66,7 @@ type WardDTO = {
 }
 
 export type WardDetailProps = {
-  ward?: WardDTO,
+  ward: WardDTO,
   onCreate: (ward: WardDTO) => void,
   onUpdate: (ward: WardDTO) => void,
   onDelete: (ward: WardDTO) => void
@@ -94,19 +94,12 @@ export const WardDetail = ({
   onDelete,
 }: PropsWithLanguage<WardDetailTranslation, WardDetailProps>) => {
   const translation = useTranslation(language, defaultWardDetailTranslations)
-  const isCreatingNewOrganization = ward === undefined
+  const isCreatingNewOrganization = ward.id === ''
 
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
 
   const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
-  const [newWard, setNewWard] = useState<WardDTO>(ward ?? {
-    id: '',
-    name: '',
-    rooms: [],
-    unscheduled: 0,
-    inProgress: 0,
-    done: 0
-  })
+  const [newWard, setNewWard] = useState<WardDTO>(ward)
 
   return (
     <div className={tw('flex flex-col py-4 px-6 w-5/6')}>

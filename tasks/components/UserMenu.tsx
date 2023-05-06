@@ -47,7 +47,7 @@ export const UserMenu = ({
   const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
 
   return (
-    <div className={tw('relative')}>
+    <div className={tw('relative z-10')}>
       <LanguageModal onDone={() => setLanguageModalOpen(false)} isOpen={isLanguageModalOpen}></LanguageModal>
 
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (

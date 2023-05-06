@@ -2,7 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
@@ -14,6 +14,7 @@ import { ToggleableInput } from '@helpwave/common/components/user_input/Toggleab
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { TaskDetailView } from './TaskDetailView'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import useSaveDelay from '../../hooks/useSaveDelay'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -73,43 +74,26 @@ export const PatientDetail = ({
   const [newPatient, setNewPatient] = useState<PatientDTO>(patient)
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
-  const [updateTimer, setUpdateTimer] = useState<NodeJS.Timer | undefined>(undefined)
-  const [notificationTimer, setNotificationTimer] = useState<NodeJS.Timer | undefined>(undefined)
+  const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
   const [sortedTasks, setSortedTasks] = useState<SortedTasks>({
     unscheduled: newPatient.tasks.filter(value => value.status === 'unscheduled'),
     inProgress: newPatient.tasks.filter(value => value.status === 'inProgress'),
     done: newPatient.tasks.filter(value => value.status === 'done'),
   })
-  // Delete interval timer afterwards
-  useEffect(() => {
-    return () => {
-      clearInterval(updateTimer)
-      clearInterval(notificationTimer)
-    }
-  })
 
-  const changeWithUpdateTimer = (newPatient: PatientDTO) => {
-    setNewPatient(newPatient)
-    clearInterval(updateTimer)
-    // No patient validation, maybe check whether this is right
-    setUpdateTimer(setInterval(() => {
-      onUpdate(newPatient)
-      // Show Saved Notification for fade animation duration
-      clearInterval(notificationTimer)
-      setNotificationTimer(undefined)
-      setNotificationTimer(setInterval(() => {
-        clearInterval(notificationTimer)
-        setNotificationTimer(undefined)
-      }, 3000))
-    }, 3000))
+  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => onUpdate(newPatient), setIsShowingSavedNotification, 3000)
+
+  const changeSavedValue = (patient:PatientDTO) => {
+    setNewPatient(patient)
+    restartTimer()
   }
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
-      {notificationTimer !== undefined &&
+      {isShowingSavedNotification &&
         (
           <div
-            className={tw('absolute top-2 right-2 bg-hw-positive-400 text-white rounded-lg px-2 py-1 animate-fade')}
+            className={tw('absolute top-2 right-2 bg-hw-positive-400 text-white rounded-lg px-2 py-1 animate-pulse')}
           >
             {translation.saved}
           </div>
@@ -146,6 +130,7 @@ export const PatientDetail = ({
               }
               setNewPatient(changedPatient)
               onUpdate(changedPatient)
+              clearUpdateTimer()
               setNewTask(undefined)
             }}
           />
@@ -160,7 +145,7 @@ export const PatientDetail = ({
               className={tw('text-lg font-semibold')}
               id="humanReadableIdentifier"
               value={newPatient.humanReadableIdentifier}
-              onChange={humanReadableIdentifier => changeWithUpdateTimer({ ...newPatient, humanReadableIdentifier })}
+              onChange={humanReadableIdentifier => changeSavedValue({ ...newPatient, humanReadableIdentifier })}
             />
           </div>
           <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
@@ -169,7 +154,7 @@ export const PatientDetail = ({
           <Textarea
             headline={translation.notes}
             value={newPatient.note}
-            onChange={text => changeWithUpdateTimer({ ...newPatient, note: text })}
+            onChange={text => changeSavedValue({ ...newPatient, note: text })}
           />
         </div>
       </div>
@@ -179,11 +164,14 @@ export const PatientDetail = ({
         boardObject={boardObject}
         onBoardChange={setBoardObject}
         editedTaskID={newTask?.id}
-        onChange={sortedTasks => setSortedTasks(sortedTasks)}
-        onEndChanging={sortedTasks => onUpdate({
-          ...newPatient,
-          tasks: [...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done]
-        })}
+        onChange={setSortedTasks}
+        onEndChanging={sortedTasks => {
+          onUpdate({
+            ...newPatient,
+            tasks: [...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done]
+          })
+          clearUpdateTimer()
+        }}
         onEditTask={task => {
           setNewTask(task)
         }}

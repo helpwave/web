@@ -83,7 +83,9 @@ export const useAuth = () => {
         setUser(user)
         return
       }
-    } catch (err) {}
+    } catch (_) {
+      Cookies.remove(COOKIE_ID_TOKEN_KEY)
+    }
 
     // Both tokens are invalid. User needs to sign in again.
     getAuthorizationUrl()

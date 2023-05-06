@@ -2,9 +2,6 @@ FROM node:18.16.0 as build
 ENV NEXT_TELEMETRY_DISABLED 1
 ARG WS="@helpwave/tasks"
 
-ENV NEXT_PUBLIC_FAKE_TOKEN_ENABLE=false
-ENV NEXT_PUBLIC_OAUTH_REDIRECT_URI=https://staging-tasks.helpwave.de/auth/callback
-
 # install pnpm
 RUN npm install --global pnpm@7
 

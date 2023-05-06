@@ -70,18 +70,20 @@ export const useAuth = () => {
   }
 
   useEffect(() => {
-    const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
+    try {
+      const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
 
-    const idTokenValid = idToken !== undefined && !isJwtExpired(idToken)
+      const idTokenValid = idToken !== undefined && !isJwtExpired(idToken)
 
-    if (!idTokenValid) Cookies.remove(COOKIE_ID_TOKEN_KEY)
+      if (!idTokenValid) Cookies.remove(COOKIE_ID_TOKEN_KEY)
 
-    if (idTokenValid) {
-      const user = tokenToUser(idToken)
-      if (!user) throw new Error('Cannot parse idToken to user')
-      setUser(user)
-      return
-    }
+      if (idTokenValid) {
+        const user = tokenToUser(idToken)
+        if (!user) throw new Error('Cannot parse idToken to user')
+        setUser(user)
+        return
+      }
+    } catch (err) {}
 
     // Both tokens are invalid. User needs to sign in again.
     getAuthorizationUrl()

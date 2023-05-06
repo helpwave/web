@@ -19,7 +19,7 @@ const defaultTaskTemplateListColumnTranslation = {
     personalTemplate: 'Persönliche Task Templates'
   },
   en: {
-    addNewTaskTemplate: 'Add new Task template',
+    addNewTaskTemplate: 'Add new Task Template',
     wardTemplate: 'Ward Task Templates',
     personalTemplate: 'Personal Task Templates'
   }

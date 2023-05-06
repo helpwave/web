@@ -52,9 +52,8 @@ export const UserMenu = ({
   const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
 
   return (
-    <div className={tw('relative')}>
+    <div className={tw('relative z-10')}>
       <LanguageModal onDone={() => setLanguageModalOpen(false)} isOpen={isLanguageModalOpen} />
-
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick} className={tw('flex gap-2 relative items-center group cursor-pointer select-none')}>
           <div className={tw('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.name}</div>

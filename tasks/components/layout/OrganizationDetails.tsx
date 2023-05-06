@@ -103,6 +103,14 @@ export const OrganizationDetail = ({
           }))}
         />
       </div>
+      <div className={tw('flex flex-row justify-end mt-6')}>
+        <Button
+          className={tw('w-auto')}
+          onClick={() => isCreatingNewOrganization ? onCreate(organizationForm.organization) : onUpdate(organizationForm.organization)}
+          disabled={!organizationForm.isValid}>
+          {isCreatingNewOrganization ? translation.create : translation.update}
+        </Button>
+      </div>
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <Span type="subsectionTitle">{translation.dangerZone}</Span>
         <Span type="description">{translation.dangerZoneText}</Span>
@@ -112,14 +120,6 @@ export const OrganizationDetail = ({
         >
           {translation.deleteOrganization}
         </button>
-      </div>
-      <div className={tw('flex flex-row justify-end mt-6')}>
-        <Button
-          className={tw('w-auto')}
-          onClick={() => isCreatingNewOrganization ? onCreate(organizationForm.organization) : onUpdate(organizationForm.organization)}
-          disabled={!organizationForm.isValid}>
-          {isCreatingNewOrganization ? translation.create : translation.update}
-        </Button>
       </div>
     </div>
   )

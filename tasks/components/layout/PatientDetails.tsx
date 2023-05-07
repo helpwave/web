@@ -81,11 +81,11 @@ export const PatientDetail = ({
     done: newPatient.tasks.filter(value => value.status === 'done'),
   })
 
-  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => onUpdate(newPatient), setIsShowingSavedNotification, 3000)
+  const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
   const changeSavedValue = (patient:PatientDTO) => {
     setNewPatient(patient)
-    restartTimer()
+    restartTimer(() => onUpdate(patient))
   }
 
   return (
@@ -180,7 +180,10 @@ export const PatientDetail = ({
         <div>
           <Button color="negative" onClick={() => setIsShowingConfirmDialog(true)}
                   className={tw('mr-4')}>{translation.dischargePatient}</Button>
-          <Button color="accent" onClick={() => onUpdate(newPatient)}>{translation.saveChanges}</Button>
+          <Button color="accent" onClick={() => {
+            onUpdate(newPatient)
+            clearUpdateTimer(true)
+          }}>{translation.saveChanges}</Button>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { Span } from '@helpwave/common/components/Span'
 import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
 import SimpleBarReact from 'simplebar-react'
+import { Edit } from 'lucide-react'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
@@ -26,7 +27,8 @@ const defaultTaskTemplateListColumnTranslation = {
 export type TaskTemplateListColumnProps = {
   taskTemplates: TaskTemplateDTO[],
   onTileClick: (taskTemplate: TaskTemplateDTO) => void,
-  selectedID?: string
+  selectedID?: string,
+  onColumnEditClick?: () => void
 }
 
 /**
@@ -36,7 +38,8 @@ export const TaskTemplateListColumn = ({
   language,
   taskTemplates,
   onTileClick,
-  selectedID = ''
+  selectedID = '',
+  onColumnEditClick
 }: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateListColumnTranslation)
   const [height, setHeight] = useState<number | undefined>(undefined)
@@ -48,9 +51,12 @@ export const TaskTemplateListColumn = ({
 
   return (
     <div className={tw('flex flex-col overflow-hidden')}>
-      <Span className={tw('text-2xl font-space font-bold mb-4')}>
-        {translation.template}
-      </Span>
+      <div className={tw('flex flex-row overflow-hidden')}>
+        <Span className={tw('text-2xl font-space font-bold mb-4 flex-1')}>
+          {translation.template}
+        </Span>
+        {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
+      </div>
       <div className={tw('overflow-hidden')} ref={ref}>
         <div>
           <SimpleBarReact style={{ maxHeight: height }}>

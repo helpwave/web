@@ -15,6 +15,7 @@ import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
 import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -81,6 +82,9 @@ export const TaskDetailView = ({
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplateDTO | undefined>(undefined)
+  const router = useRouter()
+  const { uuid } = router.query
+
   const labelClassName = 'font-bold text-medium text-gray-600'
 
   const minTaskNameLength = 4
@@ -89,7 +93,7 @@ export const TaskDetailView = ({
   const { data, isLoading, error } = useTaskTemplateQuery()
 
   return (
-    <div className={tw('flex flex-row min-h-[70vh] max-h-[80vh] overflow-hidden')}>
+    <div className={tw('flex flex-row max-h-[70vh] overflow-hidden')}>
       {task.id === '' && (
         <div className={tw('flex flex-col p-6 bg-gray-100 rounded-l-xl min-w-[250px]')}>
           <>
@@ -101,6 +105,7 @@ export const TaskDetailView = ({
                   setSelectedTemplate(taskTemplate)
                   onChange({ ...task, name: taskTemplate.name, description: taskTemplate.notes, subtasks: taskTemplate.subtasks })
                 }}
+                onColumnEditClick={() => router.push(`/ward/${uuid}/templates`)}
               />
             )}
             {/* TODO show something appropriate for error and loading */}

@@ -113,6 +113,7 @@ export const PatientDetail = ({
       <Modal
         isOpen={newTask !== undefined}
         onBackgroundClick={() => setNewTask(undefined)}
+        modalClassName={tw('!p-0')}
       >
         {newTask !== undefined && (
           <TaskDetailView
@@ -129,6 +130,11 @@ export const PatientDetail = ({
                 newTask.creationDate = Date()
               }
               setNewPatient(changedPatient)
+              setSortedTasks({
+                unscheduled: changedPatient.tasks.filter(value => value.status === 'unscheduled'),
+                inProgress: changedPatient.tasks.filter(value => value.status === 'inProgress'),
+                done: changedPatient.tasks.filter(value => value.status === 'done')
+              })
               onUpdate(changedPatient)
               clearUpdateTimer()
               setNewTask(undefined)

@@ -1,38 +1,32 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { Span } from '@helpwave/common/components/Span'
-import { AddCard } from './cards/AddCard'
+import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
+import SimpleBarReact from 'simplebar-react'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
-  wardTemplate: string,
-  personalTemplate: string
+  template: string
 }
 
 const defaultTaskTemplateListColumnTranslation = {
   de: {
     addNewTaskTemplate: 'Neues Task Template hinzufügen',
-    wardTemplate: 'Stations Task Templates',
-    personalTemplate: 'Persönliche Task Templates'
+    template: 'Templates'
   },
   en: {
     addNewTaskTemplate: 'Add new Task Template',
-    wardTemplate: 'Ward Task Templates',
-    personalTemplate: 'Personal Task Templates'
+    template: 'Templates'
   }
 }
 
-type TaskTemplateDTO = {
-  name: string,
-  subtaskCount: number
-}
-
 export type TaskTemplateListColumnProps = {
-  isWardTemplateColumn: boolean,
-  taskTemplates: TaskTemplateDTO[]
+  taskTemplates: TaskTemplateDTO[],
+  onTileClick: (taskTemplate: TaskTemplateDTO) => void,
+  selectedID?: string
 }
 
 /**
@@ -41,43 +35,41 @@ export type TaskTemplateListColumnProps = {
 export const TaskTemplateListColumn = ({
   language,
   taskTemplates,
-  isWardTemplateColumn
+  onTileClick,
+  selectedID = ''
 }: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
-  const [selected, setSelected] = useState<TaskTemplateDTO | undefined>(undefined)
   const translation = useTranslation(language, defaultTaskTemplateListColumnTranslation)
+  const [height, setHeight] = useState<number | undefined>(undefined)
+  const ref = useRef<HTMLDivElement>(null)
 
-  // TODO update with opening of the create template screen
-  const addNewTask = () => undefined
-
-  const onTileClicked = (taskTemplate: TaskTemplateDTO) => {
-    // TODO open template edit screen
-    setSelected(taskTemplate)
-  }
-
-  // TODO action on clicking the template tile
-  const onEditClicked = (taskTemplate: TaskTemplateDTO) => taskTemplate
+  useLayoutEffect(() => {
+    setHeight(ref.current?.clientHeight)
+  }, [ref])
 
   return (
-    <div>
-      <div className={tw('flex flex-row items-center')}>
-        <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <Span type="subsubsectionTitle">
-          {isWardTemplateColumn ? translation.wardTemplate : translation.personalTemplate}
-        </Span>
+    <div className={tw('flex flex-col overflow-hidden')}>
+      <Span className={tw('text-2xl font-space font-bold mb-4')}>
+        {translation.template}
+      </Span>
+      <div className={tw('overflow-hidden')} ref={ref}>
+        <div>
+          <SimpleBarReact style={{ maxHeight: height }}>
+            <div className={tw('flex flex-col gap-y-2 pr-3')}>
+              {taskTemplates.map(taskTemplate => (
+                <div key={taskTemplate.id}>
+                  <TaskTemplateCard
+                    name={taskTemplate.name}
+                    subtaskCount={taskTemplate.subtasks.length}
+                    isSelected={selectedID === taskTemplate.id}
+                    onTileClick={() => onTileClick(taskTemplate)}
+                    className={tw('border-2 border-gray-300')}
+                  />
+                </div>
+              ))}
+            </div>
+          </SimpleBarReact>
+        </div>
       </div>
-      {taskTemplates.map(taskTemplate => (
-          <div key={taskTemplate.name} className={tw('my-2')}>
-            <TaskTemplateCard
-              name={taskTemplate.name}
-              subtaskCount={taskTemplate.subtaskCount}
-              isSelected={selected === taskTemplate}
-              onEditClick={() => onEditClicked(taskTemplate)}
-              onTileClick={() => onTileClicked(taskTemplate)}
-            />
-          </div>
-      )
-      )}
-      <AddCard onTileClick={addNewTask} text={translation.addNewTaskTemplate}/>
     </div>
   )
 }

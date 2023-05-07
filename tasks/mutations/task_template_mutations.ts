@@ -19,7 +19,15 @@ let taskTemplates: TaskTemplateDTO[] = [
   { id: 'id3', subtasks: [], name: 'Template 3', notes: '', isPublicVisible: false },
   { id: 'id4', subtasks: [], name: 'Template 4', notes: '', isPublicVisible: false },
   { id: 'id5', subtasks: [], name: 'Template 5', notes: '', isPublicVisible: false },
-  { id: 'id6', subtasks: [], name: 'Template 6', notes: '', isPublicVisible: false }
+  { id: 'id6', subtasks: [], name: 'Template 6', notes: '', isPublicVisible: false },
+  { id: 'id7', subtasks: [], name: 'Template 7', notes: '', isPublicVisible: false },
+  { id: 'id8', subtasks: [], name: 'Template 8', notes: '', isPublicVisible: false },
+  { id: 'id9', subtasks: [], name: 'Template 8', notes: '', isPublicVisible: false },
+  { id: 'id10', subtasks: [], name: 'Template 9', notes: '', isPublicVisible: false },
+  { id: 'id11', subtasks: [], name: 'Template 10', notes: '', isPublicVisible: false },
+  { id: 'id12', subtasks: [], name: 'Template 11', notes: '', isPublicVisible: false },
+  { id: 'id13', subtasks: [], name: 'Template 12', notes: '', isPublicVisible: false },
+  { id: 'id14', subtasks: [], name: 'Template 13', notes: '', isPublicVisible: false }
 ]
 
 export const useTaskTemplateQuery = (onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {

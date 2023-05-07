@@ -7,13 +7,14 @@ import { TwoColumn } from '../../../components/layout/TwoColumn'
 import { PageWithHeader } from '../../../components/layout/PageWithHeader'
 import titleWrapper from '../../../utils/titleWrapper'
 import { TaskTemplateDisplay } from '../../../components/layout/TaskTemplateDisplay'
-import type { TaskTemplateDTO } from '../../../mutations/task_template_mutations'
 import {
   useCreateMutation,
-  useDeleteMutation,
-  useTaskTemplateQuery,
+  useDeleteMutation, useTaskTemplateQuery,
   useUpdateMutation
-} from '../../../mutations/task_template_mutations'
+} from '../../../mutations/personal_task_template_mutations'
+import type {
+  TaskTemplateDTO
+} from '../../../mutations/personal_task_template_mutations'
 import { TaskTemplateDetails } from '../../../components/layout/TaskTemplateDetails'
 import { useRouter } from 'next/router'
 
@@ -63,21 +64,21 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     hasChanges: false,
     template: emptyTaskTemplate
   })
-  const { isLoading, isError, data } = useTaskTemplateQuery()
+  const { isLoading, isError, data } = useTaskTemplateQuery('wardTaskTemplates')
 
-  const createMutation = useCreateMutation(taskTemplate =>
+  const createMutation = useCreateMutation('wardTaskTemplates', taskTemplate =>
     setTaskTemplateForm({
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
     }))
-  const updateMutation = useUpdateMutation(taskTemplate =>
+  const updateMutation = useUpdateMutation('wardTaskTemplates', taskTemplate =>
     setTaskTemplateForm({
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
     }))
-  const deleteMutation = useDeleteMutation(taskTemplate =>
+  const deleteMutation = useDeleteMutation('wardTaskTemplates', taskTemplate =>
     setTaskTemplateForm({
       hasChanges: false,
       isValid: taskTemplate !== undefined,

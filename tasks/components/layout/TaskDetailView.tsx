@@ -63,7 +63,7 @@ const defaultTaskDetailViewTranslation = {
   }
 }
 
-type TaskDetailViewProps = {
+export type TaskDetailViewProps = {
   task: TaskDTO,
   onChange: (task: TaskDTO) => void,
   onClose: () => void,
@@ -93,10 +93,9 @@ export const TaskDetailView = ({
   const { data, isLoading, error } = useTaskTemplateQuery()
 
   return (
-    <div className={tw('flex flex-row max-h-[70vh] overflow-hidden')}>
+    <div className={tw('relative flex flex-row h-[628px]')}>
       {task.id === '' && (
-        <div className={tw('flex flex-col p-6 bg-gray-100 rounded-l-xl min-w-[250px]')}>
-          <>
+        <div className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 bg-gray-100 rounded-l-xl')}>
             {data && (
               <TaskTemplateListColumn
                 taskTemplates={data}
@@ -108,9 +107,10 @@ export const TaskDetailView = ({
                 onColumnEditClick={() => router.push(`/ward/${uuid}/templates`)}
               />
             )}
-            {/* TODO show something appropriate for error and loading */}
-            {(isLoading || error) && ''}
-          </>
+            <>
+              {/* TODO show something appropriate for error and loading */}
+              {(isLoading || error) && ''}
+            </>
         </div>
       )}
       <div className={tw('flex flex-col p-6')}>

@@ -11,10 +11,9 @@ import type { KanbanBoardObject } from './KanabanBoard'
 import { KanbanBoard } from './KanabanBoard'
 import type { PatientDTO, TaskDTO } from '../../mutations/room_mutations'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
-import { Modal } from '@helpwave/common/components/modals/Modal'
-import { TaskDetailView } from './TaskDetailView'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import useSaveDelay from '../../hooks/useSaveDelay'
+import { TaskDetailModal } from '../TaskDetailModal'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -110,38 +109,36 @@ export const PatientDetail = ({
         }}
         confirmType="negative"
       />
-      <Modal
-        isOpen={newTask !== undefined}
-        onBackgroundClick={() => setNewTask(undefined)}
-        modalClassName={tw('!p-0')}
-      >
-        {newTask !== undefined && (
-          <TaskDetailView
-            task={newTask}
-            onChange={(task) => setNewTask(task)}
-            onClose={() => setNewTask(undefined)}
-            onFinishClick={() => {
-              const changedPatient = {
-                ...newPatient,
-                tasks: [...newPatient.tasks.filter(value => value.id !== newTask.id), newTask]
-              }
-              if (newTask.id === '') {
-                newTask.id = Math.random().toString() // TODO remove later
-                newTask.creationDate = Date()
-              }
-              setNewPatient(changedPatient)
-              setSortedTasks({
-                unscheduled: changedPatient.tasks.filter(value => value.status === 'unscheduled'),
-                inProgress: changedPatient.tasks.filter(value => value.status === 'inProgress'),
-                done: changedPatient.tasks.filter(value => value.status === 'done')
-              })
-              onUpdate(changedPatient)
-              clearUpdateTimer()
-              setNewTask(undefined)
-            }}
-          />
-        )}
-      </Modal>
+      {/* newTask indicates whether the modal is open or not */}
+      {newTask !== undefined && (
+        <TaskDetailModal
+          isOpen={true}
+          onBackgroundClick={() => setNewTask(undefined)}
+          modalClassName={tw('!p-0 rounded-l-none')}
+          task={newTask}
+          onChange={(task) => setNewTask(task)}
+          onClose={() => setNewTask(undefined)}
+          onFinishClick={() => {
+            const changedPatient = {
+              ...newPatient,
+              tasks: [...newPatient.tasks.filter(value => value.id !== newTask.id), newTask]
+            }
+            if (newTask.id === '') {
+              newTask.id = Math.random().toString() // TODO remove later
+              newTask.creationDate = Date()
+            }
+            setNewPatient(changedPatient)
+            setSortedTasks({
+              unscheduled: changedPatient.tasks.filter(value => value.status === 'unscheduled'),
+              inProgress: changedPatient.tasks.filter(value => value.status === 'inProgress'),
+              done: changedPatient.tasks.filter(value => value.status === 'done')
+            })
+            onUpdate(changedPatient)
+            clearUpdateTimer()
+            setNewTask(undefined)
+          }}
+        />
+      )}
       <ColumnTitle title={translation.patientDetails}/>
       <div className={tw('flex flex-row gap-x-6 mb-8')}>
         <div className={tw('flex flex-col gap-y-4 w-5/12')}>

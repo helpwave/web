@@ -181,8 +181,8 @@ export const PatientDetail = ({
           <Button color="negative" onClick={() => setIsShowingConfirmDialog(true)}
                   className={tw('mr-4')}>{translation.dischargePatient}</Button>
           <Button color="accent" onClick={() => {
-            onUpdate(newPatient)
             clearUpdateTimer(true)
+            onUpdate(newPatient)
           }}>{translation.saveChanges}</Button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -45,9 +45,9 @@ export const TaskTemplateListColumn = ({
   const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setHeight(ref.current?.clientHeight)
-  }, [ref])
+  }, [ref.current?.clientHeight])
 
   return (
     <div className={tw('flex flex-col overflow-hidden')}>

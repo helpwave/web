@@ -14,13 +14,15 @@ import { ToggleableInput } from '@helpwave/common/components/user_input/Toggleab
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { TaskDetailView } from './TaskDetailView'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import useSaveDelay from '../../hooks/useSaveDelay'
 
 type PatientDetailTranslation = {
   patientDetails: string,
   notes: string,
   saveChanges: string,
   dischargeConfirmText: string,
-  dischargePatient: string
+  dischargePatient: string,
+  saved: string
 }
 
 const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
@@ -30,6 +32,7 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     saveChanges: 'Save Changes',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
     dischargePatient: 'Discharge Patient',
+    saved: 'Saved'
   },
   de: {
     patientDetails: 'Patienten Details',
@@ -37,7 +40,14 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     saveChanges: 'Speichern',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
     dischargePatient: 'Patienten entlassen',
+    saved: 'Gespeichert'
   }
+}
+
+type SortedTasks = {
+  unscheduled: TaskDTO[],
+  inProgress: TaskDTO[],
+  done: TaskDTO[]
 }
 
 export type PatientDetailProps = {
@@ -64,14 +74,31 @@ export const PatientDetail = ({
   const [newPatient, setNewPatient] = useState<PatientDTO>(patient)
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
-  const sortedTasks = {
+  const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
+  const [sortedTasks, setSortedTasks] = useState<SortedTasks>({
     unscheduled: newPatient.tasks.filter(value => value.status === 'unscheduled'),
     inProgress: newPatient.tasks.filter(value => value.status === 'inProgress'),
     done: newPatient.tasks.filter(value => value.status === 'done'),
+  })
+
+  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => onUpdate(newPatient), setIsShowingSavedNotification, 3000)
+
+  const changeSavedValue = (patient:PatientDTO) => {
+    setNewPatient(patient)
+    restartTimer()
   }
 
   return (
-    <div className={tw('flex flex-col py-4 px-6')}>
+    <div className={tw('relative flex flex-col py-4 px-6')}>
+      {isShowingSavedNotification &&
+        (
+          <div
+            className={tw('absolute top-2 right-2 bg-hw-positive-400 text-white rounded-lg px-2 py-1 animate-pulse')}
+          >
+            {translation.saved}
+          </div>
+        )
+      }
       <ConfirmDialog
         title={translation.dischargeConfirmText}
         isOpen={isShowingConfirmDialog}
@@ -93,7 +120,6 @@ export const PatientDetail = ({
             onChange={(task) => setNewTask(task)}
             onClose={() => setNewTask(undefined)}
             onFinishClick={() => {
-              // currently, adding a new task isn't immediately called in the backend, but requires an update
               const changedPatient = {
                 ...newPatient,
                 tasks: [...newPatient.tasks.filter(value => value.id !== newTask.id), newTask]
@@ -101,11 +127,10 @@ export const PatientDetail = ({
               if (newTask.id === '') {
                 newTask.id = Math.random().toString() // TODO remove later
                 newTask.creationDate = Date()
-                setNewPatient(changedPatient)
-              } else {
-                setNewPatient(changedPatient)
-                onUpdate(changedPatient)
               }
+              setNewPatient(changedPatient)
+              onUpdate(changedPatient)
+              clearUpdateTimer()
               setNewTask(undefined)
             }}
           />
@@ -120,10 +145,7 @@ export const PatientDetail = ({
               className={tw('text-lg font-semibold')}
               id="humanReadableIdentifier"
               value={newPatient.humanReadableIdentifier}
-              onChange={humanReadableIdentifier => setNewPatient({
-                ...newPatient,
-                humanReadableIdentifier
-              })}
+              onChange={humanReadableIdentifier => changeSavedValue({ ...newPatient, humanReadableIdentifier })}
             />
           </div>
           <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
@@ -132,7 +154,7 @@ export const PatientDetail = ({
           <Textarea
             headline={translation.notes}
             value={newPatient.note}
-            onChange={text => setNewPatient({ ...newPatient, note: text })}
+            onChange={text => changeSavedValue({ ...newPatient, note: text })}
           />
         </div>
       </div>
@@ -142,17 +164,22 @@ export const PatientDetail = ({
         boardObject={boardObject}
         onBoardChange={setBoardObject}
         editedTaskID={newTask?.id}
-        onChange={sortedTasks => setNewPatient({
-          ...newPatient,
-          tasks: [...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done]
-        })}
+        onChange={setSortedTasks}
+        onEndChanging={sortedTasks => {
+          onUpdate({
+            ...newPatient,
+            tasks: [...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done]
+          })
+          clearUpdateTimer()
+        }}
         onEditTask={task => {
           setNewTask(task)
         }}
       />
       <div className={tw('flex flex-row justify-end mt-8')}>
         <div>
-          <Button color="negative" onClick={() => setIsShowingConfirmDialog(true)} className={tw('mr-4')}>{translation.dischargePatient}</Button>
+          <Button color="negative" onClick={() => setIsShowingConfirmDialog(true)}
+                  className={tw('mr-4')}>{translation.dischargePatient}</Button>
           <Button color="accent" onClick={() => onUpdate(newPatient)}>{translation.saveChanges}</Button>
         </div>
       </div>

@@ -4,7 +4,7 @@ function useSaveDelay(setNotificationStatus: (isShowing: boolean) => void, delay
   const [updateTimer, setUpdateTimer] = useState<NodeJS.Timeout | undefined>(undefined)
   const [notificationTimer, setNotificationTimer] = useState<NodeJS.Timeout | undefined>(undefined)
 
-  const restartTimer = (onSave:() => void) => {
+  const restartTimer = (onSave: () => void) => {
     clearTimeout(updateTimer)
     setUpdateTimer(setTimeout(() => {
       onSave()

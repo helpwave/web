@@ -11,10 +11,10 @@ import {
   useCreateMutation,
   useDeleteMutation, useTaskTemplateQuery,
   useUpdateMutation
-} from '../../../mutations/personal_task_template_mutations'
+} from '../../../mutations/task_template_mutations'
 import type {
   TaskTemplateDTO
-} from '../../../mutations/personal_task_template_mutations'
+} from '../../../mutations/task_template_mutations'
 import { TaskTemplateDetails } from '../../../components/layout/TaskTemplateDetails'
 import { useRouter } from 'next/router'
 

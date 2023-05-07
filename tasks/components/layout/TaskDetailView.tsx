@@ -90,27 +90,43 @@ export const TaskDetailView = ({
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
 
-  const { data, isLoading, error } = useTaskTemplateQuery()
+  const {
+    data: personalTaskTemplatesData,
+    isLoading: personalTaskTemplatesIsLoading,
+    error: personalTaskTemplatesError
+  } = useTaskTemplateQuery('personalTaskTemplates')
+  const {
+    data: wardTaskTemplatesData,
+    isLoading: wardTaskTemplatesIsLoading,
+    error: wardTaskTemplatesError
+  } = useTaskTemplateQuery('wardTaskTemplates')
 
   return (
     <div className={tw('relative flex flex-row h-[628px]')}>
       {task.id === '' && (
-        <div className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 bg-gray-100 rounded-l-xl')}>
-            {data && (
-              <TaskTemplateListColumn
-                taskTemplates={data}
-                selectedID={selectedTemplate?.id ?? ''}
-                onTileClick={(taskTemplate) => {
-                  setSelectedTemplate(taskTemplate)
-                  onChange({ ...task, name: taskTemplate.name, description: taskTemplate.notes, subtasks: taskTemplate.subtasks })
-                }}
-                onColumnEditClick={() => router.push(`/ward/${uuid}/templates`)}
-              />
-            )}
-            <>
-              {/* TODO show something appropriate for error and loading */}
-              {(isLoading || error) && ''}
-            </>
+        <div
+          className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 bg-gray-100 rounded-l-xl')}>
+          {personalTaskTemplatesData && wardTaskTemplatesData && (
+            <TaskTemplateListColumn
+              taskTemplates={[...personalTaskTemplatesData, ...wardTaskTemplatesData]
+                .sort((a, b) => a.name.localeCompare(b.name))}
+              selectedID={selectedTemplate?.id ?? ''}
+              onTileClick={(taskTemplate) => {
+                setSelectedTemplate(taskTemplate)
+                onChange({
+                  ...task,
+                  name: taskTemplate.name,
+                  description: taskTemplate.notes,
+                  subtasks: taskTemplate.subtasks
+                })
+              }}
+              onColumnEditClick={() => router.push(`/ward/${uuid}/templates`)}
+            />
+          )}
+          <>
+            {/* TODO show something appropriate for error and loading */}
+            {((personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading) || (personalTaskTemplatesError || wardTaskTemplatesError)) && ''}
+          </>
         </div>
       )}
       <div className={tw('flex flex-col p-6')}>

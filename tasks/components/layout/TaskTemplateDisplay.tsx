@@ -6,7 +6,7 @@ import { TaskTemplateCard } from '../cards/TaskTemplateCard'
 import { Button } from '@helpwave/common/components/Button'
 import { AddCard } from '../cards/AddCard'
 import { useRouter } from 'next/router'
-import type { TaskTemplateDTO } from '../../mutations/personal_task_template_mutations'
+import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 

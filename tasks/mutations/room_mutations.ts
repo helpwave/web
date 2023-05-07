@@ -34,6 +34,12 @@ export type BedDTO = {
   patient?: PatientDTO
 }
 
+export const emptyBed: BedDTO = {
+  id: '',
+  name: '',
+  patient: { id: '', humanReadableIdentifier: '', note: '', tasks: [] },
+}
+
 export type RoomDTO = {
   id: string,
   name: string,

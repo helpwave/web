@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind'
 import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -13,18 +12,18 @@ import {
   useDischargeMutation,
   useUpdateMutation
 } from '../../mutations/room_mutations'
-import { RoomOverview } from '../../components/RoomOverview'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { WardRoomList } from '../../components/layout/WardRoomList'
 
 type WardOverviewTranslation = {
   beds: string,
   roomOverview: string,
   organization: string,
   ward: string,
-  bed: string,
+  room: string,
   addPatientDialogTitle: string
 }
 
@@ -34,7 +33,7 @@ const defaultWardOverviewTranslation = {
     roomOverview: 'Room Overview',
     organization: 'Organization',
     ward: 'Ward',
-    bed: 'Bed',
+    room: 'Room',
     addPatientDialogTitle: 'Do you want to add a new patient?'
   },
   de: {
@@ -42,7 +41,7 @@ const defaultWardOverviewTranslation = {
     roomOverview: 'Raum Übersicht',
     organization: 'Organisation',
     ward: 'Station',
-    bed: 'Bett',
+    room: 'Raum',
     addPatientDialogTitle: 'Willst du einen neuen Patienten hinzufügen?'
   }
 }
@@ -101,9 +100,9 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: '/organizations' },
-        { display: translation.ward, link: `/organizations/${organizationUUID}` },
-        { display: translation.bed, link: `/ward/${wardUUID}` }
+        { display: translation.organization, link: `/organizations?organizationID=${organizationUUID}` },
+        { display: translation.ward, link: `/organizations/${organizationUUID}?wardID=${wardUUID}` },
+        { display: translation.room, link: `/ward/${wardUUID}` }
       ]}
     >
       <Head>
@@ -127,29 +126,12 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       />
       <TwoColumn
         left={() => (
-          <div className={tw('flex flex-col px-6 py-8')}>
-            {rooms.map(room => (
-              <RoomOverview
-                key={room.id}
-                room={room}
-                onSelect={setSelectedBed}
-                selected={selectedBed}
-                onAddPatient={bed => {
-                  setSelectedBed({
-                    ...bed,
-                    patient: {
-                      id: Math.random().toString(),
-                      note: '',
-                      humanReadableIdentifier: 'Patient ' + (room.beds.findIndex(value => value.id === bed?.id) + 1),
-                      tasks: []
-                    }
-                  })
-                  setIsShowingPatientDialog(true)
-                }}
-              />
-            )
-            )}
-          </div>
+          <WardRoomList
+            rooms={rooms}
+            setSelectedBed={setSelectedBed}
+            selectedBed={selectedBed}
+            setIsShowingPatientDialog={setIsShowingPatientDialog}
+          />
         )}
         right={() =>
           selectedBed.id === '' || selectedBed.patient === undefined || isShowingPatientDialog ?

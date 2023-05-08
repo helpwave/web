@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 
-function useSaveDelay(onSave:() => void, setNotificationStatus: (isShowing: boolean) => void, delay: number) {
+function useSaveDelay(setNotificationStatus: (isShowing: boolean) => void, delay: number) {
   const [updateTimer, setUpdateTimer] = useState<NodeJS.Timeout | undefined>(undefined)
   const [notificationTimer, setNotificationTimer] = useState<NodeJS.Timeout | undefined>(undefined)
 
-  const restartTimer = () => {
+  const restartTimer = (onSave: () => void) => {
     clearTimeout(updateTimer)
     setUpdateTimer(setTimeout(() => {
       onSave()

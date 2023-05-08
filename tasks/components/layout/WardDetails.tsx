@@ -10,7 +10,7 @@ import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
 import { Span } from '@helpwave/common/components/Span'
 import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
-import { useTaskTemplateQuery } from '../../mutations/personal_task_template_mutations'
+import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 
 type WardDetailTranslation = {
   updateWard: string,

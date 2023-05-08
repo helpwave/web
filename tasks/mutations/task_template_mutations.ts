@@ -19,18 +19,19 @@ let personalTaskTemplates: TaskTemplateDTO[] = [
   { id: 'id3', subtasks: [], name: 'Personal Template 3', notes: '', isPublicVisible: false },
   { id: 'id4', subtasks: [], name: 'Personal Template 4', notes: '', isPublicVisible: false },
   { id: 'id5', subtasks: [], name: 'Personal Template 5', notes: '', isPublicVisible: false },
-  { id: 'id6', subtasks: [], name: 'Personal Template 6', notes: '', isPublicVisible: false }
+  { id: 'id6', subtasks: [], name: 'Personal Template 6', notes: '', isPublicVisible: false },
+  { id: 'id7', subtasks: [], name: 'Personal Template 7', notes: '', isPublicVisible: false }
 ]
 
 // TODO remove once backend is implemented
 let wardTaskTemplates: TaskTemplateDTO[] = [
-  { id: 'id1', subtasks: [{ name: 'Subtask', isDone: false }], name: 'Ward Template 1', notes: '', isPublicVisible: false },
-  { id: 'id2', subtasks: [], name: 'Ward Template 2', notes: '', isPublicVisible: false },
-  { id: 'id3', subtasks: [], name: 'Ward Template 3', notes: '', isPublicVisible: false },
-  { id: 'id4', subtasks: [], name: 'Ward Template 4', notes: '', isPublicVisible: false },
-  { id: 'id5', subtasks: [], name: 'Ward Template 5', notes: '', isPublicVisible: false },
-  { id: 'id6', subtasks: [], name: 'Ward Template 6', notes: '', isPublicVisible: false },
-  { id: 'id7', subtasks: [], name: 'Ward Template 7', notes: '', isPublicVisible: false }
+  { id: 'id8', subtasks: [{ name: 'Subtask', isDone: false }], name: 'Ward Template 1', notes: '', isPublicVisible: false },
+  { id: 'id9', subtasks: [], name: 'Ward Template 2', notes: '', isPublicVisible: false },
+  { id: 'id10', subtasks: [], name: 'Ward Template 3', notes: '', isPublicVisible: false },
+  { id: 'id11', subtasks: [], name: 'Ward Template 4', notes: '', isPublicVisible: false },
+  { id: 'id12', subtasks: [], name: 'Ward Template 5', notes: '', isPublicVisible: false },
+  { id: 'id13', subtasks: [], name: 'Ward Template 6', notes: '', isPublicVisible: false },
+  { id: 'id14', subtasks: [], name: 'Ward Template 7', notes: '', isPublicVisible: false }
 ]
 
 export const useTaskTemplateQuery = (queryKey: QueryKey, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {

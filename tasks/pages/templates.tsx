@@ -7,13 +7,13 @@ import { TwoColumn } from '../components/layout/TwoColumn'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
 import titleWrapper from '../utils/titleWrapper'
 import { TaskTemplateDisplay } from '../components/layout/TaskTemplateDisplay'
-import type { TaskTemplateDTO } from '../mutations/personal_task_template_mutations'
+import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
 import {
   useCreateMutation,
   useDeleteMutation,
   useTaskTemplateQuery,
   useUpdateMutation
-} from '../mutations/personal_task_template_mutations'
+} from '../mutations/task_template_mutations'
 import type { TaskTemplateFormType } from './ward/[uuid]/templates'
 import { TaskTemplateDetails } from '../components/layout/TaskTemplateDetails'
 import { useRouter } from 'next/router'

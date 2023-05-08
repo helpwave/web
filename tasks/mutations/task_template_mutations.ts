@@ -10,36 +10,55 @@ export type TaskTemplateDTO = {
   isPublicVisible: boolean
 }
 
-const queryKey = 'taskTemplates'
+type QueryKey = 'personalTaskTemplates'| 'wardTaskTemplates'
 
 // TODO remove once backend is implemented
-let taskTemplates: TaskTemplateDTO[] = [
-  { id: 'id1', subtasks: [{ name: 'Subtask', isDone: false }], name: 'Template 1', notes: '', isPublicVisible: false },
-  { id: 'id2', subtasks: [], name: 'Template 2', notes: '', isPublicVisible: false },
-  { id: 'id3', subtasks: [], name: 'Template 3', notes: '', isPublicVisible: false },
-  { id: 'id4', subtasks: [], name: 'Template 4', notes: '', isPublicVisible: false },
-  { id: 'id5', subtasks: [], name: 'Template 5', notes: '', isPublicVisible: false },
-  { id: 'id6', subtasks: [], name: 'Template 6', notes: '', isPublicVisible: false }
+let personalTaskTemplates: TaskTemplateDTO[] = [
+  { id: 'id1', subtasks: [{ name: 'Subtask', isDone: false }], name: 'Personal Template 1', notes: '', isPublicVisible: false },
+  { id: 'id2', subtasks: [], name: 'Personal Template 2', notes: '', isPublicVisible: false },
+  { id: 'id3', subtasks: [], name: 'Personal Template 3', notes: '', isPublicVisible: false },
+  { id: 'id4', subtasks: [], name: 'Personal Template 4', notes: '', isPublicVisible: false },
+  { id: 'id5', subtasks: [], name: 'Personal Template 5', notes: '', isPublicVisible: false },
+  { id: 'id6', subtasks: [], name: 'Personal Template 6', notes: '', isPublicVisible: false },
+  { id: 'id7', subtasks: [], name: 'Personal Template 7', notes: '', isPublicVisible: false }
 ]
 
-export const useTaskTemplateQuery = (onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
+// TODO remove once backend is implemented
+let wardTaskTemplates: TaskTemplateDTO[] = [
+  { id: 'id8', subtasks: [{ name: 'Subtask', isDone: false }], name: 'Ward Template 1', notes: '', isPublicVisible: false },
+  { id: 'id9', subtasks: [], name: 'Ward Template 2', notes: '', isPublicVisible: false },
+  { id: 'id10', subtasks: [], name: 'Ward Template 3', notes: '', isPublicVisible: false },
+  { id: 'id11', subtasks: [], name: 'Ward Template 4', notes: '', isPublicVisible: false },
+  { id: 'id12', subtasks: [], name: 'Ward Template 5', notes: '', isPublicVisible: false },
+  { id: 'id13', subtasks: [], name: 'Ward Template 6', notes: '', isPublicVisible: false },
+  { id: 'id14', subtasks: [], name: 'Ward Template 7', notes: '', isPublicVisible: false }
+]
+
+export const useTaskTemplateQuery = (queryKey: QueryKey, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
   return useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
+      if (queryKey === 'wardTaskTemplates') {
+        return wardTaskTemplates
+      }
       // TODO fetch task templates
-      return taskTemplates
+      return personalTaskTemplates
     },
     onSuccess
   })
 }
 
-export const useUpdateMutation = (setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
+export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {
       // TODO create request for taskTemplate
-      taskTemplates = [...taskTemplates.filter(value => value.id !== taskTemplate.id), taskTemplate]
-      taskTemplates.sort((a, b) => a.id.localeCompare(b.id))
+      if (queryKey === 'wardTaskTemplates') {
+        wardTaskTemplates = [...wardTaskTemplates.filter(value => value.id !== taskTemplate.id), taskTemplate]
+        wardTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
+      }
+      personalTaskTemplates = [...personalTaskTemplates.filter(value => value.id !== taskTemplate.id), taskTemplate]
+      personalTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       setTemplate(taskTemplate)
     },
     onMutate: async (taskTemplate: TaskTemplateDTO) => {
@@ -49,7 +68,6 @@ export const useUpdateMutation = (setTemplate: (taskTemplate:TaskTemplateDTO | u
         [queryKey],
         // TODO do optimistic update here
         (old) => old)
-      taskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       return { previousTaskTemplates }
     },
     onError: (_, newTodo, context) => {
@@ -61,14 +79,18 @@ export const useUpdateMutation = (setTemplate: (taskTemplate:TaskTemplateDTO | u
   })
 }
 
-export const useCreateMutation = (setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
+export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskTemplate:TaskTemplateDTO) => {
       const newTaskTemplate = { ...taskTemplate, id: Math.random().toString() }
       // TODO create request for taskTemplate
-      taskTemplates = [...taskTemplates, newTaskTemplate]
-      taskTemplates.sort((a, b) => a.id.localeCompare(b.id))
+      if (queryKey === 'wardTaskTemplates') {
+        wardTaskTemplates = [...wardTaskTemplates, newTaskTemplate]
+        wardTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
+      }
+      personalTaskTemplates = [...personalTaskTemplates, newTaskTemplate]
+      personalTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       setTemplate(newTaskTemplate)
     },
     onMutate: async (taskTemplate:TaskTemplateDTO) => {
@@ -76,7 +98,6 @@ export const useCreateMutation = (setTemplate: (taskTemplate:TaskTemplateDTO | u
       const previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
       // TODO do optimistic update here
       queryClient.setQueryData<TaskTemplateDTO[]>([queryKey], (old) => old)
-      taskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       return { previousTaskTemplate }
     },
     onError: (_, newTodo, context) => {
@@ -88,13 +109,17 @@ export const useCreateMutation = (setTemplate: (taskTemplate:TaskTemplateDTO | u
   })
 }
 
-export const useDeleteMutation = (setTemplate: (task:TaskTemplateDTO | undefined) => void) => {
+export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskTemplate) => {
       // TODO create request for taskTemplate
-      taskTemplates = taskTemplates.filter(value => value.id !== taskTemplate.id)
-      taskTemplates.sort((a, b) => a.id.localeCompare(b.id))
+      if (queryKey === 'wardTaskTemplates') {
+        wardTaskTemplates = wardTaskTemplates.filter(value => value.id !== taskTemplate.id)
+        wardTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
+      }
+      personalTaskTemplates = personalTaskTemplates.filter(value => value.id !== taskTemplate.id)
+      personalTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       setTemplate(undefined)
     },
     onMutate: async (taskTemplate: TaskTemplateDTO) => {

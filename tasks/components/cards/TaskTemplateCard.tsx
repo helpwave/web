@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -35,19 +35,23 @@ export type TaskTemplateCardProps = CardProps & {
 /**
  * A Card showing a TaskTemplate
  */
-export const TaskTemplateCard =
-  ({
-    isSelected = false,
-    name,
-    subtaskCount,
-    language,
-    onTileClick = () => undefined,
-    onEditClick,
-    label
-  }: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
-    const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
-    return (
-      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group flex flex-row justify-between items-start')}>
+export const TaskTemplateCard = ({
+  isSelected = false,
+  name,
+  subtaskCount,
+  language,
+  onTileClick = () => undefined,
+  onEditClick,
+  className,
+  label
+}: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
+  const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
+  return (
+      <Card
+        onTileClick={onTileClick}
+        isSelected={isSelected}
+        className={tx('group flex flex-row justify-between items-start bg-white', className)}
+      >
         <div className={tw('flex flex-col items-start')}>
           <Span type="subsubsectionTitle">{name}</Span>
           <Span>{subtaskCount + ' ' + translation.subtask}</Span>
@@ -67,5 +71,5 @@ export const TaskTemplateCard =
           )}
         </div>
       </Card>
-    )
-  }
+  )
+}

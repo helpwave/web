@@ -52,21 +52,21 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
     hasChanges: false,
     template: emptyTaskTemplate
   })
-  const { isLoading, isError, data } = useTaskTemplateQuery()
+  const { isLoading, isError, data } = useTaskTemplateQuery('personalTaskTemplates')
 
-  const createMutation = useCreateMutation(taskTemplate =>
+  const createMutation = useCreateMutation('personalTaskTemplates', taskTemplate =>
     setTaskTemplateForm({
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
     }))
-  const updateMutation = useUpdateMutation(taskTemplate =>
+  const updateMutation = useUpdateMutation('personalTaskTemplates', taskTemplate =>
     setTaskTemplateForm({
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
     }))
-  const deleteMutation = useDeleteMutation(taskTemplate =>
+  const deleteMutation = useDeleteMutation('personalTaskTemplates', taskTemplate =>
     setTaskTemplateForm({
       hasChanges: false,
       isValid: taskTemplate !== undefined,

@@ -8,7 +8,9 @@ export type ModalProps = {
   title?: string,
   description?: string,
   onBackgroundClick?: MouseEventHandler<HTMLDivElement>,
-  portalRootName?: string
+  portalRootName?: string,
+  backgroundClassName?: string,
+  modalClassName?: string
 }
 
 /**
@@ -22,7 +24,9 @@ export const Modal = ({
   title,
   description,
   onBackgroundClick,
-  portalRootName = 'portal-root'
+  portalRootName = 'portal-root',
+  backgroundClassName = '',
+  modalClassName = ''
 }: PropsWithChildren<ModalProps>) => {
   const modalRoot = document.getElementById('modal-root')
 
@@ -37,11 +41,11 @@ export const Modal = ({
   return ReactDOM.createPortal(
     <div className={tx('fixed inset-0 overflow-y-auto z-[99]', { hidden: !isOpen }) + ` ${portalRootName}`}>
       <div
-        className={tw('fixed inset-0 h-screen w-screen bg-black/70')}
+        className={tx('fixed inset-0 h-screen w-screen bg-black/70', backgroundClassName)}
         onClick={onBackgroundClick}
       />
       <div
-        className={tw('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl')}>
+        className={tx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
         {title && (
           <span className={tx('text-lg font-semibold', { 'mb-1': description, 'mb-3': !description })}>
               {title}

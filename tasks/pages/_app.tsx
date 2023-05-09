@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import { Inter, Space_Grotesk as SpaceGrotesk } from '@next/font/google'
+import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { css, tw } from '@helpwave/common/twind'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '@helpwave/common/twind/next/app'

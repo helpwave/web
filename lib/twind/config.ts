@@ -116,11 +116,11 @@ export const config = defineConfig({
           text: '#273429'
         },
         'hw-label-blue': {
-          background: '#758ece42',
+          background: '#758ECE42',
           text: '#758ECE'
         },
         'hw-label-pink': {
-          background: '#ce75a042',
+          background: '#CE75A042',
           text: '#CE75A0'
         },
       },

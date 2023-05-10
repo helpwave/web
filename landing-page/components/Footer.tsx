@@ -10,7 +10,7 @@ const socials = [
   { name: 'Twitch', link: 'https://www.twitch.tv/helpwave' },
 ]
 
-const Header = () => {
+const Footer = () => {
   return (
       <div className={tw('w-screen absolute left-1/2 bottom-[40px] -translate-x-1/2')}>
         <div className={tw('flex flex-wrap gap-8 justify-center')}>
@@ -25,4 +25,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default Footer

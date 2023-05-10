@@ -10,6 +10,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { OrganizationDTO, OrganizationFormType } from '../../pages/organizations'
+import { Span } from '@helpwave/common/components/Span'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -102,23 +103,23 @@ export const OrganizationDetail = ({
           }))}
         />
       </div>
+      <div className={tw('flex flex-row justify-end mt-6')}>
+        <Button
+          className={tw('w-auto')}
+          onClick={() => isCreatingNewOrganization ? onCreate(organizationForm.organization) : onUpdate(organizationForm.organization)}
+          disabled={!organizationForm.isValid}>
+          {isCreatingNewOrganization ? translation.create : translation.update}
+        </Button>
+      </div>
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
-        <span className={tw('font-space text-lg font-bold')}>{translation.dangerZone}</span>
-        <span className={tw('text-gray-400')}>{translation.dangerZoneText}</span>
+        <Span type="subsectionTitle">{translation.dangerZone}</Span>
+        <Span type="description">{translation.dangerZoneText}</Span>
         <button
           onClick={() => setIsShowingConfirmDialog(true)}
           className={tw('text-hw-negative-400 font-bold text-left')}
         >
           {translation.deleteOrganization}
         </button>
-      </div>
-      <div className={tw('flex flex-row justify-end mt-6')}>
-        <Button
-          className={tw('w-1/2')}
-          onClick={() => isCreatingNewOrganization ? onCreate(organizationForm.organization) : onUpdate(organizationForm.organization)}
-          disabled={!organizationForm.isValid}>
-          {isCreatingNewOrganization ? translation.create : translation.update}
-        </Button>
       </div>
     </div>
   )

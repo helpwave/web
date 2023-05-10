@@ -1,37 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Plus } from 'lucide-react'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
+import { Span } from '@helpwave/common/components/Span'
+import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
+import SimpleBarReact from 'simplebar-react'
+import { Edit } from 'lucide-react'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
-  wardTemplate: string,
-  personalTemplate: string
+  template: string
 }
 
 const defaultTaskTemplateListColumnTranslation = {
   de: {
-    addNewTaskTemplate: 'Neue Vorlage hinzufügen',
-    wardTemplate: 'Stations Vorlagen',
-    personalTemplate: 'Persönliche Vorlagen'
+    addNewTaskTemplate: 'Neues Task Template hinzufügen',
+    template: 'Templates'
   },
   en: {
-    addNewTaskTemplate: 'Add new template',
-    wardTemplate: 'Ward Templates',
-    personalTemplate: 'Personal Templates'
+    addNewTaskTemplate: 'Add new Task Template',
+    template: 'Templates'
   }
 }
 
-type TaskTemplateDTO = {
-  name: string,
-  subtaskCount: number
-}
-
 export type TaskTemplateListColumnProps = {
-  isWardTemplateColumn: boolean,
-  taskTemplates: TaskTemplateDTO[]
+  taskTemplates: TaskTemplateDTO[],
+  onTileClick: (taskTemplate: TaskTemplateDTO) => void,
+  selectedID?: string,
+  onColumnEditClick?: () => void
 }
 
 /**
@@ -40,46 +37,44 @@ export type TaskTemplateListColumnProps = {
 export const TaskTemplateListColumn = ({
   language,
   taskTemplates,
-  isWardTemplateColumn
+  onTileClick,
+  selectedID = '',
+  onColumnEditClick
 }: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
-  const [selected, setSelected] = useState<TaskTemplateDTO | undefined>(undefined)
   const translation = useTranslation(language, defaultTaskTemplateListColumnTranslation)
+  const [height, setHeight] = useState<number | undefined>(undefined)
+  const ref = useRef<HTMLDivElement>(null)
 
-  // TODO update with opening of the create template screen
-  const addNewTask = () => undefined
-
-  const onTileClicked = (taskTemplate: TaskTemplateDTO) => {
-    // TODO open template edit screen
-    setSelected(taskTemplate)
-  }
-
-  // TODO action on clicking the template tile
-  const onEditClicked = (taskTemplate: TaskTemplateDTO) => taskTemplate
+  useEffect(() => {
+    setHeight(ref.current?.clientHeight)
+  }, [ref.current?.clientHeight])
 
   return (
-    <div>
-      <div className={tw('flex flex-row items-center')}>
-        <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <span className={tw('font-bold')}>
-          {isWardTemplateColumn ? translation.wardTemplate : translation.personalTemplate}
-        </span>
+    <div className={tw('flex flex-col overflow-hidden')}>
+      <div className={tw('flex flex-row overflow-hidden')}>
+        <Span className={tw('text-2xl font-space font-bold mb-4 flex-1')}>
+          {translation.template}
+        </Span>
+        {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
       </div>
-      {taskTemplates.map(taskTemplate => (
-          <div key={taskTemplate.name} className={tw('my-2')}>
-            <TaskTemplateCard
-              name={taskTemplate.name}
-              subtaskCount={taskTemplate.subtaskCount}
-              isSelected={selected === taskTemplate}
-              onEditClick={() => onEditClicked(taskTemplate)}
-              onTileClick={() => onTileClicked(taskTemplate)}
-            />
-          </div>
-      )
-      )}
-      <div onClick={addNewTask}
-           className={tw('flex flex-row w-full h-16 rounded-md border-2 hover:border-hw-primary-700 items-center justify-center cursor-pointer mt-4')}>
-        <Plus/>
-        <span className={tw('ml-2')}>{translation.addNewTaskTemplate}</span>
+      <div className={tw('overflow-hidden')} ref={ref}>
+        <div>
+          <SimpleBarReact style={{ maxHeight: height }}>
+            <div className={tw('flex flex-col gap-y-2 pr-3')}>
+              {taskTemplates.map(taskTemplate => (
+                <div key={taskTemplate.id}>
+                  <TaskTemplateCard
+                    name={taskTemplate.name}
+                    subtaskCount={taskTemplate.subtasks.length}
+                    isSelected={selectedID === taskTemplate.id}
+                    onTileClick={() => onTileClick(taskTemplate)}
+                    className={tw('border-2 border-gray-300')}
+                  />
+                </div>
+              ))}
+            </div>
+          </SimpleBarReact>
+        </div>
       </div>
     </div>
   )

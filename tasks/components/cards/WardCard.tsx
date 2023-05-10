@@ -6,6 +6,7 @@ import { PillLabelBox } from '../pill/PillLabelBox'
 import { Edit, Bed } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
+import { Span } from '@helpwave/common/components/Span'
 
 type WardCardTranslation = {
   edit: string,
@@ -59,7 +60,7 @@ export const WardCard = ({
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
       <div className={tw('flex flex-row justify-between w-full')}>
-        <span className={tw('font-bold font-space')}>{ward.name}</span>
+        <Span type="subsubsectionTitle">{ward.name}</Span>
         {onEditClick && (
           <button
             onClick={event => {

@@ -1,4 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const queryKey = 'rooms'
@@ -33,6 +32,12 @@ export type BedDTO = {
   id: string,
   name: string,
   patient?: PatientDTO
+}
+
+export const emptyBed: BedDTO = {
+  id: '',
+  name: '',
+  patient: { id: '', humanReadableIdentifier: '', note: '', tasks: [] },
 }
 
 export type RoomDTO = {
@@ -227,7 +232,7 @@ export const useRoomQuery = () => {
   })
 }
 
-export const useUpdateMutation = (setSelectedBed: Dispatch<SetStateAction<BedDTO | undefined>>, wardUUID: string, roomUUID: string) => {
+export const useUpdateMutation = (setSelectedBed: (bed:BedDTO) => void, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed: BedDTO) => {
@@ -261,7 +266,7 @@ export const useUpdateMutation = (setSelectedBed: Dispatch<SetStateAction<BedDTO
   })
 }
 
-export const useCreateMutation = (setSelectedBed: Dispatch<SetStateAction<BedDTO | undefined>>, wardUUID: string, roomUUID: string) => {
+export const useCreateMutation = (setSelectedBed: (bed:BedDTO) => void, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed) => {
@@ -294,7 +299,7 @@ export const useCreateMutation = (setSelectedBed: Dispatch<SetStateAction<BedDTO
   })
 }
 
-export const useDischargeMutation = (setSelectedBed: Dispatch<SetStateAction<BedDTO | undefined>>, wardUUID: string, roomUUID: string) => {
+export const useDischargeMutation = (setSelectedBed: (bed:BedDTO) => void, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed) => {

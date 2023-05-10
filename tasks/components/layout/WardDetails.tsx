@@ -8,6 +8,9 @@ import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
+import { Span } from '@helpwave/common/components/Span'
+import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
+import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -64,7 +67,7 @@ type WardDTO = {
 }
 
 export type WardDetailProps = {
-  ward?: WardDTO,
+  ward: WardDTO,
   onCreate: (ward: WardDTO) => void,
   onUpdate: (ward: WardDTO) => void,
   onDelete: (ward: WardDTO) => void
@@ -82,19 +85,14 @@ export const WardDetail = ({
   onDelete,
 }: PropsWithLanguage<WardDetailTranslation, WardDetailProps>) => {
   const translation = useTranslation(language, defaultWardDetailTranslations)
-  const isCreatingNewOrganization = ward === undefined
+  const isCreatingNewOrganization = ward.id === ''
 
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
 
   const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
-  const [newWard, setNewWard] = useState<WardDTO>(ward ?? {
-    id: '',
-    name: '',
-    rooms: [],
-    unscheduled: 0,
-    inProgress: 0,
-    done: 0
-  })
+  const [newWard, setNewWard] = useState<WardDTO>(ward)
+
+  const { data, isLoading, isError } = useTaskTemplateQuery('wardTaskTemplates')
 
   return (
     <div className={tw('flex flex-col py-4 px-6 w-5/6')}>
@@ -129,12 +127,6 @@ export const WardDetail = ({
           onChange={(rooms) => setNewWard({ ...newWard, rooms })}
         />
       </div>
-      <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
-        <span className={tw('font-space text-lg font-bold')}>{translation.dangerZone}</span>
-        <span className={tw('text-gray-400')}>{translation.dangerZoneText}</span>
-        <button onClick={() => setIsShowingConfirmDialog(true)}
-                className={tw('text-hw-negative-400 font-bold text-left')}>{translation.deleteWard}</button>
-      </div>
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button
           className={tw('w-1/2')}
@@ -142,6 +134,29 @@ export const WardDetail = ({
           disabled={!filledRequired}>
           {isCreatingNewOrganization ? translation.create : translation.update}
         </Button>
+      </div>
+      { newWard.id !== '' &&
+        (
+          <div className={tw('mt-6')}>
+            {/* TODO show something here */}
+            {(isLoading || isError) && ''}
+            {data && <TaskTemplateWardPreview taskTemplates={data} wardID={newWard.id} />}
+          </div>
+        )
+      }
+      <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
+        <Span type="subsectionTitle">{translation.dangerZone}</Span>
+        <Span type="description">{translation.dangerZoneText}</Span>
+        <div>
+          <Button
+            onClick={() => setIsShowingConfirmDialog(true)}
+            className={tw('px-0 font-bold text-left')}
+            color="negative"
+            variant="textButton"
+          >
+            {translation.deleteWard}
+          </Button>
+        </div>
       </div>
     </div>
   )

@@ -6,7 +6,7 @@ import { tx } from '../twind'
 // TODO: this could be matched to some kind of tailwind/twind custom colors
 // TODO: what about a "link color" and a "black/gray" color?
 const colors = ['accent', 'accent-secondary', 'positive', 'negative', 'neutral'] as const // TODO: this should be named differently, for example: "accent", "good"/"positive", "average"/"neutral", "bad"/"negative"
-const variants = ['primary', 'secondary', 'tertiary'] as const
+const variants = ['primary', 'secondary', 'tertiary', 'textButton'] as const
 
 type ButtonProps = PropsWithChildren<{
   /**
@@ -50,12 +50,14 @@ const Button = ({
   <button
     onClick={disabled ? undefined : onClick}
     disabled={disabled}
-    className={tx('py-2 px-4 text-sm font-medium focus:outline-none', className, {
+    className={tx('py-2 font-medium focus:outline-none', className, {
+      'px-4 text-sm': variant !== 'textButton',
+
       // disabled
       'text-white bg-gray-400 hover:bg-gray-400 focus:bg-gray-400': disabled,
 
       // primary & {accent, accent-secondary, positive, negative, neutral}
-      'text-white bg-hw-primary-400 hover:bg-hw-primary-600 focus:hw-primary-600': variant === 'primary' && color === 'accent' && !disabled,
+      'text-white bg-hw-primary-400 hover:bg-hw-primary-600 focus:ring-hw-primary-600': variant === 'primary' && color === 'accent' && !disabled,
       'text-white bg-AAA-500    hover:bg-AAA-600    focus:ring-AAA-500': variant === 'primary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
       'text-white bg-hw-positive-400    hover:bg-hw-positive-500    focus:ring-hw-positive-400': variant === 'primary' && color === 'positive' && !disabled,
       'text-white bg-hw-negative-400    hover:bg-hw-negative-500    focus:ring-hw-negative-400': variant === 'primary' && color === 'negative' && !disabled,
@@ -74,6 +76,13 @@ const Button = ({
       'text-hw-positive-400  hover:underline focus:ring-hw-positive-200': variant === 'tertiary' && color === 'positive' && !disabled,
       'text-hw-negative-400  hover:underline focus:ring-hw-negative-200': variant === 'tertiary' && color === 'negative' && !disabled,
       'text-gray-500    hover:underline focus:ring-gray-300': variant === 'tertiary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
+
+      // text button & {accent, accent-secondary, positive, negative, neutral}
+      'text-hw-primary-400 hover:text-hw-primary-500 focus:ring-0': variant === 'textButton' && color === 'accent' && !disabled,
+      'text-AAA-500 hover:text-AAA-500 focus:ring-0': variant === 'textButton' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
+      'text-hw-positive-400 hover:text-hw-positive-500 focus:ring-0': variant === 'textButton' && color === 'positive' && !disabled,
+      'text-hw-negative-500 hover:text-hw-negative-600 focus:ring-0': variant === 'textButton' && color === 'negative' && !disabled,
+      'text-gray-500 hover:text-gray-500 focus:ring-0': variant === 'textButton' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
 
       // {small, medium, large}
       'TODO1': size === 'small', // TODO: add styles for small buttons

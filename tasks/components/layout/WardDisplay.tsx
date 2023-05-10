@@ -38,9 +38,9 @@ type WardDTO = {
 }
 
 export type WardDisplayProps = {
-  selectedWard: WardDTO | undefined,
+  selectedWard: WardDTO,
   wards: WardDTO[],
-  onSelectionChange: (organization: WardDTO | undefined) => void
+  onSelectionChange: (ward: WardDTO | undefined) => void
 }
 
 /**
@@ -63,7 +63,7 @@ export const WardDisplay = ({
           <WardCard
             key={ward.id}
             ward={ward}
-            isSelected={selectedWard?.id === ward.id}
+            isSelected={selectedWard.id === ward.id}
             onEditClick={() => onSelectionChange(ward)}
             onTileClick={async () => await router.push(`/ward/${ward.id}`)}
           />
@@ -72,7 +72,7 @@ export const WardDisplay = ({
           className={tw('min-h-[96px]')}
           text={translation.addWard}
           onTileClick={() => onSelectionChange(undefined)}
-          isSelected={selectedWard === undefined}
+          isSelected={selectedWard.id === ''}
         />
       </div>
     </div>

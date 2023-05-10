@@ -119,7 +119,20 @@ export const config = defineConfig({
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],
         space: ['var(--font-space)', ...fontFamily.sans]
-      }
+      },
+      screens: {
+        desktop: { min: '1350px' },
+        mobile: { max: '1350px' },
+      },
+      animation: {
+        fade: 'fadeOut 3s ease-in-out'
+      },
+      keyframes: {
+        fadeOut: {
+          '0%': { opacity: '100%' },
+          '100%': { opacity: '0%' },
+        },
+      },
     }
   },
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms(), presetTypography()]

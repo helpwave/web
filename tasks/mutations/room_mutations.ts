@@ -16,8 +16,8 @@ export type TaskDTO = {
   description: string,
   status: TaskStatus,
   subtasks: SubTaskDTO[],
-  dueDate: string,
-  creationDate?: string,
+  dueDate: Date,
+  creationDate?: Date,
   isPublicVisible: boolean
 }
 
@@ -66,9 +66,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-20'),
               isPublicVisible: false
             },
             {
@@ -77,9 +77,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: true }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-01'),
               isPublicVisible: true
             },
             {
@@ -88,9 +88,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-20'),
               isPublicVisible: true
             },
             {
@@ -99,9 +99,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'inProgress',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-01'),
               isPublicVisible: true
             },
             {
@@ -110,9 +110,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-20'),
               isPublicVisible: true
             },
             {
@@ -121,9 +121,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-01'),
               isPublicVisible: true
             }
           ]
@@ -143,9 +143,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: true }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-20'),
               isPublicVisible: true
             },
             {
@@ -154,9 +154,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-01'),
               isPublicVisible: true
             },
             {
@@ -165,9 +165,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'unscheduled',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-20'),
               isPublicVisible: true
             },
             {
@@ -176,9 +176,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'inProgress',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-20'),
               isPublicVisible: true
             },
             {
@@ -187,9 +187,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-01'),
               isPublicVisible: true
             },
             {
@@ -198,9 +198,9 @@ let rooms: RoomDTO[] = [
               assignee: 'Assignee 1',
               description: 'Description',
               status: 'done',
-              creationDate: Date(),
+              creationDate: new Date(),
               subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: '01.06.2025',
+              dueDate: new Date('2023-05-01'),
               isPublicVisible: true
             }
           ]

@@ -181,10 +181,10 @@ export const TaskDetailView = ({
                 <Select
                   value={task.dueDate}
                   options={[
-                    { label: 'Finished', value: 'Finished' },
-                    { label: '02.03.2001', value: '02.03.2001' },
-                    { label: '17.07.2011', value: '17.07.2011' },
-                    { label: '01.04.2014', value: '01.04.2014' }
+                    { label: 'Finished', value: new Date() },
+                    { label: '02.03.2001', value: new Date('2001-03-02') },
+                    { label: '17.07.2011', value: new Date('2011-07-17') },
+                    { label: '01.04.2014', value: new Date('2014-04-01') }
                   ]}
                   onChange={dueDate => onChange({ ...task, dueDate })}
                 />

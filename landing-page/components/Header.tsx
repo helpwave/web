@@ -5,6 +5,9 @@ const socials = [
   { name: 'GitHub', link: 'https://github.com/helpwave/' },
   { name: 'LinkedIn', link: 'https://linkedin.com/company/helpwave/' },
   { name: 'Instagram', link: 'https://instagram.com/helpwave_de/' },
+  { name: 'Twitter', link: 'https://twitter.com/helpwave_org' },
+  { name: 'YouTube', link: 'https://www.youtube.com/@helpwave' },
+  { name: 'Twitch', link: 'https://www.twitch.tv/helpwave' },
 ]
 
 const Header = () => {

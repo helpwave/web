@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import type { FC as ReactFC } from 'react'
 import { tw } from '@helpwave/common/twind'
-import Header from '../Header'
+import Footer from '../Footer'
 import Helpwave from '../../icons/HelpwaveRect'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -67,7 +67,6 @@ const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionTr
   return (
     <div className={tw('w-screen h-screen bg-white')} id="start" ref={ref}>
       <Helpwave className={tw('absolute top-[25px] left-1/2 -translate-x-1/2')} height="72" width="96" />
-      <Header />
       <div className={tw('relative top-[40vh] m-auto')}>
           <div className={tw('font-space text-6xl font-bold text-center')}>helpwave</div>
 
@@ -75,6 +74,7 @@ const StartSection = forwardRef<HTMLDivElement, PropsWithLanguage<StartSectionTr
           <translation.HeroMessageComponent />
         </div>
       </div>
+      <Footer />
     </div>
   )
 })

@@ -24,8 +24,10 @@ const defaultTaskTemplateListColumnTranslation = {
   }
 }
 
+export type TaskTemplateDTOExtension = {taskTemplate: TaskTemplateDTO, type: 'personal' | 'ward'}
+
 export type TaskTemplateListColumnProps = {
-  taskTemplates: TaskTemplateDTO[],
+  taskTemplates: TaskTemplateDTOExtension[],
   onTileClick: (taskTemplate: TaskTemplateDTO) => void,
   selectedID?: string,
   onColumnEditClick?: () => void
@@ -61,14 +63,15 @@ export const TaskTemplateListColumn = ({
         <div>
           <SimpleBarReact style={{ maxHeight: height }}>
             <div className={tw('flex flex-col gap-y-2 pr-3')}>
-              {taskTemplates.map(taskTemplate => (
-                <div key={taskTemplate.id}>
+              {taskTemplates.map(taskTemplateExtension => (
+                <div key={taskTemplateExtension.taskTemplate.id}>
                   <TaskTemplateCard
-                    name={taskTemplate.name}
-                    subtaskCount={taskTemplate.subtasks.length}
-                    isSelected={selectedID === taskTemplate.id}
-                    onTileClick={() => onTileClick(taskTemplate)}
+                    name={taskTemplateExtension.taskTemplate.name}
+                    subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
+                    isSelected={selectedID === taskTemplateExtension.taskTemplate.id}
+                    onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
                     className={tw('border-2 border-gray-300')}
+                    typeForLabel={taskTemplateExtension.type}
                   />
                 </div>
               ))}

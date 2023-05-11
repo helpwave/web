@@ -108,8 +108,9 @@ export const TaskDetailView = ({
           className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 bg-gray-100 rounded-l-xl')}>
           {personalTaskTemplatesData && wardTaskTemplatesData && (
             <TaskTemplateListColumn
-              taskTemplates={[...personalTaskTemplatesData, ...wardTaskTemplatesData]
-                .sort((a, b) => a.name.localeCompare(b.name))}
+              taskTemplates={[...(personalTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'personal' as const }))),
+                ...(wardTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'ward' as const })))]
+                .sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))}
               selectedID={selectedTemplate?.id ?? ''}
               onTileClick={(taskTemplate) => {
                 setSelectedTemplate(taskTemplate)

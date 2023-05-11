@@ -179,9 +179,12 @@ export const TaskDetailView = ({
               <div>
                 <label className={tw(labelClassName)}>{translation.dueDate}</label>
                 <Input
-                  value={task.dueDate}
+                  value={task.dueDate.toLocaleDateString('en-CA')}
                   type="date"
-                  onChange={dueDate => onChange({ ...task, dueDate })}
+                  onChange={value => {
+                    let dueDate = new Date(value)
+                    onChange({ ...task, dueDate })
+                  }}
                 />
               </div>
               <div>

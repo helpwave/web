@@ -16,6 +16,7 @@ import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { Input } from '@helpwave/common/components/user_input/Input'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -177,16 +178,13 @@ export const TaskDetailView = ({
               </div>
               <div>
                 <label className={tw(labelClassName)}>{translation.dueDate}</label>
-                {/* TODO use some date picker component */}
-                <Select
-                  value={task.dueDate}
-                  options={[
-                    { label: 'Finished', value: new Date() },
-                    { label: '02.03.2001', value: new Date('2001-03-02') },
-                    { label: '17.07.2011', value: new Date('2011-07-17') },
-                    { label: '01.04.2014', value: new Date('2014-04-01') }
-                  ]}
-                  onChange={dueDate => onChange({ ...task, dueDate })}
+                <Input
+                  value={task.dueDate.toLocaleDateString('en-CA')}
+                  type="date"
+                  onChange={value => {
+                    const dueDate = new Date(value)
+                    onChange({ ...task, dueDate })
+                  }}
                 />
               </div>
               <div>

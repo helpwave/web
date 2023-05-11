@@ -6,6 +6,8 @@ import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { Edit } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
+import type { LabelProps } from '../Label'
+import { Label } from '../Label'
 
 type TaskTemplateCardTranslation = {
   subtask: string,
@@ -26,7 +28,8 @@ const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTra
 export type TaskTemplateCardProps = CardProps & {
   name: string,
   subtaskCount: number,
-  onEditClick?: () => void
+  onEditClick?: () => void,
+  label?: LabelProps
 }
 
 /**
@@ -39,7 +42,8 @@ export const TaskTemplateCard = ({
   language,
   onTileClick = () => undefined,
   onEditClick,
-  className
+  className,
+  label
 }: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
   return (
@@ -52,17 +56,20 @@ export const TaskTemplateCard = ({
           <Span type="subsubsectionTitle">{name}</Span>
           <Span>{subtaskCount + ' ' + translation.subtask}</Span>
         </div>
-        {onEditClick && (
-          <button
-            onClick={event => {
-              onEditClick()
-              event.stopPropagation()
-            }}
-            className={tw('text-transparent group-hover:text-black')}
-          >
-            <Edit size={24}/>
-          </button>
-        )}
+        <div className={tw('flex flex-col items-start')}>
+          {label && (<Label {...label}/>)}
+          {onEditClick && (
+            <button
+              onClick={event => {
+                onEditClick()
+                event.stopPropagation()
+              }}
+              className={tw('text-transparent group-hover:text-black')}
+            >
+              <Edit size={24}/>
+            </button>
+          )}
+        </div>
       </Card>
   )
 }

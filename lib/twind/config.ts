@@ -115,6 +115,14 @@ export const config = defineConfig({
           accent: '#7A977E',
           text: '#273429'
         },
+        'hw-label-blue': {
+          background: '#758ECE42',
+          text: '#758ECE'
+        },
+        'hw-label-pink': {
+          background: '#CE75A042',
+          text: '#CE75A0'
+        },
       },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],

@@ -182,7 +182,7 @@ export const TaskDetailView = ({
                   value={task.dueDate.toLocaleDateString('en-CA')}
                   type="date"
                   onChange={value => {
-                    let dueDate = new Date(value)
+                    const dueDate = new Date(value)
                     onChange({ ...task, dueDate })
                   }}
                 />

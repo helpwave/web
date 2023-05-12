@@ -16,6 +16,7 @@ import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { Input } from '@helpwave/common/components/user_input/Input'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -101,6 +102,10 @@ export const TaskDetailView = ({
     error: wardTaskTemplatesError
   } = useTaskTemplateQuery('wardTaskTemplates')
 
+  const formatDate = (date: Date) => {
+    return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+  }
+
   return (
     <div className={tw('relative flex flex-row h-[628px]')}>
       {task.id === '' && (
@@ -177,16 +182,13 @@ export const TaskDetailView = ({
               </div>
               <div>
                 <label className={tw(labelClassName)}>{translation.dueDate}</label>
-                {/* TODO use some date picker component */}
-                <Select
-                  value={task.dueDate}
-                  options={[
-                    { label: 'Finished', value: 'Finished' },
-                    { label: '02.03.2001', value: '02.03.2001' },
-                    { label: '17.07.2011', value: '17.07.2011' },
-                    { label: '01.04.2014', value: '01.04.2014' }
-                  ]}
-                  onChange={dueDate => onChange({ ...task, dueDate })}
+                <Input
+                  value={formatDate(task.dueDate)}
+                  type="datetime-local"
+                  onChange={value => {
+                    const dueDate = new Date(value)
+                    onChange({ ...task, dueDate })
+                  }}
                 />
               </div>
               <div>

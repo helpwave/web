@@ -1,10 +1,11 @@
 import { tx } from '../twind'
 import type { PropsWithChildren } from 'react'
+import type { Class } from '@twind/core'
 
 export type CardProps = {
   isSelected?: boolean,
   onTileClick?: () => void,
-  className?: string
+  className?: Class[] | string
 }
 
 /**

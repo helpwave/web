@@ -85,7 +85,7 @@ export const KanbanColumn = ({
           subtasks: [],
           assignee: '',
           isPublicVisible: false,
-          dueDate: ''
+          dueDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
         })}
         className={tw('flex flex-row ml-1 gap-x-1 text-gray-300')}
       >

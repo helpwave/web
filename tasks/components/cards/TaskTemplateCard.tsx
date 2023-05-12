@@ -55,19 +55,16 @@ export const TaskTemplateCard = ({
     <Card
       onTileClick={onTileClick}
       isSelected={isSelected}
-      className={tx('group flex flex-row justify-between items-start bg-white', className)}
+      className={tx('group flex flex-col bg-white', className)}
     >
-      <div className={tw('flex flex-col items-start')}>
-        <Span type="subsubsectionTitle">{name}</Span>
+      <div className={tw('flex flex-row items-start overflow-hidden gap-x-1')}>
+        <Span type="subsubsectionTitle" className={tw('!flex-1')}>{name}</Span>
         {typeForLabel && (
           <Label
             name={typeForLabel === 'ward' ? translation.ward : translation.personal}
             color={typeForLabel === 'ward' ? 'blue' : 'pink'}
           />
         )}
-        <Span>{subtaskCount + ' ' + translation.subtask}</Span>
-      </div>
-      <div className={tw('flex flex-col items-start')}>
         {onEditClick && (
           <button
             onClick={event => {
@@ -80,6 +77,7 @@ export const TaskTemplateCard = ({
           </button>
         )}
       </div>
+      <Span>{subtaskCount + ' ' + translation.subtask}</Span>
     </Card>
   )
 }

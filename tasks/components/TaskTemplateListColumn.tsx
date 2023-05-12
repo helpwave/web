@@ -70,7 +70,7 @@ export const TaskTemplateListColumn = ({
                     subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
                     isSelected={selectedID === taskTemplateExtension.taskTemplate.id}
                     onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
-                    className={tw('border-2 border-gray-300')}
+                    className={tw('border-2 border-gray-300 !pr-2')}
                     typeForLabel={taskTemplateExtension.type}
                   />
                 </div>

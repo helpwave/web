@@ -86,8 +86,6 @@ export const TaskDetailView = ({
   const router = useRouter()
   const { uuid } = router.query
 
-  const labelClassName = 'font-bold text-medium text-gray-600'
-
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
 
@@ -157,7 +155,7 @@ export const TaskDetailView = ({
         </div>
         <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
           <div className={tw('flex flex-col gap-y-4 w-[60%] min-w-[500px]')}>
-            <div className={tw('min-h-1/4')}>
+            <div className={tw('min-h-[25%]')}>
               <Textarea
                 headline={translation.description}
                 value={task.description}
@@ -169,7 +167,7 @@ export const TaskDetailView = ({
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
             <div className={tw('flex flex-col gap-y-4')}>
               <div>
-                <label className={tw(labelClassName)}>{translation.assignee}</label>
+                <label><Span type="labelMedium">{translation.assignee}</Span></label>
                 <Select
                   value={task.assignee}
                   options={[
@@ -182,7 +180,7 @@ export const TaskDetailView = ({
                 />
               </div>
               <div>
-                <label className={tw(labelClassName)}>{translation.dueDate}</label>
+                <label><Span type="labelMedium">{translation.dueDate}</Span></label>
                 <Input
                   value={formatDate(task.dueDate)}
                   type="datetime-local"
@@ -193,11 +191,11 @@ export const TaskDetailView = ({
                 />
               </div>
               <div>
-                <label className={tw(labelClassName)}>{translation.status}</label>
+                <label><Span type="labelMedium">{translation.status}</Span></label>
                 <TaskStatusSelect value={task.status} onChange={status => onChange({ ...task, status })}/>
               </div>
               <div>
-                <label className={tw(labelClassName)}>{translation.visibility}</label>
+                <label><Span type="labelMedium">{translation.visibility}</Span></label>
                 <Select
                   value={task.isPublicVisible}
                   options={[
@@ -211,7 +209,7 @@ export const TaskDetailView = ({
             {task.creationDate !== undefined ? (
               <div className={tw('flex flex-col gap-y-8 mt-16')}>
                 <div className={tw('flex flex-col gap-y-1')}>
-                  <Span className={tw(labelClassName)}>{translation.creationTime}</Span>
+                  <Span type="labelMedium">{translation.creationTime}</Span>
                   <TimeDisplay date={new Date(task.creationDate)}/>
                 </div>
                 <Button color="accent" onClick={onFinishClick}>{translation.update}</Button>

@@ -102,6 +102,10 @@ export const TaskDetailView = ({
     error: wardTaskTemplatesError
   } = useTaskTemplateQuery('wardTaskTemplates')
 
+  const formatDate = (date: Date) => {
+    return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+  }
+
   return (
     <div className={tw('relative flex flex-row h-[628px]')}>
       {task.id === '' && (
@@ -179,8 +183,8 @@ export const TaskDetailView = ({
               <div>
                 <label className={tw(labelClassName)}>{translation.dueDate}</label>
                 <Input
-                  value={task.dueDate.toLocaleDateString('en-CA')}
-                  type="date"
+                  value={formatDate(task.dueDate)}
+                  type="datetime-local"
                   onChange={value => {
                     const dueDate = new Date(value)
                     onChange({ ...task, dueDate })

@@ -110,7 +110,7 @@ export const TaskDetailView = ({
     <div className={tw('relative flex flex-row h-[628px]')}>
       {task.id === '' && (
         <div
-          className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 bg-gray-100 rounded-l-xl')}>
+          className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 pb-0 bg-gray-100 rounded-l-xl')}>
           {personalTaskTemplatesData && wardTaskTemplatesData && (
             <TaskTemplateListColumn
               taskTemplates={[...(personalTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'personal' as const }))),

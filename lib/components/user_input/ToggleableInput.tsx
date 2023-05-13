@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
 import { noop } from './Input'
@@ -9,7 +9,7 @@ type InputProps = {
    * used for the label's `for` attribute
    */
   id: string,
-  value: string,
+  value?: string,
   /**
    * @default 'text'
    */
@@ -20,12 +20,12 @@ type InputProps = {
    * That could be enforced through a union type but that seems a bit overkill
    * @default noop
    */
-  onChange?: (text: string) => void,
+  onChangeText?: (text: string) => void,
   labelClassName?: string,
   initialState?: 'editing' | 'display',
   size?: number,
   disclaimer?: string
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'crossOrigin'>
 
 /**
  * A Text input component for inputting text. It changes appearance upon entering the edit mode and switches
@@ -33,17 +33,17 @@ type InputProps = {
  *
  * The State is managed by the parent
  */
-export const ToggleableInput = ({
+export const ToggleableInput = forwardRef<HTMLInputElement, InputProps>(function ToggleableInput({
   id,
   type = 'text',
   value,
-  onChange = noop,
+  onChangeText = noop,
   labelClassName = '',
   initialState = 'display',
   size = 20,
   disclaimer,
   ...restProps
-}: InputProps) => {
+}: InputProps, ref) {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
   return (
     <div>
@@ -54,18 +54,30 @@ export const ToggleableInput = ({
         <div className={tx('flex flex-row overflow-hidden', { 'flex-1': isEditing })}>
           {isEditing ? (
             <input
+              ref={ref}
               autoFocus
               {...restProps}
               value={value}
               type={type}
               id={id}
-              onChange={event => onChange(event.target.value)}
-              onBlur={() => {
+              onChange={event => {
+                onChangeText(event.target.value)
+                if (restProps.onChange !== undefined) {
+                  restProps.onChange(event)
+                }
+              }}
+              onBlur={event => {
                 setIsEditing(false)
+                if (restProps.onBlur !== undefined) {
+                  restProps.onBlur(event)
+                }
               }}
               onKeyPress={event => {
                 if (event.key === 'Enter') {
                   setIsEditing(false)
+                }
+                if (restProps.onKeyPress !== undefined) {
+                  restProps.onKeyPress(event)
                 }
               }}
               className={tx(labelClassName, `w-full border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4`, {
@@ -76,8 +88,8 @@ export const ToggleableInput = ({
             <span
               className={tx(labelClassName, 'w-full break-words overflow-hidden text-ellipsis whitespace-nowrap')}
             >
-        {value}
-        </span>
+          {value}
+          </span>
           )}
         </div>
         <Pencil className={tx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size} />
@@ -89,4 +101,4 @@ export const ToggleableInput = ({
       )}
     </div>
   )
-}
+})

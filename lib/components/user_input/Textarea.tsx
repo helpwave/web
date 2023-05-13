@@ -1,14 +1,14 @@
 import { tw, tx, css } from '../../twind'
 import type { TextareaHTMLAttributes } from 'react'
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 
 type TextareaProps = {
   headline?: string,
   id?: string,
   resizable?: boolean,
-  onChange?: (text: string) => void,
+  onChangeText?: (text: string) => void,
   disclaimer?: string
-} & Omit<TextareaHTMLAttributes<Element>, 'id' | 'onChange'>
+} & Omit<TextareaHTMLAttributes<Element>, 'id'>
 
 const noop = () => { /* noop */ }
 
@@ -24,7 +24,7 @@ const globalStyles = css`
  *
  * The State is managed by the parent
  */
-export const Textarea = ({ headline, id, resizable = false, onChange = noop, disclaimer, ...props }: TextareaProps) => {
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ headline, id, resizable = false, onChangeText = noop, disclaimer, ...props }: TextareaProps, ref) {
   const [hasFocus, setHasFocus] = useState(false)
 
   return (
@@ -34,14 +34,26 @@ export const Textarea = ({ headline, id, resizable = false, onChange = noop, dis
           {headline}
         </label>
         <textarea
+          ref={ref}
           id={id}
           className={tx('pt-0 border-transparent focus:border-transparent focus:ring-0 h-32 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable })}
-          onChange={(event) => onChange(event.target.value)}
-          onFocus={() => {
-            setHasFocus(true)
+          onChange={(event) => {
+            onChangeText(event.target.value)
+            if (props.onChange !== undefined) {
+              props.onChange(event)
+            }
           }}
-          onBlur={() => {
+          onFocus={event => {
+            setHasFocus(true)
+            if (props.onFocus !== undefined) {
+              props.onFocus(event)
+            }
+          }}
+          onBlur={event => {
             setHasFocus(false)
+            if (props.onBlur !== undefined) {
+              props.onBlur(event)
+            }
           }}
           {...props}
         >
@@ -54,4 +66,4 @@ export const Textarea = ({ headline, id, resizable = false, onChange = noop, dis
       )}
     </div>
   )
-}
+})

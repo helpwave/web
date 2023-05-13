@@ -146,7 +146,7 @@ export const TaskTemplateDetails = ({
           headline={translation.notes}
           id="notes"
           value={taskTemplateForm.template.notes}
-          onChange={text => {
+          onChangeText={text => {
             setTaskTemplateForm({
               template: { ...taskTemplateForm.template, notes: text },
               isValid: taskTemplateForm.isValid,

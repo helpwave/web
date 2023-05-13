@@ -53,7 +53,7 @@ export const SubtaskTile = ({
       <ToggleableInput
         value={subtask.name}
         className={tw('')}
-        onChange={text => onChange({ ...subtask, name: text })}
+        onChangeText={text => onChange({ ...subtask, name: text })}
         id={subtask.name}
         minLength={minTaskNameLength}
         maxLength={maxTaskNameLength}

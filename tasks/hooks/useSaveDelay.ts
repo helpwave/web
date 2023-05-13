@@ -13,9 +13,7 @@ function useSaveDelay(setNotificationStatus: (isShowing: boolean) => void, delay
       clearTimeout(notificationTimer)
       setNotificationTimer(setTimeout(() => {
         setNotificationStatus(false)
-        clearTimeout(notificationTimer)
       }, delay))
-      clearTimeout(updateTimer)
     }, delay))
   }
 
@@ -26,7 +24,6 @@ function useSaveDelay(setNotificationStatus: (isShowing: boolean) => void, delay
       clearTimeout(notificationTimer)
       setNotificationTimer(setTimeout(() => {
         setNotificationStatus(false)
-        clearTimeout(notificationTimer)
       }, delay))
     } else {
       setNotificationStatus(false)

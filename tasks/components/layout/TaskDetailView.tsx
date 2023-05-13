@@ -141,7 +141,7 @@ export const TaskDetailView = ({
               initialState="editing"
               id={task.id}
               value={task.name}
-              onChange={name => onChange({ ...task, name })}
+              onChangeText={name => onChange({ ...task, name })}
               labelClassName={tw('text-2xl font-bold')}
               minLength={minTaskNameLength}
               maxLength={maxTaskNameLength}
@@ -159,7 +159,7 @@ export const TaskDetailView = ({
               <Textarea
                 headline={translation.description}
                 value={task.description}
-                onChange={description => onChange({ ...task, description })}
+                onChangeText={description => onChange({ ...task, description })}
               />
             </div>
             <SubtaskView subtasks={task.subtasks} onChange={subtasks => onChange({ ...task, subtasks })}/>

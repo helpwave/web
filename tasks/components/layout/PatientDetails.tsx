@@ -14,6 +14,7 @@ import { ToggleableInput } from '@helpwave/common/components/user_input/Toggleab
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { TaskDetailModal } from '../TaskDetailModal'
+import { useForm } from 'react-hook-form'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -49,6 +50,11 @@ type SortedTasks = {
   done: TaskDTO[]
 }
 
+type PatientFormType = {
+  humanReadableIdentifier: string,
+  note: string
+}
+
 export type PatientDetailProps = {
   bedPosition: number,
   bedsInRoom: number,
@@ -74,6 +80,12 @@ export const PatientDetail = ({
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
+  const { register, handleSubmit, watch } = useForm<PatientFormType>({
+    defaultValues: {
+      humanReadableIdentifier: newPatient.humanReadableIdentifier,
+      note: newPatient.note
+    }
+  })
   const [sortedTasks, setSortedTasks] = useState<SortedTasks>({
     unscheduled: newPatient.tasks.filter(value => value.status === 'unscheduled'),
     inProgress: newPatient.tasks.filter(value => value.status === 'inProgress'),
@@ -82,10 +94,16 @@ export const PatientDetail = ({
 
   const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
-  const changeSavedValue = (patient:PatientDTO) => {
+  const onSubmit = () => {
+    clearUpdateTimer(true)
+    onUpdate(newPatient)
+  }
+
+  watch((value) => {
+    const patient = { ...newPatient, ...value }
     setNewPatient(patient)
     restartTimer(() => onUpdate(patient))
-  }
+  })
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
@@ -140,27 +158,31 @@ export const PatientDetail = ({
         />
       )}
       <ColumnTitle title={translation.patientDetails}/>
-      <div className={tw('flex flex-row gap-x-6 mb-8')}>
-        <div className={tw('flex flex-col gap-y-4 w-5/12')}>
-          <div className={tw('h-12 w-full')}>
-            <ToggleableInput
-              labelClassName={tw('text-xl font-semibold')}
-              className={tw('text-lg font-semibold')}
-              id="humanReadableIdentifier"
-              value={newPatient.humanReadableIdentifier}
-              onChange={humanReadableIdentifier => changeSavedValue({ ...newPatient, humanReadableIdentifier })}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={tw('flex flex-row gap-x-6 mb-4')}>
+          <div className={tw('flex flex-col gap-y-4 w-5/12')}>
+            <div className={tw('h-12 w-full')}>
+              <ToggleableInput
+                id="humanReadableIdentifier"
+                labelClassName={tw('text-xl font-semibold')}
+                className={tw('text-lg font-semibold')}
+                value={newPatient.humanReadableIdentifier}
+                {...register('humanReadableIdentifier', { required: true, maxLength: 64 })}
+              />
+            </div>
+            <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
+          </div>
+          <div className={tw('flex-1')}>
+            <Textarea
+              headline={translation.notes}
+              {...register('note')}
             />
           </div>
-          <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
         </div>
-        <div className={tw('flex-1')}>
-          <Textarea
-            headline={translation.notes}
-            value={newPatient.note}
-            onChange={text => changeSavedValue({ ...newPatient, note: text })}
-          />
+        <div className={tw('flex flex-row justify-end mb-8')}>
+          <Button color="accent" type="submit">{translation.saveChanges}</Button>
         </div>
-      </div>
+      </form>
       <KanbanBoard
         key={newPatient.id}
         sortedTasks={sortedTasks}
@@ -179,15 +201,14 @@ export const PatientDetail = ({
           setNewTask(task)
         }}
       />
-      <div className={tw('flex flex-row justify-end mt-8')}>
-        <div>
-          <Button color="negative" onClick={() => setIsShowingConfirmDialog(true)}
-                  className={tw('mr-4')}>{translation.dischargePatient}</Button>
-          <Button color="accent" onClick={() => {
-            clearUpdateTimer(true)
-            onUpdate(newPatient)
-          }}>{translation.saveChanges}</Button>
-        </div>
+      <div className={tw('flex flex-row justify-end')}>
+          <Button
+            color="negative"
+            onClick={() => setIsShowingConfirmDialog(true)}
+            className={tw('mr-4')}
+          >
+            {translation.dischargePatient}
+          </Button>
       </div>
     </div>
   )

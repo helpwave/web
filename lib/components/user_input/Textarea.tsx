@@ -47,7 +47,7 @@ export const Textarea = ({ headline, id, resizable = false, onChange = noop, dis
         >
       </textarea>
       </div>
-      {hasFocus && (
+      {(hasFocus && disclaimer) && (
         <label className={tw('text-hw-negative-500')}>
           {disclaimer}
         </label>

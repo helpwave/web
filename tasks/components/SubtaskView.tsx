@@ -7,6 +7,8 @@ import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskTile } from './SubtaskTile'
 import { Span } from '@helpwave/common/components/Span'
+import { useEffect, useRef } from 'react'
+import type SimpleBarCore from 'simplebar-core'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -44,12 +46,24 @@ export const SubtaskView = ({
   onChange
 }: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
   const translation = useTranslation(language, defaultSubtaskViewTranslation)
+  const scrollableRef = useRef<SimpleBarCore>(null)
+
+  /**
+   *
+   * Automatic scrolling to the last element to give the user a visual feedback
+   */
+  useEffect(() => {
+    const scrollableElement = scrollableRef.current?.getScrollElement()
+    if (scrollableElement) {
+      scrollableElement.scrollTop = scrollableElement.scrollHeight
+    }
+  }, [subtasks])
 
   return (
     <div className={tw('flex flex-col')}>
       <Span type="subsectionTitle" className={tw('mb-1')}>{translation.subtasks}</Span>
       <div className={tw('max-h-[500px] overflow-hidden mr-4')}>
-        <SimpleBarReact style={{ maxHeight: 500 }}>
+        <SimpleBarReact ref={scrollableRef} style={{ maxHeight: 250 }}>
           <div className={tw('grid grid-cols-1 gap-y-2')}>
             {subtasks.map((subtask, index) => (
               <SubtaskTile

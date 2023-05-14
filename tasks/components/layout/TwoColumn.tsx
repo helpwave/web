@@ -41,7 +41,7 @@ export const TwoColumn = ({
   const ref = createRef<HTMLDivElement>()
   const [fullWidth, setFullWidth] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
-  const [dragImage, setDragImage] = useState<HTMLElement>()
+  const [isDragging, setIsDragging] = useState(false)
   const headerHeight = 64
   const dividerHitBoxWidth = 24
 
@@ -51,8 +51,6 @@ export const TwoColumn = ({
     }
     setFullWidth(ref.current?.clientWidth ?? 0)
   }, [ref.current?.clientWidth])
-
-  useEffect(() => setDragImage(document.createElement('div')), [])
 
   const convertToNumber = (constraint: string) => {
     if (constraint.endsWith('px')) {
@@ -89,7 +87,14 @@ export const TwoColumn = ({
   const leftFocus = baseLayoutPercentage * fullWidth < leftWidth - dividerHitBoxWidth / 2
 
   return (
-    <div ref={ref} className={tw(`relative flex flex-row h-[calc(100vh_-_${headerHeight}px)]`)}>
+    <div
+      ref={ref} className={tx(`relative flex flex-row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
+      onMouseMove={event => isDragging ? setLeftWidth(calcPosition(event.pageX)) : undefined}
+      onMouseUp={() => setIsDragging(false)}
+      onTouchEnd={() => setIsDragging(false)}
+      onMouseLeave={() => setIsDragging(false)}
+      {...{} /* maybe move these functions above as listeners on the entire document instead of just the TwoColumn */}
+    >
       <div
         className={tw(`overflow-hidden`)}
         style={{ width: leftWidth + 'px' }}
@@ -99,28 +104,9 @@ export const TwoColumn = ({
         </SimpleBarReact>
       </div>
       <div
-        draggable
-        onDragOver={event => event.preventDefault()}
-        onDragStart={event => {
-          event.dataTransfer.setDragImage(dragImage ?? document.createElement('div'), 0, 0)
-        }}
-        onDragEnd={event => {
-          if (disableResize) {
-            return
-          }
-          setLeftWidth(calcPosition(event.pageX))
-        }}
-        onDrag={event => {
-          if (disableResize) {
-            return
-          }
-          // Overscrolling to the right makes the value 0, so we block this
-          if (event.pageX !== 0) {
-            setLeftWidth(calcPosition(event.pageX))
-          }
-          event.preventDefault()
-        }}
-        className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { 'cursor-col-resize': !disableResize })}
+        onMouseDown={() => setIsDragging(true)}
+        onTouchStart={() => setIsDragging(true)}
+        className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
       >
           <div className={tw('bg-gray-300 my-4 rounded-lg w-0.5')} />
         {!disableResize && (

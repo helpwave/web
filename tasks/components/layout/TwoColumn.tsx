@@ -20,7 +20,7 @@ type TwoColumnProps = {
   right: (width: number) => ReactNode,
   baseLayoutPercentage?: number, // Given as a percentage. Between 0 and 1
   disableResize?: boolean,
-  constraints: ColumnConstraints
+  constraints?: ColumnConstraints
 }
 
 /**
@@ -73,10 +73,6 @@ export const TwoColumn = ({
           {left(leftWidth)}
         </SimpleBarReact>
       </div>
-      {/*
-        The draggable makes the entire element draggable (reacts more easily for some reason)
-        But this requires hiding the dragImage in onDragStart and changes the cursor to disabled
-      */}
       <div
         draggable
         onDragStart={event => {
@@ -98,7 +94,7 @@ export const TwoColumn = ({
           }
           event.preventDefault()
         }}
-        className={tx(`relative h-full flex justify-center bg-transparent w-[${dividerHitBoxWidth}px]`, { 'cursor-col-resize': !disableResize })}
+        className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { 'cursor-col-resize': !disableResize })}
       >
           <div className={tw('bg-gray-300 my-4 rounded-lg w-0.5')} />
           <div className={tw('absolute top-[50%] bg-gray-300 rounded-xl w-6 h-20 -translate-y-[50%]')} />

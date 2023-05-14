@@ -3,11 +3,15 @@ import type { ReactNode } from 'react'
 import SimpleBarReact from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
 import { createRef, useEffect, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
 
+/**
+ * Only px and %
+ * eg. 250px or 10%
+ */
 type Constraint = {
-  min: number,
-  max: number
+  min: string,
+  max?: string
 }
 
 type ColumnConstraints = {
@@ -32,7 +36,7 @@ export const TwoColumn = ({
   left,
   baseLayoutPercentage = 0.5,
   disableResize = true,
-  constraints = { left: { min: 24, max: Infinity }, right: { min: 24, max: Infinity } }
+  constraints = { left: { min: '33%' }, right: { min: '33%' } }
 }: TwoColumnProps) => {
   const ref = createRef<HTMLDivElement>()
   const [fullWidth, setFullWidth] = useState(0)
@@ -50,13 +54,34 @@ export const TwoColumn = ({
 
   useEffect(() => setDragImage(document.createElement('div')), [])
 
+  const convertToNumber = (constraint: string) => {
+    if (constraint.endsWith('px')) {
+      const value = parseFloat(constraint.substring(0, constraint.length - 2))
+      if (isNaN(value)) {
+        console.error(`Couldn't parse constraint ${constraint}`)
+      }
+      return value
+    } else if (constraint.endsWith('%')) {
+      const value = parseFloat(constraint.substring(0, constraint.length - 1))
+      if (isNaN(value)) {
+        console.error(`Couldn't parse constraint ${constraint}`)
+      }
+      return value / 100 * fullWidth
+    } else {
+      console.error(`Couldn't parse constraint ${constraint}`)
+      return 0
+    }
+  }
+
   // TODO Update this to be more clear and use all/better constraints
   const calcPosition = (dragPosition: number) => {
+    const leftMin = convertToNumber(constraints.left.min)
+    const rightMin = convertToNumber(constraints.right.min)
     let left = dragPosition
-    if (dragPosition < constraints.left.min) {
-      left = constraints.left.min
-    } else if (fullWidth - dragPosition - dividerHitBoxWidth < constraints.right.min) {
-      left = fullWidth - constraints.right.min
+    if (dragPosition < leftMin) {
+      left = leftMin
+    } else if (fullWidth - dragPosition - dividerHitBoxWidth < rightMin) {
+      left = fullWidth - rightMin
     }
     return left
   }
@@ -75,6 +100,7 @@ export const TwoColumn = ({
       </div>
       <div
         draggable
+        onDragOver={event => event.preventDefault()}
         onDragStart={event => {
           event.dataTransfer.setDragImage(dragImage ?? document.createElement('div'), 0, 0)
         }}
@@ -97,11 +123,17 @@ export const TwoColumn = ({
         className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { 'cursor-col-resize': !disableResize })}
       >
           <div className={tw('bg-gray-300 my-4 rounded-lg w-0.5')} />
-          <div className={tw('absolute top-[50%] bg-gray-300 rounded-xl w-6 h-20 -translate-y-[50%]')} />
+        {!disableResize && (
+          <div
+            className={tw('absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] flex flex-col justify-center items-center')}
+          >
+            <GripVertical className={tw('text-white')}/>
+          </div>
+        )}
         {!disableResize && (
           <button
             className={tw('absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5')}
-            onClick={() => setLeftWidth(leftFocus ? fullWidth * baseLayoutPercentage : fullWidth - constraints.right.min)}
+            onClick={() => setLeftWidth(leftFocus ? fullWidth * baseLayoutPercentage : fullWidth - convertToNumber(constraints.right.min))}
           >
             {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
           </button>

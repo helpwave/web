@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
@@ -63,17 +63,16 @@ export const TaskTemplateListColumn = ({
         <div>
           <SimpleBarReact style={{ maxHeight: height }}>
             <div className={tw('flex flex-col gap-y-2 pr-3')}>
-              {taskTemplates.map(taskTemplateExtension => (
-                <div key={taskTemplateExtension.taskTemplate.id}>
-                  <TaskTemplateCard
-                    name={taskTemplateExtension.taskTemplate.name}
-                    subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
-                    isSelected={selectedID === taskTemplateExtension.taskTemplate.id}
-                    onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
-                    className={tw('border-2 border-gray-300 !pr-2')}
-                    typeForLabel={taskTemplateExtension.type}
-                  />
-                </div>
+              {taskTemplates.map((taskTemplateExtension, index) => (
+                <TaskTemplateCard
+                  key={taskTemplateExtension.taskTemplate.id}
+                  name={taskTemplateExtension.taskTemplate.name}
+                  subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
+                  isSelected={selectedID === taskTemplateExtension.taskTemplate.id}
+                  onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
+                  className={tx('border-2 border-gray-300 !pr-2', { 'mb-2': index === taskTemplates.length - 1 })}
+                  typeForLabel={taskTemplateExtension.type}
+                />
               ))}
             </div>
           </SimpleBarReact>

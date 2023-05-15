@@ -74,7 +74,7 @@ export const ToggleableInput = ({
             />
           ) : (
             <span
-              className={tx(labelClassName, 'w-full break-words overflow-hidden text-ellipsis whitespace-nowrap')}
+              className={tx(labelClassName, 'max-w-xs break-words overflow-hidden')}
             >
         {value}
         </span>

@@ -43,7 +43,7 @@ export const SubtaskTile = ({
   const maxTaskNameLength = 64
 
   return (
-    <div className={tw('flex flex-row gap-x-2 items-center')}>
+    <div className={tw('flex flex-row gap-x-2 items-center overflow-x-hidden')}>
       <div>
         <Checkbox
           onChange={value => onChange({ ...subtask, isDone: value })}

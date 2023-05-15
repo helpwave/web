@@ -49,10 +49,7 @@ export const SubtaskView = ({
   const scrollableRef = useRef<SimpleBarCore>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
-  /**
-   *
-   * Automatic scrolling to the last element to give the user a visual feedback
-   */
+   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
     const scrollableElement = scrollableRef.current?.getScrollElement()
     if (scrollableElement && scrollToBottomFlag) {

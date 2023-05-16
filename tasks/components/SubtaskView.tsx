@@ -62,7 +62,7 @@ export const SubtaskView = ({
     <div className={tw('flex flex-col')}>
       <Span type="subsectionTitle" className={tw('mb-1')}>{translation.subtasks}</Span>
       <div className={tw('max-h-[500px] overflow-hidden mr-4')}>
-        <SimpleBarReact ref={scrollableRef} style={{ maxHeight: 242 }}>
+        <SimpleBarReact className="h-screen" ref={scrollableRef} style={{ maxHeight: 250 }}>
           <div className={tw('grid grid-cols-1 gap-y-2')}>
             {subtasks.map((subtask, index) => (
               <SubtaskTile

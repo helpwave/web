@@ -154,7 +154,7 @@ export const TaskDetailView = ({
           </button>
         </div>
         <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
-          <div className={tw('flex flex-col gap-y-4 w-[60%] min-w-[500px]')}>
+          <div className={tw('flex flex-col gap-y-8 w-[60%] min-w-[500px]')}>
             <div className={tw('min-h-[25%]')}>
               <Textarea
                 headline={translation.description}

@@ -85,23 +85,22 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
       <Head>
         <title>{titleWrapper(translation.wards)}</title>
       </Head>
-
       <TwoColumn
         left={() => (
-          <WardDisplay
-            selectedWard={selectedWard}
-            wards={data as WardDTO[]}
-            onSelectionChange={ward => setSelectedWard(ward ?? emptyWard)}
-          />
+            <WardDisplay
+              selectedWard={selectedWard}
+              wards={data as WardDTO[]}
+              onSelectionChange={ward => setSelectedWard(ward ?? emptyWard)}
+            />
         )}
         right={() => (
-          <WardDetail
-            key={selectedWard.id}
-            ward={selectedWard}
-            onCreate={createMutation.mutate}
-            onUpdate={updateMutation.mutate}
-            onDelete={deleteMutation.mutate}
-          />
+            <WardDetail
+              key={selectedWard.id}
+              ward={selectedWard}
+              onCreate={createMutation.mutate}
+              onUpdate={updateMutation.mutate}
+              onDelete={deleteMutation.mutate}
+            />
         )}
       />
     </PageWithHeader>

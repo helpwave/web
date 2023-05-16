@@ -200,6 +200,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      simplebar-core:
+        specifier: ^1.2.4
+        version: 1.2.4
       simplebar-react:
         specifier: ^3.2.3
         version: 3.2.3(react@18.2.0)
@@ -239,7 +242,7 @@ importers:
         version: 17.0.0(eslint-plugin-import@2.27.5)(eslint-plugin-n@15.6.1)(eslint-plugin-promise@6.1.1)(eslint@8.35.0)
       eslint-plugin-import:
         specifier: ^2.27.5
-        version: 2.27.5(@typescript-eslint/parser@5.38.1)(eslint-import-resolver-typescript@2.7.1)(eslint@8.35.0)
+        version: 2.27.5(@typescript-eslint/parser@5.38.1)(eslint-import-resolver-typescript@2.7.1)(eslint@8.24.0)
       eslint-plugin-n:
         specifier: ^15.6.1
         version: 15.6.1(eslint@8.35.0)
@@ -1716,7 +1719,7 @@ packages:
       eslint-plugin-promise: ^6.0.0
     dependencies:
       eslint: 8.35.0
-      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.38.1)(eslint-import-resolver-typescript@2.7.1)(eslint@8.35.0)
+      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.38.1)(eslint-import-resolver-typescript@2.7.1)(eslint@8.24.0)
       eslint-plugin-n: 15.6.1(eslint@8.35.0)
       eslint-plugin-promise: 6.1.1(eslint@8.35.0)
     dev: true
@@ -1875,7 +1878,7 @@ packages:
       doctrine: 2.1.0
       eslint: 8.24.0
       eslint-import-resolver-node: 0.3.6
-      eslint-module-utils: 2.7.4(@typescript-eslint/parser@5.38.1)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@2.7.1)(eslint@8.35.0)
+      eslint-module-utils: 2.7.4(@typescript-eslint/parser@5.38.1)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@2.7.1)(eslint@8.24.0)
       has: 1.0.3
       is-core-module: 2.10.0
       is-glob: 4.0.3
@@ -3365,8 +3368,8 @@ packages:
       object-inspect: 1.12.3
     dev: true
 
-  /simplebar-core@1.2.3:
-    resolution: {integrity: sha512-xWZOYLlqWMW8qDCh1vcyyPdb10FOb8KJNCgqimsBKWS/o6a/9LnATjBgR2+nTzTHUT+DGOOf+TM8yj54/Io+dw==}
+  /simplebar-core@1.2.4:
+    resolution: {integrity: sha512-P+Sqshef4fq3++gQ82TgNYcgl3qZFSCP5jS2/8NMmw18oagXOijMzs1G+vm6RUY3oMvpwH3wGoqh9u6SyDjHfQ==}
     dependencies:
       '@types/lodash-es': 4.17.7
       can-use-dom: 0.1.0
@@ -3380,7 +3383,7 @@ packages:
       react: '>=16.8.0'
     dependencies:
       react: 18.2.0
-      simplebar-core: 1.2.3
+      simplebar-core: 1.2.4
     dev: false
 
   /slash@3.0.0:

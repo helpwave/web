@@ -104,8 +104,8 @@ export const TwoColumn = ({
         </SimpleBarReact>
       </div>
       <div
-        onMouseDown={() => setIsDragging(true)}
-        onTouchStart={() => setIsDragging(true)}
+        onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
+        onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
         className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
       >
           <div className={tw('bg-gray-300 my-4 rounded-lg w-0.5')} />

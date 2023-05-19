@@ -2,8 +2,9 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { ReactNode } from 'react'
 import SimpleBarReact from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
-import { createRef, useEffect, useState } from 'react'
+import {createRef, useEffect, useRef, useState} from 'react'
 import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
+import SimpleBarCore from "simplebar-core";
 
 /**
  * Only px and %
@@ -86,6 +87,25 @@ export const TwoColumn = ({
 
   const leftFocus = baseLayoutPercentage * fullWidth < leftWidth - dividerHitBoxWidth / 2
 
+  const scrollableRef = useRef<SimpleBarCore>(null)
+  const [simpleBarMaxHeight, setSimpleBarMaxHeight] = useState(800)
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      const scrollableElement = scrollableRef.current
+      setSimpleBarMaxHeight(window.innerHeight - headerHeight)
+      if (scrollableElement) {
+        scrollableElement.recalculate()
+      }
+    }
+
+    window.addEventListener('resize', handleWindowResize)
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize)
+    }
+  }, [])
+
   return (
     <div
       ref={ref} className={tx(`relative flex flex-row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
@@ -99,7 +119,7 @@ export const TwoColumn = ({
         className={tw(`overflow-hidden`)}
         style={{ width: leftWidth + 'px' }}
       >
-        <SimpleBarReact style={{ maxHeight: window.innerHeight - headerHeight }}>
+        <SimpleBarReact ref={scrollableRef} style={{ maxHeight: simpleBarMaxHeight }}>
           {left(leftWidth)}
         </SimpleBarReact>
       </div>
@@ -129,7 +149,7 @@ export const TwoColumn = ({
         className={tw(`overflow-hidden`)}
         style={{ width: (fullWidth - leftWidth) + 'px' }}
       >
-        <SimpleBarReact style={{ maxHeight: window.innerHeight - headerHeight }}>
+        <SimpleBarReact ref={scrollableRef} style={{ maxHeight: simpleBarMaxHeight }}>
           {right(fullWidth - leftWidth)}
         </SimpleBarReact>
       </div>

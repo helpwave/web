@@ -68,7 +68,7 @@ export const WardForm = ({
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateName(ward: WardFormInfoDTO) {
-    if (ward.name === '') {
+    if (ward.name.trim() === '') {
       return translation.required
     } else if (ward.name.length < minWardNameLength) {
       return translation.tooShort(minWardNameLength)

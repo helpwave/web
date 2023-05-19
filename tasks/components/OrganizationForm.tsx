@@ -97,7 +97,7 @@ export const OrganizationForm = ({
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateShortName(organization: OrganizationGeneralInfoDTO) {
-    if (organization.shortName === '') {
+    if (organization.shortName.trim() === '') {
       return translation.required
     } else if (organization.shortName.length < minShortNameLength) {
       return translation.tooShort(minShortNameLength)
@@ -107,7 +107,7 @@ export const OrganizationForm = ({
   }
 
   function validateLongName(organization: OrganizationGeneralInfoDTO) {
-    if (organization.longName === '') {
+    if (organization.longName.trim() === '') {
       return translation.required
     } else if (organization.longName.length < minLongNameLength) {
       return translation.tooShort(minLongNameLength)
@@ -117,7 +117,7 @@ export const OrganizationForm = ({
   }
 
   function validateEmail(organization: OrganizationGeneralInfoDTO) {
-    if (organization.email === '') {
+    if (organization.email.trim() === '') {
       return translation.required
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(organization.email)) {
       return translation.invalidEmail

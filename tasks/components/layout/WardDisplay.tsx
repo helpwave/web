@@ -40,7 +40,8 @@ type WardDTO = {
 export type WardDisplayProps = {
   selectedWard: WardDTO,
   wards: WardDTO[],
-  onSelectionChange: (ward: WardDTO | undefined) => void
+  onSelectionChange: (ward: WardDTO | undefined) => void,
+  width?: number
 }
 
 /**
@@ -50,15 +51,16 @@ export const WardDisplay = ({
   language,
   selectedWard,
   wards,
-  onSelectionChange
+  onSelectionChange,
+  width
 }: PropsWithLanguage<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation(language, defaultWardDisplayTranslations)
   const router = useRouter()
-
+  const columns = width === undefined ? 3 : Math.max(Math.floor(width / 250), 1)
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.wards}/>
-      <div className={tw('grid grid-cols-2 gap-6')}>
+      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
         {wards.map(ward => (
           <WardCard
             key={ward.id}

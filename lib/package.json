@@ -23,11 +23,12 @@
     "@storybook/addon-interactions": "^7.0.10",
     "@storybook/addon-links": "^7.0.10",
     "@storybook/blocks": "^7.0.10",
+    "@storybook/nextjs": "^7.0.12",
     "@storybook/react": "^7.0.10",
-    "@storybook/react-webpack5": "^7.0.10",
     "@storybook/testing-library": "^0.0.14-next.2",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "next": "^13.4.3",
     "prop-types": "^15.8.1",
     "storybook": "^7.0.10"
   },

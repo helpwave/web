@@ -1,5 +1,9 @@
 name: Storybook lib
 
+env:
+  NODE_VERSION: 18.12.0
+  PNPM_VERSION: 7
+
 on:
   push:
     branches:

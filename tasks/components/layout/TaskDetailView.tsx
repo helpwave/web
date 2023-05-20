@@ -16,6 +16,7 @@ import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { Input } from '@helpwave/common/components/user_input/Input'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -85,8 +86,6 @@ export const TaskDetailView = ({
   const router = useRouter()
   const { uuid } = router.query
 
-  const labelClassName = 'font-bold text-medium text-gray-600'
-
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
 
@@ -101,15 +100,20 @@ export const TaskDetailView = ({
     error: wardTaskTemplatesError
   } = useTaskTemplateQuery('wardTaskTemplates')
 
+  const formatDate = (date: Date) => {
+    return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+  }
+
   return (
     <div className={tw('relative flex flex-row h-[628px]')}>
       {task.id === '' && (
         <div
-          className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 bg-gray-100 rounded-l-xl')}>
+          className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 pb-0 bg-gray-100 rounded-l-xl')}>
           {personalTaskTemplatesData && wardTaskTemplatesData && (
             <TaskTemplateListColumn
-              taskTemplates={[...personalTaskTemplatesData, ...wardTaskTemplatesData]
-                .sort((a, b) => a.name.localeCompare(b.name))}
+              taskTemplates={[...(personalTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'personal' as const }))),
+                ...(wardTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'ward' as const })))]
+                .sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))}
               selectedID={selectedTemplate?.id ?? ''}
               onTileClick={(taskTemplate) => {
                 setSelectedTemplate(taskTemplate)
@@ -150,8 +154,8 @@ export const TaskDetailView = ({
           </button>
         </div>
         <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
-          <div className={tw('flex flex-col gap-y-4 w-[60%] min-w-[500px]')}>
-            <div className={tw('min-h-1/4')}>
+          <div className={tw('flex flex-col gap-y-8 w-[60%] min-w-[500px]')}>
+            <div className={tw('min-h-[25%]')}>
               <Textarea
                 headline={translation.description}
                 value={task.description}
@@ -163,7 +167,7 @@ export const TaskDetailView = ({
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
             <div className={tw('flex flex-col gap-y-4')}>
               <div>
-                <label className={tw(labelClassName)}>{translation.assignee}</label>
+                <label><Span type="labelMedium">{translation.assignee}</Span></label>
                 <Select
                   value={task.assignee}
                   options={[
@@ -176,25 +180,22 @@ export const TaskDetailView = ({
                 />
               </div>
               <div>
-                <label className={tw(labelClassName)}>{translation.dueDate}</label>
-                {/* TODO use some date picker component */}
-                <Select
-                  value={task.dueDate}
-                  options={[
-                    { label: 'Finished', value: 'Finished' },
-                    { label: '02.03.2001', value: '02.03.2001' },
-                    { label: '17.07.2011', value: '17.07.2011' },
-                    { label: '01.04.2014', value: '01.04.2014' }
-                  ]}
-                  onChange={dueDate => onChange({ ...task, dueDate })}
+                <label><Span type="labelMedium">{translation.dueDate}</Span></label>
+                <Input
+                  value={formatDate(task.dueDate)}
+                  type="datetime-local"
+                  onChange={value => {
+                    const dueDate = new Date(value)
+                    onChange({ ...task, dueDate })
+                  }}
                 />
               </div>
               <div>
-                <label className={tw(labelClassName)}>{translation.status}</label>
+                <label><Span type="labelMedium">{translation.status}</Span></label>
                 <TaskStatusSelect value={task.status} onChange={status => onChange({ ...task, status })}/>
               </div>
               <div>
-                <label className={tw(labelClassName)}>{translation.visibility}</label>
+                <label><Span type="labelMedium">{translation.visibility}</Span></label>
                 <Select
                   value={task.isPublicVisible}
                   options={[
@@ -208,7 +209,7 @@ export const TaskDetailView = ({
             {task.creationDate !== undefined ? (
               <div className={tw('flex flex-col gap-y-8 mt-16')}>
                 <div className={tw('flex flex-col gap-y-1')}>
-                  <Span className={tw(labelClassName)}>{translation.creationTime}</Span>
+                  <Span type="labelMedium">{translation.creationTime}</Span>
                   <TimeDisplay date={new Date(task.creationDate)}/>
                 </div>
                 <Button color="accent" onClick={onFinishClick}>{translation.update}</Button>

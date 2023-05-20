@@ -6,27 +6,35 @@ import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { Edit } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
+import { Label } from '../Label'
 
 type TaskTemplateCardTranslation = {
   subtask: string,
-  edit: string
+  edit: string,
+  personal: string,
+  ward: string
 }
 
 const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTranslation> = {
   en: {
     subtask: 'Subtasks',
-    edit: 'Edit'
+    edit: 'Edit',
+    personal: 'Personal',
+    ward: 'Ward'
   },
   de: {
     subtask: 'Unteraufgabe',
-    edit: 'Bearbeiten'
+    edit: 'Bearbeiten',
+    personal: 'Persönlich',
+    ward: 'Station'
   }
 }
 
 export type TaskTemplateCardProps = CardProps & {
   name: string,
   subtaskCount: number,
-  onEditClick?: () => void
+  onEditClick?: () => void,
+  typeForLabel?: 'ward' | 'personal'
 }
 
 /**
@@ -39,19 +47,24 @@ export const TaskTemplateCard = ({
   language,
   onTileClick = () => undefined,
   onEditClick,
-  className
+  className,
+  typeForLabel
 }: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
   return (
-      <Card
-        onTileClick={onTileClick}
-        isSelected={isSelected}
-        className={tx('group flex flex-row justify-between items-start bg-white', className)}
-      >
-        <div className={tw('flex flex-col items-start')}>
-          <Span type="subsubsectionTitle">{name}</Span>
-          <Span>{subtaskCount + ' ' + translation.subtask}</Span>
-        </div>
+    <Card
+      onTileClick={onTileClick}
+      isSelected={isSelected}
+      className={tx('group flex flex-col bg-white', className)}
+    >
+      <div className={tw('flex flex-row items-start overflow-hidden gap-x-1')}>
+        <Span type="subsubsectionTitle" className={tw('!flex-1')}>{name}</Span>
+        {typeForLabel && (
+          <Label
+            name={typeForLabel === 'ward' ? translation.ward : translation.personal}
+            color={typeForLabel === 'ward' ? 'blue' : 'pink'}
+          />
+        )}
         {onEditClick && (
           <button
             onClick={event => {
@@ -63,6 +76,8 @@ export const TaskTemplateCard = ({
             <Edit size={24}/>
           </button>
         )}
-      </Card>
+      </div>
+      <Span>{subtaskCount + ' ' + translation.subtask}</Span>
+    </Card>
   )
 }

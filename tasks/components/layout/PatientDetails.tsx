@@ -125,7 +125,7 @@ export const PatientDetail = ({
             }
             if (newTask.id === '') {
               newTask.id = Math.random().toString() // TODO remove later
-              newTask.creationDate = Date()
+              newTask.creationDate = new Date()
             }
             setNewPatient(changedPatient)
             setSortedTasks({

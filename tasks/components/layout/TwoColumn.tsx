@@ -2,16 +2,29 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { ReactNode } from 'react'
 import SimpleBarReact from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
-import { useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { createRef, useEffect, useState } from 'react'
+import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
 
-type LayoutState = 'normal' | 'leftMaximized' | 'smallSidebar'
+/**
+ * Only px and %
+ * eg. 250px or 10%
+ */
+type Constraint = {
+  min: string,
+  max?: string
+}
+
+type ColumnConstraints = {
+  left : Constraint,
+  right: Constraint
+}
 
 type TwoColumnProps = {
-  left: (layoutState: LayoutState) => ReactNode,
-  right: (layoutState: LayoutState) => ReactNode,
-  initialLayoutState?: LayoutState,
-  disableResize?: boolean
+  left: (width: number) => ReactNode,
+  right: (width: number) => ReactNode,
+  baseLayoutPercentage?: number, // Given as a percentage. Between 0 and 1
+  disableResize?: boolean,
+  constraints?: ColumnConstraints
 }
 
 /**
@@ -21,49 +34,103 @@ type TwoColumnProps = {
 export const TwoColumn = ({
   right,
   left,
-  initialLayoutState = 'normal',
-  disableResize = true
+  baseLayoutPercentage = 0.5,
+  disableResize = true,
+  constraints = { left: { min: '33%' }, right: { min: '33%' } }
 }: TwoColumnProps) => {
-  const [layoutState, setLayoutState] = useState<LayoutState>(initialLayoutState)
+  const ref = createRef<HTMLDivElement>()
+  const [fullWidth, setFullWidth] = useState(0)
+  const [leftWidth, setLeftWidth] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
   const headerHeight = 64
+  const dividerHitBoxWidth = 24
+
+  useEffect(() => {
+    if (fullWidth === 0) {
+      setLeftWidth(baseLayoutPercentage * (ref.current?.clientWidth ?? 0))
+    }
+    setFullWidth(ref.current?.clientWidth ?? 0)
+  }, [ref.current?.clientWidth])
+
+  const convertToNumber = (constraint: string) => {
+    if (constraint.endsWith('px')) {
+      const value = parseFloat(constraint.substring(0, constraint.length - 2))
+      if (isNaN(value)) {
+        console.error(`Couldn't parse constraint ${constraint}`)
+      }
+      return value
+    } else if (constraint.endsWith('%')) {
+      const value = parseFloat(constraint.substring(0, constraint.length - 1))
+      if (isNaN(value)) {
+        console.error(`Couldn't parse constraint ${constraint}`)
+      }
+      return value / 100 * fullWidth
+    } else {
+      console.error(`Couldn't parse constraint ${constraint}`)
+      return 0
+    }
+  }
+
+  // TODO Update this to be more clear and use all/better constraints
+  const calcPosition = (dragPosition: number) => {
+    const leftMin = convertToNumber(constraints.left.min)
+    const rightMin = convertToNumber(constraints.right.min)
+    let left = dragPosition
+    if (dragPosition < leftMin) {
+      left = leftMin
+    } else if (fullWidth - dragPosition - dividerHitBoxWidth < rightMin) {
+      left = fullWidth - rightMin
+    }
+    return left
+  }
+
+  const leftFocus = baseLayoutPercentage * fullWidth < leftWidth - dividerHitBoxWidth / 2
+
   return (
-    <div className={tw(`flex flex-row h-[calc(100vh_-_${headerHeight}px)]`)}>
-      <div className={tx('overflow-hidden', {
-        'w-7/12': layoutState === 'normal',
-        'w-[70%]': layoutState === 'smallSidebar',
-        'flex-1': layoutState === 'leftMaximized'
-      })}>
+    <div
+      ref={ref} className={tx(`relative flex flex-row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
+      onMouseMove={event => isDragging ? setLeftWidth(calcPosition(event.pageX)) : undefined}
+      onMouseUp={() => setIsDragging(false)}
+      onTouchEnd={() => setIsDragging(false)}
+      onMouseLeave={() => setIsDragging(false)}
+      {...{} /* maybe move these functions above as listeners on the entire document instead of just the TwoColumn */}
+    >
+      <div
+        className={tw(`overflow-hidden`)}
+        style={{ width: leftWidth + 'px' }}
+      >
         <SimpleBarReact style={{ maxHeight: window.innerHeight - headerHeight }}>
-          {left(layoutState)}
+          {left(leftWidth)}
         </SimpleBarReact>
       </div>
       <div
-        className={tx(`relative flex my-4 rounded-lg bg-gray-300 w-0.5 justify-center`, { 'mr-4': layoutState === 'leftMaximized' })}>
+        onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
+        onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
+        className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
+      >
+          <div className={tw('bg-gray-300 my-4 rounded-lg w-0.5')} />
+        {!disableResize && (
+          <div
+            className={tw('absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] flex flex-col justify-center items-center')}
+          >
+            <GripVertical className={tw('text-white')}/>
+          </div>
+        )}
         {!disableResize && (
           <button
             className={tw('absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5')}
-            onClick={() => {
-              setLayoutState((layoutState) => {
-                if (layoutState === 'leftMaximized') {
-                  return initialLayoutState === 'smallSidebar' ? 'smallSidebar' : 'normal'
-                } else {
-                  return 'leftMaximized'
-                }
-              })
-            }}
+            onClick={() => setLeftWidth(leftFocus ? fullWidth * baseLayoutPercentage : fullWidth - convertToNumber(constraints.right.min))}
           >
-            {layoutState === 'leftMaximized' ? <ChevronLeft/> : <ChevronRight/>}
+            {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
           </button>
         )}
       </div>
       <div
-        className={tx('overflow-hidden', {
-          'flex-1': layoutState !== 'leftMaximized',
-          'hidden': layoutState === 'leftMaximized'
-        })}
+        className={tw(`overflow-hidden`)}
+        style={{ width: (fullWidth - leftWidth) + 'px' }}
       >
         <SimpleBarReact style={{ maxHeight: window.innerHeight - headerHeight }}>
-          {right(layoutState)}
+          {right(fullWidth - leftWidth)}
         </SimpleBarReact>
       </div>
     </div>

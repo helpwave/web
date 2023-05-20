@@ -5,12 +5,16 @@ const socials = [
   { name: 'GitHub', link: 'https://github.com/helpwave/' },
   { name: 'LinkedIn', link: 'https://linkedin.com/company/helpwave/' },
   { name: 'Instagram', link: 'https://instagram.com/helpwave_de/' },
+  { name: 'Twitter', link: 'https://twitter.com/helpwave_org' },
+  { name: 'YouTube', link: 'https://www.youtube.com/@helpwave' },
+  { name: 'Twitch', link: 'https://www.twitch.tv/helpwave' },
+  { name: 'Spotify', link: 'https://open.spotify.com/show/7oRRTH65cGS5yvvcX8XXOb' },
 ]
 
-const Header = () => {
+const Footer = () => {
   return (
-      <div className={tw('absolute left-1/2 bottom-[40px] -translate-x-1/2')}>
-        <div className={tw('flex flex-row gap-8')}>
+      <div className={tw('w-screen absolute left-1/2 bottom-[40px] -translate-x-1/2')}>
+        <div className={tw('flex flex-wrap gap-8 justify-center')}>
           {socials.map(({ name, link }) => (
             <div key={link} className={tw('group')}>
               <Link target="_blank" href={link} className={tw('py-1')}>{name}</Link>
@@ -22,4 +26,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default Footer

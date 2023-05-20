@@ -39,43 +39,46 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
         <title>{titleWrapper()}</title>
       </Head>
       <TwoColumn
-        initialLayoutState="smallSidebar"
         disableResize={false}
-        left={() => (
-          <DashboardDisplay
-            organizations={organizations}
-            wards={wards}
-          />
+        left={width => (
+          width < 50 ? <div/> : (
+            <DashboardDisplay
+              organizations={organizations}
+              wards={wards}
+            />
+          )
         )}
-        right={() => (
-          <FeatureDetails
-            features={[
-              {
-                title: 'Feature 1',
-                date: new Date('2023-04-22T14:09:58+00:00'),
-                description: [
-                  new URL('https://images.unsplash.com/photo-1606327054536-e37e655d4f4a?ixlib=rb-4.0.3&ixid=MnwxM[…]90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'),
-                  'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-                ]
-              },
-              {
-                title: 'Feature 2',
-                date: new Date('2022-12-31T14:09:58+00:00'),
-                externalResource: new URL('https://helpwave.de'),
-                description: [
-                  'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-                ]
-              },
-              {
-                title: 'Feature 3',
-                date: new Date('2021-01-22T14:09:58+00:00'),
-                description: [
-                  new URL('https://images.unsplash.com/photo-1606327054536-e37e655d4f4a?ixlib=rb-4.0.3&ixid=MnwxM[…]90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'),
-                  'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-                ]
-              }
-            ]}
-          />
+        right={width => (
+          width < 50 ? <div/> : (
+            <FeatureDetails
+              features={[
+                {
+                  title: 'Feature 1',
+                  date: new Date('2023-04-22T14:09:58+00:00'),
+                  description: [
+                    new URL('https://images.unsplash.com/photo-1606327054536-e37e655d4f4a?ixlib=rb-4.0.3&ixid=MnwxM[…]90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'),
+                    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+                  ]
+                },
+                {
+                  title: 'Feature 2',
+                  date: new Date('2022-12-31T14:09:58+00:00'),
+                  externalResource: new URL('https://helpwave.de'),
+                  description: [
+                    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+                  ]
+                },
+                {
+                  title: 'Feature 3',
+                  date: new Date('2021-01-22T14:09:58+00:00'),
+                  description: [
+                    new URL('https://images.unsplash.com/photo-1606327054536-e37e655d4f4a?ixlib=rb-4.0.3&ixid=MnwxM[…]90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'),
+                    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+                  ]
+                }
+              ]}
+            />
+          )
         )}
       />
     </PageWithHeader>

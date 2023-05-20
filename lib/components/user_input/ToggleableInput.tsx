@@ -23,7 +23,8 @@ type InputProps = {
   onChange?: (text: string) => void,
   labelClassName?: string,
   initialState?: 'editing' | 'display',
-  size?: number
+  size?: number,
+  disclaimer?: string
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 /**
@@ -40,44 +41,52 @@ export const ToggleableInput = ({
   labelClassName = '',
   initialState = 'display',
   size = 20,
+  disclaimer,
   ...restProps
 }: InputProps) => {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
   return (
-    <div
-      className={tw('flex flex-row items-center w-full gap-x-2 overflow-hidden')}
-      onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
-    >
-      <div className={tx('flex flex-row overflow-hidden', { 'flex-1': isEditing })}>
-        {isEditing ? (
-          <input
-            autoFocus
-            {...restProps}
-            value={value}
-            type={type}
-            id={id}
-            onChange={event => onChange(event.target.value)}
-            onBlur={() => {
-              setIsEditing(false)
-            }}
-            onKeyPress={event => {
-              if (event.key === 'Enter') {
+    <div>
+      <div
+        className={tw('flex flex-row items-center w-full gap-x-2 overflow-hidden')}
+        onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
+      >
+        <div className={tx('flex flex-row overflow-hidden', { 'flex-1': isEditing })}>
+          {isEditing ? (
+            <input
+              autoFocus
+              {...restProps}
+              value={value}
+              type={type}
+              id={id}
+              onChange={event => onChange(event.target.value)}
+              onBlur={() => {
                 setIsEditing(false)
-              }
-            }}
-            className={tx(labelClassName, `w-full border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4`, {
-              underline: isEditing
-            })}
-          />
-        ) : (
-          <span
-            className={tx(labelClassName, 'w-full break-words overflow-hidden text-ellipsis whitespace-nowrap')}
-          >
+              }}
+              onKeyPress={event => {
+                if (event.key === 'Enter') {
+                  setIsEditing(false)
+                }
+              }}
+              className={tx(labelClassName, `w-full border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4`, {
+                underline: isEditing
+              })}
+            />
+          ) : (
+            <span
+              className={tx(labelClassName, 'max-w-xs break-words overflow-hidden')}
+            >
         {value}
         </span>
-        )}
+          )}
+        </div>
+        <Pencil className={tx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size} />
       </div>
-     <Pencil className={tx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size} />
+      {(isEditing && disclaimer) && (
+        <label className={tw('text-hw-negative-500')}>
+          {disclaimer}
+        </label>
+      )}
     </div>
   )
 }

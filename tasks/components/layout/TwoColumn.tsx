@@ -87,15 +87,19 @@ export const TwoColumn = ({
 
   const leftFocus = baseLayoutPercentage * fullWidth < leftWidth - dividerHitBoxWidth / 2
 
-  const scrollableRef = useRef<SimpleBarCore>(null)
+  const scrollableRefRight = useRef<SimpleBarCore>(null)
+  const scrollableRefLeft = useRef<SimpleBarCore>(null)
   const [simpleBarMaxHeight, setSimpleBarMaxHeight] = useState(800)
 
   useEffect(() => {
     const handleWindowResize = () => {
-      const scrollableElement = scrollableRef.current
       setSimpleBarMaxHeight(window.innerHeight - headerHeight)
-      if (scrollableElement) {
-        scrollableElement.recalculate()
+
+      const scrollableElementRight = scrollableRefRight.current
+      const scrollableElementLeft = scrollableRefLeft.current
+      if (scrollableElementRight && scrollableElementLeft) {
+        scrollableElementRight.recalculate()
+        scrollableElementLeft.recalculate()
       }
     }
 
@@ -119,7 +123,7 @@ export const TwoColumn = ({
         className={tw(`overflow-hidden`)}
         style={{ width: leftWidth + 'px' }}
       >
-        <SimpleBarReact ref={scrollableRef} style={{ maxHeight: simpleBarMaxHeight }}>
+        <SimpleBarReact ref={scrollableRefLeft} style={{ maxHeight: simpleBarMaxHeight }}>
           {left(leftWidth)}
         </SimpleBarReact>
       </div>
@@ -149,7 +153,7 @@ export const TwoColumn = ({
         className={tw(`overflow-hidden`)}
         style={{ width: (fullWidth - leftWidth) + 'px' }}
       >
-        <SimpleBarReact ref={scrollableRef} style={{ maxHeight: simpleBarMaxHeight }}>
+        <SimpleBarReact ref={scrollableRefRight} style={{ maxHeight: simpleBarMaxHeight }}>
           {right(fullWidth - leftWidth)}
         </SimpleBarReact>
       </div>

@@ -2,12 +2,13 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { ReactNode } from 'react'
 import SimpleBarReact from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
-import { createRef, useEffect, useState } from 'react'
+import { createRef, useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
+import type SimpleBarCore from 'simplebar-core'
 
 /**
  * Only px and %
- * eg. 250px or 10%
+ * e.g. 250px or 10%
  */
 type Constraint = {
   min: string,
@@ -29,7 +30,7 @@ type TwoColumnProps = {
 
 /**
  * The layout component for most pages main content. It creates two columns with a divider in between. The size
- * of the columns can be change via the initialLayoutState
+ * of the columns can be changed via the initialLayoutState
  */
 export const TwoColumn = ({
   right,
@@ -86,6 +87,29 @@ export const TwoColumn = ({
 
   const leftFocus = baseLayoutPercentage * fullWidth < leftWidth - dividerHitBoxWidth / 2
 
+  const scrollableRefRight = useRef<SimpleBarCore>(null)
+  const scrollableRefLeft = useRef<SimpleBarCore>(null)
+  const [simpleBarMaxHeight, setSimpleBarMaxHeight] = useState(800)
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setSimpleBarMaxHeight(window.innerHeight - headerHeight)
+
+      const scrollableElementRight = scrollableRefRight.current
+      const scrollableElementLeft = scrollableRefLeft.current
+      if (scrollableElementRight && scrollableElementLeft) {
+        scrollableElementRight.recalculate()
+        scrollableElementLeft.recalculate()
+      }
+    }
+
+    window.addEventListener('resize', handleWindowResize)
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize)
+    }
+  }, [])
+
   return (
     <div
       ref={ref} className={tx(`relative flex flex-row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
@@ -99,7 +123,7 @@ export const TwoColumn = ({
         className={tw(`overflow-hidden`)}
         style={{ width: leftWidth + 'px' }}
       >
-        <SimpleBarReact style={{ maxHeight: window.innerHeight - headerHeight }}>
+        <SimpleBarReact ref={scrollableRefLeft} style={{ maxHeight: simpleBarMaxHeight }}>
           {left(leftWidth)}
         </SimpleBarReact>
       </div>
@@ -129,7 +153,7 @@ export const TwoColumn = ({
         className={tw(`overflow-hidden`)}
         style={{ width: (fullWidth - leftWidth) + 'px' }}
       >
-        <SimpleBarReact style={{ maxHeight: window.innerHeight - headerHeight }}>
+        <SimpleBarReact ref={scrollableRefRight} style={{ maxHeight: simpleBarMaxHeight }}>
           {right(fullWidth - leftWidth)}
         </SimpleBarReact>
       </div>

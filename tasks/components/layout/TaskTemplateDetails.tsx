@@ -92,11 +92,12 @@ export const TaskTemplateDetails = ({
   const maxNameLength = 64
 
   function validateName(name: string) {
-    if (name === '') {
+    const taskTemplateName = name.trim()
+    if (taskTemplateName === '') {
       return translation.required
-    } else if (name.length < minNameLength) {
+    } else if (taskTemplateName.length < minNameLength) {
       return translation.tooShort(minNameLength)
-    } else if (name.length > maxNameLength) {
+    } else if (taskTemplateName.length > maxNameLength) {
       return translation.tooLong(maxNameLength)
     }
   }

@@ -97,27 +97,30 @@ export const OrganizationForm = ({
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateShortName(organization: OrganizationGeneralInfoDTO) {
-    if (organization.shortName === '') {
+    const shortName = organization.shortName.trim()
+    if (shortName === '') {
       return translation.required
-    } else if (organization.shortName.length < minShortNameLength) {
+    } else if (shortName.length < minShortNameLength) {
       return translation.tooShort(minShortNameLength)
-    } else if (organization.shortName.length > maxShortNameLength) {
+    } else if (shortName.length > maxShortNameLength) {
       return translation.tooLong(maxShortNameLength)
     }
   }
 
   function validateLongName(organization: OrganizationGeneralInfoDTO) {
-    if (organization.longName === '') {
+    const longName = organization.longName.trim()
+    if (longName === '') {
       return translation.required
-    } else if (organization.longName.length < minLongNameLength) {
+    } else if (longName.length < minLongNameLength) {
       return translation.tooShort(minLongNameLength)
-    } else if (organization.longName.length > maxLongNameLength) {
+    } else if (longName.length > maxLongNameLength) {
       return translation.tooLong(maxLongNameLength)
     }
   }
 
   function validateEmail(organization: OrganizationGeneralInfoDTO) {
-    if (organization.email === '') {
+    const email = organization.email.trim()
+    if (email === '') {
       return translation.required
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(organization.email)) {
       return translation.invalidEmail

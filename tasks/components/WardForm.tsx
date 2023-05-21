@@ -68,11 +68,12 @@ export const WardForm = ({
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateName(ward: WardFormInfoDTO) {
-    if (ward.name === '') {
+    const wardName = ward.name.trim()
+    if (wardName === '') {
       return translation.required
-    } else if (ward.name.length < minWardNameLength) {
+    } else if (wardName.length < minWardNameLength) {
       return translation.tooShort(minWardNameLength)
-    } else if (ward.name.length > maxWardNameLength) {
+    } else if (wardName.length > maxWardNameLength) {
       return translation.tooLong(maxWardNameLength)
     } else if (usedWardNames.find(value => value === ward.name) !== undefined) {
       // May still be a duplicate, if edited at the same time

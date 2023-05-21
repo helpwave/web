@@ -15,7 +15,7 @@ This repository is split up into multiple subprojects using [pnpm](https://pnpm.
 
 ## Storybook
 
-We are about to adopting Storybook to develop, preview, testing and showcasing our components.
+We are about to adopting Storybook to develop, preview, testing and showcasing our components. Below you will find a listing of our deployt Storybook. You can also run these locally to develop new stories via `pnpm run storybook` (open the displayed port in your browser of choice) in the supported projects.
 
 - [`lib` https://storybook-lib.helpwave.de](https://storybook-lib.helpwave.de)
 

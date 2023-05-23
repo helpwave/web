@@ -91,24 +91,25 @@ export const TwoColumn = ({
   const scrollableRefLeft = useRef<SimpleBarCore>(null)
   const [simpleBarMaxHeight, setSimpleBarMaxHeight] = useState(800)
 
-  useEffect(() => {
-    const handleWindowResize = () => {
-      setSimpleBarMaxHeight(window.innerHeight - headerHeight)
+  const handleWindowResize = () => {
+    setSimpleBarMaxHeight(window.innerHeight - headerHeight)
 
-      const scrollableElementRight = scrollableRefRight.current
-      const scrollableElementLeft = scrollableRefLeft.current
-      if (scrollableElementRight && scrollableElementLeft) {
-        scrollableElementRight.recalculate()
-        scrollableElementLeft.recalculate()
-      }
+    const scrollableElementRight = scrollableRefRight.current
+    const scrollableElementLeft = scrollableRefLeft.current
+    if (scrollableElementRight && scrollableElementLeft) {
+      scrollableElementRight.recalculate()
+      scrollableElementLeft.recalculate()
     }
+  }
 
+  useEffect(() => {
     window.addEventListener('resize', handleWindowResize)
-
     return () => {
       window.removeEventListener('resize', handleWindowResize)
     }
   }, [])
+
+  useEffect(handleWindowResize, [window.innerHeight])
 
   return (
     <div

@@ -34,7 +34,8 @@ const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTra
 
 export type DashboardDisplayProps = {
   wards: WardDTO[],
-  organizations: OrganizationDTO[]
+  organizations: OrganizationDTO[],
+  width?: number
 }
 
 /**
@@ -43,10 +44,12 @@ export type DashboardDisplayProps = {
 export const DashboardDisplay = ({
   language,
   wards,
-  organizations
+  organizations,
+  width
 }: PropsWithLanguage<DashboardDisplayTranslation, DashboardDisplayProps>) => {
   const translation = useTranslation(language, defaultDashboardDisplayTranslations)
   const router = useRouter()
+  const columns = width === undefined ? 3 : Math.max(Math.floor(width / 260), 1)
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
       <div className={tw('flex flex-col')}>
@@ -64,7 +67,7 @@ export const DashboardDisplay = ({
             </Button>
           </div>
         </div>
-        <div className={tw('grid grid-cols-2 gap-6')}>
+        <div className={tw(`grid grid-cols-${columns} gap-6`)}>
           {organizations.map(organization => (
             <OrganizationCard
               key={organization.id}
@@ -76,7 +79,7 @@ export const DashboardDisplay = ({
       </div>
       <div className={tw('flex flex-col gap-y-1')}>
         <Span type="subsectionTitle">{translation.wards}</Span>
-        <div className={tw('grid grid-cols-2 gap-6')}>
+        <div className={tw(`grid grid-cols-${columns} gap-6`)}>
           {wards.map(ward => <WardCard key={ward.id} ward={ward} onTileClick={() => router.push(`/ward/${ward.id}`)}/>)}
         </div>
       </div>

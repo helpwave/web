@@ -20,7 +20,8 @@ const defaultFeatureDetailsTranslations: Record<Languages, FeatureDetailsTransla
 }
 
 export type FeatureDetailsProps = {
-  features: Feature[]
+  features: Feature[],
+  width?: number
 }
 
 /**
@@ -28,13 +29,20 @@ export type FeatureDetailsProps = {
  */
 export const FeatureDetails = ({
   language,
-  features
+  features,
+  width
 }: PropsWithLanguage<FeatureDetailsTranslation, FeatureDetailsProps>) => {
   const translation = useTranslation(language, defaultFeatureDetailsTranslations)
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
       <ColumnTitle title={translation.title}/>
-      {features.map(feature => <FeatureDisplay key={feature.title} feature={feature} />)}
+      {features.map(feature => (
+        <FeatureDisplay
+          key={feature.title}
+          feature={feature}
+          titleOnTop={width !== undefined ? width < 600 : undefined}
+        />
+      ))}
     </div>
   )
 }

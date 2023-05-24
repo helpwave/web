@@ -49,8 +49,8 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
           )
         )}
         right={width => (
-          width < 50 ? <div/> : (
             <FeatureDetails
+              width={width}
               features={[
                 {
                   title: 'Feature 1',
@@ -78,7 +78,6 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
                 }
               ]}
             />
-          )
         )}
       />
     </PageWithHeader>

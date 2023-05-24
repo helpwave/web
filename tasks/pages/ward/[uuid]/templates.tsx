@@ -121,8 +121,10 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
         <title>{titleWrapper(translation.wardTaskTemplates)}</title>
       </Head>
       <TwoColumn
-        left={() => (
+        disableResize={false}
+        left={width => (
           <TaskTemplateDisplay
+            width={width}
             onSelectChange={taskTemplate => setTaskTemplateForm({
               template: taskTemplate ?? emptyTaskTemplate,
               hasChanges: false,
@@ -133,8 +135,9 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
             variant="wardTemplates"
           />
         )}
-        right={() => (
+        right={width => (
           <TaskTemplateDetails
+            width={width}
             key={taskTemplateForm.template.id}
             taskTemplateForm={taskTemplateForm}
             onCreate={createMutation.mutate}

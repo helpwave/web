@@ -204,16 +204,19 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
         onSave={onSave}
       />
       <TwoColumn
-        left={() => (
+        disableResize={false}
+        left={width => (
           <OrganizationDisplay
+            width={width}
             selectedOrganization={organizationForm.organization}
             organizations={data as OrganizationDTO[]}
             onSelectionChange={changeOrganization}
           />
         )}
-        right={() => (
+        right={width => (
           <OrganizationDetail
             key={organizationForm.organization.id}
+            width={width}
             organizationForm={organizationForm}
             onCreate={createMutation.mutate}
             onUpdate={updateMutation.mutate}

@@ -49,7 +49,8 @@ type OrganizationDTO = {
 export type OrganizationDisplayProps = {
   selectedOrganization: OrganizationDTO,
   organizations: OrganizationDTO[],
-  onSelectionChange: (organization: OrganizationDTO) => void
+  onSelectionChange: (organization: OrganizationDTO) => void,
+  width?: number
 }
 
 /**
@@ -59,15 +60,17 @@ export const OrganizationDisplay = ({
   language,
   selectedOrganization,
   organizations,
-  onSelectionChange
+  onSelectionChange,
+  width
 }: PropsWithLanguage<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
   const translation = useTranslation(language, defaultOrganizationDisplayTranslations)
   const router = useRouter()
+  const columns = width === undefined ? 2 : Math.max(Math.floor(width / 250), 1)
 
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.yourOrganizations}/>
-      <div className={tw('grid grid-cols-2 gap-6')}>
+      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
         {organizations.map(organization => (
           <OrganizationCard
             key={organization.longName}

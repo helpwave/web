@@ -64,7 +64,8 @@ export type TaskTemplateDetailsProps = {
   onCreate: (taskTemplate: TaskTemplateDTO) => void,
   onUpdate: (taskTemplate: TaskTemplateDTO) => void,
   onDelete: (taskTemplate: TaskTemplateDTO) => void,
-  setTaskTemplateForm: (taskTemplateForm: TaskTemplateFormType) => void
+  setTaskTemplateForm: (taskTemplateForm: TaskTemplateFormType) => void,
+  width?: number
 }
 
 /**
@@ -106,7 +107,7 @@ export const TaskTemplateDetails = ({
   const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
 
   return (
-    <div className={tw('flex flex-col py-4 px-6 w-5/6')}>
+    <div className={tw('flex flex-col py-4 px-6')}>
       <ConfirmDialog
         title={translation.deleteConfirmText}
         description={translation.deleteConfirmText}
@@ -123,26 +124,26 @@ export const TaskTemplateDetails = ({
         title={isCreatingNewTemplate ? translation.createTaskTemplate : translation.updateTaskTemplate}
         subtitle={!isCreatingNewTemplate ? translation.updateTaskTemplateDescription : undefined}
       />
-      <div className={tw('mb-4')}>
-        <Input
-          id="name"
-          value={taskTemplateForm.template.name}
-          label={translation.name}
-          type="text"
-          onBlur={() => setTouched({ name: true })}
-          onChange={text => {
-            setTaskTemplateForm({
-              template: { ...taskTemplateForm.template, name: text },
-              isValid: validateName(text) === undefined,
-              hasChanges: true
-            })
-          }}
-          maxLength={maxNameLength}
-          className={tx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
-        />
-        {isDisplayingNameError && <Span type="formError">{nameErrorMessage}</Span>}
-      </div>
-      <div className={tw('mb-4')}>
+      <div className={tw(' flex flex-col gap-y-4 max-w-[400px] mb-4')}>
+        <div>
+          <Input
+            id="name"
+            value={taskTemplateForm.template.name}
+            label={translation.name}
+            type="text"
+            onBlur={() => setTouched({ name: true })}
+            onChange={text => {
+              setTaskTemplateForm({
+                template: { ...taskTemplateForm.template, name: text },
+                isValid: validateName(text) === undefined,
+                hasChanges: true
+              })
+            }}
+            maxLength={maxNameLength}
+            className={tx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
+          />
+          {isDisplayingNameError && <Span type="formError">{nameErrorMessage}</Span>}
+        </div>
         <Textarea
           headline={translation.notes}
           id="notes"

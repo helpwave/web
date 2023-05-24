@@ -33,7 +33,8 @@ export type TaskTemplateDisplayProps = {
   selectedID: string,
   onSelectChange: (taskTemplate: TaskTemplateDTO | undefined) => void,
   taskTemplates: TaskTemplateDTO[],
-  variant: 'wardTemplates' | 'personalTemplates'
+  variant: 'wardTemplates' | 'personalTemplates',
+  width?: number
 }
 
 /**
@@ -44,11 +45,13 @@ export const TaskTemplateDisplay = ({
   selectedID,
   onSelectChange,
   taskTemplates,
-  variant
+  variant,
+  width
 }: PropsWithLanguage<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateDisplayTranslation)
   const router = useRouter()
   const { uuid, wardID } = router.query
+  const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))
 
   const switchToPersonalLink = uuid ? `/templates?wardID=${uuid}` : '/templates'
   return (
@@ -70,7 +73,7 @@ export const TaskTemplateDisplay = ({
         )}
       </div>
       {/* TODO replace onClick function to something different */}
-      <div className={tw('grid grid-cols-4 gap-6')}>
+      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
         {taskTemplates.map(taskTemplate => (
           <TaskTemplateCard
             key={taskTemplate.name}

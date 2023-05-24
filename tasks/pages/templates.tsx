@@ -102,8 +102,10 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
         <title>{titleWrapper(translation.personalTaskTemplates)}</title>
       </Head>
       <TwoColumn
-        left={() => (
+        disableResize={false}
+        left={width => (
           <TaskTemplateDisplay
+            width={width}
             onSelectChange={taskTemplate => setTaskTemplateForm({
               template: taskTemplate ?? emptyTaskTemplate,
               hasChanges: false,
@@ -114,8 +116,9 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
             variant="personalTemplates"
           />
         )}
-        right={() => (
+        right={width => (
           <TaskTemplateDetails
+            width={width}
             key={taskTemplateForm.template.id}
             taskTemplateForm={taskTemplateForm}
             onCreate={createMutation.mutate}

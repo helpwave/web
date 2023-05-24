@@ -70,7 +70,8 @@ export type WardDetailProps = {
   ward: WardDTO,
   onCreate: (ward: WardDTO) => void,
   onUpdate: (ward: WardDTO) => void,
-  onDelete: (ward: WardDTO) => void
+  onDelete: (ward: WardDTO) => void,
+  width?: number
 }
 
 /**
@@ -83,6 +84,7 @@ export const WardDetail = ({
   onCreate,
   onUpdate,
   onDelete,
+  width
 }: PropsWithLanguage<WardDetailTranslation, WardDetailProps>) => {
   const translation = useTranslation(language, defaultWardDetailTranslations)
   const isCreatingNewOrganization = ward.id === ''
@@ -93,9 +95,10 @@ export const WardDetail = ({
   const [newWard, setNewWard] = useState<WardDTO>(ward)
 
   const { data, isLoading, isError } = useTaskTemplateQuery('wardTaskTemplates')
+  const columns = width === undefined ? 3 : Math.max(Math.floor(width / 200), 1)
 
   return (
-    <div className={tw('flex flex-col py-4 px-6 w-5/6')}>
+    <div className={tw('flex flex-col py-4 px-6')}>
       <ConfirmDialog
         title={translation.deleteConfirmText}
         description={translation.dangerZoneText}
@@ -112,16 +115,18 @@ export const WardDetail = ({
         title={isCreatingNewOrganization ? translation.createWard : translation.updateWard}
         subtitle={isCreatingNewOrganization ? translation.createWardSubtitle : translation.updateWardSubtitle}
       />
-      <WardForm
-        ward={newWard}
-        usedWardNames={newWard.rooms.map(ward => ward.name)}
-        onChange={(wardInfo, isValid) => {
-          setNewWard({ ...newWard, ...wardInfo })
-          setFilledRequired(isValid)
-        }}
-        isShowingErrorsDirectly={!isCreatingNewOrganization}
-      />
-      <div className={tw('mt-6')}>
+      <div className={tw('max-w-[400px]')}>
+        <WardForm
+          ward={newWard}
+          usedWardNames={newWard.rooms.map(ward => ward.name)}
+          onChange={(wardInfo, isValid) => {
+            setNewWard({ ...newWard, ...wardInfo })
+            setFilledRequired(isValid)
+          }}
+          isShowingErrorsDirectly={!isCreatingNewOrganization}
+        />
+      </div>
+      <div className={tw('max-w-[600px] mt-6')}>
         <RoomList
           rooms={newWard.rooms}
           onChange={(rooms) => setNewWard({ ...newWard, rooms })}
@@ -129,34 +134,31 @@ export const WardDetail = ({
       </div>
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button
-          className={tw('w-1/2')}
           onClick={() => isCreatingNewOrganization ? onCreate(newWard) : onUpdate(newWard)}
           disabled={!filledRequired}>
           {isCreatingNewOrganization ? translation.create : translation.update}
         </Button>
       </div>
-      { newWard.id !== '' &&
+      {newWard.id !== '' &&
         (
           <div className={tw('mt-6')}>
             {/* TODO show something here */}
             {(isLoading || isError) && ''}
-            {data && <TaskTemplateWardPreview taskTemplates={data} wardID={newWard.id} />}
+            {data && <TaskTemplateWardPreview taskTemplates={data} wardID={newWard.id} columns={columns}/>}
           </div>
         )
       }
       <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
         <Span type="subsectionTitle">{translation.dangerZone}</Span>
         <Span type="description">{translation.dangerZoneText}</Span>
-        <div>
-          <Button
-            onClick={() => setIsShowingConfirmDialog(true)}
-            className={tw('px-0 font-bold text-left')}
-            color="negative"
-            variant="textButton"
-          >
-            {translation.deleteWard}
-          </Button>
-        </div>
+        <Button
+          onClick={() => setIsShowingConfirmDialog(true)}
+          className={tw('px-0 font-bold text-left')}
+          color="negative"
+          variant="textButton"
+        >
+          {translation.deleteWard}
+        </Button>
       </div>
     </div>
   )

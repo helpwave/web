@@ -16,14 +16,24 @@ type Constraint = {
 }
 
 type ColumnConstraints = {
-  left : Constraint,
-  right: Constraint
+  left? : Constraint,
+  right?: Constraint
+}
+
+const defaultConstraint = {
+  left: { min: '33%' },
+  right: { min: '33%' }
 }
 
 type TwoColumnProps = {
   left: (width: number) => ReactNode,
   right: (width: number) => ReactNode,
-  baseLayoutPercentage?: number, // Given as a percentage. Between 0 and 1
+  /**
+   Given as px or percent
+   e.g. 250px or 30%
+   can be given as a negative then the width is used for the right side
+   */
+  baseLayoutValue?: string,
   disableResize?: boolean,
   constraints?: ColumnConstraints
 }
@@ -35,9 +45,9 @@ type TwoColumnProps = {
 export const TwoColumn = ({
   right,
   left,
-  baseLayoutPercentage = 0.5,
+  baseLayoutValue = '50%',
   disableResize = true,
-  constraints = { left: { min: '33%' }, right: { min: '33%' } }
+  constraints = defaultConstraint
 }: TwoColumnProps) => {
   const ref = createRef<HTMLDivElement>()
   const [fullWidth, setFullWidth] = useState(0)
@@ -45,37 +55,41 @@ export const TwoColumn = ({
   const [isDragging, setIsDragging] = useState(false)
   const headerHeight = 64
   const dividerHitBoxWidth = 24
+  constraints = { ...defaultConstraint, ...constraints }
 
-  useEffect(() => {
-    if (fullWidth === 0) {
-      setLeftWidth(baseLayoutPercentage * (ref.current?.clientWidth ?? 0))
-    }
-    setFullWidth(ref.current?.clientWidth ?? 0)
-  }, [ref.current?.clientWidth])
-
-  const convertToNumber = (constraint: string) => {
+  const convertToNumber = (constraint: string, fullWidth: number) => {
     if (constraint.endsWith('px')) {
       const value = parseFloat(constraint.substring(0, constraint.length - 2))
       if (isNaN(value)) {
         console.error(`Couldn't parse constraint ${constraint}`)
       }
-      return value
+      return value > 0 ? value : fullWidth - value
     } else if (constraint.endsWith('%')) {
       const value = parseFloat(constraint.substring(0, constraint.length - 1))
       if (isNaN(value)) {
         console.error(`Couldn't parse constraint ${constraint}`)
       }
-      return value / 100 * fullWidth
+      const newValue = value / 100 * fullWidth
+      return newValue > 0 ? newValue : fullWidth - newValue
     } else {
       console.error(`Couldn't parse constraint ${constraint}`)
       return 0
     }
   }
 
+  useEffect(() => {
+    const newFullWidth = ref.current?.clientWidth ?? 0
+    if (fullWidth === 0) {
+      const baseLayout = convertToNumber(baseLayoutValue, newFullWidth)
+      setLeftWidth(baseLayout)
+    }
+    setFullWidth(newFullWidth)
+  }, [ref.current?.clientWidth])
+
   // TODO Update this to be more clear and use all/better constraints
   const calcPosition = (dragPosition: number) => {
-    const leftMin = convertToNumber(constraints.left.min)
-    const rightMin = convertToNumber(constraints.right.min)
+    const leftMin = convertToNumber(constraints.left?.min ?? defaultConstraint.left.min, fullWidth)
+    const rightMin = convertToNumber(constraints.right?.min ?? defaultConstraint.left.min, fullWidth)
     let left = dragPosition
     if (dragPosition < leftMin) {
       left = leftMin
@@ -85,7 +99,7 @@ export const TwoColumn = ({
     return left
   }
 
-  const leftFocus = baseLayoutPercentage * fullWidth < leftWidth - dividerHitBoxWidth / 2
+  const leftFocus = convertToNumber(baseLayoutValue, fullWidth) < leftWidth - dividerHitBoxWidth / 2
 
   const scrollableRefRight = useRef<SimpleBarCore>(null)
   const scrollableRefLeft = useRef<SimpleBarCore>(null)
@@ -143,7 +157,7 @@ export const TwoColumn = ({
         {!disableResize && (
           <button
             className={tw('absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5')}
-            onClick={() => setLeftWidth(leftFocus ? fullWidth * baseLayoutPercentage : fullWidth - convertToNumber(constraints.right.min))}
+            onClick={() => setLeftWidth(leftFocus ? convertToNumber(baseLayoutValue, fullWidth) : fullWidth - convertToNumber(constraints.right?.min ?? defaultConstraint.right.min, fullWidth))}
           >
             {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
           </button>

@@ -129,8 +129,8 @@ export const config = defineConfig({
         space: ['var(--font-space)', ...fontFamily.sans]
       },
       screens: {
-        desktop: { min: '1350px' },
-        mobile: { max: '1350px' },
+        desktop: { min: '1150px' },
+        mobile: { max: '1150px' },
       },
       animation: {
         fade: 'fadeOut 3s ease-in-out'

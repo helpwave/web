@@ -57,20 +57,20 @@ export const TwoColumn = ({
   const dividerHitBoxWidth = 24
   constraints = { ...defaultConstraint, ...constraints }
 
-  const convertToNumber = (constraint: string, fullWidth: number) => {
+  const convertToLeftWidth = (constraint: string, usedFullWidth: number) => {
     if (constraint.endsWith('px')) {
       const value = parseFloat(constraint.substring(0, constraint.length - 2))
       if (isNaN(value)) {
         console.error(`Couldn't parse constraint ${constraint}`)
       }
-      return value > 0 ? value : fullWidth - value
+      return value > 0 ? value : usedFullWidth + value
     } else if (constraint.endsWith('%')) {
       const value = parseFloat(constraint.substring(0, constraint.length - 1))
       if (isNaN(value)) {
         console.error(`Couldn't parse constraint ${constraint}`)
       }
-      const newValue = value / 100 * fullWidth
-      return newValue > 0 ? newValue : fullWidth - newValue
+      const newValue = value / 100 * usedFullWidth
+      return newValue > 0 ? newValue : usedFullWidth + newValue
     } else {
       console.error(`Couldn't parse constraint ${constraint}`)
       return 0
@@ -80,16 +80,15 @@ export const TwoColumn = ({
   useEffect(() => {
     const newFullWidth = ref.current?.clientWidth ?? 0
     if (fullWidth === 0) {
-      const baseLayout = convertToNumber(baseLayoutValue, newFullWidth)
-      setLeftWidth(baseLayout)
+      setLeftWidth(convertToLeftWidth(baseLayoutValue, newFullWidth))
     }
     setFullWidth(newFullWidth)
   }, [ref.current?.clientWidth])
 
   // TODO Update this to be more clear and use all/better constraints
   const calcPosition = (dragPosition: number) => {
-    const leftMin = convertToNumber(constraints.left?.min ?? defaultConstraint.left.min, fullWidth)
-    const rightMin = convertToNumber(constraints.right?.min ?? defaultConstraint.left.min, fullWidth)
+    const leftMin = convertToLeftWidth(constraints.left?.min ?? defaultConstraint.left.min, fullWidth)
+    const rightMin = convertToLeftWidth(constraints.right?.min ?? defaultConstraint.left.min, fullWidth)
     let left = dragPosition
     if (dragPosition < leftMin) {
       left = leftMin
@@ -99,7 +98,7 @@ export const TwoColumn = ({
     return left
   }
 
-  const leftFocus = convertToNumber(baseLayoutValue, fullWidth) < leftWidth - dividerHitBoxWidth / 2
+  const leftFocus = convertToLeftWidth(baseLayoutValue, fullWidth) < leftWidth - dividerHitBoxWidth / 2
 
   const scrollableRefRight = useRef<SimpleBarCore>(null)
   const scrollableRefLeft = useRef<SimpleBarCore>(null)
@@ -157,7 +156,7 @@ export const TwoColumn = ({
         {!disableResize && (
           <button
             className={tw('absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5')}
-            onClick={() => setLeftWidth(leftFocus ? convertToNumber(baseLayoutValue, fullWidth) : fullWidth - convertToNumber(constraints.right?.min ?? defaultConstraint.right.min, fullWidth))}
+            onClick={() => setLeftWidth(leftFocus ? convertToLeftWidth(baseLayoutValue, fullWidth) : fullWidth - convertToLeftWidth(constraints.right?.min ?? defaultConstraint.right.min, fullWidth))}
           >
             {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
           </button>

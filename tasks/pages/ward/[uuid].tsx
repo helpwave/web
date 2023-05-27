@@ -127,6 +127,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       <TwoColumn
         disableResize={false}
         constraints={{ right: { min: '580px' }, left: { min: '33%' } }}
+        baseLayoutValue="-580px"
         left={() => (
           <WardRoomList
             rooms={rooms}

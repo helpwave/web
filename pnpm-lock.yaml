@@ -137,7 +137,7 @@ importers:
       '@twind/preset-tailwind-forms': ^1.1.0
       '@twind/preset-typography': ^1.0.6
       '@types/js-cookie': ^3.0.2
-      '@types/node': 18.16.8
+      '@types/node': 18.16.16
       '@types/react': 18.0.21
       '@types/react-dom': 18.0.6
       '@typescript-eslint/eslint-plugin': ^5.38.1
@@ -154,7 +154,7 @@ importers:
       google-protobuf: ^3.21.2
       grpc-web: ^1.4.2
       js-cookie: ^3.0.1
-      lucide-react: ^0.216.0
+      lucide-react: ^0.223.0
       next: ^13.2.3
       oauth4webapi: ^2.2.0
       react: ^18.2.0
@@ -181,7 +181,7 @@ importers:
       google-protobuf: 3.21.2
       grpc-web: 1.4.2
       js-cookie: 3.0.1
-      lucide-react: 0.216.0_react@18.2.0
+      lucide-react: 0.223.0_react@18.2.0
       next: 13.2.3_biqbaboplfbrettd7655fr4n2y
       oauth4webapi: 2.2.0
       react: 18.2.0
@@ -192,7 +192,7 @@ importers:
       zod: 3.19.1
     devDependencies:
       '@types/js-cookie': 3.0.2
-      '@types/node': 18.16.8
+      '@types/node': 18.16.16
       '@types/react': 18.0.21
       '@types/react-dom': 18.0.6
       '@typescript-eslint/eslint-plugin': 5.38.1_52hyojrpqbz6acvxkwgbx77zvi
@@ -5085,10 +5085,6 @@ packages:
     resolution: {integrity: sha512-NpaM49IGQQAUlBhHMF82QH80J08os4ZmyF9MkpCzWAGuOHqE4gTEbhzd7L3l5LmWuZ6E0OiC1FweQ4tsiW35+g==}
     dev: true
 
-  /@types/node/18.16.8:
-    resolution: {integrity: sha512-p0iAXcfWCOTCBbsExHIDFCfwsqFwBTgETJveKMT+Ci3LY9YqQCI91F5S+TB20+aRCXpcWfvx5Qr5EccnwCm2NA==}
-    dev: true
-
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
     dev: true
@@ -9554,16 +9550,16 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /lucide-react/0.216.0_react@18.2.0:
-    resolution: {integrity: sha512-PGWXs6JXI/08rhfkmj/joji0MAKDCcms44j0LYILO4J36AWqKhgjjaZ6WECRSyZ9TQe5gOrAR0g38O8cKrQngw==}
+  /lucide-react/0.221.0_react@18.2.0:
+    resolution: {integrity: sha512-g99pn2/lBaCEAA0cbi4eaCO+3rY4mSfjCaDlo8Z30F0wk8MXoBXhCR1TaUS9cmNdOP9VGxgUpoB4qMg7/vyC8A==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
     dev: false
 
-  /lucide-react/0.221.0_react@18.2.0:
-    resolution: {integrity: sha512-g99pn2/lBaCEAA0cbi4eaCO+3rY4mSfjCaDlo8Z30F0wk8MXoBXhCR1TaUS9cmNdOP9VGxgUpoB4qMg7/vyC8A==}
+  /lucide-react/0.223.0_react@18.2.0:
+    resolution: {integrity: sha512-4ST5mVxlVxsXKh5dEXa0rgXOtCYmbe5iz7uKN9+ugOLYXrbX/BhyD82Js5rAzLyBxTIhgejEsg+kICw8neC+rQ==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -10861,9 +10857,6 @@ packages:
 
   /regenerator-runtime/0.13.11:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
-
-  /regenerator-runtime/0.13.9:
-    resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
 
   /regenerator-transform/0.15.1:
     resolution: {integrity: sha512-knzmNAcuyxV+gQCufkYcvOqX/qIIfHLv0u5x79kRxuGojfYVky1f15TzZEu2Avte8QGepvUNTnLskf8E6X6Vyg==}

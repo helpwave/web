@@ -11,7 +11,7 @@
     "@twind/preset-tailwind-forms": "^1.1.0",
     "@twind/preset-typography": "^1.0.6",
     "csstype": "^3.0.10",
-    "lucide-react": "^0.216.0",
+    "lucide-react": "^0.221.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -25,7 +25,7 @@
     "@storybook/blocks": "^7.0.10",
     "@storybook/nextjs": "^7.0.12",
     "@storybook/react": "^7.0.10",
-    "@storybook/testing-library": "^0.0.14-next.2",
+    "@storybook/testing-library": "^0.1.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "next": "^13.4.3",

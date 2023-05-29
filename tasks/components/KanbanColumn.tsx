@@ -81,7 +81,7 @@ export const KanbanColumn = ({
           status: type,
           id: '',
           name: 'New Task',
-          description: '',
+          notes: '',
           subtasks: [],
           assignee: '',
           isPublicVisible: false,

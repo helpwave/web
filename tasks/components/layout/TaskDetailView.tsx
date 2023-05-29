@@ -17,10 +17,11 @@ import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Input } from '@helpwave/common/components/user_input/Input'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type TaskDetailViewTranslation = {
   close: string,
-  description: string,
+  notes: string,
   subtasks: string,
   assignee: string,
   dueDate: string,
@@ -33,10 +34,10 @@ type TaskDetailViewTranslation = {
   update: string
 }
 
-const defaultTaskDetailViewTranslation = {
+const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
   en: {
     close: 'Close',
-    description: 'Description',
+    notes: 'Notes',
     subtasks: 'Subtasks',
     assignee: 'Assignee',
     dueDate: 'Due-Date',
@@ -50,7 +51,7 @@ const defaultTaskDetailViewTranslation = {
   },
   de: {
     close: 'Schließen',
-    description: 'Beschreibung',
+    notes: 'Notizen',
     subtasks: 'Unteraufgaben',
     assignee: 'Veranwortlich',
     dueDate: 'Fälligkeits-Datum',
@@ -120,7 +121,7 @@ export const TaskDetailView = ({
                 onChange({
                   ...task,
                   name: taskTemplate.name,
-                  description: taskTemplate.notes,
+                  notes: taskTemplate.notes,
                   subtasks: taskTemplate.subtasks
                 })
               }}
@@ -157,9 +158,9 @@ export const TaskDetailView = ({
           <div className={tw('flex flex-col gap-y-8 w-[60%] min-w-[500px]')}>
             <div className={tw('min-h-[25%]')}>
               <Textarea
-                headline={translation.description}
-                value={task.description}
-                onChange={description => onChange({ ...task, description })}
+                headline={translation.notes}
+                value={task.notes}
+                onChange={description => onChange({ ...task, notes: description })}
               />
             </div>
             <SubtaskView subtasks={task.subtasks} onChange={subtasks => onChange({ ...task, subtasks })}/>

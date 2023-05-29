@@ -32,7 +32,7 @@ export const TaskCard = ({
         <div className={tw('flex flex-col overflow-hidden')}>
           <Span type="subsubsectionTitle">{task.name}</Span>
           <Span className={tw('overflow-hidden w-full block text-gray-500 text-ellipsis whitespace-nowrap')}>
-            {task.description}
+            {task.notes}
           </Span>
         </div>
         <div className={tw('w-fit mt-1 ml-2')}>

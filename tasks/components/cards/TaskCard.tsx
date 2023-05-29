@@ -35,7 +35,7 @@ export const TaskCard = ({
             {task.description}
           </Span>
         </div>
-        {task.subtasks.length !== 0 && (
+        {task.subtasks.length > 0 && (
           <div className={tw('w-fit mt-1 ml-2')}>
             <ProgressIndicator progress={progress}/>
           </div>

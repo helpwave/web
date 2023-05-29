@@ -35,9 +35,11 @@ export const TaskCard = ({
             {task.notes}
           </Span>
         </div>
-        <div className={tw('w-fit mt-1 ml-2')}>
-          <ProgressIndicator progress={progress}/>
-        </div>
+        {task.subtasks.length > 0 && (
+          <div className={tw('w-fit mt-1 ml-2')}>
+            <ProgressIndicator progress={progress}/>
+          </div>
+        )}
       </div>
     </Card>
   )

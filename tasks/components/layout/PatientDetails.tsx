@@ -54,7 +54,8 @@ export type PatientDetailProps = {
   bedsInRoom: number,
   patient: PatientDTO,
   onUpdate: (patient: PatientDTO) => void,
-  onDischarge: (patient: PatientDTO) => void
+  onDischarge: (patient: PatientDTO) => void,
+  width?: number
 }
 
 /**

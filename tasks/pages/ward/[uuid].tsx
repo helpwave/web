@@ -125,6 +125,9 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         }}
       />
       <TwoColumn
+        disableResize={false}
+        constraints={{ right: { min: '580px' }, left: { min: '33%' } }}
+        baseLayoutValue="-580px"
         left={() => (
           <WardRoomList
             rooms={rooms}
@@ -133,12 +136,13 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
             setIsShowingPatientDialog={setIsShowingPatientDialog}
           />
         )}
-        right={() =>
+        right={width =>
           selectedBed.id === '' || selectedBed.patient === undefined || isShowingPatientDialog ?
             <div>No Room or Patient Selected</div> :
               (
               <div>
                 <PatientDetail
+                  width={width}
                   key={selectedBed.id}
                   bedPosition={bedPosition}
                   bedsInRoom={numberOfBeds}

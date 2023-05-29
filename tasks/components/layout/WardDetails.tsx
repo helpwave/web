@@ -95,7 +95,9 @@ export const WardDetail = ({
   const [newWard, setNewWard] = useState<WardDTO>(ward)
 
   const { data, isLoading, isError } = useTaskTemplateQuery('wardTaskTemplates')
-  const columns = width === undefined ? 3 : Math.max(Math.floor(width / 200), 1)
+  // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
+  const minimumWidthOfCards = 200
+  const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
 
   return (
     <div className={tw('flex flex-col py-4 px-6')}>

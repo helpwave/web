@@ -20,7 +20,8 @@ const defaultFeatureDetailsTranslations: Record<Languages, FeatureDetailsTransla
 }
 
 export type FeatureDetailsProps = {
-  features: Feature[]
+  features: Feature[],
+  width?: number
 }
 
 /**
@@ -28,13 +29,23 @@ export type FeatureDetailsProps = {
  */
 export const FeatureDetails = ({
   language,
-  features
+  features,
+  width
 }: PropsWithLanguage<FeatureDetailsTranslation, FeatureDetailsProps>) => {
   const translation = useTranslation(language, defaultFeatureDetailsTranslations)
+  // The value of how much space a FeatureDisplay needs before the title can be displayed on its left
+  // Given in px
+  const widthForAppearanceChange = 600
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
       <ColumnTitle title={translation.title}/>
-      {features.map(feature => <FeatureDisplay key={feature.title} feature={feature} />)}
+      {features.map(feature => (
+        <FeatureDisplay
+          key={feature.title}
+          feature={feature}
+          titleOnTop={width ? width < widthForAppearanceChange : undefined}
+        />
+      ))}
     </div>
   )
 }

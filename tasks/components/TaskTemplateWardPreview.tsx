@@ -35,7 +35,8 @@ type TaskTemplateDTO = {
 
 export type TaskTemplateWardPreviewProps = {
   wardID: string,
-  taskTemplates: TaskTemplateDTO[]
+  taskTemplates: TaskTemplateDTO[],
+  columns?: number
 }
 
 /**
@@ -44,7 +45,8 @@ export type TaskTemplateWardPreviewProps = {
 export const TaskTemplateWardPreview = ({
   language,
   wardID,
-  taskTemplates
+  taskTemplates,
+  columns = 3
 }: PropsWithLanguage<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateWardPreviewTranslation)
   const router = useRouter()
@@ -60,7 +62,7 @@ export const TaskTemplateWardPreview = ({
           {translation.showAllTaskTemplates}
         </Button>
       </div>
-      <div className={tw('grid grid-cols-3 gap-4')}>
+      <div className={tw(`grid grid-cols-${columns} gap-4`)}>
         {taskTemplates.map((taskTemplate, index) => (
           <TaskTemplateCard
             key={index}

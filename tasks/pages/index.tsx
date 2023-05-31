@@ -40,13 +40,13 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
       </Head>
       <TwoColumn
         disableResize={false}
-        left={width => (
-          width < 50 ? <div/> : (
+        left={width => ((
             <DashboardDisplay
               organizations={organizations}
               wards={wards}
+              width={width}
             />
-          )
+        )
         )}
         right={width => (
           width < 50 ? <div/> : (

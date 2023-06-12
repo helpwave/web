@@ -86,7 +86,7 @@ importers:
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.11
       csstype: ^3.0.10
-      lucide-react: ^0.233.0
+      lucide-react: ^0.244.0
       next: ^13.4.3
       prop-types: ^15.8.1
       react: ^18.2.0
@@ -101,7 +101,7 @@ importers:
       '@twind/preset-tailwind-forms': 1.1.2_irpfsybkxj5xoet7df4dxv3g5i
       '@twind/preset-typography': 1.0.6_@twind+core@1.1.2
       csstype: 3.1.1
-      lucide-react: 0.233.0_react@18.2.0
+      lucide-react: 0.244.0_react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -9591,6 +9591,14 @@ packages:
 
   /lucide-react/0.233.0_react@18.2.0:
     resolution: {integrity: sha512-r0jMHF0vPDq2wBbZ0B3rtIcBjDyWDKpHu+vAjD2OHn2WLUr3HN5IHovtO0EMgQXuSI7YrMZbjsEZWC2uBHr8nQ==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /lucide-react/0.244.0_react@18.2.0:
+    resolution: {integrity: sha512-PeDVbx5PlIRrVvdxiuSxPfBo7sK5qrL3LbvvRoGVNiHYRAkBm/48lKqoioxcmp0bgsyJs9lMw7CdtGFvnMJbVg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:

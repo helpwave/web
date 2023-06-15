@@ -112,35 +112,21 @@ jobs:
           docker buildx imagetools inspect ${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
 
   deploy:
-    name: Deploy to cluster
+    name: Deploy to Fly
     runs-on: ubuntu-latest
     environment: staging
     needs: build
+    concurrency:
+      group: ${{ github.workflow }}-${{ vars.FLY_APP }}
+      cancel-in-progress: true
     if: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' }}
-
-    permissions:
-      contents: read
-      packages: read
-
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
-      - name: Authenticate against GCP
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Get GKE credentials
-        uses: google-github-actions/get-gke-credentials@v1
-        with:
-          cluster_name: ${{ vars.GKE_NAME }}
-          location: ${{ vars.GKE_ZONE }}
-
+      - name: Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy
-        run: |-
-          kubectl patch --namespace $DEPLOYMENT_NAMESPACE deployment/$DEPLOYMENT_NAME --patch '{"spec":{"template":{"spec":{"containers":[{"name":"'$CONTAINER_NAME'", "image":"'$CONTAINER_IMAGE'"}]}}}}'
-          kubectl rollout status --namespace $DEPLOYMENT_NAMESPACE deployment/$DEPLOYMENT_NAME
+        run: flyctl deploy --config tasks/fly.toml --app $APP --image $IMAGE --remote-only
         env:
-          DEPLOYMENT_NAMESPACE: ${{ vars.DEPLOYMENT_NAMESPACE }}
-          DEPLOYMENT_NAME: ${{ vars.DEPLOYMENT_NAME }}
-          CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
-          CONTAINER_IMAGE: ${{ needs.build.outputs.IMAGE }}
+          APP: ${{ vars.FLY_APP }}
+          IMAGE: ${{ needs.build.outputs.IMAGE }}

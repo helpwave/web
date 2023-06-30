@@ -8,7 +8,7 @@ const socials = [
   { name: 'Twitter', link: 'https://twitter.com/helpwave_org' },
   { name: 'YouTube', link: 'https://www.youtube.com/@helpwave' },
   { name: 'Twitch', link: 'https://www.twitch.tv/helpwave' },
-  { name: 'Spotify', link: 'https://open.spotify.com/show/7oRRTH65cGS5yvvcX8XXOb' },
+  { name: 'Spotify', link: 'https://open.spotify.com/show/6hL5UMytp81gmURnfn3dS9' },
 ]
 
 const Footer = () => {

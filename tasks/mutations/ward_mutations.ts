@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { WardServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_grpc_web_pb'
 import { RoomServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_grpc_web_pb'
 import { BedServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_grpc_web_pb'
-import { CreateWardRequest, GetWardsRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
+import { CreateWardRequest, GetWardsRequest, GetWardOverviewsRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
 import { GetRoomsByWardRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
 import { GetBedsByRoomRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_pb'
 import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
@@ -19,6 +19,15 @@ export type WardDTO = {
   id: string,
   name: string,
   rooms: Room[],
+  unscheduled: number,
+  inProgress: number,
+  done: number
+}
+
+export type WardOverviewDTO = {
+  id: string,
+  name: string,
+  bedCount: number,
   unscheduled: number,
   inProgress: number,
   done: number
@@ -107,9 +116,36 @@ const wardService = new WardServicePromiseClient('https://staging.api.helpwave.d
 const roomService = new RoomServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 const bedService = new BedServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 
-export const useWardQuery = () => {
+export const useWardOverviewQuery = () => {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: [queryKey, 'overviews'],
+    queryFn: async () => {
+      const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
+      const headers = {
+        'Authorization': `Bearer ${idToken}`,
+        'X-Organization': `3b25c6f5-4705-4074-9fc6-a50c28eba406`
+      }
+
+      const req = new GetWardOverviewsRequest()
+      const res = await wardService.getWardOverviews(req, headers)
+
+      const wards: WardOverviewDTO[] = res.getWardsList().map((ward) => ({
+        id: ward.getId(),
+        name: ward.getName(),
+        bedCount: ward.getBedCount(),
+        unscheduled: ward.getTasksTodo(),
+        inProgress: ward.getTasksInProgress(),
+        done: ward.getTasksDone(),
+      }))
+
+      return wards
+    }
+  })
+}
+export const useWardQuery = (id?: string) => {
+  return useQuery({
+    queryKey: [queryKey, id],
+    enabled: id !== undefined,
     queryFn: async () => {
       const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
       const headers = {
@@ -145,8 +181,8 @@ export const useWardQuery = () => {
         } as WardDTO
       })
 
-      return Promise.all(wards)
-    },
+      return Promise.all(wards).then((wards) => wards.find((ward) => ward.id === id))
+    }
   })
 }
 

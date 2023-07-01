@@ -10,7 +10,7 @@ import { TwoColumn } from '../components/layout/TwoColumn'
 import { FeatureDetails } from '../components/layout/FeatureDetails'
 import { DashboardDisplay } from '../components/layout/DashboardDisplay'
 import { organizations } from '../mutations/organization_mutations'
-import { wards } from '../mutations/ward_mutations'
+import { useWardOverviewsQuery } from '../mutations/ward_mutations'
 
 type DashboardTranslation = {
   dashboard: string
@@ -28,8 +28,9 @@ const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
 const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslation>) => {
   const translation = useTranslation(language, defaultDashboardTranslations)
   const { user } = useAuth()
+  const { data: wards, isLoading: isLoadingWards } = useWardOverviewsQuery()
 
-  if (!user) return null
+  if (isLoadingWards || !user || !wards) return null
 
   return (
     <PageWithHeader

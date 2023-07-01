@@ -1,13 +1,13 @@
-import { tx, tw } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PillLabelBox } from '../pill/PillLabelBox'
-import { Edit, Bed } from 'lucide-react'
+import { Bed, Edit } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { Span } from '@helpwave/common/components/Span'
-import { WardOverviewDTO } from '../../mutations/ward_mutations';
+import type { WardOverviewDTO } from '../../mutations/ward_mutations'
 
 type WardCardTranslation = {
   edit: string,
@@ -28,15 +28,6 @@ const defaultWardCardTranslations: Record<Languages, WardCardTranslation> = {
 type Room = {
   bedCount: number,
   name: string
-}
-
-type WardDTO = {
-  id: string,
-  name: string,
-  rooms: Room[],
-  unscheduled: number,
-  inProgress: number,
-  done: number
 }
 
 export type WardCardProps = CardProps & {

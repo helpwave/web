@@ -2,11 +2,11 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { SubTaskDTO } from '../mutations/room_mutations'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { useRouter } from 'next/router'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
+import type { TaskTemplateWardPreviewDTO } from '../mutations/task_template_mutations'
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
@@ -22,15 +22,6 @@ const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateW
     showAllTaskTemplates: 'Alle Task Templates anzeigen',
     taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
   }
-}
-
-type TaskTemplateWardPreviewDTO = {
-  id: string,
-  name: string,
-  subtasks: {
-    id: string,
-    name: string
-  }[]
 }
 
 export type TaskTemplateWardPreviewProps = {

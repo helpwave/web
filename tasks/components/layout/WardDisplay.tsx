@@ -6,9 +6,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
-import { WardDetailDTO, WardOverviewDTO } from '../../mutations/ward_mutations'
-import { GetWardDetailsResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
-import { WardDetailProps } from './WardDetails';
+import type { WardDetailDTO, WardOverviewDTO } from '../../mutations/ward_mutations'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -29,15 +27,6 @@ const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> 
 type Room = {
   bedCount: number,
   name: string
-}
-
-type WardDTO = {
-  id: string,
-  name: string,
-  rooms: Room[],
-  unscheduled: number,
-  inProgress: number,
-  done: number
 }
 
 export type WardDisplayProps = {

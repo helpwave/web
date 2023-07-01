@@ -2,6 +2,15 @@ import type { SubTaskDTO } from './room_mutations'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/components/user_input/Input'
 
+export type TaskTemplateWardPreviewDTO = {
+  id: string,
+  name: string,
+  subtasks: {
+    id: string,
+    name: string
+  }[]
+}
+
 export type TaskTemplateDTO = {
   id: string,
   name: string,

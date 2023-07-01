@@ -4,14 +4,12 @@ import {
   DeleteWardRequest,
   GetWardDetailsRequest,
   GetWardOverviewsRequest,
-  GetWardsRequest,
+  GetWardRequest,
   UpdateWardRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
-import { GetRoomsByWardRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
-import { GetBedsByRoomRequest } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_pb'
 import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
 import Cookies from 'js-cookie'
-import { bedService, getAuthenticatedGrpcMetadata, roomService, wardService } from '../utils/grpc'
+import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
 
 const queryKey = 'wards'
 
@@ -104,40 +102,16 @@ export const useWardDetailsQuery = (id?: string) => {
   })
 }
 
-export const useWardQuery = (id?: string) => {
+export const useWardQuery = (id: string) => {
   return useQuery({
     queryKey: [queryKey, id],
     enabled: id !== undefined,
-    queryFn: async () => {
-      const getWardsRequest = new GetWardsRequest()
-      const getWardsResponse = await wardService.getWards(getWardsRequest, getAuthenticatedGrpcMetadata())
+    queryFn: async (): Promise<WardDTO> => {
+      const req = new GetWardRequest()
+      req.setId(id)
+      const res = await wardService.getWard(req, getAuthenticatedGrpcMetadata())
 
-      const wards = getWardsResponse.getWardsList().map(async (ward) => {
-        const getRoomsByWardRequest = new GetRoomsByWardRequest()
-        getRoomsByWardRequest.setWardId(ward.getId())
-        const getRoomsByWardResponse = await roomService.getRoomsByWard(getRoomsByWardRequest, getAuthenticatedGrpcMetadata())
-
-        const getRoomsByWardResponses = getRoomsByWardResponse.getRoomsList().map(async (room) => {
-          const getBedsByRoomRequest = new GetBedsByRoomRequest()
-          getBedsByRoomRequest.setRoomId(room.getId())
-          const getBedsByRoomResponse = await bedService.getBedsByRoom(getBedsByRoomRequest, getAuthenticatedGrpcMetadata())
-
-          return { name: room.getName(), bedCount: getBedsByRoomResponse.getBedsList().length }
-        })
-
-        const rooms = await Promise.all(getRoomsByWardResponses)
-
-        return {
-          done: 0,
-          inProgress: 0,
-          unscheduled: 0,
-          id: ward.getId(),
-          name: ward.getName(),
-          rooms: rooms || [],
-        } as WardDTO
-      })
-
-      return Promise.all(wards).then((wards) => wards.find((ward) => ward.id === id))
+      return res.toObject()
     }
   })
 }

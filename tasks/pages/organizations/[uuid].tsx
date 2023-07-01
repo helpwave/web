@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
-import type { WardDetailDTO, WardDTO } from '../../mutations/ward_mutations'
+import type { WardDetailDTO } from '../../mutations/ward_mutations'
 import {
   useCreateMutation,
   useDeleteMutation,

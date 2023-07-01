@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
-import type { WardDTO } from '../../mutations/ward_mutations'
+import type { WardDetailDTO, WardDTO } from '../../mutations/ward_mutations'
 import {
-  useWardQuery,
   useCreateMutation,
   useDeleteMutation,
-  useUpdateMutation, useWardOverviewQuery
+  useUpdateMutation,
+  useWardDetailsQuery,
+  useWardOverviewsQuery
 } from '../../mutations/ward_mutations'
 import { WardDisplay } from '../../components/layout/WardDisplay'
 import { WardDetail } from '../../components/layout/WardDetails'
@@ -33,13 +34,11 @@ const defaultWardsPageTranslation = {
   }
 }
 
-const emptyWard: WardDTO = {
+const emptyWard: WardDetailDTO = {
   id: '',
   name: '',
-  unscheduled: 0,
-  inProgress: 0,
-  done: 0,
-  rooms: []
+  rooms: [],
+  task_templates: []
 }
 
 /**
@@ -49,16 +48,16 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
   const translation = useTranslation(language, defaultWardsPageTranslation)
   const [selectedWardId, setSelectedWardId] = useState<string>()
   const [usedQueryParam, setUsedQueryParam] = useState(false)
-  const { data: selectedWard } = useWardQuery(selectedWardId)
 
   const router = useRouter()
   const { uuid, wardID } = router.query
   const organizationUUID = uuid as string
 
-  const createMutation = useCreateMutation((ward) => setSelectedWardId(ward?.id), organizationUUID)
-  const updateMutation = useUpdateMutation((ward) => setSelectedWardId(ward?.id), organizationUUID)
-  const deleteMutation = useDeleteMutation((ward) => setSelectedWardId(ward?.id), organizationUUID)
-  const { isLoading, isError, data } = useWardOverviewQuery()
+  const createMutation = useCreateMutation((ward) => setSelectedWardId(ward?.id))
+  const updateMutation = useUpdateMutation((ward) => setSelectedWardId(ward?.id))
+  const deleteMutation = useDeleteMutation((ward) => setSelectedWardId(ward?.id))
+  const { isLoading, isError, data } = useWardOverviewsQuery()
+  const { data: selectedWard } = useWardDetailsQuery(selectedWardId)
 
   if (wardID && !usedQueryParam) {
     setSelectedWardId(wardID as string)
@@ -95,11 +94,11 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
               width={width}
             />
         )}
-        right={width => selectedWard && (
+        right={width => (
             <WardDetail
-              key={selectedWard.id}
+              key={selectedWard?.id}
               width={width}
-              ward={selectedWard}
+              ward={selectedWard ?? emptyWard}
               onCreate={createMutation.mutate}
               onUpdate={updateMutation.mutate}
               onDelete={deleteMutation.mutate}

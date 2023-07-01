@@ -6,7 +6,9 @@ import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
-import { WardOverviewDTO } from '../../mutations/ward_mutations';
+import { WardDetailDTO, WardOverviewDTO } from '../../mutations/ward_mutations'
+import { GetWardDetailsResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
+import { WardDetailProps } from './WardDetails';
 
 type WardDisplayTranslation = {
   wards: string,
@@ -39,7 +41,7 @@ type WardDTO = {
 }
 
 export type WardDisplayProps = {
-  selectedWard?: WardDTO,
+  selectedWard?: WardDetailDTO,
   wards: WardOverviewDTO[],
   onSelectionChange: (ward: WardOverviewDTO | undefined) => void,
   width?: number

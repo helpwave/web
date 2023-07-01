@@ -24,18 +24,18 @@ const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateW
   }
 }
 
-// TODO delete later
-type TaskTemplateDTO = {
+type TaskTemplateWardPreviewDTO = {
   id: string,
   name: string,
-  notes: string,
-  subtasks: SubTaskDTO[],
-  isPublicVisible: boolean
+  subtasks: {
+    id: string,
+    name: string
+  }[]
 }
 
 export type TaskTemplateWardPreviewProps = {
   wardID: string,
-  taskTemplates: TaskTemplateDTO[],
+  taskTemplates: TaskTemplateWardPreviewDTO[],
   columns?: number
 }
 

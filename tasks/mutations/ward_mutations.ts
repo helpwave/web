@@ -7,8 +7,6 @@ import {
   GetWardRequest,
   UpdateWardRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
-import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
-import Cookies from 'js-cookie'
 import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
 
 const queryKey = 'wards'
@@ -150,15 +148,9 @@ export const useCreateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) 
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward) => {
-      const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
-      const headers = {
-        'Authorization': `Bearer ${idToken}`,
-        'X-Organization': `3b25c6f5-4705-4074-9fc6-a50c28eba406`
-      }
-
       const createWardRequest = new CreateWardRequest()
       createWardRequest.setName(ward.name)
-      const res = await wardService.createWard(createWardRequest, headers)
+      const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata())
       const newWard: WardDTO = { ...ward, ...res }
 
       setSelectedWard(newWard)

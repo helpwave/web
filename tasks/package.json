@@ -13,7 +13,7 @@
     "@dnd-kit/sortable": "^7.0.2",
     "@headlessui/react": "^1.7.13",
     "@helpwave/common": "workspace:*",
-    "@helpwave/proto-ts": "https://gitpkg.now.sh/helpwave/services/gen/ts?issue/230-get-ward-details",
+    "@helpwave/proto-ts": "0.10.1-2cb5c3e.0",
     "@radix-ui/react-checkbox": "^1.0.1",
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-table": "^8.8.0",

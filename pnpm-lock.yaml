@@ -127,7 +127,7 @@ importers:
       '@dnd-kit/sortable': ^7.0.2
       '@headlessui/react': ^1.7.13
       '@helpwave/common': workspace:*
-      '@helpwave/proto-ts': https://gitpkg.now.sh/helpwave/services/gen/ts?issue/230-get-ward-details
+      '@helpwave/proto-ts': 0.10.1-2cb5c3e.0
       '@radix-ui/react-checkbox': ^1.0.1
       '@tanstack/react-query': ^4.28.0
       '@tanstack/react-table': ^8.8.0
@@ -168,7 +168,7 @@ importers:
       '@dnd-kit/sortable': 7.0.2_52scne4zmdeyjh2otzkgz2xfvu
       '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
       '@helpwave/common': link:../lib
-      '@helpwave/proto-ts': '@gitpkg.now.sh/helpwave/services/gen/ts?issue/230-get-ward-details'
+      '@helpwave/proto-ts': 0.10.1-2cb5c3e.0
       '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@tanstack/react-query': 4.28.0_biqbaboplfbrettd7655fr4n2y
       '@tanstack/react-table': 8.8.0_biqbaboplfbrettd7655fr4n2y
@@ -2822,6 +2822,10 @@ packages:
       client-only: 0.0.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@helpwave/proto-ts/0.10.1-2cb5c3e.0:
+    resolution: {integrity: sha512-zzdPtP2yHWJuJ0I6V05fbeu/kCFozeV8Xum0fLxKoNHZnzfFO0FPAqgU1vaF2fbaLWjUVhZXrNHTUvSE2cuhsA==}
     dev: false
 
   /@humanwhocodes/config-array/0.10.7:
@@ -12361,9 +12365,3 @@ packages:
   /zod/3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: true
-
-  '@gitpkg.now.sh/helpwave/services/gen/ts?issue/230-get-ward-details':
-    resolution: {tarball: https://gitpkg.now.sh/helpwave/services/gen/ts?issue/230-get-ward-details}
-    name: '@helpwave/proto-ts'
-    version: 0.9.11-9aa390b.0
-    dev: false

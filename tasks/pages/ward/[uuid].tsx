@@ -138,8 +138,12 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           />
         )}
         right={width =>
-          selectedBed.id === '' || selectedBed.patient === undefined || isShowingPatientDialog ?
-            <PatientList width={width}/> :
+          selectedBed.id === '' || selectedBed.patient === undefined || isShowingPatientDialog ? (
+            <PatientList
+              width={width}
+              wardUUID={wardUUID}
+            />
+          ) :
               (
               <div>
                 <PatientDetail

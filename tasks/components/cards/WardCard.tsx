@@ -1,12 +1,13 @@
-import { tx, tw } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PillLabelBox } from '../pill/PillLabelBox'
-import { Edit, Bed } from 'lucide-react'
+import { Bed, Edit } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { Span } from '@helpwave/common/components/Span'
+import type { WardOverviewDTO } from '../../mutations/ward_mutations'
 
 type WardCardTranslation = {
   edit: string,
@@ -29,17 +30,8 @@ type Room = {
   name: string
 }
 
-type WardDTO = {
-  id: string,
-  name: string,
-  rooms: Room[],
-  unscheduled: number,
-  inProgress: number,
-  done: number
-}
-
 export type WardCardProps = CardProps & {
-  ward: WardDTO,
+  ward: WardOverviewDTO,
   onEditClick?: () => void
 }
 
@@ -54,8 +46,7 @@ export const WardCard = ({
   onEditClick
 }: PropsWithLanguage<WardCardTranslation, WardCardProps>) => {
   const translation = useTranslation(language, defaultWardCardTranslations)
-  const numberOfBeds = ward.rooms.map(value => value.bedCount).reduce((previousValue, currentValue) => currentValue + previousValue, 0)
-  const hasRooms = ward.rooms.length > 0
+  const hasRooms = ward.bedCount > 0
 
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
@@ -73,13 +64,17 @@ export const WardCard = ({
           </button>
         )}
       </div>
-      <div className={tx('text-left my-1 truncate', { 'text-gray-400 text-sm': !hasRooms })}>
-        {hasRooms ? ward.rooms.map(value => value.name).join(', ') : translation.noRoomsYet}
-      </div>
+      {
+        !hasRooms && (
+          <div className={tx('text-left my-1 truncate text-gray-400 text-sm')}>
+            {translation.noRoomsYet}
+          </div>
+        )
+      }
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-row')}>
           <Bed/>
-          <div className={tw('pl-1')}>{numberOfBeds}</div>
+          <div className={tw('pl-1')}>{ward.bedCount}</div>
         </div>
         <PillLabelBox
           unscheduled={ward.unscheduled}

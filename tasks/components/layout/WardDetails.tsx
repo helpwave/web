@@ -11,6 +11,7 @@ import { WardForm } from '../WardForm'
 import { Span } from '@helpwave/common/components/Span'
 import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
 import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
+import type { WardDetailDTO, WardDTO } from '../../mutations/ward_mutations'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -52,22 +53,8 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
   }
 }
 
-type Room = {
-  bedCount: number,
-  name: string
-}
-
-type WardDTO = {
-  id: string,
-  name: string,
-  rooms: Room[],
-  unscheduled: number,
-  inProgress: number,
-  done: number
-}
-
 export type WardDetailProps = {
-  ward: WardDTO,
+  ward: WardDetailDTO,
   onCreate: (ward: WardDTO) => void,
   onUpdate: (ward: WardDTO) => void,
   onDelete: (ward: WardDTO) => void,
@@ -92,7 +79,7 @@ export const WardDetail = ({
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
 
   const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
-  const [newWard, setNewWard] = useState<WardDTO>(ward)
+  const [newWard, setNewWard] = useState<WardDetailDTO>(ward)
 
   const { data, isLoading, isError } = useTaskTemplateQuery('wardTaskTemplates')
   // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
@@ -130,8 +117,8 @@ export const WardDetail = ({
       </div>
       <div className={tw('max-w-[600px] mt-6')}>
         <RoomList
-          rooms={newWard.rooms}
-          onChange={(rooms) => setNewWard({ ...newWard, rooms })}
+          rooms={newWard.rooms.map((room) => ({ name: room.name, bedCount: room.beds.length }))}
+          onChange={(rooms) => setNewWard({ ...newWard })} // TODO: Figure out out to apple the diff
         />
       </div>
       <div className={tw('flex flex-row justify-end mt-6')}>
@@ -146,7 +133,7 @@ export const WardDetail = ({
           <div className={tw('mt-6')}>
             {/* TODO show something here */}
             {(isLoading || isError) && ''}
-            {data && <TaskTemplateWardPreview taskTemplates={data} wardID={newWard.id} columns={columns}/>}
+            {data && <TaskTemplateWardPreview taskTemplates={ward.task_templates} wardID={newWard.id} columns={columns}/>}
           </div>
         )
       }

@@ -62,6 +62,7 @@ const isJwtExpired = (token: string) => {
  */
 export const useAuth = () => {
   const [user, setUser] = useState<User>()
+  const [idToken, setIdToken] = useState<string>()
 
   const signOut = () => {
     Cookies.remove(COOKIE_ID_TOKEN_KEY)
@@ -81,6 +82,7 @@ export const useAuth = () => {
         const user = tokenToUser(idToken)
         if (!user) throw new Error('Cannot parse idToken to user')
         setUser(user)
+        setIdToken(idToken)
         return
       }
     } catch (_) {
@@ -96,5 +98,5 @@ export const useAuth = () => {
       })
   }, [])
 
-  return { user, signOut }
+  return { user, signOut, token: idToken, organization: '' }
 }

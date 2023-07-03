@@ -1,126 +1,138 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  CreateWardRequest,
+  DeleteWardRequest,
+  GetWardDetailsRequest,
+  GetWardOverviewsRequest,
+  GetWardRequest,
+  UpdateWardRequest
+} from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
+import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
 
 const queryKey = 'wards'
 
-type Room = {
-  bedCount: number,
+export type WardDTO = {
+  id: string,
   name: string
 }
 
-export type WardDTO = {
+export type WardOverviewDTO = {
   id: string,
   name: string,
-  rooms: Room[],
+  bedCount: number,
   unscheduled: number,
   inProgress: number,
   done: number
 }
 
-// TODO remove once backend is implemented
-export let wards: WardDTO[] = [
-  {
-    id: 'ward1',
-    name: 'Cardiology',
-    rooms: [
-      { name: 'Room 1', bedCount: 4 },
-      { name: 'Room 2', bedCount: 3 },
-      { name: 'Room 3', bedCount: 4 },
-      { name: 'Room 4', bedCount: 2 },
-      { name: 'Room 5', bedCount: 4 },
-      { name: 'Room 6', bedCount: 5 }
-    ],
-    unscheduled: 1,
-    inProgress: 3,
-    done: 6
-  },
-  {
-    id: 'ward2',
-    name: 'Chirugie',
-    rooms: [
-      { name: 'Room 1', bedCount: 4 },
-      { name: 'Room 2', bedCount: 3 },
-      { name: 'Room 3', bedCount: 4 },
-      { name: 'Room 4', bedCount: 2 },
-      { name: 'Room 5', bedCount: 4 },
-      { name: 'Room 6', bedCount: 5 }
-    ],
-    unscheduled: 1,
-    inProgress: 3,
-    done: 6
-  },
-  {
-    id: 'ward3',
-    name: 'ICU',
-    rooms: [
-      { name: 'Room 1', bedCount: 4 },
-      { name: 'Room 2', bedCount: 3 },
-      { name: 'Room 3', bedCount: 4 },
-      { name: 'Room 4', bedCount: 2 },
-      { name: 'Room 5', bedCount: 4 },
-      { name: 'Room 6', bedCount: 5 }
-    ],
-    unscheduled: 1,
-    inProgress: 3,
-    done: 6
-  },
-  {
-    id: 'ward4',
-    name: 'Radiology',
-    rooms: [
-      { name: 'Room 1', bedCount: 4 },
-      { name: 'Room 2', bedCount: 3 },
-      { name: 'Room 3', bedCount: 4 },
-      { name: 'Room 4', bedCount: 2 },
-      { name: 'Room 5', bedCount: 4 },
-      { name: 'Room 6', bedCount: 5 }
-    ],
-    unscheduled: 1,
-    inProgress: 3,
-    done: 6
-  },
-  {
-    id: 'ward5',
-    name: 'Ward Name 5',
-    rooms: [
-      { name: 'Room 1', bedCount: 4 },
-      { name: 'Room 2', bedCount: 3 },
-      { name: 'Room 3', bedCount: 4 },
-      { name: 'Room 4', bedCount: 2 },
-      { name: 'Room 5', bedCount: 4 },
-      { name: 'Room 6', bedCount: 5 }
-    ],
-    unscheduled: 1,
-    inProgress: 3,
-    done: 6
-  }
-]
+export type WardDetailDTO = {
+  id: string,
+  name: string,
+  rooms: {
+    name: string,
+    beds: {
+      id: string
+    }[]
+  }[],
+  task_templates: {
+    id: string,
+    name: string,
+    subtasks: {
+      id: string,
+      name: string
+    }[]
+  }[]
+}
 
-export const useWardQuery = () => {
+export const useWardOverviewsQuery = () => {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: [queryKey, 'overviews'],
     queryFn: async () => {
-      // TODO fetch user wards
+      const req = new GetWardOverviewsRequest()
+      const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata())
+
+      const wards: WardOverviewDTO[] = res.getWardsList().map((ward) => ({
+        id: ward.getId(),
+        name: ward.getName(),
+        bedCount: ward.getBedCount(),
+        unscheduled: ward.getTasksTodo(),
+        inProgress: ward.getTasksInProgress(),
+        done: ward.getTasksDone(),
+      }))
+
       return wards
-    },
+    }
   })
 }
 
-export const useUpdateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void, organizationUUID: string) => {
+export const useWardDetailsQuery = (id?: string) => {
+  return useQuery({
+    queryKey: [queryKey, 'details', id],
+    enabled: id !== undefined,
+    queryFn: async () => {
+      if (id === undefined) return
+
+      const req = new GetWardDetailsRequest()
+      req.setId(id)
+      const res = await wardService.getWardDetails(req, getAuthenticatedGrpcMetadata())
+
+      const ward: WardDetailDTO = {
+        id: res.getId(),
+        name: res.getName(),
+        rooms: res.getRoomsList().map((room) => ({
+          name: room.getName(),
+          beds: room.getBedsList().map((bed) => ({
+            id: bed.getId()
+          }))
+        })),
+        task_templates: res.getTaskTemplatesList().map((taskTemplate) => ({
+          id: taskTemplate.getId(),
+          name: taskTemplate.getName(),
+          subtasks: taskTemplate.getSubtasksList().map((subTask) => ({
+            id: subTask.getId(),
+            name: subTask.getName()
+          }))
+        }))
+      }
+
+      return ward
+    }
+  })
+}
+
+export const useWardQuery = (id: string) => {
+  return useQuery({
+    queryKey: [queryKey, id],
+    enabled: id !== undefined,
+    queryFn: async (): Promise<WardDTO> => {
+      const req = new GetWardRequest()
+      req.setId(id)
+      const res = await wardService.getWard(req, getAuthenticatedGrpcMetadata())
+
+      return res.toObject()
+    }
+  })
+}
+
+export const useUpdateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward: WardDTO) => {
-      // TODO create request for ward
-      wards = [...wards.filter(value => value.id !== ward.id), ward]
-      wards.sort((a, b) => a.id.localeCompare(b.id))
+      const req = new UpdateWardRequest()
+      req.setId(ward.id)
+      req.setName(ward.name)
+      await wardService.updateWard(req, getAuthenticatedGrpcMetadata())
+
       setSelectedWard(ward)
     },
     onMutate: async (ward) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousWards = queryClient.getQueryData<WardDTO[]>([queryKey])
+
       queryClient.setQueryData<WardDTO[]>(
         [queryKey],
         (old) => [...(old === undefined ? [] : old.filter(value => value.id !== ward.id)), ward])
-      wards.sort((a, b) => a.id.localeCompare(b.id))
+
       return { previousWards }
     },
     onError: (_, newTodo, context) => {
@@ -132,21 +144,21 @@ export const useUpdateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) 
   })
 }
 
-export const useCreateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void, organizationUUID: string) => {
+export const useCreateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward) => {
-      // TODO create request for Ward
-      const newWard = { ...ward, id: Math.random().toString() }
-      wards = [...wards, newWard]
-      wards.sort((a, b) => a.id.localeCompare(b.id))
+      const createWardRequest = new CreateWardRequest()
+      createWardRequest.setName(ward.name)
+      const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata())
+      const newWard: WardDTO = { ...ward, ...res }
+
       setSelectedWard(newWard)
     },
     onMutate: async (ward: WardDTO) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousWards = queryClient.getQueryData<WardDTO[]>([queryKey])
       queryClient.setQueryData<WardDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), ward])
-      wards.sort((a, b) => a.id.localeCompare(b.id))
       return { previousWards }
     },
     onError: (_, newTodo, context) => {
@@ -158,12 +170,14 @@ export const useCreateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) 
   })
 }
 
-export const useDeleteMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void, organizationUUID: string) => {
+export const useDeleteMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward) => {
-      // TODO create request for ward
-      wards = [...wards.filter(value => value.id !== ward.id)]
+      const req = new DeleteWardRequest()
+      req.setId(ward.id)
+      await wardService.deleteWard(req, getAuthenticatedGrpcMetadata())
+
       setSelectedWard(undefined)
     },
     onMutate: async (Ward: WardDTO) => {

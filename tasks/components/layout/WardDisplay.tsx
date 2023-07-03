@@ -6,6 +6,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
+import type { WardDetailDTO, WardOverviewDTO } from '../../mutations/ward_mutations'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -28,19 +29,10 @@ type Room = {
   name: string
 }
 
-type WardDTO = {
-  id: string,
-  name: string,
-  rooms: Room[],
-  unscheduled: number,
-  inProgress: number,
-  done: number
-}
-
 export type WardDisplayProps = {
-  selectedWard: WardDTO,
-  wards: WardDTO[],
-  onSelectionChange: (ward: WardDTO | undefined) => void,
+  selectedWard?: WardDetailDTO,
+  wards: WardOverviewDTO[],
+  onSelectionChange: (ward: WardOverviewDTO | undefined) => void,
   width?: number
 }
 
@@ -65,7 +57,7 @@ export const WardDisplay = ({
           <WardCard
             key={ward.id}
             ward={ward}
-            isSelected={selectedWard.id === ward.id}
+            isSelected={selectedWard?.id === ward.id}
             onEditClick={() => onSelectionChange(ward)}
             onTileClick={async () => await router.push(`/ward/${ward.id}`)}
           />
@@ -74,7 +66,7 @@ export const WardDisplay = ({
           className={tw('min-h-[96px]')}
           text={translation.addWard}
           onTileClick={() => onSelectionChange(undefined)}
-          isSelected={selectedWard.id === ''}
+          isSelected={selectedWard?.id === ''}
         />
       </div>
     </div>

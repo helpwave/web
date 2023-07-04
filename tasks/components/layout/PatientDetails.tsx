@@ -7,14 +7,15 @@ import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import type { KanbanBoardObject } from './KanabanBoard'
+import type { KanbanBoardObject, SortedTasks } from './KanabanBoard'
 import { KanbanBoard } from './KanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { TaskDetailModal } from '../TaskDetailModal'
 import type { TaskDTO } from '../../mutations/task_mutations'
-import type { PatientDTO } from '../../mutations/patient_mutations'
+import type { PatientCompleteDTO, PatientDTO } from '../../mutations/patient_mutations'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -44,18 +45,12 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
   }
 }
 
-type SortedTasks = {
-  unscheduled: TaskDTO[],
-  inProgress: TaskDTO[],
-  done: TaskDTO[]
-}
-
 export type PatientDetailProps = {
   bedPosition: number,
   bedsInRoom: number,
   patient: PatientDTO,
-  onUpdate: (patient: PatientDTO) => void,
-  onDischarge: (patient: PatientDTO) => void,
+  onUpdate: (patient: PatientCompleteDTO) => void,
+  onDischarge: (patient: PatientCompleteDTO) => void,
   width?: number
 }
 
@@ -73,21 +68,20 @@ export const PatientDetail = ({
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const translation = useTranslation(language, defaultPatientDetailTranslations)
 
-  // TODO fetch patient
-
-  const [newPatient, setNewPatient] = useState<PatientDTO>(patient)
+  // TODO fetch patient by patient.id replace below
+  const [newPatient, setNewPatient] = useState<PatientCompleteDTO>({ id: patient.id, note: patient.note, tasks: [], humanReadableIdentifier: patient.humanReadableIdentifier })
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
   const [sortedTasks, setSortedTasks] = useState<SortedTasks>({
-    unscheduled: newPatient.tasks.filter(value => value.status === 'unscheduled'),
-    inProgress: newPatient.tasks.filter(value => value.status === 'inProgress'),
-    done: newPatient.tasks.filter(value => value.status === 'done'),
+    [TaskStatus.TASK_STATUS_TODO]: newPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
+    [TaskStatus.TASK_STATUS_IN_PROGRESS]: newPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
+    [TaskStatus.TASK_STATUS_DONE]: newPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
   })
 
   const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
-  const changeSavedValue = (patient:PatientDTO) => {
+  const changeSavedValue = (patient:PatientCompleteDTO) => {
     setNewPatient(patient)
     restartTimer(() => onUpdate(patient))
   }
@@ -134,9 +128,9 @@ export const PatientDetail = ({
             }
             setNewPatient(changedPatient)
             setSortedTasks({
-              unscheduled: changedPatient.tasks.filter(value => value.status === 'unscheduled'),
-              inProgress: changedPatient.tasks.filter(value => value.status === 'inProgress'),
-              done: changedPatient.tasks.filter(value => value.status === 'done')
+              [TaskStatus.TASK_STATUS_TODO]: changedPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
+              [TaskStatus.TASK_STATUS_IN_PROGRESS]: changedPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
+              [TaskStatus.TASK_STATUS_DONE]: changedPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS)
             })
             onUpdate(changedPatient)
             clearUpdateTimer()
@@ -176,7 +170,7 @@ export const PatientDetail = ({
         onEndChanging={sortedTasks => {
           onUpdate({
             ...newPatient,
-            tasks: [...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done]
+            tasks: [...sortedTasks[TaskStatus.TASK_STATUS_TODO], ...sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS], ...sortedTasks[TaskStatus.TASK_STATUS_DONE]]
           })
           clearUpdateTimer()
         }}

@@ -2,7 +2,7 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -10,8 +10,16 @@ import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
 import { Span } from '@helpwave/common/components/Span'
 import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
-import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
-import type { WardDetailDTO, WardDTO } from '../../mutations/ward_mutations'
+import type { WardDetailDTO } from '../../mutations/ward_mutations'
+import { useRoomCreateMutation, useRoomDeleteMutation, useRoomUpdateMutation } from '../../mutations/room_mutations'
+import {
+  emptyWard, emptyWardOverview,
+  useWardCreateMutation,
+  useWardDeleteMutation,
+  useWardUpdateMutation,
+  useWardDetailsQuery
+} from '../../mutations/ward_mutations'
+import { OrganizationOverviewContext } from '../../pages/organizations/[uuid]'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -54,10 +62,7 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
 }
 
 export type WardDetailProps = {
-  ward: WardDetailDTO,
-  onCreate: (ward: WardDTO) => void,
-  onUpdate: (ward: WardDTO) => void,
-  onDelete: (ward: WardDTO) => void,
+  ward?: WardDetailDTO,
   width?: number
 }
 
@@ -68,23 +73,40 @@ export type WardDetailProps = {
 export const WardDetail = ({
   language,
   ward,
-  onCreate,
-  onUpdate,
-  onDelete,
   width
 }: PropsWithLanguage<WardDetailTranslation, WardDetailProps>) => {
+  const context = useContext(OrganizationOverviewContext)
+  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardID)
+  ward ??= data
   const translation = useTranslation(language, defaultWardDetailTranslations)
-  const isCreatingNewOrganization = ward.id === ''
+  const isCreatingNewOrganization = !ward?.id
 
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
 
   const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
-  const [newWard, setNewWard] = useState<WardDetailDTO>(ward)
+  const [newWard, setNewWard] = useState<WardDetailDTO>(emptyWard)
+  useEffect(() => data ? setNewWard(data) : undefined, [data])
 
-  const { data, isLoading, isError } = useTaskTemplateQuery('wardTaskTemplates')
+  const createWardMutation = useWardCreateMutation((ward) => context.updateContext({ ...context.state, wardID: ward.id }))
+  const updateWardMutation = useWardUpdateMutation((ward) => {
+    context.updateContext({ ...context.state, wardID: ward.id })
+    setNewWard({ ...newWard, name: ward.name })
+  })
+  const deleteWardMutation = useWardDeleteMutation(() => context.updateContext({ ...context.state, wardID: undefined }))
+
   // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
   const minimumWidthOfCards = 200
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
+
+  // TODO add view for loading
+  if (isLoading && ward) {
+    return <div>Loading Widget</div>
+  }
+
+  // TODO add view for error or error handling
+  if (isError && ward) {
+    return <div>Error Message</div>
+  }
 
   return (
     <div className={tw('flex flex-col py-4 px-6')}>
@@ -96,7 +118,7 @@ export const WardDetail = ({
         onBackgroundClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          onDelete(newWard)
+          deleteWardMutation.mutate(newWard.id)
         }}
         confirmType="negative"
       />
@@ -116,14 +138,11 @@ export const WardDetail = ({
         />
       </div>
       <div className={tw('max-w-[600px] mt-6')}>
-        <RoomList
-          rooms={newWard.rooms.map((room) => ({ name: room.name, bedCount: room.beds.length }))}
-          onChange={(rooms) => setNewWard({ ...newWard })} // TODO: Figure out out to apple the diff
-        />
+        <RoomList/>
       </div>
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button
-          onClick={() => isCreatingNewOrganization ? onCreate(newWard) : onUpdate(newWard)}
+          onClick={() => isCreatingNewOrganization ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
           disabled={!filledRequired}>
           {isCreatingNewOrganization ? translation.create : translation.update}
         </Button>
@@ -131,9 +150,7 @@ export const WardDetail = ({
       {newWard.id !== '' &&
         (
           <div className={tw('mt-6')}>
-            {/* TODO show something here */}
-            {(isLoading || isError) && ''}
-            {data && <TaskTemplateWardPreview taskTemplates={ward.task_templates} wardID={newWard.id} columns={columns}/>}
+            <TaskTemplateWardPreview wardID={newWard.id} columns={columns}/>
           </div>
         )
       }

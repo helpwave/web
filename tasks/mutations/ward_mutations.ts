@@ -16,7 +16,7 @@ export type WardDTO = {
   name: string
 }
 
-export type WardInOrganizationOverviewDTO = {
+export type WardOverviewDTO = {
   id: string,
   name: string,
   bedCount: number,
@@ -25,10 +25,20 @@ export type WardInOrganizationOverviewDTO = {
   done: number
 }
 
+export const emptyWardOverview: WardOverviewDTO = {
+  id: '',
+  name: '',
+  bedCount: 0,
+  unscheduled: 0,
+  inProgress: 0,
+  done: 0
+}
+
 export type WardDetailDTO = {
   id: string,
   name: string,
   rooms: {
+    id: string,
     name: string,
     beds: {
       id: string
@@ -44,6 +54,13 @@ export type WardDetailDTO = {
   }[]
 }
 
+export const emptyWard: WardDetailDTO = {
+  id: '',
+  name: '',
+  rooms: [],
+  task_templates: []
+}
+
 export const useWardOverviewsQuery = () => {
   return useQuery({
     queryKey: [queryKey, 'overviews'],
@@ -51,7 +68,7 @@ export const useWardOverviewsQuery = () => {
       const req = new GetWardOverviewsRequest()
       const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata())
 
-      const wards: WardInOrganizationOverviewDTO[] = res.getWardsList().map((ward) => ({
+      const wards: WardOverviewDTO[] = res.getWardsList().map((ward) => ({
         id: ward.getId(),
         name: ward.getName(),
         bedCount: ward.getBedCount(),
@@ -65,9 +82,10 @@ export const useWardOverviewsQuery = () => {
   })
 }
 
+export const wardDetailsQueryKey = 'wardDetails'
 export const useWardDetailsQuery = (id?: string) => {
   return useQuery({
-    queryKey: [queryKey, 'details', id],
+    queryKey: [queryKey, wardDetailsQueryKey, id],
     enabled: id !== undefined,
     queryFn: async () => {
       if (id === undefined) return
@@ -80,6 +98,7 @@ export const useWardDetailsQuery = (id?: string) => {
         id: res.getId(),
         name: res.getName(),
         rooms: res.getRoomsList().map((room) => ({
+          id: room.getName(), // TODO use id
           name: room.getName(),
           beds: room.getBedsList().map((bed) => ({
             id: bed.getId()
@@ -114,7 +133,7 @@ export const useWardQuery = (id: string) => {
   })
 }
 
-export const useUpdateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
+export const useWardUpdateMutation = (callback: (ward:WardDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward: WardDTO) => {
@@ -123,76 +142,43 @@ export const useUpdateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) 
       req.setName(ward.name)
       await wardService.updateWard(req, getAuthenticatedGrpcMetadata())
 
-      setSelectedWard(ward)
+      callback(ward)
     },
-    onMutate: async (ward) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<WardDTO[]>([queryKey])
-
-      queryClient.setQueryData<WardDTO[]>(
-        [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== ward.id)), ward])
-
-      return { previousWards }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    onSuccess: () => {
+      queryClient.invalidateQueries([queryKey]).then()
     }
   })
 }
 
-export const useCreateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
+export const useWardCreateMutation = (callback: (ward: WardDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (ward) => {
+    mutationFn: async (ward:WardDTO) => {
       const createWardRequest = new CreateWardRequest()
       createWardRequest.setName(ward.name)
       const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata())
       const newWard: WardDTO = { ...ward, ...res }
 
-      setSelectedWard(newWard)
+      callback(newWard)
     },
-    onMutate: async (ward: WardDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<WardDTO[]>([queryKey])
-      queryClient.setQueryData<WardDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), ward])
-      return { previousWards }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([queryKey]).then()
+    }
   })
 }
 
-export const useDeleteMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
+export const useWardDeleteMutation = (callback: () => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (ward) => {
+    mutationFn: async (wardID: string) => {
       const req = new DeleteWardRequest()
-      req.setId(ward.id)
+      req.setId(wardID)
       await wardService.deleteWard(req, getAuthenticatedGrpcMetadata())
 
-      setSelectedWard(undefined)
+      callback()
     },
-    onMutate: async (Ward: WardDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<WardDTO[]>([queryKey])
-      queryClient.setQueryData<WardDTO[]>(
-        [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== Ward.id))])
-      return { previousWards }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([queryKey]).then()
+    }
   })
 }

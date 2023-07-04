@@ -2,7 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { WardInOrganizationOverviewDTO } from '../../mutations/ward_mutations'
+import type { WardOverviewDTO } from '../../mutations/ward_mutations'
 import type { OrganizationDTO } from '../../mutations/organization_mutations'
 import { Button } from '@helpwave/common/components/Button'
 import { OrganizationCard } from '../cards/OrganizationCard'
@@ -33,7 +33,7 @@ const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTra
 }
 
 export type DashboardDisplayProps = {
-  wards: WardInOrganizationOverviewDTO[],
+  wards: WardOverviewDTO[],
   organizations: OrganizationDTO[],
   width?: number
 }

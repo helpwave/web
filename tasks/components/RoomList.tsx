@@ -9,13 +9,21 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Pagination } from '@helpwave/common/components/Pagination'
 import { Button } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Span } from '@helpwave/common/components/Span'
+import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
+import type { RoomOverviewDTO } from '../mutations/room_mutations'
+import {
+  useRoomCreateMutation,
+  useRoomDeleteMutation,
+  useRoomOverviewsQuery,
+  useRoomUpdateMutation
+} from '../mutations/room_mutations'
 
 type RoomListTranslation = {
   edit: string,
@@ -63,18 +71,12 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
   }
 }
 
-type Room = {
-  bedCount: number,
-  name: string
-}
-
 export type RoomListProps = {
-  rooms: Room[],
-  roomsPerPage?: number,
-  onChange: (rooms: Room[]) => void
+  rooms?: RoomOverviewDTO[], // TODO replace with more optimized RoonDTO
+  roomsPerPage?: number
 }
 
-const columnHelper = createColumnHelper<Room>()
+const columnHelper = createColumnHelper<RoomOverviewDTO>()
 
 const columns = [
   columnHelper.display({
@@ -83,7 +85,7 @@ const columns = [
   columnHelper.accessor('name', {
     id: 'name',
   }),
-  columnHelper.accessor('bedCount', {
+  columnHelper.accessor('beds', {
     id: 'bedCount',
   }),
   columnHelper.display({
@@ -97,14 +99,24 @@ const columns = [
 export const RoomList = ({
   language,
   roomsPerPage = 5,
-  rooms,
-  onChange
+  rooms
 }: PropsWithLanguage<RoomListTranslation, RoomListProps>) => {
   const translation = useTranslation(language, defaultRoomListTranslations)
+  const context = useContext(OrganizationOverviewContext)
+
+  const creatRoomMutation = useRoomCreateMutation(() => {
+    context.updateContext({ ...context.state })
+  }, context.state.wardID ?? '') // Not good but should be safe most of the time
+  const deleteRoomMutation = useRoomDeleteMutation(() => context.updateContext({ ...context.state }))
+  const updateRoomMutation = useRoomUpdateMutation(() => context.updateContext({ ...context.state }))
+
+  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardID) // TODO use a more light weight query
+
+  const usedRooms = rooms ?? data ?? [] // TODO fix later
 
   type ConfirmDialogState = {
     display: boolean,
-    single: CoreCell<Room, unknown> | null
+    single: CoreCell<RoomOverviewDTO, unknown> | null
   }
   const defaultState: ConfirmDialogState = { display: false, single: null }
   const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
@@ -114,7 +126,7 @@ export const RoomList = ({
   const maxRoomNameLength = 32
 
   const table = useReactTable({
-    data: rooms,
+    data: usedRooms,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -125,11 +137,20 @@ export const RoomList = ({
     const defaultBedCount = 3
     // TODO remove below for an actual room add
     const newRoom = {
-      name: 'room' + (rooms.length + 1),
-      bedCount: defaultBedCount,
-      isSelected: false
+      id: '',
+      name: 'room' + (usedRooms.length + 1),
     }
-    onChange([...rooms, newRoom])
+    creatRoomMutation.mutate(newRoom)
+  }
+
+  // TODO add view for loading
+  if (isLoading) {
+    return <div>Loading Widget</div>
+  }
+
+  // TODO add view for error or error handling
+  if (isError) {
+    return <div>Error Message</div>
   }
 
   return (
@@ -142,17 +163,17 @@ export const RoomList = ({
         onBackgroundClick={() => resetDeletionConfirmDialogState()}
         onConfirm={() => {
           if (stateDeletionConfirmDialog.single) {
-            onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+            usedRooms.filter(value => value === stateDeletionConfirmDialog.single?.row.original).forEach(value => deleteRoomMutation.mutate(value.id))
           } else {
             table.toggleAllRowsSelected(false)
-            onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+            usedRooms.filter(value => table.getSelectedRowModel().rows.find(row => row.original === value)).forEach(value => deleteRoomMutation.mutate(value.id))
           }
           resetDeletionConfirmDialogState()
         }}
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <Span type="tableName">{translation.rooms + ` (${rooms.length})`}</Span>
+        <Span type="tableName">{translation.rooms + ` (${usedRooms.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {(table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected()) && (
           <Button
@@ -212,14 +233,14 @@ export const RoomList = ({
                   bedCount: (
                     <div className={tw('w-20')}>
                       <Input
-                        value={cell.row.original.bedCount.toString()}
+                        value={cell.row.original.beds.length.toString()}
                         type="number"
-                        onChange={(text) => onChange(rooms.map(value => value.name === cell.row.original.name ? {
+                        onBlur={(text) => updateRoomMutation.mutate({
                           ...cell.row.original,
-                          bedCount: parseInt(text)
-                        } : value))}
+                          // bedCount: parseInt(text) TODO use bedcount change
+                        })} // TODO update to somthing better than blur
                         min={1}
-                        id={cell.row.original.bedCount.toString()}
+                        id={cell.row.original.id + 'bedCount'}
                       />
                     </div>
                   ),
@@ -228,10 +249,11 @@ export const RoomList = ({
                       <Input
                         value={cell.row.original.name}
                         type="text"
-                        onChange={(text) => onChange(rooms.map(value => value.name === cell.row.original.name ? {
+                        onChange={text => cell.row.original.name}
+                        onBlur={(event) => updateRoomMutation.mutate({
                           ...cell.row.original,
-                          name: text
-                        } : value))}
+                          name: event.target.value
+                        })} // TODO update to somthing better than blur
                         id={cell.row.original.name}
                         minLength={minRoomNameLength}
                         maxLength={maxRoomNameLength}
@@ -266,8 +288,8 @@ export const RoomList = ({
           </tr>
         ))}
         {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && table.getPageCount() > 1
-          && (rooms.length % roomsPerPage) !== 0
-          && ([...Array((roomsPerPage - (rooms.length % roomsPerPage)) % roomsPerPage)].map((i, index) => (
+          && (usedRooms.length % roomsPerPage) !== 0
+          && ([...Array((roomsPerPage - (usedRooms.length % roomsPerPage)) % roomsPerPage)].map((i, index) => (
             <tr key={index} className={tw('h-12')}>
               {[table.getAllColumns.length].map((j, index) => (
                 <td key={index}/>

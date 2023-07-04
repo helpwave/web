@@ -1,13 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreateRoomRequest,
-  UpdateRoomRequest,
-  GetRoomOverviewsByWardRequest, DeleteRoomRequest
+  DeleteRoomRequest,
+  GetRoomOverviewsByWardRequest,
+  UpdateRoomRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
 import type { BedDTO, BedWithPatientWithTasksNumberDTO } from './bed_mutations'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { wardDetailsQueryKey } from './ward_mutations'
 
-const queryKey = 'rooms'
+const roomsQueryKey = 'rooms'
 
 export type RoomMinimalDTO = {
   id: string,
@@ -43,69 +46,33 @@ const rooms: RoomDTO[] = [
             {
               id: 'task1',
               name: 'Task 1',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'unscheduled',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-20'),
-              isPublicVisible: false
+              status: TaskStatus.TASK_STATUS_IN_PROGRESS
             },
             {
               id: 'task2',
               name: 'Task 2',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'unscheduled',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: true }],
-              dueDate: new Date('2023-05-01'),
-              isPublicVisible: true
+              status: TaskStatus.TASK_STATUS_TODO
             },
             {
               id: 'task3',
               name: 'Task 3',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'unscheduled',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-20'),
-              isPublicVisible: true
+              status: TaskStatus.TASK_STATUS_DONE
             },
             {
               id: 'task4',
               name: 'Task 4',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'inProgress',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-01'),
-              isPublicVisible: true
+              status: TaskStatus.TASK_STATUS_TODO
             },
             {
               id: 'task5',
               name: 'Task 5',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'done',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-20'),
-              isPublicVisible: true
+              status: TaskStatus.TASK_STATUS_IN_PROGRESS
             },
             {
               id: 'task6',
               name: 'Task 6',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'done',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-01'),
-              isPublicVisible: true
-            }
+              status: TaskStatus.TASK_STATUS_DONE
+            },
           ]
         }
       },
@@ -118,71 +85,25 @@ const rooms: RoomDTO[] = [
           humanReadableIdentifier: 'Patient B',
           tasks: [
             {
-              id: 'task1',
-              name: 'Task 1',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'unscheduled',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: true }],
-              dueDate: new Date('2023-05-20'),
-              isPublicVisible: true
-            },
-            {
-              id: 'task2',
-              name: 'Task 2',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'unscheduled',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-01'),
-              isPublicVisible: true
-            },
-            {
-              id: 'task3',
-              name: 'Task 3',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'unscheduled',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-20'),
-              isPublicVisible: true
-            },
-            {
-              id: 'task4',
-              name: 'Task 4',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'inProgress',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-20'),
-              isPublicVisible: true
-            },
-            {
-              id: 'task5',
-              name: 'Task 5',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'done',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-01'),
-              isPublicVisible: true
-            },
-            {
               id: 'task6',
               name: 'Task 6',
-              assignee: 'Assignee 1',
-              notes: 'Notes',
-              status: 'done',
-              creationDate: new Date(),
-              subtasks: [{ name: 'Subtask 1', isDone: false }],
-              dueDate: new Date('2023-05-01'),
-              isPublicVisible: true
-            }
+              status: TaskStatus.TASK_STATUS_TODO
+            },
+            {
+              id: 'task7',
+              name: 'Task 7',
+              status: TaskStatus.TASK_STATUS_TODO
+            },
+            {
+              id: 'task8',
+              name: 'Task 8',
+              status: TaskStatus.TASK_STATUS_DONE,
+            },
+            {
+              id: 'task9',
+              name: 'Task 9',
+              status: TaskStatus.TASK_STATUS_TODO,
+            },
           ]
         }
       },
@@ -204,7 +125,7 @@ const rooms: RoomDTO[] = [
 
 export const useRoomQuery = () => {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: [roomsQueryKey],
     queryFn: async () => {
       // TODO fetch user rooms
       return rooms
@@ -212,16 +133,17 @@ export const useRoomQuery = () => {
   })
 }
 
-export const useRoomOverviewsQuery = (wardUUID: string) => {
+export const useRoomOverviewsQuery = (wardUUID: string | undefined) => {
   return useQuery({
-    queryKey: [queryKey, 'roomOverview'],
+    queryKey: [roomsQueryKey, 'roomOverview'],
     enabled: !!wardUUID,
     queryFn: async () => {
       const req = new GetRoomOverviewsByWardRequest()
-      req.setId(wardUUID)
+      if (wardUUID) {
+        req.setId(wardUUID)
+      }
       const res = await roomService.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
 
-      console.log(res)
       const rooms: RoomOverviewDTO[] = res.getRoomsList().map((room) => ({
         id: room.getId(),
         name: room.getName(),
@@ -259,21 +181,9 @@ export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) 
       callback(room)
       return room
     },
-    onMutate: async (room: RoomMinimalDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousRooms = queryClient.getQueryData<RoomDTO[]>([queryKey])
-      queryClient.setQueryData<RoomDTO[]>(
-        [queryKey],
-        // TODO do optimistic update here
-        (old) => old?.map(value => value.id === room.id ? { ...value, name: room.name } : value))
-      return { previousRooms }
+    onSuccess: () => {
+      queryClient.invalidateQueries([wardDetailsQueryKey, roomsQueryKey]).then()
     },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    }
   })
 }
 
@@ -294,40 +204,14 @@ export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, 
       callback(room)
       return room
     },
-    onMutate: async (room: RoomMinimalDTO) => {
-      /*
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousRooms = queryClient.getQueryData<RoomDTO[]>([queryKey])
-      const preliminaryID = Math.random().toString()
-      room.id = preliminaryID
-
-      queryClient.setQueryData<RoomDTO[]>([queryKey], (old) => {
-        if (!old) {
-          return old
-        }
-        const updated = [{ ...room, id: preliminaryID, beds: [] }, ...old]
-        updated.sort((a, b) => a.name.localeCompare(b.name))
-        return updated
-      })
-      return { previousRooms }
-      */
-      return {}
-    },
-    onError: (_, newTodo, context) => {
-      // TODO at later
-      // queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
-    },
-    onSuccess: (data, variables, context) => {
-      // TODO at later
-      // queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    onSuccess: () => {
+      queryClient.invalidateQueries([wardDetailsQueryKey, roomsQueryKey]).then()
     },
   })
 }
 
 export const useRoomDeleteMutation = (callback: () => void) => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (roomUUID: string) => {
       const req = new DeleteRoomRequest()
@@ -338,6 +222,9 @@ export const useRoomDeleteMutation = (callback: () => void) => {
 
       callback()
       return req.toObject()
-    }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([wardDetailsQueryKey, roomsQueryKey]).then()
+    },
   })
 }

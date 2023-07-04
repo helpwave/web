@@ -6,7 +6,9 @@ import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
-import type { WardDetailDTO, WardInOrganizationOverviewDTO } from '../../mutations/ward_mutations'
+import { useContext } from 'react'
+import { OrganizationOverviewContext } from '../../pages/organizations/[uuid]'
+import { emptyWard, emptyWardOverview, useWardOverviewsQuery } from '../../mutations/ward_mutations'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -24,15 +26,8 @@ const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> 
   }
 }
 
-type Room = {
-  bedCount: number,
-  name: string
-}
-
 export type WardDisplayProps = {
-  selectedWard?: WardDetailDTO,
-  wards: WardInOrganizationOverviewDTO[],
-  onSelectionChange: (ward: WardInOrganizationOverviewDTO | undefined) => void,
+  selectedWardID?: string,
   width?: number
 }
 
@@ -41,14 +36,28 @@ export type WardDisplayProps = {
  */
 export const WardDisplay = ({
   language,
-  selectedWard,
-  wards,
-  onSelectionChange,
+  selectedWardID,
   width
 }: PropsWithLanguage<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation(language, defaultWardDisplayTranslations)
   const router = useRouter()
+  const context = useContext(OrganizationOverviewContext)
+  const { data, isLoading, isError } = useWardOverviewsQuery()
+
+  // TODO add view for loading
+  if (isLoading) {
+    return <div>Loading Widget</div>
+  }
+
+  // TODO add view for error or error handling
+  if (isError) {
+    return <div>Error Message</div>
+  }
+
+  const wards = data
+  selectedWardID ??= context.state.wardID
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / 250), 1)
+
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.wards}/>
@@ -57,16 +66,16 @@ export const WardDisplay = ({
           <WardCard
             key={ward.id}
             ward={ward}
-            isSelected={selectedWard?.id === ward.id}
-            onEditClick={() => onSelectionChange(ward)}
+            isSelected={selectedWardID === ward.id}
+            onEditClick={() => context.updateContext({ ...context.state, wardID: ward.id })}
             onTileClick={async () => await router.push(`/ward/${ward.id}`)}
           />
         ))}
         <AddCard
           className={tw('min-h-[96px]')}
           text={translation.addWard}
-          onTileClick={() => onSelectionChange(undefined)}
-          isSelected={selectedWard?.id === ''}
+          onTileClick={() => context.updateContext({ ...context.state, wardID: undefined })}
+          isSelected={!selectedWardID}
         />
       </div>
     </div>

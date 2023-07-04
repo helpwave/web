@@ -1,4 +1,4 @@
-export type TaskStatus = 'unscheduled' | 'inProgress' | 'done'
+import type { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 export type SubTaskDTO = {
   name: string,
@@ -15,4 +15,10 @@ export type TaskDTO = {
   dueDate: Date,
   creationDate?: Date,
   isPublicVisible: boolean
+}
+
+export type TaskMinimalDTO = {
+  id: string,
+  name: string,
+  status: TaskStatus
 }

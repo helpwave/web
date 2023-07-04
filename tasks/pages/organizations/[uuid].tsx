@@ -1,15 +1,16 @@
-import { useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
-import type { WardDetailDTO } from '../../mutations/ward_mutations'
+import type { WardDetailDTO, WardDTO, WardOverviewDTO } from '../../mutations/ward_mutations'
 import {
-  useCreateMutation,
-  useDeleteMutation,
-  useUpdateMutation,
+  emptyWard, emptyWardOverview,
+  useWardCreateMutation,
+  useWardDeleteMutation,
+  useWardUpdateMutation,
   useWardDetailsQuery,
   useWardOverviewsQuery
 } from '../../mutations/ward_mutations'
@@ -17,6 +18,10 @@ import { WardDisplay } from '../../components/layout/WardDisplay'
 import { WardDetail } from '../../components/layout/WardDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
+import type { RoomOverviewDTO } from '../../mutations/room_mutations'
+import { useRoomDeleteMutation } from '../../mutations/room_mutations'
+import type { PatientDTO } from '../../mutations/patient_mutations'
+import type { BedMinimalDTO } from '../../mutations/bed_mutations'
 
 type WardsPageTranslation = {
   wards: string,
@@ -34,77 +39,73 @@ const defaultWardsPageTranslation = {
   }
 }
 
-const emptyWard: WardDetailDTO = {
-  id: '',
-  name: '',
-  rooms: [],
-  task_templates: []
+export type OrganizationOverviewContextState = {
+  /**
+   wardID === undefined means no ward
+
+   wardID === "" means creating a new ward
+   */
+  wardID?: string,
+  organizationID: string
 }
+
+const emptyOrganizationOverviewContextState = {
+  organizationID: ''
+}
+
+export type OrganizationOverviewContextType = {
+  state: OrganizationOverviewContextState,
+  updateContext: (context: OrganizationOverviewContextState) => void
+}
+
+export const OrganizationOverviewContext = createContext<OrganizationOverviewContextType>({
+  state: emptyOrganizationOverviewContextState,
+  updateContext: () => undefined
+})
 
 /**
  * The page for displaying and editing the wards within an organization
  */
 const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslation>) => {
   const translation = useTranslation(language, defaultWardsPageTranslation)
-  const [selectedWardId, setSelectedWardId] = useState<string>()
+  const [contextState, setContextState] = useState<OrganizationOverviewContextState>(emptyOrganizationOverviewContextState)
   const [usedQueryParam, setUsedQueryParam] = useState(false)
 
   const router = useRouter()
   const { uuid, wardID } = router.query
-  const organizationUUID = uuid as string
-
-  const createMutation = useCreateMutation((ward) => setSelectedWardId(ward?.id))
-  const updateMutation = useUpdateMutation((ward) => setSelectedWardId(ward?.id))
-  const deleteMutation = useDeleteMutation((ward) => setSelectedWardId(ward?.id))
-  const { isLoading, isError, data } = useWardOverviewsQuery()
-  const { data: selectedWard } = useWardDetailsQuery(selectedWardId)
+  const organizationID = uuid as string
 
   if (wardID && !usedQueryParam) {
-    setSelectedWardId(wardID as string)
+    setContextState({
+      ...emptyOrganizationOverviewContextState,
+      wardID: wardID as string,
+      organizationID
+    })
     setUsedQueryParam(true)
-  }
-
-  // TODO add view for loading
-  if (isLoading) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError) {
-    return <div>Error Message</div>
   }
 
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organizations, link: `/organizations?organizationID=${organizationUUID}` },
-        { display: translation.wards, link: `/organizations/${organizationUUID}` }
+        { display: translation.organizations, link: `/organizations?organizationID=${organizationID}` },
+        { display: translation.wards, link: `/organizations/${organizationID}` }
       ]}
     >
       <Head>
         <title>{titleWrapper(translation.wards)}</title>
       </Head>
-      <TwoColumn
-        disableResize={false}
-        left={width => (
-            <WardDisplay
-              selectedWard={selectedWard}
-              wards={data}
-              onSelectionChange={ward => setSelectedWardId(ward?.id)}
-              width={width}
-            />
-        )}
-        right={width => (
+      <OrganizationOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
+        <TwoColumn
+          disableResize={false}
+          left={width => (<WardDisplay width={width}/>)}
+          right={width => (
             <WardDetail
-              key={selectedWard?.id}
+              key={contextState.wardID}
               width={width}
-              ward={selectedWard ?? emptyWard}
-              onCreate={createMutation.mutate}
-              onUpdate={updateMutation.mutate}
-              onDelete={deleteMutation.mutate}
             />
-        )}
-      />
+          )}
+        />
+      </OrganizationOverviewContext.Provider>
     </PageWithHeader>
   )
 }

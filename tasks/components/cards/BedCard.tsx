@@ -5,26 +5,26 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type BedCardTranslation = {
+  bedName: (index: number) => string,
   nobody: string
 }
 
-const defaultBedCardTranslation = {
-  de: {
-    nobody: 'frei'
-  },
+const defaultBedCardTranslation: Record<Languages, BedCardTranslation> = {
   en: {
-    nobody: 'nobody'
+    nobody: 'nobody',
+    bedName: index => `Bed ${index}`
+  },
+  de: {
+    nobody: 'frei',
+    bedName: index => `Bett ${index}`
   }
 }
 
-type BedDTO = {
-  name: string
-}
-
 export type BedCardProps = CardProps & {
-  bed: BedDTO
+  bedIndex: number
 }
 
 /**
@@ -34,16 +34,16 @@ export type BedCardProps = CardProps & {
  */
 export const BedCard = ({
   language,
-  bed,
+  bedIndex,
   onTileClick,
   isSelected
 }: PropsWithLanguage<BedCardTranslation, BedCardProps>) => {
   const translation = useTranslation(language, defaultBedCardTranslation)
   return (
     (
-      <Card key={bed.name} onTileClick={onTileClick} isSelected={isSelected} className={tw('h-[148px] flex flex-col')}>
+      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('h-[148px] flex flex-col')}>
         <div className={tw('flex flex-row justify-between')}>
-          <Span type="subsubsectionTitle">{bed.name}</Span>
+          <Span type="subsubsectionTitle">{translation.bedName(bedIndex)}</Span>
           <Span>{translation.nobody}</Span>
         </div>
         <div className={tw('flex flex-1 justify-center items-center')}>

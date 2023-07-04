@@ -1,22 +1,35 @@
 import { tw } from '@helpwave/common/twind'
 import { PatientCard } from './cards/PatientCard'
 import { BedCard } from './cards/BedCard'
-import type { RoomOverviewDTO } from '../mutations/room_mutations'
+import type { RoomOverviewDTO, RoomMinimalDTO } from '../mutations/room_mutations'
 import { noop } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
-import type { BedWithPatientWithTasksNumberDTO } from '../mutations/bed_mutations'
+import type { BedWithPatientWithTasksNumberDTO, BedMinimalDTO } from '../mutations/bed_mutations'
+import { useContext } from 'react'
+import { WardOverviewContext } from '../pages/ward/[uuid]'
+import { useRoomOverviewsQuery } from '../mutations/room_mutations'
+import type { PatientDTO } from '../mutations/patient_mutations'
+import { emptyPatient } from '../mutations/patient_mutations'
 
 export type RoomOverviewProps = {
-  room: RoomOverviewDTO,
-  selected: BedWithPatientWithTasksNumberDTO | undefined,
-  onSelect: (bed: BedWithPatientWithTasksNumberDTO) => void,
-  onAddPatient?: (bed: BedWithPatientWithTasksNumberDTO) => void
+  room: RoomOverviewDTO
 }
 
 /**
  * A component to show all beds and patients within a room in a ward
  */
-export const RoomOverview = ({ room, onSelect, selected, onAddPatient = noop }: RoomOverviewProps) => {
+export const RoomOverview = ({ room }: RoomOverviewProps) => {
+  const context = useContext(WardOverviewContext)
+
+  const setSelectedBed = (room: RoomMinimalDTO, bed: BedMinimalDTO, patient: PatientDTO|undefined) =>
+    context.updateContext({
+      ...context.state,
+      room,
+      bed,
+      patient
+    })
+
+  const selectedBedID = context.state.bed?.id
   return (
     <div>
       <div className={tw('flex flex-row items-center mb-1')}>
@@ -28,20 +41,20 @@ export const RoomOverview = ({ room, onSelect, selected, onAddPatient = noop }: 
             (
             <PatientCard
               key={bed.id}
-              bedName={bed.name}
+              bedIndex={bed.index}
               patientName={bed.patient.name}
               doneTasks={bed.patient.tasksDone}
               inProgressTasks={bed.patient.tasksInProgress}
               unscheduledTasks={bed.patient.tasksUnscheduled}
-              onTileClick={() => onSelect(bed)}
-              isSelected={selected?.id === bed.id}
+              onTileClick={() => setSelectedBed(room, bed, undefined)}
+              isSelected={selectedBedID === bed.id}
             />
             ) : (
             <BedCard
-              key={bed.name}
-              bed={bed}
-              onTileClick={() => onAddPatient(bed)}
-              isSelected={selected?.id === bed.id}/>
+              key={bed.id}
+              bedIndex={bed.index}
+              onTileClick={() => setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient?.id ?? '' })}
+              isSelected={selectedBedID === bed.id}/>
             )
         )}
       </div>

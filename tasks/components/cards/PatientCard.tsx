@@ -3,9 +3,25 @@ import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import { Span } from '@helpwave/common/components/Span'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+
+type PatientCardTranslation = {
+  bedName: (index: number) => string
+}
+
+const defaultPatientCardTranslation: Record<Languages, PatientCardTranslation> = {
+  en: {
+    bedName: index => `Bed ${index}`
+  },
+  de: {
+    bedName: index => `Bett ${index}`
+  }
+}
 
 export type PatientCardProps = CardProps & {
-  bedName: string,
+  bedIndex: number,
   patientName: string,
   unscheduledTasks: number,
   inProgressTasks: number,
@@ -16,18 +32,20 @@ export type PatientCardProps = CardProps & {
  * A Card for displaying a Patient and the tasks
  */
 export const PatientCard = ({
-  bedName,
+  language,
+  bedIndex,
   patientName,
   unscheduledTasks,
   inProgressTasks,
   doneTasks,
   isSelected,
   onTileClick,
-}: PatientCardProps) => {
+}: PropsWithLanguage<Languages, PatientCardProps>) => {
+  const translation = useTranslation(language, defaultPatientCardTranslation)
   return (
     <Card isSelected={isSelected} onTileClick={onTileClick}>
       <div className={tw('flex flex-row justify-between')}>
-        <Span type="subsubsectionTitle">{bedName}</Span>
+        <Span type="subsubsectionTitle">{translation.bedName(bedIndex)}</Span>
         <Span>{patientName}</Span>
       </div>
       <div className={tw('w-7/12 min-w-[150px] mt-1')}>

@@ -3,7 +3,7 @@ import {
   CreateRoomRequest,
   UpdateRoomRequest,
   GetRoomsByWardRequest,
-  GetRoomOverviewsByWardRequest
+  GetRoomOverviewsByWardRequest, DeleteRoomRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
 import type { BedDTO, BedMinimalDTO, BedWithPatientWithTasksNumberDTO } from './bed_mutations'
@@ -28,14 +28,14 @@ export type RoomOverviewDTO = {
 }
 
 // TODO remove once backend is implemented
-let rooms: RoomDTO[] = [
+const rooms: RoomDTO[] = [
   {
     id: 'room1',
     name: 'room name 1',
     beds: [
       {
         id: 'bed1',
-        name: 'bed 1',
+        index: 1,
         patient: {
           id: 'patient1',
           note: 'Note',
@@ -112,7 +112,7 @@ let rooms: RoomDTO[] = [
       },
       {
         id: 'bed2',
-        name: 'bed 2',
+        index: 2,
         patient: {
           id: 'patient2',
           note: 'Note',
@@ -189,15 +189,15 @@ let rooms: RoomDTO[] = [
       },
       {
         id: 'bed3',
-        name: 'bed 3',
+        index: 3,
       },
       {
         id: 'bed4',
-        name: 'bed 4',
+        index: 4,
       },
       {
         id: 'bed5',
-        name: 'bed 5',
+        index: 5,
       }
     ]
   }
@@ -213,12 +213,12 @@ export const useRoomQuery = () => {
   })
 }
 
-export const useRoomOverviewsQuery = (wardID: string) => {
+export const useRoomOverviewsQuery = (wardUUID: string) => {
   return useQuery({
     queryKey: [queryKey, 'overview'],
     queryFn: async () => {
       const req = new GetRoomOverviewsByWardRequest()
-      req.setId(wardID)
+      req.setId(wardUUID)
       const res = await roomService.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
 
       const rooms: RoomOverviewDTO[] = res.getRoomsList().map((room) => ({
@@ -228,7 +228,7 @@ export const useRoomOverviewsQuery = (wardID: string) => {
           const patient = bed.getPatient()
           return {
             id: bed.getId(),
-            name: bed.getId().substring(0, 2), // TODO replace with name later
+            index: 0, // TODO replace later
             patient: !patient ? undefined : {
               id: patient.getId(),
               name: patient.getId().substring(0, 6), // TODO replace with name later
@@ -245,29 +245,26 @@ export const useRoomOverviewsQuery = (wardID: string) => {
   })
 }
 
-export const useUpdateMutation = (setSelectedBed: (bed: BedMinimalDTO) => void, wardUUID: string, roomUUID: string) => {
+export const useUpdateMutation = (callback: (room: RoomMinimalDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (bed: BedDTO) => {
-      // TODO create request for bed
-      const currentRoom = rooms.find(value => value.id === roomUUID)
-      if (currentRoom) {
-        const newBeds = [...currentRoom.beds.filter(value => value.id !== bed.id), bed]
-        newBeds.sort((a, b) => a.name.localeCompare(b.name))
-        const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
-        rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]
-        rooms.sort((a, b) => a.id.localeCompare(b.id))
-        setSelectedBed(bed)
-      }
+    mutationFn: async (room: RoomMinimalDTO) => {
+      const req = new UpdateRoomRequest()
+      req.setId(room.id)
+      req.setName(room.name)
+      await roomService.updateRoom(req, getAuthenticatedGrpcMetadata())
+
+      // TODO some check whether request was successful
+      callback(room)
+      return room
     },
-    onMutate: async (bed) => {
+    onMutate: async (room: RoomMinimalDTO) => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousRooms = queryClient.getQueryData<RoomDTO[]>([queryKey])
       queryClient.setQueryData<RoomDTO[]>(
         [queryKey],
         // TODO do optimistic update here
-        (old) => old)
-      rooms.sort((a, b) => a.id.localeCompare(b.id))
+        (old) => old?.map(value => value.id === room.id ? { ...value, name: room.name } : value))
       return { previousRooms }
     },
     onError: (_, newTodo, context) => {
@@ -279,32 +276,49 @@ export const useUpdateMutation = (setSelectedBed: (bed: BedMinimalDTO) => void, 
   })
 }
 
-export const useCreateMutation = (setSelectedBed: (bed: BedDTO) => void, wardUUID: string, roomUUID: string) => {
+export const useCreateMutation = (callback: (room: RoomMinimalDTO) => void, wardUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (bed) => {
-      // TODO create request for bed
-      bed.id = Math.random().toString()
-      const currentRoom = rooms.find(value => value.id === roomUUID)
-      if (currentRoom) {
-        const newBeds = [...currentRoom.beds, bed]
-        newBeds.sort((a, b) => a.name.localeCompare(b.name))
-        const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
-        rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]
-        rooms.sort((a, b) => a.id.localeCompare(b.id))
-        setSelectedBed(newRoom)
+    mutationFn: async (room: RoomMinimalDTO) => {
+      const req = new CreateRoomRequest()
+      req.setWardId(wardUUID)
+      req.setName(room.name)
+      const res = await roomService.createRoom(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.getId()) {
+        // TODO some check whether request was successful
+        console.error('create room failed')
       }
+
+      callback(room)
+      return room
     },
-    onMutate: async (bed: BedDTO) => {
+    onMutate: async (room: RoomMinimalDTO) => {
+      /*
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousRooms = queryClient.getQueryData<RoomDTO[]>([queryKey])
-      // TODO do optimistic update here
-      queryClient.setQueryData<RoomDTO[]>([queryKey], (old) => old)
-      rooms.sort((a, b) => a.id.localeCompare(b.id))
+      const preliminaryID = Math.random().toString()
+      room.id = preliminaryID
+
+      queryClient.setQueryData<RoomDTO[]>([queryKey], (old) => {
+        if (!old) {
+          return old
+        }
+        const updated = [{ ...room, id: preliminaryID, beds: [] }, ...old]
+        updated.sort((a, b) => a.name.localeCompare(b.name))
+        return updated
+      })
       return { previousRooms }
+      */
+      return {}
     },
     onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
+      // TODO at later
+      // queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
+    },
+    onSuccess: (data, variables, context) => {
+      // TODO at later
+      // queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
@@ -312,38 +326,17 @@ export const useCreateMutation = (setSelectedBed: (bed: BedDTO) => void, wardUUI
   })
 }
 
-export const useDischargeMutation = (setSelectedBed: (bed: BedDTO) => void, wardUUID: string, roomUUID: string) => {
-  const queryClient = useQueryClient()
+export const useDeleteMutation = (callback: () => void) => {
   return useMutation({
-    mutationFn: async (bed) => {
-      // TODO create request for bed
-      const currentRoom: RoomDTO | undefined = rooms.find(value => value.id === roomUUID)
-      if (currentRoom) {
-        const newBeds: BedDTO[] = [...currentRoom?.beds.filter(value => value.id !== bed.id), {
-          ...bed,
-          patient: undefined
-        }]
-        newBeds.sort((a, b) => a.name.localeCompare(b.name))
-        const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
-        rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]
-        rooms.sort((a, b) => a.id.localeCompare(b.id))
-        setSelectedBed(newRoom)
-      }
-    },
-    onMutate: async (bed: BedDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousRooms = queryClient.getQueryData<RoomDTO[]>([queryKey])
-      queryClient.setQueryData<RoomDTO[]>(
-        [queryKey],
-        // TODO do optimistic update here
-        (old) => old)
-      return { previousRooms }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousRooms)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
+    mutationFn: async (roomUUID: string) => {
+      const req = new DeleteRoomRequest()
+      req.setId(roomUUID)
+      await roomService.deleteRoom(req, getAuthenticatedGrpcMetadata())
+
+      // TODO some check whether request was successful
+
+      callback()
+      return req.toObject()
+    }
   })
 }

@@ -163,21 +163,21 @@ export const KanbanBoard = ({
       >
         <div className={tw('grid grid-cols-3 gap-x-4 mt-6')}>
           <KanbanColumn
-            type="unscheduled"
+            type={TaskStatus.TASK_STATUS_TODO}
             tasks={filterBySearch(sortedTasks[TaskStatus.TASK_STATUS_TODO])}
             draggedTileID={boardObject.draggedID ?? editedTaskID}
             isDraggedOver={boardObject.overColumn === TaskStatus.TASK_STATUS_TODO}
             onEditTask={onEditTask}
           />
           <KanbanColumn
-            type="inProgress"
+            type={TaskStatus.TASK_STATUS_IN_PROGRESS}
             tasks={filterBySearch(sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS])}
             draggedTileID={boardObject.draggedID ?? editedTaskID}
             isDraggedOver={boardObject.overColumn === TaskStatus.TASK_STATUS_IN_PROGRESS}
             onEditTask={onEditTask}
           />
           <KanbanColumn
-            type="done"
+            type={TaskStatus.TASK_STATUS_DONE}
             tasks={filterBySearch(sortedTasks[TaskStatus.TASK_STATUS_DONE])}
             draggedTileID={boardObject.draggedID ?? editedTaskID}
             isDraggedOver={boardObject.overColumn === TaskStatus.TASK_STATUS_DONE}

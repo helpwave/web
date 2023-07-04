@@ -2,6 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 type PillLabelTranslation = {
   text: string
@@ -10,25 +11,33 @@ type PillLabelTranslation = {
 export type TaskStateInformation = { colorLabel: string, translation: Record<Languages, PillLabelTranslation> }
 
 const TaskState = {
-  unscheduled: {
+  [TaskStatus.TASK_STATUS_TODO]: {
     colorLabel: 'hw-label-1',
     translation: {
       en: { text: 'unscheduled' },
       de: { text: 'Nicht Geplant' }
     }
   },
-  inProgress: {
+  [TaskStatus.TASK_STATUS_IN_PROGRESS]: {
     colorLabel: 'hw-label-2',
     translation: {
       en: { text: 'in progress' },
       de: { text: 'In Arbeit' }
     }
   },
-  done: {
+  [TaskStatus.TASK_STATUS_DONE]: {
     colorLabel: 'hw-label-3',
     translation: {
       en: { text: 'done' },
       de: { text: 'Fertig' }
+    }
+  },
+  // TODO change this
+  [TaskStatus.TASK_STATUS_UNSPECIFIED]: {
+    colorLabel: 'hw-label-1',
+    translation: {
+      en: { text: 'unscheduled' },
+      de: { text: 'Nicht Geplant' }
     }
   },
 } as const
@@ -44,7 +53,7 @@ export type PillLabelProps = {
 const PillLabel = ({
   language,
   count = 0,
-  state = TaskState.unscheduled
+  state = TaskState[TaskStatus.TASK_STATUS_TODO]
 }: PropsWithLanguage<PillLabelTranslation, PillLabelProps>) => {
   const translation = useTranslation(language, state.translation)
   return (

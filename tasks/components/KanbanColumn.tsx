@@ -11,7 +11,8 @@ import {
   SortableContext,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable'
-import type { TaskDTO, TaskStatus } from '../mutations/room_mutations'
+import type { TaskDTO } from '../mutations/task_mutations'
+import type { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 type KanbanColumnsTranslation = {
   addTask: string
@@ -51,16 +52,14 @@ export const KanbanColumn = ({
     id: type,
   })
 
-  const taskState = { unscheduled: TaskState.unscheduled, inProgress: TaskState.inProgress, done: TaskState.done }
-
   return (
     <div
       className={tx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver },
         'flex flex-col gap-y-4 border-2 border-dashed rounded-lg p-2')}
     >
-      <PillLabel count={tasks.length} state={taskState[type]}/>
+      <PillLabel count={tasks.length} state={TaskState[type]}/>
       <SortableContext
-        id={type}
+        id={type.toString()}
         items={tasks}
         strategy={verticalListSortingStrategy}
       >

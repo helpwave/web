@@ -1,4 +1,4 @@
-import type { TaskMinimalDTO } from './task_mutations'
+import type { TaskDTO } from './task_mutations'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
@@ -11,7 +11,7 @@ export type PatientDTO = {
   id: string,
   note: string,
   humanReadableIdentifier: string,
-  tasks: TaskMinimalDTO[]
+  tasks: TaskDTO[]
 }
 
 export const emptyPatient: PatientDTO = {

@@ -7,7 +7,7 @@ import { Bed, Edit } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { Span } from '@helpwave/common/components/Span'
-import type { WardOverviewDTO } from '../../mutations/ward_mutations'
+import type { WardInOrganizationOverviewDTO } from '../../mutations/ward_mutations'
 
 type WardCardTranslation = {
   edit: string,
@@ -31,7 +31,7 @@ type Room = {
 }
 
 export type WardCardProps = CardProps & {
-  ward: WardOverviewDTO,
+  ward: WardInOrganizationOverviewDTO,
   onEditClick?: () => void
 }
 

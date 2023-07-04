@@ -6,7 +6,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
-import type { WardDetailDTO, WardOverviewDTO } from '../../mutations/ward_mutations'
+import type { WardDetailDTO, WardInOrganizationOverviewDTO } from '../../mutations/ward_mutations'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -31,8 +31,8 @@ type Room = {
 
 export type WardDisplayProps = {
   selectedWard?: WardDetailDTO,
-  wards: WardOverviewDTO[],
-  onSelectionChange: (ward: WardOverviewDTO | undefined) => void,
+  wards: WardInOrganizationOverviewDTO[],
+  onSelectionChange: (ward: WardInOrganizationOverviewDTO | undefined) => void,
   width?: number
 }
 

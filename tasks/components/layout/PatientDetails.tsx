@@ -9,11 +9,12 @@ import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
 import type { KanbanBoardObject } from './KanabanBoard'
 import { KanbanBoard } from './KanabanBoard'
-import type { PatientDTO, TaskDTO } from '../../mutations/room_mutations'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { TaskDetailModal } from '../TaskDetailModal'
+import type { TaskDTO } from '../../mutations/task_mutations'
+import type { PatientDTO } from '../../mutations/patient_mutations'
 
 type PatientDetailTranslation = {
   patientDetails: string,

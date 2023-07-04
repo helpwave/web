@@ -16,7 +16,7 @@ export type WardDTO = {
   name: string
 }
 
-export type WardOverviewDTO = {
+export type WardInOrganizationOverviewDTO = {
   id: string,
   name: string,
   bedCount: number,
@@ -51,7 +51,7 @@ export const useWardOverviewsQuery = () => {
       const req = new GetWardOverviewsRequest()
       const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata())
 
-      const wards: WardOverviewDTO[] = res.getWardsList().map((ward) => ({
+      const wards: WardInOrganizationOverviewDTO[] = res.getWardsList().map((ward) => ({
         id: ward.getId(),
         name: ward.getName(),
         bedCount: ward.getBedCount(),

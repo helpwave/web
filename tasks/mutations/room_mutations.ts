@@ -1,49 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  CreateRoomRequest,
+  UpdateRoomRequest,
+  GetRoomsByWardRequest,
+  GetRoomOverviewsByWardRequest
+} from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
+import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
+import type { BedDTO, BedMinimalDTO, BedWithPatientWithTasksNumberDTO } from './bed_mutations'
 
 const queryKey = 'rooms'
 
-export type TaskStatus = 'unscheduled' | 'inProgress' | 'done'
-
-export type SubTaskDTO = {
-  name: string,
-  isDone: boolean
-}
-
-export type TaskDTO = {
+export type RoomMinimalDTO = {
   id: string,
-  name: string,
-  assignee: string,
-  notes: string,
-  status: TaskStatus,
-  subtasks: SubTaskDTO[],
-  dueDate: Date,
-  creationDate?: Date,
-  isPublicVisible: boolean
-}
-
-export type PatientDTO = {
-  id: string,
-  note: string,
-  humanReadableIdentifier: string,
-  tasks: TaskDTO[]
-}
-
-export type BedDTO = {
-  id: string,
-  name: string,
-  patient?: PatientDTO
-}
-
-export const emptyBed: BedDTO = {
-  id: '',
-  name: '',
-  patient: { id: '', humanReadableIdentifier: '', note: '', tasks: [] },
+  name: string
 }
 
 export type RoomDTO = {
   id: string,
   name: string,
   beds: BedDTO[]
+}
+
+export type RoomOverviewDTO = {
+  id: string,
+  name: string,
+  beds: BedWithPatientWithTasksNumberDTO[]
 }
 
 // TODO remove once backend is implemented
@@ -232,7 +213,39 @@ export const useRoomQuery = () => {
   })
 }
 
-export const useUpdateMutation = (setSelectedBed: (bed:BedDTO) => void, wardUUID: string, roomUUID: string) => {
+export const useRoomOverviewsQuery = (wardID: string) => {
+  return useQuery({
+    queryKey: [queryKey, 'overview'],
+    queryFn: async () => {
+      const req = new GetRoomOverviewsByWardRequest()
+      req.setId(wardID)
+      const res = await roomService.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
+
+      const rooms: RoomOverviewDTO[] = res.getRoomsList().map((room) => ({
+        id: room.getId(),
+        name: room.getName(),
+        beds: room.getBedsList().map(bed => {
+          const patient = bed.getPatient()
+          return {
+            id: bed.getId(),
+            name: bed.getId().substring(0, 2), // TODO replace with name later
+            patient: !patient ? undefined : {
+              id: patient.getId(),
+              name: patient.getId().substring(0, 6), // TODO replace with name later
+              tasksUnscheduled: patient.getTasksUnscheduled(),
+              tasksInProgress: patient.getTasksInProgress(),
+              tasksDone: patient.getTasksDone()
+            }
+          }
+        })
+      }))
+
+      return rooms
+    },
+  })
+}
+
+export const useUpdateMutation = (setSelectedBed: (bed: BedMinimalDTO) => void, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed: BedDTO) => {
@@ -266,7 +279,7 @@ export const useUpdateMutation = (setSelectedBed: (bed:BedDTO) => void, wardUUID
   })
 }
 
-export const useCreateMutation = (setSelectedBed: (bed:BedDTO) => void, wardUUID: string, roomUUID: string) => {
+export const useCreateMutation = (setSelectedBed: (bed: BedDTO) => void, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed) => {
@@ -299,14 +312,17 @@ export const useCreateMutation = (setSelectedBed: (bed:BedDTO) => void, wardUUID
   })
 }
 
-export const useDischargeMutation = (setSelectedBed: (bed:BedDTO) => void, wardUUID: string, roomUUID: string) => {
+export const useDischargeMutation = (setSelectedBed: (bed: BedDTO) => void, wardUUID: string, roomUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed) => {
       // TODO create request for bed
-      const currentRoom: RoomDTO| undefined = rooms.find(value => value.id === roomUUID)
+      const currentRoom: RoomDTO | undefined = rooms.find(value => value.id === roomUUID)
       if (currentRoom) {
-        const newBeds: BedDTO[] = [...currentRoom?.beds.filter(value => value.id !== bed.id), { ...bed, patient: undefined }]
+        const newBeds: BedDTO[] = [...currentRoom?.beds.filter(value => value.id !== bed.id), {
+          ...bed,
+          patient: undefined
+        }]
         newBeds.sort((a, b) => a.name.localeCompare(b.name))
         const newRoom: RoomDTO = { ...currentRoom, beds: newBeds }
         rooms = [...rooms.filter(value => value.id !== roomUUID), newRoom]

@@ -1,15 +1,16 @@
 import { tw } from '@helpwave/common/twind'
 import { PatientCard } from './cards/PatientCard'
 import { BedCard } from './cards/BedCard'
-import type { BedDTO, RoomDTO } from '../mutations/room_mutations'
+import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import { noop } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
+import type { BedWithPatientWithTasksNumberDTO } from '../mutations/bed_mutations'
 
 export type RoomOverviewProps = {
-  room: RoomDTO,
-  selected: BedDTO | undefined,
-  onSelect: (bed: BedDTO) => void,
-  onAddPatient?: (bed: BedDTO) => void
+  room: RoomOverviewDTO,
+  selected: BedWithPatientWithTasksNumberDTO | undefined,
+  onSelect: (bed: BedWithPatientWithTasksNumberDTO) => void,
+  onAddPatient?: (bed: BedWithPatientWithTasksNumberDTO) => void
 }
 
 /**
@@ -26,9 +27,12 @@ export const RoomOverview = ({ room, onSelect, selected, onAddPatient = noop }: 
         {room.beds.map(bed => bed.patient !== undefined ?
             (
             <PatientCard
-              key={bed.name}
-              patient={bed.patient}
-              bed={bed}
+              key={bed.id}
+              bedName={bed.name}
+              patientName={bed.patient.name}
+              doneTasks={bed.patient.tasksDone}
+              inProgressTasks={bed.patient.tasksInProgress}
+              unscheduledTasks={bed.patient.tasksUnscheduled}
               onTileClick={() => onSelect(bed)}
               isSelected={selected?.id === bed.id}
             />

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { createContext, , useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useAuth } from '../../hooks/useAuth'
@@ -6,17 +6,25 @@ import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
-import type { BedDTO, RoomDTO } from '../../mutations/room_mutations'
+import type { RoomMinimalDTO, RoomOverviewDTO } from '../../mutations/room_mutations'
 import {
-  useRoomQuery,
   useDischargeMutation,
-  useUpdateMutation
+  useUpdateMutation, useRoomOverviewsQuery
 } from '../../mutations/room_mutations'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { WardRoomList } from '../../components/layout/WardRoomList'
+import type {
+  BedDTO, BedMinimalDTO,
+  BedWithPatientWithTasksNumberDTO
+} from '../../mutations/bed_mutations'
+import {
+  emptyBed,
+  emptyBedWithPatientWithTasksNumber
+} from '../../mutations/bed_mutations'
+import type { PatientDTO } from '../../mutations/patient_mutations'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -46,27 +54,40 @@ const defaultWardOverviewTranslation = {
   }
 }
 
-const emptyBed: BedDTO = {
-  id: '',
-  name: '',
-  patient: { id: '', humanReadableIdentifier: '', note: '', tasks: [] },
+export type EditingPatientProps = {
+  patient?: PatientDTO,
+  bed?: BedMinimalDTO,
+  room?: RoomMinimalDTO
+}
+
+export type WardOverviewContextType = {
+  editingPatientProps: EditingPatientProps,
+  selectedBedID: string | undefined,
+  wardID: string,
+  updateContext: (context: WardOverviewContextType) => void
 }
 
 const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
-  const [selectedBed, setSelectedBed] = useState<BedDTO>(emptyBed)
-  const [isShowingPatientDialog, setIsShowingPatientDialog] = useState<boolean>(false)
-
   const router = useRouter()
   const { user } = useAuth()
   const { uuid } = router.query
   const wardUUID = uuid as string
+
+  const [contextValue, setContextValue] = useState<WardOverviewContextType>({ editingPatientProps: {}, selectedBedID: undefined, wardID: "", updateContext: () => undefined })
+  const WardOverviewContext = createContext<WardOverviewContextType>({ editingPatientProps: {}, selectedBedID: undefined, updateContext: setContextValue})
+
+  const isShowingPatientDialog = contextValue.editingPatientProps.patient?.id === ""
+
+
+
   const organizationUUID = 'org1' // TODO get this information somewhere
 
-  const { isLoading, isError, data } = useRoomQuery()
+  const { isLoading, isError, data } = useRoomOverviewsQuery(wardUUID)
 
-  const rooms = data as RoomDTO[]
-  let roomOfSelected: RoomDTO | undefined
+  const rooms = data
+  let roomOfSelected: RoomOverviewDTO | undefined
+  // To remove later
   let numberOfBeds = 0
   let bedPosition = 0
   if (rooms) {
@@ -79,11 +100,6 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       }
     }
   }
-
-  // TODO add create later on
-  // const createMutation = useCreateMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
-  const updateMutation = useUpdateMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
-  const dischargeMutation = useDischargeMutation(setSelectedBed, wardUUID, roomOfSelected?.id ?? '')
 
   if (!user) return null
 
@@ -128,7 +144,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         disableResize={false}
         constraints={{ right: { min: '580px' }, left: { min: '33%' } }}
         baseLayoutValue="-580px"
-        left={() => (
+        left={() => rooms && (
           <WardRoomList
             rooms={rooms}
             setSelectedBed={setSelectedBed}

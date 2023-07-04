@@ -1,12 +1,13 @@
 import { tw } from '@helpwave/common/twind'
 import { RoomOverview } from '../RoomOverview'
-import type { BedDTO, RoomDTO } from '../../mutations/room_mutations'
+import type { RoomOverviewDTO } from '../../mutations/room_mutations'
+import type { BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
 
 export type WardRoomListProps = {
-  selectedBed: BedDTO,
-  setSelectedBed: (bed: BedDTO) => void,
+  selectedBed: BedWithPatientWithTasksNumberDTO,
+  setSelectedBed: (bed: BedWithPatientWithTasksNumberDTO) => void,
   setIsShowingPatientDialog: (isShowing: boolean) => void,
-  rooms: RoomDTO[]
+  rooms: RoomOverviewDTO[]
 }
 
 /**
@@ -30,10 +31,11 @@ export const WardRoomList = ({
               setSelectedBed({
                 ...bed,
                 patient: {
-                  id: Math.random().toString(),
-                  note: '',
-                  humanReadableIdentifier: 'Patient ' + (room.beds.findIndex(value => value.id === bed?.id) + 1),
-                  tasks: []
+                  id: '',
+                  name: '',
+                  tasksInProgress: 0,
+                  tasksDone: 0,
+                  tasksUnscheduled: 0,
                 }
               })
               setIsShowingPatientDialog(true)

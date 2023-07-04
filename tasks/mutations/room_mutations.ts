@@ -2,11 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreateRoomRequest,
   UpdateRoomRequest,
-  GetRoomsByWardRequest,
   GetRoomOverviewsByWardRequest, DeleteRoomRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
-import type { BedDTO, BedMinimalDTO, BedWithPatientWithTasksNumberDTO } from './bed_mutations'
+import type { BedDTO, BedWithPatientWithTasksNumberDTO } from './bed_mutations'
 
 const queryKey = 'rooms'
 
@@ -215,12 +214,14 @@ export const useRoomQuery = () => {
 
 export const useRoomOverviewsQuery = (wardUUID: string) => {
   return useQuery({
-    queryKey: [queryKey, 'overview'],
+    queryKey: [queryKey, 'roomOverview'],
+    enabled: !!wardUUID,
     queryFn: async () => {
       const req = new GetRoomOverviewsByWardRequest()
       req.setId(wardUUID)
       const res = await roomService.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
 
+      console.log(res)
       const rooms: RoomOverviewDTO[] = res.getRoomsList().map((room) => ({
         id: room.getId(),
         name: room.getName(),
@@ -245,7 +246,7 @@ export const useRoomOverviewsQuery = (wardUUID: string) => {
   })
 }
 
-export const useUpdateMutation = (callback: (room: RoomMinimalDTO) => void) => {
+export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (room: RoomMinimalDTO) => {
@@ -276,7 +277,7 @@ export const useUpdateMutation = (callback: (room: RoomMinimalDTO) => void) => {
   })
 }
 
-export const useCreateMutation = (callback: (room: RoomMinimalDTO) => void, wardUUID: string) => {
+export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, wardUUID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (room: RoomMinimalDTO) => {
@@ -326,7 +327,7 @@ export const useCreateMutation = (callback: (room: RoomMinimalDTO) => void, ward
   })
 }
 
-export const useDeleteMutation = (callback: () => void) => {
+export const useRoomDeleteMutation = (callback: () => void) => {
   return useMutation({
     mutationFn: async (roomUUID: string) => {
       const req = new DeleteRoomRequest()

@@ -72,6 +72,9 @@ export const PatientDetail = ({
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const translation = useTranslation(language, defaultPatientDetailTranslations)
+
+  // TODO fetch patient
+
   const [newPatient, setNewPatient] = useState<PatientDTO>(patient)
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })

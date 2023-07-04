@@ -1,15 +1,13 @@
 import { tw } from '@helpwave/common/twind'
 import { RoomOverview } from '../RoomOverview'
-import type { RoomMinimalDTO, RoomOverviewDTO } from '../../mutations/room_mutations'
-import type { BedMinimalDTO, BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
+import type { RoomOverviewDTO } from '../../mutations/room_mutations'
+import type { BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
 import { useContext } from 'react'
-import type { WardOverviewContextType } from '../../pages/ward/[uuid]'
 import { WardOverviewContext } from '../../pages/ward/[uuid]'
 import { useRoomOverviewsQuery } from '../../mutations/room_mutations'
-import type { PatientDTO } from '../../mutations/patient_mutations'
 
 export type WardRoomListProps = {
-  selectedBed: BedWithPatientWithTasksNumberDTO,
+  selectedBed?: BedWithPatientWithTasksNumberDTO,
   rooms?: RoomOverviewDTO[]
 }
 

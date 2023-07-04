@@ -1,13 +1,11 @@
 import { tw } from '@helpwave/common/twind'
 import { PatientCard } from './cards/PatientCard'
 import { BedCard } from './cards/BedCard'
-import type { RoomOverviewDTO, RoomMinimalDTO } from '../mutations/room_mutations'
-import { noop } from '@helpwave/common/components/user_input/Input'
+import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import { Span } from '@helpwave/common/components/Span'
-import type { BedWithPatientWithTasksNumberDTO, BedMinimalDTO } from '../mutations/bed_mutations'
+import type { BedMinimalDTO } from '../mutations/bed_mutations'
 import { useContext } from 'react'
 import { WardOverviewContext } from '../pages/ward/[uuid]'
-import { useRoomOverviewsQuery } from '../mutations/room_mutations'
 import type { PatientDTO } from '../mutations/patient_mutations'
 import { emptyPatient } from '../mutations/patient_mutations'
 
@@ -21,7 +19,7 @@ export type RoomOverviewProps = {
 export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const context = useContext(WardOverviewContext)
 
-  const setSelectedBed = (room: RoomMinimalDTO, bed: BedMinimalDTO, patient: PatientDTO|undefined) =>
+  const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patient: PatientDTO|undefined) =>
     context.updateContext({
       ...context.state,
       room,

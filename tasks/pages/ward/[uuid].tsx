@@ -1,31 +1,27 @@
-import {createContext, , useState} from 'react'
-import type {NextPage} from 'next'
+import { createContext, useEffect, useState } from 'react'
+import type { NextPage } from 'next'
 import Head from 'next/head'
-import {useAuth} from '../../hooks/useAuth'
-import {useRouter} from 'next/router'
-import type {PropsWithLanguage} from '@helpwave/common/hooks/useTranslation'
-import {useTranslation} from '@helpwave/common/hooks/useTranslation'
-import {TwoColumn} from '../../components/layout/TwoColumn'
-import type {RoomMinimalDTO, RoomOverviewDTO} from '../../mutations/room_mutations'
-import {
-  useDischargeMutation,
-  useUpdateMutation, useRoomOverviewsQuery
-} from '../../mutations/room_mutations'
-import {PatientDetail} from '../../components/layout/PatientDetails'
-import {PageWithHeader} from '../../components/layout/PageWithHeader'
+import { useAuth } from '../../hooks/useAuth'
+import { useRouter } from 'next/router'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { TwoColumn } from '../../components/layout/TwoColumn'
+import type { RoomOverviewDTO } from '../../mutations/room_mutations'
+import { PatientDetail } from '../../components/layout/PatientDetails'
+import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
-import {ConfirmDialog} from '@helpwave/common/components/modals/ConfirmDialog'
-import {WardRoomList} from '../../components/layout/WardRoomList'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { WardRoomList } from '../../components/layout/WardRoomList'
 import type {
-  BedDTO, BedMinimalDTO,
-  BedWithPatientWithTasksNumberDTO
+  BedMinimalDTO
 } from '../../mutations/bed_mutations'
+import type { PatientDTO } from '../../mutations/patient_mutations'
 import {
-  emptyBed,
-  emptyBedWithPatientWithTasksNumber
-} from '../../mutations/bed_mutations'
-import type {PatientDTO} from '../../mutations/patient_mutations'
-import {emptyPatient, useCreateMutation} from "../../mutations/patient_mutations";
+  emptyPatient,
+  usePatientCreateMutation,
+  usePatientDischargeMutation,
+  usePatientUpdateMutation
+} from '../../mutations/patient_mutations'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -56,32 +52,36 @@ const defaultWardOverviewTranslation = {
 }
 
 export type WardOverviewContextState = {
+  /**
+   patient === undefined means no patient
+
+   patient?.id === "" means creating a new patient
+   */
   patient?: PatientDTO,
   bed?: BedMinimalDTO,
-  room?: RoomMinimalDTO
-  wardID: string,
+  room?: RoomOverviewDTO,
+  wardID: string
 }
 
 const emptyWardOverviewContextState = {
-  wardID: ""
+  wardID: ''
 }
 
 export type WardOverviewContextType = {
-  state: WardOverviewContextState
+  state: WardOverviewContextState,
   updateContext: (context: WardOverviewContextState) => void
 }
 
 export const WardOverviewContext = createContext<WardOverviewContextType>({
   state: emptyWardOverviewContextState,
-  updateContext: () => {
-  }
+  updateContext: () => undefined
 })
 
-const WardOverview: NextPage = ({language}: PropsWithLanguage<WardOverviewTranslation>) => {
+const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
   const router = useRouter()
-  const {user} = useAuth()
-  const {uuid} = router.query
+  const { user } = useAuth()
+  const { uuid } = router.query
   const wardUUID = uuid as string
 
   const [contextState, setContextState] = useState<WardOverviewContextState>({
@@ -89,38 +89,38 @@ const WardOverview: NextPage = ({language}: PropsWithLanguage<WardOverviewTransl
   })
 
   const isShowingPatientDialog = !!contextState.patient?.id
-
+  const isShowingPatientList = contextState.patient === undefined
 
   const organizationUUID = 'org1' // TODO get this information somewhere
+  useEffect(() => {
+    setContextState({ wardID: wardUUID })
+  }, [wardUUID])
 
-  const {isLoading, isError, data} = useRoomOverviewsQuery(wardUUID)
-
-  const rooms = data
-
-  const createMutation = useCreateMutation(patient => {
-    const updatedContext = contextState;
-    updatedContext.patient = {...emptyPatient, id: patient.id}
+  const createMutation = usePatientCreateMutation(patient => {
+    const updatedContext = contextState
+    updatedContext.patient = { ...emptyPatient, id: patient.id }
     setContextState(updatedContext)
-  });
+  })
+
+  const updateMutation = usePatientUpdateMutation(patient => {
+    const updatedContext = contextState
+    updatedContext.patient = patient
+    setContextState(updatedContext)
+  })
+
+  const dischargeMutation = usePatientDischargeMutation(() => {
+    const updatedContext = { ...emptyWardOverviewContextState, wardID: contextState.wardID }
+    setContextState(updatedContext)
+  })
 
   if (!user) return null
-
-  // TODO add view for loading
-  if (isLoading) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError) {
-    return <div>Error Message</div>
-  }
 
   return (
     <PageWithHeader
       crumbs={[
-        {display: translation.organization, link: `/organizations?organizationID=${organizationUUID}`},
-        {display: translation.ward, link: `/organizations/${organizationUUID}?wardID=${wardUUID}`},
-        {display: translation.room, link: `/ward/${wardUUID}`}
+        { display: translation.organization, link: `/organizations?organizationID=${organizationUUID}` },
+        { display: translation.ward, link: `/organizations/${organizationUUID}?wardID=${wardUUID}` },
+        { display: translation.room, link: `/ward/${wardUUID}` }
       ]}
     >
       <Head>
@@ -130,41 +130,38 @@ const WardOverview: NextPage = ({language}: PropsWithLanguage<WardOverviewTransl
         isOpen={isShowingPatientDialog}
         title={translation.addPatientDialogTitle}
         onConfirm={() => {
-          createMutation.mutate(contextState.patient!)
+          if (contextState.patient) {
+            createMutation.mutate(contextState.patient)
+          } else {
+            setContextState({ ...emptyWardOverviewContextState, wardID: contextState.wardID })
+          }
         }}
         onCancel={() => {
-          setContextState({...emptyWardOverviewContextState, wardID: contextState.wardID})
+          setContextState({ ...emptyWardOverviewContextState, wardID: contextState.wardID })
         }}
         onBackgroundClick={() => {
-          setContextState({...emptyWardOverviewContextState, wardID: contextState.wardID})
+          setContextState({ ...emptyWardOverviewContextState, wardID: contextState.wardID })
         }}
       />
-      <WardOverviewContext.Provider value={{state: contextState, updateContext: setContextState}}>
+      <WardOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn
           disableResize={false}
-          constraints={{right: {min: '580px'}, left: {min: '33%'}}}
+          constraints={{ right: { min: '580px' }, left: { min: '33%' } }}
           baseLayoutValue="-580px"
-          left={() => rooms && (
-            <WardRoomList
-              rooms={rooms}
-              setSelectedBed={setSelectedBed}
-              selectedBed={selectedBed}
-              setIsShowingPatientDialog={setIsShowingPatientDialog}
-            />
-          )}
+          left={() => (<WardRoomList key={wardUUID}/>)}
           right={width =>
-            selectedBed.id === '' || selectedBed.patient === undefined || isShowingPatientDialog ?
+            isShowingPatientList ?
               <div>No Room or Patient Selected</div> :
-              (
+              contextState.bed && contextState.room && contextState.patient && (
                 <div>
                   <PatientDetail
                     width={width}
-                    key={selectedBed.id}
-                    bedPosition={bedPosition}
-                    bedsInRoom={numberOfBeds}
-                    patient={selectedBed.patient}
-                    onUpdate={patient => updateMutation.mutate({...selectedBed, patient})}
-                    onDischarge={patient => dischargeMutation.mutate({...selectedBed, patient})}
+                    key={contextState.patient?.id}
+                    bedPosition={contextState.bed.index}
+                    bedsInRoom={contextState.room.beds.length}
+                    patient={contextState.patient}
+                    onUpdate={patient => updateMutation.mutate(patient)}
+                    onDischarge={patient => dischargeMutation.mutate(patient)}
                   />
                 </div>
               )

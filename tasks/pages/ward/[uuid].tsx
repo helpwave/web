@@ -12,6 +12,7 @@ import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { WardRoomList } from '../../components/layout/WardRoomList'
+import { PatientList } from '../../components/layout/PatientList'
 import type {
   BedMinimalDTO
 } from '../../mutations/bed_mutations'
@@ -151,7 +152,12 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           left={() => (<WardRoomList key={wardUUID}/>)}
           right={width =>
             isShowingPatientList ?
-              <div>No Room or Patient Selected</div> :
+              !contextState.bed || !contextState.patient || isShowingPatientDialog ? (
+                  <PatientList
+                    width={width}
+                    wardUUID={wardUUID}
+                  />
+                ) :
               contextState.bed && contextState.room && contextState.patient && (
                 <div>
                   <PatientDetail

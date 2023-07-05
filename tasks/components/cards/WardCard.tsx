@@ -25,11 +25,6 @@ const defaultWardCardTranslations: Record<Languages, WardCardTranslation> = {
   }
 }
 
-type Room = {
-  bedCount: number,
-  name: string
-}
-
 export type WardCardProps = CardProps & {
   ward: WardOverviewDTO,
   onEditClick?: () => void

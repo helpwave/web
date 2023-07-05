@@ -1,5 +1,5 @@
 import type { TaskDTO, TaskMinimalDTO } from './task_mutations'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
   DischargePatientRequest, GetPatientDetailsRequest,
@@ -54,6 +54,13 @@ export type PatientListDTO = {
   discharged: PatientMinimalDTO[]
 }
 
+export type PatientWithBedIDDTO = {
+  id: string,
+  note: string,
+  humanReadableIdentifier: string,
+  bedID: string
+}
+
 const patientsQueryKey = 'patients'
 
 export const usePatientQuery = (callback: (patient: PatientDTO) => void, patientID:string) => {
@@ -94,13 +101,13 @@ export const usePatientsByWardQuery = (wardID: string) => {
       req.setWardId(wardID)
       const res = await patientService.getPatientsByWard(req, getAuthenticatedGrpcMetadata())
 
-      const patients: PatientDTO[] = res.getPatientsList().map((patient) => ({
+      const patients: PatientWithBedIDDTO[] = res.getPatientsList().map((patient) => ({
         id: patient.getId(),
-        human_readable_identifier: patient.getHumanReadableIdentifier(),
-        notes: patient.getNotes(),
-        bed_id: patient.getBedId(),
+        humanReadableIdentifier: patient.getHumanReadableIdentifier(),
+        note: patient.getNotes(),
+        bedID: patient.getBedId(),
       }))
-      patients[0].notes = ''
+      patients[0].note = ''
       return patients
     }
   })
@@ -115,7 +122,7 @@ export const usePatientListQuery = (wardID: string) => {
     queryFn: async () => {
       // TODO do grpc request
 
-      return queryClient.getQueryData<PatientListDTO>([queryKey, 'patientList'])
+      return queryClient.getQueryData<PatientListDTO>([patientsQueryKey, 'patientList'])
     },
     initialData: {
       active: [

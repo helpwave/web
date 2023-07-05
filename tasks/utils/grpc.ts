@@ -1,14 +1,15 @@
 import { WardServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_grpc_web_pb'
 import { RoomServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_grpc_web_pb'
 import { BedServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_grpc_web_pb'
+import { PatientServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_grpc_web_pb'
 import Cookies from 'js-cookie'
 import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
-import { Metadata } from 'grpc-web'
 
 // TODO: Implement something like a service registry
 export const wardService = new WardServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 export const roomService = new RoomServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 export const bedService = new BedServicePromiseClient('https://staging.api.helpwave.de/task-svc')
+export const patientService = new PatientServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 
 type AuthenticatedGrpcMetadata = {
   Authorization: string,

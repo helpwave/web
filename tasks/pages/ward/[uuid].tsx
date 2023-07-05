@@ -17,6 +17,7 @@ import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { WardRoomList } from '../../components/layout/WardRoomList'
+import { PatientList } from '../../components/layout/PatientList'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -137,8 +138,12 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           />
         )}
         right={width =>
-          selectedBed.id === '' || selectedBed.patient === undefined || isShowingPatientDialog ?
-            <div>No Room or Patient Selected</div> :
+          !selectedBed.id || !selectedBed.patient || isShowingPatientDialog ? (
+            <PatientList
+              width={width}
+              wardUUID={wardUUID}
+            />
+          ) :
               (
               <div>
                 <PatientDetail

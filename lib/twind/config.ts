@@ -123,6 +123,10 @@ export const config = defineConfig({
           background: '#CE75A042',
           text: '#CE75A0'
         },
+        'hw-label-yellow': {
+          background: '#FEEACB',
+          text: '#EA8E00'
+        },
       },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],

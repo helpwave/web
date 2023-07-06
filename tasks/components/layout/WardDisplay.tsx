@@ -24,11 +24,6 @@ const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> 
   }
 }
 
-type Room = {
-  bedCount: number,
-  name: string
-}
-
 export type WardDisplayProps = {
   selectedWard?: WardDetailDTO,
   wards: WardOverviewDTO[],
@@ -63,7 +58,7 @@ export const WardDisplay = ({
           />
         ))}
         <AddCard
-          className={tw('min-h-[96px]')}
+          className={tw('min-h-[76px]')}
           text={translation.addWard}
           onTileClick={() => onSelectionChange(undefined)}
           isSelected={selectedWard?.id === ''}

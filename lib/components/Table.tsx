@@ -2,6 +2,7 @@ import { tw, tx } from '../twind'
 import type { ReactElement } from 'react'
 import { Checkbox } from './user_input/Checkbox'
 import { Pagination } from './Pagination'
+import { noop } from './user_input/Input'
 
 export type TableStatePagination = {
   currentPage: number,
@@ -52,14 +53,14 @@ export const isDataObjectSelected = <T, >(tableState: TableState, dataObject: T,
 /**
  * data length before delete
  */
-export const removeFromTableSelection = <T, >(tableState: TableState, dataObject: T, dataLength: number, identifierMapping: IdentifierMapping<T>) => {
+export const removeFromTableSelection = <T, >(tableState: TableState, dataObject: T, dataLength: number, identifierMapping: IdentifierMapping<T>): TableState => {
   if (!tableState.selection) {
     return tableState
   }
 
   const currentSelection = tableState.selection.currentSelection.filter(value => value.localeCompare(identifierMapping(dataObject)) !== 0)
-
   dataLength -= 1
+
   return {
     ...tableState,
     selection: {
@@ -67,7 +68,11 @@ export const removeFromTableSelection = <T, >(tableState: TableState, dataObject
       hasSelectedAll: currentSelection.length === dataLength,
       hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
       hasSelectedNone: currentSelection.length === 0,
-    }
+    },
+    pagination: tableState.pagination ? {
+      ...tableState.pagination,
+      currentPage: Math.min(Math.max(Math.ceil(dataLength / tableState.pagination.entriesPerPage) - 1, 0), tableState.pagination.currentPage)
+    } : undefined
   }
 }
 
@@ -109,14 +114,16 @@ const changeTableSelectionAll = <T, >(tableState: TableState, data: T[], identif
   }
 }
 
+export type TableSortingType = 'ascending' | 'descending'
+export type TableSortingFunctionType<T> = (t1:T, t2:T)=> number
+
 export type TableProps<T> = {
   data: T[],
   /**
    * When using selection or pagination
    */
-  tableState: TableState,
+  stateManagement?: [TableState, (tableState: TableState) => void],
   identifierMapping: IdentifierMapping<T>,
-  updateTableState: (tableState: TableState) => void,
   /**
    * Only the cell itself no boilerplate <tr> or <th> required
    */
@@ -124,7 +131,12 @@ export type TableProps<T> = {
   /**
    * Only the cells of the row no boilerplate <tr> or <td> required
    */
-  rowMappingToCells: (dataObject: T) => ReactElement[]
+  rowMappingToCells: (dataObject: T) => ReactElement[],
+  sorting?: [TableSortingFunctionType<T>, TableSortingType],
+  /**
+   * Always go to the page of this element
+   */
+  focusElement?: T
 }
 
 /*  Possible extension for better customization
@@ -139,22 +151,29 @@ export type TableProps<T> = {
  */
 export const Table = <T, >({
   data,
-  tableState,
-  updateTableState,
+  stateManagement = [{}, noop],
   identifierMapping,
   header,
-  rowMappingToCells
+  rowMappingToCells,
+  sorting,
+  focusElement
 }: TableProps<T>) => {
-  let shownElements = data
+  const sortedData = [...data]
+  if (sorting) {
+    const [sortingFunction, sortingType] = sorting
+    sortedData.sort((a, b) => sortingFunction(a, b) * (sortingType === 'ascending' ? 1 : -1))
+  }
   let currentPage = 0
   let pageCount = 1
   let entriesPerPage = 5
-  if (tableState.pagination) {
+  const [tableState, updateTableState] = stateManagement
+
+  if (tableState?.pagination) {
     if (tableState.pagination.entriesPerPage < 1) {
       console.error('tableState.pagination.entriesPerPage must be >= 1', tableState.pagination.entriesPerPage)
     }
     entriesPerPage = Math.max(1, tableState.pagination.entriesPerPage)
-    pageCount = Math.ceil(data.length / entriesPerPage)
+    pageCount = Math.ceil(sortedData.length / entriesPerPage)
 
     if (tableState.pagination.currentPage < 0 || tableState.pagination.currentPage >= pageCount) {
       console.error('tableState.pagination.currentPage < 0 || tableState.pagination.currentPage >= pageCount must be fullfilled',
@@ -162,11 +181,18 @@ export const Table = <T, >({
     } else {
       currentPage = tableState.pagination.currentPage
     }
-
-    shownElements = data.slice(currentPage * entriesPerPage, Math.min(data.length, (currentPage + 1) * entriesPerPage))
   }
 
-  const border = tw('border-b-2 border-gray-300')
+  if (focusElement) {
+    const index = sortedData.findIndex(value => identifierMapping(value) === identifierMapping(focusElement))
+    if (index) {
+      currentPage = Math.floor(index / entriesPerPage)
+    }
+  }
+
+  const shownElements = sortedData.slice(currentPage * entriesPerPage, Math.min(sortedData.length, (currentPage + 1) * entriesPerPage))
+
+  const headerRow = tw('border-b-2 border-gray-300')
   const headerPaddingHead = tw('pb-2')
   const headerPaddingBody = 'pt-2'
   const cellPadding = 'py-1 px-2'
@@ -175,7 +201,7 @@ export const Table = <T, >({
     <div className={tw('flex flex-col gap-y-4 items-center')}>
       <table>
         <thead>
-        <tr className={border}>
+        <tr className={headerRow}>
           {header && tableState.selection && (
             <th className={headerPaddingHead}>
               <Checkbox

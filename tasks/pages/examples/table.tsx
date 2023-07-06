@@ -1,5 +1,9 @@
 import type { NextPage } from 'next'
-import type { TableState } from '@helpwave/common/components/Table'
+import type {
+  TableState,
+  TableSortingType,
+  TableSortingFunctionType
+} from '@helpwave/common/components/Table'
 import {
   defaultTableStatePagination,
   defaultTableStateSelection, removeFromTableSelection,
@@ -9,6 +13,8 @@ import { useState } from 'react'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Button } from '@helpwave/common/components/Button'
+import { SortButton } from '@helpwave/common/components/SortButton'
+import { tw } from '@helpwave/common/twind'
 
 type DataType = {
   id: string,
@@ -33,36 +39,106 @@ const TablePage: NextPage = () => {
     pagination: defaultTableStatePagination,
     selection: defaultTableStateSelection
   })
+
+  const [sorting, setSorting] = useState<[string, TableSortingType]>()
+  const [sortingKey, ascending] = sorting ?? ['', 'ascending']
   const idMapping = (data: DataType) => data.id
 
+  const sortingFunctions: Record<string, Record<TableSortingType, TableSortingFunctionType<DataType>>> = {
+    id: {
+      ascending: (t1, t2) => t1.id.localeCompare(t2.id),
+      descending: (t1, t2) => t1.id.localeCompare(t2.id) * -1,
+    },
+    name: {
+      ascending: (t1, t2) => t1.name.localeCompare(t2.name),
+      descending: (t1, t2) => t1.name.localeCompare(t2.name) * -1,
+    },
+    age: {
+      ascending: (t1, t2) => t1.age - t2.age,
+      descending: (t1, t2) => (t1.age - t2.age) * -1,
+    }
+  }
+
   return (
-    <Table
-      tableState={tableState}
-      updateTableState={newTableState => setTableState(newTableState)}
-      data={data}
-      identifierMapping={idMapping}
-      rowMappingToCells={dataObject => [
-        <Span key="id" type="title">{dataObject.id}</Span>,
-        <Input key="name" value={dataObject.name} onChange={text => setData(data.map(value => value.id === dataObject.id ? { ...dataObject, name: text } : value))} />,
-        <Input key="age" type="number" value={dataObject.age.toString()} onChange={text => setData(data.map(value => value.id === dataObject.id ? { ...dataObject, age: parseInt(text) } : value))} />,
+    <div className={tw('flex flex-col gap-y-12 items-center')}>
+      <Table
+        stateManagement={[tableState, (newTableState) => {
+          setTableState(newTableState)
+          setData(data)
+        }]}
+        data={data}
+        identifierMapping={idMapping}
+        rowMappingToCells={dataObject => [
+          <Span key="id" type="title" className={tw('w-[100px] text-ellipsis overflow-hidden block')}>{dataObject.id}</Span>,
+          <Input key="name" value={dataObject.name} onChange={text => {
+            setData(data.map(value => value.id === dataObject.id ? { ...dataObject, name: text } : value))
+            setSorting(undefined)
+          }} />,
+          <Input key="age" type="number" value={dataObject.age.toString()} onChange={text => {
+            setData(data.map(value => value.id === dataObject.id ? { ...dataObject, age: parseInt(text) } : value))
+            setSorting(undefined)
+          }} />,
+          <Button
+            key="delete"
+            onClick={() => {
+              const newData = data.filter(value => value.id !== dataObject.id)
+              setData(newData)
+              setTableState(removeFromTableSelection(tableState, dataObject, data.length, idMapping))
+            }}
+            variant="textButton"
+            color="negative"
+          >Delete</Button>
+        ]}
+        header={[
+          <SortButton
+            key="headerID"
+            ascending={sortingKey === 'id' ? ascending : undefined}
+            onClick={newTableSorting => {
+              setSorting(['id', newTableSorting])
+              setData(data.sort(sortingFunctions.id[newTableSorting]))
+            }}
+          >
+            <Span type="tableHeader">ID</Span>
+          </SortButton>,
+          <SortButton
+            key="name"
+            ascending={sortingKey === 'name' ? ascending : undefined}
+            onClick={newTableSorting => {
+              setSorting(['name', newTableSorting])
+              setData(data.sort(sortingFunctions.name[newTableSorting]))
+            }}
+          >
+            <Span type="tableHeader">Name</Span>
+          </SortButton>,
+          <SortButton
+            key="name"
+            ascending={sortingKey === 'age' ? ascending : undefined}
+            onClick={newTableSorting => {
+              setSorting(['age', newTableSorting])
+              setData(data.sort(sortingFunctions.age[newTableSorting]))
+            }}
+          >
+            <Span key="age" type="tableHeader">age</Span>
+          </SortButton>,
+          <></>
+        ]}
+      />
+      <div>
         <Button
-          key="delete"
+          className={tw('w-auto')}
           onClick={() => {
-            const newData = data.filter(value => value.id !== dataObject.id)
-            setData(newData)
-            setTableState(removeFromTableSelection(tableState, dataObject, data.length, idMapping))
+            const withNewData = [...data, {
+              id: Math.random().toString(),
+              name: 'Name ' + data.length,
+              age: Math.ceil(Math.random() * 100)
+            }]
+            setData(sortingKey ? withNewData.sort(sortingFunctions[sortingKey][ascending]) : withNewData)
           }}
-          variant="textButton"
-          color="negative"
-        >Delete</Button>
-      ]}
-      header={[
-        <Span key="headerID" type="tableHeader">ID</Span>,
-        <Span key="name" type="tableHeader">Name</Span>,
-        <Span key="age" type="tableHeader">age</Span>,
-        <></>
-      ]}
-    />
+        >
+          {'Add Data'}
+        </Button>
+      </div>
+    </div>
   )
 }
 

@@ -1,7 +1,7 @@
-import { tw, tx } from '../twind'
+import { tw } from '../twind'
 import type { ButtonProps } from './Button'
 import { Button } from './Button'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
 import type { TableSortingType } from './Table'
 
 export type SortButtonProps = Omit<ButtonProps, 'onClick'> & {
@@ -29,9 +29,7 @@ export const SortButton = ({
     >
       <div className={tw('flex flex-row gap-x-2')}>
         {children}
-        <div className={tx({ 'text-transparent': !ascending })}>
-          {ascending === 'ascending' ? <ChevronUp/> : <ChevronDown/>}
-        </div>
+        {ascending === 'ascending' ? <ChevronUp/> : (!ascending ? <ChevronsUpDown/> : <ChevronDown/>)}
       </div>
     </Button>
   )

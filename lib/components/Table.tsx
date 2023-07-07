@@ -50,6 +50,23 @@ export const isDataObjectSelected = <T, >(tableState: TableState, dataObject: T,
   return !!tableState.selection.currentSelection.find(value => value.localeCompare(identifierMapping(dataObject)) === 0)
 }
 
+export const pageForItem = <T, >(data: T[], item: T, entriesPerPage: number, identifierMapping: IdentifierMapping<T>) => {
+  const index = data.findIndex(value => identifierMapping(value) === identifierMapping(item))
+  if (index) {
+    return Math.floor(index / entriesPerPage)
+  }
+  console.error("item doesn't exist on data", item)
+  return 0
+}
+
+export const addElementTableStateUpdate = <T, >(tableState: TableState, data: T[], dataObject: T, identifierMapping: IdentifierMapping<T>) => {
+  return {
+    ...tableState,
+    pagination: tableState.pagination ? { ...tableState.pagination, currentPage: pageForItem(data, dataObject, tableState.pagination.entriesPerPage, identifierMapping) } : undefined,
+    selection: tableState.selection ? { ...tableState.selection, hasSelectedAll: false, hasSelectedSome: tableState.selection.hasSelectedAll || tableState.selection.hasSelectedSome } : undefined
+  }
+}
+
 /**
  * data length before delete
  */
@@ -184,10 +201,7 @@ export const Table = <T, >({
   }
 
   if (focusElement) {
-    const index = sortedData.findIndex(value => identifierMapping(value) === identifierMapping(focusElement))
-    if (index) {
-      currentPage = Math.floor(index / entriesPerPage)
-    }
+    currentPage = pageForItem(sortedData, focusElement, entriesPerPage, identifierMapping)
   }
 
   const shownElements = sortedData.slice(currentPage * entriesPerPage, Math.min(sortedData.length, (currentPage + 1) * entriesPerPage))

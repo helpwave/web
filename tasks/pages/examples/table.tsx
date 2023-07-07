@@ -5,6 +5,7 @@ import type {
   TableSortingFunctionType
 } from '@helpwave/common/components/Table'
 import {
+  addElementTableStateUpdate,
   defaultTableStatePagination,
   defaultTableStateSelection, removeFromTableSelection,
   Table
@@ -127,12 +128,15 @@ const TablePage: NextPage = () => {
         <Button
           className={tw('w-auto')}
           onClick={() => {
-            const withNewData = [...data, {
+            const newData = {
               id: Math.random().toString(),
               name: 'Name ' + data.length,
               age: Math.ceil(Math.random() * 100)
-            }]
-            setData(sortingKey ? withNewData.sort(sortingFunctions[sortingKey][ascending]) : withNewData)
+            }
+            const withNewData = [...data, newData]
+            const sorted = sortingKey ? withNewData.sort(sortingFunctions[sortingKey][ascending]) : withNewData
+            setData(sorted)
+            setTableState(addElementTableStateUpdate(tableState, sorted, newData, idMapping))
           }}
         >
           {'Add Data'}

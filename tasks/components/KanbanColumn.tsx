@@ -4,7 +4,6 @@ import { TaskCard } from './cards/TaskCard'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Add from '@helpwave/common/icons/Add'
 import { useDroppable } from '@dnd-kit/core'
 import { Sortable } from './Sortable'
 import {
@@ -12,6 +11,7 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable'
 import type { TaskDTO, TaskStatus } from '../mutations/room_mutations'
+import { Plus } from 'lucide-react'
 
 type KanbanColumnsTranslation = {
   addTask: string
@@ -89,7 +89,7 @@ export const KanbanColumn = ({
         })}
         className={tw('flex flex-row ml-1 gap-x-1 text-gray-300')}
       >
-        <Add/>
+        <Plus/>
         {translation.addTask}
       </button>
     </div>

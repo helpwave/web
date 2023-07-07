@@ -12,6 +12,7 @@
   "major": {
     "dependencyDashboardApproval": true
   },
+  "rangeStrategy": "pin",
   "packageRules": [
     {
       "groupName": "non-major dependencies of lib",

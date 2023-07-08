@@ -72,7 +72,7 @@ export const WardDisplay = ({
           />
         ))}
         <AddCard
-          className={tw('min-h-[96px]')}
+          className={tw('min-h-[76px]')}
           text={translation.addWard}
           onTileClick={() => context.updateContext({ ...context.state, wardID: undefined })}
           isSelected={!selectedWardID}

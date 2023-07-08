@@ -1,4 +1,4 @@
-FROM node:18.16.0 as build
+FROM node:18.16.1 as build
 ENV NEXT_TELEMETRY_DISABLED 1
 ARG WS="@helpwave/tasks"
 
@@ -22,7 +22,7 @@ COPY lib ./lib/
 COPY tasks ./tasks/
 RUN pnpm --filter $WS run build
 
-FROM node:18.16.0-alpine
+FROM node:18.16.1-alpine
 
 LABEL maintainer="tech@helpwave.de"
 

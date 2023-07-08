@@ -1,29 +1,10 @@
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { tw } from '@helpwave/common/twind'
 import { PillLabelBox } from '../pill/PillLabelBox'
 import { Bed, Edit } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { Span } from '@helpwave/common/components/Span'
 import type { WardOverviewDTO } from '../../mutations/ward_mutations'
-
-type WardCardTranslation = {
-  edit: string,
-  noRoomsYet: string
-}
-
-const defaultWardCardTranslations: Record<Languages, WardCardTranslation> = {
-  en: {
-    edit: 'Edit',
-    noRoomsYet: 'no rooms yet'
-  },
-  de: {
-    edit: 'Bearbeiten',
-    noRoomsYet: 'noch keine Räume'
-  }
-}
 
 export type WardCardProps = CardProps & {
   ward: WardOverviewDTO,
@@ -34,38 +15,27 @@ export type WardCardProps = CardProps & {
  * A Card showing the information about a ward
  */
 export const WardCard = ({
-  language,
   isSelected,
   ward,
   onTileClick = () => undefined,
   onEditClick
-}: PropsWithLanguage<WardCardTranslation, WardCardProps>) => {
-  const translation = useTranslation(language, defaultWardCardTranslations)
-  const hasRooms = ward.bedCount > 0
-
+}: WardCardProps) => {
   return (
     <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('group cursor-pointer')}>
-      <div className={tw('flex flex-row justify-between w-full')}>
-        <Span type="subsubsectionTitle">{ward.name}</Span>
+      <div className={tw('flex flex-row w-full mb-2 gap-x-2 overflow-hidden')}>
+        <Span type="subsubsectionTitle" className={tw('flex-1 truncate')}>{ward.name}</Span>
         {onEditClick && (
           <button
             onClick={event => {
               onEditClick()
               event.stopPropagation()
             }}
-            className={tw('hidden group-hover:block')}
+            className={tw('text-transparent group-hover:text-black')}
           >
-            <Edit color="black" size={24}/>
+            <Edit size={24}/>
           </button>
         )}
       </div>
-      {
-        !hasRooms && (
-          <div className={tx('text-left my-1 truncate text-gray-400 text-sm')}>
-            {translation.noRoomsYet}
-          </div>
-        )
-      }
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-row')}>
           <Bed/>

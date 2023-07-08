@@ -1,11 +1,11 @@
 import { tw } from '@helpwave/common/twind'
 import Footer from '../Footer'
-import Helpwave from '../../icons/HelpwaveRect'
+import { HelpwaveSpinner } from '@helpwave/common/icons/HelpwaveSpinner'
 
 const StartSection = () => {
   return (
     <div className={tw('w-screen h-screen bg-white')} id="start">
-      <Helpwave className={tw('absolute top-[25px] left-1/2 -translate-x-1/2')} height="72" width="96" />
+      <HelpwaveSpinner className={tw('absolute top-[25px] left-1/2 -translate-x-1/2')} height="72" width="96" />
       <div className={tw('relative top-[40vh] m-auto')}>
           <div className={tw('font-space text-6xl font-bold text-center')}>helpwave</div>
 

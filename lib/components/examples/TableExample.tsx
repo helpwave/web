@@ -1,29 +1,25 @@
-import type { NextPage } from 'next'
-import type {
-  TableState,
-  TableSortingType,
-  TableSortingFunctionType
-} from '@helpwave/common/components/Table'
+import type { TableProps, TableSortingFunctionType, TableSortingType, TableState } from '../Table'
 import {
   addElementTableStateUpdate,
   defaultTableStatePagination,
-  defaultTableStateSelection, removeFromTableSelection,
+  defaultTableStateSelection,
+  removeFromTableSelection,
   Table
-} from '@helpwave/common/components/Table'
-import { useState } from 'react'
-import { Span } from '@helpwave/common/components/Span'
-import { Input } from '@helpwave/common/components/user_input/Input'
-import { Button } from '@helpwave/common/components/Button'
-import { SortButton } from '@helpwave/common/components/SortButton'
-import { tw } from '@helpwave/common/twind'
+} from '../Table'
+import { tw } from '../../twind'
+import { Span } from '../Span'
+import { Input } from '../user_input/Input'
+import { Button } from '../Button'
+import { SortButton } from '../SortButton'
+import { useEffect, useState } from 'react'
 
-type DataType = {
+export type DataType = {
   id: string,
   name: string,
   age: number
 }
 
-const exampleData: DataType[] = [
+export const exampleData: DataType[] = [
   { id: 'data1', name: 'Name 1', age: 23 },
   { id: 'data2', name: 'Name 2', age: 21 },
   { id: 'data3', name: 'Name 3', age: 32 },
@@ -34,12 +30,16 @@ const exampleData: DataType[] = [
   { id: 'data8', name: 'Name 8', age: 31 }
 ]
 
-const TablePage: NextPage = () => {
-  const [data, setData] = useState<DataType[]>(exampleData)
+const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>) => {
+  const [data, setData] = useState<DataType[]>(initialData)
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination,
     selection: defaultTableStateSelection
   })
+
+  useEffect(() => {
+    setData(initialData)
+  }, [initialData])
 
   const [sorting, setSorting] = useState<[string, TableSortingType]>()
   const [sortingKey, ascending] = sorting ?? ['', 'ascending']
@@ -124,7 +124,7 @@ const TablePage: NextPage = () => {
           <></>
         ]}
       />
-      <div>
+      <div className={tw('flex flex-row gap-x-2')}>
         <Button
           className={tw('w-auto')}
           onClick={() => {
@@ -141,9 +141,21 @@ const TablePage: NextPage = () => {
         >
           {'Add Data'}
         </Button>
+        <Button
+          color="negative"
+          className={tw('w-auto')}
+          onClick={() => {
+            const selectedData = data.filter((d) => tableState.selection?.currentSelection.includes(idMapping(d)))
+            const unselectedData = data.filter((d) => !tableState.selection?.currentSelection.includes(idMapping(d)))
+            setData(unselectedData)
+            setTableState(removeFromTableSelection(tableState, selectedData, data.length, idMapping))
+          }}
+        >
+          {'Remove all selected'}
+        </Button>
       </div>
     </div>
   )
 }
 
-export default TablePage
+export default TableExample

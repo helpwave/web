@@ -70,19 +70,20 @@ export const addElementTableStateUpdate = <T, >(tableState: TableState, data: T[
 /**
  * data length before delete
  */
-export const removeFromTableSelection = <T, >(tableState: TableState, dataObject: T, dataLength: number, identifierMapping: IdentifierMapping<T>): TableState => {
+export const removeFromTableSelection = <T, >(tableState: TableState, deletedObjects: T[], dataLength: number, identifierMapping: IdentifierMapping<T>): TableState => {
   if (!tableState.selection) {
     return tableState
   }
 
-  const currentSelection = tableState.selection.currentSelection.filter(value => value.localeCompare(identifierMapping(dataObject)) !== 0)
-  dataLength -= 1
+  const deletedObjectIds = deletedObjects.map(identifierMapping)
+  const currentSelection = tableState.selection.currentSelection.filter((value) => !deletedObjectIds.includes(value))
+  dataLength -= currentSelection.length
 
   return {
     ...tableState,
     selection: {
       currentSelection,
-      hasSelectedAll: currentSelection.length === dataLength,
+      hasSelectedAll: currentSelection.length === dataLength && dataLength !== 0,
       hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
       hasSelectedNone: currentSelection.length === 0,
     },
@@ -119,6 +120,19 @@ const changeTableSelectionAll = <T, >(tableState: TableState, data: T[], identif
   if (!tableState.selection) {
     return tableState
   }
+
+  if (data.length === 0) {
+    return {
+      ...tableState,
+      selection: {
+        currentSelection: [],
+        hasSelectedAll: false,
+        hasSelectedSome: false,
+        hasSelectedNone: true
+      }
+    }
+  }
+
   const hasSelectedAll = !(tableState.selection.hasSelectedSome || tableState.selection.hasSelectedAll)
   return {
     ...tableState,

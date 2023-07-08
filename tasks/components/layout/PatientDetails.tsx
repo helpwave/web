@@ -2,7 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
@@ -14,8 +14,15 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { TaskDetailModal } from '../TaskDetailModal'
 import type { TaskDTO } from '../../mutations/task_mutations'
-import type { PatientCompleteDTO, PatientDTO } from '../../mutations/patient_mutations'
+import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { WardOverviewContext } from '../../pages/ward/[uuid]'
+import {
+  emptyPatientDetails,
+  usePatientDetailsQuery,
+  usePatientDischargeMutation,
+  usePatientUpdateMutation
+} from '../../mutations/patient_mutations'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -48,9 +55,7 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
 export type PatientDetailProps = {
   bedPosition: number,
   bedsInRoom: number,
-  patient: PatientDTO,
-  onUpdate: (patient: PatientCompleteDTO) => void,
-  onDischarge: (patient: PatientCompleteDTO) => void,
+  patient?: PatientDetailsDTO,
   width?: number
 }
 
@@ -61,29 +66,50 @@ export const PatientDetail = ({
   language,
   bedPosition,
   bedsInRoom,
-  patient,
-  onUpdate,
-  onDischarge
+  patient = emptyPatientDetails
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const translation = useTranslation(language, defaultPatientDetailTranslations)
 
   // TODO fetch patient by patient.id replace below
-  const [newPatient, setNewPatient] = useState<PatientCompleteDTO>({ id: patient.id, note: patient.note, tasks: [], humanReadableIdentifier: patient.humanReadableIdentifier })
+  const context = useContext(WardOverviewContext)
+
+  const updateMutation = usePatientUpdateMutation(() => undefined)
+  const dischargeMutation = usePatientDischargeMutation(() => undefined)
+  const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.wardID)
+
+  const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
-  const [sortedTasks, setSortedTasks] = useState<SortedTasks>({
-    [TaskStatus.TASK_STATUS_TODO]: newPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
-    [TaskStatus.TASK_STATUS_IN_PROGRESS]: newPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
-    [TaskStatus.TASK_STATUS_DONE]: newPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
+
+  const sortedTasksByPatient = (patient: PatientDetailsDTO) => ({
+    [TaskStatus.TASK_STATUS_TODO]: patient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
+    [TaskStatus.TASK_STATUS_IN_PROGRESS]: patient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
+    [TaskStatus.TASK_STATUS_DONE]: patient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
   })
+  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(sortedTasksByPatient(newPatient))
+
+  useEffect(() => {
+    if (data) {
+      setNewPatient(data)
+      setSortedTasks(sortedTasksByPatient(data))
+    }
+  }, [data])
 
   const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
-  const changeSavedValue = (patient:PatientCompleteDTO) => {
+  const changeSavedValue = (patient:PatientDetailsDTO) => {
     setNewPatient(patient)
-    restartTimer(() => onUpdate(patient))
+    restartTimer(() => updateMutation.mutate(patient))
+  }
+
+  if (isError) {
+    return <div>Error in WardRoomList!</div>
+  }
+
+  if (isLoading) {
+    return <div>Loading WardRoomList!</div>
   }
 
   return (
@@ -104,7 +130,7 @@ export const PatientDetail = ({
         onBackgroundClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          onDischarge(newPatient)
+          dischargeMutation.mutate(newPatient)
         }}
         confirmType="negative"
       />
@@ -127,12 +153,8 @@ export const PatientDetail = ({
               newTask.creationDate = new Date()
             }
             setNewPatient(changedPatient)
-            setSortedTasks({
-              [TaskStatus.TASK_STATUS_TODO]: changedPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
-              [TaskStatus.TASK_STATUS_IN_PROGRESS]: changedPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
-              [TaskStatus.TASK_STATUS_DONE]: changedPatient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS)
-            })
-            onUpdate(changedPatient)
+            setSortedTasks(sortedTasksByPatient(changedPatient))
+            updateMutation.mutate(changedPatient)
             clearUpdateTimer()
             setNewTask(undefined)
           }}
@@ -168,7 +190,7 @@ export const PatientDetail = ({
         editedTaskID={newTask?.id}
         onChange={setSortedTasks}
         onEndChanging={sortedTasks => {
-          onUpdate({
+          updateMutation.mutate({
             ...newPatient,
             tasks: [...sortedTasks[TaskStatus.TASK_STATUS_TODO], ...sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS], ...sortedTasks[TaskStatus.TASK_STATUS_DONE]]
           })
@@ -184,7 +206,7 @@ export const PatientDetail = ({
                   className={tw('mr-4')}>{translation.dischargePatient}</Button>
           <Button color="accent" onClick={() => {
             clearUpdateTimer(true)
-            onUpdate(newPatient)
+            updateMutation.mutate(newPatient)
           }}>{translation.saveChanges}</Button>
         </div>
       </div>

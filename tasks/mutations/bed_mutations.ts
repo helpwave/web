@@ -28,3 +28,5 @@ export type BedMinimalDTO = {
   id: string,
   index: number
 }
+
+export const bedQueryKey = 'beds'

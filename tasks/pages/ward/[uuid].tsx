@@ -18,10 +18,8 @@ import type {
 } from '../../mutations/bed_mutations'
 import type { PatientDTO } from '../../mutations/patient_mutations'
 import {
-  emptyPatient,
-  usePatientCreateMutation,
-  usePatientDischargeMutation,
-  usePatientUpdateMutation
+  useAssignBedMutation,
+  usePatientCreateMutation
 } from '../../mutations/patient_mutations'
 
 type WardOverviewTranslation = {
@@ -89,28 +87,27 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     wardID: wardUUID
   })
 
-  const isShowingPatientDialog = !!contextState.patient?.id
-  const isShowingPatientList = contextState.patient === undefined
+  const isShowingPatientDialog = contextState.patient?.id === ''
+  const isShowingPatientList = contextState.patient === undefined || isShowingPatientDialog
 
   const organizationUUID = 'org1' // TODO get this information somewhere
   useEffect(() => {
     setContextState({ wardID: wardUUID })
   }, [wardUUID])
 
+  const assignBedMutation = useAssignBedMutation(bed => {
+    const updatedContext = contextState
+    updatedContext.bed = bed
+
+    setContextState(updatedContext)
+  })
+
   const createMutation = usePatientCreateMutation(patient => {
     const updatedContext = contextState
-    updatedContext.patient = { ...emptyPatient, id: patient.id }
-    setContextState(updatedContext)
-  })
-
-  const updateMutation = usePatientUpdateMutation(patient => {
-    const updatedContext = contextState
     updatedContext.patient = patient
-    setContextState(updatedContext)
-  })
-
-  const dischargeMutation = usePatientDischargeMutation(() => {
-    const updatedContext = { ...emptyWardOverviewContextState, wardID: contextState.wardID }
+    if (contextState.bed) {
+      assignBedMutation.mutate({ ...contextState.bed, patient })
+    }
     setContextState(updatedContext)
   })
 
@@ -164,9 +161,6 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
                     key={contextState.patient?.id}
                     bedPosition={contextState.bed.index}
                     bedsInRoom={contextState.room.beds.length}
-                    patient={contextState.patient}
-                    onUpdate={patient => updateMutation.mutate(patient)}
-                    onDischarge={patient => dischargeMutation.mutate(patient)}
                   />
                 </div>
               )

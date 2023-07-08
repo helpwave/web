@@ -75,8 +75,8 @@ export const PatientDetail = ({
   const context = useContext(WardOverviewContext)
 
   const updateMutation = usePatientUpdateMutation(() => undefined)
-  const dischargeMutation = usePatientDischargeMutation(() => undefined)
-  const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.wardID)
+  const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardID: context.state.wardID }))
+  const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)

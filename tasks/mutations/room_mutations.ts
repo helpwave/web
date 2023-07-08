@@ -8,9 +8,9 @@ import {
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
 import type { BedDTO, BedWithPatientWithTasksNumberDTO } from './bed_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import { wardDetailsQueryKey } from './ward_mutations'
+import { wardDetailsQueryKey, wardsQueryKey } from './ward_mutations'
 
-const roomsQueryKey = 'rooms'
+export const roomsQueryKey = 'rooms'
 
 export type RoomMinimalDTO = {
   id: string,
@@ -133,9 +133,10 @@ export const useRoomQuery = () => {
   })
 }
 
+export const roomOverviewsQueryKey = 'roomOverview'
 export const useRoomOverviewsQuery = (wardUUID: string | undefined) => {
   return useQuery({
-    queryKey: [roomsQueryKey, 'roomOverview'],
+    queryKey: [roomsQueryKey, roomOverviewsQueryKey],
     enabled: !!wardUUID,
     queryFn: async () => {
       const req = new GetRoomOverviewsByWardRequest()
@@ -154,7 +155,7 @@ export const useRoomOverviewsQuery = (wardUUID: string | undefined) => {
             index: 0, // TODO replace later
             patient: !patient ? undefined : {
               id: patient.getId(),
-              name: patient.getId().substring(0, 6), // TODO replace with name later
+              name: patient.getHumanReadableIdentifier(),
               tasksUnscheduled: patient.getTasksUnscheduled(),
               tasksInProgress: patient.getTasksInProgress(),
               tasksDone: patient.getTasksDone()
@@ -201,11 +202,9 @@ export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, 
         console.error('create room failed')
       }
 
+      queryClient.refetchQueries([wardsQueryKey, wardDetailsQueryKey]).then()
       callback(room)
       return room
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries([wardDetailsQueryKey, roomsQueryKey]).then()
     },
   })
 }

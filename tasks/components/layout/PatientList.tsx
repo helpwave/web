@@ -2,7 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
@@ -10,6 +10,7 @@ import type { PatientDTO, PatientWithBedAndRoomDTO } from '../../mutations/patie
 import { usePatientListQuery } from '../../mutations/patient_mutations'
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
+import { WardOverviewContext } from '../../pages/ward/[uuid]'
 
 type PatientListTranslation = {
   patients: string,
@@ -58,7 +59,6 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
 }
 
 export type PatientListProps = {
-  wardUUID: string,
   onDischarge?: (patient: PatientDTO) => void,
   width?: number
 }
@@ -67,12 +67,12 @@ export type PatientListProps = {
  * The right side of the ward/[uuid].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
-  language,
-  wardUUID
+  language
 }: PropsWithLanguage<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(language, defaultPatientListTranslations)
   const [search, setSearch] = useState('')
-  const { data, isLoading, isError } = usePatientListQuery(wardUUID)
+  const context = useContext(WardOverviewContext)
+  const { data, isLoading, isError } = usePatientListQuery(context.state.wardID)
 
   if (isError) {
     return <p>Error</p>

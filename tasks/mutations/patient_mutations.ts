@@ -8,6 +8,7 @@ import {
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedDTO } from './bed_mutations'
 import { emptyBed } from './bed_mutations'
+import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 
 export type PatientDTO = {
   id: string,
@@ -86,11 +87,15 @@ export const emptyPatientDetails = {
 
 const patientsQueryKey = 'patients'
 
-export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) => void, patientID:string) => {
+export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) => void, patientID:string | undefined) => {
   return useQuery({
     queryKey: [patientsQueryKey],
     enabled: !!patientID,
     queryFn: async () => {
+      if (!patientID) {
+        return
+      }
+
       const req = new GetPatientDetailsRequest()
       req.setId(patientID)
 
@@ -234,6 +239,7 @@ export const usePatientUpdateMutation = (callback: (patient: PatientDTO) => void
 }
 
 export const usePatientDischargeMutation = (callback: () => void) => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
       const req = new DischargePatientRequest()
@@ -243,6 +249,7 @@ export const usePatientDischargeMutation = (callback: () => void) => {
 
       // TODO some check whether request was successful
 
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).catch(reason => console.log(reason))
       callback()
       return res.toObject()
     },
@@ -250,6 +257,7 @@ export const usePatientDischargeMutation = (callback: () => void) => {
 }
 
 export const useAssignBedMutation = (callback: (bed: BedDTO) => void) => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed: BedDTO) => {
       if (!bed.patient) {
@@ -260,7 +268,6 @@ export const useAssignBedMutation = (callback: (bed: BedDTO) => void) => {
       req.setId(bed.patient.id)
       req.setBedId(bed.id)
 
-      console.log(req)
       const res = await patientService.assignBed(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
@@ -268,6 +275,7 @@ export const useAssignBedMutation = (callback: (bed: BedDTO) => void) => {
         console.error('assign bed request failed')
       }
 
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback(bed)
       return bed
     },

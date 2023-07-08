@@ -9,7 +9,7 @@ import {
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
 import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
 
-const queryKey = 'wards'
+export const wardsQueryKey = 'wards'
 
 export type WardDTO = {
   id: string,
@@ -63,7 +63,7 @@ export const emptyWard: WardDetailDTO = {
 
 export const useWardOverviewsQuery = () => {
   return useQuery({
-    queryKey: [queryKey, 'overviews'],
+    queryKey: [wardsQueryKey, 'overviews'],
     queryFn: async () => {
       const req = new GetWardOverviewsRequest()
       const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata())
@@ -85,7 +85,7 @@ export const useWardOverviewsQuery = () => {
 export const wardDetailsQueryKey = 'wardDetails'
 export const useWardDetailsQuery = (id?: string) => {
   return useQuery({
-    queryKey: [queryKey, wardDetailsQueryKey, id],
+    queryKey: [wardsQueryKey, wardDetailsQueryKey],
     enabled: id !== undefined,
     queryFn: async () => {
       if (id === undefined) return
@@ -98,7 +98,7 @@ export const useWardDetailsQuery = (id?: string) => {
         id: res.getId(),
         name: res.getName(),
         rooms: res.getRoomsList().map((room) => ({
-          id: room.getName(), // TODO use id
+          id: room.getId(),
           name: room.getName(),
           beds: room.getBedsList().map((bed) => ({
             id: bed.getId()
@@ -121,7 +121,7 @@ export const useWardDetailsQuery = (id?: string) => {
 
 export const useWardQuery = (id: string) => {
   return useQuery({
-    queryKey: [queryKey, id],
+    queryKey: [wardsQueryKey, id],
     enabled: id !== undefined,
     queryFn: async (): Promise<WardDTO> => {
       const req = new GetWardRequest()
@@ -145,7 +145,7 @@ export const useWardUpdateMutation = (callback: (ward:WardDTO) => void) => {
       callback(ward)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKey]).then()
+      queryClient.invalidateQueries([wardsQueryKey]).then()
     }
   })
 }
@@ -162,7 +162,7 @@ export const useWardCreateMutation = (callback: (ward: WardDTO) => void) => {
       callback(newWard)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKey]).then()
+      queryClient.invalidateQueries([wardsQueryKey]).then()
     }
   })
 }
@@ -178,7 +178,7 @@ export const useWardDeleteMutation = (callback: () => void) => {
       callback()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKey]).then()
+      queryClient.invalidateQueries([wardsQueryKey]).then()
     }
   })
 }

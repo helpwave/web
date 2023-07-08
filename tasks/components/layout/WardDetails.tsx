@@ -11,9 +11,8 @@ import { WardForm } from '../WardForm'
 import { Span } from '@helpwave/common/components/Span'
 import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
 import type { WardDetailDTO } from '../../mutations/ward_mutations'
-import { useRoomCreateMutation, useRoomDeleteMutation, useRoomUpdateMutation } from '../../mutations/room_mutations'
 import {
-  emptyWard, emptyWardOverview,
+  emptyWard,
   useWardCreateMutation,
   useWardDeleteMutation,
   useWardUpdateMutation,

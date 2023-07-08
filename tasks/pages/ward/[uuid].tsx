@@ -149,10 +149,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           left={() => (<WardRoomList key={wardUUID}/>)}
           right={width =>
             isShowingPatientList ? (
-                  <PatientList
-                    width={width}
-                    wardUUID={wardUUID}
-                  />
+                  <PatientList width={width}/>
             ) :
               contextState.bed && contextState.room && contextState.patient && (
                 <div>

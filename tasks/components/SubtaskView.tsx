@@ -81,7 +81,7 @@ export const SubtaskView = ({
       </div>
       <Button
         onClick={() => {
-          onChange([...subtasks, { name: translation.newSubtask, isDone: false }])
+          onChange([...subtasks, { id: '', name: translation.newSubtask, isDone: false }])
           setScrollToBottom(true)
         }}
         className={tw('flex flex-row items-center gap-x-2 mt-4 max-w-[200px] justify-center')}

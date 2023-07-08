@@ -5,10 +5,10 @@ import { tx } from '../twind'
 // TODO: add more variants
 // TODO: this could be matched to some kind of tailwind/twind custom colors
 // TODO: what about a "link color" and a "black/gray" color?
-const colors = ['accent', 'accent-secondary', 'positive', 'negative', 'neutral'] as const // TODO: this should be named differently, for example: "accent", "good"/"positive", "average"/"neutral", "bad"/"negative"
+const colors = ['accent', 'accent-secondary', 'positive', 'negative', 'neutral', 'none'] as const // TODO: this should be named differently, for example: "accent", "good"/"positive", "average"/"neutral", "bad"/"negative"
 const variants = ['primary', 'secondary', 'tertiary', 'textButton'] as const
 
-type ButtonProps = PropsWithChildren<{
+export type ButtonProps = PropsWithChildren<{
   /**
    * Color variant of the button
    * @default 'primary' // as in the primary accent color

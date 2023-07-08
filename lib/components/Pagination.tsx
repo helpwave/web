@@ -37,11 +37,12 @@ export const Pagination = ({
     onPageChanged(page)
   }
 
-  const onFirstPage = page === 0
+  const noPages = numberOfPages === 0
+  const onFirstPage = page === 0 && !noPages
   const onLastPage = page === numberOfPages - 1
 
   return (
-    <div className={tw('flex flex-row')}>
+    <div className={tx('flex flex-row', { 'opacity-30': noPages })}>
       <button onClick={() => changePage(0)} disabled={onFirstPage}>
         <ChevronFirst className={tx({ 'opacity-30': onFirstPage })}/>
       </button>
@@ -49,14 +50,14 @@ export const Pagination = ({
         <ChevronLeft className={tx({ 'opacity-30': onFirstPage })}/>
       </button>
       <div className={tw('flex min-w-[80px] justify-center mx-2')}>
-        <span className={tw('select-none text-right flex-1')}>{page + 1}</span>
+        <span className={tw('select-none text-right flex-1')}>{noPages ? 0 : page + 1}</span>
         <span className={tw('select-none mx-2')}>{translation.of}</span>
         <span className={tw('select-none text-left flex-1')}>{numberOfPages}</span>
       </div>
-      <button onClick={() => changePage(page + 1)} disabled={onLastPage}>
+      <button onClick={() => changePage(page + 1)} disabled={onLastPage || noPages}>
         <ChevronRight className={tx({ 'opacity-30': onLastPage })}/>
       </button>
-      <button onClick={() => changePage(numberOfPages - 1)} disabled={onLastPage}>
+      <button onClick={() => changePage(numberOfPages - 1)} disabled={onLastPage || noPages}>
         <ChevronLast className={tx({ 'opacity-30': onLastPage })}/>
       </button>
     </div>

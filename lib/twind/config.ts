@@ -137,12 +137,44 @@ export const config = defineConfig({
         mobile: { max: '1350px' },
       },
       animation: {
-        fade: 'fadeOut 3s ease-in-out'
+        fade: 'fadeOut 3s ease-in-out',
+        "wave-big-left-up": 'bigLeftUp 1.7s ease-in 0s infinite normal',
+        "wave-big-right-down": 'bigRightDown 1.7s ease-in 0s infinite reverse',
+        "wave-small-left-up": 'smallLeftUp 1.7s ease-in 0s infinite normal',
+        "wave-small-right-down": 'smallRightDown 1.7s ease-in 0s infinite reverse',
       },
       keyframes: {
         fadeOut: {
           '0%': { opacity: '100%' },
           '100%': { opacity: '0%' },
+        },
+        bigLeftUp: {
+          '0%': { strokeDashoffset: '1000' },
+          '25%': { strokeDashoffset: '1000' },
+          '50%': { strokeDashoffset: '0' },
+          '75%': { strokeDashoffset: '0' },
+          '100%': { strokeDashoffset: '0' },
+        },
+        bigRightDown: {
+          '0%': { strokeDashoffset: '0' },
+          '25%': { strokeDashoffset: '0' },
+          '50%': { strokeDashoffset: '0' },
+          '75%': { strokeDashoffset: '-1000' },
+          '100%': { strokeDashoffset: '-1000' },
+        },
+        smallLeftUp: {
+          '0%': { strokeDashoffset: '1000' },
+          '25%': { strokeDashoffset: '1000' },
+          '50%': { strokeDashoffset: '1000' },
+          '75%': { strokeDashoffset: '0' },
+          '100%': { strokeDashoffset: '0' },
+        },
+        smallRightDown: {
+          '0%': { strokeDashoffset: '0' },
+          '25%': { strokeDashoffset: '0' },
+          '50%': { strokeDashoffset: '-1000' },
+          '75%': { strokeDashoffset: '-1000' },
+          '100%': { strokeDashoffset: '-1000' },
         },
       },
     }

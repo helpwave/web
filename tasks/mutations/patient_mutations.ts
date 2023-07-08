@@ -260,6 +260,7 @@ export const useAssignBedMutation = (callback: (bed: BedDTO) => void) => {
       req.setId(bed.patient.id)
       req.setBedId(bed.id)
 
+      console.log(req)
       const res = await patientService.assignBed(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {

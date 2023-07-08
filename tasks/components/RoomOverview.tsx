@@ -35,7 +35,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
         <Span type="subsectionTitle">{room.name}</Span>
       </div>
       <div className={tw('grid grid-cols-3 gap-4')}>
-        {room.beds.map(bed => bed.patient !== undefined ?
+        {room.beds.map(bed => bed.patient && bed.patient?.id ?
             (
             <PatientCard
               key={bed.id}
@@ -44,14 +44,14 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
               doneTasks={bed.patient.tasksDone}
               inProgressTasks={bed.patient.tasksInProgress}
               unscheduledTasks={bed.patient.tasksUnscheduled}
-              onTileClick={() => setSelectedBed(room, bed, undefined)}
+              onTileClick={() => setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient!.id })}
               isSelected={selectedBedID === bed.id}
             />
             ) : (
             <BedCard
               key={bed.id}
               bedIndex={bed.index}
-              onTileClick={() => setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient?.id ?? '' })}
+              onTileClick={() => setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient?.id ?? '', humanReadableIdentifier: `Patient ${bed.index}` })}
               isSelected={selectedBedID === bed.id}/>
             )
         )}

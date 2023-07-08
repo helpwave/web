@@ -105,12 +105,14 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const createMutation = usePatientCreateMutation(patient => {
     const updatedContext = contextState
     updatedContext.patient = patient
+    console.log(patient)
     if (contextState.bed) {
       assignBedMutation.mutate({ ...contextState.bed, patient })
     }
     setContextState(updatedContext)
   })
 
+  console.log(contextState)
   if (!user) return null
 
   return (
@@ -157,8 +159,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
               contextState.bed && contextState.room && contextState.patient && (
                 <div>
                   <PatientDetail
-                    width={width}
                     key={contextState.patient?.id}
+                    width={width}
                     bedPosition={contextState.bed.index}
                     bedsInRoom={contextState.room.beds.length}
                   />

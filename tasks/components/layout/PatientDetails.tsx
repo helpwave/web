@@ -105,11 +105,11 @@ export const PatientDetail = ({
   }
 
   if (isError) {
-    return <div>Error in WardRoomList!</div>
+    return <div>Error in PatientDetails!</div>
   }
 
   if (isLoading) {
-    return <div>Loading WardRoomList!</div>
+    return <div>Loading PatientDetails!</div>
   }
 
   return (

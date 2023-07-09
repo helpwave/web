@@ -28,6 +28,12 @@ export type RoomOverviewDTO = {
   beds: BedWithPatientWithTasksNumberDTO[]
 }
 
+export const emptyRoomOverview = {
+  id: '',
+  name: '',
+  beds: []
+}
+
 // TODO remove once backend is implemented
 const rooms: RoomDTO[] = [
   {
@@ -201,6 +207,7 @@ export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, 
         console.error('create room failed')
       }
 
+      room.id = res.getId()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback(room)
       return room

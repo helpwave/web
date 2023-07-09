@@ -1,24 +1,16 @@
-import type { CoreCell } from '@tanstack/react-table'
-import {
-  useReactTable,
-  createColumnHelper,
-  getCoreRowModel,
-  getPaginationRowModel
-} from '@tanstack/react-table'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Pagination } from '@helpwave/common/components/Pagination'
 import { Button } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user_input/Input'
-import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Span } from '@helpwave/common/components/Span'
 import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
 import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import {
+  emptyRoomOverview,
   useRoomCreateMutation,
   useRoomDeleteMutation,
   useRoomOverviewsQuery,
@@ -28,7 +20,7 @@ import type {
   TableState
 } from '@helpwave/common/components/Table'
 import {
-  addElementToTable, changeTableSelectionSingle,
+  changeTableSelectionSingle,
   defaultTableStatePagination,
   defaultTableStateSelection, removeFromTableSelection,
   Table
@@ -75,8 +67,8 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     rooms: 'Räume',
     addRoom: 'Raum hinzufügen',
     bedCount: 'Bettenanzahl',
-    dangerZoneText: (single) => `Das Löschen von ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
-    deleteConfirmText: (single) => `Wollen Sie wirklich die ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
+    dangerZoneText: (single) => `Das Löschen von ${single ? `einem ${defaultRoomListTranslations.de.room}` : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
+    deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? 'den' : 'die'} ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
   }
 }
 
@@ -94,13 +86,18 @@ export const RoomList = ({
 }: PropsWithLanguage<RoomListTranslation, RoomListProps>) => {
   const translation = useTranslation(language, defaultRoomListTranslations)
   const context = useContext(OrganizationOverviewContext)
-  const [tableState, setTableState] = useState<TableState>({ pagination: defaultTableStatePagination, selection: defaultTableStateSelection })
+  const [tableState, setTableState] = useState<TableState>({
+    pagination: defaultTableStatePagination,
+    selection: defaultTableStateSelection
+  })
   const [usedRooms, setUsedRooms] = useState<RoomOverviewDTO[]>(rooms ?? [])
+  const [focusElement, setFocusElement] = useState<RoomOverviewDTO>()
+  const [isEditing, setIsEditing] = useState(false)
 
-  const identifierMapping = (dataObject:RoomOverviewDTO) => dataObject.id
+  const identifierMapping = (dataObject: RoomOverviewDTO) => dataObject.id
   const creatRoomMutation = useRoomCreateMutation((room) => {
     context.updateContext({ ...context.state })
-    // setTableState(addElementToTable(tableState, usedRooms, room, identifierMapping)) TODO implement
+    setFocusElement({ ...emptyRoomOverview, id: room.id })
   }, context.state.wardID ?? '') // Not good but should be safe most of the time
   const deleteRoomMutation = useRoomDeleteMutation(() => context.updateContext({ ...context.state }))
   const updateRoomMutation = useRoomUpdateMutation(() => context.updateContext({ ...context.state }))
@@ -108,10 +105,10 @@ export const RoomList = ({
   const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardID) // TODO use a more light weight query
 
   useEffect(() => {
-    if (data) {
+    if (data && !isEditing) {
       setUsedRooms(data)
     }
-  }, [data])
+  }, [data, isEditing])
   const [isShowingDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(false)
 
   const minRoomNameLength = 1
@@ -137,7 +134,6 @@ export const RoomList = ({
     return <div>Error Message</div>
   }
 
-  console.log(usedRooms, data)
   const hasSelectedMultiple = !!tableState.selection && tableState.selection?.currentSelection.length > 1
 
   return (
@@ -173,8 +169,12 @@ export const RoomList = ({
         </div>
       </div>
       <Table
-        data={data}
-        stateManagement={[tableState, setTableState]}
+        focusElement={focusElement}
+        data={usedRooms}
+        stateManagement={[tableState, tableState => {
+          setTableState(tableState)
+          setFocusElement(undefined)
+        }]}
         identifierMapping={identifierMapping}
         header={[
           <Span key="name" type="tableHeader">{translation.roomName}</Span>,
@@ -186,11 +186,21 @@ export const RoomList = ({
             <Input
               value={dataObject.name}
               type="text"
-              onChange={text => dataObject.name}
-              onBlur={(event) => updateRoomMutation.mutate({
-                ...dataObject,
-                name: event.target.value
-              })} // TODO update to somthing better than blur
+              onChange={text => {
+                setIsEditing(true)
+                setUsedRooms(usedRooms.map(value => identifierMapping(value) === identifierMapping(dataObject) ? {
+                  ...dataObject,
+                  name: text
+                } : value))
+                setFocusElement(dataObject)
+              }}
+              onEditCompleted={(text) => {
+                updateRoomMutation.mutate({
+                  ...dataObject,
+                  name: text
+                })
+                setIsEditing(false)
+              }} // TODO update to somthing better than blur
               id={dataObject.name}
               minLength={minRoomNameLength}
               maxLength={maxRoomNameLength}

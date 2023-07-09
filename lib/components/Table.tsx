@@ -52,10 +52,10 @@ export const isDataObjectSelected = <T, >(tableState: TableState, dataObject: T,
 
 export const pageForItem = <T, >(data: T[], item: T, entriesPerPage: number, identifierMapping: IdentifierMapping<T>) => {
   const index = data.findIndex(value => identifierMapping(value) === identifierMapping(item))
-  if (index) {
+  if (index !== -1) {
     return Math.floor(index / entriesPerPage)
   }
-  console.error("item doesn't exist on data", item)
+  console.warn("item doesn't exist on data", item)
   return 0
 }
 

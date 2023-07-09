@@ -11,7 +11,6 @@ import type { KanbanBoardObject, SortedTasks } from './KanabanBoard'
 import { KanbanBoard } from './KanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import useSaveDelay from '../../hooks/useSaveDelay'
 import { TaskDetailModal } from '../TaskDetailModal'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
@@ -23,6 +22,7 @@ import {
   usePatientDischargeMutation,
   usePatientUpdateMutation
 } from '../../mutations/patient_mutations'
+import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 
 type PatientDetailTranslation = {
   patientDetails: string,

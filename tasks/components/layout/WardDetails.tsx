@@ -30,7 +30,8 @@ type WardDetailTranslation = {
   deleteConfirmText: string,
   deleteWard: string,
   create: string,
-  update: string
+  update: string,
+  roomsNotOnCreate: string
 }
 
 const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = {
@@ -44,7 +45,8 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
     deleteConfirmText: 'Do you really want to delete this ward?',
     deleteWard: 'Delete ward',
     create: 'Create',
-    update: 'Update'
+    update: 'Update',
+    roomsNotOnCreate: 'Rooms can only be added once the Ward is Created'
   },
   de: {
     updateWard: 'Station ändern',
@@ -56,7 +58,8 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
     deleteConfirmText: 'Wollen Sie wirklich diese Station löschen?',
     deleteWard: 'Station Löschen',
     create: 'Erstellen',
-    update: 'Ändern'
+    update: 'Ändern',
+    roomsNotOnCreate: 'Räume können erst hinzugefügt werden, wenn der Ward erstellt wurde'
   }
 }
 
@@ -74,17 +77,22 @@ export const WardDetail = ({
   ward,
   width
 }: PropsWithLanguage<WardDetailTranslation, WardDetailProps>) => {
+  const translation = useTranslation(language, defaultWardDetailTranslations)
+
   const context = useContext(OrganizationOverviewContext)
   const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardID)
-  ward ??= data
-  const translation = useTranslation(language, defaultWardDetailTranslations)
-  const isCreatingNewOrganization = !ward?.id
 
+  const isCreatingNewWard = !context.state.wardID
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
 
-  const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
+  const [filledRequired, setFilledRequired] = useState(!isCreatingNewWard)
   const [newWard, setNewWard] = useState<WardDetailDTO>(emptyWard)
-  useEffect(() => data ? setNewWard(data) : undefined, [data])
+
+  useEffect(() => {
+    if (data && !isCreatingNewWard) {
+      setNewWard(data)
+    }
+  }, [data, isCreatingNewWard])
 
   const createWardMutation = useWardCreateMutation((ward) => context.updateContext({ ...context.state, wardID: ward.id }))
   const updateWardMutation = useWardUpdateMutation((ward) => {
@@ -122,8 +130,8 @@ export const WardDetail = ({
         confirmType="negative"
       />
       <ColumnTitle
-        title={isCreatingNewOrganization ? translation.createWard : translation.updateWard}
-        subtitle={isCreatingNewOrganization ? translation.createWardSubtitle : translation.updateWardSubtitle}
+        title={isCreatingNewWard ? translation.createWard : translation.updateWard}
+        subtitle={isCreatingNewWard ? translation.createWardSubtitle : translation.updateWardSubtitle}
       />
       <div className={tw('max-w-[400px]')}>
         <WardForm
@@ -133,17 +141,21 @@ export const WardDetail = ({
             setNewWard({ ...newWard, ...wardInfo })
             setFilledRequired(isValid)
           }}
-          isShowingErrorsDirectly={!isCreatingNewOrganization}
+          isShowingErrorsDirectly={!isCreatingNewWard}
         />
       </div>
-      <div className={tw('max-w-[600px] mt-6')}>
-        <RoomList/>
-      </div>
+      {isCreatingNewWard ?
+        <Span>{translation.roomsNotOnCreate}</Span>
+        : (
+        <div className={tw('max-w-[600px] mt-6')}>
+          <RoomList/>
+        </div>
+          )}
       <div className={tw('flex flex-row justify-end mt-6')}>
         <Button
-          onClick={() => isCreatingNewOrganization ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
+          onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
           disabled={!filledRequired}>
-          {isCreatingNewOrganization ? translation.create : translation.update}
+          {isCreatingNewWard ? translation.create : translation.update}
         </Button>
       </div>
       {newWard.id !== '' &&
@@ -153,7 +165,7 @@ export const WardDetail = ({
           </div>
         )
       }
-      <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewOrganization })}>
+      <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
         <Span type="subsectionTitle">{translation.dangerZone}</Span>
         <Span type="description">{translation.dangerZoneText}</Span>
         <Button

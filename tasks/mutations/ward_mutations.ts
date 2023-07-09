@@ -61,9 +61,10 @@ export const emptyWard: WardDetailDTO = {
   task_templates: []
 }
 
+export const wardOverviewsQueryKey = 'overviews'
 export const useWardOverviewsQuery = () => {
   return useQuery({
-    queryKey: [wardsQueryKey, 'overviews'],
+    queryKey: [wardsQueryKey, wardOverviewsQueryKey],
     queryFn: async () => {
       const req = new GetWardOverviewsRequest()
       const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata())

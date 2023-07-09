@@ -1,27 +1,14 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
-import type { WardDetailDTO, WardDTO, WardOverviewDTO } from '../../mutations/ward_mutations'
-import {
-  emptyWard, emptyWardOverview,
-  useWardCreateMutation,
-  useWardDeleteMutation,
-  useWardUpdateMutation,
-  useWardDetailsQuery,
-  useWardOverviewsQuery
-} from '../../mutations/ward_mutations'
 import { WardDisplay } from '../../components/layout/WardDisplay'
 import { WardDetail } from '../../components/layout/WardDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
-import type { RoomOverviewDTO } from '../../mutations/room_mutations'
-import { useRoomDeleteMutation } from '../../mutations/room_mutations'
-import type { PatientDTO } from '../../mutations/patient_mutations'
-import type { BedMinimalDTO } from '../../mutations/bed_mutations'
 
 type WardsPageTranslation = {
   wards: string,

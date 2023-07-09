@@ -1,6 +1,6 @@
 import type { TableProps, TableSortingFunctionType, TableSortingType, TableState } from '../Table'
 import {
-  addElementTableStateUpdate,
+  addElementToTable,
   defaultTableStatePagination,
   defaultTableStateSelection,
   removeFromTableSelection,
@@ -136,7 +136,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
             const withNewData = [...data, newData]
             const sorted = sortingKey ? withNewData.sort(sortingFunctions[sortingKey][ascending]) : withNewData
             setData(sorted)
-            setTableState(addElementTableStateUpdate(tableState, sorted, newData, idMapping))
+            setTableState(addElementToTable(tableState, sorted, newData, idMapping))
           }}
         >
           {'Add Data'}

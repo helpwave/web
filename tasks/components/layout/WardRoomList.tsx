@@ -31,7 +31,9 @@ export const WardRoomList = ({
   rooms ??= data
 
   return (
-    <div className={tw('flex flex-col px-6 py-8')}>
+    <div className={tw('flex flex-col px-6 py-8')}
+      onClick={() => context.updateContext({ wardID: context.state.wardID })}
+    >
       {rooms.map(room => (
           <RoomOverview
             key={room.id}

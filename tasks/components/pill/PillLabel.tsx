@@ -3,6 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { Span } from '@helpwave/common/components/Span'
 
 type PillLabelTranslation = {
   text: string
@@ -57,12 +58,12 @@ const PillLabel = ({
 }: PropsWithLanguage<PillLabelTranslation, PillLabelProps>) => {
   const translation = useTranslation(language, state.translation)
   return (
-    <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between
+    <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center
        bg-${state.colorLabel}-background text-${state.colorLabel}-text text-sm`)}>
       <div className={tw(`flex flex-row items-center text-${state.colorLabel}-text`)}>
         <div className={tw(`rounded-full w-2 h-2 bg-${state.colorLabel}-accent`)}/>
         <div className={tw('w-2')}/>
-        {translation.text}
+        <Span>{translation.text}</Span>
       </div>
       {count}
     </div>

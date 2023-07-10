@@ -1,10 +1,10 @@
 import { tx } from '../twind'
-import type { PropsWithChildren } from 'react'
+import type { MouseEventHandler, PropsWithChildren } from 'react'
 import type { Class } from '@twind/core'
 
 export type CardProps = {
   isSelected?: boolean,
-  onTileClick?: () => void,
+  onTileClick?: MouseEventHandler<HTMLDivElement> | undefined,
   className?: Class[] | string
 }
 

@@ -44,14 +44,26 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
               doneTasks={bed.patient.tasksDone}
               inProgressTasks={bed.patient.tasksInProgress}
               unscheduledTasks={bed.patient.tasksUnscheduled}
-              onTileClick={() => setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient!.id })}
+              onTileClick={(event) => {
+                if (bed.patient) {
+                  setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient.id })
+                }
+                event.stopPropagation()
+              }}
               isSelected={selectedBedID === bed.id}
             />
             ) : (
             <BedCard
               key={bed.id}
               bedIndex={bed.index}
-              onTileClick={() => setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient?.id ?? '', humanReadableIdentifier: `Patient ${bed.index}` })}
+              onTileClick={(event) => {
+                setSelectedBed(room, bed, {
+                  ...emptyPatient,
+                  id: bed.patient?.id ?? '',
+                  humanReadableIdentifier: `Patient ${bed.index}`
+                })
+                event.stopPropagation()
+              }}
               isSelected={selectedBedID === bed.id}/>
             )
         )}

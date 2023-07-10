@@ -20,7 +20,7 @@ import {
   emptyPatientDetails,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
-  usePatientUpdateMutation
+  usePatientUpdateMutation, useUnassignMutation
 } from '../../mutations/patient_mutations'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 
@@ -30,7 +30,8 @@ type PatientDetailTranslation = {
   saveChanges: string,
   dischargeConfirmText: string,
   dischargePatient: string,
-  saved: string
+  saved: string,
+  unassign: string
 }
 
 const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
@@ -40,7 +41,8 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     saveChanges: 'Save Changes',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
     dischargePatient: 'Discharge Patient',
-    saved: 'Saved'
+    saved: 'Saved',
+    unassign: 'Unassign'
   },
   de: {
     patientDetails: 'Patienten Details',
@@ -48,7 +50,8 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     saveChanges: 'Speichern',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
     dischargePatient: 'Patienten entlassen',
-    saved: 'Gespeichert'
+    saved: 'Gespeichert',
+    unassign: 'Zuweisung aufheben'
   }
 }
 
@@ -68,7 +71,7 @@ export const PatientDetail = ({
   bedsInRoom,
   patient = emptyPatientDetails
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
-  const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
+  const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
   const translation = useTranslation(language, defaultPatientDetailTranslations)
 
   // TODO fetch patient by patient.id replace below
@@ -76,6 +79,7 @@ export const PatientDetail = ({
 
   const updateMutation = usePatientUpdateMutation(() => undefined)
   const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardID: context.state.wardID }))
+  const unassignMutation = useUnassignMutation(() => context.updateContext({ wardID: context.state.wardID }))
   const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
@@ -125,11 +129,11 @@ export const PatientDetail = ({
       }
       <ConfirmDialog
         title={translation.dischargeConfirmText}
-        isOpen={isShowingConfirmDialog}
-        onCancel={() => setIsShowingConfirmDialog(false)}
-        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+        isOpen={isShowingDischargeDialog}
+        onCancel={() => setIsShowingDischargeDialog(false)}
+        onBackgroundClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
-          setIsShowingConfirmDialog(false)
+          setIsShowingDischargeDialog(false)
           dischargeMutation.mutate(newPatient)
         }}
         confirmType="negative"
@@ -200,15 +204,13 @@ export const PatientDetail = ({
           setNewTask(task)
         }}
       />
-      <div className={tw('flex flex-row justify-end mt-8')}>
-        <div>
-          <Button color="negative" onClick={() => setIsShowingConfirmDialog(true)}
-                  className={tw('mr-4')}>{translation.dischargePatient}</Button>
+      <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
+          <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
+          <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
           <Button color="accent" onClick={() => {
             clearUpdateTimer(true)
             updateMutation.mutate(newPatient)
           }}>{translation.saveChanges}</Button>
-        </div>
       </div>
     </div>
   )

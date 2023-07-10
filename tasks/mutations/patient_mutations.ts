@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
   DischargePatientRequest, GetPatientDetailsRequest,
-  UpdatePatientRequest, GetPatientsByWardRequest, AssignBedRequest
+  UpdatePatientRequest, GetPatientsByWardRequest, AssignBedRequest, UnassignBedRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedDTO } from './bed_mutations'
@@ -278,6 +278,27 @@ export const useAssignBedMutation = (callback: (bed: BedDTO) => void) => {
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback(bed)
       return bed
+    },
+  })
+}
+
+export const useUnassignMutation = (callback: () => void) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (patientID: string) => {
+      const req = new UnassignBedRequest()
+      req.setId(patientID)
+
+      const res = await patientService.unassignBed(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        // TODO some check whether request was successful
+        console.error('assign bed request failed')
+      }
+
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      callback()
+      return res.toObject()
     },
   })
 }

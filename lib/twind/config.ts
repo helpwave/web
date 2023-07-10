@@ -71,6 +71,16 @@ const negative = {
   800: '#804D4D',
 } as const
 
+const warn = {
+  200: '#FEEACB',
+  300: '#FAB060',
+  400: '#EA9E40',
+  500: '#D77E30',
+  600: '#C48435',
+  700: '#AD6915',
+  800: '#996628',
+} as const
+
 export const config = defineConfig({
   theme: {
     extend: {
@@ -79,6 +89,7 @@ export const config = defineConfig({
         'hw-secondary': secondary,
         'hw-positive': positive,
         'hw-negative': negative,
+        'hw-warn': warn,
         'hw-neutral': {
           // TODO: 300 is still missing, see figma
           400: '#FF9933'
@@ -137,11 +148,11 @@ export const config = defineConfig({
         mobile: { max: '1350px' },
       },
       animation: {
-        fade: 'fadeOut 3s ease-in-out',
-        "wave-big-left-up": 'bigLeftUp 1.7s ease-in 0s infinite normal',
-        "wave-big-right-down": 'bigRightDown 1.7s ease-in 0s infinite reverse',
-        "wave-small-left-up": 'smallLeftUp 1.7s ease-in 0s infinite normal',
-        "wave-small-right-down": 'smallRightDown 1.7s ease-in 0s infinite reverse',
+        'fade': 'fadeOut 3s ease-in-out',
+        'wave-big-left-up': 'bigLeftUp 1.7s ease-in 0s infinite normal',
+        'wave-big-right-down': 'bigRightDown 1.7s ease-in 0s infinite reverse',
+        'wave-small-left-up': 'smallLeftUp 1.7s ease-in 0s infinite normal',
+        'wave-small-right-down': 'smallRightDown 1.7s ease-in 0s infinite reverse',
       },
       keyframes: {
         fadeOut: {

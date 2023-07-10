@@ -6,7 +6,7 @@ export type TaskStatus = 'unscheduled' | 'inProgress' | 'done'
 
 export type SubTaskDTO = {
   name: string,
-  isDone: boolean
+  isDone?: boolean
 }
 
 export type TaskDTO = {

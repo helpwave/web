@@ -10,8 +10,8 @@ import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
 import { Span } from '@helpwave/common/components/Span'
 import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
-import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import type { WardDetailDTO, WardDTO } from '../../mutations/ward_mutations'
+import { useWardTaskTemplateQuery } from '../../mutations/task_template_mutations'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -81,7 +81,7 @@ export const WardDetail = ({
   const [filledRequired, setFilledRequired] = useState(!isCreatingNewOrganization)
   const [newWard, setNewWard] = useState<WardDetailDTO>(ward)
 
-  const { data, isLoading, isError } = useTaskTemplateQuery('wardTaskTemplates')
+  const { data, isLoading, isError } = useWardTaskTemplateQuery(ward.id)
   // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
   const minimumWidthOfCards = 200
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)

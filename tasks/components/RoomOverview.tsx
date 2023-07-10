@@ -45,10 +45,11 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
               inProgressTasks={bed.patient.tasksInProgress}
               unscheduledTasks={bed.patient.tasksUnscheduled}
               onTileClick={(event) => {
+                event.stopPropagation()
                 if (bed.patient) {
+                  // LINTER: `bed.patient.id` gets evaulated as undefined without this if
                   setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient.id })
                 }
-                event.stopPropagation()
               }}
               isSelected={selectedBedID === bed.id}
             />
@@ -57,12 +58,12 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
               key={bed.id}
               bedIndex={bed.index}
               onTileClick={(event) => {
+                event.stopPropagation()
                 setSelectedBed(room, bed, {
                   ...emptyPatient,
                   id: bed.patient?.id ?? '',
                   humanReadableIdentifier: `Patient ${bed.index}`
                 })
-                event.stopPropagation()
               }}
               isSelected={selectedBedID === bed.id}/>
             )

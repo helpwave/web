@@ -8,15 +8,15 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type PatientCardTranslation = {
-  bedName: (index: number) => string
+  bedName: string
 }
 
 const defaultPatientCardTranslation: Record<Languages, PatientCardTranslation> = {
   en: {
-    bedName: index => `Bed ${index}`
+    bedName: 'Bed'
   },
   de: {
-    bedName: index => `Bett ${index}`
+    bedName: 'Bett'
   }
 }
 
@@ -45,7 +45,7 @@ export const PatientCard = ({
   return (
     <Card isSelected={isSelected} onTileClick={onTileClick}>
       <div className={tw('flex flex-row justify-between')}>
-        <Span type="subsubsectionTitle">{translation.bedName(bedIndex)}</Span>
+        <Span type="subsubsectionTitle">{`${translation.bedName} ${bedIndex}`}</Span>
         <Span>{patientName}</Span>
       </div>
       <div className={tw('w-7/12 min-w-[150px] mt-1')}>

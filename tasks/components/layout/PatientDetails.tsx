@@ -87,17 +87,17 @@ export const PatientDetail = ({
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
 
-  const sortedTasksByPatient = (patient: PatientDetailsDTO) => ({
-    [TaskStatus.TASK_STATUS_TODO]: patient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
-    [TaskStatus.TASK_STATUS_IN_PROGRESS]: patient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
-    [TaskStatus.TASK_STATUS_DONE]: patient.tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
+  const sortedTasksByPatient = (tasks: TaskDTO[]) => ({
+    [TaskStatus.TASK_STATUS_TODO]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
+    [TaskStatus.TASK_STATUS_IN_PROGRESS]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
+    [TaskStatus.TASK_STATUS_DONE]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
   })
-  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(sortedTasksByPatient(newPatient))
+  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(sortedTasksByPatient(newPatient.tasks))
 
   useEffect(() => {
     if (data) {
       setNewPatient(data)
-      setSortedTasks(sortedTasksByPatient(data))
+      setSortedTasks(sortedTasksByPatient(data.tasks))
     }
   }, [data])
 
@@ -157,7 +157,7 @@ export const PatientDetail = ({
               newTask.creationDate = new Date()
             }
             setNewPatient(changedPatient)
-            setSortedTasks(sortedTasksByPatient(changedPatient))
+            setSortedTasks(sortedTasksByPatient(changedPatient.tasks))
             updateMutation.mutate(changedPatient)
             clearUpdateTimer()
             setNewTask(undefined)

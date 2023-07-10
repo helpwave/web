@@ -2,18 +2,27 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import type { KanbanBoardObject } from './KanabanBoard'
+import type { KanbanBoardObject, SortedTasks } from './KanabanBoard'
 import { KanbanBoard } from './KanabanBoard'
-import type { PatientDTO, TaskDTO } from '../../mutations/room_mutations'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import useSaveDelay from '../../hooks/useSaveDelay'
 import { TaskDetailModal } from '../TaskDetailModal'
+import type { TaskDTO } from '../../mutations/task_mutations'
+import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { WardOverviewContext } from '../../pages/ward/[uuid]'
+import {
+  emptyPatientDetails,
+  usePatientDetailsQuery,
+  usePatientDischargeMutation,
+  usePatientUpdateMutation, useUnassignMutation
+} from '../../mutations/patient_mutations'
+import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -21,7 +30,8 @@ type PatientDetailTranslation = {
   saveChanges: string,
   dischargeConfirmText: string,
   dischargePatient: string,
-  saved: string
+  saved: string,
+  unassign: string
 }
 
 const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
@@ -31,7 +41,8 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     saveChanges: 'Save Changes',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
     dischargePatient: 'Discharge Patient',
-    saved: 'Saved'
+    saved: 'Saved',
+    unassign: 'Unassign'
   },
   de: {
     patientDetails: 'Patienten Details',
@@ -39,22 +50,15 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     saveChanges: 'Speichern',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
     dischargePatient: 'Patienten entlassen',
-    saved: 'Gespeichert'
+    saved: 'Gespeichert',
+    unassign: 'Zuweisung aufheben'
   }
-}
-
-type SortedTasks = {
-  unscheduled: TaskDTO[],
-  inProgress: TaskDTO[],
-  done: TaskDTO[]
 }
 
 export type PatientDetailProps = {
   bedPosition: number,
   bedsInRoom: number,
-  patient: PatientDTO,
-  onUpdate: (patient: PatientDTO) => void,
-  onDischarge: (patient: PatientDTO) => void,
+  patient?: PatientDetailsDTO,
   width?: number
 }
 
@@ -65,27 +69,51 @@ export const PatientDetail = ({
   language,
   bedPosition,
   bedsInRoom,
-  patient,
-  onUpdate,
-  onDischarge
+  patient = emptyPatientDetails
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
-  const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
+  const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
   const translation = useTranslation(language, defaultPatientDetailTranslations)
-  const [newPatient, setNewPatient] = useState<PatientDTO>(patient)
+
+  // TODO fetch patient by patient.id replace below
+  const context = useContext(WardOverviewContext)
+
+  const updateMutation = usePatientUpdateMutation(() => undefined)
+  const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardID: context.state.wardID }))
+  const unassignMutation = useUnassignMutation(() => context.updateContext({ wardID: context.state.wardID }))
+  const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
+
+  const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
-  const [sortedTasks, setSortedTasks] = useState<SortedTasks>({
-    unscheduled: newPatient.tasks.filter(value => value.status === 'unscheduled'),
-    inProgress: newPatient.tasks.filter(value => value.status === 'inProgress'),
-    done: newPatient.tasks.filter(value => value.status === 'done'),
+
+  const sortedTasksByPatient = (tasks: TaskDTO[]) => ({
+    [TaskStatus.TASK_STATUS_TODO]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
+    [TaskStatus.TASK_STATUS_IN_PROGRESS]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
+    [TaskStatus.TASK_STATUS_DONE]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
   })
+  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(sortedTasksByPatient(newPatient.tasks))
+
+  useEffect(() => {
+    if (data) {
+      setNewPatient(data)
+      setSortedTasks(sortedTasksByPatient(data.tasks))
+    }
+  }, [data])
 
   const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
-  const changeSavedValue = (patient:PatientDTO) => {
+  const changeSavedValue = (patient:PatientDetailsDTO) => {
     setNewPatient(patient)
-    restartTimer(() => onUpdate(patient))
+    restartTimer(() => updateMutation.mutate(patient))
+  }
+
+  if (isError) {
+    return <div>Error in PatientDetails!</div>
+  }
+
+  if (isLoading) {
+    return <div>Loading PatientDetails!</div>
   }
 
   return (
@@ -101,12 +129,12 @@ export const PatientDetail = ({
       }
       <ConfirmDialog
         title={translation.dischargeConfirmText}
-        isOpen={isShowingConfirmDialog}
-        onCancel={() => setIsShowingConfirmDialog(false)}
-        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+        isOpen={isShowingDischargeDialog}
+        onCancel={() => setIsShowingDischargeDialog(false)}
+        onBackgroundClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
-          setIsShowingConfirmDialog(false)
-          onDischarge(newPatient)
+          setIsShowingDischargeDialog(false)
+          dischargeMutation.mutate(newPatient)
         }}
         confirmType="negative"
       />
@@ -129,12 +157,8 @@ export const PatientDetail = ({
               newTask.creationDate = new Date()
             }
             setNewPatient(changedPatient)
-            setSortedTasks({
-              unscheduled: changedPatient.tasks.filter(value => value.status === 'unscheduled'),
-              inProgress: changedPatient.tasks.filter(value => value.status === 'inProgress'),
-              done: changedPatient.tasks.filter(value => value.status === 'done')
-            })
-            onUpdate(changedPatient)
+            setSortedTasks(sortedTasksByPatient(changedPatient.tasks))
+            updateMutation.mutate(changedPatient)
             clearUpdateTimer()
             setNewTask(undefined)
           }}
@@ -170,9 +194,9 @@ export const PatientDetail = ({
         editedTaskID={newTask?.id}
         onChange={setSortedTasks}
         onEndChanging={sortedTasks => {
-          onUpdate({
+          updateMutation.mutate({
             ...newPatient,
-            tasks: [...sortedTasks.unscheduled, ...sortedTasks.inProgress, ...sortedTasks.done]
+            tasks: [...sortedTasks[TaskStatus.TASK_STATUS_TODO], ...sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS], ...sortedTasks[TaskStatus.TASK_STATUS_DONE]]
           })
           clearUpdateTimer()
         }}
@@ -180,15 +204,13 @@ export const PatientDetail = ({
           setNewTask(task)
         }}
       />
-      <div className={tw('flex flex-row justify-end mt-8')}>
-        <div>
-          <Button color="negative" onClick={() => setIsShowingConfirmDialog(true)}
-                  className={tw('mr-4')}>{translation.dischargePatient}</Button>
+      <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
+          <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
+          <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
           <Button color="accent" onClick={() => {
             clearUpdateTimer(true)
-            onUpdate(newPatient)
+            updateMutation.mutate(newPatient)
           }}>{translation.saveChanges}</Button>
-        </div>
       </div>
     </div>
   )

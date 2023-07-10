@@ -1,5 +1,4 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import type { TaskDTO } from '../../mutations/room_mutations'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
@@ -11,13 +10,18 @@ import { SubtaskView } from '../SubtaskView'
 import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import { Span } from '@helpwave/common/components/Span'
-import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import { useState } from 'react'
-import { useRouter } from 'next/router'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
+import {
+  usePersonalTaskTemplateQuery,
+  useWardTaskTemplateQuery
+} from '../../mutations/task_template_mutations'
+import { useAuth } from '../../hooks/useAuth'
+import type { TaskDTO } from '../../mutations/task_mutations'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -85,7 +89,8 @@ export const TaskDetailView = ({
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplateDTO | undefined>(undefined)
   const router = useRouter()
-  const { uuid } = router.query
+  const { uuid: wardId } = router.query
+  const { user } = useAuth()
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
@@ -94,12 +99,12 @@ export const TaskDetailView = ({
     data: personalTaskTemplatesData,
     isLoading: personalTaskTemplatesIsLoading,
     error: personalTaskTemplatesError
-  } = useTaskTemplateQuery('personalTaskTemplates')
+  } = usePersonalTaskTemplateQuery(user?.id)
   const {
     data: wardTaskTemplatesData,
     isLoading: wardTaskTemplatesIsLoading,
     error: wardTaskTemplatesError
-  } = useTaskTemplateQuery('wardTaskTemplates')
+  } = useWardTaskTemplateQuery(wardId?.toString())
 
   const formatDate = (date: Date) => {
     return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
@@ -125,7 +130,7 @@ export const TaskDetailView = ({
                   subtasks: taskTemplate.subtasks
                 })
               }}
-              onColumnEditClick={() => router.push(`/ward/${uuid}/templates`)}
+              onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
             />
           )}
           <>

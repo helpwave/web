@@ -1,7 +1,8 @@
-import type { TaskStatus } from '../../mutations/room_mutations'
 import { Select } from '@helpwave/common/components/user_input/Select'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { GetPatientDetailsResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
+import TaskStatus = GetPatientDetailsResponse.TaskStatus;
 
 type TaskStatusSelectTranslation = {
   unscheduled: string,
@@ -45,9 +46,9 @@ export const TaskStatusSelect = ({
     <Select
       value={value}
       options={[
-        { value: 'unscheduled', label: translation.unscheduled },
-        { value: 'inProgress', label: translation.inProgress },
-        { value: 'done', label: translation.done }
+        { value: TaskStatus.TASK_STATUS_TODO, label: translation.unscheduled },
+        { value: TaskStatus.TASK_STATUS_IN_PROGRESS, label: translation.inProgress },
+        { value: TaskStatus.TASK_STATUS_DONE, label: translation.done }
       ]}
       onChange={onChange}
     />

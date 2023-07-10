@@ -1,5 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import { PillLabel, TaskState } from './PillLabel'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 export type PillLabelsColumnProps = {
   unscheduledCount?: number,
@@ -13,9 +14,9 @@ export type PillLabelsColumnProps = {
 const PillLabelsColumn = ({ unscheduledCount = 0, inProgressCount = 0, doneCount = 0 }: PillLabelsColumnProps) => {
   return (
     <div className={tw('grid grid-rows-3 gap-y-2')}>
-      <PillLabel count={unscheduledCount} state={TaskState.unscheduled}/>
-      <PillLabel count={inProgressCount} state={TaskState.inProgress}/>
-      <PillLabel count={doneCount} state={TaskState.done}/>
+      <PillLabel count={unscheduledCount} state={TaskState[TaskStatus.TASK_STATUS_TODO]}/>
+      <PillLabel count={inProgressCount} state={TaskState[TaskStatus.TASK_STATUS_IN_PROGRESS]}/>
+      <PillLabel count={doneCount} state={TaskState[TaskStatus.TASK_STATUS_DONE]}/>
     </div>
   )
 }

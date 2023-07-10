@@ -9,8 +9,8 @@ import titleWrapper from '../../../utils/titleWrapper'
 import { TaskTemplateDisplay } from '../../../components/layout/TaskTemplateDisplay'
 import {
   useCreateMutation,
-  useDeleteMutation, useTaskTemplateQuery,
-  useUpdateMutation
+  useDeleteMutation,
+  useUpdateMutation, useWardTaskTemplateQuery
 } from '../../../mutations/task_template_mutations'
 import type {
   TaskTemplateDTO
@@ -46,25 +46,27 @@ export type TaskTemplateFormType = {
   template: TaskTemplateDTO
 }
 
-const emptyTaskTemplate: TaskTemplateDTO = {
-  id: '',
-  isPublicVisible: false,
-  name: '',
-  notes: '',
-  subtasks: []
-}
-
 const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
   const router = useRouter()
-  const { uuid, templateID } = router.query
+  const { uuid: warId, templateID } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
+
+  const emptyTaskTemplate: TaskTemplateDTO = {
+    wardId: warId?.toString(),
+    id: '',
+    isPublicVisible: false,
+    name: '',
+    notes: '',
+    subtasks: []
+  }
+
   const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
     isValid: false,
     hasChanges: false,
     template: emptyTaskTemplate
   })
-  const { isLoading, isError, data } = useTaskTemplateQuery('wardTaskTemplates')
+  const { isLoading, isError, data } = useWardTaskTemplateQuery(warId?.toString())
 
   const createMutation = useCreateMutation('wardTaskTemplates', taskTemplate =>
     setTaskTemplateForm({
@@ -113,8 +115,8 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     <PageWithHeader
       crumbs={[
         { display: translation.organization, link: `/organizations?organizationID=${organizationID}` },
-        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${uuid}` },
-        { display: translation.taskTemplates, link: `/ward/${uuid}/templates` }
+        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${warId}` },
+        { display: translation.taskTemplates, link: `/ward/${warId}/templates` }
       ]}
     >
       <Head>

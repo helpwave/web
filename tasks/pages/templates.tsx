@@ -10,13 +10,13 @@ import { TaskTemplateDisplay } from '../components/layout/TaskTemplateDisplay'
 import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
 import {
   useCreateMutation,
-  useDeleteMutation,
-  useTaskTemplateQuery,
+  useDeleteMutation, usePersonalTaskTemplateQuery,
   useUpdateMutation
 } from '../mutations/task_template_mutations'
 import type { TaskTemplateFormType } from './ward/[uuid]/templates'
 import { TaskTemplateDetails } from '../components/layout/TaskTemplateDetails'
 import { useRouter } from 'next/router'
+import { useAuth } from '../hooks/useAuth'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,
@@ -47,12 +47,13 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
   const router = useRouter()
   const { templateID } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
+  const { user } = useAuth()
   const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
     isValid: false,
     hasChanges: false,
     template: emptyTaskTemplate
   })
-  const { isLoading, isError, data } = useTaskTemplateQuery('personalTaskTemplates')
+  const { isLoading, isError, data } = usePersonalTaskTemplateQuery(user?.id)
 
   const createMutation = useCreateMutation('personalTaskTemplates', taskTemplate =>
     setTaskTemplateForm({

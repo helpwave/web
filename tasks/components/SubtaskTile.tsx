@@ -1,10 +1,10 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
-import type { SubTaskDTO } from '../mutations/room_mutations'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Button } from '@helpwave/common/components/Button'
+import type { SubTaskDTO } from '../mutations/task_mutations'
 
 type SubtaskTileTranslation = {
   subtasks: string,
@@ -47,7 +47,7 @@ export const SubtaskTile = ({
       <div>
         <Checkbox
           onChange={value => onChange({ ...subtask, isDone: value })}
-          checked={subtask.isDone}
+          checked={subtask.isDone !== undefined ? subtask.isDone : false}
         />
       </div>
       <ToggleableInput

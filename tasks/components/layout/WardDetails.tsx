@@ -46,7 +46,7 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
     deleteWard: 'Delete ward',
     create: 'Create',
     update: 'Update',
-    roomsNotOnCreate: 'Rooms can only be added once the Ward is Created'
+    roomsNotOnCreate: 'Rooms can only be added once the ward is created'
   },
   de: {
     updateWard: 'Station ändern',

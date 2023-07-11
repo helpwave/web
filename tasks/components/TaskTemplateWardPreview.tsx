@@ -6,7 +6,9 @@ import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { useRouter } from 'next/router'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
-import type { TaskTemplateWardPreviewDTO } from '../mutations/task_template_mutations'
+import { useTaskTemplateQuery } from '../mutations/task_template_mutations'
+import { useContext } from 'react'
+import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
@@ -25,8 +27,7 @@ const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateW
 }
 
 export type TaskTemplateWardPreviewProps = {
-  wardID: string,
-  taskTemplates: TaskTemplateWardPreviewDTO[],
+  wardID?: string,
   columns?: number
 }
 
@@ -36,11 +37,27 @@ export type TaskTemplateWardPreviewProps = {
 export const TaskTemplateWardPreview = ({
   language,
   wardID,
-  taskTemplates,
   columns = 3
 }: PropsWithLanguage<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateWardPreviewTranslation)
   const router = useRouter()
+
+  const context = useContext(OrganizationOverviewContext)
+
+  const { data, isLoading, isError } = useTaskTemplateQuery('wardTaskTemplates')
+
+  // TODO add view for loading
+  if (isLoading || !context.state.wardID) {
+    return <div>Loading Widget</div>
+  }
+
+  // TODO add view for error or error handling
+  if (isError) {
+    return <div>Error Message</div>
+  }
+
+  wardID ??= context.state.wardID
+  const taskTemplates = data
 
   return (
     <div className={tw('flex flex-col')}>

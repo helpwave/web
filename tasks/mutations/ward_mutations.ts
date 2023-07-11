@@ -9,7 +9,7 @@ import {
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
 import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
 
-const queryKey = 'wards'
+export const wardsQueryKey = 'wards'
 
 export type WardDTO = {
   id: string,
@@ -25,10 +25,20 @@ export type WardOverviewDTO = {
   done: number
 }
 
+export const emptyWardOverview: WardOverviewDTO = {
+  id: '',
+  name: '',
+  bedCount: 0,
+  unscheduled: 0,
+  inProgress: 0,
+  done: 0
+}
+
 export type WardDetailDTO = {
   id: string,
   name: string,
   rooms: {
+    id: string,
     name: string,
     beds: {
       id: string
@@ -44,9 +54,17 @@ export type WardDetailDTO = {
   }[]
 }
 
+export const emptyWard: WardDetailDTO = {
+  id: '',
+  name: '',
+  rooms: [],
+  task_templates: []
+}
+
+export const wardOverviewsQueryKey = 'overviews'
 export const useWardOverviewsQuery = () => {
   return useQuery({
-    queryKey: [queryKey, 'overviews'],
+    queryKey: [wardsQueryKey, wardOverviewsQueryKey],
     queryFn: async () => {
       const req = new GetWardOverviewsRequest()
       const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata())
@@ -65,9 +83,10 @@ export const useWardOverviewsQuery = () => {
   })
 }
 
+export const wardDetailsQueryKey = 'wardDetails'
 export const useWardDetailsQuery = (id?: string) => {
   return useQuery({
-    queryKey: [queryKey, 'details', id],
+    queryKey: [wardsQueryKey, wardDetailsQueryKey],
     enabled: id !== undefined,
     queryFn: async () => {
       if (id === undefined) return
@@ -80,6 +99,7 @@ export const useWardDetailsQuery = (id?: string) => {
         id: res.getId(),
         name: res.getName(),
         rooms: res.getRoomsList().map((room) => ({
+          id: room.getId(),
           name: room.getName(),
           beds: room.getBedsList().map((bed) => ({
             id: bed.getId()
@@ -102,7 +122,7 @@ export const useWardDetailsQuery = (id?: string) => {
 
 export const useWardQuery = (id: string) => {
   return useQuery({
-    queryKey: [queryKey, id],
+    queryKey: [wardsQueryKey, id],
     enabled: id !== undefined,
     queryFn: async (): Promise<WardDTO> => {
       const req = new GetWardRequest()
@@ -114,7 +134,7 @@ export const useWardQuery = (id: string) => {
   })
 }
 
-export const useUpdateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
+export const useWardUpdateMutation = (callback: (ward:WardDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward: WardDTO) => {
@@ -123,76 +143,43 @@ export const useUpdateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) 
       req.setName(ward.name)
       await wardService.updateWard(req, getAuthenticatedGrpcMetadata())
 
-      setSelectedWard(ward)
+      callback(ward)
     },
-    onMutate: async (ward) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<WardDTO[]>([queryKey])
-
-      queryClient.setQueryData<WardDTO[]>(
-        [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== ward.id)), ward])
-
-      return { previousWards }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    onSuccess: () => {
+      queryClient.invalidateQueries([wardsQueryKey]).then()
     }
   })
 }
 
-export const useCreateMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
+export const useWardCreateMutation = (callback: (ward: WardDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (ward) => {
+    mutationFn: async (ward:WardDTO) => {
       const createWardRequest = new CreateWardRequest()
       createWardRequest.setName(ward.name)
       const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata())
       const newWard: WardDTO = { ...ward, ...res }
 
-      setSelectedWard(newWard)
+      callback(newWard)
     },
-    onMutate: async (ward: WardDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<WardDTO[]>([queryKey])
-      queryClient.setQueryData<WardDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), ward])
-      return { previousWards }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([wardsQueryKey]).then()
+    }
   })
 }
 
-export const useDeleteMutation = (setSelectedWard: (ward:(WardDTO | undefined)) => void) => {
+export const useWardDeleteMutation = (callback: () => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (ward) => {
+    mutationFn: async (wardID: string) => {
       const req = new DeleteWardRequest()
-      req.setId(ward.id)
+      req.setId(wardID)
       await wardService.deleteWard(req, getAuthenticatedGrpcMetadata())
 
-      setSelectedWard(undefined)
+      callback()
     },
-    onMutate: async (Ward: WardDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousWards = queryClient.getQueryData<WardDTO[]>([queryKey])
-      queryClient.setQueryData<WardDTO[]>(
-        [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== Ward.id))])
-      return { previousWards }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousWards)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([wardsQueryKey]).then()
+    }
   })
 }

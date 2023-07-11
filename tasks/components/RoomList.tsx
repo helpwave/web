@@ -1,21 +1,30 @@
-import type { CoreCell } from '@tanstack/react-table'
-import {
-  useReactTable,
-  createColumnHelper,
-  getCoreRowModel,
-  getPaginationRowModel
-} from '@tanstack/react-table'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Pagination } from '@helpwave/common/components/Pagination'
 import { Button } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user_input/Input'
-import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Span } from '@helpwave/common/components/Span'
+import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
+import type { RoomOverviewDTO } from '../mutations/room_mutations'
+import {
+  emptyRoomOverview,
+  useRoomCreateMutation,
+  useRoomDeleteMutation,
+  useRoomOverviewsQuery,
+  useRoomUpdateMutation
+} from '../mutations/room_mutations'
+import type {
+  TableState
+} from '@helpwave/common/components/Table'
+import {
+  changeTableSelectionSingle,
+  defaultTableStatePagination,
+  defaultTableStateSelection, removeFromTableSelection,
+  Table
+} from '@helpwave/common/components/Table'
 
 type RoomListTranslation = {
   edit: string,
@@ -58,230 +67,171 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     rooms: 'Räume',
     addRoom: 'Raum hinzufügen',
     bedCount: 'Bettenanzahl',
-    dangerZoneText: (single) => `Das Löschen von ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
-    deleteConfirmText: (single) => `Wollen Sie wirklich die ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
+    dangerZoneText: (single) => `Das Löschen von ${single ? `einem ${defaultRoomListTranslations.de.room}` : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
+    deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? 'den' : 'die'} ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
   }
 }
 
-type Room = {
-  bedCount: number,
-  name: string
-}
-
 export type RoomListProps = {
-  rooms: Room[],
-  roomsPerPage?: number,
-  onChange: (rooms: Room[]) => void
+  rooms?: RoomOverviewDTO[], // TODO replace with more optimized RoonDTO
+  roomsPerPage?: number
 }
-
-const columnHelper = createColumnHelper<Room>()
-
-const columns = [
-  columnHelper.display({
-    id: 'select',
-  }),
-  columnHelper.accessor('name', {
-    id: 'name',
-  }),
-  columnHelper.accessor('bedCount', {
-    id: 'bedCount',
-  }),
-  columnHelper.display({
-    id: 'remove',
-  }),
-]
 
 /**
  * A table for showing and editing the rooms within a ward
  */
 export const RoomList = ({
   language,
-  roomsPerPage = 5,
-  rooms,
-  onChange
+  rooms
 }: PropsWithLanguage<RoomListTranslation, RoomListProps>) => {
   const translation = useTranslation(language, defaultRoomListTranslations)
+  const context = useContext(OrganizationOverviewContext)
+  const [tableState, setTableState] = useState<TableState>({
+    pagination: defaultTableStatePagination,
+    selection: defaultTableStateSelection
+  })
+  const [usedRooms, setUsedRooms] = useState<RoomOverviewDTO[]>(rooms ?? [])
+  const [focusElement, setFocusElement] = useState<RoomOverviewDTO>()
+  const [isEditing, setIsEditing] = useState(false)
 
-  type ConfirmDialogState = {
-    display: boolean,
-    single: CoreCell<Room, unknown> | null
-  }
-  const defaultState: ConfirmDialogState = { display: false, single: null }
-  const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
-  const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
+  const identifierMapping = (dataObject: RoomOverviewDTO) => dataObject.id
+  const creatRoomMutation = useRoomCreateMutation((room) => {
+    context.updateContext({ ...context.state })
+    setFocusElement({ ...emptyRoomOverview, id: room.id })
+  }, context.state.wardID ?? '') // Not good but should be safe most of the time
+  const deleteRoomMutation = useRoomDeleteMutation(() => context.updateContext({ ...context.state }))
+  const updateRoomMutation = useRoomUpdateMutation(() => context.updateContext({ ...context.state }))
+
+  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardID) // TODO use a more light weight query
+
+  useEffect(() => {
+    if (data && !isEditing) {
+      setUsedRooms(data)
+    }
+  }, [data, isEditing])
+  const [isShowingDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(false)
 
   const minRoomNameLength = 1
   const maxRoomNameLength = 32
-
-  const table = useReactTable({
-    data: rooms,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    initialState: { pagination: { pageSize: roomsPerPage } }
-  })
 
   const addRoom = () => {
     const defaultBedCount = 3
     // TODO remove below for an actual room add
     const newRoom = {
-      name: 'room' + (rooms.length + 1),
-      bedCount: defaultBedCount,
-      isSelected: false
+      id: '',
+      name: 'room' + (usedRooms.length + 1),
     }
-    onChange([...rooms, newRoom])
+    creatRoomMutation.mutate(newRoom)
   }
+
+  // TODO add view for loading
+  if (isLoading) {
+    return <div>Loading Widget</div>
+  }
+
+  // TODO add view for error or error handling
+  if (isError) {
+    return <div>Error Message</div>
+  }
+
+  const hasSelectedMultiple = !!tableState.selection && tableState.selection?.currentSelection.length > 1
 
   return (
     <div className={tw('flex flex-col')}>
       <ConfirmDialog
-        title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
-        description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
-        isOpen={stateDeletionConfirmDialog.display}
-        onCancel={() => resetDeletionConfirmDialogState()}
-        onBackgroundClick={() => resetDeletionConfirmDialogState()}
+        title={translation.deleteConfirmText(!hasSelectedMultiple)}
+        description={translation.dangerZoneText(!hasSelectedMultiple)}
+        isOpen={isShowingDeletionConfirmDialog}
+        onCancel={() => setDeletionConfirmDialogState(false)}
+        onBackgroundClick={() => setDeletionConfirmDialogState(false)}
         onConfirm={() => {
-          if (stateDeletionConfirmDialog.single) {
-            onChange(rooms.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
-          } else {
-            table.toggleAllRowsSelected(false)
-            onChange(rooms.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
-          }
-          resetDeletionConfirmDialogState()
+          const toDeleteElements = usedRooms.filter(value => tableState.selection?.currentSelection.includes(identifierMapping(value)))
+          toDeleteElements.forEach(value => deleteRoomMutation.mutate(value.id))
+          setTableState(removeFromTableSelection(tableState, toDeleteElements, usedRooms.length, identifierMapping))
+          setDeletionConfirmDialogState(false)
         }}
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <Span type="tableName">{translation.rooms + ` (${rooms.length})`}</Span>
+        <Span type="tableName">{translation.rooms + ` (${usedRooms.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
-          {(table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected()) && (
-          <Button
-            onClick={() => setDeletionConfirmDialogState({
-              display: true,
-              single: null
-            })}
-            color="negative"
-          >
-            {translation.removeSelection}
-          </Button>
+          {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
+            <Button
+              onClick={() => setDeletionConfirmDialogState(true)}
+              color="negative"
+            >
+              {translation.removeSelection}
+            </Button>
           )}
           <Button onClick={addRoom} color="positive">
             {translation.addRoom}
           </Button>
         </div>
       </div>
-      <table>
-        <thead className={tw('after:block after:h-1 after:w-full')}>
-        {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map(header => (
-              <th key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : {
-                      select:
-                      (<div className={tw('flex flex-row pr-4')}>
-                          <Checkbox
-                            checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
-                            onChange={() => table.toggleAllRowsSelected()}
-                          />
-                        </div>
-                      ),
-                      name:
-                      (<div className={tw('flex flex-row')}>
-                        <Span type="tableHeader">{translation.roomName}</Span>
-                      </div>),
-                      bedCount:
-                      (<div className={tw('flex flex-row')}>
-                        <Span type="tableHeader">{translation.bedCount}</Span>
-                      </div>),
-                      remove: (<div />),
-                    }[header.column.id]
-                }
-              </th>
-            ))}
-          </tr>
-        ))}
-        </thead>
-        <tbody className={tw('before:h-2 before:block border-t-2 before:w-full')}>
-        {table.getRowModel().rows.map(row => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map(cell => (
-              <td key={cell.id}>
-                {{
-                  bedCount: (
-                    <div className={tw('w-20')}>
-                      <Input
-                        value={cell.row.original.bedCount.toString()}
-                        type="number"
-                        onChange={(text) => onChange(rooms.map(value => value.name === cell.row.original.name ? {
-                          ...cell.row.original,
-                          bedCount: parseInt(text)
-                        } : value))}
-                        min={1}
-                        id={cell.row.original.bedCount.toString()}
-                      />
-                    </div>
-                  ),
-                  name: (
-                    <div className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
-                      <Input
-                        value={cell.row.original.name}
-                        type="text"
-                        onChange={(text) => onChange(rooms.map(value => value.name === cell.row.original.name ? {
-                          ...cell.row.original,
-                          name: text
-                        } : value))}
-                        id={cell.row.original.name}
-                        minLength={minRoomNameLength}
-                        maxLength={maxRoomNameLength}
-                      />
-                    </div>
-                  ),
-                  remove: (
-                    <div className={tw('flex flex-row justify-end')}>
-                      <Button
-                        onClick={() => setDeletionConfirmDialogState({
-                          display: true,
-                          single: cell
-                        })}
-                        color="negative"
-                        variant="textButton"
-                      >
-                        {translation.remove}
-                      </Button>
-                    </div>
-                  ),
-                  select: (
-                    <div className={tw('flex flex-row')}>
-                      <Checkbox
-                        checked={cell.row.getIsSelected()}
-                        onChange={() => cell.row.toggleSelected()}
-                      />
-                    </div>
-                  )
-                }[cell.column.id]}
-              </td>
-            ))}
-          </tr>
-        ))}
-        {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && table.getPageCount() > 1
-          && (rooms.length % roomsPerPage) !== 0
-          && ([...Array((roomsPerPage - (rooms.length % roomsPerPage)) % roomsPerPage)].map((i, index) => (
-            <tr key={index} className={tw('h-12')}>
-              {[table.getAllColumns.length].map((j, index) => (
-                <td key={index}/>
-              ))}
-            </tr>
-          )))}
-        </tbody>
-      </table>
-      <div className={tw('flex flex-row justify-center mt-2')}>
-        <Pagination page={table.getState().pagination.pageIndex}
-                    numberOfPages={Math.max(table.getPageCount(), 1)}
-                    onPageChanged={table.setPageIndex}
-        />
-      </div>
+      <Table
+        focusElement={focusElement}
+        data={usedRooms}
+        stateManagement={[tableState, tableState => {
+          setTableState(tableState)
+          setFocusElement(undefined)
+        }]}
+        identifierMapping={identifierMapping}
+        header={[
+          <Span key="name" type="tableHeader">{translation.roomName}</Span>,
+          <Span key="bedcount" type="tableHeader">{translation.bedCount}</Span>,
+          <></>
+        ]}
+        rowMappingToCells={dataObject => [
+          <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
+            <Input
+              value={dataObject.name}
+              type="text"
+              onChange={text => {
+                setIsEditing(true)
+                setUsedRooms(usedRooms.map(value => identifierMapping(value) === identifierMapping(dataObject) ? {
+                  ...dataObject,
+                  name: text
+                } : value))
+                setFocusElement(dataObject)
+              }}
+              onEditCompleted={(text) => {
+                updateRoomMutation.mutate({
+                  ...dataObject,
+                  name: text
+                })
+                setIsEditing(false)
+              }} // TODO update to somthing better than blur
+              id={dataObject.name}
+              minLength={minRoomNameLength}
+              maxLength={maxRoomNameLength}
+            />
+          </div>,
+          <div key="bedcount" className={tw('w-20')}>
+            <Input
+              value={dataObject.beds.length.toString()}
+              type="number"
+              onBlur={(text) => updateRoomMutation.mutate({
+                ...dataObject,
+                // bedCount: parseInt(text) TODO use bedcount change
+              })} // TODO update to somthing better than blur
+              min={1}
+              id={dataObject.id + 'bedCount'}
+            />
+          </div>,
+          <div key="remove" className={tw('flex flex-row justify-end')}>
+            <Button
+              onClick={() => {
+                setTableState(changeTableSelectionSingle(tableState, dataObject, usedRooms.length, identifierMapping))
+                setDeletionConfirmDialogState(true)
+              }}
+              color="negative"
+              variant="textButton"
+            >
+              {translation.remove}
+            </Button>
+          </div>
+        ]}
+      />
     </div>
   )
 }

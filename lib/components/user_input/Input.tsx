@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
 import { Span } from '../Span'
+import useSaveDelay from '../../hooks/useSaveDelay'
 
 const noop = () => { /* noop */ }
 
@@ -23,7 +24,8 @@ type InputProps = {
    * @default noop
    */
   onChange?: (text: string) => void,
-  className?: string
+  className?: string,
+  onEditCompleted?: (text: string) => void
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 /**
@@ -38,8 +40,12 @@ const ControlledInput = ({
   label,
   onChange = noop,
   className = '',
+  onEditCompleted,
+  onBlur,
   ...restProps
 }: InputProps) => {
+  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => undefined, 3000)
+
   return (
     <div className={tw('w-full')}>
       {label && <label htmlFor={id} className={tw('mb-1')}><Span type="labelSmall">{label}</Span></label>}
@@ -48,7 +54,24 @@ const ControlledInput = ({
         id={id}
         type={type}
         className={tx('block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500', className)}
-        onChange={e => onChange(e.target.value)}
+        onBlur={event => {
+          if (onBlur) {
+            onBlur(event)
+          }
+          if (onEditCompleted) {
+            onEditCompleted(event.target.value)
+          }
+        }}
+        onChange={e => {
+          const value = e.target.value
+          if (onEditCompleted) {
+            restartTimer(() => {
+              onEditCompleted(value)
+              clearUpdateTimer()
+            })
+          }
+          onChange(value)
+        }}
         {...restProps}
       />
     </div>

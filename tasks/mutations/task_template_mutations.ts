@@ -1,6 +1,6 @@
-import type { SubTaskDTO } from './room_mutations'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/components/user_input/Input'
+import type { SubTaskDTO } from './task_mutations'
 
 export type TaskTemplateWardPreviewDTO = {
   id: string,
@@ -23,7 +23,7 @@ type QueryKey = 'personalTaskTemplates'| 'wardTaskTemplates'
 
 // TODO remove once backend is implemented
 let personalTaskTemplates: TaskTemplateDTO[] = [
-  { id: 'id1', subtasks: [{ name: 'Subtask', isDone: false }], name: 'Personal Template 1', notes: '', isPublicVisible: false },
+  { id: 'id1', subtasks: [{ id: 'subtask1', name: 'Subtask', isDone: false }], name: 'Personal Template 1', notes: '', isPublicVisible: false },
   { id: 'id2', subtasks: [], name: 'Personal Template 2', notes: '', isPublicVisible: false },
   { id: 'id3', subtasks: [], name: 'Personal Template 3', notes: '', isPublicVisible: false },
   { id: 'id4', subtasks: [], name: 'Personal Template 4', notes: '', isPublicVisible: false },
@@ -34,7 +34,7 @@ let personalTaskTemplates: TaskTemplateDTO[] = [
 
 // TODO remove once backend is implemented
 let wardTaskTemplates: TaskTemplateDTO[] = [
-  { id: 'id8', subtasks: [{ name: 'Subtask', isDone: false }], name: 'Ward Template 1', notes: '', isPublicVisible: false },
+  { id: 'id8', subtasks: [{ id: 'subtask2', name: 'Subtask', isDone: false }], name: 'Ward Template 1', notes: '', isPublicVisible: false },
   { id: 'id9', subtasks: [], name: 'Ward Template 2', notes: '', isPublicVisible: false },
   { id: 'id10', subtasks: [], name: 'Ward Template 3', notes: '', isPublicVisible: false },
   { id: 'id11', subtasks: [], name: 'Ward Template 4', notes: '', isPublicVisible: false },

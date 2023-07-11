@@ -93,6 +93,7 @@ export const OrganizationDetail = ({
           isShowingErrorsDirectly={!isCreatingNewOrganization}
         />
         <OrganizationMemberList
+          organizationID={organizationForm.organization.id}
           members={organizationForm.organization.members}
           onChange={(members) => setOrganization((prevState) => ({
             hasChanges: true,

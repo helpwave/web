@@ -3,27 +3,11 @@ import { Edit, Mail } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { AvatarGroup } from '../AvatarGroup'
-
-type WardDTO = {
-  name: string
-}
-
-type UserDTO = {
-  name: string,
-  avatarURL: string
-}
-
-type OrganizationDTO = {
-  longName: string,
-  shortName: string,
-  wards: WardDTO[],
-  email: string,
-  members: UserDTO[]
-}
+import type { OrganizationWitWardNamesDTO } from '../../mutations/organization_mutations'
 
 export type OrganizationCardProps = CardProps & {
   maxShownWards?: number,
-  organization: OrganizationDTO,
+  organization: OrganizationWitWardNamesDTO,
   onEditClick?: () => void
 }
 
@@ -37,7 +21,7 @@ export const OrganizationCard = ({
   onTileClick = () => undefined,
   onEditClick
 }: OrganizationCardProps) => {
-  const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
+  const notDisplayedWards = Math.max(0, organization.wardNames.length - maxShownWards)
 
   return (
     <Card
@@ -63,7 +47,7 @@ export const OrganizationCard = ({
         )}
       </div>
       <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm')}>
-        {organization.wards.slice(0, maxShownWards).map(value => value.name).join(', ')}
+        {organization.wardNames.slice(0, maxShownWards).join(', ')}
         {notDisplayedWards > 0 && (
           <span className={tw('ml-1')}>
             + {notDisplayedWards}

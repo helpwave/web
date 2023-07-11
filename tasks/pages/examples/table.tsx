@@ -5,7 +5,7 @@ import type {
   TableSortingFunctionType
 } from '@helpwave/common/components/Table'
 import {
-  addElementTableStateUpdate,
+  addElementToTable,
   defaultTableStatePagination,
   defaultTableStateSelection, removeFromTableSelection,
   Table
@@ -136,7 +136,7 @@ const TablePage: NextPage = () => {
             const withNewData = [...data, newData]
             const sorted = sortingKey ? withNewData.sort(sortingFunctions[sortingKey][ascending]) : withNewData
             setData(sorted)
-            setTableState(addElementTableStateUpdate(tableState, sorted, newData, idMapping))
+            setTableState(addElementToTable(tableState, sorted, newData, idMapping))
           }}
         >
           {'Add Data'}

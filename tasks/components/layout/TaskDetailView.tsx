@@ -1,5 +1,4 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import type { TaskDTO } from '../../mutations/room_mutations'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
@@ -19,6 +18,7 @@ import { Input } from '@helpwave/common/components/user_input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { useAuth } from '../../hooks/useAuth'
+import type { TaskDTO } from '../../mutations/task_mutations'
 
 type TaskDetailViewTranslation = {
   close: string,

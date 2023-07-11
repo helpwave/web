@@ -3,7 +3,8 @@ import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator'
 import { Span } from '@helpwave/common/components/Span'
-import type { TaskDTO } from '../../mutations/room_mutations'
+import type { TaskDTO } from '../../mutations/task_mutations'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 export type TaskCardProps = CardProps & {
   task: TaskDTO
@@ -18,7 +19,7 @@ export const TaskCard = ({
   onTileClick = () => undefined
 }: TaskCardProps) => {
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
-  const isOverDue = task.dueDate < new Date() && task.status !== 'done'
+  const isOverDue = task.dueDate < new Date() && task.status !== TaskStatus.TASK_STATUS_DONE
   return (
     <Card
       onTileClick={onTileClick}

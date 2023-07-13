@@ -17,6 +17,8 @@ import { KanbanHeader } from '../KanbanHeader'
 import { noop } from '@helpwave/common/components/user_input/Input'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import React, { useState } from 'react'
+import { useTasksByPatientQuery } from '../../mutations/task_mutations'
 
 export type KanbanBoardObject = {
   draggedID?: string,
@@ -31,29 +33,30 @@ export type SortedTasks = {
 }
 
 type KanbanBoardProps = {
-  sortedTasks: SortedTasks,
-  onChange: (sortedTasks: SortedTasks) => void,
-  onEndChanging: (sortedTasks: SortedTasks) => void,
-  boardObject: KanbanBoardObject,
-  onBoardChange: (board: KanbanBoardObject) => void,
+  patientID: string,
   onEditTask: (task: TaskDTO) => void,
   editedTaskID?: string
 }
 
 /**
- * A Kanbanboard for showing and changing tasks
+ * A Kanban-Board for showing and changing tasks
  *
  * The State is managed by the parent component
  */
-export const KanbanBoard = ({
-  sortedTasks,
-  boardObject,
-  onBoardChange,
-  onChange = noop,
-  onEndChanging = noop,
+export const TasksKanbanBoard = ({
+  patientID,
   onEditTask,
   editedTaskID
 }: KanbanBoardProps) => {
+  const { data, isLoading, isError } = useTasksByPatientQuery(patientID)
+  const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
+  const sortedTasksByPatient = (tasks: TaskDTO[]) => ({
+    [TaskStatus.TASK_STATUS_TODO]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
+    [TaskStatus.TASK_STATUS_IN_PROGRESS]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
+    [TaskStatus.TASK_STATUS_DONE]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
+  })
+  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(sortedTasksByPatient(data))
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
@@ -78,7 +81,7 @@ export const KanbanBoard = ({
   }
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    onBoardChange({ ...boardObject, draggedID: active.id as string })
+    setBoardObject({ ...boardObject, draggedID: active.id as string })
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -109,7 +112,7 @@ export const KanbanBoard = ({
       ],
     })
 
-    onBoardChange({ ...boardObject, overColumn })
+    setBoardObject({ ...boardObject, overColumn })
   }
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
@@ -123,7 +126,7 @@ export const KanbanBoard = ({
     const activeIndex = sortedTasks[activeColumn].findIndex(task => task.id === active.id)
     const overIndex = sortedTasks[overColumn].findIndex(task => task.id === over?.id)
 
-    onBoardChange({ ...boardObject, draggedID: undefined, overColumn: undefined })
+    setBoardObject({ ...boardObject, draggedID: undefined, overColumn: undefined })
     if (activeIndex !== overIndex) {
       const newSortedTasks = {
         ...sortedTasks,
@@ -148,11 +151,19 @@ export const KanbanBoard = ({
     return tasks.filter(value => value.name.replaceAll(' ', '').toLowerCase().indexOf(boardObject.searchValue.replaceAll(' ', '').toLowerCase()) !== -1)
   }
 
+  if (isError) {
+    return <div>Error in TasksKanbanBoard!</div>
+  }
+
+  if (isLoading) {
+    return <div>Loading TasksKanbanBoard!</div>
+  }
+
   return (
     <div>
       <KanbanHeader
         searchValue={boardObject.searchValue}
-        onSearchChange={text => onBoardChange({ ...boardObject, searchValue: text })}
+        onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}
       />
       <DndContext
         sensors={sensors}

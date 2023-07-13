@@ -7,8 +7,8 @@ import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import type { KanbanBoardObject, SortedTasks } from './KanabanBoard'
-import { KanbanBoard } from './KanabanBoard'
+import type { KanbanBoardObject, SortedTasks } from './TasksKanabanBoard'
+import { TasksKanbanBoard } from './TasksKanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { TaskDetailModal } from '../TaskDetailModal'
@@ -84,20 +84,11 @@ export const PatientDetail = ({
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
-  const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
-
-  const sortedTasksByPatient = (tasks: TaskDTO[]) => ({
-    [TaskStatus.TASK_STATUS_TODO]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
-    [TaskStatus.TASK_STATUS_IN_PROGRESS]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
-    [TaskStatus.TASK_STATUS_DONE]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
-  })
-  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(sortedTasksByPatient(newPatient.tasks))
 
   useEffect(() => {
     if (data) {
       setNewPatient(data)
-      setSortedTasks(sortedTasksByPatient(data.tasks))
     }
   }, [data])
 
@@ -186,7 +177,7 @@ export const PatientDetail = ({
           />
         </div>
       </div>
-      <KanbanBoard
+      <TasksKanbanBoard
         key={newPatient.id}
         sortedTasks={sortedTasks}
         boardObject={boardObject}

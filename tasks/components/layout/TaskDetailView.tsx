@@ -19,9 +19,9 @@ import {
   useWardTaskTemplateQuery
 } from '../../mutations/task_template_mutations'
 import { useAuth } from '../../hooks/useAuth'
-import type { TaskDTO } from '../../mutations/task_mutations'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import type { TaskDTO } from '../../mutations/task_mutations'
 
 type TaskDetailViewTranslation = {
   close: string,

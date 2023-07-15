@@ -6,7 +6,7 @@ import {
   DeleteTaskTemplateRequest,
   GetAllTaskTemplatesByCreatorRequest,
   GetAllTaskTemplatesByWardRequest,
-  UpdateTaskTemplateRequest
+  UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
 import SubTask = CreateTaskTemplateRequest.SubTask
 
@@ -103,8 +103,18 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       updateTaskTemplate.setDescription(taskTemplate.notes)
       updateTaskTemplate.setId(taskTemplate.id)
 
-      const res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
-      const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
+      let res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
+      let newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
+
+      const updateSubtaskTemplate = new UpdateTaskTemplateSubTaskRequest()
+
+      taskTemplate.subtasks.forEach(subtask => {
+        updateSubtaskTemplate.setName(subtask.name)
+        updateSubtaskTemplate.setSubtaskId(subtask.id)
+      })
+
+      res = await taskTemplateService.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
+      newTaskTemplate = { ...newTaskTemplate, ...res }
 
       setTemplate(newTaskTemplate)
     },

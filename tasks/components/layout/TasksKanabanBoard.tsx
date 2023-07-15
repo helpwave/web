@@ -14,9 +14,14 @@ import { tw } from '@helpwave/common/twind'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import { noop } from '@helpwave/common/components/user_input/Input'
-import type { TaskDTO } from '../../mutations/task_mutations'
+import type { SortedTasks, TaskDTO } from '../../mutations/task_mutations'
+import {
+  emptySortedTasks,
+  useTasksByPatientSortedByStatusQuery, useTaskToDoneMutation, useTaskToInProgressMutation,
+  useTaskToToDoMutation
+} from '../../mutations/task_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import React, { useEffect, useState } from 'react'
 
 export type KanbanBoardObject = {
   draggedID?: string,
@@ -24,36 +29,32 @@ export type KanbanBoardObject = {
   overColumn?: TaskStatus
 }
 
-export type SortedTasks = {
-  [TaskStatus.TASK_STATUS_TODO]: TaskDTO[],
-  [TaskStatus.TASK_STATUS_IN_PROGRESS]: TaskDTO[],
-  [TaskStatus.TASK_STATUS_DONE]: TaskDTO[]
-}
-
 type KanbanBoardProps = {
-  sortedTasks: SortedTasks,
-  onChange: (sortedTasks: SortedTasks) => void,
-  onEndChanging: (sortedTasks: SortedTasks) => void,
-  boardObject: KanbanBoardObject,
-  onBoardChange: (board: KanbanBoardObject) => void,
+  patientID: string,
   onEditTask: (task: TaskDTO) => void,
   editedTaskID?: string
 }
 
 /**
- * A Kanbanboard for showing and changing tasks
+ * A Kanban-Board for showing and changing tasks
  *
  * The State is managed by the parent component
  */
-export const KanbanBoard = ({
-  sortedTasks,
-  boardObject,
-  onBoardChange,
-  onChange = noop,
-  onEndChanging = noop,
+export const TasksKanbanBoard = ({
+  patientID,
   onEditTask,
   editedTaskID
 }: KanbanBoardProps) => {
+  const { data, isLoading, isError } = useTasksByPatientSortedByStatusQuery(patientID)
+  const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
+  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(emptySortedTasks)
+
+  useEffect(() => {
+    if (data) {
+      setSortedTasks(data)
+    }
+  }, [data])
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
@@ -61,7 +62,38 @@ export const KanbanBoard = ({
     })
   )
 
-  function findColumn(id: string|TaskStatus): TaskStatus | undefined {
+  const taskToToDoMutation = useTaskToToDoMutation()
+  const taskToInProgressMutation = useTaskToInProgressMutation()
+  const taskToDoneMutation = useTaskToDoneMutation()
+
+  const onEndChanging = () => {
+    if (!boardObject.draggedID) {
+      return
+    }
+    switch (boardObject.overColumn) {
+      case TaskStatus.TASK_STATUS_TODO:
+        taskToToDoMutation.mutate(boardObject.draggedID)
+        break
+      case TaskStatus.TASK_STATUS_IN_PROGRESS:
+        taskToInProgressMutation.mutate(boardObject.draggedID)
+        break
+      case TaskStatus.TASK_STATUS_DONE:
+        taskToDoneMutation.mutate(boardObject.draggedID)
+        break
+      default:
+        break
+    }
+  }
+
+  if (isError) {
+    return <div>Error in TasksKanbanBoard!</div>
+  }
+
+  if (isLoading) {
+    return <div>Loading TasksKanbanBoard!</div>
+  }
+
+  function findColumn(id: string | TaskStatus): TaskStatus | undefined {
     if (id in sortedTasks) {
       return id as TaskStatus
     }
@@ -78,7 +110,7 @@ export const KanbanBoard = ({
   }
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    onBoardChange({ ...boardObject, draggedID: active.id as string })
+    setBoardObject({ ...boardObject, draggedID: active.id as string })
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -97,7 +129,7 @@ export const KanbanBoard = ({
     const overIndex = overItems.findIndex(item => item.id !== over?.id)
 
     sortedTasks[activeColumn][activeIndex].status = overColumn
-    onChange({
+    setSortedTasks({
       ...sortedTasks,
       [activeColumn]: [
         ...sortedTasks[activeColumn].filter(item => item.id !== active.id),
@@ -109,7 +141,7 @@ export const KanbanBoard = ({
       ],
     })
 
-    onBoardChange({ ...boardObject, overColumn })
+    setBoardObject({ ...boardObject, overColumn })
   }
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
@@ -123,16 +155,16 @@ export const KanbanBoard = ({
     const activeIndex = sortedTasks[activeColumn].findIndex(task => task.id === active.id)
     const overIndex = sortedTasks[overColumn].findIndex(task => task.id === over?.id)
 
-    onBoardChange({ ...boardObject, draggedID: undefined, overColumn: undefined })
+    setBoardObject({ ...boardObject, draggedID: undefined, overColumn: undefined })
     if (activeIndex !== overIndex) {
       const newSortedTasks = {
         ...sortedTasks,
         [overColumn]: arrayMove(sortedTasks[overColumn], activeIndex, overIndex),
       }
-      onChange(newSortedTasks)
-      onEndChanging(newSortedTasks)
+      setSortedTasks(newSortedTasks)
+      onEndChanging()
     } else {
-      onEndChanging(sortedTasks)
+      onEndChanging()
     }
   }
 
@@ -152,7 +184,7 @@ export const KanbanBoard = ({
     <div>
       <KanbanHeader
         searchValue={boardObject.searchValue}
-        onSearchChange={text => onBoardChange({ ...boardObject, searchValue: text })}
+        onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}
       />
       <DndContext
         sensors={sensors}

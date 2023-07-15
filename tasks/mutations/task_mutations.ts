@@ -6,6 +6,7 @@ import {
 import type { GetTasksByPatientSortedByStatusResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { getAuthenticatedGrpcMetadata, taskService } from '../utils/grpc'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { noop } from '@helpwave/common/components/user_input/Input'
 
 export type SubTaskDTO = {
   id: string,
@@ -61,8 +62,9 @@ export const useTasksByPatientQuery = (patientID: string | undefined) => {
 
       if (!res.getTasksList()) {
         // TODO some check whether request was successful
-        console.error('create room failed')
+        console.error('TasksByPatient query failed')
       }
+
       const tasks: TaskDTO[] = res.getTasksList().map(task => ({
         id: task.getId(),
         name: task.getName(),
@@ -99,7 +101,7 @@ export const useTasksByPatientSortedByStatusQuery = (patientID: string | undefin
 
       if (!res.toObject()) {
         // TODO some check whether request was successful
-        console.error('create room failed')
+        console.error('TasksByPatientSortedByStatus query failed')
       }
 
       const mapping = (task: GetTasksByPatientSortedByStatusResponse.Task, status: TaskStatus) => ({
@@ -128,7 +130,7 @@ export const useTasksByPatientSortedByStatusQuery = (patientID: string | undefin
   })
 }
 
-export const useTaskToToDoMutation = (callback: () => void) => {
+export const useTaskToToDoMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskID: string) => {
@@ -145,7 +147,7 @@ export const useTaskToToDoMutation = (callback: () => void) => {
   })
 }
 
-export const useTaskToInProgressMutation = (callback: () => void) => {
+export const useTaskToInProgressMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskID: string) => {
@@ -162,7 +164,7 @@ export const useTaskToInProgressMutation = (callback: () => void) => {
   })
 }
 
-export const useTaskToDoneMutation = (callback: () => void) => {
+export const useTaskToDoneMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskID: string) => {

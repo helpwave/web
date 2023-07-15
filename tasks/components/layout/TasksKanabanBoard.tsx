@@ -62,9 +62,9 @@ export const TasksKanbanBoard = ({
     })
   )
 
-  const taskToToDoMutation = useTaskToToDoMutation(() => undefined)
-  const taskToInProgressMutation = useTaskToInProgressMutation(() => undefined)
-  const taskToDoneMutation = useTaskToDoneMutation(() => undefined)
+  const taskToToDoMutation = useTaskToToDoMutation()
+  const taskToInProgressMutation = useTaskToInProgressMutation()
+  const taskToDoneMutation = useTaskToDoneMutation()
 
   const onEndChanging = () => {
     if (!boardObject.draggedID) {

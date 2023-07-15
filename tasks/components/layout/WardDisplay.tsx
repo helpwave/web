@@ -8,7 +8,7 @@ import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { OrganizationOverviewContext } from '../../pages/organizations/[uuid]'
-import { emptyWard, emptyWardOverview, useWardOverviewsQuery } from '../../mutations/ward_mutations'
+import { useWardOverviewsQuery } from '../../mutations/ward_mutations'
 
 type WardDisplayTranslation = {
   wards: string,

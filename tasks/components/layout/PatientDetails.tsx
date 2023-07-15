@@ -7,14 +7,12 @@ import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import type { KanbanBoardObject, SortedTasks } from './TasksKanabanBoard'
 import { TasksKanbanBoard } from './TasksKanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { TaskDetailModal } from '../TaskDetailModal'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { WardOverviewContext } from '../../pages/ward/[uuid]'
 import {
   emptyPatientDetails,
@@ -94,7 +92,7 @@ export const PatientDetail = ({
 
   const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
-  const changeSavedValue = (patient:PatientDetailsDTO) => {
+  const changeSavedValue = (patient: PatientDetailsDTO) => {
     setNewPatient(patient)
     restartTimer(() => updateMutation.mutate(patient))
   }
@@ -148,7 +146,6 @@ export const PatientDetail = ({
               newTask.creationDate = new Date()
             }
             setNewPatient(changedPatient)
-            setSortedTasks(sortedTasksByPatient(changedPatient.tasks))
             updateMutation.mutate(changedPatient)
             clearUpdateTimer()
             setNewTask(undefined)
@@ -177,31 +174,24 @@ export const PatientDetail = ({
           />
         </div>
       </div>
-      <TasksKanbanBoard
-        key={newPatient.id}
-        sortedTasks={sortedTasks}
-        boardObject={boardObject}
-        onBoardChange={setBoardObject}
-        editedTaskID={newTask?.id}
-        onChange={setSortedTasks}
-        onEndChanging={sortedTasks => {
-          updateMutation.mutate({
-            ...newPatient,
-            tasks: [...sortedTasks[TaskStatus.TASK_STATUS_TODO], ...sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS], ...sortedTasks[TaskStatus.TASK_STATUS_DONE]]
-          })
-          clearUpdateTimer()
-        }}
-        onEditTask={task => {
-          setNewTask(task)
-        }}
-      />
+      {!!newPatient.id && (
+        <TasksKanbanBoard
+          key={newPatient.id}
+          patientID={newPatient.id}
+          editedTaskID={newTask?.id}
+          onEditTask={task => {
+            setNewTask(task)
+          }}
+        />
+      )}
       <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
-          <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
-          <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
-          <Button color="accent" onClick={() => {
-            clearUpdateTimer(true)
-            updateMutation.mutate(newPatient)
-          }}>{translation.saveChanges}</Button>
+        <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
+        <Button color="negative"
+                onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
+        <Button color="accent" onClick={() => {
+          clearUpdateTimer(true)
+          updateMutation.mutate(newPatient)
+        }}>{translation.saveChanges}</Button>
       </div>
     </div>
   )

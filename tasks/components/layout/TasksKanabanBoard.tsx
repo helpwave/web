@@ -14,22 +14,19 @@ import { tw } from '@helpwave/common/twind'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import { noop } from '@helpwave/common/components/user_input/Input'
-import type { TaskDTO } from '../../mutations/task_mutations'
+import type { SortedTasks, TaskDTO } from '../../mutations/task_mutations'
+import {
+  emptySortedTasks,
+  useTasksByPatientSortedByStatusQuery, useTaskToDoneMutation, useTaskToInProgressMutation,
+  useTaskToToDoMutation
+} from '../../mutations/task_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import React, { useState } from 'react'
-import { useTasksByPatientQuery } from '../../mutations/task_mutations'
+import React, { useEffect, useState } from 'react'
 
 export type KanbanBoardObject = {
   draggedID?: string,
   searchValue: string,
   overColumn?: TaskStatus
-}
-
-export type SortedTasks = {
-  [TaskStatus.TASK_STATUS_TODO]: TaskDTO[],
-  [TaskStatus.TASK_STATUS_IN_PROGRESS]: TaskDTO[],
-  [TaskStatus.TASK_STATUS_DONE]: TaskDTO[]
 }
 
 type KanbanBoardProps = {
@@ -48,14 +45,15 @@ export const TasksKanbanBoard = ({
   onEditTask,
   editedTaskID
 }: KanbanBoardProps) => {
-  const { data, isLoading, isError } = useTasksByPatientQuery(patientID)
+  const { data, isLoading, isError } = useTasksByPatientSortedByStatusQuery(patientID)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
-  const sortedTasksByPatient = (tasks: TaskDTO[]) => ({
-    [TaskStatus.TASK_STATUS_TODO]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
-    [TaskStatus.TASK_STATUS_IN_PROGRESS]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
-    [TaskStatus.TASK_STATUS_DONE]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
-  })
-  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(sortedTasksByPatient(data))
+  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(emptySortedTasks)
+
+  useEffect(() => {
+    if (data) {
+      setSortedTasks(data)
+    }
+  }, [data])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -64,7 +62,38 @@ export const TasksKanbanBoard = ({
     })
   )
 
-  function findColumn(id: string|TaskStatus): TaskStatus | undefined {
+  const taskToToDoMutation = useTaskToToDoMutation(() => undefined)
+  const taskToInProgressMutation = useTaskToInProgressMutation(() => undefined)
+  const taskToDoneMutation = useTaskToDoneMutation(() => undefined)
+
+  const onEndChanging = () => {
+    if (!boardObject.draggedID) {
+      return
+    }
+    switch (boardObject.overColumn) {
+      case TaskStatus.TASK_STATUS_TODO:
+        taskToToDoMutation.mutate(boardObject.draggedID)
+        break
+      case TaskStatus.TASK_STATUS_IN_PROGRESS:
+        taskToInProgressMutation.mutate(boardObject.draggedID)
+        break
+      case TaskStatus.TASK_STATUS_DONE:
+        taskToDoneMutation.mutate(boardObject.draggedID)
+        break
+      default:
+        break
+    }
+  }
+
+  if (isError) {
+    return <div>Error in TasksKanbanBoard!</div>
+  }
+
+  if (isLoading) {
+    return <div>Loading TasksKanbanBoard!</div>
+  }
+
+  function findColumn(id: string | TaskStatus): TaskStatus | undefined {
     if (id in sortedTasks) {
       return id as TaskStatus
     }
@@ -100,7 +129,7 @@ export const TasksKanbanBoard = ({
     const overIndex = overItems.findIndex(item => item.id !== over?.id)
 
     sortedTasks[activeColumn][activeIndex].status = overColumn
-    onChange({
+    setSortedTasks({
       ...sortedTasks,
       [activeColumn]: [
         ...sortedTasks[activeColumn].filter(item => item.id !== active.id),
@@ -132,10 +161,10 @@ export const TasksKanbanBoard = ({
         ...sortedTasks,
         [overColumn]: arrayMove(sortedTasks[overColumn], activeIndex, overIndex),
       }
-      onChange(newSortedTasks)
-      onEndChanging(newSortedTasks)
+      setSortedTasks(newSortedTasks)
+      onEndChanging()
     } else {
-      onEndChanging(sortedTasks)
+      onEndChanging()
     }
   }
 
@@ -149,14 +178,6 @@ export const TasksKanbanBoard = ({
 
   function filterBySearch(tasks: TaskDTO[]): TaskDTO[] {
     return tasks.filter(value => value.name.replaceAll(' ', '').toLowerCase().indexOf(boardObject.searchValue.replaceAll(' ', '').toLowerCase()) !== -1)
-  }
-
-  if (isError) {
-    return <div>Error in TasksKanbanBoard!</div>
-  }
-
-  if (isLoading) {
-    return <div>Loading TasksKanbanBoard!</div>
   }
 
   return (

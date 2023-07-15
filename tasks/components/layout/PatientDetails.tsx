@@ -81,7 +81,7 @@ export const PatientDetail = ({
   const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
-  const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
+  const [newTask, setNewTask] = useState<TaskDTO>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
 
   useEffect(() => {

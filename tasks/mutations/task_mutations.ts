@@ -1,7 +1,11 @@
 import {
   TaskStatus,
   GetTasksByPatientRequest,
-  GetTasksByPatientSortedByStatusRequest, TaskToToDoRequest, TaskToInProgressRequest, TaskToDoneRequest
+  GetTasksByPatientSortedByStatusRequest,
+  TaskToToDoRequest,
+  TaskToInProgressRequest,
+  TaskToDoneRequest,
+  DeleteTaskRequest, CreateTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import type { GetTasksByPatientSortedByStatusResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { getAuthenticatedGrpcMetadata, taskService } from '../utils/grpc'
@@ -24,6 +28,19 @@ export type TaskDTO = {
   dueDate: Date,
   creationDate?: Date,
   isPublicVisible: boolean
+}
+
+export type TaskCreateDTO = {
+  id: string,
+  name: string,
+  assignee: string,
+  notes: string,
+  status: TaskStatus,
+  subtasks: SubTaskDTO[],
+  dueDate: Date,
+  creationDate?: Date,
+  isPublicVisible: boolean,
+  patientID: string
 }
 
 export type TaskMinimalDTO = {
@@ -126,6 +143,62 @@ export const useTasksByPatientSortedByStatusQuery = (patientID: string | undefin
       }
 
       return tasks
+    },
+  })
+}
+
+export const useTaskCreateMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (task: TaskCreateDTO) => {
+      const req = new CreateTaskRequest()
+      req.setName(task.name)
+      req.setPatientId(task.patientID)
+      req.setDescription(task.name)
+      req.setPublic(task.isPublicVisible)
+      const res = await taskService.createTask(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.log('error with CreateTask')
+      }
+
+      queryClient.refetchQueries([tasksQueryKey]).then()
+      callback()
+      return req.toObject()
+    },
+  })
+}
+
+export const useTaskUpdateMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (taskID: string) => {
+      const req = new TaskToToDoRequest()
+      req.setId(taskID)
+      await taskService.taskToToDo(req, getAuthenticatedGrpcMetadata())
+
+      // TODO some check whether request was successful
+
+      queryClient.refetchQueries([tasksQueryKey]).then()
+      callback()
+      return req.toObject()
+    },
+  })
+}
+
+export const useTaskDeleteMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (taskID: string) => {
+      const req = new DeleteTaskRequest()
+      req.setId(taskID)
+      await taskService.deleteTask(req, getAuthenticatedGrpcMetadata())
+
+      // TODO some check whether request was successful
+
+      queryClient.refetchQueries([tasksQueryKey]).then()
+      callback()
+      return req.toObject()
     },
   })
 }

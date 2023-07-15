@@ -15,7 +15,7 @@ COPY lib/package.json ./lib/
 COPY tasks/package.json ./tasks/
 
 # install dependencies
-RUN CI=1 pnpm install --frozen-lockfile
+RUN CI=1 pnpm install
 
 # build tasks app
 COPY lib ./lib/

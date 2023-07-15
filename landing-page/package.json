@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@helpwave/common": "workspace:*",
-    "@next/font": "13.4.10",
     "@radix-ui/react-checkbox": "1.0.4",
     "@twind/core": "1.1.3",
     "@twind/preset-autoprefix": "1.0.7",

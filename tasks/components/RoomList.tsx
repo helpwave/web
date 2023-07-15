@@ -115,7 +115,6 @@ export const RoomList = ({
   const maxRoomNameLength = 32
 
   const addRoom = () => {
-    const defaultBedCount = 3
     // TODO remove below for an actual room add
     const newRoom = {
       id: '',
@@ -210,7 +209,7 @@ export const RoomList = ({
             <Input
               value={dataObject.beds.length.toString()}
               type="number"
-              onBlur={(text) => updateRoomMutation.mutate({
+              onBlur={() => updateRoomMutation.mutate({
                 ...dataObject,
                 // bedCount: parseInt(text) TODO use bedcount change
               })} // TODO update to somthing better than blur

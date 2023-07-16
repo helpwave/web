@@ -40,7 +40,7 @@ const defaultSubtaskViewTranslation = {
 
 type SubtaskViewProps = {
   subtasks: SubTaskDTO[],
-  taskID: string,
+  taskID?: string,
   onChange: (subtasks: SubTaskDTO[]) => void
 }
 
@@ -57,7 +57,7 @@ export const SubtaskView = ({
   const scrollableRef = useRef<SimpleBarCore>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
-  const isCreatingTask = taskID === ''
+  const isCreatingTask = !!taskID
   const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
   const updateSubtaskMutation = useSubTaskUpdateMutation()
   const deleteSubtaskMutation = useSubTaskDeleteMutation()

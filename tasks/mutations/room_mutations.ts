@@ -8,6 +8,7 @@ import {
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
 import type { BedDTO, BedWithPatientWithTasksNumberDTO } from './bed_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { wardOverviewsQueryKey, wardsQueryKey } from './ward_mutations'
 
 export const roomsQueryKey = 'rooms'
 
@@ -224,8 +225,8 @@ export const useRoomDeleteMutation = (callback: () => void) => {
       await roomService.deleteRoom(req, getAuthenticatedGrpcMetadata())
 
       // TODO some check whether request was successful
-
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([wardsQueryKey, wardOverviewsQueryKey]).then()
       callback()
       return req.toObject()
     },

@@ -2,22 +2,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/components/user_input/Input'
 import { getAuthenticatedGrpcMetadata, taskTemplateService } from '../utils/grpc'
 import {
-  CreateTaskTemplateRequest,
-  DeleteTaskTemplateRequest,
+  CreateTaskTemplateRequest, CreateTaskTemplateSubTaskRequest,
+  DeleteTaskTemplateRequest, DeleteTaskTemplateSubTaskRequest,
   GetAllTaskTemplatesByCreatorRequest,
-  GetAllTaskTemplatesByWardRequest,
-  UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
+  GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
 import SubTask = CreateTaskTemplateRequest.SubTask
-
-export type TaskTemplateWardPreviewDTO = {
-  id: string,
-  name: string,
-  subtasks: {
-    id: string,
-    name: string
-  }[]
-}
+import { useAuth } from '../hooks/useAuth'
+import { useRouter } from 'next/router'
 
 export type TaskTemplateDTO = {
   wardId? : string,
@@ -36,7 +28,7 @@ type QueryKey = 'personalTaskTemplates' | 'wardTaskTemplates'
 
 export const useWardTaskTemplateQuery = (wardId? : string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
   return useQuery({
-    queryKey: ['wardTaskTemplates'],
+    queryKey: ['wardTaskTemplates', wardId],
     queryFn: async () => {
       let wardTaskTemplates : TaskTemplateDTO[] = []
       if (wardId !== undefined) {
@@ -95,26 +87,58 @@ export const usePersonalTaskTemplateQuery = (createdBy? : string, onSuccess: (da
 
 export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
+  const { user } = useAuth()
+  const router = useRouter()
+  const { uuid: warId } = router.query
   return useMutation({
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {
-      const updateTaskTemplate = new UpdateTaskTemplateRequest()
+      let previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey, user?.id])
+      if (queryKey === 'wardTaskTemplates') {
+        previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey, warId?.toString()])
+      }
 
+      //  update task template
+      const updateTaskTemplate = new UpdateTaskTemplateRequest()
       updateTaskTemplate.setName(taskTemplate.name)
       updateTaskTemplate.setDescription(taskTemplate.notes)
       updateTaskTemplate.setId(taskTemplate.id)
 
-      let res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
-      let newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
+      const res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
+      const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
 
       const updateSubtaskTemplate = new UpdateTaskTemplateSubTaskRequest()
+      const createSubTaskTemplate = new CreateTaskTemplateSubTaskRequest()
 
-      taskTemplate.subtasks.forEach(subtask => {
+      let subtasksToDelete = previousTaskTemplate?.map(template => template.subtasks).flat()
+
+      for (const subtask of taskTemplate.subtasks) {
+        // add new subtasks to tak template
+        if (!subtask.id) {
+          createSubTaskTemplate.setName(subtask.name)
+          createSubTaskTemplate.setTaskTemplateId(taskTemplate.id)
+          await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
+
+          continue
+        }
+        // update subtasks
         updateSubtaskTemplate.setName(subtask.name)
         updateSubtaskTemplate.setSubtaskId(subtask.id)
-      })
 
-      res = await taskTemplateService.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
-      newTaskTemplate = { ...newTaskTemplate, ...res }
+        // ignore subtask from deletion
+        subtasksToDelete =
+          subtasksToDelete?.filter(subtaskToDelete => subtaskToDelete.id !== subtask.id)
+
+        await taskTemplateService.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
+      }
+
+      // delete subtask from template
+      const deleteSubtaskTaskTemplate = new DeleteTaskTemplateSubTaskRequest()
+      if (subtasksToDelete !== undefined) {
+        for (const subtask of subtasksToDelete) {
+          deleteSubtaskTaskTemplate.setId(subtask.id)
+          await taskTemplateService.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
+        }
+      }
 
       setTemplate(newTaskTemplate)
     },

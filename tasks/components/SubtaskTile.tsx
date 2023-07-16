@@ -47,7 +47,7 @@ export const SubtaskTile = ({
       <div>
         <Checkbox
           onChange={value => onChange({ ...subtask, isDone: value })}
-          checked={subtask.isDone !== undefined ? subtask.isDone : false}
+          checked={subtask.isDone}
         />
       </div>
       <ToggleableInput

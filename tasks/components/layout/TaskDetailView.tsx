@@ -13,11 +13,18 @@ import { Span } from '@helpwave/common/components/Span'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
 import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { TaskDTO } from '../../mutations/task_mutations'
+import {
+  emptyTask,
+  useSubTaskAddMutation,
+  useTaskCreateMutation, useTaskDeleteMutation,
+  useTaskQuery,
+  useTaskUpdateMutation
+} from '../../mutations/task_mutations'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -31,7 +38,8 @@ type TaskDetailViewTranslation = {
   private: string,
   public: string,
   create: string,
-  update: string
+  update: string,
+  delete: string
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -47,7 +55,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     private: 'private',
     public: 'public',
     create: 'Create',
-    update: 'Update'
+    update: 'Update',
+    delete: 'Delete'
   },
   de: {
     close: 'Schließen',
@@ -61,15 +70,15 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     private: 'privat',
     public: 'öffentlich',
     create: 'Hinzufügen',
-    update: 'Ändern'
+    update: 'Ändern',
+    delete: 'Löschen'
   }
 }
 
 export type TaskDetailViewProps = {
-  task: TaskDTO,
-  onChange: (task: TaskDTO) => void,
-  onClose: () => void,
-  onFinishClick: () => void
+  taskID: string,
+  patientID: string,
+  onClose: () => void
 }
 
 /**
@@ -77,10 +86,9 @@ export type TaskDetailViewProps = {
  */
 export const TaskDetailView = ({
   language,
-  task,
-  onChange,
-  onClose,
-  onFinishClick
+  patientID,
+  taskID,
+  onClose
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplateDTO | undefined>(undefined)
@@ -89,6 +97,24 @@ export const TaskDetailView = ({
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
+
+  const isCreating = taskID === ''
+  const { data, isLoading, isError } = useTaskQuery(taskID)
+
+  const [task, setTask] = useState<TaskDTO>({ ...emptyTask })
+  const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
+  const createTaskMutation = useTaskCreateMutation(newTask => {
+    newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskID: newTask.id }))
+    onClose()
+  }, patientID)
+  const updateTaskMutation = useTaskUpdateMutation()
+  const deleteTaskMutation = useTaskDeleteMutation(onClose)
+
+  useEffect(() => {
+    if (data) {
+      setTask(data)
+    }
+  }, [data])
 
   const {
     data: personalTaskTemplatesData,
@@ -105,20 +131,31 @@ export const TaskDetailView = ({
     return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
   }
 
+  if (isError) {
+    return <div>Error in TasksDetailView!</div>
+  }
+
+  if ((isLoading || !data) && !isCreating) {
+    return <div>Loading TasksDetailView!</div>
+  }
+
   return (
     <div className={tw('relative flex flex-row h-[628px]')}>
-      {task.id === '' && (
+      {isCreating && (
         <div
           className={tw('fixed flex flex-col w-[250px] h-[628px] -translate-x-[250px] overflow-hidden p-6 pb-0 bg-gray-100 rounded-l-xl')}>
           {personalTaskTemplatesData && wardTaskTemplatesData && (
             <TaskTemplateListColumn
-              taskTemplates={[...(personalTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'personal' as const }))),
-                ...(wardTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'ward' as const })))]
+              taskTemplates={[...(personalTaskTemplatesData.map(taskTemplate => ({
+                taskTemplate,
+                type: 'personal' as const
+              }))),
+              ...(wardTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'ward' as const })))]
                 .sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))}
               selectedID={selectedTemplate?.id ?? ''}
               onTileClick={(taskTemplate) => {
                 setSelectedTemplate(taskTemplate)
-                onChange({
+                setTask({
                   ...task,
                   name: taskTemplate.name,
                   notes: taskTemplate.notes,
@@ -142,7 +179,7 @@ export const TaskDetailView = ({
               initialState="editing"
               id={task.id}
               value={task.name}
-              onChange={name => onChange({ ...task, name })}
+              onChange={name => setTask({ ...task, name })}
               labelClassName={tw('text-2xl font-bold')}
               minLength={minTaskNameLength}
               maxLength={maxTaskNameLength}
@@ -160,10 +197,10 @@ export const TaskDetailView = ({
               <Textarea
                 headline={translation.notes}
                 value={task.notes}
-                onChange={description => onChange({ ...task, notes: description })}
+                onChange={description => setTask({ ...task, notes: description })}
               />
             </div>
-            <SubtaskView subtasks={task.subtasks} onChange={subtasks => onChange({ ...task, subtasks })}/>
+            <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange={subtasks => setTask({ ...task, subtasks })}/>
           </div>
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
             <div className={tw('flex flex-col gap-y-4')}>
@@ -177,7 +214,7 @@ export const TaskDetailView = ({
                     { label: 'Assignee 3', value: 'assignee3' },
                     { label: 'Assignee 4', value: 'assignee4' }
                   ]}
-                  onChange={assignee => onChange({ ...task, assignee })}
+                  onChange={assignee => setTask({ ...task, assignee })}
                 />
               </div>
               <div>
@@ -187,13 +224,13 @@ export const TaskDetailView = ({
                   type="datetime-local"
                   onChange={value => {
                     const dueDate = new Date(value)
-                    onChange({ ...task, dueDate })
+                    setTask({ ...task, dueDate })
                   }}
                 />
               </div>
               <div>
                 <label><Span type="labelMedium">{translation.status}</Span></label>
-                <TaskStatusSelect value={task.status} onChange={status => onChange({ ...task, status })}/>
+                <TaskStatusSelect value={task.status} onChange={status => setTask({ ...task, status })}/>
               </div>
               <div>
                 <label><Span type="labelMedium">{translation.visibility}</Span></label>
@@ -203,19 +240,22 @@ export const TaskDetailView = ({
                     { label: translation.private, value: false },
                     { label: translation.public, value: true }
                   ]}
-                  onChange={isPublicVisible => onChange({ ...task, isPublicVisible })}
+                  onChange={isPublicVisible => setTask({ ...task, isPublicVisible })}
                 />
               </div>
             </div>
-            {task.creationDate !== undefined ? (
+            {!isCreating ? (
               <div className={tw('flex flex-col gap-y-8 mt-16')}>
-                <div className={tw('flex flex-col gap-y-1')}>
-                  <Span type="labelMedium">{translation.creationTime}</Span>
-                  <TimeDisplay date={new Date(task.creationDate)}/>
-                </div>
-                <Button color="accent" onClick={onFinishClick}>{translation.update}</Button>
+                {task.creationDate && (
+                  <div className={tw('flex flex-col gap-y-1')}>
+                    <Span type="labelMedium">{translation.creationTime}</Span>
+                    <TimeDisplay date={new Date(task.creationDate)}/>
+                  </div>
+                )}
+                <Button color="negative" onClick={() => deleteTaskMutation.mutate(task.id)}>{translation.delete}</Button>
+                <Button color="accent" onClick={() => updateTaskMutation.mutate(task)}>{translation.update}</Button>
               </div>
-            ) : <Button color="accent" onClick={onFinishClick} className={tw('mt-16')}>{translation.create}</Button>}
+            ) : <Button color="accent" onClick={() => createTaskMutation.mutate(task)} className={tw('mt-16')}>{translation.create}</Button>}
           </div>
         </div>
       </div>

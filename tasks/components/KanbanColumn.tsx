@@ -13,6 +13,7 @@ import {
 import type { TaskDTO } from '../mutations/task_mutations'
 import type { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { Plus } from 'lucide-react'
+import { emptyTask } from '../mutations/task_mutations'
 
 type KanbanColumnsTranslation = {
   addTask: string
@@ -77,13 +78,8 @@ export const KanbanColumn = ({
       </SortableContext>
       <button
         onClick={() => onEditTask({
+          ...emptyTask,
           status: type,
-          id: '',
-          name: 'New Task',
-          notes: '',
-          subtasks: [],
-          assignee: '',
-          isPublicVisible: false,
           dueDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
         })}
         className={tw('flex flex-row ml-1 gap-x-1 text-gray-300')}

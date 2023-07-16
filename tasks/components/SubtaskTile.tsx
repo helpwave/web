@@ -25,7 +25,8 @@ const defaultSubtaskTileTranslation = {
 type SubtaskTileProps = {
   subtask: SubTaskDTO,
   onRemoveClick: () => void,
-  onChange: (subtask: SubTaskDTO) => void
+  onNameChange: (subtask: SubTaskDTO) => void,
+  onDoneChange: (done: boolean) => void
 }
 
 /**
@@ -35,7 +36,8 @@ export const SubtaskTile = ({
   language,
   subtask,
   onRemoveClick,
-  onChange
+  onNameChange,
+  onDoneChange
 }: PropsWithLanguage<SubtaskTileTranslation, SubtaskTileProps>) => {
   const translation = useTranslation(language, defaultSubtaskTileTranslation)
 
@@ -46,14 +48,14 @@ export const SubtaskTile = ({
     <div className={tw('flex flex-row gap-x-2 items-center overflow-x-hidden')}>
       <div>
         <Checkbox
-          onChange={value => onChange({ ...subtask, isDone: value })}
+          onChange={ onDoneChange }
           checked={subtask.isDone}
         />
       </div>
       <ToggleableInput
         value={subtask.name}
         className={tw('')}
-        onChange={text => onChange({ ...subtask, name: text })}
+        onChange={text => onNameChange({ ...subtask, name: text })}
         id={subtask.name}
         minLength={minTaskNameLength}
         maxLength={maxTaskNameLength}

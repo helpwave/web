@@ -11,15 +11,15 @@ import { TasksKanbanBoard } from './TasksKanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { TaskDetailModal } from '../TaskDetailModal'
-import type { TaskDTO } from '../../mutations/task_mutations'
 import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
-import { WardOverviewContext } from '../../pages/ward/[uuid]'
 import {
   emptyPatientDetails,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
-  usePatientUpdateMutation, useUnassignMutation
+  usePatientUpdateMutation,
+  useUnassignMutation
 } from '../../mutations/patient_mutations'
+import { WardOverviewContext } from '../../pages/ward/[uuid]'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 
 type PatientDetailTranslation = {
@@ -81,7 +81,7 @@ export const PatientDetail = ({
   const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
-  const [newTask, setNewTask] = useState<TaskDTO>()
+  const [taskID, setTaskID] = useState<string>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
 
   useEffect(() => {
@@ -127,29 +127,14 @@ export const PatientDetail = ({
         }}
         confirmType="negative"
       />
-      {/* newTask indicates whether the modal is open or not */}
-      {newTask !== undefined && (
+      {/* taskID === '' is create and if set it's the tasks id */}
+      {(!!taskID || taskID === '') && (
         <TaskDetailModal
           isOpen={true}
-          onBackgroundClick={() => setNewTask(undefined)}
-          modalClassName={tw('!p-0 rounded-l-none')}
-          task={newTask}
-          onChange={(task) => setNewTask(task)}
-          onClose={() => setNewTask(undefined)}
-          onFinishClick={() => {
-            const changedPatient = {
-              ...newPatient,
-              tasks: [...newPatient.tasks.filter(value => value.id !== newTask.id), newTask]
-            }
-            if (newTask.id === '') {
-              newTask.id = Math.random().toString() // TODO remove later
-              newTask.creationDate = new Date()
-            }
-            setNewPatient(changedPatient)
-            updateMutation.mutate(changedPatient)
-            clearUpdateTimer()
-            setNewTask(undefined)
-          }}
+          onBackgroundClick={() => setTaskID(undefined)}
+          onClose={() => setTaskID(undefined)}
+          taskID={taskID}
+          patientID={newPatient.id}
         />
       )}
       <ColumnTitle title={translation.patientDetails}/>
@@ -178,9 +163,9 @@ export const PatientDetail = ({
         <TasksKanbanBoard
           key={newPatient.id}
           patientID={newPatient.id}
-          editedTaskID={newTask?.id}
+          editedTaskID={taskID}
           onEditTask={task => {
-            setNewTask(task)
+            setTaskID(task.id)
           }}
         />
       )}

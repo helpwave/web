@@ -107,6 +107,8 @@ export const TasksKanbanBoard = ({
     if (sortedTasks[TaskStatus.TASK_STATUS_DONE].find(value => value.id === id)) {
       return TaskStatus.TASK_STATUS_DONE
     }
+
+    return undefined
   }
 
   const handleDragStart = ({ active }: DragStartEvent) => {

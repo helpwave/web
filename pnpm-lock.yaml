@@ -135,7 +135,7 @@ importers:
       '@dnd-kit/sortable': 7.0.2
       '@headlessui/react': 1.7.13
       '@helpwave/common': workspace:*
-      '@helpwave/proto-ts': 0.11.1-d08c34e.0
+      '@helpwave/proto-ts': 0.12.0-ee28a57.0
       '@radix-ui/react-checkbox': 1.0.1
       '@tanstack/react-query': 4.28.0
       '@tanstack/react-table': 8.8.0
@@ -176,7 +176,7 @@ importers:
       '@dnd-kit/sortable': 7.0.2_52scne4zmdeyjh2otzkgz2xfvu
       '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
       '@helpwave/common': link:../lib
-      '@helpwave/proto-ts': 0.11.1-d08c34e.0
+      '@helpwave/proto-ts': 0.12.0-ee28a57.0
       '@radix-ui/react-checkbox': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@tanstack/react-query': 4.28.0_biqbaboplfbrettd7655fr4n2y
       '@tanstack/react-table': 8.8.0_biqbaboplfbrettd7655fr4n2y
@@ -3255,8 +3255,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@helpwave/proto-ts/0.11.1-d08c34e.0:
-    resolution: {integrity: sha512-nFvCXBi/NPMAJk7khgnrYs/4EjRCpIRPgJOcGqy2JhgdxG2xnV7aNiomn/hSKc+9Cp/Je2JDsL+82egrN/KG+Q==}
+  /@helpwave/proto-ts/0.12.0-ee28a57.0:
+    resolution: {integrity: sha512-7bApC8e3YIWnGESxIxNLE+TziMOvtvan7xVmW7p6UQl5LToyvSpXdCxKKImfl8XtLd3PjI95ZX8riI3DghTnag==}
     dev: false
 
   /@humanwhocodes/config-array/0.10.7:

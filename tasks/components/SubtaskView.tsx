@@ -9,6 +9,12 @@ import { Span } from '@helpwave/common/components/Span'
 import { useEffect, useRef, useState } from 'react'
 import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
+import {
+  useSubTaskAddMutation,
+  useSubTaskDeleteMutation, useSubTaskToDoneMutation,
+  useSubTaskToToDoMutation,
+  useSubTaskUpdateMutation
+} from '../mutations/task_mutations'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -34,6 +40,7 @@ const defaultSubtaskViewTranslation = {
 
 type SubtaskViewProps = {
   subtasks: SubTaskDTO[],
+  taskID: string,
   onChange: (subtasks: SubTaskDTO[]) => void
 }
 
@@ -43,11 +50,19 @@ type SubtaskViewProps = {
 export const SubtaskView = ({
   language,
   subtasks,
+  taskID,
   onChange
 }: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
   const translation = useTranslation(language, defaultSubtaskViewTranslation)
   const scrollableRef = useRef<SimpleBarCore>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
+
+  const isCreatingTask = taskID === ''
+  const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
+  const updateSubtaskMutation = useSubTaskUpdateMutation()
+  const deleteSubtaskMutation = useSubTaskDeleteMutation()
+  const subtaskToToDoMutation = useSubTaskToToDoMutation()
+  const subtaskToDoneMutation = useSubTaskToDoneMutation()
 
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
@@ -68,12 +83,33 @@ export const SubtaskView = ({
               <SubtaskTile
                 key={index}
                 subtask={subtask}
-                onChange={newSubtask => {
+                onNameChange={newSubtask => {
                   const newSubtasks = [...subtasks]
                   newSubtasks[index] = newSubtask
-                  onChange(newSubtasks)
+                  if (isCreatingTask) {
+                    onChange(newSubtasks)
+                  } else {
+                    updateSubtaskMutation.mutate(newSubtask)
+                  }
                 }}
-                onRemoveClick={() => onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))}
+                onRemoveClick={() => {
+                  if (isCreatingTask) {
+                    onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))
+                  } else {
+                    deleteSubtaskMutation.mutate(subtask.id)
+                  }
+                }}
+                onDoneChange={done => {
+                  if (isCreatingTask) {
+                    subtask.isDone = done
+                  } else {
+                    if (done) {
+                      subtaskToDoneMutation.mutate(subtask.id)
+                    } else {
+                      subtaskToToDoMutation.mutate(subtask.id)
+                    }
+                  }
+                }}
               />
             ))}
           </div>
@@ -81,7 +117,12 @@ export const SubtaskView = ({
       </div>
       <Button
         onClick={() => {
-          onChange([...subtasks, { id: '', name: translation.newSubtask, isDone: false }])
+          const newSubtask = { id: '', name: translation.newSubtask, isDone: false }
+          if (isCreatingTask) {
+            onChange([...subtasks, newSubtask])
+          } else {
+            addSubtaskMutation.mutate(newSubtask)
+          }
           setScrollToBottom(true)
         }}
         className={tw('flex flex-row items-center gap-x-2 mt-4 max-w-[200px] justify-center')}

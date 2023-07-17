@@ -200,14 +200,14 @@ export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
 export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (taskTemplate) => {
+    mutationFn: async (taskTemplate: TaskTemplateDTO) => {
       const deleteTaskTemplate = new DeleteTaskTemplateRequest()
       deleteTaskTemplate.setId(taskTemplate.id)
       await taskTemplateService.deleteTaskTemplate(deleteTaskTemplate, getAuthenticatedGrpcMetadata())
 
       setTemplate(undefined)
     },
-    onMutate: async (taskTemplate: TaskTemplateDTO) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
       queryClient.setQueryData<TaskTemplateDTO[]>(

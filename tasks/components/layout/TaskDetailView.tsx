@@ -11,11 +11,6 @@ import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import { Span } from '@helpwave/common/components/Span'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-<<<<<<< HEAD
-=======
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
->>>>>>> origin/main
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
@@ -24,7 +19,7 @@ import {
   useWardTaskTemplateQuery
 } from '../../mutations/task_template_mutations'
 import { useAuth } from '../../hooks/useAuth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import {

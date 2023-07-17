@@ -7,21 +7,19 @@ import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import type { KanbanBoardObject, SortedTasks } from './KanabanBoard'
-import { KanbanBoard } from './KanabanBoard'
+import { TasksKanbanBoard } from './TasksKanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { TaskDetailModal } from '../TaskDetailModal'
-import type { TaskDTO } from '../../mutations/task_mutations'
 import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import { WardOverviewContext } from '../../pages/ward/[uuid]'
 import {
   emptyPatientDetails,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
-  usePatientUpdateMutation, useUnassignMutation
+  usePatientUpdateMutation,
+  useUnassignMutation
 } from '../../mutations/patient_mutations'
+import { WardOverviewContext } from '../../pages/ward/[uuid]'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 
 type PatientDetailTranslation = {
@@ -83,27 +81,18 @@ export const PatientDetail = ({
   const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
-  const [newTask, setNewTask] = useState<TaskDTO | undefined>(undefined)
-  const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
+  const [taskID, setTaskID] = useState<string>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
-
-  const sortedTasksByPatient = (tasks: TaskDTO[]) => ({
-    [TaskStatus.TASK_STATUS_TODO]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_TODO),
-    [TaskStatus.TASK_STATUS_IN_PROGRESS]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_IN_PROGRESS),
-    [TaskStatus.TASK_STATUS_DONE]: tasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE),
-  })
-  const [sortedTasks, setSortedTasks] = useState<SortedTasks>(sortedTasksByPatient(newPatient.tasks))
 
   useEffect(() => {
     if (data) {
       setNewPatient(data)
-      setSortedTasks(sortedTasksByPatient(data.tasks))
     }
   }, [data])
 
   const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
-  const changeSavedValue = (patient:PatientDetailsDTO) => {
+  const changeSavedValue = (patient: PatientDetailsDTO) => {
     setNewPatient(patient)
     restartTimer(() => updateMutation.mutate(patient))
   }
@@ -138,30 +127,14 @@ export const PatientDetail = ({
         }}
         confirmType="negative"
       />
-      {/* newTask indicates whether the modal is open or not */}
-      {newTask !== undefined && (
+      {/* taskID === '' is create and if set it's the tasks id */}
+      {(!!taskID || taskID === '') && (
         <TaskDetailModal
           isOpen={true}
-          onBackgroundClick={() => setNewTask(undefined)}
-          modalClassName={tw('!p-0 rounded-l-none')}
-          task={newTask}
-          onChange={(task) => setNewTask(task)}
-          onClose={() => setNewTask(undefined)}
-          onFinishClick={() => {
-            const changedPatient = {
-              ...newPatient,
-              tasks: [...newPatient.tasks.filter(value => value.id !== newTask.id), newTask]
-            }
-            if (newTask.id === '') {
-              newTask.id = Math.random().toString() // TODO remove later
-              newTask.creationDate = new Date()
-            }
-            setNewPatient(changedPatient)
-            setSortedTasks(sortedTasksByPatient(changedPatient.tasks))
-            updateMutation.mutate(changedPatient)
-            clearUpdateTimer()
-            setNewTask(undefined)
-          }}
+          onBackgroundClick={() => setTaskID(undefined)}
+          onClose={() => setTaskID(undefined)}
+          taskID={taskID}
+          patientID={newPatient.id}
         />
       )}
       <ColumnTitle title={translation.patientDetails}/>
@@ -186,31 +159,24 @@ export const PatientDetail = ({
           />
         </div>
       </div>
-      <KanbanBoard
-        key={newPatient.id}
-        sortedTasks={sortedTasks}
-        boardObject={boardObject}
-        onBoardChange={setBoardObject}
-        editedTaskID={newTask?.id}
-        onChange={setSortedTasks}
-        onEndChanging={sortedTasks => {
-          updateMutation.mutate({
-            ...newPatient,
-            tasks: [...sortedTasks[TaskStatus.TASK_STATUS_TODO], ...sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS], ...sortedTasks[TaskStatus.TASK_STATUS_DONE]]
-          })
-          clearUpdateTimer()
-        }}
-        onEditTask={task => {
-          setNewTask(task)
-        }}
-      />
+      {!!newPatient.id && (
+        <TasksKanbanBoard
+          key={newPatient.id}
+          patientID={newPatient.id}
+          editedTaskID={taskID}
+          onEditTask={task => {
+            setTaskID(task.id)
+          }}
+        />
+      )}
       <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
-          <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
-          <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
-          <Button color="accent" onClick={() => {
-            clearUpdateTimer(true)
-            updateMutation.mutate(newPatient)
-          }}>{translation.saveChanges}</Button>
+        <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
+        <Button color="negative"
+                onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
+        <Button color="accent" onClick={() => {
+          clearUpdateTimer(true)
+          updateMutation.mutate(newPatient)
+        }}>{translation.saveChanges}</Button>
       </div>
     </div>
   )

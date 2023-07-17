@@ -7,6 +7,7 @@ import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
 import {
   TaskTemplateServicePromiseClient
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_grpc_web_pb'
+import { TaskServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_grpc_web_pb'
 
 // TODO: Implement something like a service registry
 export const wardService = new WardServicePromiseClient('https://staging.api.helpwave.de/task-svc')
@@ -14,6 +15,7 @@ export const roomService = new RoomServicePromiseClient('https://staging.api.hel
 export const bedService = new BedServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 export const patientService = new PatientServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 export const taskTemplateService = new TaskTemplateServicePromiseClient('https://staging.api.helpwave.de/task-svc')
+export const taskService = new TaskServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 
 type AuthenticatedGrpcMetadata = {
   Authorization: string,

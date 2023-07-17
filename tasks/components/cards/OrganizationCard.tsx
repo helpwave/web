@@ -3,22 +3,25 @@ import { Edit, Mail } from 'lucide-react'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import { AvatarGroup } from '../AvatarGroup'
+import type { OrganizationDTO } from '../../mutations/organization_mutations'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
-type WardDTO = {
-  name: string
+type OrganizationCardTranslation = {
+  member: string,
+  members: string
 }
 
-type UserDTO = {
-  name: string,
-  avatarURL: string
-}
-
-type OrganizationDTO = {
-  longName: string,
-  shortName: string,
-  wards: WardDTO[],
-  email: string,
-  members: UserDTO[]
+const defaultOrganizationCardTranslation: Record<Languages, OrganizationCardTranslation> = {
+  en: {
+    member: 'Member',
+    members: 'Members'
+  },
+  de: {
+    member: 'Mitglied',
+    members: 'Mitglieder'
+  }
 }
 
 export type OrganizationCardProps = CardProps & {
@@ -31,13 +34,14 @@ export type OrganizationCardProps = CardProps & {
  * A Card displaying a Organization
  */
 export const OrganizationCard = ({
-  maxShownWards = 5,
+  language,
   isSelected,
   organization,
   onTileClick = () => undefined,
   onEditClick
-}: OrganizationCardProps) => {
-  const notDisplayedWards = Math.max(0, organization.wards.length - maxShownWards)
+}: PropsWithLanguage<Languages, OrganizationCardProps>) => {
+  const translation = useTranslation(language, defaultOrganizationCardTranslation)
+  const organizationMemberCount = organization.members.length
 
   return (
     <Card
@@ -47,7 +51,8 @@ export const OrganizationCard = ({
     >
       <div className={tw('flex flex-row justify-between w-full gap-x-2 items-start')}>
         <div className={tw('flex flex-row gap-x-1 font-bold font-space overflow-hidden')}>
-          <span className={tw('text-ellipsis whitespace-nowrap overflow-hidden flex-1')}>{`${organization.longName}`}</span>
+          <span
+            className={tw('text-ellipsis whitespace-nowrap overflow-hidden flex-1')}>{`${organization.longName}`}</span>
           <span>{`(${organization.shortName})`}</span>
         </div>
         {onEditClick && (
@@ -62,18 +67,13 @@ export const OrganizationCard = ({
           </button>
         )}
       </div>
-      <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm')}>
-        {organization.wards.slice(0, maxShownWards).map(value => value.name).join(', ')}
-        {notDisplayedWards > 0 && (
-          <span className={tw('ml-1')}>
-            + {notDisplayedWards}
-          </span>
-        )}
+      <div className={tw('truncate flex flex-row items-center')}>
+        <Mail/>
+        <span className={tw('w-full truncate ml-2 text-sm')}>{organization.email}</span>
       </div>
       <div className={tw('flex flex-row justify-between')}>
-        <div className={tw('truncate flex flex-row items-center')}>
-          <Mail/>
-          <span className={tw('w-full truncate ml-2 text-sm')}>{organization.email}</span>
+        <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm truncate')}>
+          {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation.members : translation.member}`}
         </div>
         <AvatarGroup users={organization.members}/>
       </div>

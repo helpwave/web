@@ -10,20 +10,18 @@ export type TaskDetailModalProps = ModalProps & TaskDetailViewProps
  * A Modal Wrapper for the task detail view
  */
 export const TaskDetailModal = ({
-  isOpen,
-  onBackgroundClick,
-  task,
-  onChange,
+  taskID,
+  patientID,
   onClose,
-  onFinishClick
+  modalClassName,
+  ...modalProps
 }: TaskDetailModalProps) => {
   return (
     <Modal
-      isOpen={isOpen}
-      onBackgroundClick={onBackgroundClick}
-      modalClassName={tx('!p-0', { 'rounded-l-none': task.id === '' })}
+      modalClassName={tx('!p-0', { '!rounded-l-none': taskID === '' }, modalClassName)}
+      {...modalProps}
     >
-      <TaskDetailView task={task} onChange={onChange} onClose={onClose} onFinishClick={onFinishClick}/>
+      <TaskDetailView patientID={patientID} taskID={taskID} onClose={onClose}/>
     </Modal>
   )
 }

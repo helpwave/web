@@ -1,7 +1,16 @@
-import { Role } from '../components/OrganizationMemberList'
+import type { Role } from '../components/OrganizationMemberList'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  CreateOrganizationForUserRequest,
+  CreateOrganizationRequest,
+  DeleteOrganizationRequest,
+  GetInvitationsByUserRequest,
+  GetOrganizationRequest, UpdateOrganizationRequest
+} from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
+import { getAuthenticatedGrpcMetadata, organizationService } from '../utils/grpc'
+import { noop } from '@helpwave/common/util/noop'
 
-const queryKey = 'organizations'
+export const organizationsQueryKey = 'organizations'
 
 type WardDTO = {
   name: string
@@ -14,171 +23,177 @@ export type OrgMember = {
   role: Role
 }
 
-export type OrganizationDTO = {
+export type OrgMemberMinimalDTO = {
+  id: string
+}
+
+export type OrganizationMinimalDTO = {
   id: string,
   shortName: string,
   longName: string,
   email: string,
   isVerified: boolean,
+  isPersonal: boolean,
+  avatarURL: string
+}
+
+export type OrganizationDTO = OrganizationMinimalDTO & {
   wards: WardDTO[],
   members: OrgMember[]
 }
 
-// TODO remove once backend is implemented
-export let organizations: OrganizationDTO[] = [
-  {
-    id: 'org1',
-    shortName: 'UKM',
-    longName: 'Uniklinkum Münster',
-    email: 'ukm@helpwave.de',
-    isVerified: false,
-    wards: [{ name: 'ICU' }, { name: 'Radiology' }, { name: 'Cardiology' }],
-    members: [
-      {
-        name: 'User1',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user1@helpwave.de',
-        role: Role.admin
-      }, {
-        name: 'User2',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user2@helpwave.de',
-        role: Role.user
-      },
-      {
-        name: 'User3',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user3@helpwave.de',
-        role: Role.user
-      },
-      {
-        name: 'User4',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user4@helpwave.de',
-        role: Role.user
-      }
-    ]
-  },
-  {
-    id: 'org2',
-    shortName: 'ORGA',
-    longName: 'Organame',
-    email: 'orga@helpwave.de',
-    isVerified: false,
-    wards: [{ name: 'ICU' }, { name: 'Radiology' }, { name: 'Cardiology' }],
-    members: [
-      {
-        name: 'User1',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user1@helpwave.de',
-        role: Role.admin
-      }, {
-        name: 'User2',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user2@helpwave.de',
-        role: Role.user
-      },
-      {
-        name: 'User3',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user3@helpwave.de',
-        role: Role.user
-      },
-      {
-        name: 'User4',
-        avatarURL: 'https://source.boringavatars.com/',
-        email: 'user4@helpwave.de',
-        role: Role.user
-      }
-    ]
-  },
-]
+export type OrganizationWithMinimalMemberDTO = OrganizationMinimalDTO & {
+  members: OrgMemberMinimalDTO[]
+}
 
-export const useOrganizationQuery = () => {
+export type OrganizationDisplayableDTO = {
+  id: string,
+  longName: string,
+  avatarURL: string
+}
+
+export type InvitationState = 'accepted' | 'rejected' | 'pending'
+
+export type Invitation = {
+  id: string,
+  email: string,
+  organization: OrganizationDisplayableDTO,
+  state: InvitationState
+}
+
+export const useOrganizationQuery = (organizationID: string | undefined) => {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: [organizationsQueryKey],
+    enabled: !!organizationID,
     queryFn: async () => {
-      // TODO fetch user organizations
-      return organizations
+      const req = new GetOrganizationRequest()
+      if (organizationID) {
+        req.setId(organizationID)
+      }
+
+      const res = await organizationService.getOrganization(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in Organization')
+      }
+
+      const organization: OrganizationWithMinimalMemberDTO = {
+        id: res.getId(),
+        email: res.getContactEmail(),
+        isVerified: true, // TODO update later
+        longName: res.getLongName(),
+        shortName: res.getShortName(),
+        isPersonal: res.getIsPersonal(),
+        avatarURL: res.getAvatarUrl(),
+        members: res.getMembersList().map(member => ({ id: member.getUserId() }))
+      }
+      return organization
     },
   })
 }
 
-export const useUpdateMutation = (setSelectedOrganization: (organization: OrganizationDTO | undefined) => void) => {
+export const invitationsQueryKey = 'invitations'
+export const useInvitationsByUserQuery = (state?: InvitationState) => {
+  return useQuery({
+    queryKey: [organizationsQueryKey, invitationsQueryKey],
+    queryFn: async () => {
+      const req = new GetInvitationsByUserRequest()
+      if (state) {
+        req.setState(state)
+      }
+      const res = await organizationService.getInvitationsByUser(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in InvitationsByUser')
+      }
+
+      const invitations: Invitation[] = res.getInvitationsList().map(invite => {
+        const organization = invite.getOrganization()
+        return {
+          id: invite.getId(),
+          state: invite.getState() as InvitationState, // TODO change later to enum
+          email: invite.getEmail(),
+          organization: {
+            id: organization.getId(),
+            avatarURL: organization.getAvatarUrl(),
+            longName: organization.getLongName()
+          }
+        }
+      })
+      return invitations
+    },
+  })
+}
+
+export const useOrganizationCreateMutation = (callback: (organization: OrganizationMinimalDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (organization: OrganizationDTO) => {
-      // TODO create request for organization
-      organizations = [...organizations.filter(value => value.id !== organization.id), organization]
-      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-      setSelectedOrganization(organization)
+    mutationFn: async (organization: OrganizationMinimalDTO) => {
+      const req = new CreateOrganizationRequest()
+      req.setLongName(organization.longName)
+      req.setShortName(organization.shortName)
+      req.setIsPersonal(organization.isPersonal)
+      req.setContactEmail(organization.email)
+      const res = await organizationService.createOrganization(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in OrganizationCreate')
+      }
+
+      const newOrganization: OrganizationMinimalDTO = { ...organization, id: res.getId() }
+      callback(newOrganization)
+      return newOrganization
     },
-    onMutate: async (organization) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-      queryClient.setQueryData<OrganizationDTO[]>(
-        [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id)), organization])
-      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-      return { previousOrganizations }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: [organizationsQueryKey] }).then()
     }
   })
 }
 
-export const useCreateMutation = (setSelectedOrganization: (organization: OrganizationDTO | undefined) => void) => {
+export const useOrganizationUpdateMutation = (callback: (organization: OrganizationMinimalDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (organization) => {
-      organization.id = Math.random().toString()
-      // TODO create request for organization
-      const newOrganization = { ...organization, id: Math.random().toString() }
-      organizations = [...organizations, newOrganization]
-      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-      setSelectedOrganization(newOrganization)
+    mutationFn: async (organization: OrganizationMinimalDTO) => {
+      const req = new UpdateOrganizationRequest()
+      req.setId(organization.id)
+      req.setLongName(organization.longName)
+      req.setShortName(organization.shortName)
+      req.setIsPersonal(organization.isPersonal)
+      req.setAvatarUrl(organization.avatarURL)
+      req.setContactEmail(organization.email)
+      const res = await organizationService.updateOrganization(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in OrganizationUpdate')
+      }
+
+      const newOrganization: OrganizationMinimalDTO = { ...organization }
+      callback(newOrganization)
+      return newOrganization
     },
-    onMutate: async(organization: OrganizationDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-      queryClient.setQueryData<OrganizationDTO[]>([queryKey], (old) => [...(old === undefined ? [] : old), organization])
-      organizations.sort((a, b) => a.longName.localeCompare(b.longName))
-      return { previousOrganizations }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
-    },
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: [organizationsQueryKey] }).then()
+    }
   })
 }
 
-export const useDeleteMutation = (setSelectedOrganization: (organization: OrganizationDTO | undefined) => void) => {
+export const useOrganizationDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (organization) => {
-      // TODO create request for organization
-      organizations = [...organizations.filter(value => value.id !== organization.id)]
-      setSelectedOrganization(undefined)
+    mutationFn: async (organizationID: string) => {
+      const req = new DeleteOrganizationRequest()
+      req.setId(organizationID)
+      const res = await organizationService.deleteOrganization(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in OrganizationDelete')
+      }
+
+      callback()
+      return res.toObject()
     },
-    onMutate: async(organization: OrganizationDTO) => {
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousOrganizations = queryClient.getQueryData<OrganizationDTO[]>([queryKey])
-      queryClient.setQueryData<OrganizationDTO[]>(
-        [queryKey],
-        (old) => [...(old === undefined ? [] : old.filter(value => value.id !== organization.id))])
-      return { previousOrganizations }
-    },
-    onError: (_, newTodo, context) => {
-      queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousOrganizations)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: [organizationsQueryKey] }).then()
     },
   })
 }

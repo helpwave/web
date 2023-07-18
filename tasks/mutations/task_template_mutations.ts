@@ -70,7 +70,7 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       personalTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       setTemplate(taskTemplate)
     },
-    onMutate: async (taskTemplate: TaskTemplateDTO) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousTaskTemplates = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
       queryClient.setQueryData<TaskTemplateDTO[]>(
@@ -102,7 +102,7 @@ export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       personalTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       setTemplate(newTaskTemplate)
     },
-    onMutate: async (taskTemplate:TaskTemplateDTO) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
       // TODO do optimistic update here
@@ -131,7 +131,7 @@ export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task:TaskTem
       personalTaskTemplates.sort((a, b) => a.id.localeCompare(b.id))
       setTemplate(undefined)
     },
-    onMutate: async (taskTemplate: TaskTemplateDTO) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
       const previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
       queryClient.setQueryData<TaskTemplateDTO[]>(

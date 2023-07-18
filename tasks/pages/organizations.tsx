@@ -8,10 +8,10 @@ import { OrganizationDisplay } from '../components/layout/OrganizationDisplay'
 import type { Role } from '../components/OrganizationMemberList'
 import { OrganizationDetail } from '../components/layout/OrganizationDetails'
 import {
-  useCreateMutation,
-  useDeleteMutation,
+  useOrganizationCreateMutation,
+  useOrganizationDeleteMutation,
   useOrganizationQuery,
-  useUpdateMutation
+  useOrganizationUpdateMutation
 } from '../mutations/organization_mutations'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
 import titleWrapper from '../utils/titleWrapper'
@@ -94,7 +94,7 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
 
   const { isLoading, isError, data } = useOrganizationQuery()
 
-  const createMutation = useCreateMutation(organization => {
+  const createMutation = useOrganizationCreateMutation(organization => {
     setOrganizationForm({
       isValid: true,
       hasChanges: false,
@@ -102,7 +102,7 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
     })
     setDiscardDialogInfo({ isShowing: false, organization: undefined })
   })
-  const updateMutation = useUpdateMutation(organization => {
+  const updateMutation = useOrganizationUpdateMutation(organization => {
     setOrganizationForm({
       isValid: true,
       hasChanges: false,
@@ -110,7 +110,7 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
     })
     setDiscardDialogInfo({ isShowing: false, organization: undefined })
   })
-  const deleteMutation = useDeleteMutation(() => {
+  const deleteMutation = useOrganizationDeleteMutation(() => {
     setOrganizationForm({
       isValid: false,
       hasChanges: false,

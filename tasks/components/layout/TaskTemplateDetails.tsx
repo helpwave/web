@@ -158,6 +158,8 @@ export const TaskTemplateDetails = ({
         />
       </div>
       <SubtaskView
+        taskTemplateId={taskTemplateForm.template.id}
+        queryKey="taskTemplateSubtasks"
         subtasks={taskTemplateForm.template.subtasks}
         onChange={subtasks => setTaskTemplateForm({
           hasChanges: true,

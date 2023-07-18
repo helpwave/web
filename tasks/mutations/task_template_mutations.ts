@@ -3,13 +3,14 @@ import { noop } from '@helpwave/common/components/user_input/Input'
 import { getAuthenticatedGrpcMetadata, taskTemplateService } from '../utils/grpc'
 import {
   CreateTaskTemplateRequest, CreateTaskTemplateSubTaskRequest,
-  DeleteTaskTemplateRequest, DeleteTaskTemplateSubTaskRequest,
+  DeleteTaskTemplateRequest,
+  DeleteTaskTemplateSubTaskRequest,
   GetAllTaskTemplatesByCreatorRequest,
-  GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
+  GetAllTaskTemplatesByWardRequest,
+  UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
 import SubTask = CreateTaskTemplateRequest.SubTask
-import { useAuth } from '../hooks/useAuth'
-import { useRouter } from 'next/router'
+import type { SubTaskDTO } from './task_mutations'
 
 export type TaskTemplateDTO = {
   wardId? : string,
@@ -87,58 +88,16 @@ export const usePersonalTaskTemplateQuery = (createdBy? : string, onSuccess: (da
 
 export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
-  const { user } = useAuth()
-  const router = useRouter()
-  const { uuid: warId } = router.query
   return useMutation({
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {
-      let previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey, user?.id])
-      if (queryKey === 'wardTaskTemplates') {
-        previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey, warId?.toString()])
-      }
-
-      //  update task template
       const updateTaskTemplate = new UpdateTaskTemplateRequest()
+
       updateTaskTemplate.setName(taskTemplate.name)
       updateTaskTemplate.setDescription(taskTemplate.notes)
       updateTaskTemplate.setId(taskTemplate.id)
 
       const res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
       const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
-
-      const updateSubtaskTemplate = new UpdateTaskTemplateSubTaskRequest()
-      const createSubTaskTemplate = new CreateTaskTemplateSubTaskRequest()
-
-      let subtasksToDelete = previousTaskTemplate?.map(template => template.subtasks).flat()
-
-      for (const subtask of taskTemplate.subtasks) {
-        // add new subtasks to tak template
-        if (!subtask.id) {
-          createSubTaskTemplate.setName(subtask.name)
-          createSubTaskTemplate.setTaskTemplateId(taskTemplate.id)
-          await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
-
-          continue
-        }
-        // update subtasks
-        updateSubtaskTemplate.setName(subtask.name)
-        updateSubtaskTemplate.setSubtaskId(subtask.id)
-
-        // ignore subtask from deletion
-        subtasksToDelete =
-          subtasksToDelete?.filter(subtaskToDelete => subtaskToDelete.id !== subtask.id)
-
-        await taskTemplateService.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
-      }
-
-      // delete subtask from template
-      const deleteSubtaskTaskTemplate = new DeleteTaskTemplateSubTaskRequest()
-      if (subtasksToDelete !== undefined) {
-        for (const subtask of subtasksToDelete) {
-          deleteSubtaskTaskTemplate.setId(subtask.id)
-          await taskTemplateService.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
-        }
-      }
 
       setTemplate(newTaskTemplate)
     },
@@ -220,6 +179,66 @@ export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task:TaskTem
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+    },
+  })
+}
+
+export const useSubTaskTemplateDeleteMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (subtaskID: string) => {
+      const deleteSubtaskTaskTemplate = new DeleteTaskTemplateSubTaskRequest()
+      deleteSubtaskTaskTemplate.setId(subtaskID)
+      await taskTemplateService.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
+      queryClient.refetchQueries(['personalTaskTemplates']).then()
+      callback()
+      return deleteSubtaskTaskTemplate.toObject()
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['personalTaskTemplates'] }).then()
+    },
+  })
+}
+
+export const useSubTaskTemplateUpdateMutation = (callback: (subtask: SubTaskDTO) => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (subtask: SubTaskDTO) => {
+      const updateSubtaskTemplate = new UpdateTaskTemplateSubTaskRequest()
+      updateSubtaskTemplate.setName(subtask.name)
+      updateSubtaskTemplate.setSubtaskId(subtask.id)
+      await taskTemplateService.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
+      const newSubtask: SubTaskDTO = { ...subtask }
+      queryClient.refetchQueries(['wardTaskTemplates']).then()
+      callback(newSubtask)
+      return updateSubtaskTemplate.toObject()
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['personalTaskTemplates'] }).then()
+    },
+  })
+}
+
+export const useSubTaskTemplateAddMutation = (callback: (subtask: SubTaskDTO) => void = noop, taskTemplateId : string | undefined) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (subtask: SubTaskDTO) => {
+      const createSubTaskTemplate = new CreateTaskTemplateSubTaskRequest()
+      createSubTaskTemplate.setName(subtask.name)
+      if (taskTemplateId !== undefined) {
+        createSubTaskTemplate.setTaskTemplateId(taskTemplateId)
+      }
+      const res = await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
+
+      const newSubtask: SubTaskDTO = {
+        id: res.getId(),
+        name: subtask.name,
+        isDone: subtask.isDone,
+      }
+
+      queryClient.refetchQueries(['wardTaskTemplates']).then()
+      callback(newSubtask)
+      return createSubTaskTemplate.toObject()
     },
   })
 }

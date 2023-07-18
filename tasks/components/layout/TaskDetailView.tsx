@@ -107,11 +107,15 @@ export const TaskDetailView = ({
   const { data, isLoading, isError } = useTaskQuery(taskID)
 
   const [task, setTask] = useState<TaskDTO>({ ...emptyTask })
+
   const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
+
   const createTaskMutation = useTaskCreateMutation(newTask => {
-    newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskID: newTask.id }))
+    newTask.subtasks.forEach(value =>
+      addSubtaskMutation.mutate({ ...value, taskID: newTask.id }))
     onClose()
   }, patientID)
+
   const updateTaskMutation = useTaskUpdateMutation()
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
 
@@ -205,7 +209,7 @@ export const TaskDetailView = ({
                 onChange={description => setTask({ ...task, notes: description })}
               />
             </div>
-            <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange={subtasks => setTask({ ...task, subtasks })}/>
+            <SubtaskView queryKey="taskSubtasks" subtasks={task.subtasks} taskID={taskID} onChange={subtasks => setTask({ ...task, subtasks })}/>
           </div>
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
             <div className={tw('flex flex-col gap-y-4')}>

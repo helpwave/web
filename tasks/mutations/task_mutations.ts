@@ -229,11 +229,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       req.setId(task.id)
       req.setDescription(task.notes)
       req.setName(task.name)
-      const res = await taskService.updateTask(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in TaskUpdate')
-      }
+      await taskService.updateTask(req, getAuthenticatedGrpcMetadata())
 
       queryClient.refetchQueries([tasksQueryKey]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
@@ -249,11 +245,7 @@ export const useTaskDeleteMutation = (callback: () => void = noop) => {
     mutationFn: async (taskID: string) => {
       const req = new DeleteTaskRequest()
       req.setId(taskID)
-      const res = await taskService.deleteTask(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in TaskDelete')
-      }
+      await taskService.deleteTask(req, getAuthenticatedGrpcMetadata())
 
       queryClient.refetchQueries([tasksQueryKey, sortedTasksByPatientQueryKey]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
@@ -269,12 +261,7 @@ export const useTaskToToDoMutation = (callback: () => void = noop) => {
     mutationFn: async (taskID: string) => {
       const req = new TaskToToDoRequest()
       req.setId(taskID)
-      const res = await taskService.taskToToDo(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in TaskToToDo')
-      }
-
+      await taskService.taskToToDo(req, getAuthenticatedGrpcMetadata())
       queryClient.refetchQueries([tasksQueryKey]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback()

@@ -11,10 +11,16 @@ import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import {
   useSubTaskAddMutation,
-  useSubTaskDeleteMutation, useSubTaskToDoneMutation,
+  useSubTaskDeleteMutation,
+  useSubTaskToDoneMutation,
   useSubTaskToToDoMutation,
   useSubTaskUpdateMutation
 } from '../mutations/task_mutations'
+import {
+  useSubTaskTemplateUpdateMutation,
+  useSubTaskTemplateDeleteMutation,
+  useSubTaskTemplateAddMutation
+} from '../mutations/task_template_mutations'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -37,10 +43,14 @@ const defaultSubtaskViewTranslation = {
     newSubtask: 'Neue Unteraufgabe'
   }
 }
+type QueryKey = 'taskTemplateSubtasks' | 'taskSubtasks'
 
 type SubtaskViewProps = {
+  queryKey : QueryKey,
   subtasks: SubTaskDTO[],
   taskID?: string,
+  createdBy?: string,
+  taskTemplateId? : string,
   onChange: (subtasks: SubTaskDTO[]) => void
 }
 
@@ -48,21 +58,28 @@ type SubtaskViewProps = {
  * A view for editing and showing all subtasks of a task
  */
 export const SubtaskView = ({
+  queryKey,
   language,
   subtasks,
   taskID,
+  taskTemplateId,
   onChange
 }: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
   const translation = useTranslation(language, defaultSubtaskViewTranslation)
   const scrollableRef = useRef<SimpleBarCore>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
-  const isCreatingTask = !!taskID
+  const isCreatingTask = !taskID && !taskTemplateId
+
   const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
   const updateSubtaskMutation = useSubTaskUpdateMutation()
   const deleteSubtaskMutation = useSubTaskDeleteMutation()
   const subtaskToToDoMutation = useSubTaskToToDoMutation()
   const subtaskToDoneMutation = useSubTaskToDoneMutation()
+
+  const deleteSubtaskTemplateMutation = useSubTaskTemplateDeleteMutation()
+  const updateSubtaskTemplateMutation = useSubTaskTemplateUpdateMutation()
+  const addSubtaskTemplateMutation = useSubTaskTemplateAddMutation(() => undefined, taskTemplateId)
 
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
@@ -86,18 +103,20 @@ export const SubtaskView = ({
                 onNameChange={newSubtask => {
                   const newSubtasks = [...subtasks]
                   newSubtasks[index] = newSubtask
-                  if (isCreatingTask) {
-                    onChange(newSubtasks)
-                  } else {
+                  if (queryKey === 'taskSubtasks') {
                     updateSubtaskMutation.mutate(newSubtask)
+                  } else {
+                    updateSubtaskTemplateMutation.mutate(newSubtask)
                   }
+                  onChange(newSubtasks)
                 }}
                 onRemoveClick={() => {
-                  if (isCreatingTask) {
-                    onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))
-                  } else {
+                  if (queryKey === 'taskSubtasks') {
                     deleteSubtaskMutation.mutate(subtask.id)
+                  } else {
+                    deleteSubtaskTemplateMutation.mutate(subtask.id)
                   }
+                  onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))
                 }}
                 onDoneChange={done => {
                   if (isCreatingTask) {
@@ -121,7 +140,11 @@ export const SubtaskView = ({
           if (isCreatingTask) {
             onChange([...subtasks, newSubtask])
           } else {
-            addSubtaskMutation.mutate(newSubtask)
+            if (queryKey === 'taskSubtasks') {
+              addSubtaskMutation.mutate(newSubtask)
+            } else {
+              addSubtaskTemplateMutation.mutate(newSubtask)
+            }
           }
           setScrollToBottom(true)
         }}

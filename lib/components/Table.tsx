@@ -229,7 +229,7 @@ export const Table = <T, >({
 
   return (
     <div className={tw('flex flex-col gap-y-4 items-center')}>
-      <table>
+      <table className={tw('w-full')}>
         <thead>
         <tr className={headerRow}>
           {header && tableState.selection && (

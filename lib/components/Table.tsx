@@ -76,8 +76,9 @@ export const removeFromTableSelection = <T, >(tableState: TableState, deletedObj
   }
 
   const deletedObjectIds = deletedObjects.map(identifierMapping)
+  const elementsBefore = tableState.selection.currentSelection.length
   const currentSelection = tableState.selection.currentSelection.filter((value) => !deletedObjectIds.includes(value))
-  dataLength -= currentSelection.length
+  dataLength -= elementsBefore - currentSelection.length
 
   return {
     ...tableState,

@@ -8,12 +8,14 @@ import { tx } from '../twind'
 const colors = ['accent', 'accent-secondary', 'positive', 'negative', 'neutral', 'warn', 'none'] as const // TODO: this should be named differently, for example: "accent", "good"/"positive", "average"/"neutral", "bad"/"negative"
 const variants = ['primary', 'secondary', 'tertiary', 'textButton'] as const
 
+export type ButtonColorType = typeof colors[number]
+
 export type ButtonProps = PropsWithChildren<{
   /**
    * Color variant of the button
    * @default 'primary' // as in the primary accent color
    */
-  color?: typeof colors[number],
+  color?: ButtonColorType,
   /**
    * Importance, visibility, prominence, obtrusiveness of the button
    * E.g.

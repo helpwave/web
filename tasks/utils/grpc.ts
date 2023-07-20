@@ -5,9 +5,7 @@ import { PatientServicePromiseClient } from '@helpwave/proto-ts/proto/services/t
 import Cookies from 'js-cookie'
 import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_grpc_web_pb'
-import {
-  OrganizationServicePromiseClient
-} from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
+import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
 
 // TODO: Implement something like a service registry
 export const wardService = new WardServicePromiseClient('https://staging.api.helpwave.de/task-svc')

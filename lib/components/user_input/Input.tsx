@@ -6,7 +6,7 @@ import useSaveDelay from '../../hooks/useSaveDelay'
 
 const noop = () => { /* noop */ }
 
-type InputProps = {
+export type InputProps = {
   /**
    * used for the label's `for` attribute
    */

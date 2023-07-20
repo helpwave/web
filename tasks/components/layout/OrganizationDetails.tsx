@@ -135,6 +135,7 @@ export const OrganizationDetail = ({
       {!isCreatingNewOrganization && (
         // TODO updatae later
         <OrganizationMemberList
+          organizationID={organizationForm.organization.id}
           members={organizationForm.organization.members}
           onChange={() => undefined}
         />

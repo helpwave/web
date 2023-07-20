@@ -7,6 +7,7 @@ import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import type { OrganizationDTO } from '../mutations/organization_mutations'
 import { emptyOrganization } from '../mutations/organization_mutations'
+import { validateEmail } from '@helpwave/common/util/emailValidation'
 
 type OrganizationFormTranslation = {
   general: string,
@@ -125,23 +126,23 @@ export const OrganizationForm = ({
     }
   }
 
-  function validateEmail(organization: OrganizationDTO) {
+  function validateEmailWithOrganization(organization: OrganizationDTO) {
     const email = organization.email.trim()
     if (email === '') {
       return translation.required
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(organization.email)) {
+    } else if (!validateEmail(organization.email)) {
       return translation.invalidEmail
     }
   }
 
   function triggerOnChange(newOrganization: OrganizationDTO) {
-    const isValid = validateShortName(newOrganization) === undefined && validateLongName(newOrganization) === undefined && validateEmail(newOrganization) === undefined
+    const isValid = validateShortName(newOrganization) === undefined && validateLongName(newOrganization) === undefined && validateEmailWithOrganization(newOrganization) === undefined
     onChange({ hasChanges: true, isValid, organization: newOrganization })
   }
 
   const shortNameErrorMessage: string | undefined = validateShortName(organizationForm.organization)
   const longNameErrorMessage: string | undefined = validateLongName(organizationForm.organization)
-  const emailErrorMessage: string | undefined = validateEmail(organizationForm.organization)
+  const emailErrorMessage: string | undefined = validateEmailWithOrganization(organizationForm.organization)
 
   const isDisplayingShortNameError = shortNameErrorMessage && touched.shortName
   const isDisplayingLongNameError = longNameErrorMessage && touched.longName

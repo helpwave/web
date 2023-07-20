@@ -21,6 +21,7 @@ import {
   useSubTaskTemplateDeleteMutation,
   useSubTaskTemplateAddMutation
 } from '../mutations/task_template_mutations'
+import { taskTemplateContextState } from '../pages/templates';
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -46,6 +47,7 @@ const defaultSubtaskViewTranslation = {
 type QueryKey = 'taskTemplateSubtasks' | 'taskSubtasks'
 
 type SubtaskViewProps = {
+  // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
   queryKey : QueryKey,
   subtasks: SubTaskDTO[],
   taskID?: string,
@@ -79,7 +81,8 @@ export const SubtaskView = ({
 
   const deleteSubtaskTemplateMutation = useSubTaskTemplateDeleteMutation()
   const updateSubtaskTemplateMutation = useSubTaskTemplateUpdateMutation()
-  const addSubtaskTemplateMutation = useSubTaskTemplateAddMutation(() => undefined, taskTemplateId)
+  // TODO: Remove ?? '' once the mutate functions are passed properly
+  const addSubtaskTemplateMutation = useSubTaskTemplateAddMutation(() => undefined, taskTemplateId ?? '')
 
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
@@ -105,7 +108,7 @@ export const SubtaskView = ({
                   newSubtasks[index] = newSubtask
                   if (queryKey === 'taskSubtasks') {
                     updateSubtaskMutation.mutate(newSubtask)
-                  } else {
+                  } else if (!isCreatingTask) {
                     updateSubtaskTemplateMutation.mutate(newSubtask)
                   }
                   onChange(newSubtasks)
@@ -113,7 +116,7 @@ export const SubtaskView = ({
                 onRemoveClick={() => {
                   if (queryKey === 'taskSubtasks') {
                     deleteSubtaskMutation.mutate(subtask.id)
-                  } else {
+                  } else if (!isCreatingTask) {
                     deleteSubtaskTemplateMutation.mutate(subtask.id)
                   }
                   onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))
@@ -124,7 +127,7 @@ export const SubtaskView = ({
                   } else {
                     if (done) {
                       subtaskToDoneMutation.mutate(subtask.id)
-                    } else {
+                    } else if (!isCreatingTask) {
                       subtaskToToDoMutation.mutate(subtask.id)
                     }
                   }
@@ -140,7 +143,7 @@ export const SubtaskView = ({
           if (queryKey === 'taskSubtasks') {
             addSubtaskMutation.mutate(newSubtask)
           } else {
-            addSubtaskTemplateMutation.mutate(newSubtask)
+            // Skip, will be handled one component above
           }
           onChange([...subtasks, newSubtask])
           setScrollToBottom(true)

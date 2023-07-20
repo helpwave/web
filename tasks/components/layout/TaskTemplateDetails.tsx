@@ -2,7 +2,7 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -11,8 +11,7 @@ import { SubtaskView } from '../SubtaskView'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import type { PersonalTaskTemplateContextType } from '../../pages/templates'
-import type { WardTaskTemplateContextType } from '../../pages/ward/[uuid]/templates'
+import { TaskTemplateContext } from '../../pages/templates'
 
 type TaskTemplateDetailsTranslation = {
   updateTaskTemplate: string,
@@ -61,7 +60,6 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
 }
 
 export type TaskTemplateDetailsProps = {
-  context: PersonalTaskTemplateContextType | WardTaskTemplateContextType,
   onCreate: (taskTemplate: TaskTemplateDTO) => void,
   onUpdate: (taskTemplate: TaskTemplateDTO) => void,
   onDelete: (taskTemplate: TaskTemplateDTO) => void,
@@ -73,11 +71,12 @@ export type TaskTemplateDetailsProps = {
  */
 export const TaskTemplateDetails = ({
   language,
-  context,
   onCreate,
   onUpdate,
   onDelete,
 }: PropsWithLanguage<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
+  const context = useContext(TaskTemplateContext)
+
   const translation = useTranslation(language, defaultTaskTemplateDetailsTranslations)
   const isCreatingNewTemplate = context.state.template.id === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
@@ -158,6 +157,7 @@ export const TaskTemplateDetails = ({
       </div>
       <SubtaskView
         queryKey="taskTemplateSubtasks"
+        taskTemplateId={context.state.template.id}
         subtasks={context.state.template.subtasks}
         onChange={subtasks => context.updateContext({
           hasChanges: true,

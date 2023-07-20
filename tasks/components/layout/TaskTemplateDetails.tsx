@@ -7,11 +7,12 @@ import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import type { TaskTemplateFormType } from '../../pages/ward/[uuid]/templates'
 import { SubtaskView } from '../SubtaskView'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
+import type { PersonalTaskTemplateContextType } from '../../pages/templates'
+import type { WardTaskTemplateContextType } from '../../pages/ward/[uuid]/templates'
 
 type TaskTemplateDetailsTranslation = {
   updateTaskTemplate: string,
@@ -60,11 +61,10 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
 }
 
 export type TaskTemplateDetailsProps = {
-  taskTemplateForm: TaskTemplateFormType,
+  context: PersonalTaskTemplateContextType | WardTaskTemplateContextType,
   onCreate: (taskTemplate: TaskTemplateDTO) => void,
   onUpdate: (taskTemplate: TaskTemplateDTO) => void,
   onDelete: (taskTemplate: TaskTemplateDTO) => void,
-  setTaskTemplateForm: (taskTemplateForm: TaskTemplateFormType) => void,
   width?: number
 }
 
@@ -73,14 +73,13 @@ export type TaskTemplateDetailsProps = {
  */
 export const TaskTemplateDetails = ({
   language,
-  taskTemplateForm,
+  context,
   onCreate,
   onUpdate,
   onDelete,
-  setTaskTemplateForm
 }: PropsWithLanguage<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateDetailsTranslations)
-  const isCreatingNewTemplate = taskTemplateForm.template.id === ''
+  const isCreatingNewTemplate = context.state.template.id === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [touched, setTouched] = useState({
     name: !isCreatingNewTemplate
@@ -103,7 +102,7 @@ export const TaskTemplateDetails = ({
     }
   }
 
-  const nameErrorMessage: string | undefined = validateName(taskTemplateForm.template.name)
+  const nameErrorMessage: string | undefined = validateName(context.state.template.name)
   const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
 
   return (
@@ -116,7 +115,7 @@ export const TaskTemplateDetails = ({
         onBackgroundClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          onDelete(taskTemplateForm.template)
+          onDelete(context.state.template)
         }}
         confirmType="negative"
       />
@@ -128,13 +127,13 @@ export const TaskTemplateDetails = ({
         <div>
           <Input
             id="name"
-            value={taskTemplateForm.template.name}
+            value={context.state.template.name}
             label={translation.name}
             type="text"
             onBlur={() => setTouched({ name: true })}
             onChange={text => {
-              setTaskTemplateForm({
-                template: { ...taskTemplateForm.template, name: text },
+              context.updateContext({
+                template: { ...context.state.template, name: text },
                 isValid: validateName(text) === undefined,
                 hasChanges: true
               })
@@ -147,24 +146,23 @@ export const TaskTemplateDetails = ({
         <Textarea
           headline={translation.notes}
           id="notes"
-          value={taskTemplateForm.template.notes}
+          value={context.state.template.notes}
           onChange={text => {
-            setTaskTemplateForm({
-              template: { ...taskTemplateForm.template, notes: text },
-              isValid: taskTemplateForm.isValid,
+            context.updateContext({
+              template: { ...context.state.template, notes: text },
+              isValid: context.state.isValid,
               hasChanges: true
             })
           }}
         />
       </div>
       <SubtaskView
-        taskTemplateId={taskTemplateForm.template.id}
         queryKey="taskTemplateSubtasks"
-        subtasks={taskTemplateForm.template.subtasks}
-        onChange={subtasks => setTaskTemplateForm({
+        subtasks={context.state.template.subtasks}
+        onChange={subtasks => context.updateContext({
           hasChanges: true,
-          isValid: taskTemplateForm.isValid,
-          template: { ...taskTemplateForm.template, subtasks }
+          isValid: context.state.isValid,
+          template: { ...context.state.template, subtasks }
         })}
       />
       <div className={tx('flex flex-row mt-12',
@@ -175,8 +173,8 @@ export const TaskTemplateDetails = ({
       >
         <Button
           className={tw('w-auto')}
-          onClick={() => isCreatingNewTemplate ? onCreate(taskTemplateForm.template) : onUpdate(taskTemplateForm.template)}
-          disabled={!taskTemplateForm.isValid}
+          onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state.template)}
+          disabled={!context.state.isValid}
         >
           {isCreatingNewTemplate ? translation.create : translation.update}
         </Button>

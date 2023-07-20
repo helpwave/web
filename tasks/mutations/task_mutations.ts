@@ -206,13 +206,10 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       req.setPatientId(patientID)
       req.setDescription(task.notes)
       req.setPublic(task.isPublicVisible)
+
       const res = await taskService.createTask(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error with TaskCreate')
-      }
-
       const newTask = { ...task, id: res.getId() }
+
       queryClient.refetchQueries([tasksQueryKey]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback(newTask)
@@ -276,12 +273,7 @@ export const useTaskToInProgressMutation = (callback: () => void = noop) => {
     mutationFn: async (taskID: string) => {
       const req = new TaskToInProgressRequest()
       req.setId(taskID)
-      const res = await taskService.taskToInProgress(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in TaskToInProgress')
-      }
-
+      await taskService.taskToInProgress(req, getAuthenticatedGrpcMetadata())
       queryClient.refetchQueries([tasksQueryKey]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback()
@@ -296,12 +288,7 @@ export const useTaskToDoneMutation = (callback: () => void = noop) => {
     mutationFn: async (taskID: string) => {
       const req = new TaskToDoneRequest()
       req.setId(taskID)
-      const res = await taskService.taskToDone(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in TaskToDone')
-      }
-
+      await taskService.taskToDone(req, getAuthenticatedGrpcMetadata())
       queryClient.refetchQueries([tasksQueryKey]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback()
@@ -324,10 +311,6 @@ export const useSubTaskAddMutation = (callback: (subtask: SubTaskDTO) => void = 
       req.setDone(subtask.isDone)
       const res = await taskService.addSubTask(req, getAuthenticatedGrpcMetadata())
 
-      if (!res.toObject()) {
-        console.error('error in SubTaskCreate')
-      }
-
       const newSubtask: SubTaskDTO = {
         id: res.getId(),
         name: subtask.name,
@@ -347,12 +330,7 @@ export const useSubTaskUpdateMutation = (callback: (subtask: SubTaskDTO) => void
       const req = new UpdateSubTaskRequest()
       req.setId(subtask.id)
       req.setName(subtask.name)
-      const res = await taskService.updateSubTask(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in SubTaskUpdate')
-      }
-
+      await taskService.updateSubTask(req, getAuthenticatedGrpcMetadata())
       const newSubtask: SubTaskDTO = { ...subtask }
       queryClient.refetchQueries([tasksQueryKey]).then()
       callback(newSubtask)
@@ -367,12 +345,7 @@ export const useSubTaskDeleteMutation = (callback: () => void = noop) => {
     mutationFn: async (subtaskID: string) => {
       const req = new RemoveSubTaskRequest()
       req.setId(subtaskID)
-      const res = await taskService.removeSubTask(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in SubTaskDelete')
-      }
-
+      await taskService.removeSubTask(req, getAuthenticatedGrpcMetadata())
       queryClient.refetchQueries([tasksQueryKey]).then()
       callback()
       return req.toObject()
@@ -386,12 +359,7 @@ export const useSubTaskToToDoMutation = (callback: () => void = noop) => {
     mutationFn: async (subtaskID: string) => {
       const req = new SubTaskToToDoRequest()
       req.setId(subtaskID)
-      const res = await taskService.subTaskToToDo(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in SubTaskToToDo')
-      }
-
+      await taskService.subTaskToToDo(req, getAuthenticatedGrpcMetadata())
       queryClient.refetchQueries([tasksQueryKey]).then()
       callback()
       return req.toObject()
@@ -405,12 +373,7 @@ export const useSubTaskToDoneMutation = (callback: () => void = noop) => {
     mutationFn: async (subtaskID: string) => {
       const req = new SubTaskToDoneRequest()
       req.setId(subtaskID)
-      const res = await taskService.subTaskToDone(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in SubTaskToDone')
-      }
-
+      await taskService.subTaskToDone(req, getAuthenticatedGrpcMetadata())
       queryClient.refetchQueries([tasksQueryKey]).then()
       callback()
       return req.toObject()

@@ -137,15 +137,12 @@ export const SubtaskView = ({
       <Button
         onClick={() => {
           const newSubtask = { id: '', name: translation.newSubtask, isDone: false }
-          if (isCreatingTask) {
-            onChange([...subtasks, newSubtask])
+          if (queryKey === 'taskSubtasks') {
+            addSubtaskMutation.mutate(newSubtask)
           } else {
-            if (queryKey === 'taskSubtasks') {
-              addSubtaskMutation.mutate(newSubtask)
-            } else {
-              addSubtaskTemplateMutation.mutate(newSubtask)
-            }
+            addSubtaskTemplateMutation.mutate(newSubtask)
           }
+          onChange([...subtasks, newSubtask])
           setScrollToBottom(true)
         }}
         className={tw('flex flex-row items-center gap-x-2 mt-4 max-w-[200px] justify-center')}

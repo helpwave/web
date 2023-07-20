@@ -3,8 +3,7 @@ import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
 import { Span } from '../Span'
 import useSaveDelay from '../../hooks/useSaveDelay'
-
-const noop = () => { /* noop */ }
+import { noop } from '../../util/noop'
 
 export type InputProps = {
   /**
@@ -60,6 +59,7 @@ const ControlledInput = ({
           }
           if (onEditCompleted) {
             onEditCompleted(event.target.value)
+            clearUpdateTimer()
           }
         }}
         onChange={e => {

@@ -1,5 +1,5 @@
-import { Role } from '../components/OrganizationMemberList'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import {
   AcceptInvitationRequest,
   CreateOrganizationRequest, DeclineInvitationRequest,
@@ -10,8 +10,9 @@ import {
 } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import { getAuthenticatedGrpcMetadata, organizationService } from '../utils/grpc'
 import { noop } from '@helpwave/common/util/noop'
+import { Role } from './organization_member_mutations'
 
-export const organizationsQueryKey = 'organizations'
+export const organizationQueryKey = 'organizations'
 export const organizationInvitesQueryKey = 'organizationInvites'
 
 export type OrgMemberMinimalDTO = {
@@ -60,8 +61,6 @@ export type OrganizationDisplayableDTO = {
   avatarURL: string
 }
 
-export type InvitationState = 'accepted' | 'rejected' | 'pending'
-
 export type Invitation = {
   id: string,
   email: string,
@@ -71,7 +70,7 @@ export type Invitation = {
 
 export const useOrganizationQuery = (organizationID: string | undefined) => {
   return useQuery({
-    queryKey: [organizationsQueryKey],
+    queryKey: [organizationQueryKey],
     enabled: !!organizationID,
     queryFn: async () => {
       const req = new GetOrganizationRequest()
@@ -102,7 +101,7 @@ export const useOrganizationQuery = (organizationID: string | undefined) => {
 
 export const useOrganizationsByUserQuery = () => {
   return useQuery({
-    queryKey: [organizationsQueryKey],
+    queryKey: [organizationQueryKey],
     queryFn: async () => {
       const req = new GetOrganizationsByUserRequest()
 
@@ -138,7 +137,7 @@ export const useOrganizationsByUserQuery = () => {
 export const invitationsQueryKey = 'invitations'
 export const useInvitationsByUserQuery = (state?: InvitationState) => {
   return useQuery({
-    queryKey: [organizationsQueryKey, invitationsQueryKey],
+    queryKey: [organizationQueryKey, invitationsQueryKey],
     queryFn: async () => {
       const req = new GetInvitationsByUserRequest()
       if (state) {
@@ -188,7 +187,7 @@ export const useOrganizationCreateMutation = (callback: (organization: Organizat
       return newOrganization
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [organizationsQueryKey] }).then()
+      queryClient.refetchQueries({ queryKey: [organizationQueryKey] }).then()
     }
   })
 }
@@ -215,7 +214,7 @@ export const useOrganizationUpdateMutation = (callback: (organization: Organizat
       return newOrganization
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [organizationsQueryKey] }).then()
+      queryClient.refetchQueries({ queryKey: [organizationQueryKey] }).then()
     }
   })
 }
@@ -236,7 +235,7 @@ export const useOrganizationDeleteMutation = (callback: () => void = noop) => {
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [organizationsQueryKey] }).then()
+      queryClient.refetchQueries({ queryKey: [organizationQueryKey] }).then()
     },
   })
 }
@@ -257,12 +256,12 @@ export const useInviteDeclineMutation = (callback: () => void = noop) => {
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [organizationsQueryKey, invitationsQueryKey] }).then()
+      queryClient.refetchQueries({ queryKey: [organizationQueryKey, invitationsQueryKey] }).then()
     },
   })
 }
 
-export const useInviteMemberMutation = (callback: (inviteID: string) => void, organizationID: string) => {
+export const useInviteMemberMutation = (organizationID: string, callback: (inviteID: string) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (email: string) => {
@@ -276,7 +275,7 @@ export const useInviteMemberMutation = (callback: (inviteID: string) => void, or
         // TODO some check whether request was successful
         console.error('InviteMember failed')
       }
-      queryClient.refetchQueries({ queryKey: [organizationsQueryKey] }).then()
+      queryClient.refetchQueries({ queryKey: [organizationQueryKey] }).then()
       queryClient.refetchQueries({ queryKey: [organizationInvitesQueryKey] }).then()
       callback(res.getId())
       return res.toObject()
@@ -300,7 +299,7 @@ export const useInviteAcceptMutation = (callback: () => void = noop) => {
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [organizationsQueryKey, invitationsQueryKey] }).then()
+      queryClient.refetchQueries({ queryKey: [organizationQueryKey, invitationsQueryKey] }).then()
     },
   })
 }

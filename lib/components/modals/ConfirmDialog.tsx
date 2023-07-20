@@ -31,7 +31,7 @@ const defaultConfirmDialogTranslation = {
 export type ButtonOverwriteType = {
   text?: string,
   color?: ButtonColorType,
-  enabled?: boolean
+  disabled?: boolean
 }
 
 export type ConfirmDialogProps = ModalProps & {
@@ -67,6 +67,7 @@ export const ConfirmDialog = ({
   ...restProps
 }: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
+
   return (
     <Modal
       isOpen={isOpen}
@@ -77,16 +78,16 @@ export const ConfirmDialog = ({
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
         {onCancel && (
-          <Button color={buttonOverwrites?.[0].color ?? 'neutral'} onClick={onCancel} disabled={buttonOverwrites?.[0].enabled ?? false}>
+          <Button color={buttonOverwrites?.[0].color ?? 'neutral'} onClick={onCancel} disabled={buttonOverwrites?.[0].disabled ?? false}>
             {buttonOverwrites?.[0].text ?? translation.cancel}
           </Button>
         )}
         {onDecline && (
-          <Button color={buttonOverwrites?.[1].color ?? 'negative'} onClick={onDecline} disabled={buttonOverwrites?.[1].enabled ?? false}>
+          <Button color={buttonOverwrites?.[1].color ?? 'negative'} onClick={onDecline} disabled={buttonOverwrites?.[1].disabled ?? false}>
             {buttonOverwrites?.[1].text ?? translation.decline}
           </Button>
         )}
-        <Button autoFocus color={buttonOverwrites?.[2].color ?? confirmType} onClick={onConfirm} disabled={buttonOverwrites?.[2].enabled ?? false}>
+        <Button autoFocus color={buttonOverwrites?.[2].color ?? confirmType} onClick={onConfirm} disabled={buttonOverwrites?.[2].disabled ?? false}>
           {buttonOverwrites?.[2].text ?? translation.confirm}
         </Button>
       </div>

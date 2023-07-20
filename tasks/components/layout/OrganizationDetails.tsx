@@ -11,6 +11,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import {
+  useInviteMemberMutation,
   useOrganizationCreateMutation, useOrganizationDeleteMutation,
   useOrganizationQuery, useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
@@ -85,8 +86,10 @@ export const OrganizationDetail = ({
     }
   }, [data, isCreatingNewOrganization])
 
+  const inviteMemberMutation = useInviteMemberMutation(contextState.organizationID)
+
   const createMutation = useOrganizationCreateMutation(organization => {
-    // TODO invite members
+    organizationInvites.forEach(invite => inviteMemberMutation.mutate(invite.email))
     updateContext({ organizationID: organization.id })
   })
 
@@ -124,16 +127,15 @@ export const OrganizationDetail = ({
       <OrganizationForm
         organizationForm={organizationForm}
         isShowingErrorsDirectly={!isCreatingNewOrganization}
-        onChange={organizationForm => {
+        onChange={(organizationForm, shouldUpdate) => {
           if (isCreatingNewOrganization) {
             setOrganizationForm(organizationForm)
-          } else {
+          } else if (shouldUpdate) {
             updateMutation.mutate(organizationForm.organization)
           }
         }}
       />
       {!isCreatingNewOrganization && (
-        // TODO updatae later
         <OrganizationMemberList
           organizationID={organizationForm.organization.id}
           members={organizationForm.organization.members}

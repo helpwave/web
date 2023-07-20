@@ -155,7 +155,7 @@ export const OrganizationMemberList = ({
           setNewMember(undefined)
         }}
         inputs={[{ value: newMember ?? '', type: 'email', onChange: text => setNewMember(text) }]}
-        buttonOverwrites={[{}, { color: 'warn', enabled: newMemberIsValid }, { text: translation.addMember, enabled: newMemberIsValid }]}
+        buttonOverwrites={[{}, { color: 'warn', disabled: newMemberIsValid }, { text: translation.addMember, disabled: newMemberIsValid }]}
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <Span type="tableName">{translation.members + ` (${data.length})`}</Span>

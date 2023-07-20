@@ -61,13 +61,13 @@ export const OrganizationDisplay = ({
             key={organization.longName}
             organization={organization}
             isSelected={usedSelectedID === organization.id}
-            onEditClick={() => context.updateContext({ ...context.state, changeIntent: organization.id })}
+            onEditClick={() => context.updateContext({ ...context.state, organizationID: organization.id })}
             onTileClick={async () => await router.push(`/organizations/${organization.id}`)}
           />
         ))}
         <AddCard
           text={translation.addOrganization}
-          onTileClick={() => context.updateContext({ ...context.state, changeIntent: '' })}
+          onTileClick={() => context.updateContext({ ...context.state, organizationID: '' })}
           isSelected={usedSelectedID === ''}
           className={tw('h-24')}
         />

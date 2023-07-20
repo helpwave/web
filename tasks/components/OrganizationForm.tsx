@@ -73,7 +73,7 @@ export const emptyOrganizationForm: OrganizationFormType = {
 // TODO make sure the Organization type only has the used values shortName, longName, email, isVerified
 export type OrganizationFormProps = {
   organizationForm?: OrganizationFormType,
-  onChange: (organizationForm: OrganizationFormType) => void,
+  onChange: (organizationForm: OrganizationFormType, shouldUpdate: boolean) => void,
   isShowingErrorsDirectly?: boolean
 }
 
@@ -135,9 +135,9 @@ export const OrganizationForm = ({
     }
   }
 
-  function triggerOnChange(newOrganization: OrganizationDTO) {
+  function triggerOnChange(newOrganization: OrganizationDTO, shouldUpdate: boolean) {
     const isValid = validateShortName(newOrganization) === undefined && validateLongName(newOrganization) === undefined && validateEmailWithOrganization(newOrganization) === undefined
-    onChange({ hasChanges: true, isValid, organization: newOrganization })
+    onChange({ hasChanges: true, isValid, organization: newOrganization }, shouldUpdate && isValid) // this might lead to confusing behaviour where changes aren't saved on invalid input
   }
 
   const shortNameErrorMessage: string | undefined = validateShortName(organizationForm.organization)
@@ -157,7 +157,8 @@ export const OrganizationForm = ({
           value={organizationForm.organization.shortName}
           label={translation.shortName}
           onBlur={() => setTouched({ ...touched, shortName: true })}
-          onChange={text => triggerOnChange({ ...organizationForm.organization, shortName: text })}
+          onChange={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, false)}
+          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, true)}
           maxLength={maxShortNameLength}
           className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
@@ -170,7 +171,8 @@ export const OrganizationForm = ({
           value={organizationForm.organization.longName}
           label={translation.longName}
           onBlur={() => setTouched({ ...touched, longName: true })}
-          onChange={text => triggerOnChange({ ...organizationForm.organization, longName: text })}
+          onChange={text => triggerOnChange({ ...organizationForm.organization, longName: text }, false)}
+          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, longName: text }, true)}
           maxLength={maxLongNameLength}
           className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
@@ -185,7 +187,8 @@ export const OrganizationForm = ({
               value={organizationForm.organization.email}
               label={translation.contactEmail} type="email"
               onBlur={() => setTouched({ ...touched, email: true })}
-              onChange={text => triggerOnChange({ ...organizationForm.organization, email: text })}
+              onChange={text => triggerOnChange({ ...organizationForm.organization, email: text }, false)}
+              onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, email: text }, true)}
               maxLength={maxMailLength}
               className={tx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
             />

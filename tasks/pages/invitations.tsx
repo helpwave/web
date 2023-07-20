@@ -36,8 +36,10 @@ export const InvitationsPage = ({
       <Head>
         <title>{titleWrapper(translation.invitations)}</title>
       </Head>
-      <div className={tw('flex flex-col')}>
-        <UserInvitationList/>
+      <div className={tw('flex flex-col items-center')}>
+          <div className={tw('w-1/2')}>
+            <UserInvitationList/>
+          </div>
       </div>
     </PageWithHeader>
   )

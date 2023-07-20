@@ -103,8 +103,8 @@ export const OrganizationMemberList = ({
   const [newMember, setNewMember] = useState<string>()
   const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationID)
 
-  const removeMemberMutation = useRemoveMemberMutation(() => undefined, organizationID)
-  const inviteMemberMutation = useInviteMemberMutation(() => undefined, organizationID)
+  const removeMemberMutation = useRemoveMemberMutation(organizationID)
+  const inviteMemberMutation = useInviteMemberMutation(organizationID)
 
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
 

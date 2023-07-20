@@ -8,7 +8,7 @@ import { OrganizationCard } from '../cards/OrganizationCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
 import { Span } from '@helpwave/common/components/Span'
-import type { OrganizationWitWardNamesDTO } from '../../mutations/organization_mutations'
+import type { OrganizationDTO } from '../../mutations/organization_mutations'
 
 type DashboardDisplayTranslation = {
   organizations: string,
@@ -34,7 +34,7 @@ const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTra
 
 export type DashboardDisplayProps = {
   wards: WardOverviewDTO[],
-  organizations: OrganizationWitWardNamesDTO[],
+  organizations: OrganizationDTO[],
   width?: number
 }
 

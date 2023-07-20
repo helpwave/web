@@ -29,7 +29,7 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
   const translation = useTranslation(language, defaultDashboardTranslations)
   const { user } = useAuth()
   const { data: wards, isLoading: isLoadingWards } = useWardOverviewsQuery()
-  const { data: organizations, isLoading: isLoadingOrganizations } = useOrganizationsByUserQuery(user?.id)
+  const { data: organizations, isLoading: isLoadingOrganizations } = useOrganizationsByUserQuery()
 
   if (isLoadingWards || isLoadingOrganizations || !user || !wards || !organizations) return null
 

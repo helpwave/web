@@ -121,7 +121,7 @@ export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
 export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (taskTemplate) => {
+    mutationFn: async (taskTemplate: TaskTemplateDTO) => {
       // TODO create request for taskTemplate
       if (queryKey === 'wardTaskTemplates') {
         wardTaskTemplates = wardTaskTemplates.filter(value => value.id !== taskTemplate.id)

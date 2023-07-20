@@ -325,7 +325,7 @@ export const useAddMemberMutation = (callback: () => void, organizationID: strin
   })
 }
 
-export const useRemoveMemberMutation = (callback: () => void, organizationID: string) => {
+export const useRemoveMemberMutation = (organizationID: string, callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (userID: string) => {

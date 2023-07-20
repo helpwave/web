@@ -5,7 +5,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import titleWrapper from '../utils/titleWrapper'
 import Head from 'next/head'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
-import { InvitationList } from '../components/InvitationList'
+import { UserInvitationList } from '../components/UserInvitationList'
 
 type InvitationsPageTranslation = {
   invitations: string
@@ -37,7 +37,7 @@ export const InvitationsPage = ({
         <title>{titleWrapper(translation.invitations)}</title>
       </Head>
       <div className={tw('flex flex-col')}>
-        <InvitationList/>
+        <UserInvitationList/>
       </div>
     </PageWithHeader>
   )

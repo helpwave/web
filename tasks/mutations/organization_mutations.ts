@@ -1,30 +1,26 @@
-import type { Role } from '../components/OrganizationMemberList'
+import { Role } from '../components/OrganizationMemberList'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  CreateOrganizationForUserRequest,
-  CreateOrganizationRequest,
+  AcceptInvitationRequest,
+  CreateOrganizationRequest, DeclineInvitationRequest,
   DeleteOrganizationRequest,
   GetInvitationsByUserRequest,
-  GetOrganizationRequest, UpdateOrganizationRequest
+  GetOrganizationRequest, GetOrganizationsByUserRequest, UpdateOrganizationRequest
 } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import { getAuthenticatedGrpcMetadata, organizationService } from '../utils/grpc'
 import { noop } from '@helpwave/common/util/noop'
 
 export const organizationsQueryKey = 'organizations'
 
-type WardDTO = {
-  name: string
+export type OrgMemberMinimalDTO = {
+  id: string
 }
 
-export type OrgMember = {
+export type OrgMember = OrgMemberMinimalDTO & {
   email: string,
   name: string,
   avatarURL: string,
   role: Role
-}
-
-export type OrgMemberMinimalDTO = {
-  id: string
 }
 
 export type OrganizationMinimalDTO = {
@@ -38,8 +34,18 @@ export type OrganizationMinimalDTO = {
 }
 
 export type OrganizationDTO = OrganizationMinimalDTO & {
-  wards: WardDTO[],
   members: OrgMember[]
+}
+
+export const emptyOrganization: OrganizationDTO = {
+  id: '',
+  shortName: '',
+  longName: '',
+  email: '',
+  avatarURL: '',
+  isPersonal: false,
+  isVerified: false,
+  members: []
 }
 
 export type OrganizationWithMinimalMemberDTO = OrganizationMinimalDTO & {
@@ -92,6 +98,41 @@ export const useOrganizationQuery = (organizationID: string | undefined) => {
   })
 }
 
+export const useOrganizationsByUserQuery = () => {
+  return useQuery({
+    queryKey: [organizationsQueryKey],
+    queryFn: async () => {
+      const req = new GetOrganizationsByUserRequest()
+
+      // TODO
+      const res = await organizationService.getOrganizationsByUser(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('inviteMember failed')
+      }
+
+      const organizations: OrganizationDTO[] = res.getOrganizationsList().map(organization => ({
+        id: organization.getId(),
+        email: organization.getContactEmail(),
+        isPersonal: organization.getIsPersonal(),
+        avatarUrl: organization.getAvatarUrl(),
+        longName: organization.getLongName(),
+        shortName: organization.getShortName(),
+        avatarURL: organization.getAvatarUrl(),
+        isVerified: true, // TODO change Later
+        members: organization.getMembersList().map(member => ({
+          id: member.getUserId(),
+          email: member.getEmail(),
+          name: member.getNickname(),
+          avatarURL: member.getAvatarUrl(),
+          role: Role.admin // TODO change later
+        }))
+      }))
+      return organizations
+    },
+  })
+}
+
 export const invitationsQueryKey = 'invitations'
 export const useInvitationsByUserQuery = (state?: InvitationState) => {
   return useQuery({
@@ -114,9 +155,9 @@ export const useInvitationsByUserQuery = (state?: InvitationState) => {
           state: invite.getState() as InvitationState, // TODO change later to enum
           email: invite.getEmail(),
           organization: {
-            id: organization.getId(),
-            avatarURL: organization.getAvatarUrl(),
-            longName: organization.getLongName()
+            id: organization?.getId() ?? '',
+            avatarURL: organization?.getAvatarUrl() ?? '',
+            longName: organization?.getLongName() ?? ''
           }
         }
       })
@@ -194,6 +235,48 @@ export const useOrganizationDeleteMutation = (callback: () => void = noop) => {
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [organizationsQueryKey] }).then()
+    },
+  })
+}
+
+export const useInviteDeclineMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (inviteID: string) => {
+      const req = new DeclineInvitationRequest()
+      req.setInvitationId(inviteID)
+      const res = await organizationService.declineInvitation(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in InviteDecline')
+      }
+
+      callback()
+      return res.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: [organizationsQueryKey, invitationsQueryKey] }).then()
+    },
+  })
+}
+
+export const useInviteAcceptMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (inviteID: string) => {
+      const req = new AcceptInvitationRequest()
+      req.setInvitationId(inviteID)
+      const res = await organizationService.acceptInvitation(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in InviteAccept')
+      }
+
+      callback()
+      return res.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: [organizationsQueryKey, invitationsQueryKey] }).then()
     },
   })
 }

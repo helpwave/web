@@ -20,11 +20,11 @@ import type {
   TableState
 } from '@helpwave/common/components/Table'
 import {
-  changeTableSelectionSingle,
   defaultTableStatePagination,
   defaultTableStateSelection, removeFromTableSelection,
   Table
 } from '@helpwave/common/components/Table'
+import { ManageBedsModal } from './MangeBedsModal'
 
 type RoomListTranslation = {
   edit: string,
@@ -37,6 +37,8 @@ type RoomListTranslation = {
   rooms: string,
   addRoom: string,
   bedCount: string,
+  manageBeds: string,
+  manage: string,
   dangerZoneText: (single: boolean) => string,
   deleteConfirmText: (single: boolean) => string
 }
@@ -52,7 +54,9 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     room: 'Room',
     rooms: 'Rooms',
     addRoom: 'Add Room',
-    bedCount: 'Number of Beds',
+    bedCount: '#Beds',
+    manageBeds: 'Manage Beds',
+    manage: 'Manage',
     dangerZoneText: (single) => `Deleting ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms} is a permanent action and cannot be undone. Be careful!`,
     deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms}?`,
   },
@@ -66,7 +70,9 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     room: 'Raum',
     rooms: 'Räume',
     addRoom: 'Raum hinzufügen',
-    bedCount: 'Bettenanzahl',
+    bedCount: '#Betten',
+    manageBeds: 'Betten verwalten',
+    manage: 'Verwalten',
     dangerZoneText: (single) => `Das Löschen von ${single ? `einem ${defaultRoomListTranslations.de.room}` : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
     deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? 'den' : 'die'} ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
   }
@@ -93,6 +99,7 @@ export const RoomList = ({
   const [usedRooms, setUsedRooms] = useState<RoomOverviewDTO[]>(rooms ?? [])
   const [focusElement, setFocusElement] = useState<RoomOverviewDTO>()
   const [isEditing, setIsEditing] = useState(false)
+  const [managedRoom, setManagedRoom] = useState<string>()
 
   const identifierMapping = (dataObject: RoomOverviewDTO) => dataObject.id
   const creatRoomMutation = useRoomCreateMutation((room) => {
@@ -109,7 +116,10 @@ export const RoomList = ({
       setUsedRooms(data)
     }
   }, [data, isEditing])
-  const [isShowingDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(false)
+  // undefined = dont show
+  // ""        = take selcted
+  // "<id>"    = only the id
+  const [deletionConfirmDialogElement, setDeletionConfirmDialogElement] = useState<string>()
 
   const minRoomNameLength = 1
   const maxRoomNameLength = 32
@@ -133,30 +143,44 @@ export const RoomList = ({
     return <div>Error Message</div>
   }
 
-  const hasSelectedMultiple = !!tableState.selection && tableState.selection?.currentSelection.length > 1
+  const multipleInDelete = deletionConfirmDialogElement !== '' || tableState.selection?.currentSelection.length === 1
 
   return (
     <div className={tw('flex flex-col')}>
       <ConfirmDialog
-        title={translation.deleteConfirmText(!hasSelectedMultiple)}
-        description={translation.dangerZoneText(!hasSelectedMultiple)}
-        isOpen={isShowingDeletionConfirmDialog}
-        onCancel={() => setDeletionConfirmDialogState(false)}
-        onBackgroundClick={() => setDeletionConfirmDialogState(false)}
+        title={translation.deleteConfirmText(multipleInDelete)}
+        description={translation.dangerZoneText(multipleInDelete)}
+        isOpen={deletionConfirmDialogElement !== undefined}
+        onCancel={() => setDeletionConfirmDialogElement(undefined)}
+        onBackgroundClick={() => setDeletionConfirmDialogElement(undefined)}
         onConfirm={() => {
-          const toDeleteElements = usedRooms.filter(value => tableState.selection?.currentSelection.includes(identifierMapping(value)))
+          let toDeleteElements: RoomOverviewDTO[]
+          if (deletionConfirmDialogElement) {
+            toDeleteElements = usedRooms.filter(value => identifierMapping(value) === deletionConfirmDialogElement)
+          } else {
+            toDeleteElements = usedRooms.filter(value => tableState.selection?.currentSelection.includes(identifierMapping(value)))
+          }
           toDeleteElements.forEach(value => deleteRoomMutation.mutate(value.id))
           setTableState(removeFromTableSelection(tableState, toDeleteElements, usedRooms.length, identifierMapping))
-          setDeletionConfirmDialogState(false)
+          setDeletionConfirmDialogElement(undefined)
         }}
         confirmType="negative"
       />
+      {managedRoom && context.state.wardID && (
+        <ManageBedsModal
+          isOpen={!!managedRoom}
+          wardID={context.state.wardID}
+          roomID={managedRoom}
+          onBackgroundClick={() => setManagedRoom(undefined)}
+          onClose={() => setManagedRoom(undefined)}
+        />
+      )}
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
         <Span type="tableName">{translation.rooms + ` (${usedRooms.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
             <Button
-              onClick={() => setDeletionConfirmDialogState(true)}
+              onClick={() => setDeletionConfirmDialogElement('')}
               color="negative"
             >
               {translation.removeSelection}
@@ -178,51 +202,49 @@ export const RoomList = ({
         header={[
           <Span key="name" type="tableHeader">{translation.roomName}</Span>,
           <Span key="bedcount" type="tableHeader">{translation.bedCount}</Span>,
+          <Span key="manage" type="tableHeader" >{translation.manageBeds}</Span>,
           <></>
         ]}
-        rowMappingToCells={dataObject => [
+        rowMappingToCells={room => [
           <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
             <Input
-              value={dataObject.name}
+              value={room.name}
               type="text"
               onChange={text => {
                 setIsEditing(true)
-                setUsedRooms(usedRooms.map(value => identifierMapping(value) === identifierMapping(dataObject) ? {
-                  ...dataObject,
+                setUsedRooms(usedRooms.map(value => identifierMapping(value) === identifierMapping(room) ? {
+                  ...room,
                   name: text
                 } : value))
-                setFocusElement(dataObject)
+                setFocusElement(room)
               }}
               onEditCompleted={(text) => {
                 updateRoomMutation.mutate({
-                  ...dataObject,
+                  ...room,
                   name: text
                 })
                 setIsEditing(false)
-              }} // TODO update to somthing better than blur
-              id={dataObject.name}
+              }}
+              id={room.name}
               minLength={minRoomNameLength}
               maxLength={maxRoomNameLength}
             />
           </div>,
           <div key="bedcount" className={tw('w-20')}>
-            <Input
-              value={dataObject.beds.length.toString()}
-              type="number"
-              onBlur={() => updateRoomMutation.mutate({
-                ...dataObject,
-                // bedCount: parseInt(text) TODO use bedcount change
-              })} // TODO update to somthing better than blur
-              min={1}
-              id={dataObject.id + 'bedCount'}
-            />
+            <Span>{room.beds.length}</Span>
+          </div>,
+          <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
+            <Button
+              onClick={() => setManagedRoom(room.id)}
+              variant="textButton"
+              color="neutral"
+            >
+              {translation.manage}
+            </Button>
           </div>,
           <div key="remove" className={tw('flex flex-row justify-end')}>
             <Button
-              onClick={() => {
-                setTableState(changeTableSelectionSingle(tableState, dataObject, usedRooms.length, identifierMapping))
-                setDeletionConfirmDialogState(true)
-              }}
+              onClick={() => setDeletionConfirmDialogElement(room.id)}
               color="negative"
               variant="textButton"
             >

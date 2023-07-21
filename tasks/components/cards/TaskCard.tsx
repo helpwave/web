@@ -5,6 +5,7 @@ import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator
 import { Span } from '@helpwave/common/components/Span'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { LockIcon } from 'lucide-react'
 
 export type TaskCardProps = CardProps & {
   task: TaskDTO
@@ -31,7 +32,10 @@ export const TaskCard = ({
     >
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-col overflow-hidden')}>
-          <Span type="subsubsectionTitle">{task.name}</Span>
+          <div className={tw('flex flex-row overflow-hidden items-center gap-x-1')}>
+            {!task.isPublicVisible && <div className={tw('w-[12px]')}><LockIcon size={12}/></div>}
+            <Span type="subsubsectionTitle" className={tw('truncate')}>{task.name}</Span>
+          </div>
           <Span className={tw('overflow-hidden w-full block text-gray-500 text-ellipsis whitespace-nowrap')}>
             {task.notes}
           </Span>

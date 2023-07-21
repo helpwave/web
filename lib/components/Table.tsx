@@ -59,6 +59,11 @@ export const pageForItem = <T, >(data: T[], item: T, entriesPerPage: number, ide
   return 0
 }
 
+export const updatePagination = (pagination: TableStatePagination, dataLength: number): TableStatePagination => ({
+  ...pagination,
+  currentPage: Math.min(Math.max(Math.ceil(dataLength / pagination.entriesPerPage) - 1, 0), pagination.currentPage)
+})
+
 export const addElementToTable = <T, >(tableState: TableState, data: T[], dataObject: T, identifierMapping: IdentifierMapping<T>) => {
   return {
     ...tableState,
@@ -87,10 +92,7 @@ export const removeFromTableSelection = <T, >(tableState: TableState, deletedObj
       hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
       hasSelectedNone: currentSelection.length === 0,
     },
-    pagination: tableState.pagination ? {
-      ...tableState.pagination,
-      currentPage: Math.min(Math.max(Math.ceil(dataLength / tableState.pagination.entriesPerPage) - 1, 0), tableState.pagination.currentPage)
-    } : undefined
+    pagination: tableState.pagination ? updatePagination(tableState.pagination, dataLength) : undefined
   }
 }
 
@@ -227,7 +229,7 @@ export const Table = <T, >({
 
   return (
     <div className={tw('flex flex-col gap-y-4 items-center')}>
-      <table>
+      <table className={tw('w-full')}>
         <thead>
         <tr className={headerRow}>
           {header && tableState.selection && (
@@ -238,8 +240,13 @@ export const Table = <T, >({
               />
             </th>
           )}
-          {header && header.map((value, index) =>
-            <th key={`tableHeader${index}`} className={headerPaddingHead}>{value}</th>
+          {header && header.map((value, index) => (
+            <th key={`tableHeader${index}`} className={headerPaddingHead}>
+              <div className={tw('flex flex-row justify-start px-2')}>
+                {value}
+              </div>
+            </th>
+          )
           )}
         </tr>
         </thead>

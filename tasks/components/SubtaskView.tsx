@@ -21,7 +21,6 @@ import {
   useSubTaskTemplateDeleteMutation,
   useSubTaskTemplateAddMutation
 } from '../mutations/task_template_mutations'
-import { taskTemplateContextState } from '../pages/templates';
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -81,9 +80,10 @@ export const SubtaskView = ({
 
   const deleteSubtaskTemplateMutation = useSubTaskTemplateDeleteMutation()
   const updateSubtaskTemplateMutation = useSubTaskTemplateUpdateMutation()
-  // TODO: Remove ?? '' once the mutate functions are passed properly
-  const addSubtaskTemplateMutation = useSubTaskTemplateAddMutation(() => undefined, taskTemplateId ?? '')
+  // const addSubtaskTemplateMutation = useSubTaskTemplateAddMutation(() => undefined, taskTemplateId ?? '')
 
+  // TODO: Remove ?? '' once the mutate functions are passed properly
+  useSubTaskTemplateAddMutation(() => undefined, taskTemplateId ?? '')
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
     const scrollableElement = scrollableRef.current?.getScrollElement()
@@ -106,18 +106,26 @@ export const SubtaskView = ({
                 onNameChange={newSubtask => {
                   const newSubtasks = [...subtasks]
                   newSubtasks[index] = newSubtask
-                  if (queryKey === 'taskSubtasks') {
-                    updateSubtaskMutation.mutate(newSubtask)
-                  } else if (!isCreatingTask) {
-                    updateSubtaskTemplateMutation.mutate(newSubtask)
+                  if (newSubtask.id) {
+                    if (queryKey === 'taskSubtasks') {
+                      updateSubtaskMutation.mutate(newSubtask)
+                    } else if (!isCreatingTask) {
+                      updateSubtaskTemplateMutation.mutate(newSubtask)
+                    }
+                  } else {
+                    // Skip, will be handled one component above
                   }
                   onChange(newSubtasks)
                 }}
                 onRemoveClick={() => {
-                  if (queryKey === 'taskSubtasks') {
-                    deleteSubtaskMutation.mutate(subtask.id)
-                  } else if (!isCreatingTask) {
-                    deleteSubtaskTemplateMutation.mutate(subtask.id)
+                  if (subtask.id) {
+                    if (queryKey === 'taskSubtasks') {
+                      deleteSubtaskMutation.mutate(subtask.id)
+                    } else if (!isCreatingTask) {
+                      deleteSubtaskTemplateMutation.mutate(subtask.id)
+                    }
+                  } else {
+                    // Skip, will be handled one component above
                   }
                   onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))
                 }}

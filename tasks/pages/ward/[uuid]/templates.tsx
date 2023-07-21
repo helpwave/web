@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -86,6 +86,16 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     })
     setUsedQueryParam(true)
   }
+
+  useEffect(() => {
+    const newSelected = data?.find(value => value.id === contextState.template.id) ?? emptyTaskTemplate
+    setContextState({
+      ...contextState,
+      isValid: newSelected.id !== '',
+      hasChanges: false,
+      template: newSelected
+    })
+  }, [data])
 
   // TODO load organization id of ward
   const organizationID = 'org1'

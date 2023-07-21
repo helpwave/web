@@ -19,7 +19,6 @@ import {
   useWardTaskTemplateQuery
 } from '../../mutations/task_template_mutations'
 import { useAuth } from '../../hooks/useAuth'
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import {
@@ -29,6 +28,7 @@ import {
   useTaskQuery,
   useTaskUpdateMutation
 } from '../../mutations/task_mutations'
+import { useEffect, useState } from 'react'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -66,10 +66,10 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     close: 'Schließen',
     notes: 'Notizen',
     subtasks: 'Unteraufgaben',
-    assignee: 'Veranwortlich',
-    dueDate: 'Fälligkeits-Datum',
+    assignee: 'Verantwortlich',
+    dueDate: 'Fälligkeit-Datum',
     status: 'Status',
-    visibility: 'Sichbarkeit',
+    visibility: 'Sichtbarkeit',
     creationTime: 'Erstell Zeit',
     private: 'privat',
     public: 'öffentlich',
@@ -209,7 +209,9 @@ export const TaskDetailView = ({
                 onChange={description => setTask({ ...task, notes: description })}
               />
             </div>
-            <SubtaskView queryKey="taskSubtasks" subtasks={task.subtasks} taskID={taskID} onChange={subtasks => setTask({ ...task, subtasks })}/>
+            <SubtaskView queryKey="taskSubtasks" subtasks={task.subtasks} taskID={taskID} onChange= {
+              subtasks => setTask({ ...task, subtasks })
+            }/>
           </div>
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
             <div className={tw('flex flex-col gap-y-4')}>

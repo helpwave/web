@@ -10,7 +10,7 @@ import {
   UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
 import SubTask = CreateTaskTemplateRequest.SubTask
-import type { CreateSubTaskDTO, SubTaskDTO } from './task_mutations'
+import type { SubTaskDTO } from './task_mutations'
 
 export type TaskTemplateDTO = {
   wardId? : string,
@@ -38,7 +38,7 @@ export const useWardTaskTemplateQuery = (wardId? : string, onSuccess: (data: Tas
         const res = await taskTemplateService.getAllTaskTemplatesByWard(req, getAuthenticatedGrpcMetadata())
         wardTaskTemplates = res.getTemplatesList().map((template) => ({
           id: template.getId(),
-          wardId: wardId,
+          wardId,
           name: template.getName(),
           notes: template.getDescription(),
           subtasks: template.getSubtasksList().map((subtask) => ({
@@ -96,6 +96,16 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       updateTaskTemplate.setName(taskTemplate.name)
       updateTaskTemplate.setDescription(taskTemplate.notes)
       updateTaskTemplate.setId(taskTemplate.id)
+
+      const createTaskTemplateSubtask = new CreateTaskTemplateSubTaskRequest()
+      for (const subtask of taskTemplate.subtasks) {
+        // added new subtask on update
+        if (!subtask.id) {
+          createTaskTemplateSubtask.setName(subtask.name)
+          createTaskTemplateSubtask.setTaskTemplateId(taskTemplate.id)
+          await taskTemplateService.createTaskTemplateSubTask(createTaskTemplateSubtask, getAuthenticatedGrpcMetadata())
+        }
+      }
 
       const res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
       const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }

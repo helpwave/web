@@ -10,7 +10,7 @@ const socials = [
   { name: 'Twitch', link: 'https://www.twitch.tv/helpwave' },
   { name: 'Spotify', link: 'https://open.spotify.com/show/6hL5UMytp81gmURnfn3dS9' },
   { name: 'Apple Podcasts', link: 'https://podcasts.apple.com/us/podcast/helpwave-talks/id1695217116' },
-  { name: 'Google Podcasts', link: 'https://podcasts.google.com/' },
+  { name: 'Google Podcasts', link: 'https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy9lNTE1NWZhMC9wb2RjYXN0L3Jzcw' },
 ]
 
 const Footer = () => {

@@ -222,16 +222,53 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (task: TaskDTO) => {
-      const req = new UpdateTaskRequest()
-      req.setId(task.id)
-      req.setDescription(task.notes)
-      req.setName(task.name)
-      await taskService.updateTask(req, getAuthenticatedGrpcMetadata())
+      const updateTask = new UpdateTaskRequest()
+
+      updateTask.setId(task.id)
+      updateTask.setDescription(task.notes)
+      updateTask.setName(task.name)
+
+      const getTask = new GetTaskRequest()
+      const removeSubtask = new RemoveSubTaskRequest()
+
+      getTask.setId(task.id)
+
+      const taskResponse = await taskService.getTask(getTask, getAuthenticatedGrpcMetadata())
+      const subtasksResponse = taskResponse.getSubtasksList()
+      const taskSubtasks = task.subtasks
+
+      // remove subtasks
+      const subtasksToDelete = subtasksResponse.filter(subtask => !taskSubtasks.some(taskSubtask => taskSubtask.id === subtask.getId()))
+      for (const subtask of subtasksToDelete) {
+        removeSubtask.setId(subtask.getId())
+        await taskService.removeSubTask(removeSubtask, getAuthenticatedGrpcMetadata())
+      }
+
+      const updateSubtask = new UpdateSubTaskRequest()
+      const createSubTask = new AddSubTaskRequest()
+
+      for (const subtask of task.subtasks) {
+        // create new subtasks
+        if (!subtask.id) {
+          createSubTask.setName(subtask.name)
+          createSubTask.setTaskId(task.id)
+          await taskService.addSubTask(createSubTask, getAuthenticatedGrpcMetadata())
+
+          continue
+        }
+
+        updateSubtask.setName(subtask.name)
+        updateSubtask.setId(subtask.id)
+
+        await taskService.updateSubTask(updateSubtask, getAuthenticatedGrpcMetadata())
+      }
+
+      await taskService.updateTask(updateTask, getAuthenticatedGrpcMetadata())
 
       queryClient.refetchQueries([tasksQueryKey]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback()
-      return req.toObject()
+      return updateTask.toObject()
     },
   })
 }

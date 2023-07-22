@@ -156,7 +156,6 @@ export const TaskTemplateDetails = ({
         />
       </div>
       <SubtaskView
-        queryKey="taskTemplateSubtasks"
         taskTemplateId={context.state.template.id}
         subtasks={context.state.template.subtasks}
         onChange={subtasks => context.updateContext({

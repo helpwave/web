@@ -10,15 +10,10 @@ import { useEffect, useRef, useState } from 'react'
 import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import {
-  useSubTaskAddMutation,
-  useSubTaskDeleteMutation,
   useSubTaskToDoneMutation,
-  useSubTaskToToDoMutation,
-  useSubTaskUpdateMutation
+  useSubTaskToToDoMutation
 } from '../mutations/task_mutations'
 import {
-  useSubTaskTemplateUpdateMutation,
-  useSubTaskTemplateDeleteMutation,
   useSubTaskTemplateAddMutation
 } from '../mutations/task_template_mutations'
 
@@ -43,28 +38,25 @@ const defaultSubtaskViewTranslation = {
     newSubtask: 'Neue Unteraufgabe'
   }
 }
-type QueryKey = 'taskTemplateSubtasks' | 'taskSubtasks'
 
 type SubtaskViewProps = {
   // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
-  queryKey : QueryKey,
   subtasks: SubTaskDTO[],
   taskID?: string,
   createdBy?: string,
   taskTemplateId? : string,
-  onChange: (subtasks: SubTaskDTO[]) => void
+  onChange: (subtasks: SubTaskDTO[]) => void,
 }
 
 /**
  * A view for editing and showing all subtasks of a task
  */
 export const SubtaskView = ({
-  queryKey,
   language,
   subtasks,
   taskID,
   taskTemplateId,
-  onChange
+  onChange,
 }: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
   const translation = useTranslation(language, defaultSubtaskViewTranslation)
   const scrollableRef = useRef<SimpleBarCore>(null)
@@ -72,15 +64,8 @@ export const SubtaskView = ({
 
   const isCreatingTask = !taskID && !taskTemplateId
 
-  const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
-  const updateSubtaskMutation = useSubTaskUpdateMutation()
-  const deleteSubtaskMutation = useSubTaskDeleteMutation()
   const subtaskToToDoMutation = useSubTaskToToDoMutation()
   const subtaskToDoneMutation = useSubTaskToDoneMutation()
-
-  const deleteSubtaskTemplateMutation = useSubTaskTemplateDeleteMutation()
-  const updateSubtaskTemplateMutation = useSubTaskTemplateUpdateMutation()
-  // const addSubtaskTemplateMutation = useSubTaskTemplateAddMutation(() => undefined, taskTemplateId ?? '')
 
   // TODO: Remove ?? '' once the mutate functions are passed properly
   useSubTaskTemplateAddMutation(() => undefined, taskTemplateId ?? '')
@@ -106,27 +91,9 @@ export const SubtaskView = ({
                 onNameChange={newSubtask => {
                   const newSubtasks = [...subtasks]
                   newSubtasks[index] = newSubtask
-                  if (newSubtask.id) {
-                    if (queryKey === 'taskSubtasks') {
-                      updateSubtaskMutation.mutate(newSubtask)
-                    } else if (!isCreatingTask) {
-                      updateSubtaskTemplateMutation.mutate(newSubtask)
-                    }
-                  } else {
-                    // Skip, will be handled one component above
-                  }
                   onChange(newSubtasks)
                 }}
                 onRemoveClick={() => {
-                  if (subtask.id) {
-                    if (queryKey === 'taskSubtasks') {
-                      deleteSubtaskMutation.mutate(subtask.id)
-                    } else if (!isCreatingTask) {
-                      deleteSubtaskTemplateMutation.mutate(subtask.id)
-                    }
-                  } else {
-                    // Skip, will be handled one component above
-                  }
                   onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))
                 }}
                 onDoneChange={done => {
@@ -148,11 +115,6 @@ export const SubtaskView = ({
       <Button
         onClick={() => {
           const newSubtask = { id: '', name: translation.newSubtask, isDone: false }
-          if (queryKey === 'taskSubtasks') {
-            addSubtaskMutation.mutate(newSubtask)
-          } else {
-            // Skip, will be handled one component above
-          }
           onChange([...subtasks, newSubtask])
           setScrollToBottom(true)
         }}

@@ -87,16 +87,6 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     setUsedQueryParam(true)
   }
 
-  useEffect(() => {
-    const newSelected = data?.find(value => value.id === contextState.template.id) ?? emptyTaskTemplate
-    setContextState({
-      ...contextState,
-      isValid: newSelected.id !== '',
-      hasChanges: false,
-      template: newSelected
-    })
-  }, [data])
-
   // TODO load organization id of ward
   const organizationID = 'org1'
 

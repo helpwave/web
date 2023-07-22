@@ -209,8 +209,7 @@ export const TaskDetailView = ({
                 onChange={description => setTask({ ...task, notes: description })}
               />
             </div>
-            <SubtaskView queryKey="taskSubtasks" subtasks={task.subtasks} taskID={taskID} onChange= {
-              subtasks => setTask({ ...task, subtasks })
+            <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange= { subtasks => setTask({ ...task, subtasks })
             }/>
           </div>
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>

@@ -175,6 +175,9 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
 
 export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
+  const router = useRouter()
+  const { uuid: wardId } = router.query
+
   return useMutation({
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {
       const createTaskTemplate = new CreateTaskTemplateRequest()
@@ -187,8 +190,8 @@ export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
         return subTask
       }))
 
-      if (taskTemplate.wardId !== undefined) {
-        createTaskTemplate.setWardId(taskTemplate.wardId)
+      if (wardId) {
+        createTaskTemplate.setWardId(wardId.toString())
       }
 
       const res = await taskTemplateService.createTaskTemplate(createTaskTemplate, getAuthenticatedGrpcMetadata())

@@ -209,8 +209,9 @@ export const TaskDetailView = ({
                 onChange={description => setTask({ ...task, notes: description })}
               />
             </div>
-            <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange= { subtasks => setTask({ ...task, subtasks })
-            }/>
+            <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange= {subtasks => {
+              setTask({ ...task, subtasks })
+            }}/>
           </div>
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
             <div className={tw('flex flex-col gap-y-4')}>
@@ -224,7 +225,9 @@ export const TaskDetailView = ({
                     { label: 'Assignee 3', value: 'assignee3' },
                     { label: 'Assignee 4', value: 'assignee4' }
                   ]}
-                  onChange={assignee => setTask({ ...task, assignee })}
+                  onChange={assignee => {
+                    setTask({ ...task, assignee })
+                  }}
                 />
               </div>
               <div>

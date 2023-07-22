@@ -38,14 +38,16 @@ export type TaskTemplateFormType = {
   isValid: boolean,
   hasChanges: boolean,
   template: TaskTemplateDTO,
-  wardId?: string
+  wardId?: string,
+  deletedSubtaskIds?: string[]
 }
 
 export type TaskTemplateContextState = {
   isValid: boolean,
   template: TaskTemplateDTO,
   hasChanges: boolean,
-  wardId?: string
+  wardId?: string,
+  deletedSubtaskIds?: string[]
 }
 
 export const emptyTaskTemplate: TaskTemplateDTO = {
@@ -64,7 +66,8 @@ export type TaskTemplateContextType = {
 export const taskTemplateContextState = {
   isValid: false,
   template: emptyTaskTemplate,
-  hasChanges: false
+  hasChanges: false,
+  deletedSubtaskIds: []
 }
 
 export const TaskTemplateContext = createContext<TaskTemplateContextType>({

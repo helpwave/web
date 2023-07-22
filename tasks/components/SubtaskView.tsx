@@ -6,7 +6,7 @@ import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskTile } from './SubtaskTile'
 import { Span } from '@helpwave/common/components/Span'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import {
@@ -16,6 +16,7 @@ import {
 import {
   useSubTaskTemplateAddMutation
 } from '../mutations/task_template_mutations'
+import { TaskTemplateContext } from '../pages/templates'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -45,7 +46,7 @@ type SubtaskViewProps = {
   taskID?: string,
   createdBy?: string,
   taskTemplateId? : string,
-  onChange: (subtasks: SubTaskDTO[]) => void,
+  onChange: (subtasks: SubTaskDTO[]) => void
 }
 
 /**
@@ -58,6 +59,8 @@ export const SubtaskView = ({
   taskTemplateId,
   onChange,
 }: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
+  const context = useContext(TaskTemplateContext)
+
   const translation = useTranslation(language, defaultSubtaskViewTranslation)
   const scrollableRef = useRef<SimpleBarCore>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
@@ -94,7 +97,16 @@ export const SubtaskView = ({
                   onChange(newSubtasks)
                 }}
                 onRemoveClick={() => {
-                  onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))
+                  const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
+                  if (!taskID) {
+                    context.updateContext({
+                      ...context.state,
+                      template: { ...context.state.template, subtasks: filteredSubtasks },
+                      deletedSubtaskIds: [...context.state.deletedSubtaskIds ?? [], subtasks[index].id]
+                    })
+                  } else {
+                    onChange(filteredSubtasks)
+                  }
                 }}
                 onDoneChange={done => {
                   if (isCreatingTask) {

@@ -11,7 +11,7 @@ import { SubtaskView } from '../SubtaskView'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import { TaskTemplateContext } from '../../pages/templates'
+import {TaskTemplateContext, TaskTemplateFormType} from '../../pages/templates'
 
 type TaskTemplateDetailsTranslation = {
   updateTaskTemplate: string,
@@ -61,7 +61,7 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
 
 export type TaskTemplateDetailsProps = {
   onCreate: (taskTemplate: TaskTemplateDTO) => void,
-  onUpdate: (taskTemplate: TaskTemplateDTO) => void,
+  onUpdate: (taskTemplate: TaskTemplateFormType) => void,
   onDelete: (taskTemplate: TaskTemplateDTO) => void,
   width?: number
 }
@@ -134,7 +134,8 @@ export const TaskTemplateDetails = ({
               context.updateContext({
                 template: { ...context.state.template, name: text },
                 isValid: validateName(text) === undefined,
-                hasChanges: true
+                hasChanges: true,
+                deletedSubtaskIds: context.state.deletedSubtaskIds
               })
             }}
             maxLength={maxNameLength}
@@ -150,7 +151,8 @@ export const TaskTemplateDetails = ({
             context.updateContext({
               template: { ...context.state.template, notes: text },
               isValid: context.state.isValid,
-              hasChanges: true
+              hasChanges: true,
+              deletedSubtaskIds: context.state.deletedSubtaskIds
             })
           }}
         />
@@ -161,7 +163,8 @@ export const TaskTemplateDetails = ({
         onChange={subtasks => context.updateContext({
           hasChanges: true,
           isValid: context.state.isValid,
-          template: { ...context.state.template, subtasks }
+          template: { ...context.state.template, subtasks },
+          deletedSubtaskIds: context.state.deletedSubtaskIds
         })}
       />
       <div className={tx('flex flex-row mt-12',
@@ -172,7 +175,7 @@ export const TaskTemplateDetails = ({
       >
         <Button
           className={tw('w-auto')}
-          onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state.template)}
+          onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state)}
           disabled={!context.state.isValid}
         >
           {isCreatingNewTemplate ? translation.create : translation.update}

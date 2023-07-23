@@ -41,7 +41,7 @@ type SubtaskViewProps = {
   subtasks: SubTaskDTO[],
   taskID?: string,
   createdBy?: string,
-  taskTemplateId? : string,
+  taskTemplateId?: string,
   onChange: (subtasks: SubTaskDTO[]) => void
 }
 

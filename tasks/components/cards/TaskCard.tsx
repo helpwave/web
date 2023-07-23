@@ -25,10 +25,11 @@ export const TaskCard = ({
     <Card
       onTileClick={onTileClick}
       isSelected={isSelected}
-      className={tx('bg-white', {
+      // TODO enable overDue indication when datetime picker works
+      className={tx('bg-white', /*{
         '!border-hw-negative-400 !hover:border-hw-negative-600': isOverDue,
         '!border-hw-negative-600': isOverDue && isSelected,
-      })}
+      }*/)}
     >
       <div className={tw('flex flex-row justify-between w-full')}>
         <div className={tw('flex flex-col overflow-hidden')}>

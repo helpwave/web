@@ -165,34 +165,10 @@ export const usePatientListQuery = (wardID: string) => {
     },
     initialData: {
       active: [
-        {
-          id: 'patient2',
-          human_readable_identifier: 'Patient B',
-          bed: { id: 'bed1', index: 1 },
-          room: { id: 'room2', name: 'Room 2' },
-        },
-        {
-          id: 'patient4',
-          human_readable_identifier: 'Patient D',
-          bed: { id: 'bed2', index: 2 },
-          room: { id: 'room1', name: 'Room 1' },
-        }
       ],
       unassigned: [
-        {
-          id: 'patient1',
-          human_readable_identifier: 'Patient A',
-        },
-        {
-          id: 'patient3',
-          human_readable_identifier: 'Patient C',
-        }
       ],
       discharged: [
-        {
-          id: 'patient5',
-          human_readable_identifier: 'Patient E',
-        }
       ]
     }
   })

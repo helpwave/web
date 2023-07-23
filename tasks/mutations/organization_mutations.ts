@@ -27,12 +27,12 @@ export type OrganizationDTO = {
 // TODO remove once backend is implemented
 export let organizations: OrganizationDTO[] = [
   {
-    id: 'org1',
-    shortName: 'UKM',
-    longName: 'Uniklinkum Münster',
-    email: 'ukm@helpwave.de',
+    id: 'e25256a4-830d-4af3-baa2-81ad8dc50e04',
+    shortName: 'UKA',
+    longName: 'Uniklinik Aachen',
+    email: 'uka@helpwave.de',
     isVerified: false,
-    wards: [{ name: 'ICU' }, { name: 'Radiology' }, { name: 'Cardiology' }],
+    wards: [],
     members: [
       {
         name: 'User1',
@@ -60,19 +60,50 @@ export let organizations: OrganizationDTO[] = [
     ]
   },
   {
-    id: 'org2',
-    shortName: 'ORGA',
-    longName: 'Organame',
-    email: 'orga@helpwave.de',
+    id: 'e25256a4-830d-4af3-baa2-81ad8dc50e04',
+    shortName: 'UKM',
+    longName: 'Uniklinik Münster',
+    email: 'ukm@helpwave.de',
     isVerified: false,
-    wards: [{ name: 'ICU' }, { name: 'Radiology' }, { name: 'Cardiology' }],
+    wards: [],
     members: [
       {
         name: 'User1',
         avatarURL: 'https://source.boringavatars.com/',
         email: 'user1@helpwave.de',
         role: Role.admin
-      }, {
+      },
+      {
+        name: 'User1',
+        avatarURL: 'https://source.boringavatars.com/',
+        email: 'user1@helpwave.de',
+        role: Role.admin
+      },
+      {
+        name: 'User1',
+        avatarURL: 'https://source.boringavatars.com/',
+        email: 'user1@helpwave.de',
+        role: Role.admin
+      },
+      {
+        name: 'User1',
+        avatarURL: 'https://source.boringavatars.com/',
+        email: 'user1@helpwave.de',
+        role: Role.admin
+      },
+      {
+        name: 'User1',
+        avatarURL: 'https://source.boringavatars.com/',
+        email: 'user1@helpwave.de',
+        role: Role.admin
+      },
+      {
+        name: 'User1',
+        avatarURL: 'https://source.boringavatars.com/',
+        email: 'user1@helpwave.de',
+        role: Role.admin
+      },
+      {
         name: 'User2',
         avatarURL: 'https://source.boringavatars.com/',
         email: 'user2@helpwave.de',
@@ -92,6 +123,35 @@ export let organizations: OrganizationDTO[] = [
       }
     ]
   },
+  {
+    id: 'f6e0f961-6a2e-4ddd-bac3-7c29485b75d5',
+    shortName: 'UKGM',
+    longName: 'Uniklinikum Giessen und Marburg',
+    email: 'ukgm@helpwave.de',
+    isVerified: false,
+    wards: [],
+    members: [
+      {
+        name: 'User2',
+        avatarURL: 'https://source.boringavatars.com/',
+        email: 'user2@helpwave.de',
+        role: Role.user
+      },
+      {
+        name: 'User3',
+        avatarURL: 'https://source.boringavatars.com/',
+        email: 'user3@helpwave.de',
+        role: Role.user
+      },
+      {
+        name: 'User4',
+        avatarURL: 'https://source.boringavatars.com/',
+        email: 'user4@helpwave.de',
+        role: Role.user
+      }
+    ]
+  },
+
 ]
 
 export const useOrganizationQuery = () => {

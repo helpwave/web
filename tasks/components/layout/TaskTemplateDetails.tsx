@@ -11,7 +11,9 @@ import { SubtaskView } from '../SubtaskView'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import {TaskTemplateContext, TaskTemplateFormType} from '../../pages/templates'
+import type { TaskTemplateFormType } from '../../pages/templates'
+
+import { TaskTemplateContext } from '../../pages/templates'
 
 type TaskTemplateDetailsTranslation = {
   updateTaskTemplate: string,

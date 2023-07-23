@@ -12,8 +12,8 @@ import {
   GetTaskRequest,
   UpdateTaskRequest,
   SubTaskToDoneRequest,
-  SubTaskToToDoRequest, 
-  GetTasksByPatientSortedByStatusRequest,
+  SubTaskToToDoRequest,
+  GetTasksByPatientSortedByStatusRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { getAuthenticatedGrpcMetadata, taskService } from '../utils/grpc'
 import type { GetTasksByPatientSortedByStatusResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'

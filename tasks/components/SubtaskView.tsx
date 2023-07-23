@@ -62,7 +62,7 @@ export const SubtaskView = ({
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
   // TODO: Remove ?? '' once the mutate functions are passed properly
-  useSubTaskTemplateAddMutation(() => undefined, taskTemplateId ?? '')
+  useSubTaskTemplateAddMutation(taskTemplateId ?? '')
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
     const scrollableElement = scrollableRef.current?.getScrollElement()

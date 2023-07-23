@@ -257,23 +257,16 @@ export const useSubTaskTemplateUpdateMutation = (callback: (subtask: SubTaskDTO)
   })
 }
 
-export const useSubTaskTemplateAddMutation = (callback: (subtask: SubTaskDTO) => void = noop, taskTemplateId : string) => {
+export const useSubTaskTemplateAddMutation = (taskTemplateId : string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (subtask: SubTaskDTO) => {
       const createSubTaskTemplate = new CreateTaskTemplateSubTaskRequest()
       createSubTaskTemplate.setName(subtask.name)
       createSubTaskTemplate.setTaskTemplateId(taskTemplateId)
-      const res = await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
-
-      const newSubtask: SubTaskDTO = {
-        id: res.getId(),
-        name: subtask.name,
-        isDone: subtask.isDone,
-      }
+      await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata());
 
       queryClient.refetchQueries(['wardTaskTemplates']).then()
-      callback(newSubtask)
       return createSubTaskTemplate.toObject()
     },
   })

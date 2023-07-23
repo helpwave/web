@@ -10,10 +10,6 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import {
-  useSubTaskToDoneMutation,
-  useSubTaskToToDoMutation
-} from '../mutations/task_mutations'
-import {
   useSubTaskTemplateAddMutation
 } from '../mutations/task_template_mutations'
 import { TaskTemplateContext } from '../pages/templates'
@@ -65,11 +61,6 @@ export const SubtaskView = ({
   const scrollableRef = useRef<SimpleBarCore>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
-  const isCreatingTask = !taskID && !taskTemplateId
-
-  const subtaskToToDoMutation = useSubTaskToToDoMutation()
-  const subtaskToDoneMutation = useSubTaskToDoneMutation()
-
   // TODO: Remove ?? '' once the mutate functions are passed properly
   useSubTaskTemplateAddMutation(() => undefined, taskTemplateId ?? '')
   // Automatic scrolling to the last element to give the user a visual feedback
@@ -109,15 +100,7 @@ export const SubtaskView = ({
                   }
                 }}
                 onDoneChange={done => {
-                  if (isCreatingTask) {
-                    subtask.isDone = done
-                  } else {
-                    if (done) {
-                      subtaskToDoneMutation.mutate(subtask.id)
-                    } else if (!isCreatingTask) {
-                      subtaskToToDoMutation.mutate(subtask.id)
-                    }
-                  }
+                  subtask.isDone = done
                 }}
               />
             ))}

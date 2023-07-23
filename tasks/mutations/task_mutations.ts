@@ -247,14 +247,28 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       const updateSubtask = new UpdateSubTaskRequest()
       const createSubTask = new AddSubTaskRequest()
 
+      const subTaskToDone = new SubTaskToDoneRequest()
+      const subTaskToDo = new SubTaskToToDoRequest()
+
       for (const subtask of task.subtasks) {
         // create new subtasks
         if (!subtask.id) {
           createSubTask.setName(subtask.name)
           createSubTask.setTaskId(task.id)
-          await taskService.addSubTask(createSubTask, getAuthenticatedGrpcMetadata())
+          createSubTask.setDone(subtask.isDone)
+
+          const res = await taskService.addSubTask(createSubTask, getAuthenticatedGrpcMetadata())
+          subtask.id = res.getId()
 
           continue
+        }
+
+        if (subtask.isDone) {
+          subTaskToDone.setId(subtask.id)
+          await taskService.subTaskToDone(subTaskToDone, getAuthenticatedGrpcMetadata())
+        } else {
+          subTaskToDo.setId(subtask.id)
+          await taskService.subTaskToToDo(subTaskToDo, getAuthenticatedGrpcMetadata())
         }
 
         updateSubtask.setName(subtask.name)

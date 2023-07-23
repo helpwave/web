@@ -5,6 +5,7 @@ import { ToggleableInput } from '@helpwave/common/components/user_input/Toggleab
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Button } from '@helpwave/common/components/Button'
 import type { SubTaskDTO } from '../mutations/task_mutations'
+import { useEffect, useState } from 'react'
 
 type SubtaskTileTranslation = {
   subtasks: string,
@@ -43,13 +44,21 @@ export const SubtaskTile = ({
 
   const minTaskNameLength = 2
   const maxTaskNameLength = 64
+  const [checked, setChecked] = useState(false)
+
+  useEffect(() => {
+    setChecked(subtask.isDone)
+  }, [subtask.isDone])
 
   return (
     <div className={tw('flex flex-row gap-x-2 items-center overflow-x-hidden')}>
       <div>
         <Checkbox
-          onChange={ onDoneChange }
-          checked={subtask.isDone}
+          onChange={done => {
+            onDoneChange(done)
+            setChecked(subtask.isDone)
+          }}
+          checked={checked}
         />
       </div>
       <ToggleableInput

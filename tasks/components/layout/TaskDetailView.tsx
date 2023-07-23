@@ -67,7 +67,7 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     notes: 'Notizen',
     subtasks: 'Unteraufgaben',
     assignee: 'Verantwortlich',
-    dueDate: 'Fälligkeit-Datum',
+    dueDate: 'Fälligkeitsdatum',
     status: 'Status',
     visibility: 'Sichtbarkeit',
     creationTime: 'Erstell Zeit',

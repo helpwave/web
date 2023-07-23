@@ -47,7 +47,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
               onTileClick={(event) => {
                 event.stopPropagation()
                 if (bed.patient) {
-                  // LINTER: `bed.patient.id` gets evaulated as undefined without this if
+                  // LINTER: `bed.patient.id` gets evaluated as undefined without this if
                   setSelectedBed(room, bed, { ...emptyPatient, id: bed.patient.id })
                 }
               }}

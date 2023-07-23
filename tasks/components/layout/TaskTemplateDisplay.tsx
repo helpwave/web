@@ -76,7 +76,7 @@ export const TaskTemplateDisplay = ({
       <div className={tw(`grid grid-cols-${columns} gap-6`)}>
         {taskTemplates.map(taskTemplate => (
           <TaskTemplateCard
-            key={taskTemplate.name}
+            key={taskTemplate.id}
             name={taskTemplate.name}
             subtaskCount={taskTemplate.subtasks.length}
             isSelected={selectedID === taskTemplate.id}

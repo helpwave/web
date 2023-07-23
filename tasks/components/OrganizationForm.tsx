@@ -5,7 +5,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
-import type { OrganizationDTO } from '../mutations/organization_mutations'
+import type { OrganizationMinimalDTO } from '../mutations/organization_mutations'
 import { emptyOrganization } from '../mutations/organization_mutations'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 
@@ -61,7 +61,7 @@ const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTra
 export type OrganizationFormType = {
   isValid: boolean,
   hasChanges: boolean,
-  organization: OrganizationDTO
+  organization: OrganizationMinimalDTO
 }
 
 export const emptyOrganizationForm: OrganizationFormType = {
@@ -104,7 +104,7 @@ export const OrganizationForm = ({
   const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
-  function validateShortName(organization: OrganizationDTO) {
+  function validateShortName(organization: OrganizationMinimalDTO) {
     const shortName = organization.shortName.trim()
     if (shortName === '') {
       return translation.required
@@ -115,7 +115,7 @@ export const OrganizationForm = ({
     }
   }
 
-  function validateLongName(organization: OrganizationDTO) {
+  function validateLongName(organization: OrganizationMinimalDTO) {
     const longName = organization.longName.trim()
     if (longName === '') {
       return translation.required
@@ -126,7 +126,7 @@ export const OrganizationForm = ({
     }
   }
 
-  function validateEmailWithOrganization(organization: OrganizationDTO) {
+  function validateEmailWithOrganization(organization: OrganizationMinimalDTO) {
     const email = organization.email.trim()
     if (email === '') {
       return translation.required
@@ -135,9 +135,14 @@ export const OrganizationForm = ({
     }
   }
 
-  function triggerOnChange(newOrganization: OrganizationDTO, shouldUpdate: boolean) {
+  function triggerOnChange(newOrganization: OrganizationMinimalDTO, shouldUpdate: boolean) {
     const isValid = validateShortName(newOrganization) === undefined && validateLongName(newOrganization) === undefined && validateEmailWithOrganization(newOrganization) === undefined
     onChange({ hasChanges: true, isValid, organization: newOrganization }, shouldUpdate && isValid) // this might lead to confusing behaviour where changes aren't saved on invalid input
+  }
+
+  if (!organizationForm) {
+    // TODO replace with loading animation
+    return <div>Loading OrganizationForm</div>
   }
 
   const shortNameErrorMessage: string | undefined = validateShortName(organizationForm.organization)

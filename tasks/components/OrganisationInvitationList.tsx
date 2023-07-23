@@ -30,7 +30,7 @@ const defaultOrganisationInvitationListTranslation: Record<Languages, Organisati
     email: 'Email',
     addAndNext: 'Add and next',
     add: 'Add',
-    invitations: 'invitations',
+    invitations: 'Invitations',
     inviteMember: 'Invite Member'
   },
   de: {
@@ -90,7 +90,7 @@ export const OrganisationInvitationList = ({
           onBackgroundClick={() => setInviteMemberModalEmail(undefined)}
           onConfirm={() => {
             if (!isCreatingOrganization) {
-              inviteMemberMutation.mutate(inviteMemberModalEmail)
+              inviteMemberMutation.mutate({ email: inviteMemberModalEmail })
             }
             onChange([...usedInvitations, {
               id: '',
@@ -102,10 +102,10 @@ export const OrganisationInvitationList = ({
             value: inviteMemberModalEmail,
             onChange: text => setInviteMemberModalEmail(text)
           }]}
-          // Overwrite button
+          // Overwritten button doesn't do anything regarding decline
           onDecline={() => {
             if (!isCreatingOrganization) {
-              inviteMemberMutation.mutate(inviteMemberModalEmail)
+              inviteMemberMutation.mutate({ email: inviteMemberModalEmail })
             }
             onChange([...usedInvitations, {
               id: '',

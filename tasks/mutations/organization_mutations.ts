@@ -68,9 +68,12 @@ export type Invitation = {
   state: InvitationState
 }
 
+export type InviteMemberType = { email: string, organizationID?: string }
+
+export const singleOrganizationQueryKey = 'singleOrganization'
 export const useOrganizationQuery = (organizationID: string | undefined) => {
   return useQuery({
-    queryKey: [organizationQueryKey],
+    queryKey: [organizationQueryKey, singleOrganizationQueryKey],
     enabled: !!organizationID,
     queryFn: async () => {
       const req = new GetOrganizationRequest()
@@ -99,9 +102,10 @@ export const useOrganizationQuery = (organizationID: string | undefined) => {
   })
 }
 
+export const organizationsByUserQueryKey = 'organizationsByUser'
 export const useOrganizationsByUserQuery = () => {
   return useQuery({
-    queryKey: [organizationQueryKey],
+    queryKey: [organizationQueryKey, organizationsByUserQueryKey],
     queryFn: async () => {
       const req = new GetOrganizationsByUserRequest()
 
@@ -162,6 +166,18 @@ export const useInvitationsByUserQuery = (state?: InvitationState) => {
           }
         }
       })
+      return invitations
+    },
+  })
+}
+
+export const useInvitationsByOrganisationQuery = (organizationID: string | undefined) => {
+  return useQuery({
+    queryKey: [organizationQueryKey, invitationsQueryKey],
+    enabled: !!organizationID,
+    queryFn: async () => {
+      // TODO update later
+      const invitations: Invitation[] = []
       return invitations
     },
   })
@@ -264,9 +280,17 @@ export const useInviteDeclineMutation = (callback: () => void = noop) => {
 export const useInviteMemberMutation = (organizationID: string, callback: (inviteID: string) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (email: string) => {
+    mutationFn: async (invite: InviteMemberType) => {
       const req = new InviteMemberRequest()
-      req.setEmail(email)
+
+      if (!organizationID) {
+        if (invite.organizationID) {
+          organizationID = invite.organizationID
+        } else {
+          console.error('InviteMember failed, provide an non null organization id either in the mutate or the hook')
+        }
+      }
+      req.setEmail(invite.email)
       req.setOrganizationId(organizationID)
 
       const res = await organizationService.inviteMember(req, getAuthenticatedGrpcMetadata())

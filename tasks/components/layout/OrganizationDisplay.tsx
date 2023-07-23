@@ -58,7 +58,7 @@ export const OrganizationDisplay = ({
       <div className={tw(`grid grid-cols-${columns} gap-6`)}>
         {usedOrganizations.map(organization => (
           <OrganizationCard
-            key={organization.longName}
+            key={organization.id}
             organization={organization}
             isSelected={usedSelectedID === organization.id}
             onEditClick={() => context.updateContext({ ...context.state, organizationID: organization.id })}

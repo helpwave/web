@@ -78,10 +78,7 @@ export const OrganizationDetail = ({
       setOrganizationForm({
         isValid: true,
         hasChanges: false,
-        organization: {
-          ...data,
-          members: []
-        }
+        organization: { ...data }
       })
     }
   }, [data, isCreatingNewOrganization])
@@ -89,7 +86,10 @@ export const OrganizationDetail = ({
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationID)
 
   const createMutation = useOrganizationCreateMutation(organization => {
-    organizationInvites.forEach(invite => inviteMemberMutation.mutate(invite.email))
+    organizationInvites.forEach(invite => inviteMemberMutation.mutate({
+      email: invite.email,
+      organizationID: organization.id
+    }))
     updateContext({ organizationID: organization.id })
   })
 
@@ -98,8 +98,7 @@ export const OrganizationDetail = ({
       isValid: true,
       hasChanges: false,
       organization: {
-        ...organization,
-        members: []
+        ...organization
       }
     })
   })
@@ -136,11 +135,7 @@ export const OrganizationDetail = ({
         }}
       />
       {!isCreatingNewOrganization && (
-        <OrganizationMemberList
-          organizationID={organizationForm.organization.id}
-          members={organizationForm.organization.members}
-          onChange={() => undefined}
-        />
+        <OrganizationMemberList />
       )}
       <OrganisationInvitationList
         onChange={setOrganizationInvites}

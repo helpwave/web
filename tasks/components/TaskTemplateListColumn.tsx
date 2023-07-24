@@ -52,7 +52,7 @@ export const TaskTemplateListColumn = ({
   }, [ref.current?.clientHeight])
 
   return (
-    <div className={tw('flex flex-col overflow-hidden')}>
+    <div className={tw('flex flex-col overflow-hidden h-full')}>
       <div className={tw('flex flex-row overflow-hidden')}>
         <Span className={tw('text-2xl font-space font-bold mb-4 flex-1')}>
           {translation.template}

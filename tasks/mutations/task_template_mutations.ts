@@ -106,6 +106,9 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
 
       if (templateForm.deletedSubtaskIds) {
         for (const id of templateForm.deletedSubtaskIds) {
+          if (!id) {
+            continue
+          }
           deleteSubtaskTaskTemplate.setId(id)
           await taskTemplateService.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
         }
@@ -134,6 +137,7 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       const res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
       const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
 
+      templateForm.deletedSubtaskIds = []
       setTemplate(newTaskTemplate)
     },
     onMutate: async () => {

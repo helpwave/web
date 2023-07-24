@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -44,12 +44,7 @@ export const TaskTemplateListColumn = ({
   onColumnEditClick
 }: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateListColumnTranslation)
-  const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setHeight(ref.current?.clientHeight)
-  }, [ref.current?.clientHeight])
 
   return (
     <div className={tw('flex flex-col overflow-hidden')}>
@@ -61,7 +56,7 @@ export const TaskTemplateListColumn = ({
       </div>
       <div className={tw('overflow-hidden')} ref={ref}>
         <div>
-          <SimpleBarReact style={{ maxHeight: height }}>
+          <SimpleBarReact style={{ maxHeight: 500 }}>
             <div className={tw('flex flex-col gap-y-2 pr-3')}>
               {taskTemplates.map((taskTemplateExtension, index) => (
                 <TaskTemplateCard

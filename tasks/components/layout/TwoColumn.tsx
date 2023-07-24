@@ -122,7 +122,7 @@ export const TwoColumn = ({
     }
   }, [])
 
-  useEffect(handleWindowResize, [])
+  useEffect(handleWindowResize, [window.innerHeight])
 
   return (
     <div

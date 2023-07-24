@@ -9,14 +9,14 @@ import titleWrapper from '../../../utils/titleWrapper'
 import { TaskTemplateDisplay } from '../../../components/layout/TaskTemplateDisplay'
 import {
   useCreateMutation,
-  useDeleteMutation, useTaskTemplateQuery,
-  useUpdateMutation
-} from '../../../mutations/task_template_mutations'
-import type {
-  TaskTemplateDTO
+  useDeleteMutation,
+  useUpdateMutation,
+  useWardTaskTemplateQuery
 } from '../../../mutations/task_template_mutations'
 import { TaskTemplateDetails } from '../../../components/layout/TaskTemplateDetails'
 import { useRouter } from 'next/router'
+import type { TaskTemplateContextState } from '../../templates'
+import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState } from '../../templates'
 
 type WardTaskTemplateTranslation = {
   taskTemplates: string,
@@ -40,54 +40,46 @@ const defaultWardTaskTemplateTranslations = {
   }
 }
 
-export type TaskTemplateFormType = {
-  isValid: boolean,
-  hasChanges: boolean,
-  template: TaskTemplateDTO
-}
-
-const emptyTaskTemplate: TaskTemplateDTO = {
-  id: '',
-  isPublicVisible: false,
-  name: '',
-  notes: '',
-  subtasks: []
-}
-
 const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
   const router = useRouter()
-  const { uuid, templateID } = router.query
+  const { uuid: wardId, templateID } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
-  const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
-    isValid: false,
-    hasChanges: false,
-    template: emptyTaskTemplate
-  })
-  const { isLoading, isError, data } = useTaskTemplateQuery('wardTaskTemplates')
+  const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId?.toString())
+
+  const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
   const createMutation = useCreateMutation('wardTaskTemplates', taskTemplate =>
-    setTaskTemplateForm({
+    setContextState({
+      ...contextState,
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
-    }))
-  const updateMutation = useUpdateMutation('wardTaskTemplates', taskTemplate =>
-    setTaskTemplateForm({
-      hasChanges: false,
-      isValid: taskTemplate !== undefined,
-      template: taskTemplate ?? emptyTaskTemplate
-    }))
-  const deleteMutation = useDeleteMutation('wardTaskTemplates', taskTemplate =>
-    setTaskTemplateForm({
-      hasChanges: false,
-      isValid: taskTemplate !== undefined,
-      template: taskTemplate ?? emptyTaskTemplate
-    }))
+    })
+  )
 
-  if (!taskTemplateForm.hasChanges && templateID && !usedQueryParam) {
+  const updateMutation = useUpdateMutation('wardTaskTemplates', taskTemplate =>
+    setContextState({
+      ...contextState,
+      hasChanges: false,
+      isValid: taskTemplate !== undefined,
+      template: taskTemplate ?? emptyTaskTemplate
+    })
+  )
+
+  const deleteMutation = useDeleteMutation('wardTaskTemplates', taskTemplate =>
+    setContextState({
+      ...contextState,
+      hasChanges: false,
+      isValid: taskTemplate !== undefined,
+      template: taskTemplate ?? emptyTaskTemplate
+    })
+  )
+
+  if (!contextState.hasChanges && templateID && !usedQueryParam) {
     const newSelected = data?.find(value => value.id === templateID) ?? emptyTaskTemplate
-    setTaskTemplateForm({
+    setContextState({
+      ...contextState,
       isValid: newSelected.id !== '',
       hasChanges: false,
       template: newSelected
@@ -113,40 +105,44 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     <PageWithHeader
       crumbs={[
         { display: translation.organization, link: `/organizations?organizationID=${organizationID}` },
-        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${uuid}` },
-        { display: translation.taskTemplates, link: `/ward/${uuid}/templates` }
+        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${wardId}` },
+        { display: translation.taskTemplates, link: `/ward/${wardId}/templates` }
       ]}
     >
       <Head>
         <title>{titleWrapper(translation.wardTaskTemplates)}</title>
       </Head>
-      <TwoColumn
-        disableResize={false}
-        left={width => (
-          <TaskTemplateDisplay
-            width={width}
-            onSelectChange={taskTemplate => setTaskTemplateForm({
-              template: taskTemplate ?? emptyTaskTemplate,
-              hasChanges: false,
-              isValid: taskTemplate !== undefined,
-            })}
-            selectedID={taskTemplateForm.template.id}
-            taskTemplates={data}
-            variant="wardTemplates"
-          />
-        )}
-        right={width => (
-          <TaskTemplateDetails
-            width={width}
-            key={taskTemplateForm.template.id}
-            taskTemplateForm={taskTemplateForm}
-            onCreate={createMutation.mutate}
-            onUpdate={updateMutation.mutate}
-            onDelete={deleteMutation.mutate}
-            setTaskTemplateForm={setTaskTemplateForm}
-          />
-        )}
-      />
+      <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
+        <TwoColumn
+          disableResize={false}
+          left={width => (
+            <TaskTemplateDisplay
+              width={width}
+              onSelectChange={taskTemplate => {
+                setContextState({
+                  ...contextState,
+                  template: taskTemplate ?? { ...emptyTaskTemplate, wardId: wardId as string | undefined },
+                  hasChanges: false,
+                  isValid: taskTemplate !== undefined,
+                  deletedSubtaskIds: []
+                })
+              }}
+              selectedID={contextState.template.id}
+              taskTemplates={data}
+              variant="wardTemplates"
+            />
+          )}
+          right={width => (
+            <TaskTemplateDetails
+              width={width}
+              key={contextState.template.id}
+              onCreate={createMutation.mutate}
+              onUpdate={updateMutation.mutate}
+              onDelete={deleteMutation.mutate}
+            />
+          )}
+        />
+      </TaskTemplateContext.Provider>
     </PageWithHeader>
   )
 }

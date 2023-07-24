@@ -10,13 +10,16 @@ import { SubtaskView } from '../SubtaskView'
 import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import { Span } from '@helpwave/common/components/Span'
-import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import { useTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
+import {
+  usePersonalTaskTemplateQuery,
+  useWardTaskTemplateQuery
+} from '../../mutations/task_template_mutations'
+import { useAuth } from '../../hooks/useAuth'
+import { useRouter } from 'next/router'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import {
   emptyTask,
@@ -25,6 +28,7 @@ import {
   useTaskQuery,
   useTaskUpdateMutation
 } from '../../mutations/task_mutations'
+import { useEffect, useState } from 'react'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -62,10 +66,10 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     close: 'Schließen',
     notes: 'Notizen',
     subtasks: 'Unteraufgaben',
-    assignee: 'Veranwortlich',
-    dueDate: 'Fälligkeits-Datum',
+    assignee: 'Verantwortlich',
+    dueDate: 'Fälligkeitsdatum',
     status: 'Status',
-    visibility: 'Sichbarkeit',
+    visibility: 'Sichtbarkeit',
     creationTime: 'Erstell Zeit',
     private: 'privat',
     public: 'öffentlich',
@@ -93,7 +97,8 @@ export const TaskDetailView = ({
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplateDTO | undefined>(undefined)
   const router = useRouter()
-  const { uuid } = router.query
+  const { uuid: wardId } = router.query
+  const { user } = useAuth()
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
@@ -102,11 +107,15 @@ export const TaskDetailView = ({
   const { data, isLoading, isError } = useTaskQuery(taskID)
 
   const [task, setTask] = useState<TaskDTO>({ ...emptyTask })
+
   const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
+
   const createTaskMutation = useTaskCreateMutation(newTask => {
-    newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskID: newTask.id }))
+    newTask.subtasks.forEach(value =>
+      addSubtaskMutation.mutate({ ...value, taskID: newTask.id }))
     onClose()
   }, patientID)
+
   const updateTaskMutation = useTaskUpdateMutation()
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
 
@@ -120,12 +129,12 @@ export const TaskDetailView = ({
     data: personalTaskTemplatesData,
     isLoading: personalTaskTemplatesIsLoading,
     error: personalTaskTemplatesError
-  } = useTaskTemplateQuery('personalTaskTemplates')
+  } = usePersonalTaskTemplateQuery(user?.id)
   const {
     data: wardTaskTemplatesData,
     isLoading: wardTaskTemplatesIsLoading,
     error: wardTaskTemplatesError
-  } = useTaskTemplateQuery('wardTaskTemplates')
+  } = useWardTaskTemplateQuery(wardId?.toString())
 
   const formatDate = (date: Date) => {
     return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
@@ -162,7 +171,7 @@ export const TaskDetailView = ({
                   subtasks: taskTemplate.subtasks
                 })
               }}
-              onColumnEditClick={() => router.push(`/ward/${uuid}/templates`)}
+              onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
             />
           )}
           <>
@@ -200,10 +209,12 @@ export const TaskDetailView = ({
                 onChange={description => setTask({ ...task, notes: description })}
               />
             </div>
-            <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange={subtasks => setTask({ ...task, subtasks })}/>
+            <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange= {subtasks => {
+              setTask({ ...task, subtasks })
+            }}/>
           </div>
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
-            <div className={tw('flex flex-col gap-y-4')}>
+            <div className={tw('flex flex-col gap-y-4 hidden')}>
               <div>
                 <label><Span type="labelMedium">{translation.assignee}</Span></label>
                 <Select
@@ -214,7 +225,9 @@ export const TaskDetailView = ({
                     { label: 'Assignee 3', value: 'assignee3' },
                     { label: 'Assignee 4', value: 'assignee4' }
                   ]}
-                  onChange={assignee => setTask({ ...task, assignee })}
+                  onChange={assignee => {
+                    setTask({ ...task, assignee })
+                  }}
                 />
               </div>
               <div>

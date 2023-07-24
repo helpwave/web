@@ -55,29 +55,24 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
               width={width}
               features={[
                 {
-                  title: 'Feature 1',
-                  date: new Date('2023-04-22T14:09:58+00:00'),
+                  title: 'mission - Was ist helpwave?',
+                  date: new Date('10 July 2023'),
+                  externalResource: new URL('https://podcasters.spotify.com/pod/show/helpwave/episodes/mission---Was-ist-helpwave-e26n9gi/a-aa3paqd'),
                   description: [
-                    new URL('https://images.unsplash.com/photo-1606327054536-e37e655d4f4a?ixlib=rb-4.0.3&ixid=MnwxM[…]90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'),
-                    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+                    new URL('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'),
+                    'Hallo, willkommen zur allerersten richtigen Folge von helpwave talks! Heute wird es konkret: Was ist eigentlich helpwave? Was ist die Vision? Und vor allem wer ist helpwave und wie genau will helpwave mittels Informatik das Gesundheitswesen revolutionieren? Max Schäfer und Christian Porschen haben die Antworten und geben einen detaillieren Einblick in das "Was", "Wie" und vor allem "Warum" von helpwave.'
                   ]
                 },
+
                 {
-                  title: 'Feature 2',
-                  date: new Date('2022-12-31T14:09:58+00:00'),
-                  externalResource: new URL('https://helpwave.de'),
+                  title: 'trailer - Fusionsküche Medizin und Informatik',
+                  date: new Date('30 June 2023'),
+                  externalResource: new URL('https://podcasters.spotify.com/pod/show/helpwave/episodes/trailer---Fusionskche-Medizin-und-Informatik-e26dbf7/a-aa2rb9o'),
                   description: [
-                    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+                    new URL('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80'),
+                    'Hey! Willkommen bei helpwave talks unserem einzigartigen Format rund um die medizinische Informatik mit vielen interessanten Gästen aus Forschung, Entwicklung, Pflege, Recht, ...'
                   ]
                 },
-                {
-                  title: 'Feature 3',
-                  date: new Date('2021-01-22T14:09:58+00:00'),
-                  description: [
-                    new URL('https://images.unsplash.com/photo-1606327054536-e37e655d4f4a?ixlib=rb-4.0.3&ixid=MnwxM[…]90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'),
-                    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-                  ]
-                }
               ]}
             />
         )}

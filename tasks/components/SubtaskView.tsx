@@ -6,15 +6,13 @@ import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskTile } from './SubtaskTile'
 import { Span } from '@helpwave/common/components/Span'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import {
-  useSubTaskAddMutation,
-  useSubTaskDeleteMutation, useSubTaskToDoneMutation,
-  useSubTaskToToDoMutation,
-  useSubTaskUpdateMutation
-} from '../mutations/task_mutations'
+  useSubTaskTemplateAddMutation
+} from '../mutations/task_template_mutations'
+import { TaskTemplateContext } from '../pages/templates'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -39,8 +37,11 @@ const defaultSubtaskViewTranslation = {
 }
 
 type SubtaskViewProps = {
+  // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
   subtasks: SubTaskDTO[],
   taskID?: string,
+  createdBy?: string,
+  taskTemplateId?: string,
   onChange: (subtasks: SubTaskDTO[]) => void
 }
 
@@ -51,19 +52,17 @@ export const SubtaskView = ({
   language,
   subtasks,
   taskID,
-  onChange
+  taskTemplateId,
+  onChange,
 }: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
+  const context = useContext(TaskTemplateContext)
+
   const translation = useTranslation(language, defaultSubtaskViewTranslation)
   const scrollableRef = useRef<SimpleBarCore>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
-  const isCreatingTask = !!taskID
-  const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
-  const updateSubtaskMutation = useSubTaskUpdateMutation()
-  const deleteSubtaskMutation = useSubTaskDeleteMutation()
-  const subtaskToToDoMutation = useSubTaskToToDoMutation()
-  const subtaskToDoneMutation = useSubTaskToDoneMutation()
-
+  // TODO: Remove ?? '' once the mutate functions are passed properly
+  useSubTaskTemplateAddMutation(taskTemplateId ?? '')
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
     const scrollableElement = scrollableRef.current?.getScrollElement()
@@ -86,29 +85,22 @@ export const SubtaskView = ({
                 onNameChange={newSubtask => {
                   const newSubtasks = [...subtasks]
                   newSubtasks[index] = newSubtask
-                  if (isCreatingTask) {
-                    onChange(newSubtasks)
-                  } else {
-                    updateSubtaskMutation.mutate(newSubtask)
-                  }
+                  onChange(newSubtasks)
                 }}
                 onRemoveClick={() => {
-                  if (isCreatingTask) {
-                    onChange(subtasks.filter((_, subtaskIndex) => subtaskIndex !== index))
+                  const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
+                  if (!taskID) {
+                    context.updateContext({
+                      ...context.state,
+                      template: { ...context.state.template, subtasks: filteredSubtasks },
+                      deletedSubtaskIds: [...context.state.deletedSubtaskIds ?? [], subtasks[index].id]
+                    })
                   } else {
-                    deleteSubtaskMutation.mutate(subtask.id)
+                    onChange(filteredSubtasks)
                   }
                 }}
                 onDoneChange={done => {
-                  if (isCreatingTask) {
-                    subtask.isDone = done
-                  } else {
-                    if (done) {
-                      subtaskToDoneMutation.mutate(subtask.id)
-                    } else {
-                      subtaskToToDoMutation.mutate(subtask.id)
-                    }
-                  }
+                  subtask.isDone = done
                 }}
               />
             ))}
@@ -118,11 +110,7 @@ export const SubtaskView = ({
       <Button
         onClick={() => {
           const newSubtask = { id: '', name: translation.newSubtask, isDone: false }
-          if (isCreatingTask) {
-            onChange([...subtasks, newSubtask])
-          } else {
-            addSubtaskMutation.mutate(newSubtask)
-          }
+          onChange([...subtasks, newSubtask])
           setScrollToBottom(true)
         }}
         className={tw('flex flex-row items-center gap-x-2 mt-4 max-w-[200px] justify-center')}

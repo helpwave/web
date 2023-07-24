@@ -6,9 +6,9 @@ import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { useRouter } from 'next/router'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
-import { useTaskTemplateQuery } from '../mutations/task_template_mutations'
 import { useContext } from 'react'
 import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
+import { useWardTaskTemplateQuery } from '../mutations/task_template_mutations'
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
@@ -44,8 +44,7 @@ export const TaskTemplateWardPreview = ({
 
   const context = useContext(OrganizationOverviewContext)
 
-  const { data, isLoading, isError } = useTaskTemplateQuery('wardTaskTemplates')
-
+  const { data, isLoading, isError } = useWardTaskTemplateQuery(wardID)
   // TODO add view for loading
   if (isLoading || !context.state.wardID) {
     return <div>Loading Widget</div>

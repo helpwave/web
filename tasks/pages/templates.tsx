@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -11,12 +11,12 @@ import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
 import {
   useCreateMutation,
   useDeleteMutation,
-  useTaskTemplateQuery,
+  usePersonalTaskTemplateQuery,
   useUpdateMutation
 } from '../mutations/task_template_mutations'
-import type { TaskTemplateFormType } from './ward/[uuid]/templates'
 import { TaskTemplateDetails } from '../components/layout/TaskTemplateDetails'
 import { useRouter } from 'next/router'
+import { useAuth } from '../hooks/useAuth'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,
@@ -34,7 +34,23 @@ const defaultPersonalTaskTemplateTranslations = {
   }
 }
 
-const emptyTaskTemplate: TaskTemplateDTO = {
+export type TaskTemplateFormType = {
+  isValid: boolean,
+  hasChanges: boolean,
+  template: TaskTemplateDTO,
+  wardId?: string,
+  deletedSubtaskIds?: string[]
+}
+
+export type TaskTemplateContextState = {
+  isValid: boolean,
+  template: TaskTemplateDTO,
+  hasChanges: boolean,
+  wardId?: string,
+  deletedSubtaskIds?: string[]
+}
+
+export const emptyTaskTemplate: TaskTemplateDTO = {
   id: '',
   isPublicVisible: false,
   name: '',
@@ -42,40 +58,62 @@ const emptyTaskTemplate: TaskTemplateDTO = {
   subtasks: []
 }
 
+export type TaskTemplateContextType = {
+  state: TaskTemplateFormType,
+  updateContext: (context: TaskTemplateContextState) => void
+}
+
+export const taskTemplateContextState = {
+  isValid: false,
+  template: emptyTaskTemplate,
+  hasChanges: false,
+  deletedSubtaskIds: []
+}
+
+export const TaskTemplateContext = createContext<TaskTemplateContextType>({
+  state: taskTemplateContextState,
+  updateContext: () => undefined
+})
+
 const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<PersonalTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultPersonalTaskTemplateTranslations)
   const router = useRouter()
   const { templateID } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
-  const [taskTemplateForm, setTaskTemplateForm] = useState<TaskTemplateFormType>({
-    isValid: false,
-    hasChanges: false,
-    template: emptyTaskTemplate
-  })
-  const { isLoading, isError, data } = useTaskTemplateQuery('personalTaskTemplates')
+  const { user } = useAuth()
+  const { isLoading, isError, data } = usePersonalTaskTemplateQuery(user?.id)
+
+  const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
   const createMutation = useCreateMutation('personalTaskTemplates', taskTemplate =>
-    setTaskTemplateForm({
-      hasChanges: false,
-      isValid: taskTemplate !== undefined,
-      template: taskTemplate ?? emptyTaskTemplate
-    }))
-  const updateMutation = useUpdateMutation('personalTaskTemplates', taskTemplate =>
-    setTaskTemplateForm({
-      hasChanges: false,
-      isValid: taskTemplate !== undefined,
-      template: taskTemplate ?? emptyTaskTemplate
-    }))
-  const deleteMutation = useDeleteMutation('personalTaskTemplates', taskTemplate =>
-    setTaskTemplateForm({
+    setContextState({
+      ...contextState,
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
     }))
 
-  if (!taskTemplateForm.hasChanges && templateID && !usedQueryParam) {
+  const updateMutation = useUpdateMutation('personalTaskTemplates', taskTemplate => {
+    setContextState({
+      ...contextState,
+      hasChanges: false,
+      isValid: taskTemplate !== undefined,
+      template: taskTemplate ?? emptyTaskTemplate
+    })
+  })
+
+  const deleteMutation = useDeleteMutation('personalTaskTemplates', taskTemplate =>
+    setContextState({
+      ...contextState,
+      hasChanges: false,
+      isValid: taskTemplate !== undefined,
+      template: taskTemplate ?? emptyTaskTemplate
+    }))
+
+  if (!contextState.hasChanges && templateID && !usedQueryParam) {
     const newSelected = data?.find(value => value.id === templateID) ?? emptyTaskTemplate
-    setTaskTemplateForm({
+    setContextState({
+      ...contextState,
       isValid: newSelected.id !== '',
       hasChanges: false,
       template: newSelected
@@ -101,33 +139,37 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
       <Head>
         <title>{titleWrapper(translation.personalTaskTemplates)}</title>
       </Head>
-      <TwoColumn
-        disableResize={false}
-        left={width => (
-          <TaskTemplateDisplay
-            width={width}
-            onSelectChange={taskTemplate => setTaskTemplateForm({
-              template: taskTemplate ?? emptyTaskTemplate,
-              hasChanges: false,
-              isValid: taskTemplate !== undefined,
-            })}
-            selectedID={taskTemplateForm.template.id}
-            taskTemplates={data}
-            variant="personalTemplates"
-          />
-        )}
-        right={width => (
-          <TaskTemplateDetails
-            width={width}
-            key={taskTemplateForm.template.id}
-            taskTemplateForm={taskTemplateForm}
-            onCreate={createMutation.mutate}
-            onUpdate={updateMutation.mutate}
-            onDelete={deleteMutation.mutate}
-            setTaskTemplateForm={setTaskTemplateForm}
-          />
-        )}
-      />
+      <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
+        <TwoColumn
+          disableResize={false}
+          left={width => (
+            <TaskTemplateDisplay
+              width={width}
+              onSelectChange={taskTemplate => {
+                setContextState({
+                  ...contextState,
+                  template: taskTemplate ?? emptyTaskTemplate,
+                  hasChanges: false,
+                  isValid: taskTemplate !== undefined,
+                  deletedSubtaskIds: []
+                })
+              }}
+              selectedID={contextState.template.id}
+              taskTemplates={data}
+              variant="personalTemplates"
+            />
+          )}
+          right={width => (
+            <TaskTemplateDetails
+              width={width}
+              key={contextState.template.id}
+              onCreate={createMutation.mutate}
+              onUpdate={updateMutation.mutate}
+              onDelete={deleteMutation.mutate}
+            />
+          )}
+        />
+      </TaskTemplateContext.Provider>
     </PageWithHeader>
   )
 }

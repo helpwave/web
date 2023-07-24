@@ -214,7 +214,7 @@ export const TaskDetailView = ({
             }}/>
           </div>
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
-            <div className={tw('flex flex-col gap-y-4')}>
+            <div className={tw('flex flex-col gap-y-4 hidden')}>
               <div>
                 <label><Span type="labelMedium">{translation.assignee}</Span></label>
                 <Select

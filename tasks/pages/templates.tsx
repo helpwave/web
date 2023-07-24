@@ -151,6 +151,7 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
                   template: taskTemplate ?? emptyTaskTemplate,
                   hasChanges: false,
                   isValid: taskTemplate !== undefined,
+                  deletedSubtaskIds: []
                 })
               }}
               selectedID={contextState.template.id}

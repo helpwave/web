@@ -124,6 +124,7 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
                   template: taskTemplate ?? { ...emptyTaskTemplate, wardId: wardId as string | undefined },
                   hasChanges: false,
                   isValid: taskTemplate !== undefined,
+                  deletedSubtaskIds: []
                 })
               }}
               selectedID={contextState.template.id}

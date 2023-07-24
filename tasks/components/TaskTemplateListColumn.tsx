@@ -59,7 +59,7 @@ export const TaskTemplateListColumn = ({
         </Span>
         {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
       </div>
-      <div className={tw('overflow-hidden')} ref={ref}>
+      <div className={tw('overflow-hidden h-full')} ref={ref}>
         <div>
           <SimpleBarReact style={{ maxHeight: height }}>
             <div className={tw('flex flex-col gap-y-2 pr-3')}>

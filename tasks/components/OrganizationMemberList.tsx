@@ -15,8 +15,9 @@ import {
   Table
 } from '@helpwave/common/components/Table'
 import type { OrgMember } from '../mutations/organization_member_mutations'
-import { Role, useMembersByOrganizationQuery } from '../mutations/organization_member_mutations'
+import { Role } from '../mutations/organization_member_mutations'
 import {
+  useOrganizationsByUserQuery,
   useRemoveMemberMutation
 } from '../mutations/organization_mutations'
 import { OrganizationContext } from '../pages/organizations'
@@ -71,7 +72,8 @@ type DeleteDialogState = {isShowing: boolean, member?: OrgMember}
 const defaultDeleteDialogState: DeleteDialogState = { isShowing: false }
 
 export type OrganizationMemberListProps = {
-  organizationID?: string
+  organizationID?: string,
+  members?: OrgMember[]
 }
 
 /**
@@ -79,26 +81,29 @@ export type OrganizationMemberListProps = {
  */
 export const OrganizationMemberList = ({
   language,
-  organizationID
+  organizationID,
+  members
 }: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
   const [tableState, setTableState] = useState<TableState>({ pagination: defaultTableStatePagination, selection: defaultTableStateSelection })
 
   const context = useContext(OrganizationContext)
   organizationID ??= context.state.organizationID
-  const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationID)
-
+  // const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationID) TODO use later
+  const { data, isError, isLoading } = useOrganizationsByUserQuery()
+  const membersByOrganization = data?.find(value => value.id === organizationID)?.members ?? []
+  const usedMembers: OrgMember[] = members ?? membersByOrganization ?? []
   const removeMemberMutation = useRemoveMemberMutation(organizationID)
 
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
 
   // TODO add view for loading
-  if (isLoading) {
+  if (isLoading && !members) {
     return <div>Loading Widget</div>
   }
 
   // TODO add view for error or error handling
-  if (isError) {
+  if (isError && !members) {
     return <div>Error Message</div>
   }
 
@@ -115,11 +120,11 @@ export const OrganizationMemberList = ({
         onBackgroundClick={() => setDeleteDialogState(defaultDeleteDialogState)}
         onConfirm={() => {
           if (deleteDialogState.member) {
-            setTableState(removeFromTableSelection(tableState, [deleteDialogState.member], data.length, idMapping))
+            setTableState(removeFromTableSelection(tableState, [deleteDialogState.member], usedMembers.length, idMapping))
             removeMemberMutation.mutate(deleteDialogState.member.id)
           } else {
-            const selected = data.filter(value => tableState.selection?.currentSelection.includes(idMapping(value)))
-            setTableState(removeFromTableSelection(tableState, selected, data.length, idMapping))
+            const selected = usedMembers.filter(value => tableState.selection?.currentSelection.includes(idMapping(value)))
+            setTableState(removeFromTableSelection(tableState, selected, usedMembers.length, idMapping))
             selected.forEach(value => removeMemberMutation.mutate(value.id))
           }
           setDeleteDialogState(defaultDeleteDialogState)
@@ -127,7 +132,7 @@ export const OrganizationMemberList = ({
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <Span type="tableName">{translation.members + ` (${data.length})`}</Span>
+        <Span type="tableName">{translation.members + ` (${usedMembers.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
           {tableState.selection && tableState.selection.currentSelection.length > 0 && (
             <Button
@@ -140,7 +145,7 @@ export const OrganizationMemberList = ({
         </div>
       </div>
       <Table
-        data={data}
+        data={usedMembers}
         stateManagement={[tableState, setTableState]}
         header={[
           <div key="member" className={tw('flex flex-row pl-10')}>

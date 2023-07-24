@@ -139,7 +139,7 @@ export const OrganizationDetail = ({
       )}
       <OrganisationInvitationList
         onChange={setOrganizationInvites}
-        invitations={organizationInvites}
+        invitations={isCreatingNewOrganization ? organizationInvites : undefined}
         organizationID={contextState.organizationID}
       />
       <div className={tw('flex flex-row justify-end')}>

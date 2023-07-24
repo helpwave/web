@@ -10,10 +10,12 @@ import { Button } from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { OrganizationContext } from '../pages/organizations'
 import {
+  useInvitationsByOrganisationQuery,
   useInviteDeclineMutation,
   useInviteMemberMutation
 } from '../mutations/organization_mutations'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
+import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 
 type OrganisationInvitationListTranslation = {
   remove: string,
@@ -49,7 +51,7 @@ export type OrganisationInvitation = {
 }
 
 export type OrganisationInvitationListProps = {
-  organizationID: string, // TODO use to fetch open invites in an organization
+  organizationID: string,
   invitations?: OrganisationInvitation[],
   onChange: (invites: OrganisationInvitation[]) => void
 }
@@ -59,12 +61,16 @@ export type OrganisationInvitationListProps = {
  */
 export const OrganisationInvitationList = ({
   language,
+  organizationID,
   invitations,
   onChange
 }: PropsWithLanguage<OrganisationInvitationListTranslation, OrganisationInvitationListProps>) => {
   const translation = useTranslation(language, defaultOrganisationInvitationListTranslation)
 
   const context = useContext(OrganizationContext)
+  const usedOrganizationID = organizationID ?? context.state.organizationID
+  const isCreatingOrganization = usedOrganizationID === ''
+  const { data, isLoading, isError } = useInvitationsByOrganisationQuery(context.state.organizationID)
   const [tableState, setTableState] = useState<TableState>({
     pagination: {
       ...defaultTableStatePagination,
@@ -72,14 +78,24 @@ export const OrganisationInvitationList = ({
     }
   })
   const [inviteMemberModalEmail, setInviteMemberModalEmail] = useState<string>()
+  // Maybe move this filter to the endpoint or the query
+  const usedInvitations: OrganisationInvitation[] = invitations ?? (data ?? []).filter(value => value.state === InvitationState.INVITATION_STATE_PENDING)
 
-  const isCreatingOrganization = context.state.organizationID === ''
-  const usedInvitations: OrganisationInvitation[] = invitations ?? [] // TODO get Invitations by organization
-  const inviteMemberMutation = useInviteMemberMutation(context.state.organizationID)
+  const inviteMemberMutation = useInviteMemberMutation(usedOrganizationID)
   const declineInviteMutation = useInviteDeclineMutation()
   const idMapping = (invite: OrganisationInvitation) => invite.email
   const isValidEmail = !!inviteMemberModalEmail && validateEmail(inviteMemberModalEmail)
   const isShowingInviteMemberModal = inviteMemberModalEmail !== undefined
+
+  // TODO add view for loading
+  if (isLoading && context.state.organizationID) {
+    return <div>Loading Widget</div>
+  }
+
+  // TODO add view for error or error handling
+  if (isError && context.state.organizationID) {
+    return <div>Error Message</div>
+  }
 
   return (
     <div>

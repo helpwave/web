@@ -3,13 +3,18 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Invitation } from '../mutations/organization_mutations'
-import { useInvitationsByUserQuery } from '../mutations/organization_mutations'
+import {
+  useInvitationsByUserQuery,
+  useInviteAcceptMutation,
+  useInviteDeclineMutation
+} from '../mutations/organization_mutations'
 import type { TableState } from '@helpwave/common/components/Table'
 import { defaultTableStatePagination, Table } from '@helpwave/common/components/Table'
 import { useState } from 'react'
 import { Avatar } from './Avatar'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
+import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 
 type UserInvitationListTranslation = {
   accept: string,
@@ -33,14 +38,17 @@ const defaultUserInvitationListTranslation: Record<Languages, UserInvitationList
 export type UserInvitationListProps = Record<string, never>
 
 /**
- * Description
+ * A table that shows all organizations a user hast been invited to
  */
 export const UserInvitationList = ({
   language,
 }: PropsWithLanguage<UserInvitationListTranslation, UserInvitationListProps>) => {
   const translation = useTranslation(language, defaultUserInvitationListTranslation)
   const [tableState, setTableState] = useState<TableState>({ pagination: { ...defaultTableStatePagination, entriesPerPage: 10 } })
-  const { data, isLoading, isError } = useInvitationsByUserQuery()
+  const { data, isLoading, isError } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
+
+  const declineInviteMutation = useInviteDeclineMutation()
+  const acceptInviteMutation = useInviteAcceptMutation()
 
   const idMapping = (invite: Invitation) => invite.id
 
@@ -70,8 +78,20 @@ export const UserInvitationList = ({
             <Avatar avatarUrl={invite.organization.id} alt=""/>
             <Span>{invite.organization.longName}</Span>
           </div>,
-          <Button key="accept" color="positive">{translation.accept}</Button>,
-          <Button key="decline" color="negative">{translation.decline}</Button>
+          <Button
+            key="accept"
+            color="positive"
+            onClick={() => acceptInviteMutation.mutate(invite.id)}
+          >
+            {translation.accept}
+          </Button>,
+          <Button
+            key="decline"
+            color="negative"
+            onClick={() => declineInviteMutation.mutate(invite.id)}
+          >
+            {translation.decline}
+          </Button>
         ]}
       />
     </div>

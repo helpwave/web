@@ -52,14 +52,14 @@ export const TaskTemplateListColumn = ({
   }, [ref.current?.clientHeight])
 
   return (
-    <div className={tw('flex flex-col overflow-hidden')}>
+    <div className={tw('flex flex-col overflow-hidden h-full')}>
       <div className={tw('flex flex-row overflow-hidden')}>
         <Span className={tw('text-2xl font-space font-bold mb-4 flex-1')}>
           {translation.template}
         </Span>
         {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
       </div>
-      <div className={tw('overflow-hidden')} ref={ref}>
+      <div className={tw('overflow-hidden h-full')} ref={ref}>
         <div>
           <SimpleBarReact style={{ maxHeight: height }}>
             <div className={tw('flex flex-col gap-y-2 pr-3')}>

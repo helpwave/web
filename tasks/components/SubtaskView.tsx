@@ -100,7 +100,10 @@ export const SubtaskView = ({
                   }
                 }}
                 onDoneChange={done => {
-                  subtask.isDone = done
+                  // taskTemplateId === "" for the creation of a template
+                  if (taskTemplateId === undefined) {
+                    subtask.isDone = done
+                  }
                 }}
               />
             ))}

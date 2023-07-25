@@ -30,10 +30,12 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const selectedBedID = context.state.bed?.id
   return (
     <div>
-      <div className={tw('flex flex-row items-center mb-1')}>
-        <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <Span type="subsectionTitle">{room.name}</Span>
-      </div>
+      { room.beds.length > 0 ? (
+        <div className={tw('flex flex-row items-center mb-1')}>
+          <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
+          <Span type="subsectionTitle">{room.name}</Span>
+        </div>
+      ) : ''}
       <div className={tw('grid grid-cols-3 gap-4')}>
         {room.beds.map(bed => bed.patient && bed.patient?.id ?
             (

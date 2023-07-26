@@ -127,9 +127,8 @@ export const OrganizationDetail = ({
         organizationForm={organizationForm}
         isShowingErrorsDirectly={!isCreatingNewOrganization}
         onChange={(organizationForm, shouldUpdate) => {
-          if (isCreatingNewOrganization) {
-            setOrganizationForm(organizationForm)
-          } else if (shouldUpdate) {
+          setOrganizationForm(organizationForm)
+          if (shouldUpdate) {
             updateMutation.mutate(organizationForm.organization)
           }
         }}

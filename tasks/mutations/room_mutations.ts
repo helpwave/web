@@ -182,9 +182,12 @@ export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) 
       const req = new UpdateRoomRequest()
       req.setId(room.id)
       req.setName(room.name)
-      await roomService.updateRoom(req, getAuthenticatedGrpcMetadata())
+      const res = await roomService.updateRoom(req, getAuthenticatedGrpcMetadata())
 
-      // TODO some check whether request was successful
+      if (!res.toObject()) {
+        console.error('error in RoomUpdate')
+      }
+
       callback(room)
       return room
     },

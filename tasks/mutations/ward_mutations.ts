@@ -83,16 +83,15 @@ export const useWardOverviewsQuery = () => {
   })
 }
 
-export const wardDetailsQueryKey = 'wardDetails'
-export const useWardDetailsQuery = (id?: string) => {
+export const useWardDetailsQuery = (wardID?: string) => {
   return useQuery({
-    queryKey: [wardsQueryKey, wardDetailsQueryKey],
-    enabled: id !== undefined,
+    queryKey: [wardsQueryKey, wardID],
+    enabled: wardID !== undefined,
     queryFn: async () => {
-      if (id === undefined) return
+      if (wardID === undefined) return
 
       const req = new GetWardDetailsRequest()
-      req.setId(id)
+      req.setId(wardID)
       const res = await wardService.getWardDetails(req, getAuthenticatedGrpcMetadata())
 
       const ward: WardDetailDTO = {

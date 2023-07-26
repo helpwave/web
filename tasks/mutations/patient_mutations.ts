@@ -89,7 +89,7 @@ const patientsQueryKey = 'patients'
 
 export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) => void, patientID:string | undefined) => {
   return useQuery({
-    queryKey: [patientsQueryKey],
+    queryKey: [patientsQueryKey, patientID],
     enabled: !!patientID,
     queryFn: async () => {
       if (!patientID) {

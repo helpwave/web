@@ -11,8 +11,7 @@ import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { OrganizationContext } from '../pages/organizations'
 import {
   useInvitationsByOrganisationQuery,
-  useInviteDeclineMutation,
-  useInviteMemberMutation
+  useInviteMemberMutation, useInviteRevokeMutation
 } from '../mutations/organization_mutations'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
@@ -82,7 +81,7 @@ export const OrganisationInvitationList = ({
   const usedInvitations: OrganisationInvitation[] = invitations ?? (data ?? []).filter(value => value.state === InvitationState.INVITATION_STATE_PENDING)
 
   const inviteMemberMutation = useInviteMemberMutation(usedOrganizationID)
-  const declineInviteMutation = useInviteDeclineMutation()
+  const revokeInviteMutation = useInviteRevokeMutation()
   const idMapping = (invite: OrganisationInvitation) => invite.email
   const isValidEmail = !!inviteMemberModalEmail && validateEmail(inviteMemberModalEmail)
   const isShowingInviteMemberModal = inviteMemberModalEmail !== undefined
@@ -163,7 +162,7 @@ export const OrganisationInvitationList = ({
               variant="textButton"
               onClick={() => {
                 if (!isCreatingOrganization) {
-                  declineInviteMutation.mutate(invite.id)
+                  revokeInviteMutation.mutate(invite.id)
                 }
                 onChange(usedInvitations.filter(value => idMapping(value) !== idMapping(invite)))
               }}

@@ -2,6 +2,7 @@ import { tw } from '../../twind'
 import type { PropsWithChildren } from 'react'
 import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
+import type { ButtonColorType } from '../Button'
 import { Button } from '../Button'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -27,13 +28,23 @@ const defaultConfirmDialogTranslation = {
   }
 }
 
-type ConfirmDialogProps = ModalProps & {
+export type ButtonOverwriteType = {
+  text?: string,
+  color?: ButtonColorType,
+  disabled?: boolean
+}
+
+export type ConfirmDialogProps = ModalProps & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
   onCancel?: () => void,
   onConfirm: () => void,
   onDecline?: () => void,
-  confirmType?: ConfirmDialogType
+  confirmType?: ConfirmDialogType,
+  /**
+   * Order: Cancel, Decline, Confirm
+   */
+  buttonOverwrites?: [ButtonOverwriteType, ButtonOverwriteType, ButtonOverwriteType]
 }
 
 /**
@@ -51,29 +62,33 @@ export const ConfirmDialog = ({
   onConfirm,
   onDecline,
   onBackgroundClick,
-  confirmType = 'positive'
+  confirmType = 'positive',
+  buttonOverwrites,
+  ...restProps
 }: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
+
   return (
     <Modal
       isOpen={isOpen}
       title={title} description={description}
       onBackgroundClick={onBackgroundClick}
+      {...restProps}
     >
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
         {onCancel && (
-          <Button color="neutral" onClick={onCancel}>
-            {translation.cancel}
+          <Button color={buttonOverwrites?.[0].color ?? 'neutral'} onClick={onCancel} disabled={buttonOverwrites?.[0].disabled ?? false}>
+            {buttonOverwrites?.[0].text ?? translation.cancel}
           </Button>
         )}
         {onDecline && (
-          <Button color="negative" onClick={onDecline}>
-            {translation.decline}
+          <Button color={buttonOverwrites?.[1].color ?? 'negative'} onClick={onDecline} disabled={buttonOverwrites?.[1].disabled ?? false}>
+            {buttonOverwrites?.[1].text ?? translation.decline}
           </Button>
         )}
-        <Button autoFocus color={confirmType} onClick={onConfirm}>
-          {translation.confirm}
+        <Button autoFocus color={buttonOverwrites?.[2].color ?? confirmType} onClick={onConfirm} disabled={buttonOverwrites?.[2].disabled ?? false}>
+          {buttonOverwrites?.[2].text ?? translation.confirm}
         </Button>
       </div>
     </Modal>

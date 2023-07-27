@@ -17,7 +17,8 @@ type UserMenuTranslation = {
   profile: string,
   language: string,
   signOut: string,
-  taskTemplates: string
+  taskTemplates: string,
+  invitations: string
 }
 
 const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
@@ -25,13 +26,15 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     profile: 'Profile',
     language: 'Language',
     signOut: 'Sign Out',
-    taskTemplates: 'Task Templates'
+    taskTemplates: 'Task Templates',
+    invitations: 'Invitations'
   },
   de: {
     profile: 'Profil',
     language: 'Sprache',
     signOut: 'Ausloggen',
-    taskTemplates: 'Task Templates'
+    taskTemplates: 'Task Templates',
+    invitations: 'Einladungen'
   }
 }
 
@@ -63,6 +66,7 @@ export const UserMenu = ({
         <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
         <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem alignment="left">{translation.language}</MenuItem></div>
         <div className={tw('cursor-pointer')} onClick={() => router.push('/templates')}><MenuItem alignment="left">{translation.taskTemplates}</MenuItem></div>
+        <div className={tw('cursor-pointer')} onClick={() => router.push('/invitations')}><MenuItem alignment="left">{translation.invitations}</MenuItem></div>
         <div
           className={tw('cursor-pointer text-hw-negative-400 hover:text-hw-negative-500')}
           onClick={() => signOut()}

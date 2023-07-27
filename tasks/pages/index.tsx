@@ -9,8 +9,8 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/layout/TwoColumn'
 import { FeatureDetails } from '../components/layout/FeatureDetails'
 import { DashboardDisplay } from '../components/layout/DashboardDisplay'
-import { organizations } from '../mutations/organization_mutations'
 import { useWardOverviewsQuery } from '../mutations/ward_mutations'
+import { useOrganizationsByUserQuery } from '../mutations/organization_mutations'
 
 type DashboardTranslation = {
   dashboard: string
@@ -29,8 +29,9 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
   const translation = useTranslation(language, defaultDashboardTranslations)
   const { user } = useAuth()
   const { data: wards, isLoading: isLoadingWards } = useWardOverviewsQuery()
+  const { data: organizations, isLoading: isLoadingOrganizations } = useOrganizationsByUserQuery()
 
-  if (isLoadingWards || !user || !wards) return null
+  if (isLoadingWards || isLoadingOrganizations || !user || !wards || !organizations) return null
 
   return (
     <PageWithHeader

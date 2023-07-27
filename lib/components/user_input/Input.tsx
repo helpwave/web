@@ -3,10 +3,9 @@ import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
 import { Span } from '../Span'
 import useSaveDelay from '../../hooks/useSaveDelay'
+import { noop } from '../../util/noop'
 
-const noop = () => { /* noop */ }
-
-type InputProps = {
+export type InputProps = {
   /**
    * used for the label's `for` attribute
    */
@@ -60,6 +59,7 @@ const ControlledInput = ({
           }
           if (onEditCompleted) {
             onEditCompleted(event.target.value)
+            clearUpdateTimer()
           }
         }}
         onChange={e => {

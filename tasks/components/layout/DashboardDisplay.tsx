@@ -3,12 +3,12 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { WardOverviewDTO } from '../../mutations/ward_mutations'
-import type { OrganizationDTO } from '../../mutations/organization_mutations'
 import { Button } from '@helpwave/common/components/Button'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
 import { Span } from '@helpwave/common/components/Span'
+import type { OrganizationDTO } from '../../mutations/organization_mutations'
 
 type DashboardDisplayTranslation = {
   organizations: string,

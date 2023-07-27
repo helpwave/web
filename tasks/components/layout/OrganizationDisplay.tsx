@@ -5,9 +5,11 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
-import type { Role } from '../OrganizationMemberList'
 import { useRouter } from 'next/router'
-import { emptyOrganization } from '../../pages/organizations'
+import type { OrganizationDTO } from '../../mutations/organization_mutations'
+import { useOrganizationsByUserQuery } from '../../mutations/organization_mutations'
+import { useContext } from 'react'
+import { OrganizationContext } from '../../pages/organizations'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -25,31 +27,9 @@ const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisp
   }
 }
 
-type WardDTO = {
-  name: string
-}
-
-type OrgMember = {
-  email: string,
-  name: string,
-  avatarURL: string,
-  role: Role
-}
-
-type OrganizationDTO = {
-  id: string,
-  shortName: string,
-  longName: string,
-  email: string,
-  isVerified: boolean,
-  wards: WardDTO[],
-  members: OrgMember[]
-}
-
 export type OrganizationDisplayProps = {
-  selectedOrganization: OrganizationDTO,
-  organizations: OrganizationDTO[],
-  onSelectionChange: (organization: OrganizationDTO) => void,
+  selectedOrganizationID?: string,
+  organizations?: OrganizationDTO[],
   width?: number
 }
 
@@ -58,32 +38,37 @@ export type OrganizationDisplayProps = {
  */
 export const OrganizationDisplay = ({
   language,
-  selectedOrganization,
+  selectedOrganizationID,
   organizations,
-  onSelectionChange,
   width
 }: PropsWithLanguage<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
   const translation = useTranslation(language, defaultOrganizationDisplayTranslations)
   const router = useRouter()
+
+  const context = useContext(OrganizationContext)
+  const { data } = useOrganizationsByUserQuery()
+  const usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
+
   const columns = width === undefined ? 2 : Math.max(Math.floor(width / 250), 1)
 
+  const usedSelectedID = selectedOrganizationID ?? context.state.organizationID
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.yourOrganizations}/>
       <div className={tw(`grid grid-cols-${columns} gap-6`)}>
-        {organizations.map(organization => (
+        {usedOrganizations.map(organization => (
           <OrganizationCard
-            key={organization.longName}
+            key={organization.id}
             organization={organization}
-            isSelected={selectedOrganization.id === organization.id}
-            onEditClick={() => onSelectionChange(organization)}
+            isSelected={usedSelectedID === organization.id}
+            onEditClick={() => context.updateContext({ ...context.state, organizationID: organization.id })}
             onTileClick={async () => await router.push(`/organizations/${organization.id}`)}
           />
         ))}
         <AddCard
           text={translation.addOrganization}
-          onTileClick={() => onSelectionChange(emptyOrganization)}
-          isSelected={selectedOrganization.id === ''}
+          onTileClick={() => context.updateContext({ ...context.state, organizationID: '' })}
+          isSelected={usedSelectedID === ''}
           className={tw('h-24')}
         />
       </div>

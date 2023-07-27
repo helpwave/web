@@ -1,21 +1,13 @@
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/layout/TwoColumn'
 import { OrganizationDisplay } from '../components/layout/OrganizationDisplay'
-import type { Role } from '../components/OrganizationMemberList'
 import { OrganizationDetail } from '../components/layout/OrganizationDetails'
-import {
-  useCreateMutation,
-  useDeleteMutation,
-  useOrganizationQuery,
-  useUpdateMutation
-} from '../mutations/organization_mutations'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
 import titleWrapper from '../utils/titleWrapper'
-import { DiscardChangesDialog } from '@helpwave/common/components/modals/DiscardChangesDialog'
 import { useRouter } from 'next/router'
 
 type OrganizationsPageTranslation = {
@@ -31,47 +23,23 @@ const defaultOrganizationsPageTranslation = {
   }
 }
 
-export type OrganizationFormType = {
-  isValid: boolean,
-  hasChanges: boolean,
-  organization: OrganizationDTO
+export type OrganizationContextState = {
+  organizationID: string
 }
 
-type DiscardChangesInfo = {
-  isShowing: boolean,
-  organization: OrganizationDTO | undefined
+export const emptyOrganizationContextState: OrganizationContextState = {
+  organizationID: ''
 }
 
-type WardDTO = {
-  name: string
+export type OrganizationContextType = {
+  state: OrganizationContextState,
+  updateContext: (context: OrganizationContextState) => void
 }
 
-type OrgMember = {
-  email: string,
-  name: string,
-  avatarURL: string,
-  role: Role
-}
-
-export type OrganizationDTO = {
-  id: string,
-  shortName: string,
-  longName: string,
-  email: string,
-  isVerified: boolean,
-  wards: WardDTO[],
-  members: OrgMember[]
-}
-
-export const emptyOrganization: OrganizationDTO = {
-  id: '',
-  shortName: '',
-  longName: '',
-  email: '',
-  isVerified: false,
-  wards: [],
-  members: []
-}
+export const OrganizationContext = createContext<OrganizationContextType>({
+  state: emptyOrganizationContextState,
+  updateContext: () => undefined
+})
 
 /**
  * The page for showing all organizations a user is part of
@@ -81,150 +49,40 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
   const router = useRouter()
   const { organizationID } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
+  const [context, setContext] = useState<OrganizationContextState>(emptyOrganizationContextState)
 
-  const [discardDialogInfo, setDiscardDialogInfo] = useState<DiscardChangesInfo>({
-    isShowing: false,
-    organization: emptyOrganization
-  })
-  const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>({
-    isValid: false,
-    hasChanges: false,
-    organization: emptyOrganization
-  })
-
-  const { isLoading, isError, data } = useOrganizationQuery()
-
-  const createMutation = useCreateMutation(organization => {
-    setOrganizationForm({
-      isValid: true,
-      hasChanges: false,
-      organization: discardDialogInfo.organization !== undefined ? organization ?? discardDialogInfo.organization : organization ?? emptyOrganization
-    })
-    setDiscardDialogInfo({ isShowing: false, organization: undefined })
-  })
-  const updateMutation = useUpdateMutation(organization => {
-    setOrganizationForm({
-      isValid: true,
-      hasChanges: false,
-      organization: discardDialogInfo.organization !== undefined ? discardDialogInfo.organization : organization ?? emptyOrganization
-    })
-    setDiscardDialogInfo({ isShowing: false, organization: undefined })
-  })
-  const deleteMutation = useDeleteMutation(() => {
-    setOrganizationForm({
-      isValid: false,
-      hasChanges: false,
-      organization: emptyOrganization
-    })
-    setDiscardDialogInfo({ isShowing: false, organization: undefined })
-  })
-
-  if (organizationID && !usedQueryParam) {
-    const newSelected = data?.find(value => value.id === organizationID) ?? emptyOrganization
-    setOrganizationForm({
-      isValid: newSelected.id !== '',
-      hasChanges: false,
-      organization: newSelected
+  if (organizationID && !usedQueryParam && organizationID) {
+    setContext({
+      ...context,
+      organizationID: organizationID as string
     })
     setUsedQueryParam(true)
   }
 
-  const changeOrganization = (organization: OrganizationDTO) => {
-    if (organizationForm.organization.id === '' && !organizationForm.hasChanges) {
-      setOrganizationForm({
-        isValid: organization !== undefined,
-        hasChanges: false,
-        organization: organization ?? emptyOrganization
-      })
-      return
-    }
-    // Same ID don't change anything
-    if (organizationForm.organization.id === organization?.id) return
-
-    if (organizationForm.hasChanges) {
-      setDiscardDialogInfo({ isShowing: true, organization })
-    } else {
-      setOrganizationForm({
-        isValid: organization !== undefined,
-        hasChanges: false,
-        organization: organization ?? emptyOrganization
-      })
-    }
-  }
-
-  const onSave = () => {
-    if (!organizationForm.isValid) {
-      setDiscardDialogInfo({ isShowing: false, organization: undefined })
-    } else {
-      if (organizationForm.organization.id === '') {
-        createMutation.mutate(organizationForm.organization)
-      } else {
-        updateMutation.mutate(organizationForm.organization)
-      }
-      setOrganizationForm({
-        isValid: discardDialogInfo.organization !== undefined && discardDialogInfo.organization?.id !== '',
-        hasChanges: false,
-        organization: discardDialogInfo.organization ?? emptyOrganization
-      })
-    }
-  }
-
-  const onDontSave = () => {
-    setOrganizationForm({
-      isValid: discardDialogInfo.organization !== undefined && discardDialogInfo.organization?.id !== '',
-      hasChanges: false,
-      organization: discardDialogInfo.organization ?? emptyOrganization
-    })
-    setDiscardDialogInfo({ isShowing: false, organization: undefined })
-  }
-
-  // TODO add view for loading
-  if (isLoading) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError) {
-    return <div>Error Message</div>
-  }
-
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.organizations, link: '/organizations' }]}
+      crumbs={[{
+        display: translation.organizations,
+        link: '/organizations'
+      }]}
     >
       <Head>
         <title>{titleWrapper(translation.organizations)}</title>
       </Head>
-      <DiscardChangesDialog
-        isOpen={discardDialogInfo.isShowing}
-        onCancel={() => {
-          setDiscardDialogInfo({ isShowing: false, organization: undefined })
-        }}
-        onDontSave={onDontSave}
-        onSave={onSave}
-      />
-      <TwoColumn
-        disableResize={false}
-        left={width => (
-          <OrganizationDisplay
-            width={width}
-            selectedOrganization={organizationForm.organization}
-            organizations={data as OrganizationDTO[]}
-            onSelectionChange={changeOrganization}
-          />
-        )}
-        right={width => (
-          <OrganizationDetail
-            key={organizationForm.organization.id}
-            width={width}
-            organizationForm={organizationForm}
-            onCreate={createMutation.mutate}
-            onUpdate={updateMutation.mutate}
-            onDelete={deleteMutation.mutate}
-            setOrganization={setOrganizationForm}
-          />
-        )}
-      />
+      <OrganizationContext.Provider value={{ state: context, updateContext: setContext }}>
+        <TwoColumn
+          disableResize={false}
+          left={width => (
+            <OrganizationDisplay width={width} />
+          )}
+          right={width => (
+            <OrganizationDetail
+              key={context.organizationID}
+              width={width}
+            />
+          )}
+        />
+      </OrganizationContext.Provider>
     </PageWithHeader>
   )
 }

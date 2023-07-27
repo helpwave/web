@@ -1,27 +1,26 @@
-import type { CoreCell } from '@tanstack/react-table'
-import {
-  useReactTable,
-  createColumnHelper,
-  getCoreRowModel,
-  getPaginationRowModel
-} from '@tanstack/react-table'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Pagination } from '@helpwave/common/components/Pagination'
 import { Button } from '@helpwave/common/components/Button'
-import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Avatar } from './Avatar'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Span } from '@helpwave/common/components/Span'
-
-// TODO replace later
-export const enum Role {
-  user,
-  admin,
-}
+import type { TableState } from '@helpwave/common/components/Table'
+import {
+  defaultTableStatePagination,
+  defaultTableStateSelection,
+  removeFromTableSelection,
+  Table
+} from '@helpwave/common/components/Table'
+import type { OrgMember } from '../mutations/organization_member_mutations'
+import { Role } from '../mutations/organization_member_mutations'
+import {
+  useOrganizationsByUserQuery,
+  useRemoveMemberMutation
+} from '../mutations/organization_mutations'
+import { OrganizationContext } from '../pages/organizations'
 
 type OrganizationMemberListTranslation = {
   edit: string,
@@ -31,7 +30,6 @@ type OrganizationMemberListTranslation = {
   selectAll: string,
   members: string,
   member: string,
-  addMember: string,
   saveChanges: string,
   role: string,
   roleTypes: Record<Role, string>,
@@ -48,7 +46,6 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     selectAll: 'Select all',
     members: 'Members',
     member: 'Member',
-    addMember: 'Add member',
     saveChanges: 'Save changes',
     role: 'Role',
     roleTypes: { [Role.admin]: 'Admin', [Role.user]: 'User' },
@@ -63,7 +60,6 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     selectAll: 'Alle auswählen',
     members: 'Mitgliedern',
     member: 'Mitglied',
-    addMember: 'Miglied hinzufügen',
     saveChanges: 'Speichern',
     role: 'Rolle',
     roleTypes: { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' },
@@ -72,216 +68,122 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
   }
 }
 
-type OrgMember = {
-  email: string,
-  name: string,
-  avatarURL: string,
-  role: Role
-}
+type DeleteDialogState = {isShowing: boolean, member?: OrgMember}
+const defaultDeleteDialogState: DeleteDialogState = { isShowing: false }
 
 export type OrganizationMemberListProps = {
-  members: OrgMember[],
-  usersPerPage?: number,
-  onChange: (members: OrgMember[]) => void
+  organizationID?: string,
+  members?: OrgMember[]
 }
-
-const columnHelper = createColumnHelper<OrgMember>()
-
-const columns = [
-  columnHelper.display({
-    id: 'select',
-  }),
-  columnHelper.accessor('name', {
-    id: 'name',
-  }),
-  columnHelper.accessor('role', {
-    id: 'role',
-  }),
-  columnHelper.display({
-    id: 'remove',
-  }),
-]
 
 /**
  * A table for showing and editing the members of an organization
  */
 export const OrganizationMemberList = ({
   language,
-  usersPerPage = 5,
-  members,
-  onChange
+  organizationID,
+  members
 }: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
+  const [tableState, setTableState] = useState<TableState>({ pagination: defaultTableStatePagination, selection: defaultTableStateSelection })
 
-  const table = useReactTable({
-    data: members,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    initialState: { pagination: { pageSize: usersPerPage } }
-  })
+  const context = useContext(OrganizationContext)
+  organizationID ??= context.state.organizationID
+  // const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationID) TODO use later
+  const { data, isError, isLoading } = useOrganizationsByUserQuery()
+  const membersByOrganization = data?.find(value => value.id === organizationID)?.members ?? []
+  const usedMembers: OrgMember[] = members ?? membersByOrganization ?? []
+  const removeMemberMutation = useRemoveMemberMutation(organizationID)
 
-  const addUser = () => {
-    // TODO remove below for an actual user add
-    const newMember = {
-      name: 'user' + (members.length + 1),
-      role: Role.user,
-      email: `user${(members.length + 1)}@helpwave.de`,
-      isSelected: false,
-      avatarURL: ''
-    }
-    onChange([...members, newMember])
+  const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
+
+  // TODO add view for loading
+  if (isLoading && !members) {
+    return <div>Loading Widget</div>
   }
 
-  type ConfirmDialogState = {
-    display: boolean,
-    single: CoreCell<OrgMember, unknown> | null
+  // TODO add view for error or error handling
+  if (isError && !members) {
+    return <div>Error Message</div>
   }
-  const defaultState: ConfirmDialogState = { display: false, single: null }
-  const [stateDeletionConfirmDialog, setDeletionConfirmDialogState] = useState(defaultState)
-  const resetDeletionConfirmDialogState = () => setDeletionConfirmDialogState(defaultState)
+
+  const hasSelectedMultiple = !!tableState.selection && tableState.selection.currentSelection.length > 1
+  const idMapping = (dataObject: OrgMember) => dataObject.id
 
   return (
     <div className={tw('flex flex-col')}>
       <ConfirmDialog
-        title={translation.deleteConfirmText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
-        description={translation.dangerZoneText(Boolean(stateDeletionConfirmDialog.single || table.getSelectedRowModel().rows.length <= 1))}
-        isOpen={stateDeletionConfirmDialog.display}
-        onCancel={() => resetDeletionConfirmDialogState()}
-        onBackgroundClick={() => resetDeletionConfirmDialogState()}
+        title={translation.deleteConfirmText(hasSelectedMultiple)}
+        description={translation.dangerZoneText(hasSelectedMultiple)}
+        isOpen={deleteDialogState.isShowing}
+        onCancel={() => setDeleteDialogState(defaultDeleteDialogState)}
+        onBackgroundClick={() => setDeleteDialogState(defaultDeleteDialogState)}
         onConfirm={() => {
-          if (stateDeletionConfirmDialog.single) {
-            onChange(members.filter(value => value !== stateDeletionConfirmDialog.single?.row.original))
+          if (deleteDialogState.member) {
+            setTableState(removeFromTableSelection(tableState, [deleteDialogState.member], usedMembers.length, idMapping))
+            removeMemberMutation.mutate(deleteDialogState.member.id)
           } else {
-            table.toggleAllRowsSelected(false)
-            onChange(members.filter(value => !table.getSelectedRowModel().rows.find(row => row.original === value)))
+            const selected = usedMembers.filter(value => tableState.selection?.currentSelection.includes(idMapping(value)))
+            setTableState(removeFromTableSelection(tableState, selected, usedMembers.length, idMapping))
+            selected.forEach(value => removeMemberMutation.mutate(value.id))
           }
-          resetDeletionConfirmDialogState()
+          setDeleteDialogState(defaultDeleteDialogState)
         }}
         confirmType="negative"
       />
       <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <Span type="tableName">{translation.members + ` (${members.length})`}</Span>
+        <Span type="tableName">{translation.members + ` (${usedMembers.length})`}</Span>
         <div className={tw('flex flex-row gap-x-2')}>
-          {(table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected()) && (
+          {tableState.selection && tableState.selection.currentSelection.length > 0 && (
             <Button
-              onClick={() => setDeletionConfirmDialogState({
-                display: true,
-                single: null
-              })}
+              onClick={() => setDeleteDialogState({ isShowing: true })}
               color="negative"
             >
               {translation.removeSelection}
             </Button>
           )}
-          <Button onClick={addUser} color="positive">
-            <div className={tw('flex flex-row items-center')}>
-              <Span className={tw('mr-2')}>{translation.addMember}</Span>
-            </div>
-          </Button>
         </div>
       </div>
-      <table>
-        <thead className={tw('after:block after:h-1 after:w-full')}>
-        {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map(header => (
-              <th key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : {
-                      select: (
-                        <Checkbox
-                          checked={table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
-                          onChange={() => table.toggleAllRowsSelected()}
-                        />
-                      ),
-                      name: (
-                        <div className={tw('flex flex-row pl-10')}>
-                          <Span type="tableHeader">{translation.member}</Span>
-                        </div>
-                      ),
-                      role: (
-                        <div className={tw('flex flex-row')}>
-                          <Span type="tableHeader">{translation.role}</Span>
-                        </div>
-                      ),
-                      remove: <div/>,
-                    }[header.column.id]
-                }
-              </th>
-            ))}
-          </tr>
-        ))}
-        </thead>
-        <tbody className={tw('before:h-2 before:block border-t-2 before:w-full')}>
-        {table.getRowModel().rows.map(row => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map(cell => (
-              <td key={cell.id}>
-                {{
-                  role: (
-                    <div className={tw('flex flex-row items-center mr-2')}>
-                      <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
-                      }}>
-                        <Span className={tw(`font-semibold`)}>
-                          {translation.roleTypes[cell.row.original.role]}
-                        </Span>
-                      </button>
-                    </div>
-                  ),
-                  name: (
-                    <div className={tw('flex flex-row items-center h-12')}>
-                      <Avatar avatarUrl={cell.row.original.avatarURL} alt={cell.row.original.name.charAt(0)}
-                              size="small"/>
-                      <div className={tw('flex flex-col ml-2')}>
-                        <Span className={tw('font-bold h-5')}>{cell.row.original.name}</Span>
-                        <Span type="description" className={tw('text-sm')}>{cell.row.original.email}</Span>
-                      </div>
-                    </div>
-                  ),
-                  remove: (
-                    <div className={tw('flex flex-row justify-end')}>
-                      <Button
-                        onClick={() => setDeletionConfirmDialogState({
-                          display: true,
-                          single: cell
-                        })}
-                        color="negative"
-                        variant="textButton"
-                      >
-                        {translation.remove}
-                      </Button>
-                    </div>
-                  ),
-                  select: (
-                    <Checkbox
-                      checked={cell.row.getIsSelected()}
-                      onChange={() => cell.row.toggleSelected()}
-                    />
-                  )
-                }[cell.column.id]}
-              </td>
-            ))}
-          </tr>
-        ))}
-        {table.getState().pagination.pageIndex === (table.getPageCount() - 1) && table.getPageCount() > 1
-          && (members.length % usersPerPage) !== 0
-          && ([...Array((usersPerPage - (members.length % usersPerPage)) % usersPerPage)].map((i, index) => (
-            <tr key={index} className={tw('h-12')}>
-              {[table.getAllColumns.length].map((j, index) => (
-                <td key={index}/>
-              ))}
-            </tr>
-          )))}
-        </tbody>
-      </table>
-      <div className={tw('flex flex-row justify-center mt-2')}>
-        <Pagination page={table.getState().pagination.pageIndex}
-                    numberOfPages={Math.max(table.getPageCount(), 1)}
-                    onPageChanged={table.setPageIndex}
-        />
-      </div>
+      <Table
+        data={usedMembers}
+        stateManagement={[tableState, setTableState]}
+        header={[
+          <div key="member" className={tw('flex flex-row pl-10')}>
+            <Span type="tableHeader">{translation.member}</Span>
+          </div>,
+          <div key="role" className={tw('flex flex-row')}>
+            <Span type="tableHeader">{translation.role}</Span>
+          </div>,
+          <></>
+        ]}
+        rowMappingToCells={dataObject => [
+          <div key="member" className={tw('flex flex-row items-center h-12')}>
+            <Avatar avatarUrl={dataObject.avatarURL} alt="" size="small"/>
+            <div className={tw('flex flex-col ml-2')}>
+              <Span className={tw('font-bold h-5')}>{dataObject.name}</Span>
+              <Span type="description" className={tw('text-sm')}>{dataObject.email}</Span>
+            </div>
+          </div>,
+          <div key="role" className={tw('flex flex-row items-center mr-2')}>
+            <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
+            }}>
+              <Span className={tw(`font-semibold`)}>
+                {translation.roleTypes[dataObject.role]}
+              </Span>
+            </button>
+          </div>,
+          <div key="remove" className={tw('flex flex-row justify-end')}>
+            <Button
+              onClick={() => setDeleteDialogState({ isShowing: true, member: dataObject })}
+              color="negative"
+              variant="textButton"
+            >
+              {translation.remove}
+            </Button>
+          </div>
+        ]}
+       identifierMapping={idMapping}
+      />
     </div>
   )
 }

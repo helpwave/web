@@ -1,6 +1,7 @@
 lockfileVersion: '6.0'
 
 settings:
+  autoInstallPeers: true
   excludeLinksFromLockfile: false
 
 importers:
@@ -198,8 +199,8 @@ importers:
         specifier: workspace:*
         version: link:../lib
       '@helpwave/proto-ts':
-        specifier: 0.12.0-ee28a57.0
-        version: 0.12.0-ee28a57.0
+        specifier: 0.18.1-844e26c.0
+        version: 0.18.1-844e26c.0
       '@radix-ui/react-checkbox':
         specifier: 1.0.4
         version: 1.0.4(@types/react-dom@18.2.7)(@types/react@18.2.15)(react-dom@18.2.0)(react@18.2.0)
@@ -2994,8 +2995,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@helpwave/proto-ts@0.12.0-ee28a57.0:
-    resolution: {integrity: sha512-7bApC8e3YIWnGESxIxNLE+TziMOvtvan7xVmW7p6UQl5LToyvSpXdCxKKImfl8XtLd3PjI95ZX8riI3DghTnag==}
+  /@helpwave/proto-ts@0.18.1-844e26c.0:
+    resolution: {integrity: sha512-nDA97J6YNmqvyoXklR7JLXw7fQ+DNFHorikH3yM/dAEexzydNEwzqckQr65YxFU8GLlJZDpIem/IhE2fwCoaWw==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.10:

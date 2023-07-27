@@ -122,7 +122,7 @@ export const useWardDetailsQuery = (wardID?: string) => {
 export const useWardQuery = (id: string) => {
   return useQuery({
     queryKey: [wardsQueryKey, id],
-    enabled: id !== undefined,
+    enabled: !!id,
     queryFn: async (): Promise<WardDTO> => {
       const req = new GetWardRequest()
       req.setId(id)
@@ -157,7 +157,7 @@ export const useWardCreateMutation = (callback: (ward: WardDTO) => void) => {
       const createWardRequest = new CreateWardRequest()
       createWardRequest.setName(ward.name)
       const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata())
-      const newWard: WardDTO = { ...ward, ...res }
+      const newWard: WardDTO = { ...ward, id: res.getId() }
 
       callback(newWard)
     },

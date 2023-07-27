@@ -1,9 +1,10 @@
 import type { TaskDTO, TaskMinimalDTO } from './task_mutations'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
   DischargePatientRequest, GetPatientDetailsRequest,
-  UpdatePatientRequest, GetPatientsByWardRequest, AssignBedRequest, UnassignBedRequest
+  UpdatePatientRequest, GetPatientsByWardRequest, AssignBedRequest, UnassignBedRequest, GetPatientDetailsResponse
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedDTO } from './bed_mutations'
@@ -105,6 +106,13 @@ export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) =>
         // TODO some check whether request was successful
         console.error('create room failed')
       }
+
+      const statusMap = {
+        [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_UNSPECIFIED]: TaskStatus.TASK_STATUS_UNSPECIFIED,
+        [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_TODO]: TaskStatus.TASK_STATUS_TODO,
+        [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_IN_PROGRESS]: TaskStatus.TASK_STATUS_IN_PROGRESS,
+        [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_DONE]: TaskStatus.TASK_STATUS_DONE,
+      }
       const patient: PatientDetailsDTO = {
         id: res.getId(),
         note: res.getNotes(),
@@ -113,7 +121,7 @@ export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) =>
         tasks: res.getTasksList().map(task => ({
           id: task.getId(),
           name: task.getName(),
-          status: task.getStatus(),
+          status: statusMap[task.getStatus()],
           notes: task.getDescription(),
           isPublicVisible: task.getPublic(),
           assignee: task.getAssignedUserId(),

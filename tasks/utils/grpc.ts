@@ -8,6 +8,7 @@ import {
   TaskTemplateServicePromiseClient
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_grpc_web_pb'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_grpc_web_pb'
+import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
 
 // TODO: Implement something like a service registry
 export const wardService = new WardServicePromiseClient('https://staging.api.helpwave.de/task-svc')
@@ -16,6 +17,7 @@ export const bedService = new BedServicePromiseClient('https://staging.api.helpw
 export const patientService = new PatientServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 export const taskTemplateService = new TaskTemplateServicePromiseClient('https://staging.api.helpwave.de/task-svc')
 export const taskService = new TaskServicePromiseClient('https://staging.api.helpwave.de/task-svc')
+export const organizationService = new OrganizationServicePromiseClient('https://staging.api.helpwave.de/user-svc')
 
 type AuthenticatedGrpcMetadata = {
   Authorization: string,

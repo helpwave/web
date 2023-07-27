@@ -2,11 +2,18 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import {
   AcceptInvitationRequest,
-  CreateOrganizationRequest, DeclineInvitationRequest,
+  CreateOrganizationRequest,
+  DeclineInvitationRequest,
   DeleteOrganizationRequest,
   GetInvitationsByUserRequest,
-  GetOrganizationRequest, GetOrganizationsByUserRequest, UpdateOrganizationRequest,
-  InviteMemberRequest, RemoveMemberRequest, AddMemberRequest, GetInvitationsByOrganizationRequest
+  GetOrganizationRequest,
+  GetOrganizationsByUserRequest,
+  UpdateOrganizationRequest,
+  InviteMemberRequest,
+  RemoveMemberRequest,
+  AddMemberRequest,
+  GetInvitationsByOrganizationRequest,
+  RevokeInvitationRequest
 } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import { getAuthenticatedGrpcMetadata, organizationService } from '../utils/grpc'
 import { noop } from '@helpwave/common/util/noop'
@@ -284,6 +291,27 @@ export const useInviteDeclineMutation = (callback: () => void = noop) => {
       const req = new DeclineInvitationRequest()
       req.setInvitationId(inviteID)
       const res = await organizationService.declineInvitation(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in InviteDecline')
+      }
+
+      callback()
+      return res.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: [invitationsQueryKey] }).then()
+    },
+  })
+}
+
+export const useInviteRevokeMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (inviteID: string) => {
+      const req = new RevokeInvitationRequest()
+      req.setInvitationId(inviteID)
+      const res = await organizationService.revokeInvitation(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in InviteDecline')

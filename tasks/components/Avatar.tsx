@@ -10,6 +10,7 @@ export type AvatarProps = {
  * A component for showing a profile picture
  */
 const Avatar = ({ avatarUrl, alt, size = 'medium' }: AvatarProps) => {
+  avatarUrl = 'https://source.boringavatars.com/beam' // TODO remove later when we use our own service
   return (
     <div className={tw('rounded-full')}>
       <img className={tx('rounded-full border border-slate-200 group-hover:border-indigo-200  flex justify-evenly items-center', {

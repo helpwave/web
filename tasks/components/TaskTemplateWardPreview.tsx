@@ -9,6 +9,7 @@ import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { useContext } from 'react'
 import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
 import { useWardTaskTemplateQuery } from '../mutations/task_template_mutations'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
@@ -45,40 +46,42 @@ export const TaskTemplateWardPreview = ({
   const context = useContext(OrganizationOverviewContext)
 
   const { data, isLoading, isError } = useWardTaskTemplateQuery(wardID)
-  // TODO add view for loading
-  if (isLoading || !context.state.wardID) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError) {
-    return <div>Error Message</div>
-  }
 
   wardID ??= context.state.wardID
   const taskTemplates = data
 
   return (
-    <div className={tw('flex flex-col')}>
-      <div className={tw('flex flex-row justify-between items-center mb-4')}>
-        <Span type="tableName">{translation.taskTemplates(taskTemplates.length)}</Span>
-        <Button
-          className={tw('w-auto')}
-          onClick={() => router.push(`/ward/${wardID}/templates`)}
-        >
-          {translation.showAllTaskTemplates}
-        </Button>
-      </div>
-      <div className={tw(`grid grid-cols-${columns} gap-4`)}>
-        {taskTemplates.map((taskTemplate, index) => (
-          <TaskTemplateCard
-            key={index}
-            name={taskTemplate.name}
-            subtaskCount={taskTemplate.subtasks.length}
-            onTileClick={() => { router.push(`/ward/${wardID}/templates?templateID=${taskTemplate.id}`).then() }}
-          />
-        ))}
-      </div>
-    </div>
+    <LoadingAndErrorComponent
+      isLoading={isLoading || !context.state.wardID}
+      hasError={isError}
+      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+      errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+    >
+      {taskTemplates && (
+        <div className={tw('flex flex-col')}>
+          <div className={tw('flex flex-row justify-between items-center mb-4')}>
+            <Span type="tableName">{translation.taskTemplates(taskTemplates.length)}</Span>
+            <Button
+              className={tw('w-auto')}
+              onClick={() => router.push(`/ward/${wardID}/templates`)}
+            >
+              {translation.showAllTaskTemplates}
+            </Button>
+          </div>
+          <div className={tw(`grid grid-cols-${columns} gap-4`)}>
+            {taskTemplates.map((taskTemplate, index) => (
+              <TaskTemplateCard
+                key={index}
+                name={taskTemplate.name}
+                subtaskCount={taskTemplate.subtasks.length}
+                onTileClick={() => {
+                  router.push(`/ward/${wardID}/templates?templateID=${taskTemplate.id}`).then()
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </LoadingAndErrorComponent>
   )
 }

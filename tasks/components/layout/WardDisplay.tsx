@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { OrganizationOverviewContext } from '../../pages/organizations/[uuid]'
 import { useWardOverviewsQuery } from '../../mutations/ward_mutations'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -44,16 +45,6 @@ export const WardDisplay = ({
   const context = useContext(OrganizationOverviewContext)
   const { data, isLoading, isError } = useWardOverviewsQuery()
 
-  // TODO add view for loading
-  if (isLoading) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError) {
-    return <div>Error Message</div>
-  }
-
   const wards = data
   selectedWardID ??= context.state.wardID
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / 250), 1)
@@ -61,23 +52,36 @@ export const WardDisplay = ({
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.wards}/>
-      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
-        {wards.map(ward => (
-          <WardCard
-            key={ward.id}
-            ward={ward}
-            isSelected={selectedWardID === ward.id}
-            onEditClick={() => context.updateContext({ ...context.state, wardID: ward.id })}
-            onTileClick={async () => await router.push(`/ward/${ward.id}`)}
-          />
-        ))}
-        <AddCard
-          className={tw('min-h-[76px]')}
-          text={translation.addWard}
-          onTileClick={() => context.updateContext({ ...context.state, wardID: undefined })}
-          isSelected={!selectedWardID}
-        />
-      </div>
+      <LoadingAndErrorComponent
+        isLoading={isLoading}
+        hasError={isError}
+      >
+        {wards && (
+          <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+            {wards.map(ward => (
+              <WardCard
+                key={ward.id}
+                ward={ward}
+                isSelected={selectedWardID === ward.id}
+                onEditClick={() => context.updateContext({
+                  ...context.state,
+                  wardID: ward.id
+                })}
+                onTileClick={async () => await router.push(`/ward/${ward.id}`)}
+              />
+            ))}
+            <AddCard
+              className={tw('min-h-[76px]')}
+              text={translation.addWard}
+              onTileClick={() => context.updateContext({
+                ...context.state,
+                wardID: undefined
+              })}
+              isSelected={!selectedWardID}
+            />
+          </div>
+        )}
+      </LoadingAndErrorComponent>
     </div>
   )
 }

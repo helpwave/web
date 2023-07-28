@@ -9,6 +9,7 @@ import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
 import { Span } from '@helpwave/common/components/Span'
 import type { OrganizationDTO } from '../../mutations/organization_mutations'
+import { InvitationBanner } from '../InvitationBanner'
 
 type DashboardDisplayTranslation = {
   organizations: string,
@@ -53,6 +54,7 @@ export const DashboardDisplay = ({
   const columns = !width ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
+      <InvitationBanner />
       <div className={tw('flex flex-col')}>
         <div className={tw('flex flex-row justify-between mb-1')}>
           <div className={tw('flex flex-col')}>

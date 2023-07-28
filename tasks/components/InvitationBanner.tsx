@@ -43,7 +43,7 @@ export const InvitationBanner = ({
     }
   }
 
-  if (!openInvites || openInvites < 0) {
+  if (!openInvites || openInvites <= 0) {
     return null
   }
 

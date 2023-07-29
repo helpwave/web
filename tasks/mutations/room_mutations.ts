@@ -6,7 +6,7 @@ import {
   UpdateRoomRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
-import type { BedDTO, BedWithPatientWithTasksNumberDTO } from './bed_mutations'
+import type { BedDTO, BedWithPatientWithTasksNumberDTO, BedWithMinimalPatientDTO } from './bed_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { wardOverviewsQueryKey, wardsQueryKey } from './ward_mutations'
 
@@ -29,6 +29,10 @@ export type RoomOverviewDTO = {
   beds: BedWithPatientWithTasksNumberDTO[]
 }
 
+export type RoomWithMinimalBedAndPatient = RoomMinimalDTO & {
+  beds: BedWithMinimalPatientDTO[]
+}
+
 export const emptyRoomOverview = {
   id: '',
   name: '',
@@ -47,7 +51,7 @@ const rooms: RoomDTO[] = [
         patient: {
           id: 'patient1',
           note: 'Note',
-          humanReadableIdentifier: 'Patient A',
+          name: 'Patient A',
           tasks: [
             {
               id: 'task1',
@@ -88,7 +92,7 @@ const rooms: RoomDTO[] = [
         patient: {
           id: 'patient2',
           note: 'Note',
-          humanReadableIdentifier: 'Patient B',
+          name: 'Patient B',
           tasks: [
             {
               id: 'task6',

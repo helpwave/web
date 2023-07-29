@@ -64,7 +64,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                 setSelectedBed(room, bed, {
                   ...emptyPatient,
                   id: bed.patient?.id ?? '',
-                  humanReadableIdentifier: `Patient ${bed.index}`
+                  name: `Patient ${bed.index}`
                 })
               }}
               isSelected={selectedBedID === bed.id}/>

@@ -5,7 +5,6 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import React, { useContext, useEffect, useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
-import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
 import { TasksKanbanBoard } from './TasksKanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
@@ -21,6 +20,7 @@ import {
 } from '../../mutations/patient_mutations'
 import { WardOverviewContext } from '../../pages/ward/[uuid]'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
+import { RoomBedDropDown } from '../RoomBedDropDown'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -54,8 +54,6 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
 }
 
 export type PatientDetailProps = {
-  bedPosition: number,
-  bedsInRoom: number,
   patient?: PatientDetailsDTO,
   width?: number
 }
@@ -65,8 +63,6 @@ export type PatientDetailProps = {
  */
 export const PatientDetail = ({
   language,
-  bedPosition,
-  bedsInRoom,
   patient = emptyPatientDetails
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
@@ -145,11 +141,11 @@ export const PatientDetail = ({
               labelClassName={tw('text-xl font-semibold')}
               className={tw('text-lg font-semibold')}
               id="humanReadableIdentifier"
-              value={newPatient.humanReadableIdentifier}
-              onChange={humanReadableIdentifier => changeSavedValue({ ...newPatient, humanReadableIdentifier })}
+              value={newPatient.name}
+              onChange={name => changeSavedValue({ ...newPatient, name })}
             />
           </div>
-          <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
+          <RoomBedDropDown initialRoomAndBed={{ roomID: context.state.room?.id ?? '', bedID: context.state.bed?.id ?? '', patientID: context.state.patient?.id ?? '' }} wardID={context.state.wardID} />
         </div>
         <div className={tw('flex-1')}>
           <Textarea

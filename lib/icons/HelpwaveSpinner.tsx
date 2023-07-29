@@ -29,19 +29,18 @@ export const HelpwaveSpinner = ({
     console.error('size cannot be less than 0')
     size = 64
   }
-  const scale = size / 888
 
   return (
     <svg
-      width={888 * scale}
-      height={888 * scale}
-      viewBox={`0 0 ${888 * scale} ${888 * scale}`}
+      width={size}
+      height={size}
+      viewBox="0 0 888 888"
       fill="none"
       strokeLinecap="round"
       strokeWidth={48}
       {...props}
     >
-      <g className={tx(svgAnimationKey, `scale-[${scale}]`)}>
+      <g className={tx(svgAnimationKey)}>
         <path className={tx({ 'animate-wave-big-left-up': isLoadingAnimation })} d="M144 543.235C144 423.259 232.164 326 340.92 326" stroke={color} strokeDasharray="1000" />
         <path className={tx({ 'animate-wave-big-right-down': isLoadingAnimation })} d="M537.84 544.104C429.084 544.104 340.92 446.844 340.92 326.869" stroke={color} strokeDasharray="1000" />
         <path className={tx({ 'animate-wave-small-left-up': isLoadingAnimation })} d="M462.223 518.035C462.223 432.133 525.348 362.495 603.217 362.495" stroke={color} strokeDasharray="1000" />

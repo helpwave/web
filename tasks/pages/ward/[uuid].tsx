@@ -156,8 +156,6 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
                   <PatientDetail
                     key={contextState.patient?.id}
                     width={width}
-                    bedPosition={contextState.bed.index}
-                    bedsInRoom={contextState.room.beds.length}
                   />
                 </div>
               )

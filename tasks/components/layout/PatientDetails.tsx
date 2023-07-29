@@ -5,7 +5,6 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import React, { useContext, useEffect, useState } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
-import { BedInRoomIndicator } from '../BedInRoomIndicator'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
 import { TasksKanbanBoard } from './TasksKanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
@@ -54,8 +53,6 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
 }
 
 export type PatientDetailProps = {
-  bedPosition: number,
-  bedsInRoom: number,
   patient?: PatientDetailsDTO,
   width?: number
 }
@@ -65,8 +62,6 @@ export type PatientDetailProps = {
  */
 export const PatientDetail = ({
   language,
-  bedPosition,
-  bedsInRoom,
   patient = emptyPatientDetails
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
@@ -149,7 +144,6 @@ export const PatientDetail = ({
               onChange={humanReadableIdentifier => changeSavedValue({ ...newPatient, humanReadableIdentifier })}
             />
           </div>
-          <BedInRoomIndicator bedsInRoom={bedsInRoom} bedPosition={bedPosition}/>
         </div>
         <div className={tw('flex-1')}>
           <Textarea

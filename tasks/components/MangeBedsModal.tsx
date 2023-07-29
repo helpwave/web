@@ -14,11 +14,12 @@ import {
   defaultTableStatePagination,
   Table, updatePagination
 } from '@helpwave/common/components/Table'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { BedWithPatientWithTasksNumberDTO } from '../mutations/bed_mutations'
-import { useBedCreateMutation, useBedDeleteMutation } from '../mutations/bed_mutations'
+import { useBedCreateMutation, useBedDeleteMutation, useBedUpdateMutation } from '../mutations/bed_mutations'
 import { noop } from '@helpwave/common/util/noop'
 import { X } from 'lucide-react'
+import { Input } from '@helpwave/common/components/user_input/Input'
 
 type ManageBedsModalTranslation = {
   manageBedsIn: string,
@@ -76,7 +77,18 @@ export const ManageBedsModal = ({
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination
   })
+  const [beds, setBeds] = useState<BedWithPatientWithTasksNumberDTO[]>([])
+  const room = data?.find(value => value.id === roomID)
+
+  useEffect(() => {
+    if (data) {
+      const beds = room?.beds ?? []
+      setBeds(beds)
+    }
+  }, [data, room])
+
   const addBedMutation = useBedCreateMutation()
+  const updateBedMutation = useBedUpdateMutation()
   const deleteBedMutation = useBedDeleteMutation()
 
   // TODO add view for loading
@@ -84,8 +96,6 @@ export const ManageBedsModal = ({
     return <div>Loading ManageBedsModal</div>
   }
 
-  const room = data.find(value => value.id === roomID)
-  const beds = room?.beds
   // TODO add view for error or error handling
   if (isError || !beds || !room) {
     return <div>Error ManageBedsModal</div>
@@ -103,7 +113,7 @@ export const ManageBedsModal = ({
       </div>
       <div className={tw('flex flex-row justify-between items-end mb-2')}>
         <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
-        <Button color="positive" onClick={() => addBedMutation.mutate(roomID)}>{translation.addBed}</Button>
+        <Button color="positive" onClick={() => addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1 ?? 1}`, roomID })}>{translation.addBed}</Button>
       </div>
       <Table
         data={beds}
@@ -116,7 +126,13 @@ export const ManageBedsModal = ({
         ]}
         rowMappingToCells={bed => [
           <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
-            <Span>{`${translation.bed} ${bed.index}`}</Span>
+            <Input
+              value={bed.name}
+              onChange={text => {
+                setBeds(beds.map(value => value.id === bed.id ? { ...value, name: text } : value))
+              }}
+              onEditCompleted={text => updateBedMutation.mutate({ id: bed.id, name: text, roomID: room.id })}
+            />
           </div>,
           <div key="patient" className={tw('w-20')}>
             <Span>{bed.patient ? bed.patient.name : '-'}</Span>

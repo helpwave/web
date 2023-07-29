@@ -41,7 +41,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
             (
             <PatientCard
               key={bed.id}
-              bedIndex={bed.index}
+              bedName={bed.name}
               patientName={bed.patient.name}
               doneTasks={bed.patient.tasksDone}
               inProgressTasks={bed.patient.tasksInProgress}
@@ -58,13 +58,13 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
             ) : (
             <BedCard
               key={bed.id}
-              bedIndex={bed.index}
+              bedName={bed.name}
               onTileClick={(event) => {
                 event.stopPropagation()
                 setSelectedBed(room, bed, {
                   ...emptyPatient,
                   id: bed.patient?.id ?? '',
-                  humanReadableIdentifier: `Patient ${bed.index}`
+                  humanReadableIdentifier: `Patient ${context.state.room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
                 })
               }}
               isSelected={selectedBedID === bed.id}/>

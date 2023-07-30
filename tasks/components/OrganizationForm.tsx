@@ -8,6 +8,7 @@ import { Span } from '@helpwave/common/components/Span'
 import type { OrganizationMinimalDTO } from '../mutations/organization_mutations'
 import { emptyOrganization } from '../mutations/organization_mutations'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type OrganizationFormTranslation = {
   general: string,
@@ -140,11 +141,6 @@ export const OrganizationForm = ({
     onChange({ hasChanges: true, isValid, organization: newOrganization }, shouldUpdate && isValid) // this might lead to confusing behaviour where changes aren't saved on invalid input
   }
 
-  if (!organizationForm) {
-    // TODO replace with loading animation
-    return <div>Loading OrganizationForm</div>
-  }
-
   const shortNameErrorMessage: string | undefined = validateShortName(organizationForm.organization)
   const longNameErrorMessage: string | undefined = validateLongName(organizationForm.organization)
   const emailErrorMessage: string | undefined = validateEmailWithOrganization(organizationForm.organization)
@@ -154,7 +150,11 @@ export const OrganizationForm = ({
   const isDisplayingEmailNameError = emailErrorMessage && touched.email
 
   return (
-    <form>
+    <LoadingAndErrorComponent
+      isLoading={!organizationForm}
+      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[350px]') }}
+      minimumLoadingDuration={200} // prevents errors flickering TODO investigate this
+    >
       <Span type="subsectionTitle">{translation.general}</Span>
       <div className={tw('mt-2 mb-1')}>
         <Input
@@ -206,6 +206,6 @@ export const OrganizationForm = ({
         {isDisplayingEmailNameError && <Span type="formError">{emailErrorMessage}</Span>}
       </div>
       <Span type="formDescription">{translation.contactEmailDescription}</Span>
-    </form>
+    </LoadingAndErrorComponent>
   )
 }

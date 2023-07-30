@@ -133,44 +133,50 @@ export const TwoColumn = ({
       onMouseLeave={() => setIsDragging(false)}
       {...{} /* maybe move these functions above as listeners on the entire document instead of just the TwoColumn */}
     >
-      <div
-        className={tw(`overflow-hidden`)}
-        style={{ width: leftWidth + 'px' }}
-      >
-        <SimpleBarReact ref={scrollableRefLeft} style={{ maxHeight: simpleBarMaxHeight }}>
-          {left(leftWidth)}
-        </SimpleBarReact>
-      </div>
-      <div
-        onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
-        onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
-        className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
-      >
-          <div className={tw('bg-gray-300 my-4 rounded-lg w-0.5')} />
-        {!disableResize && (
+      { /* While calculating show nothing */}
+      { /* TODO maybe use the loading animation or something else to create a smoother transition from showing nothing */}
+      {fullWidth !== 0 && (
+        <>
           <div
-            className={tw('absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] flex flex-col justify-center items-center')}
+            className={tw(`overflow-hidden`)}
+            style={{ width: leftWidth + 'px' }}
           >
-            <GripVertical className={tw('text-white')}/>
+            <SimpleBarReact ref={scrollableRefLeft} style={{ maxHeight: simpleBarMaxHeight }}>
+              {left(leftWidth)}
+            </SimpleBarReact>
           </div>
-        )}
-        {!disableResize && (
-          <button
-            className={tw('absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5')}
-            onClick={() => setLeftWidth(leftFocus ? convertToLeftWidth(baseLayoutValue, fullWidth) : fullWidth - convertToLeftWidth(constraints.right?.min ?? defaultConstraint.right.min, fullWidth))}
+          <div
+            onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
+            onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
+            className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
           >
-            {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
-          </button>
-        )}
-      </div>
-      <div
-        className={tw(`overflow-hidden`)}
-        style={{ width: (fullWidth - leftWidth) + 'px' }}
-      >
-        <SimpleBarReact ref={scrollableRefRight} style={{ maxHeight: simpleBarMaxHeight }}>
-          {right(fullWidth - leftWidth)}
-        </SimpleBarReact>
-      </div>
+              <div className={tw('bg-gray-300 my-4 rounded-lg w-0.5')} />
+            {!disableResize && (
+              <div
+                className={tw('absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] flex flex-col justify-center items-center')}
+              >
+                <GripVertical className={tw('text-white')}/>
+              </div>
+            )}
+            {!disableResize && (
+              <button
+                className={tw('absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5')}
+                onClick={() => setLeftWidth(leftFocus ? convertToLeftWidth(baseLayoutValue, fullWidth) : fullWidth - convertToLeftWidth(constraints.right?.min ?? defaultConstraint.right.min, fullWidth))}
+              >
+                {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
+              </button>
+            )}
+          </div>
+          <div
+            className={tw(`overflow-hidden`)}
+            style={{ width: (fullWidth - leftWidth) + 'px' }}
+          >
+            <SimpleBarReact ref={scrollableRefRight} style={{ maxHeight: simpleBarMaxHeight }}>
+              {right(fullWidth - leftWidth)}
+            </SimpleBarReact>
+          </div>
+        </>
+      )}
     </div>
   )
 }

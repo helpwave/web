@@ -25,6 +25,7 @@ import {
   Table
 } from '@helpwave/common/components/Table'
 import { ManageBedsModal } from './MangeBedsModal'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type RoomListTranslation = {
   edit: string,
@@ -133,16 +134,6 @@ export const RoomList = ({
     creatRoomMutation.mutate(newRoom)
   }
 
-  // TODO add view for loading
-  if (isLoading) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError) {
-    return <div>Error Message</div>
-  }
-
   const multipleInDelete = deletionConfirmDialogElement !== '' || tableState.selection?.currentSelection.length === 1
 
   return (
@@ -175,84 +166,91 @@ export const RoomList = ({
           onClose={() => setManagedRoom(undefined)}
         />
       )}
-      <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <Span type="tableName">{translation.rooms + ` (${usedRooms.length})`}</Span>
-        <div className={tw('flex flex-row gap-x-2')}>
-          {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
-            <Button
-              onClick={() => setDeletionConfirmDialogElement('')}
-              color="negative"
-            >
-              {translation.removeSelection}
-            </Button>
-          )}
-          <Button onClick={addRoom} color="positive">
-            {translation.addRoom}
-          </Button>
-        </div>
-      </div>
-      <Table
-        focusElement={focusElement}
-        data={usedRooms}
-        stateManagement={[tableState, tableState => {
-          setTableState(tableState)
-          setFocusElement(undefined)
-        }]}
-        identifierMapping={identifierMapping}
-        header={[
-          <Span key="name" type="tableHeader">{translation.roomName}</Span>,
-          <Span key="bedcount" type="tableHeader">{translation.bedCount}</Span>,
-          <Span key="manage" type="tableHeader" >{translation.manageBeds}</Span>,
-          <></>
-        ]}
-        rowMappingToCells={room => [
-          <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
-            <Input
-              value={room.name}
-              type="text"
-              onChange={text => {
-                setIsEditing(true)
-                setUsedRooms(usedRooms.map(value => identifierMapping(value) === identifierMapping(room) ? {
-                  ...room,
-                  name: text
-                } : value))
-                setFocusElement(room)
-              }}
-              onEditCompleted={(text) => {
-                updateRoomMutation.mutate({
-                  ...room,
-                  name: text
-                })
-                setIsEditing(false)
-              }}
-              id={room.name}
-              minLength={minRoomNameLength}
-              maxLength={maxRoomNameLength}
-            />
-          </div>,
-          <div key="bedcount" className={tw('w-20')}>
-            <Span>{room.beds.length}</Span>
-          </div>,
-          <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
-            <Button
-              onClick={() => setManagedRoom(room.id)}
-              variant="textButton"
-              color="neutral"
-            >
-              {translation.manage}
-            </Button>
-          </div>,
-          <div key="remove" className={tw('flex flex-row justify-end')}>
-            <Button
-              onClick={() => setDeletionConfirmDialogElement(room.id)}
-              color="negative"
-              variant="textButton"
-            >
-              {translation.remove}
+      <LoadingAndErrorComponent
+        isLoading={isLoading}
+        hasError={isError}
+        loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+        errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+      >
+        <div className={tw('flex flex-row justify-between items-center mb-2')}>
+          <Span type="tableName">{translation.rooms + ` (${usedRooms.length})`}</Span>
+          <div className={tw('flex flex-row gap-x-2')}>
+            {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
+              <Button
+                onClick={() => setDeletionConfirmDialogElement('')}
+                color="negative"
+              >
+                {translation.removeSelection}
+              </Button>
+            )}
+            <Button onClick={addRoom} color="positive">
+              {translation.addRoom}
             </Button>
           </div>
-        ]}
-      />
+        </div>
+        <Table
+          focusElement={focusElement}
+          data={usedRooms}
+          stateManagement={[tableState, tableState => {
+            setTableState(tableState)
+            setFocusElement(undefined)
+          }]}
+          identifierMapping={identifierMapping}
+          header={[
+            <Span key="name" type="tableHeader">{translation.roomName}</Span>,
+            <Span key="bedcount" type="tableHeader">{translation.bedCount}</Span>,
+            <Span key="manage" type="tableHeader" >{translation.manageBeds}</Span>,
+            <></>
+          ]}
+          rowMappingToCells={room => [
+            <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
+              <Input
+                value={room.name}
+                type="text"
+                onChange={text => {
+                  setIsEditing(true)
+                  setUsedRooms(usedRooms.map(value => identifierMapping(value) === identifierMapping(room) ? {
+                    ...room,
+                    name: text
+                  } : value))
+                  setFocusElement(room)
+                }}
+                onEditCompleted={(text) => {
+                  updateRoomMutation.mutate({
+                    ...room,
+                    name: text
+                  })
+                  setIsEditing(false)
+                }}
+                id={room.name}
+                minLength={minRoomNameLength}
+                maxLength={maxRoomNameLength}
+              />
+            </div>,
+            <div key="bedcount" className={tw('w-20')}>
+              <Span>{room.beds.length}</Span>
+            </div>,
+            <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
+              <Button
+                onClick={() => setManagedRoom(room.id)}
+                variant="textButton"
+                color="neutral"
+              >
+                {translation.manage}
+              </Button>
+            </div>,
+            <div key="remove" className={tw('flex flex-row justify-end')}>
+              <Button
+                onClick={() => setDeletionConfirmDialogElement(room.id)}
+                color="negative"
+                variant="textButton"
+              >
+                {translation.remove}
+              </Button>
+            </div>
+          ]}
+        />
+      </LoadingAndErrorComponent>
     </div>
   )
 }

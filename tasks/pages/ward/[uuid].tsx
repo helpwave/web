@@ -6,16 +6,12 @@ import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../../components/layout/TwoColumn'
-import type { RoomOverviewDTO } from '../../mutations/room_mutations'
 import { PatientDetail } from '../../components/layout/PatientDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { WardRoomList } from '../../components/layout/WardRoomList'
 import { PatientList } from '../../components/layout/PatientList'
-import type {
-  BedMinimalDTO
-} from '../../mutations/bed_mutations'
 import type { PatientDTO } from '../../mutations/patient_mutations'
 import {
   useAssignBedMutation,
@@ -57,8 +53,8 @@ export type WardOverviewContextState = {
    patient?.id === "" means creating a new patient
    */
   patient?: PatientDTO,
-  bed?: BedMinimalDTO,
-  room?: RoomOverviewDTO,
+  bedID?: string,
+  roomID?: string,
   wardID: string
 }
 
@@ -101,8 +97,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     const updatedContext = contextState
     updatedContext.patient = patient
 
-    if (contextState.bed) {
-      assignBedMutation.mutate({ ...contextState.bed, patientID: patient.id })
+    if (contextState.bedID) {
+      assignBedMutation.mutate({ id: contextState.bedID, patientID: patient.id })
     }
     setContextState(updatedContext)
   })
@@ -147,7 +143,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
             isShowingPatientList ? (
                   <PatientList width={width}/>
             ) :
-              contextState.bed && contextState.room && contextState.patient && (
+              contextState.bedID && contextState.roomID && contextState.patient && (
                 <div>
                   <PatientDetail
                     key={contextState.patient?.id}

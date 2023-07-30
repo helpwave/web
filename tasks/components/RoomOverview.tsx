@@ -22,12 +22,12 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patient: PatientDTO|undefined) =>
     context.updateContext({
       ...context.state,
-      room,
-      bed,
+      roomID: room.id,
+      bedID: bed.id,
       patient
     })
 
-  const selectedBedID = context.state.bed?.id
+  const selectedBedID = context.state.bedID
   return (
     <div>
       { room.beds.length > 0 ? (

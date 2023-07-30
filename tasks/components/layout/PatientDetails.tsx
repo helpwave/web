@@ -145,7 +145,11 @@ export const PatientDetail = ({
               onChange={name => changeSavedValue({ ...newPatient, name })}
             />
           </div>
-          <RoomBedDropDown initialRoomAndBed={{ roomID: context.state.room?.id ?? '', bedID: context.state.bed?.id ?? '', patientID: context.state.patient?.id ?? '' }} wardID={context.state.wardID} />
+          <RoomBedDropDown
+            initialRoomAndBed={{ roomID: context.state.roomID ?? '', bedID: context.state.bedID ?? '', patientID: context.state.patient?.id ?? '' }}
+            wardID={context.state.wardID}
+            onChange={roomBedDropDownIDs => context.updateContext({ ...context.state, ...roomBedDropDownIDs })}
+          />
         </div>
         <div className={tw('flex-1')}>
           <Textarea

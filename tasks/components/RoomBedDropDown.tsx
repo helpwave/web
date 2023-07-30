@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { Undo2 } from 'lucide-react'
 import { Select } from '@helpwave/common/components/user_input/Select'
 import { Span } from '@helpwave/common/components/Span'
+import { noop } from '@helpwave/common/util/noop'
 
 type RoomBedDropDownTranslation = {
   saved: string,
@@ -32,7 +33,8 @@ export type RoomBedDropDownIDs = {
 
 export type RoomBedDropDownProps = {
   initialRoomAndBed: RoomBedDropDownIDs,
-  wardID: string
+  wardID: string,
+  onChange?: (roomBedDropDownIDs:RoomBedDropDownIDs) => void
 }
 
 /**
@@ -41,12 +43,13 @@ export type RoomBedDropDownProps = {
 export const RoomBedDropDown = ({
   language,
   initialRoomAndBed,
-  wardID
+  wardID,
+  onChange = noop
 }: PropsWithLanguage<RoomBedDropDownTranslation, RoomBedDropDownProps>) => {
   const translation = useTranslation(language, defaultRoomBedDropDownTranslation)
   const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardID)
-  const assignBedMutation = useAssignBedMutation()
   const [currentSelection, setCurrentSelection] = useState<RoomBedDropDownIDs>({ ...initialRoomAndBed })
+  const assignBedMutation = useAssignBedMutation(() => onChange(currentSelection))
 
   const currentRoom = data?.find(value => value.id === currentSelection.roomID)
 

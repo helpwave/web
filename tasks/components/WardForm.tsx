@@ -77,6 +77,7 @@ export const WardForm = ({
       return translation.tooLong(maxWardNameLength)
     } else if (usedWardNames.find(value => value === ward.name) !== undefined) {
       // May still be a duplicate, if edited at the same time
+      // TODO maybe remove, because backend doesn't support this check anyway
       return translation.duplicateName
     }
   }

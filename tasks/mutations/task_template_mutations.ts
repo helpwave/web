@@ -268,7 +268,7 @@ export const useSubTaskTemplateAddMutation = (taskTemplateId : string) => {
       const createSubTaskTemplate = new CreateTaskTemplateSubTaskRequest()
       createSubTaskTemplate.setName(subtask.name)
       createSubTaskTemplate.setTaskTemplateId(taskTemplateId)
-      await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata());
+      await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
 
       queryClient.refetchQueries(['wardTaskTemplates']).then()
       return createSubTaskTemplate.toObject()

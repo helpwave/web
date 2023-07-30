@@ -67,7 +67,6 @@ export const PatientDetail = ({
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
   const translation = useTranslation(language, defaultPatientDetailTranslations)
 
-  // TODO fetch patient by patient.id replace below
   const context = useContext(WardOverviewContext)
 
   const updateMutation = usePatientUpdateMutation(() => undefined)

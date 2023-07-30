@@ -29,6 +29,7 @@ import {
   useTaskUpdateMutation
 } from '../../mutations/task_mutations'
 import { useEffect, useState } from 'react'
+import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -145,7 +146,7 @@ export const TaskDetailView = ({
   }
 
   if ((isLoading || !data) && !isCreating) {
-    return <div>Loading TasksDetailView!</div>
+    return <LoadingAnimation />
   }
 
   return (
@@ -175,8 +176,7 @@ export const TaskDetailView = ({
             />
           )}
           <>
-            {/* TODO show something appropriate for error and loading */}
-            {((personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading) || (personalTaskTemplatesError || wardTaskTemplatesError)) && ''}
+            {((personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading) || (personalTaskTemplatesError || wardTaskTemplatesError)) && <LoadingAnimation />}
           </>
         </div>
       )}

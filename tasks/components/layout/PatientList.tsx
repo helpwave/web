@@ -7,7 +7,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { PatientDTO, PatientWithBedAndRoomDTO } from '../../mutations/patient_mutations'
-import { usePatientListQuery } from '../../mutations/patient_mutations'
+import { usePatientDischargeMutation, usePatientListQuery } from '../../mutations/patient_mutations'
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
 import { WardOverviewContext } from '../../pages/ward/[uuid]'
@@ -73,6 +73,7 @@ export const PatientList = ({
   const [search, setSearch] = useState('')
   const context = useContext(WardOverviewContext)
   const { data, isLoading, isError } = usePatientListQuery(context.state.wardID)
+  const dischargeMutation = usePatientDischargeMutation()
 
   if (isError) {
     return <p>Error</p>
@@ -85,8 +86,8 @@ export const PatientList = ({
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${translation.bed} ${patient.bed.index}`
 
   const filteredActive = MultiSearchWithMapping(search, data.active, value => [value.human_readable_identifier, activeLabelText(value)])
-  const filteredUnassigned = SimpleSearchWithMapping(search, data.unassigned, value => value.human_readable_identifier)
-  const filteredDischarged = SimpleSearchWithMapping(search, data.discharged, value => value.human_readable_identifier)
+  const filteredUnassigned = SimpleSearchWithMapping(search, data.unassigned, value => value.name)
+  const filteredDischarged = SimpleSearchWithMapping(search, data.discharged, value => value.name)
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
@@ -112,7 +113,7 @@ export const PatientList = ({
               <div className={tw('flex flex-row flex-1 justify-between items-center')}>
                 <Label name={activeLabelText(patient)} color="blue"/>
                 <Button color="negative" variant="textButton" onClick={() => {
-                  // TODO discharge
+                  dischargeMutation.mutate(patient.id)
                 }}>
                   {translation.discharge}
                 </Button>
@@ -126,11 +127,11 @@ export const PatientList = ({
           <Span type="accent" className={tw('text-hw-label-yellow-text')}>{`${translation.unassigned} (${filteredUnassigned.length})`}</Span>
           {filteredUnassigned.map(patient => (
             <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 items-center')}>
-              <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.human_readable_identifier}</Span>
+              <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
               <div className={tw('flex flex-row flex-1 justify-between items-center')}>
                 <Label name={`${translation.unassigned}`} color="yellow"/>
                 <Button color="negative" variant="textButton" onClick={() => {
-                  // TODO discharge
+                  dischargeMutation.mutate(patient.id)
                 }}>
                   {translation.discharge}
                 </Button>
@@ -144,7 +145,7 @@ export const PatientList = ({
           <Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>
           {filteredDischarged.map(patient => (
             <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
-              <Span className={tw('font-space font-bold')}>{patient.human_readable_identifier}</Span>
+              <Span className={tw('font-space font-bold')}>{patient.name}</Span>
               <Button color="negative" variant="textButton" onClick={() => {
                 // TODO delete
               }}>

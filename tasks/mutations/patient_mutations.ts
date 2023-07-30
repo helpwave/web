@@ -3,13 +3,20 @@ import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_s
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
-  DischargePatientRequest, GetPatientDetailsRequest,
-  UpdatePatientRequest, GetPatientsByWardRequest, AssignBedRequest, UnassignBedRequest, GetPatientDetailsResponse
+  DischargePatientRequest,
+  GetPatientDetailsRequest,
+  UpdatePatientRequest,
+  GetPatientsByWardRequest,
+  AssignBedRequest,
+  UnassignBedRequest,
+  GetPatientDetailsResponse,
+  GetPatientListRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedDTO } from './bed_mutations'
 import { emptyBed } from './bed_mutations'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
+import { noop } from '@helpwave/common/util/noop'
 
 export type PatientDTO = {
   id: string,
@@ -42,7 +49,7 @@ export type PatientCompleteDTO = {
 
 export type PatientMinimalDTO = {
   id: string,
-  human_readable_identifier: string
+  name: string
 }
 
 export const emptyPatientMinimal = {
@@ -52,9 +59,9 @@ export const emptyPatientMinimal = {
 
 export type PatientWithBedAndRoomDTO = {
   id: string,
-  human_readable_identifier: string,
+  name: string,
   room: { id: string, name: string },
-  bed: { id: string, index: number }
+  bed: { id: string, name: string }
 }
 
 export type PatientListDTO = {
@@ -160,24 +167,44 @@ export const usePatientsByWardQuery = (wardID: string) => {
   })
 }
 
-// TODO remove this comment
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const usePatientListQuery = (wardID: string) => {
-  const queryClient = useQueryClient()
+export const usePatientListQuery = (organisationID: string) => {
   return useQuery({
     queryKey: [patientsQueryKey, 'patientList'],
     queryFn: async () => {
-      // TODO do grpc request
+      const req = new GetPatientListRequest()
+      req.setOrganisationId(organisationID)
+      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata())
 
-      return queryClient.getQueryData<PatientListDTO>([patientsQueryKey, 'patientList'])
-    },
-    initialData: {
-      active: [
-      ],
-      unassigned: [
-      ],
-      discharged: [
-      ]
+      const patientList: PatientListDTO = {
+        active: res.getActiveList().map(value => {
+          const room = value.getRoom()
+          const bed = value.getBed()
+
+          if (!room) {
+            console.error('no room for active patient in PatientList')
+          }
+
+          if (!bed) {
+            console.error('no room for active patient in PatientList')
+          }
+          return ({
+            id: value.getId(),
+            name: value.getHumanReadableIdentifier(),
+            bed: { id: bed?.getId() ?? '', name: bed?.getName() ?? '' },
+            room: { id: room?.getId() ?? '', name: room?.getName() ?? '' }
+          })
+        }),
+        discharged: res.getDischargedPatientsList().map(value => ({
+          id: value.getId(),
+          name: value.getHumanReadableIdentifier(),
+        })),
+        unassigned: res.getUnassignedPatientsList().map(value => ({
+          id: value.getId(),
+          name: value.getHumanReadableIdentifier(),
+        }))
+      }
+
+      return patientList
     }
   })
 }
@@ -222,16 +249,18 @@ export const usePatientUpdateMutation = (callback: (patient: PatientDTO) => void
   })
 }
 
-export const usePatientDischargeMutation = (callback: () => void) => {
+export const usePatientDischargeMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (patient: PatientDTO) => {
+    mutationFn: async (patientID: string) => {
       const req = new DischargePatientRequest()
-      req.setId(patient.id)
+      req.setId(patientID)
 
       const res = await patientService.dischargePatient(req, getAuthenticatedGrpcMetadata())
 
-      // TODO some check whether request was successful
+      if (!res.toObject()) {
+        console.error('error in PatientDischarge')
+      }
 
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).catch(reason => console.log(reason))
       callback()

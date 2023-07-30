@@ -36,7 +36,7 @@ export const Select = <T, >({ value, label, options, onChange, isHidingCurrentVa
         {({ open }) => (
           <>
             <Menu.Button
-              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-3 hover:bg-gray-100 font-medium', { 'rounded-b-lg': !open })}
+              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 hover:bg-gray-100 font-medium', { 'rounded-b-lg': !open })}
             >
               <span>{options.find(option => option.value === value)?.label ?? hintText}</span>
               {open ? <ChevronUp/> : <ChevronDown/>}

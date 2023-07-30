@@ -208,14 +208,15 @@ export const usePatientListQuery = (wardID: string) => {
 }
 
 export const usePatientCreateMutation = (callback: (patient: PatientDTO) => void) => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
       const req = new CreatePatientRequest()
       req.setNotes(patient.note)
       req.setHumanReadableIdentifier(patient.name)
       const res = await patientService.createPatient(req, getAuthenticatedGrpcMetadata())
+
       if (!res.getId()) {
-        // TODO some check whether request was successful
         console.error('create room failed')
       }
 
@@ -224,10 +225,14 @@ export const usePatientCreateMutation = (callback: (patient: PatientDTO) => void
       callback(patient)
       return patient
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.log(reason))
+    }
   })
 }
 
 export const usePatientUpdateMutation = (callback: (patient: PatientDTO) => void) => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
       const req = new UpdatePatientRequest()
@@ -235,15 +240,20 @@ export const usePatientUpdateMutation = (callback: (patient: PatientDTO) => void
       req.setNotes(patient.note)
       req.setHumanReadableIdentifier(patient.name)
 
-      await patientService.updatePatient(req, getAuthenticatedGrpcMetadata())
+      const res = await patientService.updatePatient(req, getAuthenticatedGrpcMetadata())
 
-      // TODO some check whether request was successful
+      if (!res.toObject()) {
+        console.error('error in PatientUpdate')
+      }
 
       patient = { ...patient }
 
       callback(patient)
       return patient
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.log(reason))
+    }
   })
 }
 

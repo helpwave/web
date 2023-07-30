@@ -19,6 +19,7 @@ import {
   useWardDetailsQuery
 } from '../../mutations/ward_mutations'
 import { OrganizationOverviewContext } from '../../pages/organizations/[uuid]'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -105,78 +106,75 @@ export const WardDetail = ({
   const minimumWidthOfCards = 200
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
 
-  // TODO add view for loading
-  if (isLoading && ward) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError && ward) {
-    return <div>Error Message</div>
-  }
-
   return (
     <div className={tw('flex flex-col py-4 px-6')}>
-      <ConfirmDialog
-        title={translation.deleteConfirmText}
-        description={translation.dangerZoneText}
-        isOpen={isShowingConfirmDialog}
-        onCancel={() => setIsShowingConfirmDialog(false)}
-        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
-        onConfirm={() => {
-          setIsShowingConfirmDialog(false)
-          deleteWardMutation.mutate(newWard.id)
-        }}
-        confirmType="negative"
-      />
-      <ColumnTitle
-        title={isCreatingNewWard ? translation.createWard : translation.updateWard}
-        subtitle={isCreatingNewWard ? translation.createWardSubtitle : translation.updateWardSubtitle}
-      />
-      <div className={tw('max-w-[400px]')}>
-        <WardForm
-          ward={newWard}
-          usedWardNames={newWard.rooms.map(ward => ward.name)}
-          onChange={(wardInfo, isValid) => {
-            setNewWard({ ...newWard, ...wardInfo })
-            setFilledRequired(isValid)
+      <LoadingAndErrorComponent
+        isLoading={isLoading && !!ward}
+        hasError={isError && !!ward}
+        loadingProps={{ classname: tw('!h-full') }}
+        errorProps={{ classname: tw('!h-full') }}
+      >
+        <ConfirmDialog
+          title={translation.deleteConfirmText}
+          description={translation.dangerZoneText}
+          isOpen={isShowingConfirmDialog}
+          onCancel={() => setIsShowingConfirmDialog(false)}
+          onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+          onConfirm={() => {
+            setIsShowingConfirmDialog(false)
+            deleteWardMutation.mutate(newWard.id)
           }}
-          isShowingErrorsDirectly={!isCreatingNewWard}
+          confirmType="negative"
         />
-      </div>
-      {isCreatingNewWard ?
-        <Span>{translation.roomsNotOnCreate}</Span>
-        : (
-        <div className={tw('max-w-[600px] mt-6')}>
-          <RoomList/>
+        <ColumnTitle
+          title={isCreatingNewWard ? translation.createWard : translation.updateWard}
+          subtitle={isCreatingNewWard ? translation.createWardSubtitle : translation.updateWardSubtitle}
+        />
+        <div className={tw('max-w-[400px]')}>
+          <WardForm
+            ward={newWard}
+            usedWardNames={newWard.rooms.map(ward => ward.name)}
+            onChange={(wardInfo, isValid) => {
+              setNewWard({ ...newWard, ...wardInfo })
+              setFilledRequired(isValid)
+            }}
+            isShowingErrorsDirectly={!isCreatingNewWard}
+          />
         </div>
-          )}
-      <div className={tw('flex flex-row justify-end mt-6')}>
-        <Button
-          onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
-          disabled={!filledRequired}>
-          {isCreatingNewWard ? translation.create : translation.update}
-        </Button>
-      </div>
-      {newWard.id !== '' &&
-        (
-          <div className={tw('mt-6')}>
-            <TaskTemplateWardPreview wardID={newWard.id} columns={columns}/>
+        {isCreatingNewWard ?
+          <Span>{translation.roomsNotOnCreate}</Span>
+          : (
+          <div className={tw('max-w-[600px] mt-6')}>
+            <RoomList/>
           </div>
-        )
-      }
-      <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
-        <Span type="subsectionTitle">{translation.dangerZone}</Span>
-        <Span type="description">{translation.dangerZoneText}</Span>
-        <Button
-          onClick={() => setIsShowingConfirmDialog(true)}
-          className={tw('px-0 font-bold text-left')}
-          color="negative"
-          variant="textButton"
-        >
-          {translation.deleteWard}
-        </Button>
-      </div>
+            )}
+        <div className={tw('flex flex-row justify-end mt-6')}>
+          <Button
+            onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
+            disabled={!filledRequired}>
+            {isCreatingNewWard ? translation.create : translation.update}
+          </Button>
+        </div>
+        {newWard.id !== '' &&
+          (
+            <div className={tw('mt-6')}>
+              <TaskTemplateWardPreview wardID={newWard.id} columns={columns}/>
+            </div>
+          )
+        }
+        <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
+          <Span type="subsectionTitle">{translation.dangerZone}</Span>
+          <Span type="description">{translation.dangerZoneText}</Span>
+          <Button
+            onClick={() => setIsShowingConfirmDialog(true)}
+            className={tw('px-0 font-bold text-left')}
+            color="negative"
+            variant="textButton"
+          >
+            {translation.deleteWard}
+          </Button>
+        </div>
+      </LoadingAndErrorComponent>
     </div>
   )
 }

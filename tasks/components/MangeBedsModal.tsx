@@ -19,6 +19,7 @@ import type { BedWithPatientWithTasksNumberDTO } from '../mutations/bed_mutation
 import { useBedCreateMutation, useBedDeleteMutation } from '../mutations/bed_mutations'
 import { noop } from '@helpwave/common/util/noop'
 import { X } from 'lucide-react'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type ManageBedsModalTranslation = {
   manageBedsIn: string,
@@ -79,63 +80,65 @@ export const ManageBedsModal = ({
   const addBedMutation = useBedCreateMutation()
   const deleteBedMutation = useBedDeleteMutation()
 
-  // TODO add view for loading
-  if (isLoading || !data) {
-    return <div>Loading ManageBedsModal</div>
-  }
-
-  const room = data.find(value => value.id === roomID)
+  const room = data?.find(value => value.id === roomID)
   const beds = room?.beds
-  // TODO add view for error or error handling
-  if (isError || !beds || !room) {
-    return <div>Error ManageBedsModal</div>
-  }
 
   const identifierMapping = (bed: BedWithPatientWithTasksNumberDTO) => bed.id
   return (
     <Modal modalClassName={tx('min-w-[600px]', modalClassName)} {...ModalProps}>
-      <div className={tw('flex flex-row justify-between items-center mb-4')}>
-        <Span className={tw('text-lg font-semibold')}>{`${translation.manageBedsIn} ${room.name}`}</Span>
-        <div className={tw('flex flex-row gap-x-4 items-end')} onClick={() => onClose()}>
-          <Span>{translation.close}</Span>
-          <X/>
-        </div>
-      </div>
-      <div className={tw('flex flex-row justify-between items-end mb-2')}>
-        <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
-        <Button color="positive" onClick={() => addBedMutation.mutate(roomID)}>{translation.addBed}</Button>
-      </div>
-      <Table
-        data={beds}
-        stateManagement={[tableState, setTableState]}
-        identifierMapping={identifierMapping}
-        header={[
-          <Span key="name" type="tableHeader">{translation.name}</Span>,
-          <Span key="patient" type="tableHeader">{translation.patient}</Span>,
-          <></>
-        ]}
-        rowMappingToCells={bed => [
-          <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
-            <Span>{`${translation.bed} ${bed.index}`}</Span>
-          </div>,
-          <div key="patient" className={tw('w-20')}>
-            <Span>{bed.patient ? bed.patient.name : '-'}</Span>
-          </div>,
-          <div key="remove" className={tw('flex flex-row justify-end')}>
-            <Button
-              disabled={!!bed.patient}
-              onClick={() => {
-                deleteBedMutation.mutate(bed.id)
-                setTableState({ pagination: tableState.pagination ? updatePagination(tableState.pagination, beds.length - 1) : undefined })
-              }}
-              color="negative"
-              variant="textButton"
-            >
-              {translation.remove}
-            </Button>
-          </div>
-        ]}
-      />
+      <LoadingAndErrorComponent
+        isLoading={isLoading || !data}
+        hasError={isError || !beds || !room}
+        loadingProps={{ classname: tw('!h-full min-h-[400px]') }}
+        errorProps={{ classname: tw('!h-full min-h-[400px]') }}
+      >
+        {room && beds && (
+          <>
+            <div className={tw('flex flex-row justify-between items-center mb-4')}>
+              <Span className={tw('text-lg font-semibold')}>{`${translation.manageBedsIn} ${room.name}`}</Span>
+              <div className={tw('flex flex-row gap-x-4 items-end')} onClick={() => onClose()}>
+                <Span>{translation.close}</Span>
+                <X/>
+              </div>
+            </div>
+            <div className={tw('flex flex-row justify-between items-end mb-2')}>
+              <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
+              <Button color="positive" onClick={() => addBedMutation.mutate(roomID)}>{translation.addBed}</Button>
+            </div>
+            <Table
+              data={beds}
+              stateManagement={[tableState, setTableState]}
+              identifierMapping={identifierMapping}
+              header={[
+                <Span key="name" type="tableHeader">{translation.name}</Span>,
+                <Span key="patient" type="tableHeader">{translation.patient}</Span>,
+                <></>
+              ]}
+              rowMappingToCells={bed => [
+                <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
+                  <Span>{`${translation.bed} ${bed.index}`}</Span>
+                </div>,
+                <div key="patient" className={tw('w-20')}>
+                  <Span>{bed.patient ? bed.patient.name : '-'}</Span>
+                </div>,
+                <div key="remove" className={tw('flex flex-row justify-end')}>
+                  <Button
+                    disabled={!!bed.patient}
+                    onClick={() => {
+                      deleteBedMutation.mutate(bed.id)
+                      setTableState({ pagination: tableState.pagination ? updatePagination(tableState.pagination, beds.length - 1) : undefined })
+                    }}
+                    color="negative"
+                    variant="textButton"
+                  >
+                    {translation.remove}
+                  </Button>
+                </div>
+              ]}
+            />
+          </>
+        )}
+      </LoadingAndErrorComponent>
     </Modal>
   )
 }

@@ -15,6 +15,7 @@ import {
 } from '../mutations/organization_mutations'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type OrganisationInvitationListTranslation = {
   remove: string,
@@ -86,18 +87,13 @@ export const OrganisationInvitationList = ({
   const isValidEmail = !!inviteMemberModalEmail && validateEmail(inviteMemberModalEmail)
   const isShowingInviteMemberModal = inviteMemberModalEmail !== undefined
 
-  // TODO add view for loading
-  if (isLoading && context.state.organizationID) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError && context.state.organizationID) {
-    return <div>Error Message</div>
-  }
-
   return (
-    <div>
+    <LoadingAndErrorComponent
+      isLoading={isLoading && context.state.organizationID !== undefined}
+      hasError={isError && context.state.organizationID !== undefined}
+      errorProps={{ classname: tw('border-b-2 border-gray-500 rounded-xl') }}
+      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
+    >
       {isShowingInviteMemberModal && (
         <InputModal
           modalClassName={tw('min-w-[400px]')}
@@ -172,6 +168,6 @@ export const OrganisationInvitationList = ({
           </div>
         ]}
       />
-    </div>
+    </LoadingAndErrorComponent>
   )
 }

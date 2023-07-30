@@ -1,3 +1,4 @@
+import { tw } from '@helpwave/common/twind'
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -17,6 +18,7 @@ import {
 import { TaskTemplateDetails } from '../components/layout/TaskTemplateDetails'
 import { useRouter } from 'next/router'
 import { useAuth } from '../hooks/useAuth'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,
@@ -121,17 +123,6 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
     setUsedQueryParam(true)
   }
 
-  // TODO add view for loading
-  if (isLoading) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError) {
-    return <div>Error Message</div>
-  }
-
-  // TODO update breadcrumbs
   return (
     <PageWithHeader
       crumbs={[{ display: translation.taskTemplates, link: '/templates' }]}
@@ -140,35 +131,40 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
         <title>{titleWrapper(translation.personalTaskTemplates)}</title>
       </Head>
       <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
-        <TwoColumn
-          disableResize={false}
-          left={width => (
-            <TaskTemplateDisplay
-              width={width}
-              onSelectChange={taskTemplate => {
-                setContextState({
-                  ...contextState,
-                  template: taskTemplate ?? emptyTaskTemplate,
-                  hasChanges: false,
-                  isValid: taskTemplate !== undefined,
-                  deletedSubtaskIds: []
-                })
-              }}
-              selectedID={contextState.template.id}
-              taskTemplates={data}
-              variant="personalTemplates"
-            />
-          )}
-          right={width => (
-            <TaskTemplateDetails
-              width={width}
-              key={contextState.template.id}
-              onCreate={createMutation.mutate}
-              onUpdate={updateMutation.mutate}
-              onDelete={deleteMutation.mutate}
-            />
-          )}
-        />
+        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError || !data} loadingProps={{ classname: tw('!h-full') }} errorProps={{ classname: tw('!h-full') }}>
+          <TwoColumn
+            disableResize={false}
+            left={width => (
+              // TODO move this data checking and so on into the TaskTemplateDisplay Component
+              data && (
+                <TaskTemplateDisplay
+                  width={width}
+                  onSelectChange={taskTemplate => {
+                    setContextState({
+                      ...contextState,
+                      template: taskTemplate ?? emptyTaskTemplate,
+                      hasChanges: false,
+                      isValid: taskTemplate !== undefined,
+                      deletedSubtaskIds: []
+                    })
+                  }}
+                  selectedID={contextState.template.id}
+                  taskTemplates={data}
+                  variant="personalTemplates"
+                />
+              )
+            )}
+            right={width => (
+              <TaskTemplateDetails
+                width={width}
+                key={contextState.template.id}
+                onCreate={createMutation.mutate}
+                onUpdate={updateMutation.mutate}
+                onDelete={deleteMutation.mutate}
+              />
+            )}
+          />
+        </LoadingAndErrorComponent>
       </TaskTemplateContext.Provider>
     </PageWithHeader>
   )

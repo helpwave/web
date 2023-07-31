@@ -30,7 +30,7 @@ export const PatientCard = ({
         <Span type="subsubsectionTitle">{bedName}</Span>
         <Span>{patientName}</Span>
       </div>
-      <div className={tw('w-7/12 min-w-[150px] mt-1')}>
+      <div className={tw('min-w-[150px] max-w-[200px] mt-1')}>
         <PillLabelsColumn
           doneCount={doneTasks}
           inProgressCount={inProgressTasks}

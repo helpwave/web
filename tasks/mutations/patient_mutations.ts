@@ -53,7 +53,7 @@ export const emptyPatientMinimal: PatientMinimalDTO = {
 
 export type PatientWithBedAndRoomDTO = PatientMinimalDTO & {
   room: { id: string, name: string },
-  bed: { id: string, index: number }
+  bed: { id: string, name: string }
 }
 
 export type PatientListDTO = {

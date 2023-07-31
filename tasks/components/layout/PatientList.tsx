@@ -82,7 +82,7 @@ export const PatientList = ({
     return null
   }
 
-  const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${translation.bed} ${patient.bed.index}`
+  const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
   const filteredActive = MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
   const filteredUnassigned = SimpleSearchWithMapping(search, data.unassigned, value => value.name)

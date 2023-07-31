@@ -54,7 +54,7 @@ export type PatientWithBedAndRoomDTO = {
   id: string,
   human_readable_identifier: string,
   room: { id: string, name: string },
-  bed: { id: string, index: number }
+  bed: { id: string, name: string }
 }
 
 export type PatientListDTO = {

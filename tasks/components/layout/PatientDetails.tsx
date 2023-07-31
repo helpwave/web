@@ -134,7 +134,7 @@ export const PatientDetail = ({
       )}
       <ColumnTitle title={translation.patientDetails}/>
       <div className={tw('flex flex-row gap-x-6 mb-8')}>
-        <div className={tw('flex flex-col gap-y-4 w-5/12')}>
+        <div className={tw('flex flex-col gap-y-2 w-5/12')}>
           <div className={tw('h-12 w-full')}>
             <ToggleableInput
               labelClassName={tw('text-xl font-semibold')}

@@ -49,7 +49,7 @@ export const OrganizationDisplay = ({
   const { data } = useOrganizationsByUserQuery()
   const usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
 
-  const columns = width === undefined ? 2 : Math.max(Math.floor(width / 250), 1)
+  const columns = width === undefined ? 3 : Math.min(Math.floor(width / 250), 3)
 
   const usedSelectedID = selectedOrganizationID ?? context.state.organizationID
   return (

@@ -1,4 +1,4 @@
-import type { PatientDTO, PatientWithTasksNumberDTO } from './patient_mutations'
+import type { PatientDTO, PatientWithTasksNumberDTO, PatientMinimalDTO } from './patient_mutations'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { bedService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import {
@@ -37,6 +37,15 @@ export const emptyBedWithPatientWithTasksNumber: BedWithPatientWithTasksNumberDT
 
 export type BedWithRoomID = BedMinimalDTO & {
   roomID: string
+}
+
+export type BedWithMinimalPatientDTO = BedMinimalDTO & {
+  patient?: PatientMinimalDTO
+}
+
+export type BedWithPatientID = {
+  id: string,
+  patientID: string
 }
 
 export const bedQueryKey = 'beds'

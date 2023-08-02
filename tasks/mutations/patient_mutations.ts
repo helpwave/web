@@ -3,56 +3,55 @@ import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_s
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
-  DischargePatientRequest, GetPatientDetailsRequest,
-  UpdatePatientRequest, GetPatientsByWardRequest, AssignBedRequest, UnassignBedRequest, GetPatientDetailsResponse
+  DischargePatientRequest,
+  GetPatientDetailsRequest,
+  UpdatePatientRequest,
+  GetPatientsByWardRequest,
+  AssignBedRequest,
+  UnassignBedRequest,
+  GetPatientDetailsResponse,
+  GetPatientAssignmentByWardRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
-import type { BedDTO } from './bed_mutations'
-import { emptyBed } from './bed_mutations'
+import type { BedWithPatientID } from './bed_mutations'
+import type { RoomWithMinimalBedAndPatient } from './room_mutations'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
+import { noop } from '@helpwave/common/util/noop'
 
-export type PatientDTO = {
+export type PatientMinimalDTO = {
   id: string,
+  name: string
+}
+
+export type PatientDTO = PatientMinimalDTO & {
   note: string,
-  humanReadableIdentifier: string,
   tasks: TaskMinimalDTO[]
 }
 
 export const emptyPatient: PatientDTO = {
   id: '',
   note: '',
-  humanReadableIdentifier: '',
+  name: '',
   tasks: []
 }
 
-export type PatientWithTasksNumberDTO = {
-  id: string,
-  name: string,
+export type PatientWithTasksNumberDTO = PatientMinimalDTO & {
   tasksUnscheduled: number,
   tasksInProgress: number,
   tasksDone: number
 }
 
-export type PatientCompleteDTO = {
-  id: string,
+export type PatientCompleteDTO = PatientMinimalDTO & {
   note: string,
-  humanReadableIdentifier: string,
   tasks: TaskDTO[]
 }
 
-export type PatientMinimalDTO = {
-  id: string,
-  human_readable_identifier: string
-}
-
-export const emptyPatientMinimal = {
+export const emptyPatientMinimal: PatientMinimalDTO = {
   id: '',
-  human_readable_identifier: ''
+  name: ''
 }
 
-export type PatientWithBedAndRoomDTO = {
-  id: string,
-  human_readable_identifier: string,
+export type PatientWithBedAndRoomDTO = PatientMinimalDTO & {
   room: { id: string, name: string },
   bed: { id: string, name: string }
 }
@@ -63,26 +62,20 @@ export type PatientListDTO = {
   discharged: PatientMinimalDTO[]
 }
 
-export type PatientWithBedIDDTO = {
-  id: string,
+export type PatientWithBedIDTO = PatientMinimalDTO &{
   note: string,
-  humanReadableIdentifier: string,
   bedID: string
 }
 
-export type PatientDetailsDTO = {
-  id: string,
-  name: string,
+export type PatientDetailsDTO = PatientMinimalDTO &{
   note: string,
-  humanReadableIdentifier: string,
   tasks: TaskDTO[]
 }
 
-export const emptyPatientDetails = {
+export const emptyPatientDetails: PatientDetailsDTO = {
   id: '',
   name: '',
   note: '',
-  humanReadableIdentifier: '',
   tasks: []
 }
 
@@ -117,7 +110,6 @@ export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) =>
         id: res.getId(),
         note: res.getNotes(),
         name: res.getName(),
-        humanReadableIdentifier: res.getHumanReadableIdentifier(),
         tasks: res.getTasksList().map(task => ({
           id: task.getId(),
           name: task.getName(),
@@ -148,14 +140,47 @@ export const usePatientsByWardQuery = (wardID: string) => {
       req.setWardId(wardID)
       const res = await patientService.getPatientsByWard(req, getAuthenticatedGrpcMetadata())
 
-      const patients: PatientWithBedIDDTO[] = res.getPatientsList().map((patient) => ({
+      const patients: PatientWithBedIDTO[] = res.getPatientsList().map((patient) => ({
         id: patient.getId(),
-        humanReadableIdentifier: patient.getHumanReadableIdentifier(),
+        name: patient.getHumanReadableIdentifier(),
         note: patient.getNotes(),
         bedID: patient.getBedId(),
       }))
-      patients[0].note = ''
+
       return patients
+    }
+  })
+}
+
+export const usePatientAssignmentByWardQuery = (wardID: string) => {
+  return useQuery({
+    queryKey: [roomsQueryKey, 'patientAssignments'],
+    queryFn: async () => {
+      const req = new GetPatientAssignmentByWardRequest()
+      req.setWardId(wardID)
+      const res = await patientService.getPatientAssignmentByWard(req, getAuthenticatedGrpcMetadata())
+
+      const rooms: RoomWithMinimalBedAndPatient[] = res.getRoomsList().map((room) => ({
+        id: room.getId(),
+        name: room.getName(),
+        beds: room.getBedsList().map(bed => {
+          let patient: PatientMinimalDTO | undefined
+          const objectPatient = bed.getPatient()
+          if (objectPatient) {
+            patient = {
+              id: objectPatient.getId(),
+              name: objectPatient.getName()
+            }
+          }
+          return {
+            id: bed.getId(),
+            name: bed.getName(),
+            patient
+          }
+        })
+      }))
+
+      return rooms
     }
   })
 }
@@ -183,14 +208,15 @@ export const usePatientListQuery = (wardID: string) => {
 }
 
 export const usePatientCreateMutation = (callback: (patient: PatientDTO) => void) => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
       const req = new CreatePatientRequest()
       req.setNotes(patient.note)
-      req.setHumanReadableIdentifier(patient.humanReadableIdentifier)
+      req.setHumanReadableIdentifier(patient.name)
       const res = await patientService.createPatient(req, getAuthenticatedGrpcMetadata())
+
       if (!res.getId()) {
-        // TODO some check whether request was successful
         console.error('create room failed')
       }
 
@@ -199,26 +225,35 @@ export const usePatientCreateMutation = (callback: (patient: PatientDTO) => void
       callback(patient)
       return patient
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.log(reason))
+    }
   })
 }
 
 export const usePatientUpdateMutation = (callback: (patient: PatientDTO) => void) => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
       const req = new UpdatePatientRequest()
       req.setId(patient.id)
       req.setNotes(patient.note)
-      req.setHumanReadableIdentifier(patient.humanReadableIdentifier)
+      req.setHumanReadableIdentifier(patient.name)
 
-      await patientService.updatePatient(req, getAuthenticatedGrpcMetadata())
+      const res = await patientService.updatePatient(req, getAuthenticatedGrpcMetadata())
 
-      // TODO some check whether request was successful
+      if (!res.toObject()) {
+        console.error('error in PatientUpdate')
+      }
 
       patient = { ...patient }
 
       callback(patient)
       return patient
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.log(reason))
+    }
   })
 }
 
@@ -240,16 +275,12 @@ export const usePatientDischargeMutation = (callback: () => void) => {
   })
 }
 
-export const useAssignBedMutation = (callback: (bed: BedDTO) => void) => {
+export const useAssignBedMutation = (callback: (bed: BedWithPatientID) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (bed: BedDTO) => {
-      if (!bed.patient) {
-        console.error('cannot use bed without an assigned patient to make the assign request')
-        return { ...emptyBed }
-      }
+    mutationFn: async (bed: BedWithPatientID) => {
       const req = new AssignBedRequest()
-      req.setId(bed.patient.id)
+      req.setId(bed.patientID)
       req.setBedId(bed.id)
 
       const res = await patientService.assignBed(req, getAuthenticatedGrpcMetadata())
@@ -259,10 +290,13 @@ export const useAssignBedMutation = (callback: (bed: BedDTO) => void) => {
         console.error('assign bed request failed')
       }
 
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback(bed)
       return bed
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([patientsQueryKey]).then()
+    }
   })
 }
 

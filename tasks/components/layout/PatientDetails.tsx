@@ -20,6 +20,7 @@ import {
 } from '../../mutations/patient_mutations'
 import { WardOverviewContext } from '../../pages/ward/[uuid]'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
+import { RoomBedDropDown } from '../RoomBedDropDown'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -133,16 +134,21 @@ export const PatientDetail = ({
       )}
       <ColumnTitle title={translation.patientDetails}/>
       <div className={tw('flex flex-row gap-x-6 mb-8')}>
-        <div className={tw('flex flex-col gap-y-4 w-5/12')}>
+        <div className={tw('flex flex-col gap-y-2 w-5/12')}>
           <div className={tw('h-12 w-full')}>
             <ToggleableInput
               labelClassName={tw('text-xl font-semibold')}
               className={tw('text-lg font-semibold')}
               id="humanReadableIdentifier"
-              value={newPatient.humanReadableIdentifier}
-              onChange={humanReadableIdentifier => changeSavedValue({ ...newPatient, humanReadableIdentifier })}
+              value={newPatient.name}
+              onChange={name => changeSavedValue({ ...newPatient, name })}
             />
           </div>
+          <RoomBedDropDown
+            initialRoomAndBed={{ roomID: context.state.roomID ?? '', bedID: context.state.bedID ?? '', patientID: context.state.patient?.id ?? '' }}
+            wardID={context.state.wardID}
+            onChange={roomBedDropDownIDs => context.updateContext({ ...context.state, ...roomBedDropDownIDs })}
+          />
         </div>
         <div className={tw('flex-1')}>
           <Textarea

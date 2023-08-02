@@ -22,12 +22,12 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patient: PatientDTO|undefined) =>
     context.updateContext({
       ...context.state,
-      room,
-      bed,
+      roomID: room.id,
+      bedID: bed.id,
       patient
     })
 
-  const selectedBedID = context.state.bed?.id
+  const selectedBedID = context.state.bedID
   return (
     <div>
       { room.beds.length > 0 ? (
@@ -59,12 +59,13 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
             <BedCard
               key={bed.id}
               bedName={bed.name}
+              // TODO move patient creation to here
               onTileClick={(event) => {
                 event.stopPropagation()
                 setSelectedBed(room, bed, {
                   ...emptyPatient,
                   id: bed.patient?.id ?? '',
-                  humanReadableIdentifier: `Patient ${context.state.room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
+                  name: `Patient ${room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
                 })
               }}
               isSelected={selectedBedID === bed.id}/>

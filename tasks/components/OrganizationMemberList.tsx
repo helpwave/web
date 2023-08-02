@@ -161,12 +161,9 @@ export const OrganizationMemberList = ({
             <Avatar avatarUrl={dataObject.avatarURL} alt="" size="small"/>
             <div className={tw('flex flex-col ml-2 max-w-[250px] overflow-hidden')}>
               <Span className={tw('font-bold truncate')}>{dataObject.name}</Span>
-              <button
-                // TODO update to a copy to clipboard button
-                onClick={() => navigator.clipboard.writeText(dataObject.email)}
-              >
+              <a href={`mailto:${dataObject.email}`} >
                 <Span type="description" className={tw('text-sm truncate')}>{dataObject.email}</Span>
-              </button>
+              </a>
             </div>
           </div>,
           <div key="role" className={tw('flex flex-row items-center mr-2')}>

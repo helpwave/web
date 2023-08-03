@@ -38,7 +38,7 @@ export const BedCard = ({
   const translation = useTranslation(language, defaultBedCardTranslation)
   return (
     (
-      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('h-[148px] flex flex-col')}>
+      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('min-h-[148px] flex flex-col')}>
         <div className={tw('flex flex-row justify-between')}>
           <Span type="subsubsectionTitle">{bedName}</Span>
           <Span>{translation.nobody}</Span>

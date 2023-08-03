@@ -90,7 +90,7 @@ export const PatientList = ({
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
-      <div className={tw('flex flex-row gap-x-2 items-end')}>
+      <div className={tw('flex flex-row gap-x-2 items-center')}>
         <Span type="subsectionTitle" className={tw('pr-4')}>{translation.patients}</Span>
         <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
         <Button

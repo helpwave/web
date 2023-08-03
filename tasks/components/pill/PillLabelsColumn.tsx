@@ -13,7 +13,7 @@ export type PillLabelsColumnProps = {
  */
 const PillLabelsColumn = ({ unscheduledCount = 0, inProgressCount = 0, doneCount = 0 }: PillLabelsColumnProps) => {
   return (
-    <div className={tw('grid grid-rows-3 gap-y-2')}>
+    <div className={tw('flex flex-col gap-y-2')}>
       <PillLabel count={unscheduledCount} state={TaskState[TaskStatus.TASK_STATUS_TODO]}/>
       <PillLabel count={inProgressCount} state={TaskState[TaskStatus.TASK_STATUS_IN_PROGRESS]}/>
       <PillLabel count={doneCount} state={TaskState[TaskStatus.TASK_STATUS_DONE]}/>

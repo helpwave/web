@@ -92,6 +92,8 @@ export const ManageBedsModal = ({
   const updateBedMutation = useBedUpdateMutation()
   const deleteBedMutation = useBedDeleteMutation()
 
+  const maxBedNameLength = 16
+
   const identifierMapping = (bed: BedWithPatientWithTasksNumberDTO) => bed.id
   return (
     <Modal modalClassName={tx('min-w-[600px]', modalClassName)} {...ModalProps}>
@@ -127,6 +129,7 @@ export const ManageBedsModal = ({
                 <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
                   <Input
                     value={bed.name}
+                    maxLength={maxBedNameLength}
                     onChange={text => {
                       setBeds(beds.map(value => value.id === bed.id ? { ...value, name: text } : value))
                     }}

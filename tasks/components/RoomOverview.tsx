@@ -39,10 +39,12 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
 
   return (
     <div className={tw('flex flex-col w-full')} ref={ref}>
-      <div className={tw('flex flex-row items-center mb-1')}>
-        <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <Span type="subsectionTitle">{room.name}</Span>
-      </div>
+      { room.beds.length > 0 ? (
+        <div className={tw('flex flex-row items-center mb-1')}>
+          <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
+          <Span type="subsectionTitle">{room.name}</Span>
+        </div>
+      ) : ''}
       <div className={tw(`grid grid-cols-${columns} gap-4`)}>
         {room.beds.map(bed => bed.patient && bed.patient?.id ?
             (

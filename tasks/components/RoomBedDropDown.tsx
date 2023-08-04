@@ -83,7 +83,7 @@ export const RoomBedDropDown = ({
     <Select
       className={tw('min-w-[120px]')}
       value={currentSelection.roomID}
-      options={data.map(room => ({ value: room.id, label: room.name }))}
+      options={data.map(room => ({ value: room.id, label: room.name, disabled: room.beds.length === 0 }))}
       onChange={value => {
         setCurrentSelection({
           ...currentSelection,
@@ -99,7 +99,7 @@ export const RoomBedDropDown = ({
     <Select
       className={tw('min-w-[150px]')}
       value={currentSelection.bedID}
-      options={currentRoom.beds.map(value => ({ value: value.id, label: value.name }))}
+      options={currentRoom.beds.map(value => ({ value: value.id, label: value.name, disabled: value.patient }))}
       onChange={value => {
         setCurrentSelection({
           ...currentSelection,

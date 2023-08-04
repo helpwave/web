@@ -4,7 +4,8 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 
 type Option<T> = {
   label: string,
-  value: T
+  value: T,
+  disabled?: boolean
 }
 
 type SelectProps<T> = {
@@ -14,6 +15,7 @@ type SelectProps<T> = {
   onChange: (value: T) => void,
   isHidingCurrentValue?: boolean,
   hintText?: string,
+  showDisabledOptions?: boolean,
   className?: string
 };
 
@@ -22,9 +24,21 @@ type SelectProps<T> = {
  *
  * The State is managed by the parent
  */
-export const Select = <T, >({ value, label, options, onChange, isHidingCurrentValue = true, hintText = '', className }: SelectProps<T>) => {
+export const Select = <T, >({
+  value,
+  label,
+  options,
+  onChange,
+  isHidingCurrentValue = true,
+  hintText = '',
+  showDisabledOptions = true,
+  className
+}: SelectProps<T>) => {
   // Notice: for more complex types this check here might need an additional compare method
-  const filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
+  let filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
+  if (!showDisabledOptions) {
+    filteredOptions = filteredOptions.filter(value => !value.disabled)
+  }
   return (
     <div className={tx(className)}>
       {label && (
@@ -47,12 +61,18 @@ export const Select = <T, >({ value, label, options, onChange, isHidingCurrentVa
                 <Menu.Item key={option.label}>
                   {
                     <div
-                      className={tx('px-4 py-2 cursor-pointer overflow-hidden whitespace-nowrap text-ellipsis hover:bg-gray-100 border-2 border-t-0', {
-                        'bg-gray-100 ': option.value === value,
+                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
+                        'bg-gray-100': option.value === value,
                         'bg-gray-50': index % 2 === 1,
+                        'text-gray-300 cursor-not-allowed': !!option.disabled,
+                        'hover:bg-gray-100 cursor-pointer': !option.disabled,
                         'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
                       })}
-                      onClick={() => onChange(option.value)}
+                      onClick={() => {
+                        if (!option.disabled) {
+                          onChange(option.value)
+                        }
+                      }}
                     >
                       {option.label}
                     </div>

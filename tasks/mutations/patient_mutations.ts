@@ -294,7 +294,7 @@ export const useAssignBedMutation = (callback: (bed: BedWithPatientID) => void =
       return bed
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey]).then()
       queryClient.refetchQueries([patientsQueryKey]).then()
     }
   })

@@ -99,7 +99,7 @@ export const RoomBedDropDown = ({
     <Select
       className={tw('min-w-[150px]')}
       value={currentSelection.bedID}
-      options={currentRoom.beds.map(value => ({ value: value.id, label: value.name, disabled: value.patient }))}
+      options={currentRoom.beds.map(value => ({ value: value.id, label: value.name, disabled: !!value.patient }))}
       onChange={value => {
         setCurrentSelection({
           ...currentSelection,

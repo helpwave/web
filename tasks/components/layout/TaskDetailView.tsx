@@ -121,10 +121,10 @@ export const TaskDetailView = ({
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
 
   useEffect(() => {
-    if (data) {
+    if (data && taskID) {
       setTask(data)
     }
-  }, [data])
+  }, [data, taskID])
 
   const {
     data: personalTaskTemplatesData,

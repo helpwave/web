@@ -100,6 +100,8 @@ export const PatientDetail = ({
     return <div>Loading PatientDetails!</div>
   }
 
+  const isShowingTask = (!!taskID || taskID === '')
+
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
       {isShowingSavedNotification &&
@@ -123,7 +125,7 @@ export const PatientDetail = ({
         confirmType="negative"
       />
       {/* taskID === '' is create and if set it's the tasks id */}
-      {(!!taskID || taskID === '') && (
+      {isShowingTask && (
         <TaskDetailModal
           isOpen={true}
           onBackgroundClick={() => setTaskID(undefined)}

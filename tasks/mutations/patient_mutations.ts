@@ -153,7 +153,6 @@ export const usePatientsByWardQuery = (wardID: string) => {
   })
 }
 
-
 export const usePatientAssignmentByWardQuery = (wardID: string) => {
   return useQuery({
     queryKey: [roomsQueryKey, 'patientAssignments'],
@@ -187,13 +186,14 @@ export const usePatientAssignmentByWardQuery = (wardID: string) => {
   })
 }
 
-
-export const usePatientListQuery = (organisationID: string) => {
+export const usePatientListQuery = (organisationID?: string) => {
   return useQuery({
     queryKey: [patientsQueryKey, 'patientList'],
     queryFn: async () => {
       const req = new GetPatientListRequest()
-      req.setOrganisationId(organisationID)
+      if (organisationID) {
+        req.setOrganisationId(organisationID)
+      }
       const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata())
 
       const patientList: PatientListDTO = {

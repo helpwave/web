@@ -79,6 +79,8 @@ export const PatientDetail = ({
   const [taskID, setTaskID] = useState<string>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
 
+  const maxHumanReadableIdentifierLength = 24
+
   useEffect(() => {
     if (data) {
       setNewPatient(data)
@@ -137,6 +139,7 @@ export const PatientDetail = ({
         <div className={tw('flex flex-col gap-y-2 w-5/12')}>
           <div className={tw('h-12 w-full')}>
             <ToggleableInput
+              maxLength={maxHumanReadableIdentifierLength}
               labelClassName={tw('text-xl font-semibold')}
               className={tw('text-lg font-semibold')}
               id="humanReadableIdentifier"

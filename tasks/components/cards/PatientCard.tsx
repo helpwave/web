@@ -27,8 +27,8 @@ export const PatientCard = ({
   return (
     <Card isSelected={isSelected} onTileClick={onTileClick}>
       <div className={tw('flex flex-row justify-between')}>
-        <Span type="subsubsectionTitle">{bedName}</Span>
-        <Span>{patientName}</Span>
+        <Span className={tw('whitespace-nowrap')} type="subsubsectionTitle">{bedName}</Span>
+        <Span className={tw('ml-2 truncate')}>{patientName}</Span>
       </div>
       <div className={tw('min-w-[150px] max-w-[200px] mt-1')}>
         <PillLabelsColumn

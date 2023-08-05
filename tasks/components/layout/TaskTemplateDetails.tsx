@@ -90,7 +90,7 @@ export const TaskTemplateDetails = ({
   const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   const minNameLength = 2
-  const maxNameLength = 64
+  const maxNameLength = 32
 
   function validateName(name: string) {
     const taskTemplateName = name.trim()

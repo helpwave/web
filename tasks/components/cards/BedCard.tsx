@@ -8,23 +8,20 @@ import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type BedCardTranslation = {
-  bedName: string,
   nobody: string
 }
 
 const defaultBedCardTranslation: Record<Languages, BedCardTranslation> = {
   en: {
     nobody: 'nobody',
-    bedName: 'Bed'
   },
   de: {
     nobody: 'frei',
-    bedName: 'Bett'
   }
 }
 
 export type BedCardProps = CardProps & {
-  bedIndex: number
+  bedName: string
 }
 
 /**
@@ -34,16 +31,16 @@ export type BedCardProps = CardProps & {
  */
 export const BedCard = ({
   language,
-  bedIndex,
+  bedName,
   onTileClick,
   isSelected
 }: PropsWithLanguage<BedCardTranslation, BedCardProps>) => {
   const translation = useTranslation(language, defaultBedCardTranslation)
   return (
     (
-      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('h-[148px] flex flex-col')}>
+      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('min-h-[148px] flex flex-col')}>
         <div className={tw('flex flex-row justify-between')}>
-          <Span type="subsubsectionTitle">{`${translation.bedName} ${bedIndex}`}</Span>
+          <Span type="subsubsectionTitle">{bedName}</Span>
           <Span>{translation.nobody}</Span>
         </div>
         <div className={tw('flex flex-1 justify-center items-center')}>

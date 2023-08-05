@@ -83,15 +83,15 @@ export const PatientList = ({
     return null
   }
 
-  const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${translation.bed} ${patient.bed.index}`
+  const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
-  const filteredActive = MultiSearchWithMapping(search, data.active, value => [value.human_readable_identifier, activeLabelText(value)])
+  const filteredActive = MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
   const filteredUnassigned = SimpleSearchWithMapping(search, data.unassigned, value => value.name)
   const filteredDischarged = SimpleSearchWithMapping(search, data.discharged, value => value.name)
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
-      <div className={tw('flex flex-row gap-x-2 items-end')}>
+      <div className={tw('flex flex-row gap-x-2 items-center')}>
         <Span type="subsectionTitle" className={tw('pr-4')}>{translation.patients}</Span>
         <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
         <Button
@@ -109,7 +109,7 @@ export const PatientList = ({
           <Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>
           {filteredActive.map(patient => (
             <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
-              <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.human_readable_identifier}</Span>
+              <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
               <div className={tw('flex flex-row flex-1 justify-between items-center')}>
                 <Label name={activeLabelText(patient)} color="blue"/>
                 <Button color="negative" variant="textButton" onClick={() => {

@@ -68,10 +68,12 @@ export const WardRoomList = ({
         hasError={isError}
       >
         {rooms && rooms.map(room => (
+          room.beds.length > 0 ? (
             <RoomOverview
               key={room.id}
               room={room}
             />
+          ) : ''
         )
         )}
       </LoadingAndErrorComponent>

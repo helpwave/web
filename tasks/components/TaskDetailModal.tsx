@@ -18,7 +18,7 @@ export const TaskDetailModal = ({
 }: TaskDetailModalProps) => {
   return (
     <Modal
-      modalClassName={tx('!p-0', { '!rounded-l-none': taskID === '' }, modalClassName)}
+      modalClassName={tx(modalClassName)}
       {...modalProps}
     >
       <TaskDetailView patientID={patientID} taskID={taskID} onClose={onClose}/>

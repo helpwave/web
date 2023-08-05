@@ -73,9 +73,23 @@ export const SubtaskView = ({
   }, [scrollToBottomFlag, subtasks])
 
   return (
-    <div className={tw('flex flex-col')}>
-      <Span type="subsectionTitle" className={tw('mb-1')}>{translation.subtasks}</Span>
-      <div className={tw('max-h-[500px] overflow-hidden mr-4')}>
+    <div className={tw('flex flex-col gap-y-2')}>
+      <div className={tw('flex flex-row items-center justify-between')}>
+        <Span type="subsectionTitle">{translation.subtasks}</Span>
+        <Button
+          onClick={() => {
+            const newSubtask = { id: '', name: translation.newSubtask, isDone: false }
+            onChange([...subtasks, newSubtask])
+            setScrollToBottom(true)
+          }}
+        >
+          <div className={tw('flex flex-row items-center gap-x-2')}>
+            <Plus size={18}/>
+            <Span>{translation.addSubtask}</Span>
+          </div>
+        </Button>
+      </div>
+      <div className={tw('max-h-[500px] overflow-hidden')}>
         <SimpleBarReact className="h-screen" ref={scrollableRef} style={{ maxHeight: 250 }}>
           <div className={tw('grid grid-cols-1 gap-y-2')}>
             {subtasks.map((subtask, index) => (
@@ -112,17 +126,6 @@ export const SubtaskView = ({
           </div>
         </SimpleBarReact>
       </div>
-      <Button
-        onClick={() => {
-          const newSubtask = { id: '', name: translation.newSubtask, isDone: false }
-          onChange([...subtasks, newSubtask])
-          setScrollToBottom(true)
-        }}
-        className={tw('flex flex-row items-center gap-x-2 mt-4 max-w-[200px] justify-center')}
-      >
-        <Plus/>
-        {translation.addSubtask}
-      </Button>
     </div>
   )
 }

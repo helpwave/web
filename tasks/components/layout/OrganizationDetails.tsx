@@ -108,58 +108,61 @@ export const OrganizationDetail = ({
   }))
 
   return (
-  <div className={tw('flex flex-col py-4 px-6')}>
-    <ConfirmDialog
-      title={translation.deleteConfirmText}
-      description={translation.dangerZoneText}
-      isOpen={isShowingConfirmDialog}
-      onCancel={() => setIsShowingConfirmDialog(false)}
-      onBackgroundClick={() => setIsShowingConfirmDialog(false)}
-      onConfirm={() => {
-        setIsShowingConfirmDialog(false)
-        deleteMutation.mutate(contextState.organizationID)
-      }}
-      confirmType="negative"
-    />
-    <ColumnTitle title={translation.organizationDetail}/>
-    <div className={tw('flex flex-col gap-y-4 max-w-[500px]')}>
-      <OrganizationForm
-        organizationForm={organizationForm}
-        isShowingErrorsDirectly={!isCreatingNewOrganization}
-        onChange={(organizationForm, shouldUpdate) => {
-          setOrganizationForm(organizationForm)
-          if (shouldUpdate) {
-            updateMutation.mutate(organizationForm.organization)
-          }
+    <div
+      key={contextState.organizationID}
+      className={tw('flex flex-col py-4 px-6')}
+    >
+      <ConfirmDialog
+        title={translation.deleteConfirmText}
+        description={translation.dangerZoneText}
+        isOpen={isShowingConfirmDialog}
+        onCancel={() => setIsShowingConfirmDialog(false)}
+        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+        onConfirm={() => {
+          setIsShowingConfirmDialog(false)
+          deleteMutation.mutate(contextState.organizationID)
         }}
+        confirmType="negative"
       />
-      {!isCreatingNewOrganization && (
-        <OrganizationMemberList />
-      )}
-      <OrganisationInvitationList
-        onChange={setOrganizationInvites}
-        invitations={isCreatingNewOrganization ? organizationInvites : undefined}
-        organizationID={contextState.organizationID}
-      />
-      <div className={tw('flex flex-row justify-end')}>
-        <Button
-          className={tw('w-auto')}
-          onClick={() => isCreatingNewOrganization ? createMutation.mutate(organizationForm.organization) : updateMutation.mutate(organizationForm.organization)}
-          disabled={!organizationForm.isValid}>
-          {isCreatingNewOrganization ? translation.create : translation.update}
-        </Button>
-      </div>
-      <div className={tx('flex flex-col justify-start', { hidden: isCreatingNewOrganization })}>
-        <Span type="subsectionTitle">{translation.dangerZone}</Span>
-        <Span type="description">{translation.dangerZoneText}</Span>
-        <button
-          onClick={() => setIsShowingConfirmDialog(true)}
-          className={tw('text-hw-negative-400 font-bold text-left')}
-        >
-          {translation.deleteOrganization}
-        </button>
+      <ColumnTitle title={translation.organizationDetail}/>
+      <div className={tw('flex flex-col gap-y-4 max-w-[500px]')}>
+        <OrganizationForm
+          organizationForm={organizationForm}
+          isShowingErrorsDirectly={!isCreatingNewOrganization}
+          onChange={(organizationForm, shouldUpdate) => {
+            setOrganizationForm(organizationForm)
+            if (shouldUpdate) {
+              updateMutation.mutate(organizationForm.organization)
+            }
+          }}
+        />
+        {!isCreatingNewOrganization && (
+          <OrganizationMemberList />
+        )}
+        <OrganisationInvitationList
+          onChange={setOrganizationInvites}
+          invitations={isCreatingNewOrganization ? organizationInvites : undefined}
+          organizationID={contextState.organizationID}
+        />
+        <div className={tw('flex flex-row justify-end')}>
+          <Button
+            className={tw('w-auto')}
+            onClick={() => isCreatingNewOrganization ? createMutation.mutate(organizationForm.organization) : updateMutation.mutate(organizationForm.organization)}
+            disabled={!organizationForm.isValid}>
+            {isCreatingNewOrganization ? translation.create : translation.update}
+          </Button>
+        </div>
+        <div className={tx('flex flex-col justify-start', { hidden: isCreatingNewOrganization })}>
+          <Span type="subsectionTitle">{translation.dangerZone}</Span>
+          <Span type="description">{translation.dangerZoneText}</Span>
+          <button
+            onClick={() => setIsShowingConfirmDialog(true)}
+            className={tw('text-hw-negative-400 font-bold text-left')}
+          >
+            {translation.deleteOrganization}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   )
 }

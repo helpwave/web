@@ -14,22 +14,25 @@ import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import {
-  usePersonalTaskTemplateQuery,
-  useWardTaskTemplateQuery
-} from '../../mutations/task_template_mutations'
+import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import {
   emptyTask,
   useSubTaskAddMutation,
-  useTaskCreateMutation, useTaskDeleteMutation,
+  useTaskCreateMutation,
+  useTaskDeleteMutation,
   useTaskQuery,
+  useTaskToDoneMutation,
+  useTaskToInProgressMutation,
+  useTaskToToDoMutation,
   useTaskUpdateMutation
 } from '../../mutations/task_mutations'
 import { useEffect, useState } from 'react'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import { GetPatientDetailsResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
+import TaskStatus = GetPatientDetailsResponse.TaskStatus
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -119,6 +122,9 @@ export const TaskDetailView = ({
 
   const updateTaskMutation = useTaskUpdateMutation()
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
+  const toToDoMutation = useTaskToToDoMutation()
+  const toInProgressMutation = useTaskToInProgressMutation()
+  const toDoneMutation = useTaskToDoneMutation()
 
   useEffect(() => {
     if (data) {
@@ -149,6 +155,7 @@ export const TaskDetailView = ({
     return <LoadingAnimation />
   }
 
+  console.log(data, data?.dueDate)
   return (
     <div className={tw('relative flex flex-row h-[628px]')}>
       {isCreating && (
@@ -214,8 +221,8 @@ export const TaskDetailView = ({
             }}/>
           </div>
           <div className={tw('flex flex-col justify-between min-w-[250px]')}>
-            <div className={tw('flex flex-col gap-y-4 hidden')}>
-              <div>
+            <div className={tw('flex flex-col gap-y-4')}>
+              <div className={tw('hidden')} /* TODO enable later */ >
                 <label><Span type="labelMedium">{translation.assignee}</Span></label>
                 <Select
                   value={task.assignee}
@@ -232,20 +239,46 @@ export const TaskDetailView = ({
               </div>
               <div>
                 <label><Span type="labelMedium">{translation.dueDate}</Span></label>
-                <Input
-                  value={formatDate(task.dueDate)}
-                  type="datetime-local"
-                  onChange={value => {
-                    const dueDate = new Date(value)
-                    setTask({ ...task, dueDate })
-                  }}
-                />
+                <div className={tw('flex flex-row items-center gap-x-2')}>
+                  <Input
+                    value={task.dueDate ? formatDate(task.dueDate) : ''}
+                    type="datetime-local"
+                    onChange={value => {
+                      const dueDate = new Date(value)
+                      setTask({ ...task, dueDate })
+                      // Maybe add some auto save here after a validation
+                    }}
+                  />
+                  <Button
+                    onClick={() => setTask({ ...task, dueDate: undefined })}
+                    variant="textButton"
+                    color="negative"
+                    disabled={!task.dueDate}
+                  >
+                    <X size={24}/>
+                  </Button>
+                </div>
               </div>
               <div>
                 <label><Span type="labelMedium">{translation.status}</Span></label>
-                <TaskStatusSelect value={task.status} onChange={status => setTask({ ...task, status })}/>
+                <TaskStatusSelect value={task.status} onChange={status => {
+                  switch (status) {
+                    case TaskStatus.TASK_STATUS_TODO:
+                      toToDoMutation.mutate(task.id)
+                      break
+                    case TaskStatus.TASK_STATUS_IN_PROGRESS:
+                      toInProgressMutation.mutate(task.id)
+                      break
+                    case TaskStatus.TASK_STATUS_DONE:
+                      toDoneMutation.mutate(task.id)
+                      break
+                    default:
+                      break
+                  }
+                  setTask({ ...task, status })
+                }}/>
               </div>
-              <div>
+              <div className={tw('hidden')} /* TODO enable later */>
                 <label><Span type="labelMedium">{translation.visibility}</Span></label>
                 <Select
                   value={task.isPublicVisible}

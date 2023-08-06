@@ -22,6 +22,7 @@
     "@twind/preset-tailwind": "1.1.4",
     "@twind/preset-tailwind-forms": "1.1.2",
     "@twind/preset-typography": "1.0.7",
+    "@types/google-protobuf": "^3.15.6",
     "cookies-next": "2.1.2",
     "google-protobuf": "3.21.2",
     "grpc-web": "1.4.2",

@@ -64,7 +64,7 @@ export const Select = <T, >({
                       className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
                         'bg-gray-100': option.value === value,
                         'bg-gray-50': index % 2 === 1,
-                        'text-gray-300 cursor-not-allowed': option.disabled,
+                        'text-gray-300 cursor-not-allowed': !!option.disabled,
                         'hover:bg-gray-100 cursor-pointer': !option.disabled,
                         'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
                       })}

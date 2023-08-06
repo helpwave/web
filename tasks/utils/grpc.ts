@@ -9,15 +9,19 @@ import {
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_grpc_web_pb'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_grpc_web_pb'
 import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
+import { getConfig } from './config'
+
+const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
+const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`
 
 // TODO: Implement something like a service registry
-export const wardService = new WardServicePromiseClient('https://staging.api.helpwave.de/task-svc')
-export const roomService = new RoomServicePromiseClient('https://staging.api.helpwave.de/task-svc')
-export const bedService = new BedServicePromiseClient('https://staging.api.helpwave.de/task-svc')
-export const patientService = new PatientServicePromiseClient('https://staging.api.helpwave.de/task-svc')
-export const taskTemplateService = new TaskTemplateServicePromiseClient('https://staging.api.helpwave.de/task-svc')
-export const taskService = new TaskServicePromiseClient('https://staging.api.helpwave.de/task-svc')
-export const organizationService = new OrganizationServicePromiseClient('https://staging.api.helpwave.de/user-svc')
+export const wardService = new WardServicePromiseClient(taskSvcBaseUrl)
+export const roomService = new RoomServicePromiseClient(taskSvcBaseUrl)
+export const bedService = new BedServicePromiseClient(taskSvcBaseUrl)
+export const patientService = new PatientServicePromiseClient(taskSvcBaseUrl)
+export const taskTemplateService = new TaskTemplateServicePromiseClient(taskSvcBaseUrl)
+export const taskService = new TaskServicePromiseClient(taskSvcBaseUrl)
+export const organizationService = new OrganizationServicePromiseClient(userSvcBaseUrl)
 
 type AuthenticatedGrpcMetadata = {
   Authorization: string,

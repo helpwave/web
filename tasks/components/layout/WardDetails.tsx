@@ -83,7 +83,7 @@ export const WardDetail = ({
   const context = useContext(OrganizationOverviewContext)
   const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardID)
 
-  const isCreatingNewWard = !context.state.wardID
+  const isCreatingNewWard = context.state.wardID === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
 
   const [filledRequired, setFilledRequired] = useState(!isCreatingNewWard)
@@ -97,10 +97,9 @@ export const WardDetail = ({
 
   const createWardMutation = useWardCreateMutation((ward) => context.updateContext({ ...context.state, wardID: ward.id }))
   const updateWardMutation = useWardUpdateMutation((ward) => {
-    context.updateContext({ ...context.state, wardID: ward.id })
     setNewWard({ ...newWard, name: ward.name })
   })
-  const deleteWardMutation = useWardDeleteMutation(() => context.updateContext({ ...context.state, wardID: undefined }))
+  const deleteWardMutation = useWardDeleteMutation(() => context.updateContext({ ...context.state, wardID: '' }))
 
   // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
   const minimumWidthOfCards = 200
@@ -109,8 +108,8 @@ export const WardDetail = ({
   return (
     <div className={tw('flex flex-col py-4 px-6')}>
       <LoadingAndErrorComponent
-        isLoading={isLoading && !!ward}
-        hasError={isError && !!ward}
+        isLoading={(isLoading && !isCreatingNewWard && !ward) || (!isCreatingNewWard && !newWard.id)}
+        hasError={isError && !isCreatingNewWard && !ward}
         loadingProps={{ classname: tw('!h-full') }}
         errorProps={{ classname: tw('!h-full') }}
       >
@@ -132,6 +131,7 @@ export const WardDetail = ({
         />
         <div className={tw('max-w-[400px]')}>
           <WardForm
+            key={newWard.id}
             ward={newWard}
             usedWardNames={newWard.rooms.map(ward => ward.name)}
             onChange={(wardInfo, isValid) => {

@@ -86,7 +86,7 @@ export const useWardOverviewsQuery = () => {
 export const useWardDetailsQuery = (wardID?: string) => {
   return useQuery({
     queryKey: [wardsQueryKey, wardID],
-    enabled: wardID !== undefined,
+    enabled: !!wardID,
     queryFn: async () => {
       if (wardID === undefined) return
 

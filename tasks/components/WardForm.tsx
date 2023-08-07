@@ -42,7 +42,7 @@ type WardFormInfoDTO = {
 }
 
 export type WardFormProps = {
-  ward?: WardFormInfoDTO,
+  ward: WardFormInfoDTO,
   usedWardNames: string[],
   onChange: (organization: WardFormInfoDTO, isValid: boolean) => void,
   isShowingErrorsDirectly?: boolean
@@ -53,7 +53,7 @@ export type WardFormProps = {
  */
 export const WardForm = ({
   language,
-  ward = { name: '' },
+  ward,
   usedWardNames = [],
   onChange = () => undefined,
   isShowingErrorsDirectly = false
@@ -87,6 +87,7 @@ export const WardForm = ({
     onChange(newWard, isValid)
   }
 
+  console.log(ward)
   const nameErrorMessage: string | undefined = validateName(ward)
 
   const isDisplayingShortNameError = nameErrorMessage && touched.name

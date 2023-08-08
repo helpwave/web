@@ -108,7 +108,7 @@ export const WardDetail = ({
   return (
     <div className={tw('flex flex-col py-4 px-6')}>
       <LoadingAndErrorComponent
-        isLoading={(isLoading && !isCreatingNewWard && !ward) || (!isCreatingNewWard && !newWard.id)}
+        isLoading={!isCreatingNewWard && ((isLoading && !ward) || !newWard.id)}
         hasError={isError && !isCreatingNewWard && !ward}
         loadingProps={{ classname: tw('!h-full') }}
         errorProps={{ classname: tw('!h-full') }}

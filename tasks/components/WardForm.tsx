@@ -87,7 +87,6 @@ export const WardForm = ({
     onChange(newWard, isValid)
   }
 
-  console.log(ward)
   const nameErrorMessage: string | undefined = validateName(ward)
 
   const isDisplayingShortNameError = nameErrorMessage && touched.name

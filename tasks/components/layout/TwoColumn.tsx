@@ -141,7 +141,7 @@ export const TwoColumn = ({
             className={tw(`overflow-hidden`)}
             style={{ width: leftWidth + 'px' }}
           >
-            <SimpleBarReact ref={scrollableRefLeft} style={{ maxHeight: simpleBarMaxHeight }}>
+            <SimpleBarReact ref={scrollableRefLeft} style={{ overflowX: 'hidden', maxHeight: simpleBarMaxHeight }}>
               {left(leftWidth)}
             </SimpleBarReact>
           </div>
@@ -171,7 +171,7 @@ export const TwoColumn = ({
             className={tw(`overflow-hidden`)}
             style={{ width: (fullWidth - leftWidth) + 'px' }}
           >
-            <SimpleBarReact ref={scrollableRefRight} style={{ maxHeight: simpleBarMaxHeight }}>
+            <SimpleBarReact ref={scrollableRefRight} style={{ overflowX: 'hidden', maxHeight: simpleBarMaxHeight }}>
               {right(fullWidth - leftWidth)}
             </SimpleBarReact>
           </div>

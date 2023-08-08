@@ -155,7 +155,6 @@ export const TaskDetailView = ({
     return <LoadingAnimation />
   }
 
-  console.log(data, data?.dueDate)
   return (
     <div className={tw('relative flex flex-row h-[628px]')}>
       {isCreating && (
@@ -249,6 +248,7 @@ export const TaskDetailView = ({
                       // Maybe add some auto save here after a validation
                     }}
                   />
+                  { /* TODO reenable when backend has implemented a remove duedate
                   <Button
                     onClick={() => setTask({ ...task, dueDate: undefined })}
                     variant="textButton"
@@ -257,6 +257,7 @@ export const TaskDetailView = ({
                   >
                     <X size={24}/>
                   </Button>
+                  */ }
                 </div>
               </div>
               <div>

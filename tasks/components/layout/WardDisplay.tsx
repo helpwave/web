@@ -75,7 +75,7 @@ export const WardDisplay = ({
               text={translation.addWard}
               onTileClick={() => context.updateContext({
                 ...context.state,
-                wardID: undefined
+                wardID: ''
               })}
               isSelected={!selectedWardID}
             />

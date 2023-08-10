@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import type { AppProps } from 'next/app'
+import type { AppContext, AppInitialProps, AppProps } from 'next/app'
+import App from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { tw } from '@helpwave/common/twind'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
@@ -8,6 +9,8 @@ import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import MobileInterceptor from '../components/MobileInterceptor'
 import titleWrapper from '../utils/titleWrapper'
+import type { Config } from '../hooks/useConfig'
+import { ConfigProvider } from '../hooks/useConfig'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,31 +24,44 @@ const spaceGrotesk = SpaceGrotesk({
 
 const queryClient = new QueryClient()
 
-function MyApp({ Component, pageProps }: AppProps) {
+type AppOwnProps = { config: Config }
+
+function MyApp({ Component, pageProps, config }: AppProps & AppOwnProps) {
   return (
-    <ProvideLanguage>
-      <div className={tw('mobile:hidden')}>
-        <Head>
-          <title>{titleWrapper()}</title>
-          <style>{`
+    <ConfigProvider initialConfig={config}>
+      <ProvideLanguage>
+        <div className={tw('mobile:hidden')}>
+          <Head>
+            <title>{titleWrapper()}</title>
+            <style>{`
         :root {
           --font-inter: ${inter.style.fontFamily};
           --font-space: ${spaceGrotesk.style.fontFamily};
         }
       `}</style>
-        </Head>
-        <QueryClientProvider client={queryClient}>
-          <div className={tw('font-sans')} id="modal-root">
-            <Component {...pageProps} />
-          </div>
-        </QueryClientProvider>
-      </div>
+          </Head>
+          <QueryClientProvider client={queryClient}>
+            <div className={tw('font-sans')} id="modal-root">
+              <Component {...pageProps} />
+            </div>
+          </QueryClientProvider>
+        </div>
 
-      <div className={tw('desktop:hidden')}>
-        <MobileInterceptor {...pageProps} />
-      </div>
-    </ProvideLanguage>
+        <div className={tw('desktop:hidden')}>
+          <MobileInterceptor {...pageProps} />
+        </div>
+      </ProvideLanguage>
+    </ConfigProvider>
   )
+}
+
+// TODO: Adopting the AppRouter https://nextjs.org/docs/pages/building-your-application/routing/custom-app#getinitialprops-with-app
+MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps & AppOwnProps> => {
+  const ctx = await App.getInitialProps(context)
+  const config: Config = {
+    api: process.env.API || '123'
+  }
+  return { ...ctx, config }
 }
 
 export default withNextApp(config, MyApp)

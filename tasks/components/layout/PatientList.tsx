@@ -11,6 +11,7 @@ import { usePatientListQuery } from '../../mutations/patient_mutations'
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
 import { WardOverviewContext } from '../../pages/ward/[uuid]'
+import { AddPatientModal } from '../AddPatientModal'
 
 type PatientListTranslation = {
   patients: string,
@@ -73,6 +74,7 @@ export const PatientList = ({
   const [search, setSearch] = useState('')
   const context = useContext(WardOverviewContext)
   const { data, isLoading, isError } = usePatientListQuery(context.state.wardID)
+  const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
 
   if (isError) {
     return <p>Error</p>
@@ -90,6 +92,14 @@ export const PatientList = ({
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
+      <AddPatientModal
+        key={isShowingAddPatientModal}
+        isOpen={isShowingAddPatientModal !== 0}
+        onConfirm={() => setIsShowingAddPatientModal(0)}
+        onCancel={() => setIsShowingAddPatientModal(0)}
+        onBackgroundClick={() => setIsShowingAddPatientModal(0)}
+        wardID={context.state.wardID}
+      />
       <div className={tw('flex flex-row gap-x-2 items-center')}>
         <Span type="subsectionTitle" className={tw('pr-4')}>{translation.patients}</Span>
         <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
@@ -97,7 +107,7 @@ export const PatientList = ({
           className={tw('whitespace-nowrap')}
           color="positive"
           onClick={() => {
-            // TODO open add patient screen
+            setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
           }}
         >
           {translation.addPatient}

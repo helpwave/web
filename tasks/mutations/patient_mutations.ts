@@ -155,6 +155,7 @@ export const usePatientsByWardQuery = (wardID: string) => {
 export const usePatientAssignmentByWardQuery = (wardID: string) => {
   return useQuery({
     queryKey: [roomsQueryKey, 'patientAssignments'],
+    enabled: !!wardID,
     queryFn: async () => {
       const req = new GetPatientAssignmentByWardRequest()
       req.setWardId(wardID)

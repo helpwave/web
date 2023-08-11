@@ -16,7 +16,8 @@ type SelectProps<T> = {
   isHidingCurrentValue?: boolean,
   hintText?: string,
   showDisabledOptions?: boolean,
-  className?: string
+  className?: string,
+  isDisabled?: boolean
 };
 
 /**
@@ -32,6 +33,7 @@ export const Select = <T, >({
   isHidingCurrentValue = true,
   hintText = '',
   showDisabledOptions = true,
+  isDisabled,
   className
 }: SelectProps<T>) => {
   // Notice: for more complex types this check here might need an additional compare method
@@ -51,6 +53,7 @@ export const Select = <T, >({
           <>
             <Menu.Button
               className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 hover:bg-gray-100 font-medium', { 'rounded-b-lg': !open })}
+              disabled={isDisabled}
             >
               <span>{options.find(option => option.value === value)?.label ?? hintText}</span>
               {open ? <ChevronUp/> : <ChevronDown/>}

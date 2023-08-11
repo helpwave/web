@@ -33,7 +33,7 @@ export const ErrorComponent = ({
   const translation = useTranslation(language, defaultErrorComponentTranslation)
   return (
     <div className={tx('flex flex-col items-center justify-center gap-y-4 w-full h-24', classname)}>
-      <AlertOctagon size={64} className={tw('text-hw-warning-400')}/>
+      <AlertOctagon size={64} className={tw('text-hw-warn-400')}/>
       {errorText ?? `${translation.errorOccurred} :(`}
     </div>
   )

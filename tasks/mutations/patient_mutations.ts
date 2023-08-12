@@ -249,7 +249,8 @@ export const usePatientCreateMutation = (callback: (patient: PatientDTO) => void
       return patient
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.log(reason))
+      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
     }
   })
 }
@@ -275,7 +276,8 @@ export const usePatientUpdateMutation = (callback: (patient: PatientDTO) => void
       return patient
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.log(reason))
+      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.error(reason))
     }
   })
 }
@@ -293,10 +295,13 @@ export const usePatientDischargeMutation = (callback: () => void = noop) => {
         console.error('error in PatientDischarge')
       }
 
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).catch(reason => console.log(reason))
       callback()
       return res.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
+    }
   })
 }
 
@@ -339,9 +344,12 @@ export const useUnassignMutation = (callback: () => void) => {
         console.error('assign bed request failed')
       }
 
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback()
       return res.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([patientsQueryKey]).then()
+    }
   })
 }

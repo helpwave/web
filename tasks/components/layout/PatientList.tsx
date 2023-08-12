@@ -11,6 +11,7 @@ import { usePatientDischargeMutation, usePatientListQuery } from '../../mutation
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 type PatientListTranslation = {
   patients: string,
@@ -58,8 +59,21 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
   }
 }
 
+export type PatientListOpenedSectionsType = {
+  active: boolean,
+  unassigned: boolean,
+  discharged: boolean
+}
+
+export const defaultPatientListOpenedSections: PatientListOpenedSectionsType = {
+  active: true,
+  unassigned: true,
+  discharged: false
+}
+
 export type PatientListProps = {
   onDischarge?: (patient: PatientDTO) => void,
+  initialOpenedSections?:PatientListOpenedSectionsType,
   width?: number
 }
 
@@ -67,12 +81,14 @@ export type PatientListProps = {
  * The right side of the ward/[uuid].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
-  language
+  language,
+  initialOpenedSections = defaultPatientListOpenedSections
 }: PropsWithLanguage<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(language, defaultPatientListTranslations)
   const [search, setSearch] = useState('')
   const { data, isLoading, isError } = usePatientListQuery()
   const dischargeMutation = usePatientDischargeMutation()
+  const [openedSections, setOpenedSections] = useState<PatientListOpenedSectionsType>(initialOpenedSections)
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
@@ -104,8 +120,15 @@ export const PatientList = ({
         <div className={tw('flex flex-col gap-y-4')}>
           {filteredActive.length >= 0 && (
             <div className={tw('flex flex-col')}>
-              <Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>
-              {filteredActive.map(patient => (
+              <div className={tw('flex flex-row justify-between items-center')}>
+                <Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>
+                <button
+                  onClick={() => setOpenedSections({ ...openedSections, active: !openedSections.active })}
+                >
+                  {filteredActive.length > 0 && (openedSections.active ? <ChevronUp /> : <ChevronDown />)}
+                </button>
+              </div>
+              {openedSections.active && filteredActive.map(patient => (
                 <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
                   <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                   <div className={tw('flex flex-row flex-1 justify-between items-center')}>
@@ -122,8 +145,15 @@ export const PatientList = ({
           )}
           {filteredUnassigned.length >= 0 && (
             <div className={tw('flex flex-col')}>
-              <Span type="accent" className={tw('text-hw-label-yellow-text')}>{`${translation.unassigned} (${filteredUnassigned.length})`}</Span>
-              {filteredUnassigned.map(patient => (
+              <div className={tw('flex flex-row justify-between items-center')}>
+                <Span type="accent" className={tw('text-hw-label-yellow-text')}>{`${translation.unassigned} (${filteredUnassigned.length})`}</Span>
+                <button
+                  onClick={() => setOpenedSections({ ...openedSections, unassigned: !openedSections.unassigned })}
+                >
+                  {filteredUnassigned.length > 0 && (openedSections.unassigned ? <ChevronUp /> : <ChevronDown />)}
+                </button>
+              </div>
+              {openedSections.unassigned && filteredUnassigned.map(patient => (
                 <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 items-center')}>
                   <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                   <div className={tw('flex flex-row flex-1 justify-between items-center')}>
@@ -140,8 +170,15 @@ export const PatientList = ({
           )}
           {filteredDischarged.length >= 0 && (
             <div className={tw('flex flex-col')}>
-              <Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>
-              {filteredDischarged.map(patient => (
+              <div className={tw('flex flex-row justify-between items-center')}>
+                <Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>
+                <button
+                  onClick={() => setOpenedSections({ ...openedSections, discharged: !openedSections.discharged })}
+                >
+                  {filteredDischarged.length > 0 && (openedSections.discharged ? <ChevronUp /> : <ChevronDown />)}
+                </button>
+              </div>
+              {openedSections.discharged && filteredDischarged.map(patient => (
                 <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
                   <Span className={tw('font-space font-bold')}>{patient.name}</Span>
                   <Button color="negative" variant="textButton" onClick={() => {

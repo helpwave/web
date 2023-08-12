@@ -117,7 +117,7 @@ export const PatientList = ({
         errorProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
         loadingProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
       >
-        <div className={tw('flex flex-col gap-y-4')}>
+        <div className={tw('flex flex-col gap-y-4 mb-8')}>
           {filteredActive.length >= 0 && (
             <div className={tw('flex flex-col')}>
               <div className={tw('flex flex-row justify-between items-center')}>
@@ -181,11 +181,13 @@ export const PatientList = ({
               {openedSections.discharged && filteredDischarged.map(patient => (
                 <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
                   <Span className={tw('font-space font-bold')}>{patient.name}</Span>
+                  { /* TODO implement when backend endpoint exists
                   <Button color="negative" variant="textButton" onClick={() => {
                     // TODO delete
                   }}>
                     {translation.delete}
                   </Button>
+                  */}
                 </div>
               ))}
             </div>

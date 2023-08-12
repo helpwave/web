@@ -100,7 +100,7 @@ export const TaskDetailView = ({
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplateDTO | undefined>(undefined)
   const router = useRouter()
-  const { uuid: wardId } = router.query
+  const { id: wardId } = router.query
   const { user } = useAuth()
 
   const minTaskNameLength = 4

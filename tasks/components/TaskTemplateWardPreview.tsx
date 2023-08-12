@@ -7,7 +7,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { useRouter } from 'next/router'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { useContext } from 'react'
-import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
+import { OrganizationOverviewContext } from '../pages/organizations/[id]'
 import { useWardTaskTemplateQuery } from '../mutations/task_template_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 

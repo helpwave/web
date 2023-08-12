@@ -45,14 +45,14 @@ export const useRoomQuery = () => {
 }
 
 export const roomOverviewsQueryKey = 'roomOverview'
-export const useRoomOverviewsQuery = (wardUUID: string | undefined) => {
+export const useRoomOverviewsQuery = (wardID: string | undefined) => {
   return useQuery({
     queryKey: [roomsQueryKey, roomOverviewsQueryKey],
-    enabled: !!wardUUID,
+    enabled: !!wardID,
     queryFn: async () => {
       const req = new GetRoomOverviewsByWardRequest()
-      if (wardUUID) {
-        req.setId(wardUUID)
+      if (wardID) {
+        req.setId(wardID)
       }
       const res = await roomService.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
 
@@ -102,12 +102,12 @@ export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) 
   })
 }
 
-export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, wardUUID: string) => {
+export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, wardID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (room: RoomMinimalDTO) => {
       const req = new CreateRoomRequest()
-      req.setWardId(wardUUID)
+      req.setWardId(wardID)
       req.setName(room.name)
       const res = await roomService.createRoom(req, getAuthenticatedGrpcMetadata())
 
@@ -128,9 +128,9 @@ export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, 
 export const useRoomDeleteMutation = (callback: () => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (roomUUID: string) => {
+    mutationFn: async (roomID: string) => {
       const req = new DeleteRoomRequest()
-      req.setId(roomUUID)
+      req.setId(roomID)
       const res = await roomService.deleteRoom(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {

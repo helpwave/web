@@ -5,7 +5,7 @@ import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import { Span } from '@helpwave/common/components/Span'
 import type { BedMinimalDTO } from '../mutations/bed_mutations'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { WardOverviewContext } from '../pages/ward/[uuid]'
+import { WardOverviewContext } from '../pages/ward/[id]'
 import type { PatientDTO } from '../mutations/patient_mutations'
 import { emptyPatient } from '../mutations/patient_mutations'
 

@@ -160,7 +160,7 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
 export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
   const router = useRouter()
-  const { uuid: wardId } = router.query
+  const { id: wardId } = router.query
 
   return useMutation({
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {

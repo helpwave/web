@@ -7,7 +7,7 @@ import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
-import { OrganizationOverviewContext } from '../../pages/organizations/[uuid]'
+import { OrganizationOverviewContext } from '../../pages/organizations/[id]'
 import { useWardOverviewsQuery } from '../../mutations/ward_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
@@ -33,7 +33,7 @@ export type WardDisplayProps = {
 }
 
 /**
- * The left side of the organizations/[uuid].tsx page showing the wards within the organizations
+ * The left side of the organizations/[id].tsx page showing the wards within the organizations
  */
 export const WardDisplay = ({
   language,

@@ -50,10 +50,10 @@ export const TaskTemplateDisplay = ({
 }: PropsWithLanguage<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateDisplayTranslation)
   const router = useRouter()
-  const { uuid, wardID } = router.query
+  const { id, wardID } = router.query
   const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))
 
-  const switchToPersonalLink = uuid ? `/templates?wardID=${uuid}` : '/templates'
+  const switchToPersonalLink = id ? `/templates?wardID=${id}` : '/templates'
   return (
     <div className={tw('py-4 px-6')}>
       <div className={tw('flex flex-row items-center justify-between mb-4')}>

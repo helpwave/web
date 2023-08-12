@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -75,21 +74,20 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
 const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
   const router = useRouter()
-  const { user } = useAuth()
-  const { uuid } = router.query
-  const wardUUID = uuid as string
+  const { id } = router.query
+  const wardID = id as string
 
   const [contextState, setContextState] = useState<WardOverviewContextState>({
-    wardID: wardUUID
+    wardID
   })
 
   const isShowingPatientDialog = contextState.patient?.id === ''
   const isShowingPatientList = contextState.patient === undefined || isShowingPatientDialog
 
-  const organizationUUID = 'org1' // TODO get this information somewhere
+  const organizationID = 'org1' // TODO get this information somewhere
   useEffect(() => {
-    setContextState({ wardID: wardUUID })
-  }, [wardUUID])
+    setContextState({ wardID })
+  }, [wardID])
 
   const assignBedMutation = useAssignBedMutation()
 
@@ -103,14 +101,12 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     setContextState(updatedContext)
   })
 
-  if (!user) return null
-
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: `/organizations?organizationID=${organizationUUID}` },
-        { display: translation.ward, link: `/organizations/${organizationUUID}?wardID=${wardUUID}` },
-        { display: translation.room, link: `/ward/${wardUUID}` }
+        { display: translation.organization, link: `/organizations?organizationID=${organizationID}` },
+        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${wardID}` },
+        { display: translation.room, link: `/ward/${wardID}` }
       ]}
     >
       <Head>
@@ -138,7 +134,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           disableResize={false}
           constraints={{ right: { min: '580px' }, left: { min: '33%' } }}
           baseLayoutValue="-580px"
-          left={() => (<WardRoomList key={wardUUID}/>)}
+          left={() => (<WardRoomList key={wardID}/>)}
           right={width =>
             isShowingPatientList ? (
                   <PatientList width={width}/>

@@ -58,8 +58,8 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
   const [usedQueryParam, setUsedQueryParam] = useState(false)
 
   const router = useRouter()
-  const { uuid, wardID } = router.query
-  const organizationID = uuid as string
+  const { id, wardID } = router.query
+  const organizationID = id as string
 
   if (wardID && !usedQueryParam) {
     setContextState({

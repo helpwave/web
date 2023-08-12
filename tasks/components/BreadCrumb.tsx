@@ -14,7 +14,7 @@ type BreadCrumbProps = {
 /**
  * A component for showing a hierarchical link structure with an independent link on each element
  *
- * e.g. Organizations/Ward/uuid
+ * e.g. Organizations/Ward/<id>
  */
 export const BreadCrumb = ({ crumbs }: BreadCrumbProps) => {
   return (

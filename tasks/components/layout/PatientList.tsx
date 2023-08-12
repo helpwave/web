@@ -10,7 +10,7 @@ import type { PatientDTO, PatientWithBedAndRoomDTO } from '../../mutations/patie
 import { usePatientListQuery } from '../../mutations/patient_mutations'
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
-import { WardOverviewContext } from '../../pages/ward/[uuid]'
+import { WardOverviewContext } from '../../pages/ward/[id]'
 
 type PatientListTranslation = {
   patients: string,
@@ -64,7 +64,7 @@ export type PatientListProps = {
 }
 
 /**
- * The right side of the ward/[uuid].tsx page showing the detailed information about the patients in the ward
+ * The right side of the ward/[id].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
   language

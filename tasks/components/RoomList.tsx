@@ -7,7 +7,7 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Button } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
-import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
+import { OrganizationOverviewContext } from '../pages/organizations/[id]'
 import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import {
   emptyRoomOverview,

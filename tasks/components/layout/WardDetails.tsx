@@ -18,7 +18,7 @@ import {
   useWardUpdateMutation,
   useWardDetailsQuery
 } from '../../mutations/ward_mutations'
-import { OrganizationOverviewContext } from '../../pages/organizations/[uuid]'
+import { OrganizationOverviewContext } from '../../pages/organizations/[id]'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type WardDetailTranslation = {
@@ -70,7 +70,7 @@ export type WardDetailProps = {
 }
 
 /**
- * The right side of the organizations/[uuid].tsx page showing the ward. This screen also affords to edit
+ * The right side of the organizations/[id].tsx page showing the ward. This screen also affords to edit
  * the Ward
  */
 export const WardDetail = ({

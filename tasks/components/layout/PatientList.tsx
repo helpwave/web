@@ -11,7 +11,7 @@ import { usePatientDischargeMutation, usePatientListQuery } from '../../mutation
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 
 type PatientListTranslation = {
   patients: string,
@@ -88,7 +88,6 @@ export const PatientList = ({
   const [search, setSearch] = useState('')
   const { data, isLoading, isError } = usePatientListQuery()
   const dischargeMutation = usePatientDischargeMutation()
-  const [openedSections, setOpenedSections] = useState<PatientListOpenedSectionsType>(initialOpenedSections)
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
@@ -119,16 +118,12 @@ export const PatientList = ({
       >
         <div className={tw('flex flex-col gap-y-4 mb-8')}>
           {filteredActive.length >= 0 && (
-            <div className={tw('flex flex-col')}>
-              <div className={tw('flex flex-row justify-between items-center')}>
-                <Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>
-                <button
-                  onClick={() => setOpenedSections({ ...openedSections, active: !openedSections.active })}
-                >
-                  {filteredActive.length > 0 && (openedSections.active ? <ChevronUp /> : <ChevronDown />)}
-                </button>
-              </div>
-              {openedSections.active && filteredActive.map(patient => (
+            <HideableContentSection
+              initiallyOpen={initialOpenedSections?.active}
+              disabled={filteredActive.length <= 0}
+              header={<Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>}
+            >
+              {filteredActive.map(patient => (
                 <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
                   <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                   <div className={tw('flex flex-row flex-1 justify-between items-center')}>
@@ -141,19 +136,15 @@ export const PatientList = ({
                   </div>
                 </div>
               ))}
-            </div>
+            </HideableContentSection>
           )}
           {filteredUnassigned.length >= 0 && (
-            <div className={tw('flex flex-col')}>
-              <div className={tw('flex flex-row justify-between items-center')}>
-                <Span type="accent" className={tw('text-hw-label-yellow-text')}>{`${translation.unassigned} (${filteredUnassigned.length})`}</Span>
-                <button
-                  onClick={() => setOpenedSections({ ...openedSections, unassigned: !openedSections.unassigned })}
-                >
-                  {filteredUnassigned.length > 0 && (openedSections.unassigned ? <ChevronUp /> : <ChevronDown />)}
-                </button>
-              </div>
-              {openedSections.unassigned && filteredUnassigned.map(patient => (
+            <HideableContentSection
+              initiallyOpen={initialOpenedSections?.unassigned}
+              disabled={filteredUnassigned.length <= 0}
+              header={ <Span type="accent" className={tw('text-hw-label-yellow-text')}>{`${translation.unassigned} (${filteredUnassigned.length})`}</Span>}
+            >
+              {filteredUnassigned.map(patient => (
                 <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 items-center')}>
                   <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                   <div className={tw('flex flex-row flex-1 justify-between items-center')}>
@@ -166,19 +157,15 @@ export const PatientList = ({
                   </div>
                 </div>
               ))}
-            </div>
+            </HideableContentSection>
           )}
           {filteredDischarged.length >= 0 && (
-            <div className={tw('flex flex-col')}>
-              <div className={tw('flex flex-row justify-between items-center')}>
-                <Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>
-                <button
-                  onClick={() => setOpenedSections({ ...openedSections, discharged: !openedSections.discharged })}
-                >
-                  {filteredDischarged.length > 0 && (openedSections.discharged ? <ChevronUp /> : <ChevronDown />)}
-                </button>
-              </div>
-              {openedSections.discharged && filteredDischarged.map(patient => (
+            <HideableContentSection
+              initiallyOpen={initialOpenedSections?.discharged}
+              disabled={filteredDischarged.length <= 0}
+              header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
+            >
+              {filteredDischarged.map(patient => (
                 <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
                   <Span className={tw('font-space font-bold')}>{patient.name}</Span>
                   { /* TODO implement when backend endpoint exists
@@ -190,7 +177,7 @@ export const PatientList = ({
                   */}
                 </div>
               ))}
-            </div>
+            </HideableContentSection>
           )}
         </div>
       </LoadingAndErrorComponent>

@@ -16,11 +16,9 @@ import {
 } from '@helpwave/common/components/Table'
 import type { OrgMember } from '../mutations/organization_member_mutations'
 import { Role } from '../mutations/organization_member_mutations'
-import {
-  useOrganizationsByUserQuery,
-  useRemoveMemberMutation
-} from '../mutations/organization_mutations'
+import { useOrganizationsByUserQuery, useRemoveMemberMutation } from '../mutations/organization_mutations'
 import { OrganizationContext } from '../pages/organizations'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type OrganizationMemberListTranslation = {
   edit: string,
@@ -97,18 +95,23 @@ export const OrganizationMemberList = ({
 
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
 
-  // TODO add view for loading
-  if (isLoading && !members) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError && !members) {
-    return <div>Error Message</div>
-  }
-
   const hasSelectedMultiple = !!tableState.selection && tableState.selection.currentSelection.length > 1
   const idMapping = (dataObject: OrgMember) => dataObject.id
+
+  // TODO move this filtering to the Table component
+  const admins = usedMembers.filter(value => value.role === Role.admin).map(idMapping)
+  if (tableState.selection?.currentSelection.find(value => admins.find(adminID => adminID === value))) {
+    const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminID => adminID === value))
+    setTableState({
+      ...tableState,
+      selection: {
+        currentSelection: newSelection,
+        hasSelectedAll: false, // There is always one admin
+        hasSelectedSome: newSelection.length > 0,
+        hasSelectedNone: newSelection.length === 0,
+      }
+    })
+  }
 
   return (
     <div className={tw('flex flex-col')}>
@@ -131,61 +134,69 @@ export const OrganizationMemberList = ({
         }}
         confirmType="negative"
       />
-      <div className={tw('flex flex-row justify-between items-center mb-2')}>
-        <Span type="tableName">{translation.members + ` (${usedMembers.length})`}</Span>
-        <div className={tw('flex flex-row gap-x-2')}>
-          {tableState.selection && tableState.selection.currentSelection.length > 0 && (
-            <Button
-              onClick={() => setDeleteDialogState({ isShowing: true })}
-              color="negative"
-            >
-              {translation.removeSelection}
-            </Button>
-          )}
-        </div>
-      </div>
-      <Table
-        data={usedMembers}
-        stateManagement={[tableState, setTableState]}
-        header={[
-          <div key="member" className={tw('flex flex-row')}>
-            <Span type="tableHeader">{translation.member}</Span>
-          </div>,
-          <div key="role" className={tw('flex flex-row')}>
-            <Span type="tableHeader">{translation.role}</Span>
-          </div>,
-          <></>
-        ]}
-        rowMappingToCells={dataObject => [
-          <div key="member" className={tw('flex flex-row items-center h-12')}>
-            <Avatar avatarUrl={dataObject.avatarURL} alt="" size="small"/>
-            <div className={tw('flex flex-col ml-2 max-w-[250px] overflow-hidden')}>
-              <Span className={tw('font-bold truncate')}>{dataObject.name}</Span>
-              <a href={`mailto:${dataObject.email}`} >
-                <Span type="description" className={tw('text-sm truncate')}>{dataObject.email}</Span>
-              </a>
-            </div>
-          </div>,
-          <div key="role" className={tw('flex flex-row items-center mr-2')}>
-            <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
-            }}>
-              <Span className={tw(`font-semibold`)}>
-                {translation.roleTypes[dataObject.role]}
-              </Span>
-            </button>
-          </div>,
-          <div key="remove" className={tw('flex flex-row justify-end')}>
-            <Button
-              onClick={() => setDeleteDialogState({ isShowing: true, member: dataObject })}
-              color="negative"
-              variant="textButton"
-            >
-              {translation.remove}
-            </Button>
+      <LoadingAndErrorComponent
+        hasError={(isError || !data) && !members}
+        isLoading={!members && isLoading}
+        errorProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
+        loadingProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
+      >
+        <div className={tw('flex flex-row justify-between items-center mb-2')}>
+          <Span type="tableName">{translation.members + ` (${usedMembers.length})`}</Span>
+          <div className={tw('flex flex-row gap-x-2')}>
+            {tableState.selection && tableState.selection.currentSelection.length > 0 && (
+              <Button
+                onClick={() => setDeleteDialogState({ isShowing: true })}
+                color="negative"
+              >
+                {translation.removeSelection}
+              </Button>
+            )}
           </div>
-        ]}
-       identifierMapping={idMapping}
-      />
+        </div>
+        <Table
+          data={usedMembers}
+          stateManagement={[tableState, setTableState]}
+          header={[
+            <div key="member" className={tw('flex flex-row')}>
+              <Span type="tableHeader">{translation.member}</Span>
+            </div>,
+            <div key="role" className={tw('flex flex-row')}>
+              <Span type="tableHeader">{translation.role}</Span>
+            </div>,
+            <></>
+          ]}
+          rowMappingToCells={orgMember => [
+            <div key="member" className={tw('flex flex-row items-center h-12 overflow-hidden max-w-[200px]')}>
+              <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
+              <div className={tw('flex flex-col ml-2')}>
+                <Span className={tw('font-bold truncate')}>{orgMember.name}</Span>
+                <a href={`mailto:${orgMember.email}`}>
+                  <Span type="description" className={tw('text-sm truncate')}>{orgMember.email}</Span>
+                </a>
+              </div>
+            </div>,
+            <div key="role" className={tw('flex flex-row items-center mr-2')}>
+              <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
+              }}>
+                <Span className={tw(`font-semibold`)}>
+                  {translation.roleTypes[orgMember.role]}
+                </Span>
+              </button>
+            </div>,
+            <div key="remove" className={tw('flex flex-row justify-end')}>
+              <Button
+                onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
+                color="negative"
+                variant="textButton"
+                disabled={orgMember.role === Role.admin}
+              >
+                {translation.remove}
+              </Button>
+            </div>
+          ]}
+         identifierMapping={idMapping}
+        />
+      </LoadingAndErrorComponent>
     </div>
   )
 }

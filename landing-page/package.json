@@ -25,11 +25,11 @@
     "react-intersection-observer": "9.5.2"
   },
   "devDependencies": {
-    "@types/node": "20.4.5",
-    "@types/react": "18.2.17",
+    "@types/node": "20.4.8",
+    "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
-    "@typescript-eslint/eslint-plugin": "6.2.0",
-    "@typescript-eslint/parser": "6.2.0",
+    "@typescript-eslint/eslint-plugin": "6.2.1",
+    "@typescript-eslint/parser": "6.2.1",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "eslint-config-standard": "17.1.0",

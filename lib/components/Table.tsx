@@ -2,7 +2,8 @@ import { tw, tx } from '../twind'
 import type { ReactElement } from 'react'
 import { Checkbox } from './user_input/Checkbox'
 import { Pagination } from './Pagination'
-import { noop } from './user_input/Input'
+import { noop } from '../util/noop'
+import SimpleBarReact from 'simplebar-react'
 
 export type TableStatePagination = {
   currentPage: number,
@@ -229,49 +230,55 @@ export const Table = <T, >({
   const cellPadding = 'py-1 px-2'
 
   return (
-    <div className={tw('flex flex-col gap-y-4 items-center')}>
-      <table className={tw('w-full')}>
-        <thead>
-        <tr className={headerRow}>
-          {header && tableState.selection && (
-            <th className={headerPaddingHead}>
-              <Checkbox
-                checked={tableState.selection.hasSelectedSome ? 'indeterminate' : tableState.selection.hasSelectedAll}
-                onChange={() => updateTableState(changeTableSelectionAll(tableState, data, identifierMapping))}
-              />
-            </th>
-          )}
-          {header && header.map((value, index) => (
-            <th key={`tableHeader${index}`} className={headerPaddingHead}>
-              <div className={tw('flex flex-row justify-start px-2')}>
-                {value}
-              </div>
-            </th>
-          )
-          )}
-        </tr>
-        </thead>
-        <tbody>
-        {shownElements.map((value, rowIndex) => (
-          <tr key={identifierMapping(value)} >
-            {tableState.selection && (
-              <td className={tx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
-                <Checkbox
-                  checked={isDataObjectSelected(tableState, value, identifierMapping)}
-                  onChange={() => {
-                    updateTableState(changeTableSelectionSingle(tableState, value, data.length, identifierMapping))
-                  }}
-                />
-              </td>
-            )}
-            {rowMappingToCells(value).map((value1, index) => <td key={index} className={tx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>{value1}</td>)}
-          </tr>
-        ))}
-        </tbody>
-      </table>
-      {tableState.pagination &&
-        <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({ ...tableState, pagination: { entriesPerPage, currentPage: page } })}/>
-      }
+    <div className={tw('flex flex-col gap-y-4 overflow-hidden')}>
+      <div>
+        <SimpleBarReact>
+          <table className={tw('w-full mb-[12px]')}>
+            <thead>
+              <tr className={headerRow}>
+                {header && tableState.selection && (
+                  <th className={headerPaddingHead}>
+                    <Checkbox
+                      checked={tableState.selection.hasSelectedSome ? 'indeterminate' : tableState.selection.hasSelectedAll}
+                      onChange={() => updateTableState(changeTableSelectionAll(tableState, data, identifierMapping))}
+                    />
+                  </th>
+                )}
+                {header && header.map((value, index) => (
+                  <th key={`tableHeader${index}`} className={headerPaddingHead}>
+                    <div className={tw('flex flex-row justify-start px-2')}>
+                      {value}
+                    </div>
+                  </th>
+                )
+                )}
+              </tr>
+            </thead>
+            <tbody>
+            {shownElements.map((value, rowIndex) => (
+              <tr key={identifierMapping(value)}>
+                {tableState.selection && (
+                  <td className={tx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
+                    <Checkbox
+                      checked={isDataObjectSelected(tableState, value, identifierMapping)}
+                      onChange={() => {
+                        updateTableState(changeTableSelectionSingle(tableState, value, data.length, identifierMapping))
+                      }}
+                    />
+                  </td>
+                )}
+                {rowMappingToCells(value).map((value1, index) => <td key={index} className={tx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>{value1}</td>)}
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </SimpleBarReact>
+      </div>
+      <div className={tw('flex flex-row justify-center')}>
+        {tableState.pagination &&
+          <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({ ...tableState, pagination: { entriesPerPage, currentPage: page } })}/>
+        }
+      </div>
     </div>
   )
 }

@@ -28,16 +28,15 @@ const defaultWardsPageTranslation = {
 
 export type OrganizationOverviewContextState = {
   /**
-   wardID === undefined means no ward
-
    wardID === "" means creating a new ward
    */
-  wardID?: string,
+  wardID: string,
   organizationID: string
 }
 
 const emptyOrganizationOverviewContextState = {
-  organizationID: ''
+  organizationID: '',
+  wardID: ''
 }
 
 export type OrganizationOverviewContextType = {

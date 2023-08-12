@@ -89,9 +89,9 @@ export const OrganisationInvitationList = ({
 
   return (
     <LoadingAndErrorComponent
-      isLoading={isLoading && context.state.organizationID !== undefined}
-      hasError={isError && context.state.organizationID !== undefined}
-      errorProps={{ classname: tw('border-b-2 border-gray-500 rounded-xl') }}
+      isLoading={isLoading && !!context.state.organizationID}
+      hasError={isError && !!context.state.organizationID}
+      errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
       loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
     >
       {isShowingInviteMemberModal && (

@@ -67,7 +67,7 @@ export const WardRoomList = ({
         isLoading={isLoading}
         hasError={isError}
       >
-        {rooms && rooms.map(room => (
+        {rooms && rooms.filter(room => room.beds.length > 0).map(room => (
             <RoomOverview
               key={room.id}
               room={room}

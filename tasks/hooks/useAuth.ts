@@ -12,13 +12,15 @@ export const LOCALSTORAGE_HREF_AFTER_AUTH_KEY = 'href-after-auth'
 
 const IdTokenClaimsSchema = z.object({
   sub: z.string().uuid(),
-  email: z.string().email()
+  email: z.string().email(),
+  name: z.string(),
+  nickname: z.string()
 }).transform((obj) => ({
   id: obj.sub,
   email: obj.email,
-  name: 'Max Mustermann',
-  nickname: 'max.mustermann',
-  avatarUrl: `https://source.boringavatars.com/beam`
+  name: obj.name,
+  nickname: obj.nickname,
+  avatarUrl: `https://source.boringavatars.com/marble/80/${obj.sub}`
 }))
 
 export type User = z.output<typeof IdTokenClaimsSchema>

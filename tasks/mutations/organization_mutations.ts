@@ -345,9 +345,9 @@ export const useInviteMemberMutation = (organizationID: string, callback: (invit
       const res = await organizationService.inviteMember(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getId()) {
-        // TODO some check whether request was successful
         console.error('InviteMember failed')
       }
+
       callback(res.getId())
       return res.toObject()
     },

@@ -15,7 +15,7 @@ const socials = [
 
 const Footer = () => {
   return (
-      <div className={tw('w-screen absolute left-1/2 bottom-[40px] -translate-x-1/2')}>
+      <div className={tw('w-screen relative left-1/2 bottom-[40px] -translate-x-1/2')}>
         <div className={tw('flex flex-wrap gap-8 justify-center')}>
           {socials.map(({ name, link }) => (
             <div key={link} className={tw('group')}>

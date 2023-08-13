@@ -1,5 +1,4 @@
-import { Meta } from '@storybook/react'
-import type { StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { HelpwaveSpinner } from '../icons/HelpwaveSpinner'
 
@@ -18,8 +17,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   args: {
-    color: "#8070A9",
-    animate: true,
+    color: '#8070A9',
+    animate: 'loading',
     width: 128,
     height: 128,
   },

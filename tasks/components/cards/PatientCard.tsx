@@ -23,9 +23,10 @@ export const PatientCard = ({
   doneTasks,
   isSelected,
   onTileClick,
+  ...restCardProps
 }: PatientCardProps) => {
   return (
-    <Card isSelected={isSelected} onTileClick={onTileClick}>
+    <Card isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
       <div className={tw('flex flex-row justify-between')}>
         <Span className={tw('whitespace-nowrap')} type="subsubsectionTitle">{bedName}</Span>
         <Span className={tw('ml-2 truncate')}>{patientName}</Span>

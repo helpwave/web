@@ -8,6 +8,9 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { WardOverviewContext } from '../pages/ward/[uuid]'
 import type { PatientDTO } from '../mutations/patient_mutations'
 import { emptyPatient } from '../mutations/patient_mutations'
+import { Droppable } from './dnd-kit/Droppable'
+import { Draggable } from './dnd-kit/Draggable'
+import { Card } from '@helpwave/common/components/Card'
 
 export type RoomOverviewProps = {
   room: RoomOverviewDTO
@@ -21,11 +24,12 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const [columns, setColumns] = useState(3)
 
-  const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patient: PatientDTO|undefined) =>
+  const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patientID?: string, patient?: PatientDTO) =>
     context.updateContext({
       ...context.state,
       roomID: room.id,
       bedID: bed.id,
+      patientID,
       patient
     })
 
@@ -46,39 +50,54 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
       <div className={tw(`grid grid-cols-${columns} gap-4`)}>
         {room.beds.map(bed => bed.patient && bed.patient?.id ?
             (
-            <PatientCard
-              key={bed.id}
-              bedName={bed.name}
-              patientName={bed.patient.name}
-              doneTasks={bed.patient.tasksDone}
-              inProgressTasks={bed.patient.tasksInProgress}
-              unscheduledTasks={bed.patient.tasksUnscheduled}
-              onTileClick={(event) => {
-                event.stopPropagation()
-                if (bed.patient) {
-                  // LINTER: `bed.patient.id` gets evaluated as undefined without this if
-                  setSelectedBed(room, bed, {
-                    ...emptyPatient,
-                    id: bed.patient.id
-                  })
-                }
-              }}
-              isSelected={selectedBedID === bed.id}
-            />
+              <Droppable id={bed.id} key={bed.id} data={{ bed, room }}>
+                {({ isOver }) => bed.patient && bed.patient?.id && (
+                  <Card
+                    cardDragProperties={{ isOver, isDangerous: true }}
+                    className={tw('!p-0 !border-0')}
+                  >
+                    <Draggable id={bed.patient.id + 'roomOverview'} data={bed.patient}>
+                      {() => bed.patient && bed.patient?.id && (
+                        <PatientCard
+                          bedName={bed.name}
+                          patientName={bed.patient.name}
+                          doneTasks={bed.patient.tasksDone}
+                          inProgressTasks={bed.patient.tasksInProgress}
+                          unscheduledTasks={bed.patient.tasksUnscheduled}
+                          onTileClick={(event) => {
+                            event.stopPropagation()
+                            if (bed.patient) {
+                              // LINTER: `bed.patient.id` gets evaluated as undefined without this if
+                              setSelectedBed(room, bed, bed.patient.id)
+                            }
+                          }}
+                          isSelected={selectedBedID === bed.id}
+                        />
+                      )}
+                    </Draggable>
+                  </Card>
+                )}
+              </Droppable>
             ) : (
-            <BedCard
-              key={bed.id}
-              bedName={bed.name}
-              // TODO move patient creation to here
-              onTileClick={(event) => {
-                event.stopPropagation()
-                setSelectedBed(room, bed, {
-                  ...emptyPatient,
-                  id: bed.patient?.id ?? '',
-                  name: `Patient ${room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
-                })
-              }}
-              isSelected={selectedBedID === bed.id}/>
+              // Maybe also wrap inside the drag and drop later
+              <Droppable key={bed.id} id={bed.id} data={{ bed, room }}>
+                {({ isOver }) => (
+                  <BedCard
+                    bedName={bed.name}
+                    // TODO move patient creation to here
+                    onTileClick={(event) => {
+                      event.stopPropagation()
+                      setSelectedBed(room, bed, undefined, {
+                        ...emptyPatient,
+                        id: '',
+                        name: `Patient ${room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
+                      })
+                    }}
+                    isSelected={selectedBedID === bed.id}
+                    cardDragProperties={{ isOver }}
+                  />
+                )}
+              </Droppable>
             )
         )}
       </div>

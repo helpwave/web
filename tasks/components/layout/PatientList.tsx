@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -7,11 +7,16 @@ import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { PatientDTO, PatientWithBedAndRoomDTO } from '../../mutations/patient_mutations'
-import { usePatientDischargeMutation, usePatientListQuery } from '../../mutations/patient_mutations'
+import {
+  usePatientDischargeMutation,
+  usePatientListQuery
+} from '../../mutations/patient_mutations'
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
+import { Draggable } from '../dnd-kit/Draggable'
+import { Droppable } from '../dnd-kit/Droppable'
 
 type PatientListTranslation = {
   patients: string,
@@ -73,7 +78,7 @@ export const defaultPatientListOpenedSections: PatientListOpenedSectionsType = {
 
 export type PatientListProps = {
   onDischarge?: (patient: PatientDTO) => void,
-  initialOpenedSections?:PatientListOpenedSectionsType,
+  initialOpenedSections?: PatientListOpenedSectionsType,
   width?: number
 }
 
@@ -88,7 +93,6 @@ export const PatientList = ({
   const [search, setSearch] = useState('')
   const { data, isLoading, isError } = usePatientListQuery()
   const dischargeMutation = usePatientDischargeMutation()
-
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
   const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
@@ -117,68 +121,95 @@ export const PatientList = ({
         loadingProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
       >
         <div className={tw('flex flex-col gap-y-4 mb-8')}>
-          {filteredActive.length >= 0 && (
+          <div className={tx('p-2 border-2 border-transparent rounded-xl')}>
             <HideableContentSection
               initiallyOpen={initialOpenedSections?.active}
               disabled={filteredActive.length <= 0}
               header={<Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>}
             >
               {filteredActive.map(patient => (
-                <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
-                  <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
-                  <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                    <Label name={activeLabelText(patient)} color="blue"/>
+                <Draggable id={patient.id} key={patient.id} data={patient}>
+                  {() => (
+                    <div className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
+                      <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
+                      <div className={tw('flex flex-row flex-1 justify-between items-center')}>
+                        <Label name={activeLabelText(patient)} color="blue"/>
+                        <Button color="negative" variant="textButton" onClick={() => {
+                          dischargeMutation.mutate(patient.id)
+                        }}>
+                          {translation.discharge}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+            </HideableContentSection>
+          </div>
+          <Droppable id="patientListUnassigned" data={{ patientListSection: 'unassigned' }}>
+            {({ isOver }) => (
+              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
+                'border-hw-primary-700': isOver,
+                'border-transparent': !isOver
+              })}>
+                <HideableContentSection
+                  initiallyOpen={initialOpenedSections?.unassigned}
+                  disabled={filteredUnassigned.length <= 0}
+                  header={(<Span type="accent" className={tw('text-hw-label-yellow-text')}>{`${translation.unassigned} (${filteredUnassigned.length})`}</Span>)}
+                >
+                  {filteredUnassigned.map(patient => (
+                    <Draggable id={patient.id} key={patient.id} data={patient}>
+                      {() => (
+                        <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 items-center')}>
+                          <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
+                          <div className={tw('flex flex-row flex-1 justify-between items-center')}>
+                            <Label name={`${translation.unassigned}`} color="yellow"/>
+                            <Button color="negative" variant="textButton" onClick={() => {
+                              dischargeMutation.mutate(patient.id)
+                            }}>
+                              {translation.discharge}
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </HideableContentSection>
+              </div>
+            )}
+          </Droppable>
+          <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
+            {({ isOver }) => (
+              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
+                'border-hw-primary-700': isOver,
+                'border-transparent': !isOver
+              })}>
+                <HideableContentSection
+                  initiallyOpen={initialOpenedSections?.discharged}
+                  disabled={filteredDischarged.length <= 0}
+                  header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
+                >
+                  {filteredDischarged.map(patient => (
+                    <Draggable id={patient.id} key={patient.id} data={patient}>
+                      {() => (
+                        <div key={patient.id}
+                             className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
+                          <Span className={tw('font-space font-bold')}>{patient.name}</Span>
+                          { /* TODO implement when backend endpoint exists
                     <Button color="negative" variant="textButton" onClick={() => {
-                      dischargeMutation.mutate(patient.id)
+                      // TODO delete
                     }}>
-                      {translation.discharge}
+                      {translation.delete}
                     </Button>
-                  </div>
-                </div>
-              ))}
-            </HideableContentSection>
-          )}
-          {filteredUnassigned.length >= 0 && (
-            <HideableContentSection
-              initiallyOpen={initialOpenedSections?.unassigned}
-              disabled={filteredUnassigned.length <= 0}
-              header={ <Span type="accent" className={tw('text-hw-label-yellow-text')}>{`${translation.unassigned} (${filteredUnassigned.length})`}</Span>}
-            >
-              {filteredUnassigned.map(patient => (
-                <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 items-center')}>
-                  <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
-                  <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                    <Label name={`${translation.unassigned}`} color="yellow"/>
-                    <Button color="negative" variant="textButton" onClick={() => {
-                      dischargeMutation.mutate(patient.id)
-                    }}>
-                      {translation.discharge}
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </HideableContentSection>
-          )}
-          {filteredDischarged.length >= 0 && (
-            <HideableContentSection
-              initiallyOpen={initialOpenedSections?.discharged}
-              disabled={filteredDischarged.length <= 0}
-              header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
-            >
-              {filteredDischarged.map(patient => (
-                <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
-                  <Span className={tw('font-space font-bold')}>{patient.name}</Span>
-                  { /* TODO implement when backend endpoint exists
-                  <Button color="negative" variant="textButton" onClick={() => {
-                    // TODO delete
-                  }}>
-                    {translation.delete}
-                  </Button>
-                  */}
-                </div>
-              ))}
-            </HideableContentSection>
-          )}
+                    */}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </HideableContentSection>
+              </div>
+            )}
+          </Droppable>
         </div>
       </LoadingAndErrorComponent>
     </div>

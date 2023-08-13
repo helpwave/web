@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/common/twind'
 import type { CardProps } from '@helpwave/common/components/Card'
 import { Card } from '@helpwave/common/components/Card'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -33,12 +33,14 @@ export const BedCard = ({
   language,
   bedName,
   onTileClick,
-  isSelected
+  isSelected,
+  className,
+  ...restCardProps
 }: PropsWithLanguage<BedCardTranslation, BedCardProps>) => {
   const translation = useTranslation(language, defaultBedCardTranslation)
   return (
     (
-      <Card onTileClick={onTileClick} isSelected={isSelected} className={tw('min-h-[148px] flex flex-col')}>
+      <Card onTileClick={onTileClick} isSelected={isSelected} className={tx('min-h-[148px] flex flex-col', className)} {...restCardProps}>
         <div className={tw('flex flex-row justify-between')}>
           <Span type="subsubsectionTitle">{bedName}</Span>
           <Span>{translation.nobody}</Span>

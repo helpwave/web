@@ -8,10 +8,8 @@ import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { getConfig } from '../utils/config'
 import { useRouter } from 'next/router'
-
-const config = getConfig()
+import { useConfig } from '../hooks/useConfig'
 
 type UserMenuTranslation = {
   profile: string,
@@ -48,6 +46,7 @@ export const UserMenu = ({
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const { user, signOut } = useAuth()
   const router = useRouter()
+  const { config } = useConfig()
 
   if (!user) return null
 

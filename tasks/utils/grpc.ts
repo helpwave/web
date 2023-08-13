@@ -8,11 +8,17 @@ import {
   TaskTemplateServicePromiseClient
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_grpc_web_pb'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_grpc_web_pb'
-import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
-import { getConfig } from './config'
+import {
+  OrganizationServicePromiseClient
+} from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
 
-const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
-const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`
+// TODO: RESOLVE BEFORE MERGE dont hardcode
+const config = {
+  apiUrl: 'https://staging.api.helpwave.de'
+}
+
+const taskSvcBaseUrl = `${config.apiUrl}/task-svc`
+const userSvcBaseUrl = `${config.apiUrl}/user-svc`
 
 // TODO: Implement something like a service registry
 export const wardService = new WardServicePromiseClient(taskSvcBaseUrl)

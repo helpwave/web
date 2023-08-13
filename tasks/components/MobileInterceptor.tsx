@@ -4,8 +4,8 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Link from 'next/link'
 import HelpwaveLogo from '@helpwave/common/icons/HelpwaveRect'
 import type { NextPage } from 'next'
-import { getConfig } from '../utils/config'
 import { Span } from '@helpwave/common/components/Span'
+import { useConfig } from '../hooks/useConfig'
 
 type MobileInterceptorTranslation = {
   pleaseDownloadApp: string,
@@ -34,7 +34,7 @@ const defaultMobileInterceptorTranslation = {
  */
 const MobileInterceptor: NextPage = ({ language }: PropsWithLanguage<MobileInterceptorTranslation>) => {
   const translation = useTranslation(language, defaultMobileInterceptorTranslation)
-  const config = getConfig()
+  const { config } = useConfig()
   const playStoreLink = config.appstoreLinks.playStore
   const appstoreLink = config.appstoreLinks.appStore
   return (

@@ -2,7 +2,7 @@ import type { DetailedHTMLProps, HTMLAttributes, PropsWithChildren } from 'react
 import { tx } from '../twind'
 
 export type SpanProps = DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> & {
-  type?: 'normal' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'tableHeader' | 'formError' | 'formDescription',
+  type?: 'normal' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError' | 'formDescription',
   className?: string
 }
 
@@ -23,6 +23,7 @@ export const Span = ({ children, type = 'normal', className = '', ...restProps }
         'text-sm text-gray-700 font-semibold': type === 'labelSmall',
         'text-gray-700 font-semibold': type === 'labelMedium',
         'text-lg font-space font-medium': type === 'tableName',
+        'text-lg font-space font-normal': type === 'navigationItem',
         'text-gray-600 font-bold': type === 'tableHeader',
         'text-hw-negative-500 text-sm': type === 'formError',
         'text-gray-500 text-sm': type === 'formDescription'

@@ -1,9 +1,9 @@
-import HelpwaveRect from '../icons/HelpwaveRect'
+import { noop } from '@twind/core'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsWithLanguage } from '../hooks/useTranslation'
-import { tw, tx } from '../twind'
 import { useTranslation } from '../hooks/useTranslation'
-import { noop } from '@twind/core'
+import { Helpwave } from '../icons/Helpwave'
+import { tw, tx } from '../twind'
 
 type SignInButtonTranslation = {
   signIn: string
@@ -40,7 +40,7 @@ export const SignInButton = ({
         'bg-white text-black hover:bg-gray-100': color === 'light'
       })}
     >
-      <HelpwaveRect className={tw('h-7 w-auto')}/>
+      <Helpwave className={tw('h-7 w-auto')}/>
       <span className={tw('text-lg font-semibold')}>{translation.signIn}</span>
     </button>
   )

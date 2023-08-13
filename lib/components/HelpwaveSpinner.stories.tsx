@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { HelpwaveSpinner } from '../icons/HelpwaveSpinner'
+import { Helpwave } from '../icons/Helpwave'
 
 // 👇 This default export determines where your story goes in the story list
 const meta = {
@@ -8,14 +8,21 @@ const meta = {
      * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
      * to learn how to generate automatic titles
      */
-  title: 'Spinner',
-  component: HelpwaveSpinner,
-} satisfies Meta<typeof HelpwaveSpinner>
+  title: 'Logo',
+  component: Helpwave,
+} satisfies Meta<typeof Helpwave>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
+  args: {
+    width: 128,
+    height: 128,
+  },
+}
+
+export const Spinner: Story = {
   args: {
     color: '#8070A9',
     animate: 'loading',

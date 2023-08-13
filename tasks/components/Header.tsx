@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react'
+import { Span } from '@helpwave/common/components/Span'
+import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import Link from 'next/link'
-import HelpwaveLogo from '@helpwave/common/icons/HelpwaveRect'
-import { Span } from '@helpwave/common/components/Span'
+import type { ReactNode } from 'react'
 
 export type HeaderProps = {
   title?: string,
@@ -31,7 +31,7 @@ const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: Heade
           {withIcon && (
             <div className={tw('relative flex gap-2 align-center')}>
               <Link href="/">
-                <HelpwaveLogo className={tw('mx-auto h-8 w-auto')}/>
+                <Helpwave size={52} />
               </Link>
             </div>
           )}

@@ -1,4 +1,3 @@
-import { getConfig } from './config'
 import type { AuthorizationServer, Client } from 'oauth4webapi'
 import * as oauth from 'oauth4webapi'
 import {
@@ -11,8 +10,10 @@ import {
   validateAuthResponse
 } from 'oauth4webapi'
 import { getCookie, setCookie } from 'cookies-next'
+import type { Config } from '../hooks/useConfig'
 
-const config = getConfig()
+type OAuthConfig = Pick<Config, 'oauth'> & { fakeToken: string, fakeTokenEnable: boolean }
+
 const codeChallengeMethod = 'S256'
 
 const LOCALSTORAGE_KEY_STATE = 'oauth_state'
@@ -30,8 +31,8 @@ const getAuthorizationServer = async (issuerUrl: string): Promise<AuthorizationS
   return authorizationServer
 }
 
-const getCommonOAuthEntities = async (overrideConfig?: Partial<typeof config.oauth>): Promise<{ authorizationServer: AuthorizationServer, client: Client }> => {
-  const { issuerUrl, clientId } = { ...config.oauth, ...overrideConfig }
+const getCommonOAuthEntities = async (oauthConfig: Pick<Config, 'oauth'>): Promise<{ authorizationServer: AuthorizationServer, client: Client }> => {
+  const { issuerUrl, clientId } = oauthConfig.oauth
 
   const authorizationServer = await getAuthorizationServer(issuerUrl)
   const client: Client = {
@@ -42,11 +43,10 @@ const getCommonOAuthEntities = async (overrideConfig?: Partial<typeof config.oau
   return { authorizationServer, client }
 }
 
-const storeValue = (key: string, value: string) => {
+const storeValue = (key: string, value: string, secure: boolean) => {
   const expiresAt = new Date()
   expiresAt.setHours(expiresAt.getHours() + 1)
-  const secureCookie = config.env === 'production'
-  setCookie(key, value, { expires: expiresAt, sameSite: 'lax', secure: secureCookie })
+  setCookie(key, value, { expires: expiresAt, sameSite: 'lax', secure })
 }
 
 const retrieveValue = (key: string): string|null => {
@@ -54,9 +54,9 @@ const retrieveValue = (key: string): string|null => {
   return typeof value === 'string' ? value : null
 }
 
-const setupState = (): string => {
+const setupState = (secure: boolean): string => {
   const state = generateRandomState()
-  storeValue(LOCALSTORAGE_KEY_STATE, state)
+  storeValue(LOCALSTORAGE_KEY_STATE, state, secure)
   return state
 }
 
@@ -66,9 +66,9 @@ const retrieveState = (): string => {
   return state
 }
 
-const setupCodeVerifier = (): string => {
+const setupCodeVerifier = (secure: boolean): string => {
   const codeVerifier = oauth.generateRandomCodeVerifier()
-  storeValue(LOCALSTORAGE_KEY_CODE_VERIFIER, codeVerifier)
+  storeValue(LOCALSTORAGE_KEY_CODE_VERIFIER, codeVerifier, secure)
   return codeVerifier
 }
 
@@ -97,22 +97,24 @@ const buildAuthorizationUrl = (params: {
   return authorizationUrl
 }
 
-export const getAuthorizationUrl = async (): Promise<string> => {
+export const getAuthorizationUrl = async (config: OAuthConfig): Promise<string> => {
   if (config.fakeTokenEnable) {
     const url = new URL(config.oauth.redirectUri)
     url.searchParams.set('fake_token', config.fakeToken)
     return url.toString()
   }
 
-  const { authorizationServer } = await getCommonOAuthEntities()
+  const { authorizationServer } = await getCommonOAuthEntities(config)
 
   if (!authorizationServer.authorization_endpoint) {
     throw new Error('No authorization_endpoint on authorization server')
   }
 
-  const state = setupState()
+  // TODO: RESOLVE BEFORE MERGE dont hardcode
+  const state = setupState(false)
 
-  const codeVerifier = setupCodeVerifier()
+  // TODO: RESOLVE BEFORE MERGE dont hardcode
+  const codeVerifier = setupCodeVerifier(false)
   const codeChallenge = await oauth.calculatePKCECodeChallenge(codeVerifier)
 
   return buildAuthorizationUrl({
@@ -125,7 +127,7 @@ export const getAuthorizationUrl = async (): Promise<string> => {
   }).toString()
 }
 
-export const handleCodeExchange = async (): Promise<{ id_token: string, refresh_token: string }> => {
+export const handleCodeExchange = async (config: OAuthConfig): Promise<{ id_token: string, refresh_token: string }> => {
   if (config.fakeTokenEnable) {
     const currentUrl = new URL(window.location.toString())
     const fakeToken = currentUrl.searchParams.get('fake_token')
@@ -133,7 +135,7 @@ export const handleCodeExchange = async (): Promise<{ id_token: string, refresh_
   }
 
   // issuerUrl -> WORK AROUND - Ory does not set the "iss"-Claim of the ID Token to "auth.helpwave.de". We will ask Ory about this.
-  const { authorizationServer, client } = await getCommonOAuthEntities()
+  const { authorizationServer, client } = await getCommonOAuthEntities(config)
 
   const state = retrieveState()
   const codeVerifier = retrieveCodeVerifier()

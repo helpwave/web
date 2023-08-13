@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import Cookies from 'js-cookie'
-import { getConfig } from '../utils/config'
 import { getAuthorizationUrl } from '../utils/oauth'
-
-const config = getConfig()
+import { useConfig } from './useConfig'
 
 export const COOKIE_ID_TOKEN_KEY = 'id-token'
 export const COOKIE_REFRESH_TOKEN_KEY = 'refresh-token'
@@ -31,21 +29,15 @@ const parseJwtPayload = (token: string) => {
   return JSON.parse(decodedPayload)
 }
 
-const tokenToUser = (token: string): User | null => {
-  let decoded: string
-  if (config.fakeTokenEnable) {
-    decoded = JSON.parse(Buffer.from(config.fakeToken, 'base64').toString())
-  } else {
-    decoded = parseJwtPayload(token)
-  }
+const parseFakeTokenPayload = (token: string) => JSON.parse(Buffer.from(token, 'base64').toString())
+
+const tokenToUser = (token: string, parseTokenFnc: (token: string) => string): User | null => {
+  const decoded = parseTokenFnc(token)
   const parsed = IdTokenClaimsSchema.safeParse(decoded)
   return parsed.success ? parsed.data : null
 }
 
 const isJwtExpired = (token: string) => {
-  if (config.fakeTokenEnable) {
-    return tokenToUser(token) === null
-  }
   const payloadBase64 = token.split('.')[1]
   const decodedPayload = Buffer.from(payloadBase64, 'base64').toString()
   const parsedPayload = JSON.parse(decodedPayload)
@@ -65,6 +57,9 @@ const isJwtExpired = (token: string) => {
 export const useAuth = () => {
   const [user, setUser] = useState<User>()
   const [idToken, setIdToken] = useState<string>()
+  const { config } = useConfig()
+
+  const parseTokenFnc = config.fakeTokenEnable ? parseFakeTokenPayload : parseJwtPayload
 
   const signOut = () => {
     Cookies.remove(COOKIE_ID_TOKEN_KEY)
@@ -76,12 +71,16 @@ export const useAuth = () => {
     try {
       const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
 
-      const idTokenValid = idToken !== undefined && !isJwtExpired(idToken)
+      const idTokenValid = idToken !== undefined && (
+        config.fakeTokenEnable
+          ? tokenToUser(idToken, parseTokenFnc) !== null
+          : !isJwtExpired(idToken)
+      )
 
       if (!idTokenValid) Cookies.remove(COOKIE_ID_TOKEN_KEY)
 
       if (idTokenValid) {
-        const user = tokenToUser(idToken)
+        const user = tokenToUser(idToken, parseTokenFnc)
         if (!user) throw new Error('Cannot parse idToken to user')
         setUser(user)
         setIdToken(idToken)
@@ -92,7 +91,7 @@ export const useAuth = () => {
     }
 
     // Both tokens are invalid. User needs to sign in again.
-    getAuthorizationUrl()
+    getAuthorizationUrl(config)
       .then((url) => {
         // Store current href into localStorage. Will be used by /auth/callback.
         window.localStorage.setItem(LOCALSTORAGE_HREF_AFTER_AUTH_KEY, window.location.href)

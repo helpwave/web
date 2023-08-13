@@ -3,10 +3,13 @@ import { handleCodeExchange } from '../../utils/oauth'
 import { COOKIE_ID_TOKEN_KEY, LOCALSTORAGE_HREF_AFTER_AUTH_KEY } from '../../hooks/useAuth'
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
+import { useConfig } from '../../hooks/useConfig'
 
 const AuthCallback: NextPage = () => {
+  const { config } = useConfig()
+
   useEffect(() => {
-    handleCodeExchange().then((tokens) => {
+    handleCodeExchange(config).then((tokens) => {
       Cookies.set(COOKIE_ID_TOKEN_KEY, tokens.id_token)
 
       const hrefAfterAuth = window.localStorage.getItem(LOCALSTORAGE_HREF_AFTER_AUTH_KEY)

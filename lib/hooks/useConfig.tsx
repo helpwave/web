@@ -1,7 +1,7 @@
 import type { Context, Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useState } from 'react'
 
-type ConfigContextValue<T = unknown> = {
+type ConfigContextValue<T> = {
   config: T,
   setConfig: Dispatch<SetStateAction<T>>
 }

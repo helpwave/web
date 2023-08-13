@@ -10,7 +10,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import MobileInterceptor from '../components/MobileInterceptor'
 import titleWrapper from '../utils/titleWrapper'
 import type { Config } from '../hooks/useConfig'
-import { ConfigProvider } from '../hooks/useConfig'
+import { ConfigProvider, parseConfigFromEnvironmentVariablesWithNextPublicPrefix } from '../hooks/useConfig'
+import { useEffect } from 'react';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -58,9 +59,7 @@ function MyApp({ Component, pageProps, config }: AppProps & AppOwnProps) {
 // TODO: Adopting the AppRouter https://nextjs.org/docs/pages/building-your-application/routing/custom-app#getinitialprops-with-app
 MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps & AppOwnProps> => {
   const ctx = await App.getInitialProps(context)
-  const config: Config = {
-    api: process.env.API || '123'
-  }
+  const config = parseConfigFromEnvironmentVariablesWithNextPublicPrefix()
   return { ...ctx, config }
 }
 

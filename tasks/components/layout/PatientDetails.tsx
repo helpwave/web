@@ -73,7 +73,7 @@ export const PatientDetail = ({
   const updateMutation = usePatientUpdateMutation(() => undefined)
   const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardID: context.state.wardID }))
   const unassignMutation = useUnassignMutation(() => context.updateContext({ wardID: context.state.wardID }))
-  const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
+  const { data, isError, isLoading } = usePatientDetailsQuery(context.state.patientID)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [taskID, setTaskID] = useState<string>()
@@ -121,8 +121,8 @@ export const PatientDetail = ({
         onCancel={() => setIsShowingDischargeDialog(false)}
         onBackgroundClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
-          setIsShowingDischargeDialog(false)
           dischargeMutation.mutate(newPatient.id)
+          setIsShowingDischargeDialog(false)
         }}
         confirmType="negative"
       />
@@ -149,11 +149,18 @@ export const PatientDetail = ({
               onChange={name => changeSavedValue({ ...newPatient, name })}
             />
           </div>
-          <RoomBedDropDown
-            initialRoomAndBed={{ roomID: context.state.roomID ?? '', bedID: context.state.bedID ?? '', patientID: context.state.patient?.id ?? '' }}
-            wardID={context.state.wardID}
-            onChange={roomBedDropDownIDs => context.updateContext({ ...context.state, ...roomBedDropDownIDs })}
-          />
+          {context.state.patientID && context.state.roomID && (
+            // TODO make this possible with a optional room id
+            <RoomBedDropDown
+              initialRoomAndBed={{
+                roomID: context.state.roomID,
+                bedID: context.state.bedID,
+                patientID: context.state.patientID
+              }}
+              wardID={context.state.wardID}
+              onChange={roomBedDropDownIDs => context.updateContext({ ...context.state, ...roomBedDropDownIDs })}
+            />
+          )}
         </div>
         <div className={tw('flex-1')}>
           <Textarea

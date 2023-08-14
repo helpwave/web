@@ -5,7 +5,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useDroppable } from '@dnd-kit/core'
-import { Sortable } from './Sortable'
+import { Sortable } from './dnd-kit/Sortable'
 import {
   SortableContext,
   verticalListSortingStrategy

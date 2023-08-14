@@ -53,7 +53,7 @@ export type PillLabelProps = {
  */
 const PillLabel = ({
   language,
-  count = 0,
+  count,
   state = TaskState[TaskStatus.TASK_STATUS_TODO]
 }: PropsWithLanguage<PillLabelTranslation, PillLabelProps>) => {
   const translation = useTranslation(language, state.translation)
@@ -65,7 +65,7 @@ const PillLabel = ({
         <div className={tw('w-2')}/>
         <Span>{translation.text}</Span>
       </div>
-      {count}
+      {count ?? '-'}
     </div>
   )
 }

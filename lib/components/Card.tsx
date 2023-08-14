@@ -1,6 +1,7 @@
 import { tx } from '../twind'
 import type { MouseEventHandler, PropsWithChildren } from 'react'
 import type { Class } from '@twind/core'
+import { noop } from '../util/noop'
 
 export type CardProps = {
   isSelected?: boolean,
@@ -14,12 +15,15 @@ export type CardProps = {
 export const Card = ({
   children,
   isSelected = false,
-  onTileClick = () => undefined,
+  onTileClick = noop,
   className = '',
 }: PropsWithChildren<CardProps>) => {
   return (
     <div onClick={onTileClick}
-         className={tx('cursor-pointer rounded-md py-2 px-4 border border-2 hover:border-hw-primary-700 w-full', { 'border-hw-primary-700': isSelected }, className)}>
+         className={tx('rounded-md py-2 px-4 border border-2 w-full bg-white hover:border-hw-primary-800 cursor-pointer', {
+           'border-hw-primary-700': isSelected,
+         }, className)}
+    >
       {children}
     </div>
   )

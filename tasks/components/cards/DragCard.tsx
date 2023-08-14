@@ -26,7 +26,7 @@ export const DragCard = ({
 }: DragCardProps) => {
   // For now fully equal to a normal card but, that might change later
   return (
-    <Card className={tx(className, 'border-3', {
+    <Card className={tx(className, 'border-2', {
       'hover:border-hw-primary-800 cursor-pointer': !cardDragProperties.isDragging && !cardDragProperties.isOver, // default
       'border-hw-primary-700': isSelected,
       'cursor-grabbing': cardDragProperties.isDragging,

@@ -93,10 +93,11 @@ export const PatientList = ({
 }: PropsWithLanguage<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(language, defaultPatientListTranslations)
   const [search, setSearch] = useState('')
-  const { data, isLoading, isError } = usePatientListQuery(context.state.wardID)
+  const { state: context, updateContext } = useContext(WardOverviewContext)
+  const { data, isLoading, isError } = usePatientListQuery()
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
-  const { state: context, updateContext } = useContext(WardOverviewContext)
+
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
   const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
@@ -111,7 +112,7 @@ export const PatientList = ({
         onConfirm={() => setIsShowingAddPatientModal(0)}
         onCancel={() => setIsShowingAddPatientModal(0)}
         onBackgroundClick={() => setIsShowingAddPatientModal(0)}
-        wardID={context.state.wardID}
+        wardID={context.wardID}
       />
       <div className={tw('flex flex-row gap-x-2 items-center')}>
         <Span type="subsectionTitle" className={tw('pr-4')}>{translation.patients}</Span>

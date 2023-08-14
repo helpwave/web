@@ -9,23 +9,11 @@ export const timestampToDate = (timestamp: Timestamp): Date => {
   return new Date(milliseconds)
 }
 
-export const timestampToDateOptional = (timestamp?: Timestamp): Date | undefined => {
-  if (timestamp) {
-    return timestampToDate(timestamp)
-  }
-  return undefined
-}
-
 export const dateToTimestamp = (date: Date): Timestamp => {
   const timestamp = new Timestamp()
+
   timestamp.setSeconds(Math.floor(date.getTime() / 1000)) // Convert to seconds
   timestamp.setNanos(date.getMilliseconds() * 1e6) // Convert milliseconds to nanoseconds
-  return timestamp
-}
 
-export const dateToTimestampOptional = (date?: Date): Timestamp | undefined => {
-  if (date) {
-    return dateToTimestamp(date)
-  }
-  return undefined
+  return timestamp
 }

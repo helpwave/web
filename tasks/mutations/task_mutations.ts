@@ -20,7 +20,7 @@ import type { GetTasksByPatientSortedByStatusResponse } from '@helpwave/proto-ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/components/user_input/Input'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
-import { dateToTimestampOptional, timestampToDateOptional } from '../utils/timeConversion'
+import { dateToTimestamp, timestampToDate } from '../utils/timeConversion'
 
 export type SubTaskDTO = {
   id: string,
@@ -100,7 +100,7 @@ export const useTaskQuery = (taskID: string | undefined) => {
         notes: res.getDescription(),
         isPublicVisible: res.getPublic(),
         assignee: res.getAssignedUserId(),
-        dueDate: timestampToDateOptional(res.getDueAt()),
+        dueDate: res.getDueAt() ? timestampToDate(res.getDueAt()) : undefined,
         subtasks: res.getSubtasksList().map(subtask => ({
           id: subtask.getId(),
           name: subtask.getName(),
@@ -139,7 +139,7 @@ export const useTasksByPatientQuery = (patientID: string | undefined) => {
         notes: task.getDescription(),
         isPublicVisible: task.getPublic(),
         assignee: task.getAssignedUserId(),
-        dueDate: timestampToDateOptional(task.getDueAt()),
+        dueDate: task.getDueAt() ? timestampToDate(task.getDueAt()) : undefined,
         subtasks: task.getSubtasksList().map(subtask => ({
           id: subtask.getId(),
           name: subtask.getName(),
@@ -178,7 +178,7 @@ export const useTasksByPatientSortedByStatusQuery = (patientID: string | undefin
         notes: task.getDescription(),
         isPublicVisible: task.getPublic(),
         assignee: task.getAssignedUserId(),
-        dueDate: timestampToDateOptional(task.getDueAt()),
+        dueDate: task.getDueAt() ? timestampToDate(task.getDueAt()) : undefined,
         subtasks: task.getSubtasksList().map(subtask => ({
           id: subtask.getId(),
           name: subtask.getName(),
@@ -229,7 +229,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       updateTask.setId(task.id)
       updateTask.setDescription(task.notes)
       updateTask.setName(task.name)
-      updateTask.setDueAt(dateToTimestampOptional(task.dueDate))
+      updateTask.setDueAt(task.dueDate ? dateToTimestamp(task.dueDate) : undefined)
       updateTask.setPublic(task.isPublicVisible)
 
       const getTask = new GetTaskRequest()

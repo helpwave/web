@@ -186,17 +186,13 @@ export const usePatientAssignmentByWardQuery = (wardId: string) => {
   })
 }
 
-// TODO remove this comment
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const usePatientListQuery = (wardId: string) => {
-  const queryClient = useQueryClient()
-export const usePatientListQuery = (organisationID?: string) => {
+export const usePatientListQuery = (organisationId?: string) => {
   return useQuery({
     queryKey: [patientsQueryKey, 'patientList'],
     queryFn: async () => {
       const req = new GetPatientListRequest()
-      if (organisationID) {
-        req.setOrganisationId(organisationID)
+      if (organisationId) {
+        req.setOrganisationId(organisationId)
       }
       const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata())
 

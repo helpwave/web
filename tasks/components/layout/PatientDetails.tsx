@@ -153,7 +153,6 @@ export const PatientDetail = ({
               />
             </div>
             <RoomBedDropDown
-              // TODO make this possible with a optional room id
               initialRoomAndBed={{ roomId: context.state.roomId ?? '', bedId: context.state.bedId ?? '' }}
               wardId={context.state.wardId}
               onChange={roomBedDropDownIds => {

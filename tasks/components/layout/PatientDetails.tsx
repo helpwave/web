@@ -74,7 +74,7 @@ export const PatientDetail = ({
   const updateMutation = usePatientUpdateMutation(() => undefined)
   const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardID: context.state.wardID }))
   const unassignMutation = useUnassignMutation(() => context.updateContext({ wardID: context.state.wardID }))
-  const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
+  const { data, isError, isLoading } = usePatientDetailsQuery(context.state.patientID)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [taskID, setTaskID] = useState<string>()
@@ -127,8 +127,8 @@ export const PatientDetail = ({
         onCancel={() => setIsShowingDischargeDialog(false)}
         onBackgroundClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
-          setIsShowingDischargeDialog(false)
           dischargeMutation.mutate(newPatient.id)
+          setIsShowingDischargeDialog(false)
         }}
         confirmType="negative"
       />
@@ -156,6 +156,7 @@ export const PatientDetail = ({
             />
           </div>
           <RoomBedDropDown
+            // TODO make this possible with a optional room id
             initialRoomAndBed={{ roomID: context.state.roomID ?? '', bedID: context.state.bedID ?? '' }}
             wardID={context.state.wardID}
             onChange={roomBedDropDownIDs => {

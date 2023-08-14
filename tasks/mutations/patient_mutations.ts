@@ -10,7 +10,8 @@ import {
   AssignBedRequest,
   UnassignBedRequest,
   GetPatientDetailsResponse,
-  GetPatientAssignmentByWardRequest
+  GetPatientAssignmentByWardRequest,
+  GetPatientListRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedWithPatientId } from './bed_mutations'
@@ -189,20 +190,46 @@ export const usePatientAssignmentByWardQuery = (wardId: string) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const usePatientListQuery = (wardId: string) => {
   const queryClient = useQueryClient()
+export const usePatientListQuery = (organisationID?: string) => {
   return useQuery({
     queryKey: [patientsQueryKey, 'patientList'],
     queryFn: async () => {
-      // TODO do grpc request
+      const req = new GetPatientListRequest()
+      if (organisationID) {
+        req.setOrganisationId(organisationID)
+      }
+      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata())
 
-      return queryClient.getQueryData<PatientListDTO>([patientsQueryKey, 'patientList'])
-    },
-    initialData: {
-      active: [
-      ],
-      unassigned: [
-      ],
-      discharged: [
-      ]
+      const patientList: PatientListDTO = {
+        active: res.getActiveList().map(value => {
+          const room = value.getRoom()
+          const bed = value.getBed()
+
+          if (!room) {
+            console.error('no room for active patient in PatientList')
+          }
+
+          if (!bed) {
+            console.error('no room for active patient in PatientList')
+          }
+          return ({
+            id: value.getId(),
+            name: value.getHumanReadableIdentifier(),
+            bed: { id: bed?.getId() ?? '', name: bed?.getName() ?? '' },
+            room: { id: room?.getId() ?? '', name: room?.getName() ?? '' }
+          })
+        }),
+        discharged: res.getDischargedPatientsList().map(value => ({
+          id: value.getId(),
+          name: value.getHumanReadableIdentifier(),
+        })),
+        unassigned: res.getUnassignedPatientsList().map(value => ({
+          id: value.getId(),
+          name: value.getHumanReadableIdentifier(),
+        }))
+      }
+
+      return patientList
     }
   })
 }
@@ -226,7 +253,8 @@ export const usePatientCreateMutation = (callback: (patient: PatientDTO) => void
       return patient
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.log(reason))
+      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
     }
   })
 }
@@ -252,26 +280,32 @@ export const usePatientUpdateMutation = (callback: (patient: PatientDTO) => void
       return patient
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.log(reason))
+      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.error(reason))
     }
   })
 }
 
-export const usePatientDischargeMutation = (callback: () => void) => {
+export const usePatientDischargeMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (patient: PatientDTO) => {
+    mutationFn: async (patientId: string) => {
       const req = new DischargePatientRequest()
-      req.setId(patient.id)
+      req.setId(patientId)
 
       const res = await patientService.dischargePatient(req, getAuthenticatedGrpcMetadata())
 
-      // TODO some check whether request was successful
+      if (!res.toObject()) {
+        console.error('error in PatientDischarge')
+      }
 
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).catch(reason => console.log(reason))
       callback()
       return res.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
+    }
   })
 }
 
@@ -314,9 +348,12 @@ export const useUnassignMutation = (callback: () => void) => {
         console.error('assign bed request failed')
       }
 
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback()
       return res.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([patientsQueryKey]).then()
+    }
   })
 }

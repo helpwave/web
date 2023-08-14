@@ -4,7 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { RoomBedDropDownIDs } from './RoomBedDropDown'
+import type { RoomBedDropDownIds } from './RoomBedDropDown'
 import { RoomBedDropDown } from './RoomBedDropDown'
 import React, { useState } from 'react'
 import { Span } from '@helpwave/common/components/Span'
@@ -35,7 +35,7 @@ const defaultAddPatientModalTranslation: Record<Languages, AddPatientModalTransl
 }
 
 export type AddPatientModalProps = ConfirmDialogProps & {
-  wardID: string
+  wardId: string
 }
 
 /**
@@ -43,26 +43,26 @@ export type AddPatientModalProps = ConfirmDialogProps & {
  */
 export const AddPatientModal = ({
   language,
-  wardID,
+  wardId,
   title,
   onConfirm = noop,
   ...modalProps
 }: PropsWithLanguage<AddPatientModalTranslation, AddPatientModalProps>) => {
   const translation = useTranslation(language, defaultAddPatientModalTranslation)
-  const [dropdownID, setDropdownID] = useState<RoomBedDropDownIDs>({})
+  const [dropdownId, setDropdownId] = useState<RoomBedDropDownIds>({})
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)
   const assignBedMutation = useAssignBedMutation()
   const createPatientMutation = usePatientCreateMutation(patient => {
-    if (dropdownID.bedID) {
-      assignBedMutation.mutate({ id: dropdownID.bedID, patientID: patient.id })
+    if (dropdownId.bedId) {
+      assignBedMutation.mutate({ id: dropdownId.bedId, patientId: patient.id })
     }
   })
 
   const minimumNameLength = 4
   const trimmedPatientName = patientName.trim()
   const validPatientName = trimmedPatientName.length >= minimumNameLength
-  const validRoomAndBed = dropdownID.roomID && dropdownID.bedID
+  const validRoomAndBed = dropdownId.roomId && dropdownId.bedId
   const isShowingError = touched && !validPatientName
 
   return (
@@ -88,9 +88,9 @@ export const AddPatientModal = ({
           {isShowingError && <Span type="formError">{translation.minimumLength(minimumNameLength)}</Span>}
         </div>
         <RoomBedDropDown
-          initialRoomAndBed={dropdownID}
-          wardID={wardID}
-          onChange={roomBedDropDownIDs => setDropdownID(roomBedDropDownIDs)}
+          initialRoomAndBed={dropdownId}
+          wardId={wardId}
+          onChange={roomBedDropDownIds => setDropdownId(roomBedDropDownIds)}
           isClearable={true}
         />
         <Span className={tx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</Span>

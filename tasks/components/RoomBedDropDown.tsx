@@ -56,7 +56,7 @@ export type RoomBedDropDownIds = {
 
 export type RoomBedDropDownProps = {
   initialRoomAndBed: RoomBedDropDownIds,
-  wardID: string,
+  wardId: string,
   /**
    * Only triggers on valid input
    */
@@ -115,7 +115,7 @@ export const RoomBedDropDown = ({
       onChange={value => {
         const newSelection = {
           ...currentSelection,
-          bedID: value
+          bedId: value
         }
         setCurrentSelection(newSelection)
         setTouched(true)

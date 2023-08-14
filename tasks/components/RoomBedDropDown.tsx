@@ -4,7 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { usePatientAssignmentByWardQuery } from '../mutations/patient_mutations'
 import { useEffect, useRef, useState } from 'react'
-import { Undo2 } from 'lucide-react'
+import { Undo2, X } from 'lucide-react'
 import { Select } from '@helpwave/common/components/user_input/Select'
 import { Span } from '@helpwave/common/components/Span'
 import { noop } from '@helpwave/common/util/noop'
@@ -31,7 +31,8 @@ const defaultRoomBedDropDownTranslation: Record<Languages, RoomBedDropDownTransl
     room: 'Room',
     bed: 'Bed',
     revert: 'Revert',
-    submitting: 'Submitting'
+    submitting: 'Submitting',
+
   },
   de: {
     saved: 'gespeichert',
@@ -60,7 +61,8 @@ export type RoomBedDropDownProps = {
    * Only triggers on valid input
    */
   onChange?: (roomBedDropDownIDs:RoomBedDropDownIDs) => void,
-  isSubmitting?: boolean
+  isSubmitting?: boolean,
+  isClearable?: boolean
 }
 
 /**
@@ -71,6 +73,7 @@ export const RoomBedDropDown = ({
   initialRoomAndBed,
   wardID,
   isSubmitting = false,
+  isClearable = false,
   onChange = noop
 }: PropsWithLanguage<RoomBedDropDownTranslation, RoomBedDropDownProps>) => {
   const translation = useTranslation(language, defaultRoomBedDropDownTranslation)
@@ -120,26 +123,48 @@ export const RoomBedDropDown = ({
       }}
     />
   )
-
+  const isShowingClear = isClearable && !isSubmitting && touched
+  const isShowingRevert = touched && hasChanges && !isSubmitting && !isCreating && !isClearable
   const changesAndSaveRow = (
     <div className={tw('flex flex-row justify-between items-center')}>
-      {touched && hasChanges && !isSubmitting && !isCreating ? (
-        <Button
-          onClick={() => {
-            if (hasChanges) {
-              setCurrentSelection({ ...initialRoomAndBed })
+      <div>
+        {isShowingRevert && (
+          <Button
+            onClick={() => {
+              if (hasChanges) {
+                setCurrentSelection({ ...initialRoomAndBed })
+                setTouched(false)
+              }
+            }}
+            variant="tertiary"
+            disabled={!hasChanges}
+          >
+            <div className={tw('flex flex-row gap-x-2 items-center')}>
+              {translation.revert}
+              <Undo2 size={16}/>
+            </div>
+          </Button>
+        )}
+        {isShowingClear && (
+          <Button
+            onClick={() => {
+              setCurrentSelection({
+                bedID: undefined,
+                roomID: undefined
+              })
               setTouched(false)
-            }
-          }}
-          variant="tertiary"
-          disabled={!hasChanges}
-        >
-          <div className={tw('flex flex-row gap-x-2 items-center')}>
-            {translation.revert}
-            <Undo2 size={16}/>
-          </div>
-        </Button>
-      ) : <div></div>}
+              onChange({})
+            }}
+            variant="tertiary"
+            color="negative"
+          >
+            <div className={tw('flex flex-row gap-x-2 items-center')}>
+              {translation.revert}
+              <X size={16}/>
+            </div>
+          </Button>
+        )}
+      </div>
       {touched && !isSubmitting && !isCreating && (
         <Span className={tx({
           '!text-hw-negative-400': hasChanges,
@@ -212,7 +237,7 @@ export const RoomBedDropDown = ({
   )
 
   return (
-    <div ref={ref} id="test">
+    <div ref={ref}>
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError || !data}

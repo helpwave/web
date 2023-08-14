@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -15,19 +15,22 @@ import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '..
 type AddPatientModalTranslation = {
   addPatient: string,
   name: string,
-  minimumLength: (characters: number) => string
+  minimumLength: (characters: number) => string,
+  noBedSelected: string
 }
 
 const defaultAddPatientModalTranslation: Record<Languages, AddPatientModalTranslation> = {
   en: {
     addPatient: 'Add Patient',
     name: 'Name',
-    minimumLength: (characters: number) => `The Name must be at least ${characters} characters long`
+    minimumLength: (characters: number) => `The Name must be at least ${characters} characters long`,
+    noBedSelected: 'No bed selected, the patient won\'t be assigned directly'
   },
   de: {
     addPatient: 'Patient Hinzufügen',
     name: 'Name',
-    minimumLength: (characters: number) => `Der Name muss mindestens ${characters} characters lang sein`
+    minimumLength: (characters: number) => `Der Name muss mindestens ${characters} characters lang sein`,
+    noBedSelected: 'Kein Bett ausgewählt, der Patient wird nicht direkt zugeordnet'
   }
 }
 
@@ -36,7 +39,7 @@ export type AddPatientModalProps = ConfirmDialogProps & {
 }
 
 /**
- * Description
+ * A Modal for adding a Patient
  */
 export const AddPatientModal = ({
   language,
@@ -53,17 +56,14 @@ export const AddPatientModal = ({
   const createPatientMutation = usePatientCreateMutation(patient => {
     if (dropdownID.bedID) {
       assignBedMutation.mutate({ id: dropdownID.bedID, patientID: patient.id })
-    } else {
-      // should not occur but just as a safety measurement
-      console.error('AddPatientModal bedId not found')
     }
   })
 
   const minimumNameLength = 4
   const trimmedPatientName = patientName.trim()
   const validPatientName = trimmedPatientName.length >= minimumNameLength
+  const validRoomAndBed = dropdownID.roomID && dropdownID.bedID
   const isShowingError = touched && !validPatientName
-  const isValid = validPatientName && !!dropdownID.roomID && !!dropdownID.bedID
 
   return (
     <ConfirmDialog
@@ -72,7 +72,7 @@ export const AddPatientModal = ({
         onConfirm()
         createPatientMutation.mutate({ ...emptyPatient, name: trimmedPatientName })
       }}
-      buttonOverwrites={[{}, {}, { disabled: !isValid }]}
+      buttonOverwrites={[{}, {}, { disabled: !validPatientName }]}
       {...modalProps}
     >
       <div className={tw('flex flex-col gap-y-4 min-w-[300px]')}>
@@ -91,7 +91,9 @@ export const AddPatientModal = ({
           initialRoomAndBed={dropdownID}
           wardID={wardID}
           onChange={roomBedDropDownIDs => setDropdownID(roomBedDropDownIDs)}
+          isClearable={true}
         />
+        <Span className={tx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</Span>
       </div>
     </ConfirmDialog>
   )

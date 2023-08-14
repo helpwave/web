@@ -2,7 +2,7 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
@@ -17,6 +17,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { Draggable } from '../dnd-kit/Draggable'
 import { Droppable } from '../dnd-kit/Droppable'
+import { WardOverviewContext } from '../../pages/ward/[uuid]'
 
 type PatientListTranslation = {
   patients: string,
@@ -93,6 +94,7 @@ export const PatientList = ({
   const [search, setSearch] = useState('')
   const { data, isLoading, isError } = usePatientListQuery()
   const dischargeMutation = usePatientDischargeMutation()
+  const { state: context, updateContext } = useContext(WardOverviewContext)
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
   const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
@@ -128,13 +130,17 @@ export const PatientList = ({
               header={<Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>}
             >
               {filteredActive.map(patient => (
-                <Draggable id={patient.id} key={patient.id} data={patient}>
+                <Draggable id={patient.id + 'patientList'} key={patient.id} data={{ id: patient.id, name: patient.name }}>
                   {() => (
-                    <div className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
+                    <div
+                      className={tw('flex flex-row pt-2 border-b-2 justify-between items-center cursor-pointer')}
+                      onClick={() => updateContext({ ...context, patientID: patient.id, roomID: patient.room.id, bedID: patient.bed.id })}
+                    >
                       <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                       <div className={tw('flex flex-row flex-1 justify-between items-center')}>
                         <Label name={activeLabelText(patient)} color="blue"/>
-                        <Button color="negative" variant="textButton" onClick={() => {
+                        <Button color="negative" variant="textButton" onClick={event => {
+                          event.stopPropagation()
                           dischargeMutation.mutate(patient.id)
                         }}>
                           {translation.discharge}
@@ -160,11 +166,16 @@ export const PatientList = ({
                   {filteredUnassigned.map(patient => (
                     <Draggable id={patient.id} key={patient.id} data={patient}>
                       {() => (
-                        <div key={patient.id} className={tw('flex flex-row pt-2 border-b-2 items-center')}>
+                        <div
+                          key={patient.id}
+                          className={tw('flex flex-row pt-2 border-b-2 items-center cursor-pointer')}
+                          onClick={() => updateContext({ wardID: context.wardID, patientID: patient.id })}
+                        >
                           <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                           <div className={tw('flex flex-row flex-1 justify-between items-center')}>
                             <Label name={`${translation.unassigned}`} color="yellow"/>
-                            <Button color="negative" variant="textButton" onClick={() => {
+                            <Button color="negative" variant="textButton" onClick={event => {
+                              event.stopPropagation()
                               dischargeMutation.mutate(patient.id)
                             }}>
                               {translation.discharge}
@@ -192,16 +203,21 @@ export const PatientList = ({
                   {filteredDischarged.map(patient => (
                     <Draggable id={patient.id} key={patient.id} data={patient}>
                       {() => (
-                        <div key={patient.id}
-                             className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}>
+                        <div
+                          key={patient.id}
+                          className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
+                          onClick={() => updateContext({ wardID: context.wardID, patientID: patient.id })}
+                        >
                           <Span className={tw('font-space font-bold')}>{patient.name}</Span>
                           { /* TODO implement when backend endpoint exists
-                    <Button color="negative" variant="textButton" onClick={() => {
-                      // TODO delete
-                    }}>
-                      {translation.delete}
-                    </Button>
-                    */}
+                            <Button color="negative" variant="textButton" onClick={event => {
+                              event.stopPropagation()
+                              // TODO delete
+                            }}>
+                              {translation.delete}
+                            </Button>
+                            */
+                          }
                         </div>
                       )}
                     </Draggable>

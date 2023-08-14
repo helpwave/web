@@ -1,11 +1,11 @@
 import { tw, tx } from '@helpwave/common/twind'
-import type { CardProps } from '@helpwave/common/components/Card'
-import { Card } from '@helpwave/common/components/Card'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { DragCardProps } from './DragCard'
+import { DragCard } from './DragCard'
 
 type BedCardTranslation = {
   nobody: string
@@ -20,7 +20,7 @@ const defaultBedCardTranslation: Record<Languages, BedCardTranslation> = {
   }
 }
 
-export type BedCardProps = CardProps & {
+export type BedCardProps = DragCardProps & {
   bedName: string
 }
 
@@ -40,7 +40,7 @@ export const BedCard = ({
   const translation = useTranslation(language, defaultBedCardTranslation)
   return (
     (
-      <Card onTileClick={onTileClick} isSelected={isSelected} className={tx('min-h-[148px] flex flex-col', className)} {...restCardProps}>
+      <DragCard onTileClick={onTileClick} isSelected={isSelected} className={tx('min-h-[148px] flex flex-col', className)} {...restCardProps}>
         <div className={tw('flex flex-row justify-between')}>
           <Span type="subsubsectionTitle">{bedName}</Span>
           <Span>{translation.nobody}</Span>
@@ -48,7 +48,7 @@ export const BedCard = ({
         <div className={tw('flex flex-1 justify-center items-center')}>
           <Plus/>
         </div>
-      </Card>
+      </DragCard>
     )
   )
 }

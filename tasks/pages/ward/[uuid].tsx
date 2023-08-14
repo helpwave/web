@@ -31,6 +31,8 @@ import {
 } from '@dnd-kit/core'
 import { DragCard } from '../../components/cards/DragCard'
 import { Span } from '@helpwave/common/components/Span'
+import type { BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
+import { PatientCard } from '../../components/cards/PatientCard'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -89,7 +91,7 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
 const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
   const router = useRouter()
-  const [draggedPatient, setDraggedPatient] = useState<PatientMinimalDTO>()
+  const [draggedPatient, setDraggedPatient] = useState<{ patient?: PatientMinimalDTO, bed?: BedWithPatientWithTasksNumberDTO }>()
   const { user } = useAuth()
   const { uuid } = router.query
   const wardUUID = uuid as string
@@ -128,37 +130,45 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     setContextState({ ...contextState, patient: undefined })
   })
 
+  const sensorOptions = { activationConstraint: { distance: 8 } }
   const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { distance: 8 } })
+    useSensor(MouseSensor, sensorOptions),
+    useSensor(TouchSensor, sensorOptions)
   )
 
   const handleDragStart = useCallback(({ active }: DragStartEvent) => {
-    setDraggedPatient({
-      ...(active.data.current as PatientMinimalDTO)
-    })
+    if (active.data.current?.bed) {
+      setDraggedPatient({
+        bed: { ...(active.data.current.bed as BedWithPatientWithTasksNumberDTO) }
+      })
+    } else {
+      setDraggedPatient({
+        patient: { ...(active.data.current as PatientMinimalDTO) }
+      })
+    }
   }, [])
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
     const overData = over?.data.current
+    const patientID = draggedPatient?.patient?.id ?? draggedPatient?.bed?.patient?.id ?? ''
     if (overData && active.data.current) {
       if (overData.patientListSection) {
         // Moving in patientlist
         if (overData.patientListSection === 'unassigned') {
-          unassignMutation.mutate(active.data.current.id) // TODO this doesn't work for unassigned patients
+          unassignMutation.mutate(patientID) // TODO this doesn't work for unassigned patients
         } else if (overData.patientListSection === 'discharged') {
-          dischargeMutation.mutate(active.data.current.id)
+          dischargeMutation.mutate(patientID)
         }
       } else {
         // Moving on bed cards
         setDraggingRoomID(overData.room.id)
-        assignBedMutation.mutate({ id: overData.bed.id, patientID: active.data.current.id })
+        assignBedMutation.mutate({ id: overData.bed.id, patientID })
       }
     }
 
     setDraggedPatient(undefined)
-  }, [assignBedMutation, unassignMutation, dischargeMutation])
+  }, [assignBedMutation, unassignMutation, dischargeMutation, draggedPatient])
 
   const handleDragCancel = useCallback(() => {
     setDraggedPatient(undefined)
@@ -218,7 +228,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
               isShowingPatientList ? (
                     <PatientList width={width}/>
               ) :
-                contextState.bedID && contextState.roomID && contextState.patientID && (
+                contextState.patientID && (
                   <div>
                     <PatientDetail
                       key={contextState.patient?.id}
@@ -228,8 +238,20 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
                 )
             }
           />
-          <DragOverlay style={{ width: '200px' }}>
-            {draggedPatient ? <DragCard cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.name}</Span></DragCard> : null}
+          {/* TODO Later reenable the dropAnimation */}
+          <DragOverlay style={{ width: '200px' }} dropAnimation={null}>
+            {draggedPatient && (draggedPatient.patient ?
+              <DragCard cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.patient.name}</Span></DragCard>
+              : draggedPatient.bed && draggedPatient.bed.patient && (
+                <PatientCard
+                  bedName={draggedPatient.bed.name}
+                  patientName={draggedPatient.bed.patient.name}
+                  unscheduledTasks={draggedPatient.bed.patient.tasksUnscheduled}
+                  inProgressTasks={draggedPatient.bed.patient.tasksInProgress}
+                  doneTasks={draggedPatient.bed.patient.tasksDone}
+                />
+              )
+            )}
           </DragOverlay>
         </DndContext>
       </WardOverviewContext.Provider>

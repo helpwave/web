@@ -10,7 +10,7 @@ import type { PatientDTO } from '../mutations/patient_mutations'
 import { emptyPatient } from '../mutations/patient_mutations'
 import { Droppable } from './dnd-kit/Droppable'
 import { Draggable } from './dnd-kit/Draggable'
-import { Card } from '@helpwave/common/components/Card'
+import { DragCard } from './cards/DragCard'
 
 export type RoomOverviewProps = {
   room: RoomOverviewDTO
@@ -52,11 +52,10 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
             (
               <Droppable id={bed.id} key={bed.id} data={{ bed, room }}>
                 {({ isOver }) => bed.patient && bed.patient?.id && (
-                  <Card
-                    cardDragProperties={{ isOver, isDangerous: true }}
+                  <DragCard
                     className={tw('!p-0 !border-0')}
                   >
-                    <Draggable id={bed.patient.id + 'roomOverview'} data={bed.patient}>
+                    <Draggable id={bed.patient.id + 'roomOverview'} data={{ bed }}>
                       {() => bed.patient && bed.patient?.id && (
                         <PatientCard
                           bedName={bed.name}
@@ -72,16 +71,17 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                             }
                           }}
                           isSelected={selectedBedID === bed.id}
+                          cardDragProperties={{ isOver, isDangerous: true }}
                         />
                       )}
                     </Draggable>
-                  </Card>
+                  </DragCard>
                 )}
               </Droppable>
             ) : (
               // Maybe also wrap inside the drag and drop later
               <Droppable key={bed.id} id={bed.id} data={{ bed, room }}>
-                {({ isOver }) => (
+                {({ isOver, active }) => (!isOver ? (
                   <BedCard
                     bedName={bed.name}
                     // TODO move patient creation to here
@@ -94,8 +94,14 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                       })
                     }}
                     isSelected={selectedBedID === bed.id}
+                  />
+                ) : (
+                  <PatientCard
+                    bedName={bed.name}
+                    patientName={active?.data.current?.bed?.patient?.name ?? active?.data.current?.name}
                     cardDragProperties={{ isOver }}
                   />
+                )
                 )}
               </Droppable>
             )

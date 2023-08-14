@@ -1,4 +1,4 @@
-import z from 'zod'
+import { z } from 'zod'
 
 /*
   Config loading works by having a zod schema which validates the environment variables.

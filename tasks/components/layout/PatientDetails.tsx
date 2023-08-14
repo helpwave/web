@@ -127,7 +127,7 @@ export const PatientDetail = ({
         onBackgroundClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
           setIsShowingDischargeDialog(false)
-          dischargeMutation.mutate(newPatient)
+          dischargeMutation.mutate(newPatient.id)
         }}
         confirmType="negative"
       />

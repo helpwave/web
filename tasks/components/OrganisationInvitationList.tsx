@@ -91,7 +91,7 @@ export const OrganisationInvitationList = ({
     <LoadingAndErrorComponent
       isLoading={isLoading && !!context.state.organizationID}
       hasError={isError && !!context.state.organizationID}
-      errorProps={{ classname: tw('border-b-2 border-gray-500 rounded-xl') }}
+      errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
       loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
     >
       {isShowingInviteMemberModal && (

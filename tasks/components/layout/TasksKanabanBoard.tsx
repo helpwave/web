@@ -22,6 +22,7 @@ import {
 } from '../../mutations/task_mutations'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import React, { useEffect, useState } from 'react'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 export type KanbanBoardObject = {
   draggedID?: string,
@@ -83,14 +84,6 @@ export const TasksKanbanBoard = ({
       default:
         break
     }
-  }
-
-  if (isError) {
-    return <div>Error in TasksKanbanBoard!</div>
-  }
-
-  if (isLoading) {
-    return <div>Loading TasksKanbanBoard!</div>
   }
 
   function findColumn(id: string | TaskStatus): TaskStatus | undefined {
@@ -183,7 +176,13 @@ export const TasksKanbanBoard = ({
   }
 
   return (
-    <div>
+    <LoadingAndErrorComponent
+      isLoading={isLoading}
+      hasError={isError}
+      loadingProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
+      errorProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
+      minimumLoadingDuration={200}
+    >
       <KanbanHeader
         searchValue={boardObject.searchValue}
         onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}
@@ -222,6 +221,6 @@ export const TasksKanbanBoard = ({
           </DragOverlay>
         </div>
       </DndContext>
-    </div>
+    </LoadingAndErrorComponent>
   )
 }

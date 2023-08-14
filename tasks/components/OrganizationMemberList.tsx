@@ -16,10 +16,7 @@ import {
 } from '@helpwave/common/components/Table'
 import type { OrgMember } from '../mutations/organization_member_mutations'
 import { Role } from '../mutations/organization_member_mutations'
-import {
-  useOrganizationsByUserQuery,
-  useRemoveMemberMutation
-} from '../mutations/organization_mutations'
+import { useOrganizationsByUserQuery, useRemoveMemberMutation } from '../mutations/organization_mutations'
 import { OrganizationContext } from '../pages/organizations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
@@ -101,6 +98,21 @@ export const OrganizationMemberList = ({
   const hasSelectedMultiple = !!tableState.selection && tableState.selection.currentSelection.length > 1
   const idMapping = (dataObject: OrgMember) => dataObject.id
 
+  // TODO move this filtering to the Table component
+  const admins = usedMembers.filter(value => value.role === Role.admin).map(idMapping)
+  if (tableState.selection?.currentSelection.find(value => admins.find(adminID => adminID === value))) {
+    const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminID => adminID === value))
+    setTableState({
+      ...tableState,
+      selection: {
+        currentSelection: newSelection,
+        hasSelectedAll: false, // There is always one admin
+        hasSelectedSome: newSelection.length > 0,
+        hasSelectedNone: newSelection.length === 0,
+      }
+    })
+  }
+
   return (
     <div className={tw('flex flex-col')}>
       <ConfirmDialog
@@ -153,13 +165,13 @@ export const OrganizationMemberList = ({
             </div>,
             <></>
           ]}
-          rowMappingToCells={dataObject => [
+          rowMappingToCells={orgMember => [
             <div key="member" className={tw('flex flex-row items-center h-12 overflow-hidden max-w-[200px]')}>
-              <Avatar avatarUrl={dataObject.avatarURL} alt="" size="small"/>
+              <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
               <div className={tw('flex flex-col ml-2')}>
-                <Span className={tw('font-bold truncate')}>{dataObject.name}</Span>
-                <a href={`mailto:${dataObject.email}`}>
-                  <Span type="description" className={tw('text-sm truncate')}>{dataObject.email}</Span>
+                <Span className={tw('font-bold truncate')}>{orgMember.name}</Span>
+                <a href={`mailto:${orgMember.email}`}>
+                  <Span type="description" className={tw('text-sm truncate')}>{orgMember.email}</Span>
                 </a>
               </div>
             </div>,
@@ -167,15 +179,16 @@ export const OrganizationMemberList = ({
               <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
               }}>
                 <Span className={tw(`font-semibold`)}>
-                  {translation.roleTypes[dataObject.role]}
+                  {translation.roleTypes[orgMember.role]}
                 </Span>
               </button>
             </div>,
             <div key="remove" className={tw('flex flex-row justify-end')}>
               <Button
-                onClick={() => setDeleteDialogState({ isShowing: true, member: dataObject })}
+                onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
                 color="negative"
                 variant="textButton"
+                disabled={orgMember.role === Role.admin}
               >
                 {translation.remove}
               </Button>

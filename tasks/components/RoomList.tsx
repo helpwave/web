@@ -7,7 +7,7 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Button } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { Span } from '@helpwave/common/components/Span'
-import { OrganizationOverviewContext } from '../pages/organizations/[uuid]'
+import { OrganizationOverviewContext } from '../pages/organizations/[id]'
 import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import {
   emptyRoomOverview,
@@ -106,11 +106,11 @@ export const RoomList = ({
   const creatRoomMutation = useRoomCreateMutation((room) => {
     context.updateContext({ ...context.state })
     setFocusElement({ ...emptyRoomOverview, id: room.id })
-  }, context.state.wardID ?? '') // Not good but should be safe most of the time
+  }, context.state.wardId ?? '') // Not good but should be safe most of the time
   const deleteRoomMutation = useRoomDeleteMutation(() => context.updateContext({ ...context.state }))
   const updateRoomMutation = useRoomUpdateMutation(() => context.updateContext({ ...context.state }))
 
-  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardID) // TODO use a more light weight query
+  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId) // TODO use a more light weight query
 
   useEffect(() => {
     if (data && !isEditing) {
@@ -157,11 +157,11 @@ export const RoomList = ({
         }}
         confirmType="negative"
       />
-      {managedRoom && context.state.wardID && (
+      {managedRoom && context.state.wardId && (
         <ManageBedsModal
           isOpen={!!managedRoom}
-          wardID={context.state.wardID}
-          roomID={managedRoom}
+          wardId={context.state.wardId}
+          roomId={managedRoom}
           onBackgroundClick={() => setManagedRoom(undefined)}
           onClose={() => setManagedRoom(undefined)}
         />

@@ -32,7 +32,7 @@ type KanbanColumnProps = {
   tasks: TaskDTO[],
   type: TaskStatus,
   isDraggedOver: boolean,
-  draggedTileID?: string,
+  draggedTileId?: string,
   onEditTask: (task: TaskDTO) => void
 }
 
@@ -44,7 +44,7 @@ export const KanbanColumn = ({
   tasks,
   type,
   isDraggedOver,
-  draggedTileID,
+  draggedTileId,
   onEditTask
 }: PropsWithLanguage<KanbanColumnsTranslation, KanbanColumnProps>) => {
   const translation = useTranslation(language, defaultKanbanColumnsTranslations)
@@ -69,7 +69,7 @@ export const KanbanColumn = ({
             <Sortable key={task.id} id={task.id}>
               <TaskCard
                 task={task}
-                isSelected={draggedTileID === task.id}
+                isSelected={draggedTileId === task.id}
                 onTileClick={() => onEditTask(task)}
               />
             </Sortable>

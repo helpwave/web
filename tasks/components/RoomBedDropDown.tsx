@@ -46,21 +46,21 @@ const defaultRoomBedDropDownTranslation: Record<Languages, RoomBedDropDownTransl
   }
 }
 
-export type RoomBedDropDownIDs = {
+export type RoomBedDropDownIds = {
   /**
    * undefined value here means select a room and bed
    */
-  roomID?: string,
-  bedID?: string
+  roomId?: string,
+  bedId?: string
 }
 
 export type RoomBedDropDownProps = {
-  initialRoomAndBed: RoomBedDropDownIDs,
-  wardID: string,
+  initialRoomAndBed: RoomBedDropDownIds,
+  wardId: string,
   /**
    * Only triggers on valid input
    */
-  onChange?: (roomBedDropDownIDs:RoomBedDropDownIDs) => void,
+  onChange?: (roomBedDropDownIds:RoomBedDropDownIds) => void,
   isSubmitting?: boolean,
   isClearable?: boolean
 }
@@ -71,35 +71,35 @@ export type RoomBedDropDownProps = {
 export const RoomBedDropDown = ({
   language,
   initialRoomAndBed,
-  wardID,
+  wardId,
   isSubmitting = false,
   isClearable = false,
   onChange = noop
 }: PropsWithLanguage<RoomBedDropDownTranslation, RoomBedDropDownProps>) => {
   const translation = useTranslation(language, defaultRoomBedDropDownTranslation)
-  const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardID)
-  const [currentSelection, setCurrentSelection] = useState<RoomBedDropDownIDs>({ ...initialRoomAndBed })
+  const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardId)
+  const [currentSelection, setCurrentSelection] = useState<RoomBedDropDownIds>({ ...initialRoomAndBed })
   const ref = useRef<HTMLDivElement>(null)
-  const currentRoom = data?.find(value => value.id === currentSelection.roomID)
+  const currentRoom = data?.find(value => value.id === currentSelection.roomId)
   const [touched, setTouched] = useState(false)
-  const isCreating = !initialRoomAndBed.roomID
+  const isCreating = !initialRoomAndBed.roomId
 
   useEffect(() => {
     setCurrentSelection(initialRoomAndBed)
   }, [initialRoomAndBed])
 
-  const hasChanges = initialRoomAndBed.bedID !== currentSelection.bedID || initialRoomAndBed.roomID !== currentSelection.roomID
+  const hasChanges = initialRoomAndBed.bedId !== currentSelection.bedId || initialRoomAndBed.roomId !== currentSelection.roomId
 
   const roomSelect = (data && (
     <Select
       className={tw('min-w-[120px]')}
-      value={currentSelection.roomID}
+      value={currentSelection.roomId}
       options={data.map(room => ({ value: room.id, label: room.name, disabled: room.beds.length === 0 }))}
       onChange={value => {
         setCurrentSelection({
           ...currentSelection,
-          roomID: value,
-          bedID: undefined
+          roomId: value,
+          bedId: undefined
         })
         setTouched(true)
       }}
@@ -109,13 +109,13 @@ export const RoomBedDropDown = ({
   const bedSelect = (
     <Select
       className={tw('min-w-[150px]')}
-      value={currentSelection.bedID}
-      isDisabled={!currentSelection.roomID}
+      value={currentSelection.bedId}
+      isDisabled={!currentSelection.roomId}
       options={(currentRoom?.beds ?? []).map(value => ({ value: value.id, label: value.name, disabled: !!value.patient }))}
       onChange={value => {
         const newSelection = {
           ...currentSelection,
-          bedID: value
+          bedId: value
         }
         setCurrentSelection(newSelection)
         setTouched(true)
@@ -149,8 +149,8 @@ export const RoomBedDropDown = ({
           <Button
             onClick={() => {
               setCurrentSelection({
-                bedID: undefined,
-                roomID: undefined
+                bedId: undefined,
+                roomId: undefined
               })
               setTouched(false)
               onChange({})
@@ -175,10 +175,10 @@ export const RoomBedDropDown = ({
       )}
       {touched && !isSubmitting && isCreating && (
         <Span className={tx({
-          '!text-hw-positive-400': currentSelection.roomID && currentSelection.bedID,
-          '!text-hw-negative-400': !(currentSelection.roomID && currentSelection.bedID)
+          '!text-hw-positive-400': currentSelection.roomId && currentSelection.bedId,
+          '!text-hw-negative-400': !(currentSelection.roomId && currentSelection.bedId)
         })}>
-          {currentSelection.roomID && currentSelection.bedID ? translation.valid : translation.invalid}
+          {currentSelection.roomId && currentSelection.bedId ? translation.valid : translation.invalid}
         </Span>
       )}
       {isSubmitting && (

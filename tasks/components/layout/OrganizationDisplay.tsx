@@ -28,7 +28,7 @@ const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisp
 }
 
 export type OrganizationDisplayProps = {
-  selectedOrganizationID?: string,
+  selectedOrganizationId?: string,
   organizations?: OrganizationDTO[],
   width?: number
 }
@@ -38,7 +38,7 @@ export type OrganizationDisplayProps = {
  */
 export const OrganizationDisplay = ({
   language,
-  selectedOrganizationID,
+  selectedOrganizationId,
   organizations,
   width
 }: PropsWithLanguage<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
@@ -51,7 +51,7 @@ export const OrganizationDisplay = ({
 
   const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)
 
-  const usedSelectedID = selectedOrganizationID ?? context.state.organizationID
+  const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.yourOrganizations}/>
@@ -60,15 +60,15 @@ export const OrganizationDisplay = ({
           <OrganizationCard
             key={organization.id}
             organization={organization}
-            isSelected={usedSelectedID === organization.id}
-            onEditClick={() => context.updateContext({ ...context.state, organizationID: organization.id })}
+            isSelected={usedSelectedId === organization.id}
+            onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
             onTileClick={async () => await router.push(`/organizations/${organization.id}`)}
           />
         ))}
         <AddCard
           text={translation.addOrganization}
-          onTileClick={() => context.updateContext({ ...context.state, organizationID: '' })}
-          isSelected={usedSelectedID === ''}
+          onTileClick={() => context.updateContext({ ...context.state, organizationId: '' })}
+          isSelected={usedSelectedId === ''}
           className={tw('h-24')}
         />
       </div>

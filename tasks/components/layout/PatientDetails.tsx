@@ -19,9 +19,10 @@ import {
   usePatientUpdateMutation,
   useUnassignMutation
 } from '../../mutations/patient_mutations'
-import { WardOverviewContext } from '../../pages/ward/[uuid]'
+import { WardOverviewContext } from '../../pages/ward/[id]'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { RoomBedDropDown } from '../RoomBedDropDown'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -60,7 +61,7 @@ export type PatientDetailProps = {
 }
 
 /**
- * The right side of the ward/[uuid].tsx page showing the detailed information about the patient
+ * The right side of the ward/[id].tsx page showing the detailed information about the patient
  */
 export const PatientDetail = ({
   language,
@@ -72,12 +73,12 @@ export const PatientDetail = ({
   const context = useContext(WardOverviewContext)
 
   const updateMutation = usePatientUpdateMutation(() => undefined)
-  const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardID: context.state.wardID }))
-  const unassignMutation = useUnassignMutation(() => context.updateContext({ wardID: context.state.wardID }))
-  const { data, isError, isLoading } = usePatientDetailsQuery(context.state.patientID)
+  const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardId: context.state.wardId }))
+  const unassignMutation = useUnassignMutation(() => context.updateContext({ wardId: context.state.wardId }))
+  const { data, isError, isLoading } = usePatientDetailsQuery(context.state.patientId)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
-  const [taskID, setTaskID] = useState<string>()
+  const [taskId, setTaskId] = useState<string>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
 
   const maxHumanReadableIdentifierLength = 24
@@ -100,15 +101,7 @@ export const PatientDetail = ({
     restartTimer(() => updateMutation.mutate(patient))
   }
 
-  if (isError) {
-    return <div>Error in PatientDetails!</div>
-  }
-
-  if (isLoading) {
-    return <div>Loading PatientDetails!</div>
-  }
-
-  const isShowingTask = (!!taskID || taskID === '')
+  const isShowingTask = (!!taskId || taskId === '')
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
@@ -132,69 +125,73 @@ export const PatientDetail = ({
         }}
         confirmType="negative"
       />
-      {/* taskID === '' is create and if set it's the tasks id */}
+      {/* taskId === '' is create and if set it's the tasks id */}
       {isShowingTask && (
         <TaskDetailModal
           isOpen={true}
-          onBackgroundClick={() => setTaskID(undefined)}
-          onClose={() => setTaskID(undefined)}
-          taskID={taskID}
-          patientID={newPatient.id}
+          onBackgroundClick={() => setTaskId(undefined)}
+          onClose={() => setTaskId(undefined)}
+          taskId={taskId}
+          patientId={newPatient.id}
         />
       )}
       <ColumnTitle title={translation.patientDetails}/>
-      <div className={tw('flex flex-row gap-x-6 mb-8')}>
-        <div className={tw('flex flex-col gap-y-2 w-5/12')}>
-          <div className={tw('h-12 w-full')}>
-            <ToggleableInput
-              maxLength={maxHumanReadableIdentifierLength}
-              labelClassName={tw('text-xl font-semibold')}
-              className={tw('text-lg font-semibold')}
-              id="humanReadableIdentifier"
-              value={newPatient.name}
-              onChange={name => changeSavedValue({ ...newPatient, name })}
+      <LoadingAndErrorComponent
+        isLoading={isLoading}
+        hasError={isError}
+      >
+        <div className={tw('flex flex-row gap-x-6 mb-8')}>
+          <div className={tw('flex flex-col gap-y-2 w-5/12')}>
+            <div className={tw('h-12 w-full')}>
+              <ToggleableInput
+                maxLength={maxHumanReadableIdentifierLength}
+                labelClassName={tw('text-xl font-semibold')}
+                className={tw('text-lg font-semibold')}
+                id="humanReadableIdentifier"
+                value={newPatient.name}
+                onChange={name => changeSavedValue({ ...newPatient, name })}
+              />
+            </div>
+            <RoomBedDropDown
+              initialRoomAndBed={{ roomId: context.state.roomId ?? '', bedId: context.state.bedId ?? '' }}
+              wardId={context.state.wardId}
+              onChange={roomBedDropDownIds => {
+                if (roomBedDropDownIds.bedId && context.state.patientId) {
+                  context.updateContext({ ...context.state, ...roomBedDropDownIds })
+                  assignBedMutation.mutate({ id: roomBedDropDownIds.bedId, patientId: context.state.patientId })
+                }
+              }}
+              isSubmitting={isSubmitting}
             />
           </div>
-          <RoomBedDropDown
-            // TODO make this possible with a optional room id
-            initialRoomAndBed={{ roomID: context.state.roomID ?? '', bedID: context.state.bedID ?? '' }}
-            wardID={context.state.wardID}
-            onChange={roomBedDropDownIDs => {
-              if (roomBedDropDownIDs.bedID && context.state.patient) {
-                context.updateContext({ ...context.state, ...roomBedDropDownIDs })
-                assignBedMutation.mutate({ id: roomBedDropDownIDs.bedID, patientID: context.state.patient?.id })
-              }
+          <div className={tw('flex-1')}>
+            <Textarea
+              headline={translation.notes}
+              value={newPatient.note}
+              onChange={text => changeSavedValue({ ...newPatient, note: text })}
+            />
+          </div>
+        </div>
+        {!!newPatient.id && (
+          <TasksKanbanBoard
+            key={newPatient.id}
+            patientId={newPatient.id}
+            editedTaskId={taskId}
+            onEditTask={task => {
+              setTaskId(task.id)
             }}
-            isSubmitting={isSubmitting}
           />
+        )}
+        <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
+          <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
+          <Button color="negative"
+                  onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
+          <Button color="accent" onClick={() => {
+            clearUpdateTimer(true)
+            updateMutation.mutate(newPatient)
+          }}>{translation.saveChanges}</Button>
         </div>
-        <div className={tw('flex-1')}>
-          <Textarea
-            headline={translation.notes}
-            value={newPatient.note}
-            onChange={text => changeSavedValue({ ...newPatient, note: text })}
-          />
-        </div>
-      </div>
-      {!!newPatient.id && (
-        <TasksKanbanBoard
-          key={newPatient.id}
-          patientID={newPatient.id}
-          editedTaskID={taskID}
-          onEditTask={task => {
-            setTaskID(task.id)
-          }}
-        />
-      )}
-      <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
-        <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
-        <Button color="negative"
-                onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
-        <Button color="accent" onClick={() => {
-          clearUpdateTimer(true)
-          updateMutation.mutate(newPatient)
-        }}>{translation.saveChanges}</Button>
-      </div>
+      </LoadingAndErrorComponent>
     </div>
   )
 }

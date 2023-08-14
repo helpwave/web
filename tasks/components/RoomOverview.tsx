@@ -5,7 +5,7 @@ import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import { Span } from '@helpwave/common/components/Span'
 import type { BedMinimalDTO } from '../mutations/bed_mutations'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { WardOverviewContext } from '../pages/ward/[uuid]'
+import { WardOverviewContext } from '../pages/ward/[id]'
 import type { PatientDTO } from '../mutations/patient_mutations'
 import { emptyPatient } from '../mutations/patient_mutations'
 import { Droppable } from './dnd-kit/Droppable'
@@ -24,12 +24,12 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const [columns, setColumns] = useState(3)
 
-  const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patientID?: string, patient?: PatientDTO) =>
+  const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patientId?: string, patient?: PatientDTO) =>
     context.updateContext({
       ...context.state,
-      roomID: room.id,
-      bedID: bed.id,
-      patientID,
+      roomId: room.id,
+      bedId: bed.id,
+      patientId,
       patient
     })
 
@@ -39,7 +39,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
     }
   }, [ref.current?.offsetWidth])
 
-  const selectedBedID = context.state.bedID
+  const selectedBedId = context.state.bedId
 
   return (
     <div className={tw('flex flex-col w-full')} ref={ref}>
@@ -70,7 +70,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                               setSelectedBed(room, bed, bed.patient.id)
                             }
                           }}
-                          isSelected={selectedBedID === bed.id}
+                          isSelected={selectedBedId === bed.id}
                           cardDragProperties={{ isOver, isDangerous: true }}
                         />
                       )}
@@ -93,7 +93,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                         name: `Patient ${room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
                       })
                     }}
-                    isSelected={selectedBedID === bed.id}
+                    isSelected={selectedBedId === bed.id}
                   />
                 ) : (
                   <PatientCard

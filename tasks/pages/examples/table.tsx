@@ -92,14 +92,14 @@ const TablePage: NextPage = () => {
         ]}
         header={[
           <SortButton
-            key="headerID"
+            key="headerId"
             ascending={sortingKey === 'id' ? ascending : undefined}
             onClick={newTableSorting => {
               setSorting(['id', newTableSorting])
               setData(data.sort(sortingFunctions.id[newTableSorting]))
             }}
           >
-            <Span type="tableHeader">ID</Span>
+            <Span type="tableHeader">Id</Span>
           </SortButton>,
           <SortButton
             key="name"

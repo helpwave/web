@@ -17,7 +17,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { Draggable } from '../dnd-kit/Draggable'
 import { Droppable } from '../dnd-kit/Droppable'
-import { WardOverviewContext } from '../../pages/ward/[uuid]'
+import { WardOverviewContext } from '../../pages/ward/[id]'
 import { AddPatientModal } from '../AddPatientModal'
 
 type PatientListTranslation = {
@@ -85,7 +85,7 @@ export type PatientListProps = {
 }
 
 /**
- * The right side of the ward/[uuid].tsx page showing the detailed information about the patients in the ward
+ * The right side of the ward/[id].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
   language,
@@ -112,7 +112,7 @@ export const PatientList = ({
         onConfirm={() => setIsShowingAddPatientModal(0)}
         onCancel={() => setIsShowingAddPatientModal(0)}
         onBackgroundClick={() => setIsShowingAddPatientModal(0)}
-        wardID={context.wardID}
+        wardId={context.wardId}
       />
       <div className={tw('flex flex-row gap-x-2 items-center')}>
         <Span type="subsectionTitle" className={tw('pr-4')}>{translation.patients}</Span>
@@ -145,7 +145,7 @@ export const PatientList = ({
                   {() => (
                     <div
                       className={tw('flex flex-row pt-2 border-b-2 justify-between items-center cursor-pointer')}
-                      onClick={() => updateContext({ ...context, patientID: patient.id, roomID: patient.room.id, bedID: patient.bed.id })}
+                      onClick={() => updateContext({ ...context, patientId: patient.id, roomId: patient.room.id, bedId: patient.bed.id })}
                     >
                       <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                       <div className={tw('flex flex-row flex-1 justify-between items-center')}>
@@ -180,7 +180,7 @@ export const PatientList = ({
                         <div
                           key={patient.id}
                           className={tw('flex flex-row pt-2 border-b-2 items-center cursor-pointer')}
-                          onClick={() => updateContext({ wardID: context.wardID, patientID: patient.id })}
+                          onClick={() => updateContext({ wardId: context.wardId, patientId: patient.id })}
                         >
                           <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                           <div className={tw('flex flex-row flex-1 justify-between items-center')}>
@@ -217,7 +217,7 @@ export const PatientList = ({
                         <div
                           key={patient.id}
                           className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
-                          onClick={() => updateContext({ wardID: context.wardID, patientID: patient.id })}
+                          onClick={() => updateContext({ wardId: context.wardId, patientId: patient.id })}
                         >
                           <Span className={tw('font-space font-bold')}>{patient.name}</Span>
                           { /* TODO implement when backend endpoint exists

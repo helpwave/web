@@ -57,8 +57,8 @@ const defaultManageBedsModalTranslation: Record<Languages, ManageBedsModalTransl
 }
 
 export type ManageBedsModalProps = Omit<ModalProps, 'title'|'description'> & {
-  wardID: string, // TODO remove later
-  roomID: string,
+  wardId: string, // TODO remove later
+  roomId: string,
   onClose?: () => void
 }
 
@@ -67,19 +67,19 @@ export type ManageBedsModalProps = Omit<ModalProps, 'title'|'description'> & {
  */
 export const ManageBedsModal = ({
   language,
-  wardID,
-  roomID,
+  wardId,
+  roomId,
   onClose = noop,
   modalClassName,
   ...ModalProps
 }: PropsWithLanguage<ManageBedsModalTranslation, ManageBedsModalProps>) => {
   const translation = useTranslation(language, defaultManageBedsModalTranslation)
-  const { data, isLoading, isError } = useRoomOverviewsQuery(wardID) // Todo use more optimized query later
+  const { data, isLoading, isError } = useRoomOverviewsQuery(wardId) // Todo use more optimized query later
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination
   })
   const [beds, setBeds] = useState<BedWithPatientWithTasksNumberDTO[]>([])
-  const room = data?.find(value => value.id === roomID)
+  const room = data?.find(value => value.id === roomId)
 
   useEffect(() => {
     if (data) {
@@ -114,7 +114,7 @@ export const ManageBedsModal = ({
             </div>
             <div className={tw('flex flex-row justify-between items-end mb-2')}>
               <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
-              <Button color="positive" onClick={() => addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1 ?? 1}`, roomID })}>{translation.addBed}</Button>
+              <Button color="positive" onClick={() => addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1 ?? 1}`, roomId })}>{translation.addBed}</Button>
             </div>
             <Table
               data={beds}
@@ -133,7 +133,7 @@ export const ManageBedsModal = ({
                     onChange={text => {
                       setBeds(beds.map(value => value.id === bed.id ? { ...value, name: text } : value))
                     }}
-                    onEditCompleted={text => updateBedMutation.mutate({ id: bed.id, name: text, roomID: room.id })}
+                    onEditCompleted={text => updateBedMutation.mutate({ id: bed.id, name: text, roomId: room.id })}
                   />
                 </div>,
                 <div key="patient" className={tw('w-20')}>

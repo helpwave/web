@@ -10,8 +10,8 @@ export type TaskDetailModalProps = ModalProps & TaskDetailViewProps
  * A Modal Wrapper for the task detail view
  */
 export const TaskDetailModal = ({
-  taskID,
-  patientID,
+  taskId,
+  patientId,
   onClose,
   modalClassName,
   ...modalProps
@@ -21,7 +21,7 @@ export const TaskDetailModal = ({
       modalClassName={tx(modalClassName)}
       {...modalProps}
     >
-      <TaskDetailView patientID={patientID} taskID={taskID} onClose={onClose}/>
+      <TaskDetailView patientId={patientId} taskId={taskId} onClose={onClose}/>
     </Modal>
   )
 }

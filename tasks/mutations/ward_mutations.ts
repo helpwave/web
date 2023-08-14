@@ -83,15 +83,15 @@ export const useWardOverviewsQuery = () => {
   })
 }
 
-export const useWardDetailsQuery = (wardID?: string) => {
+export const useWardDetailsQuery = (wardId?: string) => {
   return useQuery({
-    queryKey: [wardsQueryKey, wardID],
-    enabled: !!wardID,
+    queryKey: [wardsQueryKey, wardId],
+    enabled: !!wardId,
     queryFn: async () => {
-      if (wardID === undefined) return
+      if (wardId === undefined) return
 
       const req = new GetWardDetailsRequest()
-      req.setId(wardID)
+      req.setId(wardId)
       const res = await wardService.getWardDetails(req, getAuthenticatedGrpcMetadata())
 
       const ward: WardDetailDTO = {
@@ -170,9 +170,9 @@ export const useWardCreateMutation = (callback: (ward: WardDTO) => void) => {
 export const useWardDeleteMutation = (callback: () => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (wardID: string) => {
+    mutationFn: async (wardId: string) => {
       const req = new DeleteWardRequest()
-      req.setId(wardID)
+      req.setId(wardId)
       await wardService.deleteWard(req, getAuthenticatedGrpcMetadata())
 
       callback()

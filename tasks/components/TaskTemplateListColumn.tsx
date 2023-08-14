@@ -29,7 +29,7 @@ export type TaskTemplateDTOExtension = {taskTemplate: TaskTemplateDTO, type: 'pe
 export type TaskTemplateListColumnProps = {
   taskTemplates: TaskTemplateDTOExtension[],
   onTileClick: (taskTemplate: TaskTemplateDTO) => void,
-  selectedID?: string,
+  selectedId?: string,
   onColumnEditClick?: () => void
 }
 
@@ -40,7 +40,7 @@ export const TaskTemplateListColumn = ({
   language,
   taskTemplates,
   onTileClick,
-  selectedID = '',
+  selectedId = '',
   onColumnEditClick
 }: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateListColumnTranslation)
@@ -68,7 +68,7 @@ export const TaskTemplateListColumn = ({
                   key={taskTemplateExtension.taskTemplate.id}
                   name={taskTemplateExtension.taskTemplate.name}
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
-                  isSelected={selectedID === taskTemplateExtension.taskTemplate.id}
+                  isSelected={selectedId === taskTemplateExtension.taskTemplate.id}
                   onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
                   className={tx('border-2 border-gray-300 !pr-2', { 'mb-2': index === taskTemplates.length - 1 })}
                   typeForLabel={taskTemplateExtension.type}

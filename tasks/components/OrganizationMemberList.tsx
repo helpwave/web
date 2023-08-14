@@ -70,7 +70,7 @@ type DeleteDialogState = {isShowing: boolean, member?: OrgMember}
 const defaultDeleteDialogState: DeleteDialogState = { isShowing: false }
 
 export type OrganizationMemberListProps = {
-  organizationID?: string,
+  organizationId?: string,
   members?: OrgMember[]
 }
 
@@ -79,19 +79,19 @@ export type OrganizationMemberListProps = {
  */
 export const OrganizationMemberList = ({
   language,
-  organizationID,
+  organizationId,
   members
 }: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
   const [tableState, setTableState] = useState<TableState>({ pagination: defaultTableStatePagination, selection: defaultTableStateSelection })
 
   const context = useContext(OrganizationContext)
-  organizationID ??= context.state.organizationID
-  // const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationID) TODO use later
+  organizationId ??= context.state.organizationId
+  // const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId) TODO use later
   const { data, isError, isLoading } = useOrganizationsByUserQuery()
-  const membersByOrganization = data?.find(value => value.id === organizationID)?.members ?? []
+  const membersByOrganization = data?.find(value => value.id === organizationId)?.members ?? []
   const usedMembers: OrgMember[] = members ?? membersByOrganization ?? []
-  const removeMemberMutation = useRemoveMemberMutation(organizationID)
+  const removeMemberMutation = useRemoveMemberMutation(organizationId)
 
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
 
@@ -100,8 +100,8 @@ export const OrganizationMemberList = ({
 
   // TODO move this filtering to the Table component
   const admins = usedMembers.filter(value => value.role === Role.admin).map(idMapping)
-  if (tableState.selection?.currentSelection.find(value => admins.find(adminID => adminID === value))) {
-    const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminID => adminID === value))
+  if (tableState.selection?.currentSelection.find(value => admins.find(adminId => adminId === value))) {
+    const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminId => adminId === value))
     setTableState({
       ...tableState,
       selection: {

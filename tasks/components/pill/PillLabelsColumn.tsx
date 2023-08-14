@@ -11,7 +11,7 @@ export type PillLabelsColumnProps = {
 /**
  * A column showing the all TaskStates with a PillLabel for each
  */
-const PillLabelsColumn = ({ unscheduledCount = 0, inProgressCount = 0, doneCount = 0 }: PillLabelsColumnProps) => {
+const PillLabelsColumn = ({ unscheduledCount, inProgressCount, doneCount }: PillLabelsColumnProps) => {
   return (
     <div className={tw('flex flex-col gap-y-2')}>
       <PillLabel count={unscheduledCount} state={TaskState[TaskStatus.TASK_STATUS_TODO]}/>

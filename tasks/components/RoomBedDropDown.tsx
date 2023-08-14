@@ -2,9 +2,9 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useAssignBedMutation, usePatientAssignmentByWardQuery } from '../mutations/patient_mutations'
+import { usePatientAssignmentByWardQuery } from '../mutations/patient_mutations'
 import { useEffect, useRef, useState } from 'react'
-import { Undo2 } from 'lucide-react'
+import { Undo2, X } from 'lucide-react'
 import { Select } from '@helpwave/common/components/user_input/Select'
 import { Span } from '@helpwave/common/components/Span'
 import { noop } from '@helpwave/common/util/noop'
@@ -14,6 +14,8 @@ import { Button } from '@helpwave/common/components/Button'
 type RoomBedDropDownTranslation = {
   saved: string,
   unsaved: string,
+  valid: string,
+  invalid: string,
   room: string,
   bed: string,
   revert: string,
@@ -24,14 +26,19 @@ const defaultRoomBedDropDownTranslation: Record<Languages, RoomBedDropDownTransl
   en: {
     saved: 'saved',
     unsaved: 'not saved',
+    valid: 'valid',
+    invalid: 'invalid',
     room: 'Room',
     bed: 'Bed',
     revert: 'Revert',
-    submitting: 'Submitting'
+    submitting: 'Submitting',
+
   },
   de: {
     saved: 'gespeichert',
     unsaved: 'nicht gespeichert',
+    valid: 'okay',
+    invalid: 'nicht okay',
     room: 'Raum',
     bed: 'Bett',
     revert: 'Rückgängig',
@@ -40,15 +47,22 @@ const defaultRoomBedDropDownTranslation: Record<Languages, RoomBedDropDownTransl
 }
 
 export type RoomBedDropDownIds = {
-  roomId : string,
-  bedId?: string,
-  patientId: string
+  /**
+   * undefined value here means select a room and bed
+   */
+  roomId?: string,
+  bedId?: string
 }
 
 export type RoomBedDropDownProps = {
   initialRoomAndBed: RoomBedDropDownIds,
-  wardId: string,
-  onChange?: (roomBedDropDownIds:RoomBedDropDownIds) => void
+  wardID: string,
+  /**
+   * Only triggers on valid input
+   */
+  onChange?: (roomBedDropDownIds:RoomBedDropDownIds) => void,
+  isSubmitting?: boolean,
+  isClearable?: boolean
 }
 
 /**
@@ -58,6 +72,8 @@ export const RoomBedDropDown = ({
   language,
   initialRoomAndBed,
   wardId,
+  isSubmitting = false,
+  isClearable = false,
   onChange = noop
 }: PropsWithLanguage<RoomBedDropDownTranslation, RoomBedDropDownProps>) => {
   const translation = useTranslation(language, defaultRoomBedDropDownTranslation)
@@ -66,12 +82,7 @@ export const RoomBedDropDown = ({
   const ref = useRef<HTMLDivElement>(null)
   const currentRoom = data?.find(value => value.id === currentSelection.roomId)
   const [touched, setTouched] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-
-  const assignBedMutation = useAssignBedMutation(() => {
-    onChange(currentSelection)
-    setSubmitting(false)
-  })
+  const isCreating = !initialRoomAndBed.roomId
 
   useEffect(() => {
     setCurrentSelection(initialRoomAndBed)
@@ -95,43 +106,66 @@ export const RoomBedDropDown = ({
     />
   ))
 
-  const bedSelect = (currentRoom && (
+  const bedSelect = (
     <Select
       className={tw('min-w-[150px]')}
       value={currentSelection.bedId}
-      options={currentRoom.beds.map(value => ({ value: value.id, label: value.name, disabled: !!value.patient }))}
+      isDisabled={!currentSelection.roomId}
+      options={(currentRoom?.beds ?? []).map(value => ({ value: value.id, label: value.name, disabled: !!value.patient }))}
       onChange={value => {
-        setCurrentSelection({
+        const newSelection = {
           ...currentSelection,
-          bedId: value
-        })
+          bedID: value
+        }
+        setCurrentSelection(newSelection)
         setTouched(true)
-        setSubmitting(true)
-        assignBedMutation.mutate({ id: value, patientId: initialRoomAndBed.patientId })
+        onChange(newSelection)
       }}
     />
-  ))
-
+  )
+  const isShowingClear = isClearable && !isSubmitting && touched
+  const isShowingRevert = touched && hasChanges && !isSubmitting && !isCreating && !isClearable
   const changesAndSaveRow = (
     <div className={tw('flex flex-row justify-between items-center')}>
-      {touched && hasChanges && !submitting ? (
-        <Button
-          onClick={() => {
-            if (hasChanges) {
-              setCurrentSelection({ ...initialRoomAndBed })
+      <div>
+        {isShowingRevert && (
+          <Button
+            onClick={() => {
+              if (hasChanges) {
+                setCurrentSelection({ ...initialRoomAndBed })
+                setTouched(false)
+              }
+            }}
+            variant="tertiary"
+            disabled={!hasChanges}
+          >
+            <div className={tw('flex flex-row gap-x-2 items-center')}>
+              {translation.revert}
+              <Undo2 size={16}/>
+            </div>
+          </Button>
+        )}
+        {isShowingClear && (
+          <Button
+            onClick={() => {
+              setCurrentSelection({
+                bedId: undefined,
+                roomId: undefined
+              })
               setTouched(false)
-            }
-          }}
-          variant="tertiary"
-          disabled={!hasChanges}
-        >
-          <div className={tw('flex flex-row gap-x-2 items-center')}>
-            {translation.revert}
-            <Undo2 size={16}/>
-          </div>
-        </Button>
-      ) : <div></div>}
-      {touched && !submitting && (
+              onChange({})
+            }}
+            variant="tertiary"
+            color="negative"
+          >
+            <div className={tw('flex flex-row gap-x-2 items-center')}>
+              {translation.revert}
+              <X size={16}/>
+            </div>
+          </Button>
+        )}
+      </div>
+      {touched && !isSubmitting && !isCreating && (
         <Span className={tx({
           '!text-hw-negative-400': hasChanges,
           '!text-hw-positive-400': !hasChanges
@@ -139,7 +173,15 @@ export const RoomBedDropDown = ({
           {hasChanges ? translation.unsaved : translation.saved}
         </Span>
       )}
-      {submitting && (
+      {touched && !isSubmitting && isCreating && (
+        <Span className={tx({
+          '!text-hw-positive-400': currentSelection.roomId && currentSelection.bedId,
+          '!text-hw-negative-400': !(currentSelection.roomId && currentSelection.bedId)
+        })}>
+          {currentSelection.roomId && currentSelection.bedId ? translation.valid : translation.invalid}
+        </Span>
+      )}
+      {isSubmitting && (
         <Span>
           {`${translation.submitting}...`}
         </Span>
@@ -171,7 +213,7 @@ export const RoomBedDropDown = ({
     </div>
   )
 
-  const heightLayout = (data && currentRoom && (
+  const heightLayout = (
     <div className={tw('flex flex-col')}>
       <table className={tw('border-spacing-y-2 border-separate')}>
         <thead/>
@@ -192,13 +234,13 @@ export const RoomBedDropDown = ({
       </table>
       {changesAndSaveRow}
     </div>
-  ))
+  )
 
   return (
     <div ref={ref}>
       <LoadingAndErrorComponent
         isLoading={isLoading}
-        hasError={isError || !data || !currentRoom}
+        hasError={isError || !data}
       >
         {ref.current?.offsetWidth && ref.current.offsetWidth > 300 ? widthLayout : heightLayout}
       </LoadingAndErrorComponent>

@@ -82,7 +82,7 @@ export const emptyPatientDetails: PatientDetailsDTO = {
 
 const patientsQueryKey = 'patients'
 
-export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) => void, patientId: string | undefined) => {
+export const usePatientDetailsQuery = (patientId: string | undefined) => {
   return useQuery({
     queryKey: [patientsQueryKey, patientId],
     enabled: !!patientId,
@@ -127,7 +127,6 @@ export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) =>
         }))
       }
 
-      callback(patient)
       return patient
     },
   })
@@ -156,6 +155,7 @@ export const usePatientsByWardQuery = (wardId: string) => {
 export const usePatientAssignmentByWardQuery = (wardId: string) => {
   return useQuery({
     queryKey: [roomsQueryKey, 'patientAssignments'],
+    enabled: !!wardId,
     queryFn: async () => {
       const req = new GetPatientAssignmentByWardRequest()
       req.setWardId(wardId)
@@ -330,7 +330,7 @@ export const useAssignBedMutation = (callback: (bed: BedWithPatientId) => void =
   })
 }
 
-export const useUnassignMutation = (callback: () => void) => {
+export const useUnassignMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patientId: string) => {

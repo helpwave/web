@@ -13,6 +13,7 @@ import { TaskDetailModal } from '../TaskDetailModal'
 import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
 import {
   emptyPatientDetails,
+  useAssignBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,
@@ -74,7 +75,7 @@ export const PatientDetail = ({
   const updateMutation = usePatientUpdateMutation(() => undefined)
   const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardId: context.state.wardId }))
   const unassignMutation = useUnassignMutation(() => context.updateContext({ wardId: context.state.wardId }))
-  const { data, isError, isLoading } = usePatientDetailsQuery(() => undefined, context.state.patient?.id)
+  const { data, isError, isLoading } = usePatientDetailsQuery(context.state.patientId)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [taskId, setTaskId] = useState<string>()
@@ -87,6 +88,11 @@ export const PatientDetail = ({
       setNewPatient(data)
     }
   }, [data])
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const assignBedMutation = useAssignBedMutation(() => {
+    setIsSubmitting(false)
+  })
 
   const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
@@ -114,8 +120,8 @@ export const PatientDetail = ({
         onCancel={() => setIsShowingDischargeDialog(false)}
         onBackgroundClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
-          setIsShowingDischargeDialog(false)
           dischargeMutation.mutate(newPatient.id)
+          setIsShowingDischargeDialog(false)
         }}
         confirmType="negative"
       />
@@ -147,9 +153,16 @@ export const PatientDetail = ({
               />
             </div>
             <RoomBedDropDown
-              initialRoomAndBed={{ roomId: context.state.roomId ?? '', bedId: context.state.bedId ?? '', patientId: context.state.patient?.id ?? '' }}
+              // TODO make this possible with a optional room id
+              initialRoomAndBed={{ roomId: context.state.roomId ?? '', bedId: context.state.bedId ?? '' }}
               wardId={context.state.wardId}
-              onChange={roomBedDropDownIds => context.updateContext({ ...context.state, ...roomBedDropDownIds })}
+              onChange={roomBedDropDownIds => {
+                if (roomBedDropDownIds.bedId && context.state.patientId) {
+                  context.updateContext({ ...context.state, ...roomBedDropDownIds })
+                  assignBedMutation.mutate({ id: roomBedDropDownIds.bedId, patientId: context.state.patientId })
+                }
+              }}
+              isSubmitting={isSubmitting}
             />
           </div>
           <div className={tw('flex-1')}>

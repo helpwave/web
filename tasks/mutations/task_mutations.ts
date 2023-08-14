@@ -20,6 +20,7 @@ import type { GetTasksByPatientSortedByStatusResponse } from '@helpwave/proto-ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/components/user_input/Input'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
+import { dateToTimestamp, timestampToDate } from '../utils/timeConversion'
 
 export type SubTaskDTO = {
   id: string,
@@ -38,7 +39,7 @@ export type TaskDTO = {
   notes: string,
   status: TaskStatus,
   subtasks: SubTaskDTO[],
-  dueDate: Date,
+  dueDate?: Date,
   creationDate?: Date,
   isPublicVisible: boolean
 }
@@ -92,6 +93,7 @@ export const useTaskQuery = (taskId: string | undefined) => {
         console.error('TasksByPatient query failed')
       }
 
+      const dueAt = res.getDueAt()
       const task: TaskDTO = {
         id: res.getId(),
         name: res.getName(),
@@ -99,7 +101,7 @@ export const useTaskQuery = (taskId: string | undefined) => {
         notes: res.getDescription(),
         isPublicVisible: res.getPublic(),
         assignee: res.getAssignedUserId(),
-        dueDate: new Date(), // TODO replace later
+        dueDate: dueAt ? timestampToDate(dueAt) : undefined,
         subtasks: res.getSubtasksList().map(subtask => ({
           id: subtask.getId(),
           name: subtask.getName(),
@@ -128,27 +130,29 @@ export const useTasksByPatientQuery = (patientId: string | undefined) => {
       const res = await taskService.getTasksByPatient(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getTasksList()) {
-        // TODO some check whether request was successful
         console.error('TasksByPatient query failed')
       }
 
-      const tasks: TaskDTO[] = res.getTasksList().map(task => ({
-        id: task.getId(),
-        name: task.getName(),
-        status: task.getStatus(),
-        notes: task.getDescription(),
-        isPublicVisible: task.getPublic(),
-        assignee: task.getAssignedUserId(),
-        dueDate: new Date(), // TODO replace later
-        subtasks: task.getSubtasksList().map(subtask => ({
-          id: subtask.getId(),
-          name: subtask.getName(),
-          isDone: subtask.getDone()
-        }))
-      }))
+      const tasks: TaskDTO[] = res.getTasksList().map(task => {
+        const dueAt = task.getDueAt()
+        return {
+          id: task.getId(),
+          name: task.getName(),
+          status: task.getStatus(),
+          notes: task.getDescription(),
+          isPublicVisible: task.getPublic(),
+          assignee: task.getAssignedUserId(),
+          dueDate: dueAt ? timestampToDate(dueAt) : undefined,
+          subtasks: task.getSubtasksList().map(subtask => ({
+            id: subtask.getId(),
+            name: subtask.getName(),
+            isDone: subtask.getDone()
+          }))
+        }
+      })
 
       return tasks
-    },
+    }
   })
 }
 
@@ -168,24 +172,26 @@ export const useTasksByPatientSortedByStatusQuery = (patientId: string | undefin
       const res = await taskService.getTasksByPatientSortedByStatus(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
-        // TODO some check whether request was successful
         console.error('TasksByPatientSortedByStatus query failed')
       }
 
-      const mapping = (task: GetTasksByPatientSortedByStatusResponse.Task, status: TaskStatus) => ({
-        id: task.getId(),
-        name: task.getName(),
-        status,
-        notes: task.getDescription(),
-        isPublicVisible: task.getPublic(),
-        assignee: task.getAssignedUserId(),
-        dueDate: new Date(), // TODO replace later
-        subtasks: task.getSubtasksList().map(subtask => ({
-          id: subtask.getId(),
-          name: subtask.getName(),
-          isDone: subtask.getDone()
-        }))
-      })
+      const mapping = (task: GetTasksByPatientSortedByStatusResponse.Task, status: TaskStatus) => {
+        const dueAt = task.getDueAt()
+        return {
+          id: task.getId(),
+          name: task.getName(),
+          status,
+          notes: task.getDescription(),
+          isPublicVisible: task.getPublic(),
+          assignee: task.getAssignedUserId(),
+          dueDate: dueAt ? timestampToDate(dueAt) : undefined,
+          subtasks: task.getSubtasksList().map(subtask => ({
+            id: subtask.getId(),
+            name: subtask.getName(),
+            isDone: subtask.getDone()
+          }))
+        }
+      }
 
       const tasks: SortedTasks = {
         [TaskStatus.TASK_STATUS_TODO]: res.getTodoList().map(value => mapping(value, TaskStatus.TASK_STATUS_TODO)),
@@ -211,11 +217,13 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       const res = await taskService.createTask(req, getAuthenticatedGrpcMetadata())
       const newTask = { ...task, id: res.getId() }
 
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback(newTask)
       return newTask
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+    }
   })
 }
 
@@ -228,6 +236,8 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       updateTask.setId(task.id)
       updateTask.setDescription(task.notes)
       updateTask.setName(task.name)
+      updateTask.setDueAt(task.dueDate ? dateToTimestamp(task.dueDate) : undefined)
+      updateTask.setPublic(task.isPublicVisible)
 
       const getTask = new GetTaskRequest()
       const removeSubtask = new RemoveSubTaskRequest()
@@ -280,11 +290,13 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
 
       await taskService.updateTask(updateTask, getAuthenticatedGrpcMetadata())
 
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback()
       return updateTask.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+    }
   })
 }
 
@@ -296,11 +308,13 @@ export const useTaskDeleteMutation = (callback: () => void = noop) => {
       req.setId(taskId)
       await taskService.deleteTask(req, getAuthenticatedGrpcMetadata())
 
-      queryClient.refetchQueries([tasksQueryKey, sortedTasksByPatientQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       callback()
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey, sortedTasksByPatientQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+    }
   })
 }
 
@@ -311,11 +325,14 @@ export const useTaskToToDoMutation = (callback: () => void = noop) => {
       const req = new TaskToToDoRequest()
       req.setId(taskId)
       await taskService.taskToToDo(req, getAuthenticatedGrpcMetadata())
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+
       callback()
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+    }
   })
 }
 
@@ -326,11 +343,14 @@ export const useTaskToInProgressMutation = (callback: () => void = noop) => {
       const req = new TaskToInProgressRequest()
       req.setId(taskId)
       await taskService.taskToInProgress(req, getAuthenticatedGrpcMetadata())
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+
       callback()
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+    }
   })
 }
 
@@ -341,11 +361,14 @@ export const useTaskToDoneMutation = (callback: () => void = noop) => {
       const req = new TaskToDoneRequest()
       req.setId(taskId)
       await taskService.taskToDone(req, getAuthenticatedGrpcMetadata())
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+
       callback()
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+    }
   })
 }
 
@@ -369,10 +392,13 @@ export const useSubTaskAddMutation = (callback: (subtask: SubTaskDTO) => void = 
         name: subtask.name,
         isDone: subtask.isDone,
       }
-      queryClient.refetchQueries([tasksQueryKey]).then()
+
       callback(newSubtask)
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+    }
   })
 }
 
@@ -385,10 +411,13 @@ export const useSubTaskUpdateMutation = (callback: (subtask: SubTaskDTO) => void
       req.setName(subtask.name)
       await taskService.updateSubTask(req, getAuthenticatedGrpcMetadata())
       const newSubtask: SubTaskDTO = { ...subtask }
-      queryClient.refetchQueries([tasksQueryKey]).then()
+
       callback(newSubtask)
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+    }
   })
 }
 
@@ -399,10 +428,13 @@ export const useSubTaskDeleteMutation = (callback: () => void = noop) => {
       const req = new RemoveSubTaskRequest()
       req.setId(subtaskId)
       await taskService.removeSubTask(req, getAuthenticatedGrpcMetadata())
-      queryClient.refetchQueries([tasksQueryKey]).then()
+
       callback()
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+    }
   })
 }
 
@@ -413,10 +445,13 @@ export const useSubTaskToToDoMutation = (callback: () => void = noop) => {
       const req = new SubTaskToToDoRequest()
       req.setId(subtaskId)
       await taskService.subTaskToToDo(req, getAuthenticatedGrpcMetadata())
-      queryClient.refetchQueries([tasksQueryKey]).then()
+
       callback()
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+    }
   })
 }
 
@@ -427,9 +462,12 @@ export const useSubTaskToDoneMutation = (callback: () => void = noop) => {
       const req = new SubTaskToDoneRequest()
       req.setId(subtaskId)
       await taskService.subTaskToDone(req, getAuthenticatedGrpcMetadata())
-      queryClient.refetchQueries([tasksQueryKey]).then()
+
       callback()
       return req.toObject()
     },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+    }
   })
 }

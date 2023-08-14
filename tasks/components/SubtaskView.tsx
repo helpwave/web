@@ -39,7 +39,7 @@ const defaultSubtaskViewTranslation = {
 type SubtaskViewProps = {
   // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
   subtasks: SubTaskDTO[],
-  taskID?: string,
+  taskId?: string,
   createdBy?: string,
   taskTemplateId?: string,
   onChange: (subtasks: SubTaskDTO[]) => void
@@ -51,7 +51,7 @@ type SubtaskViewProps = {
 export const SubtaskView = ({
   language,
   subtasks,
-  taskID,
+  taskId,
   taskTemplateId,
   onChange,
 }: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
@@ -103,7 +103,7 @@ export const SubtaskView = ({
                 }}
                 onRemoveClick={() => {
                   const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
-                  if (!taskID) {
+                  if (!taskId) {
                     context.updateContext({
                       ...context.state,
                       template: { ...context.state.template, subtasks: filteredSubtasks },

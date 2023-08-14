@@ -24,8 +24,8 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patient: PatientDTO|undefined) =>
     context.updateContext({
       ...context.state,
-      roomID: room.id,
-      bedID: bed.id,
+      roomId: room.id,
+      bedId: bed.id,
       patient
     })
 
@@ -35,7 +35,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
     }
   }, [ref.current?.offsetWidth])
 
-  const selectedBedID = context.state.bedID
+  const selectedBedId = context.state.bedId
 
   return (
     <div className={tw('flex flex-col w-full')} ref={ref}>
@@ -63,7 +63,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                   })
                 }
               }}
-              isSelected={selectedBedID === bed.id}
+              isSelected={selectedBedId === bed.id}
             />
             ) : (
             <BedCard
@@ -78,7 +78,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                   name: `Patient ${room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
                 })
               }}
-              isSelected={selectedBedID === bed.id}/>
+              isSelected={selectedBedId === bed.id}/>
             )
         )}
       </div>

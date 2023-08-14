@@ -20,12 +20,12 @@ export type OrgMemberMinimalDTO = {
 }
 
 // TODO MembersByOrganization
-export const useMembersByOrganizationQuery = (organizationID: string | undefined) => {
+export const useMembersByOrganizationQuery = (organizationId: string | undefined) => {
   return useQuery({
     queryKey: [organizationQueryKey],
-    enabled: !!organizationID,
+    enabled: !!organizationId,
     queryFn: async () => {
-      if (!organizationID) {
+      if (!organizationId) {
         return []
       }
       const members: OrgMember[] = []

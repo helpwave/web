@@ -24,11 +24,11 @@ const defaultOrganizationsPageTranslation = {
 }
 
 export type OrganizationContextState = {
-  organizationID: string
+  organizationId: string
 }
 
 export const emptyOrganizationContextState: OrganizationContextState = {
-  organizationID: ''
+  organizationId: ''
 }
 
 export type OrganizationContextType = {
@@ -47,14 +47,14 @@ export const OrganizationContext = createContext<OrganizationContextType>({
 const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsPageTranslation>) => {
   const translation = useTranslation(language, defaultOrganizationsPageTranslation)
   const router = useRouter()
-  const { organizationID } = router.query
+  const { organizationId } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const [context, setContext] = useState<OrganizationContextState>(emptyOrganizationContextState)
 
-  if (organizationID && !usedQueryParam && organizationID) {
+  if (organizationId && !usedQueryParam && organizationId) {
     setContext({
       ...context,
-      organizationID: organizationID as string
+      organizationId: organizationId as string
     })
     setUsedQueryParam(true)
   }
@@ -77,7 +77,7 @@ const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<Organizatio
           )}
           right={width => (
             <OrganizationDetail
-              key={context.organizationID}
+              key={context.organizationId}
               width={width}
             />
           )}

@@ -52,13 +52,13 @@ export type WardOverviewContextState = {
    patient?.id === "" means creating a new patient
    */
   patient?: PatientDTO,
-  bedID?: string,
-  roomID?: string,
-  wardID: string
+  bedId?: string,
+  roomId?: string,
+  wardId: string
 }
 
 const emptyWardOverviewContextState = {
-  wardID: ''
+  wardId: ''
 }
 
 export type WardOverviewContextType = {
@@ -75,19 +75,19 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const translation = useTranslation(language, defaultWardOverviewTranslation)
   const router = useRouter()
   const { id } = router.query
-  const wardID = id as string
+  const wardId = id as string
 
   const [contextState, setContextState] = useState<WardOverviewContextState>({
-    wardID
+    wardId
   })
 
   const isShowingPatientDialog = contextState.patient?.id === ''
   const isShowingPatientList = contextState.patient === undefined || isShowingPatientDialog
 
-  const organizationID = 'org1' // TODO get this information somewhere
+  const organizationId = 'org1' // TODO get this information somewhere
   useEffect(() => {
-    setContextState({ wardID })
-  }, [wardID])
+    setContextState({ wardId })
+  }, [wardId])
 
   const assignBedMutation = useAssignBedMutation()
 
@@ -95,8 +95,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     const updatedContext = contextState
     updatedContext.patient = patient
 
-    if (contextState.bedID) {
-      assignBedMutation.mutate({ id: contextState.bedID, patientID: patient.id })
+    if (contextState.bedId) {
+      assignBedMutation.mutate({ id: contextState.bedId, patientId: patient.id })
     }
     setContextState(updatedContext)
   })
@@ -104,9 +104,9 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: `/organizations?organizationID=${organizationID}` },
-        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${wardID}` },
-        { display: translation.room, link: `/ward/${wardID}` }
+        { display: translation.organization, link: `/organizations?organizationId=${organizationId}` },
+        { display: translation.ward, link: `/organizations/${organizationId}?wardId=${wardId}` },
+        { display: translation.room, link: `/ward/${wardId}` }
       ]}
     >
       <Head>
@@ -119,14 +119,14 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           if (contextState.patient) {
             createMutation.mutate(contextState.patient)
           } else {
-            setContextState({ ...emptyWardOverviewContextState, wardID: contextState.wardID })
+            setContextState({ ...emptyWardOverviewContextState, wardId: contextState.wardId })
           }
         }}
         onCancel={() => {
-          setContextState({ ...emptyWardOverviewContextState, wardID: contextState.wardID })
+          setContextState({ ...emptyWardOverviewContextState, wardId: contextState.wardId })
         }}
         onBackgroundClick={() => {
-          setContextState({ ...emptyWardOverviewContextState, wardID: contextState.wardID })
+          setContextState({ ...emptyWardOverviewContextState, wardId: contextState.wardId })
         }}
       />
       <WardOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
@@ -134,12 +134,12 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           disableResize={false}
           constraints={{ right: { min: '580px' }, left: { min: '33%' } }}
           baseLayoutValue="-580px"
-          left={() => (<WardRoomList key={wardID}/>)}
+          left={() => (<WardRoomList key={wardId}/>)}
           right={width =>
             isShowingPatientList ? (
                   <PatientList width={width}/>
             ) :
-              contextState.bedID && contextState.roomID && contextState.patient && (
+              contextState.bedId && contextState.roomId && contextState.patient && (
                 <div>
                   <PatientDetail
                     key={contextState.patient?.id}

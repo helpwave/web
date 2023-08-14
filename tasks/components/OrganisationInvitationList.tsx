@@ -51,26 +51,26 @@ export type OrganisationInvitation = {
 }
 
 export type OrganisationInvitationListProps = {
-  organizationID: string,
+  organizationId: string,
   invitations?: OrganisationInvitation[],
   onChange: (invites: OrganisationInvitation[]) => void
 }
 
 /**
- * Description
+ * A List showing all members invited to an organisation
  */
 export const OrganisationInvitationList = ({
   language,
-  organizationID,
+  organizationId,
   invitations,
   onChange
 }: PropsWithLanguage<OrganisationInvitationListTranslation, OrganisationInvitationListProps>) => {
   const translation = useTranslation(language, defaultOrganisationInvitationListTranslation)
 
   const context = useContext(OrganizationContext)
-  const usedOrganizationID = organizationID ?? context.state.organizationID
-  const isCreatingOrganization = usedOrganizationID === ''
-  const { data, isLoading, isError } = useInvitationsByOrganisationQuery(context.state.organizationID)
+  const usedOrganizationId = organizationId ?? context.state.organizationId
+  const isCreatingOrganization = usedOrganizationId === ''
+  const { data, isLoading, isError } = useInvitationsByOrganisationQuery(context.state.organizationId)
   const [tableState, setTableState] = useState<TableState>({
     pagination: {
       ...defaultTableStatePagination,
@@ -81,7 +81,7 @@ export const OrganisationInvitationList = ({
   // Maybe move this filter to the endpoint or the query
   const usedInvitations: OrganisationInvitation[] = invitations ?? (data ?? []).filter(value => value.state === InvitationState.INVITATION_STATE_PENDING)
 
-  const inviteMemberMutation = useInviteMemberMutation(usedOrganizationID)
+  const inviteMemberMutation = useInviteMemberMutation(usedOrganizationId)
   const revokeInviteMutation = useInviteRevokeMutation()
   const idMapping = (invite: OrganisationInvitation) => invite.email
   const isValidEmail = !!inviteMemberModalEmail && validateEmail(inviteMemberModalEmail)
@@ -89,8 +89,8 @@ export const OrganisationInvitationList = ({
 
   return (
     <LoadingAndErrorComponent
-      isLoading={isLoading && !!context.state.organizationID}
-      hasError={isError && !!context.state.organizationID}
+      isLoading={isLoading && !!context.state.organizationId}
+      hasError={isError && !!context.state.organizationId}
       errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
       loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
     >

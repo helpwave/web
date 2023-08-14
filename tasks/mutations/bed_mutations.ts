@@ -35,36 +35,36 @@ export const emptyBedWithPatientWithTasksNumber: BedWithPatientWithTasksNumberDT
   patient: undefined
 }
 
-export type BedWithRoomID = BedMinimalDTO & {
-  roomID: string
+export type BedWithRoomId = BedMinimalDTO & {
+  roomId: string
 }
 
 export type BedWithMinimalPatientDTO = BedMinimalDTO & {
   patient?: PatientMinimalDTO
 }
 
-export type BedWithPatientID = {
+export type BedWithPatientId = {
   id: string,
-  patientID: string
+  patientId: string
 }
 
 export const bedQueryKey = 'beds'
 
-export const useBedQuery = (bedID: string | undefined) => {
+export const useBedQuery = (bedId: string | undefined) => {
   return useQuery({
     queryKey: [bedQueryKey],
-    enabled: !!bedID,
+    enabled: !!bedId,
     queryFn: async () => {
       const req = new GetBedRequest()
-      if (bedID) {
-        req.setId(bedID)
+      if (bedId) {
+        req.setId(bedId)
       }
       const res = await bedService.getBed(req, getAuthenticatedGrpcMetadata())
 
-      const bed: BedWithRoomID = {
+      const bed: BedWithRoomId = {
         id: res.getId(),
         name: res.getName(),
-        roomID: res.getRoomId()
+        roomId: res.getRoomId()
       }
 
       return bed
@@ -75,9 +75,9 @@ export const useBedQuery = (bedID: string | undefined) => {
 export const useBedCreateMutation = (callback: (bed: BedMinimalDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (bed: BedWithRoomID) => {
+    mutationFn: async (bed: BedWithRoomId) => {
       const req = new CreateBedRequest()
-      req.setRoomId(bed.roomID)
+      req.setRoomId(bed.roomId)
       req.setName(bed.name)
       const res = await bedService.createBed(req, getAuthenticatedGrpcMetadata())
 
@@ -103,11 +103,11 @@ export const useBedCreateMutation = (callback: (bed: BedMinimalDTO) => void = no
 export const useBedUpdateMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (bed: BedWithRoomID) => {
+    mutationFn: async (bed: BedWithRoomId) => {
       const req = new UpdateBedRequest()
       req.setId(bed.id)
       req.setName(bed.name)
-      req.setRoomId(bed.roomID)
+      req.setRoomId(bed.roomId)
 
       const res = await bedService.updateBed(req, getAuthenticatedGrpcMetadata())
 
@@ -128,9 +128,9 @@ export const useBedUpdateMutation = (callback: () => void = noop) => {
 export const useBedDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (bedID: string) => {
+    mutationFn: async (bedId: string) => {
       const req = new DeleteBedRequest()
-      req.setId(bedID)
+      req.setId(bedId)
 
       const res = await bedService.deleteBed(req, getAuthenticatedGrpcMetadata())
 

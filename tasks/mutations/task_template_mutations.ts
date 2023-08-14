@@ -228,9 +228,9 @@ export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task:TaskTem
 export const useSubTaskTemplateDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (subtaskID: string) => {
+    mutationFn: async (subtaskId: string) => {
       const deleteSubtaskTaskTemplate = new DeleteTaskTemplateSubTaskRequest()
-      deleteSubtaskTaskTemplate.setId(subtaskID)
+      deleteSubtaskTaskTemplate.setId(subtaskId)
       await taskTemplateService.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
       queryClient.refetchQueries(['personalTaskTemplates']).then()
       callback()

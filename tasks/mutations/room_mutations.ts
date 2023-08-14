@@ -8,6 +8,7 @@ import {
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
 import type { BedDTO, BedWithPatientWithTasksNumberDTO, BedWithMinimalPatientDTO } from './bed_mutations'
 import { wardOverviewsQueryKey, wardsQueryKey } from './ward_mutations'
+import { noop } from '@helpwave/common/util/noop'
 
 export const roomsQueryKey = 'rooms'
 
@@ -45,14 +46,14 @@ export const useRoomQuery = () => {
 }
 
 export const roomOverviewsQueryKey = 'roomOverview'
-export const useRoomOverviewsQuery = (wardID: string | undefined) => {
+export const useRoomOverviewsQuery = (wardId: string | undefined) => {
   return useQuery({
     queryKey: [roomsQueryKey, roomOverviewsQueryKey],
-    enabled: !!wardID,
+    enabled: !!wardId,
     queryFn: async () => {
       const req = new GetRoomOverviewsByWardRequest()
-      if (wardID) {
-        req.setId(wardID)
+      if (wardId) {
+        req.setId(wardId)
       }
       const res = await roomService.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
 
@@ -102,12 +103,12 @@ export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) 
   })
 }
 
-export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, wardID: string) => {
+export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void = noop, wardId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (room: RoomMinimalDTO) => {
       const req = new CreateRoomRequest()
-      req.setWardId(wardID)
+      req.setWardId(wardId)
       req.setName(room.name)
       const res = await roomService.createRoom(req, getAuthenticatedGrpcMetadata())
 
@@ -125,12 +126,12 @@ export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, 
   })
 }
 
-export const useRoomDeleteMutation = (callback: () => void) => {
+export const useRoomDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (roomID: string) => {
+    mutationFn: async (roomId: string) => {
       const req = new DeleteRoomRequest()
-      req.setId(roomID)
+      req.setId(roomId)
       const res = await roomService.deleteRoom(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {

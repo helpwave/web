@@ -28,15 +28,15 @@ const defaultWardsPageTranslation = {
 
 export type OrganizationOverviewContextState = {
   /**
-   wardID === "" means creating a new ward
+   wardId === "" means creating a new ward
    */
-  wardID: string,
-  organizationID: string
+  wardId: string,
+  organizationId: string
 }
 
 const emptyOrganizationOverviewContextState = {
-  organizationID: '',
-  wardID: ''
+  organizationId: '',
+  wardId: ''
 }
 
 export type OrganizationOverviewContextType = {
@@ -58,14 +58,14 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
   const [usedQueryParam, setUsedQueryParam] = useState(false)
 
   const router = useRouter()
-  const { id, wardID } = router.query
-  const organizationID = id as string
+  const { id, wardId } = router.query
+  const organizationId = id as string
 
-  if (wardID && !usedQueryParam) {
+  if (wardId && !usedQueryParam) {
     setContextState({
       ...emptyOrganizationOverviewContextState,
-      wardID: wardID as string,
-      organizationID
+      wardId: wardId as string,
+      organizationId
     })
     setUsedQueryParam(true)
   }
@@ -73,8 +73,8 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organizations, link: `/organizations?organizationID=${organizationID}` },
-        { display: translation.wards, link: `/organizations/${organizationID}` }
+        { display: translation.organizations, link: `/organizations?organizationId=${organizationId}` },
+        { display: translation.wards, link: `/organizations/${organizationId}` }
       ]}
     >
       <Head>
@@ -86,7 +86,7 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
           left={width => (<WardDisplay width={width}/>)}
           right={width => (
             <WardDetail
-              key={contextState.wardID}
+              key={contextState.wardId}
               width={width}
             />
           )}

@@ -28,7 +28,7 @@ const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateW
 }
 
 export type TaskTemplateWardPreviewProps = {
-  wardID?: string,
+  wardId?: string,
   columns?: number
 }
 
@@ -37,7 +37,7 @@ export type TaskTemplateWardPreviewProps = {
  */
 export const TaskTemplateWardPreview = ({
   language,
-  wardID,
+  wardId,
   columns = 3
 }: PropsWithLanguage<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateWardPreviewTranslation)
@@ -45,14 +45,14 @@ export const TaskTemplateWardPreview = ({
 
   const context = useContext(OrganizationOverviewContext)
 
-  const { data, isLoading, isError } = useWardTaskTemplateQuery(wardID)
+  const { data, isLoading, isError } = useWardTaskTemplateQuery(wardId)
 
-  wardID ??= context.state.wardID
+  wardId ??= context.state.wardId
   const taskTemplates = data
 
   return (
     <LoadingAndErrorComponent
-      isLoading={isLoading || !context.state.wardID}
+      isLoading={isLoading || !context.state.wardId}
       hasError={isError}
       loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
       errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
@@ -63,7 +63,7 @@ export const TaskTemplateWardPreview = ({
             <Span type="tableName">{translation.taskTemplates(taskTemplates.length)}</Span>
             <Button
               className={tw('w-auto')}
-              onClick={() => router.push(`/ward/${wardID}/templates`)}
+              onClick={() => router.push(`/ward/${wardId}/templates`)}
             >
               {translation.showAllTaskTemplates}
             </Button>
@@ -75,7 +75,7 @@ export const TaskTemplateWardPreview = ({
                 name={taskTemplate.name}
                 subtaskCount={taskTemplate.subtasks.length}
                 onTileClick={() => {
-                  router.push(`/ward/${wardID}/templates?templateID=${taskTemplate.id}`).then()
+                  router.push(`/ward/${wardId}/templates?templateId=${taskTemplate.id}`).then()
                 }}
               />
             ))}

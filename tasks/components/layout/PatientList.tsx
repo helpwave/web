@@ -72,7 +72,7 @@ export const PatientList = ({
   const translation = useTranslation(language, defaultPatientListTranslations)
   const [search, setSearch] = useState('')
   const context = useContext(WardOverviewContext)
-  const { data, isLoading, isError } = usePatientListQuery(context.state.wardID)
+  const { data, isLoading, isError } = usePatientListQuery(context.state.wardId)
 
   if (isError) {
     return <p>Error</p>

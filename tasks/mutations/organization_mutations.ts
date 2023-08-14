@@ -68,10 +68,10 @@ export type OrganizationDisplayableDTO = {
   avatarURL: string
 }
 
-export type InvitationWithOrganizationID = {
+export type InvitationWithOrganizationId = {
   id: string,
   email: string,
-  organizationID: string,
+  organizationId: string,
   state: InvitationState
 }
 
@@ -82,17 +82,17 @@ export type Invitation = {
   state: InvitationState
 }
 
-export type InviteMemberType = { email: string, organizationID?: string }
+export type InviteMemberType = { email: string, organizationId?: string }
 
 export const singleOrganizationQueryKey = 'singleOrganization'
-export const useOrganizationQuery = (organizationID: string | undefined) => {
+export const useOrganizationQuery = (organizationId: string | undefined) => {
   return useQuery({
     queryKey: [organizationQueryKey, singleOrganizationQueryKey],
-    enabled: !!organizationID,
+    enabled: !!organizationId,
     queryFn: async () => {
       const req = new GetOrganizationRequest()
-      if (organizationID) {
-        req.setId(organizationID)
+      if (organizationId) {
+        req.setId(organizationId)
       }
 
       const res = await organizationService.getOrganization(req, getAuthenticatedGrpcMetadata())
@@ -184,15 +184,15 @@ export const useInvitationsByUserQuery = (state?: InvitationState) => {
   })
 }
 
-export const useInvitationsByOrganisationQuery = (organizationID: string | undefined) => {
+export const useInvitationsByOrganisationQuery = (organizationId: string | undefined) => {
   return useQuery({
     queryKey: [invitationsQueryKey, organizationQueryKey],
-    enabled: !!organizationID,
+    enabled: !!organizationId,
     queryFn: async () => {
       // TODO update later
       const req = new GetInvitationsByOrganizationRequest()
-      if (organizationID) {
-        req.setOrganizationId(organizationID)
+      if (organizationId) {
+        req.setOrganizationId(organizationId)
       }
       const res = await organizationService.getInvitationsByOrganization(req, getAuthenticatedGrpcMetadata())
 
@@ -200,10 +200,10 @@ export const useInvitationsByOrganisationQuery = (organizationID: string | undef
         console.error('error in OrganizationCreate')
       }
 
-      const invitations: InvitationWithOrganizationID[] = res.getInvitationsList().map(invite => ({
+      const invitations: InvitationWithOrganizationId[] = res.getInvitationsList().map(invite => ({
         id: invite.getId(),
         email: invite.getEmail(),
-        organizationID: invite.getOrganizationId(),
+        organizationId: invite.getOrganizationId(),
         state: invite.getState()
       }))
       return invitations
@@ -266,9 +266,9 @@ export const useOrganizationUpdateMutation = (callback: (organization: Organizat
 export const useOrganizationDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (organizationID: string) => {
+    mutationFn: async (organizationId: string) => {
       const req = new DeleteOrganizationRequest()
-      req.setId(organizationID)
+      req.setId(organizationId)
       const res = await organizationService.deleteOrganization(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
@@ -287,9 +287,9 @@ export const useOrganizationDeleteMutation = (callback: () => void = noop) => {
 export const useInviteDeclineMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (inviteID: string) => {
+    mutationFn: async (inviteId: string) => {
       const req = new DeclineInvitationRequest()
-      req.setInvitationId(inviteID)
+      req.setInvitationId(inviteId)
       const res = await organizationService.declineInvitation(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
@@ -308,9 +308,9 @@ export const useInviteDeclineMutation = (callback: () => void = noop) => {
 export const useInviteRevokeMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (inviteID: string) => {
+    mutationFn: async (inviteId: string) => {
       const req = new RevokeInvitationRequest()
-      req.setInvitationId(inviteID)
+      req.setInvitationId(inviteId)
       const res = await organizationService.revokeInvitation(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
@@ -326,21 +326,21 @@ export const useInviteRevokeMutation = (callback: () => void = noop) => {
   })
 }
 
-export const useInviteMemberMutation = (organizationID: string, callback: (inviteID: string) => void = noop) => {
+export const useInviteMemberMutation = (organizationId: string, callback: (inviteId: string) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (invite: InviteMemberType) => {
       const req = new InviteMemberRequest()
 
-      if (!organizationID) {
-        if (invite.organizationID) {
-          organizationID = invite.organizationID
+      if (!organizationId) {
+        if (invite.organizationId) {
+          organizationId = invite.organizationId
         } else {
           console.error('InviteMember failed, provide an non null organization id either in the mutate or the hook')
         }
       }
       req.setEmail(invite.email)
-      req.setOrganizationId(organizationID)
+      req.setOrganizationId(organizationId)
 
       const res = await organizationService.inviteMember(req, getAuthenticatedGrpcMetadata())
 
@@ -360,9 +360,9 @@ export const useInviteMemberMutation = (organizationID: string, callback: (invit
 export const useInviteAcceptMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (inviteID: string) => {
+    mutationFn: async (inviteId: string) => {
       const req = new AcceptInvitationRequest()
-      req.setInvitationId(inviteID)
+      req.setInvitationId(inviteId)
       const res = await organizationService.acceptInvitation(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
@@ -378,13 +378,13 @@ export const useInviteAcceptMutation = (callback: () => void = noop) => {
   })
 }
 
-export const useAddMemberMutation = (callback: () => void, organizationID: string) => {
+export const useAddMemberMutation = (callback: () => void, organizationId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (userID: string) => {
+    mutationFn: async (userId: string) => {
       const req = new AddMemberRequest()
-      req.setId(organizationID)
-      req.setUserId(userID)
+      req.setId(organizationId)
+      req.setUserId(userId)
 
       const res = await organizationService.addMember(req, getAuthenticatedGrpcMetadata())
 
@@ -401,13 +401,13 @@ export const useAddMemberMutation = (callback: () => void, organizationID: strin
   })
 }
 
-export const useRemoveMemberMutation = (organizationID: string, callback: () => void = noop) => {
+export const useRemoveMemberMutation = (organizationId: string, callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (userID: string) => {
+    mutationFn: async (userId: string) => {
       const req = new RemoveMemberRequest()
-      req.setId(organizationID)
-      req.setUserId(userID)
+      req.setId(organizationId)
+      req.setUserId(userId)
 
       const res = await organizationService.removeMember(req, getAuthenticatedGrpcMetadata())
 

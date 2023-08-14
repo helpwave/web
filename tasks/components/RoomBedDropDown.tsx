@@ -39,16 +39,16 @@ const defaultRoomBedDropDownTranslation: Record<Languages, RoomBedDropDownTransl
   }
 }
 
-export type RoomBedDropDownIDs = {
-  roomID : string,
-  bedID?: string,
-  patientID: string
+export type RoomBedDropDownIds = {
+  roomId : string,
+  bedId?: string,
+  patientId: string
 }
 
 export type RoomBedDropDownProps = {
-  initialRoomAndBed: RoomBedDropDownIDs,
-  wardID: string,
-  onChange?: (roomBedDropDownIDs:RoomBedDropDownIDs) => void
+  initialRoomAndBed: RoomBedDropDownIds,
+  wardId: string,
+  onChange?: (roomBedDropDownIds:RoomBedDropDownIds) => void
 }
 
 /**
@@ -57,14 +57,14 @@ export type RoomBedDropDownProps = {
 export const RoomBedDropDown = ({
   language,
   initialRoomAndBed,
-  wardID,
+  wardId,
   onChange = noop
 }: PropsWithLanguage<RoomBedDropDownTranslation, RoomBedDropDownProps>) => {
   const translation = useTranslation(language, defaultRoomBedDropDownTranslation)
-  const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardID)
-  const [currentSelection, setCurrentSelection] = useState<RoomBedDropDownIDs>({ ...initialRoomAndBed })
+  const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardId)
+  const [currentSelection, setCurrentSelection] = useState<RoomBedDropDownIds>({ ...initialRoomAndBed })
   const ref = useRef<HTMLDivElement>(null)
-  const currentRoom = data?.find(value => value.id === currentSelection.roomID)
+  const currentRoom = data?.find(value => value.id === currentSelection.roomId)
   const [touched, setTouched] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
@@ -77,18 +77,18 @@ export const RoomBedDropDown = ({
     setCurrentSelection(initialRoomAndBed)
   }, [initialRoomAndBed])
 
-  const hasChanges = initialRoomAndBed.bedID !== currentSelection.bedID || initialRoomAndBed.roomID !== currentSelection.roomID
+  const hasChanges = initialRoomAndBed.bedId !== currentSelection.bedId || initialRoomAndBed.roomId !== currentSelection.roomId
 
   const roomSelect = (data && (
     <Select
       className={tw('min-w-[120px]')}
-      value={currentSelection.roomID}
+      value={currentSelection.roomId}
       options={data.map(room => ({ value: room.id, label: room.name, disabled: room.beds.length === 0 }))}
       onChange={value => {
         setCurrentSelection({
           ...currentSelection,
-          roomID: value,
-          bedID: undefined
+          roomId: value,
+          bedId: undefined
         })
         setTouched(true)
       }}
@@ -98,16 +98,16 @@ export const RoomBedDropDown = ({
   const bedSelect = (currentRoom && (
     <Select
       className={tw('min-w-[150px]')}
-      value={currentSelection.bedID}
+      value={currentSelection.bedId}
       options={currentRoom.beds.map(value => ({ value: value.id, label: value.name, disabled: !!value.patient }))}
       onChange={value => {
         setCurrentSelection({
           ...currentSelection,
-          bedID: value
+          bedId: value
         })
         setTouched(true)
         setSubmitting(true)
-        assignBedMutation.mutate({ id: value, patientID: initialRoomAndBed.patientID })
+        assignBedMutation.mutate({ id: value, patientId: initialRoomAndBed.patientId })
       }}
     />
   ))

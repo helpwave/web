@@ -83,8 +83,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
 }
 
 export type TaskDetailViewProps = {
-  taskID: string,
-  patientID: string,
+  taskId: string,
+  patientId: string,
   onClose: () => void
 }
 
@@ -93,8 +93,8 @@ export type TaskDetailViewProps = {
  */
 export const TaskDetailView = ({
   language,
-  patientID,
-  taskID,
+  patientId,
+  taskId,
   onClose
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
@@ -106,27 +106,27 @@ export const TaskDetailView = ({
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
 
-  const isCreating = taskID === ''
-  const { data, isLoading, isError } = useTaskQuery(taskID)
+  const isCreating = taskId === ''
+  const { data, isLoading, isError } = useTaskQuery(taskId)
 
   const [task, setTask] = useState<TaskDTO>({ ...emptyTask })
 
-  const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
+  const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskId)
 
   const createTaskMutation = useTaskCreateMutation(newTask => {
     newTask.subtasks.forEach(value =>
-      addSubtaskMutation.mutate({ ...value, taskID: newTask.id }))
+      addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
     onClose()
-  }, patientID)
+  }, patientId)
 
   const updateTaskMutation = useTaskUpdateMutation()
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
 
   useEffect(() => {
-    if (data && taskID) {
+    if (data && taskId) {
       setTask(data)
     }
-  }, [data, taskID])
+  }, [data, taskId])
 
   const {
     data: personalTaskTemplatesData,
@@ -173,7 +173,7 @@ export const TaskDetailView = ({
               onChange={description => setTask({ ...task, notes: description })}
             />
           </div>
-          <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange= {subtasks => {
+          <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange= {subtasks => {
             setTask({ ...task, subtasks })
           }}/>
         </div>
@@ -255,7 +255,7 @@ export const TaskDetailView = ({
           }))),
           ...(wardTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'ward' as const })))]
             .sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))}
-          selectedID={selectedTemplate?.id ?? ''}
+          selectedId={selectedTemplate?.id ?? ''}
           onTileClick={(taskTemplate) => {
             setSelectedTemplate(taskTemplate)
             setTask({

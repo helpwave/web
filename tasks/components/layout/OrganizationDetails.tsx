@@ -67,8 +67,8 @@ export const OrganizationDetail = ({
     updateContext
   } = useContext(OrganizationContext)
 
-  const isCreatingNewOrganization = contextState.organizationID === ''
-  const { data } = useOrganizationQuery(contextState.organizationID)
+  const isCreatingNewOrganization = contextState.organizationId === ''
+  const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
   const [organizationInvites, setOrganizationInvites] = useState<OrganisationInvitation[]>([])
@@ -83,14 +83,14 @@ export const OrganizationDetail = ({
     }
   }, [data, isCreatingNewOrganization])
 
-  const inviteMemberMutation = useInviteMemberMutation(contextState.organizationID)
+  const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 
   const createMutation = useOrganizationCreateMutation(organization => {
     organizationInvites.forEach(invite => inviteMemberMutation.mutate({
       email: invite.email,
-      organizationID: organization.id
+      organizationId: organization.id
     }))
-    updateContext({ organizationID: organization.id })
+    updateContext({ organizationId: organization.id })
   })
 
   const updateMutation = useOrganizationUpdateMutation(organization => {
@@ -104,12 +104,12 @@ export const OrganizationDetail = ({
   })
 
   const deleteMutation = useOrganizationDeleteMutation(() => updateContext({
-    organizationID: ''
+    organizationId: ''
   }))
 
   return (
     <div
-      key={contextState.organizationID}
+      key={contextState.organizationId}
       className={tw('flex flex-col py-4 px-6')}
     >
       <ConfirmDialog
@@ -120,7 +120,7 @@ export const OrganizationDetail = ({
         onBackgroundClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          deleteMutation.mutate(contextState.organizationID)
+          deleteMutation.mutate(contextState.organizationId)
         }}
         confirmType="negative"
       />
@@ -142,7 +142,7 @@ export const OrganizationDetail = ({
         <OrganisationInvitationList
           onChange={setOrganizationInvites}
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
-          organizationID={contextState.organizationID}
+          organizationId={contextState.organizationId}
         />
         <div className={tw('flex flex-row justify-end')}>
           <Button

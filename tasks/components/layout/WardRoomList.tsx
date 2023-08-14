@@ -42,7 +42,7 @@ export const WardRoomList = ({
 }: PropsWithLanguage<WardRoomListTranslation, WardRoomListProps>) => {
   const translation = useTranslation(language, defaultWardRoomListTranslation)
   const context = useContext(WardOverviewContext)
-  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardID)
+  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId)
 
   rooms ??= data
 
@@ -52,13 +52,13 @@ export const WardRoomList = ({
 
   return (
     <div className={tw('flex flex-col px-6 py-4')}
-      onClick={() => context.updateContext({ wardID: context.state.wardID })}
+      onClick={() => context.updateContext({ wardId: context.state.wardId })}
     >
       <div className={tw('flex flex-row justify-between items-center pb-4')}>
         <Span type="title">{translation.roomOverview}</Span>
         <Button onClick={event => {
           event.stopPropagation()
-          context.updateContext({ wardID: context.state.wardID })
+          context.updateContext({ wardId: context.state.wardId })
         }}>
           {translation.showPatientList}
         </Button>

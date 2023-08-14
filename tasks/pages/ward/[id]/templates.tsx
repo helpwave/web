@@ -44,7 +44,7 @@ const defaultWardTaskTemplateTranslations = {
 const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
   const router = useRouter()
-  const { id: wardId, templateID } = router.query
+  const { id: wardId, templateId } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId?.toString())
 
@@ -77,8 +77,8 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     })
   )
 
-  if (!contextState.hasChanges && templateID && !usedQueryParam) {
-    const newSelected = data?.find(value => value.id === templateID) ?? emptyTaskTemplate
+  if (!contextState.hasChanges && templateId && !usedQueryParam) {
+    const newSelected = data?.find(value => value.id === templateId) ?? emptyTaskTemplate
     setContextState({
       ...contextState,
       isValid: newSelected.id !== '',
@@ -89,14 +89,14 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
   }
 
   // TODO load organization id of ward
-  const organizationID = 'org1'
+  const organizationId = 'org1'
 
   // TODO update breadcrumbs
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: `/organizations?organizationID=${organizationID}` },
-        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${wardId}` },
+        { display: translation.organization, link: `/organizations?organizationId=${organizationId}` },
+        { display: translation.ward, link: `/organizations/${organizationId}?wardId=${wardId}` },
         { display: translation.taskTemplates, link: `/ward/${wardId}/templates` }
       ]}
     >
@@ -127,7 +127,7 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
                       deletedSubtaskIds: []
                     })
                   }}
-                  selectedID={contextState.template.id}
+                  selectedId={contextState.template.id}
                   taskTemplates={data}
                   variant="wardTemplates"
                 />

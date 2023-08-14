@@ -12,7 +12,8 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { TaskDetailModal } from '../TaskDetailModal'
 import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
 import {
-  emptyPatientDetails, useAssignBedMutation,
+  emptyPatientDetails,
+  useAssignBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,

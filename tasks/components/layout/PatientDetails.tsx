@@ -13,6 +13,7 @@ import { TaskDetailModal } from '../TaskDetailModal'
 import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
 import {
   emptyPatientDetails,
+  useAssignBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,
@@ -87,6 +88,11 @@ export const PatientDetail = ({
     }
   }, [data])
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const assignBedMutation = useAssignBedMutation(() => {
+    setIsSubmitting(false)
+  })
+
   const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
   const changeSavedValue = (patient: PatientDetailsDTO) => {
@@ -149,18 +155,18 @@ export const PatientDetail = ({
               onChange={name => changeSavedValue({ ...newPatient, name })}
             />
           </div>
-          {context.state.patientID && context.state.roomID && (
+          <RoomBedDropDown
             // TODO make this possible with a optional room id
-            <RoomBedDropDown
-              initialRoomAndBed={{
-                roomID: context.state.roomID,
-                bedID: context.state.bedID,
-                patientID: context.state.patientID
-              }}
-              wardID={context.state.wardID}
-              onChange={roomBedDropDownIDs => context.updateContext({ ...context.state, ...roomBedDropDownIDs })}
-            />
-          )}
+            initialRoomAndBed={{ roomID: context.state.roomID ?? '', bedID: context.state.bedID ?? '' }}
+            wardID={context.state.wardID}
+            onChange={roomBedDropDownIDs => {
+              if (roomBedDropDownIDs.bedID && context.state.patient) {
+                context.updateContext({ ...context.state, ...roomBedDropDownIDs })
+                assignBedMutation.mutate({ id: roomBedDropDownIDs.bedID, patientID: context.state.patient?.id })
+              }
+            }}
+            isSubmitting={isSubmitting}
+          />
         </div>
         <div className={tw('flex-1')}>
           <Textarea

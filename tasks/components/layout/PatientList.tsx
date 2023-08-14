@@ -18,6 +18,7 @@ import { HideableContentSection } from '@helpwave/common/components/HideableCont
 import { Draggable } from '../dnd-kit/Draggable'
 import { Droppable } from '../dnd-kit/Droppable'
 import { WardOverviewContext } from '../../pages/ward/[uuid]'
+import { AddPatientModal } from '../AddPatientModal'
 
 type PatientListTranslation = {
   patients: string,
@@ -92,9 +93,11 @@ export const PatientList = ({
 }: PropsWithLanguage<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(language, defaultPatientListTranslations)
   const [search, setSearch] = useState('')
-  const { data, isLoading, isError } = usePatientListQuery()
-  const dischargeMutation = usePatientDischargeMutation()
   const { state: context, updateContext } = useContext(WardOverviewContext)
+  const { data, isLoading, isError } = usePatientListQuery()
+  const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
+  const dischargeMutation = usePatientDischargeMutation()
+
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
   const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
@@ -103,14 +106,22 @@ export const PatientList = ({
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
-      <div className={tw('flex flex-row gap-x-2 items-center mb-6')}>
+      <AddPatientModal
+        key={isShowingAddPatientModal}
+        isOpen={isShowingAddPatientModal !== 0}
+        onConfirm={() => setIsShowingAddPatientModal(0)}
+        onCancel={() => setIsShowingAddPatientModal(0)}
+        onBackgroundClick={() => setIsShowingAddPatientModal(0)}
+        wardID={context.wardID}
+      />
+      <div className={tw('flex flex-row gap-x-2 items-center')}>
         <Span type="subsectionTitle" className={tw('pr-4')}>{translation.patients}</Span>
         <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
         <Button
           className={tw('whitespace-nowrap')}
           color="positive"
           onClick={() => {
-            // TODO open add patient screen
+            setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
           }}
         >
           {translation.addPatient}

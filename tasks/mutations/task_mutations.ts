@@ -93,6 +93,7 @@ export const useTaskQuery = (taskID: string | undefined) => {
         console.error('TasksByPatient query failed')
       }
 
+      const dueAt = res.getDueAt()
       const task: TaskDTO = {
         id: res.getId(),
         name: res.getName(),
@@ -100,7 +101,7 @@ export const useTaskQuery = (taskID: string | undefined) => {
         notes: res.getDescription(),
         isPublicVisible: res.getPublic(),
         assignee: res.getAssignedUserId(),
-        dueDate: res.getDueAt() ? timestampToDate(res.getDueAt()) : undefined,
+        dueDate: dueAt ? timestampToDate(dueAt) : undefined,
         subtasks: res.getSubtasksList().map(subtask => ({
           id: subtask.getId(),
           name: subtask.getName(),
@@ -132,23 +133,26 @@ export const useTasksByPatientQuery = (patientID: string | undefined) => {
         console.error('TasksByPatient query failed')
       }
 
-      const tasks: TaskDTO[] = res.getTasksList().map(task => ({
-        id: task.getId(),
-        name: task.getName(),
-        status: task.getStatus(),
-        notes: task.getDescription(),
-        isPublicVisible: task.getPublic(),
-        assignee: task.getAssignedUserId(),
-        dueDate: task.getDueAt() ? timestampToDate(task.getDueAt()) : undefined,
-        subtasks: task.getSubtasksList().map(subtask => ({
-          id: subtask.getId(),
-          name: subtask.getName(),
-          isDone: subtask.getDone()
-        }))
-      }))
+      const tasks: TaskDTO[] = res.getTasksList().map(task => {
+        const dueAt = task.getDueAt()
+        return {
+          id: task.getId(),
+          name: task.getName(),
+          status: task.getStatus(),
+          notes: task.getDescription(),
+          isPublicVisible: task.getPublic(),
+          assignee: task.getAssignedUserId(),
+          dueDate: dueAt ? timestampToDate(dueAt) : undefined,
+          subtasks: task.getSubtasksList().map(subtask => ({
+            id: subtask.getId(),
+            name: subtask.getName(),
+            isDone: subtask.getDone()
+          }))
+        }
+      })
 
       return tasks
-    },
+    }
   })
 }
 
@@ -171,20 +175,23 @@ export const useTasksByPatientSortedByStatusQuery = (patientID: string | undefin
         console.error('TasksByPatientSortedByStatus query failed')
       }
 
-      const mapping = (task: GetTasksByPatientSortedByStatusResponse.Task, status: TaskStatus) => ({
-        id: task.getId(),
-        name: task.getName(),
-        status,
-        notes: task.getDescription(),
-        isPublicVisible: task.getPublic(),
-        assignee: task.getAssignedUserId(),
-        dueDate: task.getDueAt() ? timestampToDate(task.getDueAt()) : undefined,
-        subtasks: task.getSubtasksList().map(subtask => ({
-          id: subtask.getId(),
-          name: subtask.getName(),
-          isDone: subtask.getDone()
-        }))
-      })
+      const mapping = (task: GetTasksByPatientSortedByStatusResponse.Task, status: TaskStatus) => {
+        const dueAt = task.getDueAt()
+        return {
+          id: task.getId(),
+          name: task.getName(),
+          status,
+          notes: task.getDescription(),
+          isPublicVisible: task.getPublic(),
+          assignee: task.getAssignedUserId(),
+          dueDate: dueAt ? timestampToDate(dueAt) : undefined,
+          subtasks: task.getSubtasksList().map(subtask => ({
+            id: subtask.getId(),
+            name: subtask.getName(),
+            isDone: subtask.getDone()
+          }))
+        }
+      }
 
       const tasks: SortedTasks = {
         [TaskStatus.TASK_STATUS_TODO]: res.getTodoList().map(value => mapping(value, TaskStatus.TASK_STATUS_TODO)),

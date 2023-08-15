@@ -107,6 +107,7 @@ export const PatientList = ({
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
       <AddPatientModal
+        id="patientList-AddPatientModal"
         key={isShowingAddPatientModal}
         isOpen={isShowingAddPatientModal !== 0}
         onConfirm={() => setIsShowingAddPatientModal(0)}

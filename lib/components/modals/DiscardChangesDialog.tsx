@@ -42,21 +42,19 @@ type DiscardChangesDialogProps = ModalProps & {
 export const DiscardChangesDialog = ({
   language,
   children,
-  isOpen,
   title,
   description,
   onCancel,
   onSave,
   onDontSave,
-  onBackgroundClick
+  ...modalProps
 }: PropsWithLanguage<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
   const translation = useTranslation(language, defaultDiscardChangesDialogTranslation)
   return (
     <Modal
-      isOpen={isOpen}
       title={title ?? translation.title}
       description={description ?? translation.description}
-      onBackgroundClick={onBackgroundClick}
+      {...modalProps}
     >
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>

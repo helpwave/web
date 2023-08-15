@@ -1,7 +1,6 @@
-import { Meta } from '@storybook/react'
-import type { StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 
-import { HelpwaveSpinner } from '../icons/HelpwaveSpinner'
+import { HelpwaveSpinner } from '../../icons/HelpwaveSpinner'
 
 // 👇 This default export determines where your story goes in the story list
 const meta = {
@@ -18,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   args: {
-    color: "#8070A9",
+    color: '#8070A9',
     animate: true,
     width: 128,
     height: 128,

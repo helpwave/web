@@ -116,6 +116,7 @@ export const OrganizationMemberList = ({
   return (
     <div className={tw('flex flex-col')}>
       <ConfirmDialog
+        id="organizationMemberList-DeleteDialog"
         title={translation.deleteConfirmText(hasSelectedMultiple)}
         description={translation.dangerZoneText(hasSelectedMultiple)}
         isOpen={deleteDialogState.isShowing}

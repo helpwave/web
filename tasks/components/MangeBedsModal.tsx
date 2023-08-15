@@ -63,7 +63,7 @@ export type ManageBedsModalProps = Omit<ModalProps, 'title'|'description'> & {
 }
 
 /**
- * Description
+ * A Modal for managing beds
  */
 export const ManageBedsModal = ({
   language,

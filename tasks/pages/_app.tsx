@@ -8,6 +8,8 @@ import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import MobileInterceptor from '../components/MobileInterceptor'
 import titleWrapper from '../utils/titleWrapper'
+import { modalRootName } from '@helpwave/common/components/modals/Modal'
+import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,9 +37,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       `}</style>
         </Head>
         <QueryClientProvider client={queryClient}>
-          <div className={tw('font-sans')} id="modal-root">
-            <Component {...pageProps} />
-          </div>
+          <ModalRegister>
+            <div className={tw('font-sans')} id={modalRootName}>
+              <Component {...pageProps} />
+            </div>
+          </ModalRegister>
         </QueryClientProvider>
       </div>
 

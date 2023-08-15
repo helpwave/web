@@ -113,6 +113,7 @@ export const OrganizationDetail = ({
       className={tw('flex flex-col py-4 px-6')}
     >
       <ConfirmDialog
+        id="organizationDetail-DeleteDialog"
         title={translation.deleteConfirmText}
         description={translation.dangerZoneText}
         isOpen={isShowingConfirmDialog}

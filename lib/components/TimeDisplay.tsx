@@ -110,7 +110,7 @@ export const TimeDisplay = ({
   if (mode === 'daysFromToday') {
     fullString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')} - ${displayString}`
   } else {
-    fullString = `${date.getDay()}. ${monthToTranslation[date.getMonth()]} ${date.getFullYear()}`
+    fullString = `${date.getDate()}. ${monthToTranslation[date.getMonth()]} ${date.getFullYear()}`
   }
 
   return (

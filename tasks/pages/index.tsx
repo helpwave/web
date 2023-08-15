@@ -13,8 +13,7 @@ import { useWardOverviewsQuery } from '../mutations/ward_mutations'
 import { useOrganizationsByUserQuery } from '../mutations/organization_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { tw } from '@twind/core'
-import type { Feature } from '../components/FeatureDisplay'
-import { featuresSchema } from '../components/FeatureDisplay'
+import { featuresSchema, fetchFeatures } from '../utils/features'
 
 type DashboardTranslation = {
   dashboard: string
@@ -34,13 +33,7 @@ type DashboardServerSideProps = {
 }
 
 export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = async () => {
-  const json = await fetch('https://cdn.helpwave.de/feed.json')
-    .then((res) => res.json())
-    .then(async (json) => {
-      await featuresSchema.parseAsync(json)
-      return json as Feature[]
-    })
-
+  const json = await fetchFeatures()
   return { props: { jsonFeed: json } }
 }
 

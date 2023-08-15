@@ -2,34 +2,7 @@ import { tw, tx } from '@helpwave/common/twind'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import Link from 'next/link'
 import { Span } from '@helpwave/common/components/Span'
-import { z } from 'zod'
-
-export const featureSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  date: z.string(),
-  image: z.string().url().optional(),
-  externalResource: z.string().url().optional(),
-}).transform<Feature>((obj) => {
-  let description: (string | URL)[] = [obj.description]
-  if (obj.image) description = [new URL(obj.image), ...description]
-
-  return {
-    title: obj.title,
-    date: new Date(obj.date),
-    description,
-    externalResource: obj.externalResource ? new URL(obj.externalResource) : undefined
-  }
-})
-
-export const featuresSchema = z.array(featureSchema)
-
-export type Feature = {
-  title: string,
-  date: Date,
-  description: (string | URL)[],
-  externalResource?: URL
-}
+import type { Feature } from '../utils/features'
 
 export type FeatureDisplayProps = {
   feature: Feature,

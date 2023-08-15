@@ -37,6 +37,7 @@ const configSchema = z.object({
   NEXT_PUBLIC_OAUTH_SCOPES: z.string().default('openid,offline_access,email,nickname,name,organizations'),
   NEXT_PUBLIC_FAKE_TOKEN_ENABLE: z.literal('true').or(z.literal('false')).default('false'),
   NEXT_PUBLIC_FAKE_TOKEN: z.object({ sub: z.string().uuid(), name: z.string(), nickname: z.string(), email: z.string().email(), organizations: z.string().array() }).default({ sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984', name: 'Max Mustermann', nickname: 'max.mustermann', email: 'max.mustermann@helpwave.de', organizations: ['3b25c6f5-4705-4074-9fc6-a50c28eba406'] }),
+  NEXT_PUBLIC_FEEDBACK_FORM_URL: z.string().url().default('https://share-eu1.hsforms.com/1Libxb_ANSm-CpMCQ37Ti6Qfsrtd'),
   NEXT_PUBLIC_FEATURES_FEED_URL: z.string().url().default('https://cdn.helpwave.de/feed.json'),
 }).transform(obj => ({
   env: obj.NODE_ENV,
@@ -55,6 +56,7 @@ const configSchema = z.object({
   },
   fakeTokenEnable: obj.NEXT_PUBLIC_FAKE_TOKEN_ENABLE === 'true',
   fakeToken: Buffer.from(JSON.stringify(obj.NEXT_PUBLIC_FAKE_TOKEN)).toString('base64'),
+  feedbackFormUrl: obj.NEXT_PUBLIC_FEEDBACK_FORM_URL,
   featuresFeedUrl: obj.NEXT_PUBLIC_FEATURES_FEED_URL,
 }))
 

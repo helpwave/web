@@ -1,3 +1,4 @@
+import type { SelectProps } from '@helpwave/common/components/user_input/Select'
 import { Select } from '@helpwave/common/components/user_input/Select'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -26,10 +27,7 @@ const defaultTaskStatusSelectTranslation = {
   }
 }
 
-type TaskStatusSelectProps = {
-  value: TaskStatus | undefined,
-  onChange: (status: TaskStatus) => void
-}
+type TaskStatusSelectProps = Omit<SelectProps<TaskStatus>, 'options'>
 
 /**
  * A component for selecting a TaskStatus
@@ -38,19 +36,17 @@ type TaskStatusSelectProps = {
  */
 export const TaskStatusSelect = ({
   language,
-  value,
-  onChange
+  ...selectProps
 }: PropsWithLanguage<TaskStatusSelectTranslation, TaskStatusSelectProps>) => {
   const translation = useTranslation(language, defaultTaskStatusSelectTranslation)
   return (
     <Select
-      value={value}
       options={[
         { value: TaskStatus.TASK_STATUS_TODO, label: translation.unscheduled },
         { value: TaskStatus.TASK_STATUS_IN_PROGRESS, label: translation.inProgress },
         { value: TaskStatus.TASK_STATUS_DONE, label: translation.done }
       ]}
-      onChange={onChange}
+      {...selectProps}
     />
   )
 }

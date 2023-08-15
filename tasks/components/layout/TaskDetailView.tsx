@@ -226,22 +226,26 @@ export const TaskDetailView = ({
             </div>
             <div>
               <label><Span type="labelMedium">{translation.status}</Span></label>
-              <TaskStatusSelect value={task.status} onChange={status => {
-                switch (status) {
-                  case TaskStatus.TASK_STATUS_TODO:
-                    toToDoMutation.mutate(task.id)
-                    break
-                  case TaskStatus.TASK_STATUS_IN_PROGRESS:
-                    toInProgressMutation.mutate(task.id)
-                    break
-                  case TaskStatus.TASK_STATUS_DONE:
-                    toDoneMutation.mutate(task.id)
-                    break
-                  default:
-                    break
-                }
-                setTask({ ...task, status })
-              }}/>
+              <TaskStatusSelect
+                value={task.status}
+                isDisabled={isCreating}
+                onChange={status => {
+                  switch (status) {
+                    case TaskStatus.TASK_STATUS_TODO:
+                      toToDoMutation.mutate(task.id)
+                      break
+                    case TaskStatus.TASK_STATUS_IN_PROGRESS:
+                      toInProgressMutation.mutate(task.id)
+                      break
+                    case TaskStatus.TASK_STATUS_DONE:
+                      toDoneMutation.mutate(task.id)
+                      break
+                    default:
+                      break
+                  }
+                  setTask({ ...task, status })
+                }}
+              />
             </div>
             <div className={tw('hidden')} /* TODO enable later */>
               <label><Span type="labelMedium">{translation.visibility}</Span></label>

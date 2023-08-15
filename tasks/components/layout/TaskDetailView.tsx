@@ -48,7 +48,8 @@ type TaskDetailViewTranslation = {
   public: string,
   create: string,
   update: string,
-  delete: string
+  delete: string,
+  publish: string
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -65,7 +66,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     public: 'public',
     create: 'Create',
     update: 'Update',
-    delete: 'Delete'
+    delete: 'Delete',
+    publish: 'Publish'
   },
   de: {
     close: 'Schließen',
@@ -80,7 +82,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     public: 'öffentlich',
     create: 'Hinzufügen',
     update: 'Ändern',
-    delete: 'Löschen'
+    delete: 'Löschen',
+    publish: 'Veröffentlichen'
   }
 }
 
@@ -148,6 +151,9 @@ export const TaskDetailView = ({
     return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
   }
 
+  const taskNameMinimumLength = 1
+  const isValid = task.name.length >= taskNameMinimumLength
+
   const tasksDetails = (
     <div className={tx('flex flex-col', { 'pl-6': isCreating, 'px-2': !isCreating })}>
       <div className={tw('flex flex-row justify-between')}>
@@ -183,8 +189,7 @@ export const TaskDetailView = ({
           }}/>
         </div>
         { /* TODO create a new component for this */}
-        <div className={tw('flex flex-col justify-between min-w-[250px]')}>
-          <div className={tw('flex flex-col gap-y-4')}>
+        <div className={tw('flex flex-col min-w-[250px] gap-y-4')}>
             <div className={tw('hidden')} /* TODO enable later */ >
               <label><Span type="labelMedium">{translation.assignee}</Span></label>
               <Select
@@ -243,16 +248,24 @@ export const TaskDetailView = ({
                 setTask({ ...task, status })
               }}/>
             </div>
-            <div className={tw('hidden')} /* TODO enable later */>
+            <div>
               <label><Span type="labelMedium">{translation.visibility}</Span></label>
-              <Select
-                value={task.isPublicVisible}
-                options={[
-                  { label: translation.private, value: false },
-                  { label: translation.public, value: true }
-                ]}
-                onChange={isPublicVisible => setTask({ ...task, isPublicVisible })}
-              />
+              <div className={tw('flex flex-row justify-between items-center')}>
+                <Span>{task.isPublicVisible ? translation.public : translation.private}</Span>
+                {!task.isPublicVisible && (
+                  <Button
+                    color="neutral"
+                    variant="tertiary"
+                    className={tw('!py-1 !px-2')}
+                    onClick={() => setTask({
+                      ...task,
+                      isPublicVisible: true
+                    })}
+                  >
+                    <Span>{translation.publish}</Span>
+                  </Button>
+                )}
+              </div>
             </div>
             {task.creationDate && (
               <div className={tw('flex flex-col gap-y-1')}>
@@ -261,16 +274,36 @@ export const TaskDetailView = ({
               </div>
             )}
           </div>
-        </div>
       </div>
       <div className={tw('flex flex-row justify-end gap-x-8')}>
-        {!isCreating ? (
-            <>
-              <Button color="negative" onClick={() => deleteTaskMutation.mutate(task.id)}>{translation.delete}</Button>
-              <Button color="accent" onClick={() => updateTaskMutation.mutate(task)}>{translation.update}</Button>
-            </>
-        )
-          : <Button color="accent" onClick={() => createTaskMutation.mutate(task)}>{translation.create}</Button>
+        {!isCreating ?
+            (
+              <>
+                <Button
+                  color="negative"
+                  onClick={() => deleteTaskMutation.mutate(task.id)}
+                >
+                  {translation.delete}
+                </Button>
+                <Button
+                  color="accent"
+                  onClick={() => updateTaskMutation.mutate(task)}
+                  disabled={!isValid}
+                >
+                  {translation.update}
+                </Button>
+              </>
+            )
+          :
+            (
+              <Button
+                color="accent"
+                onClick={() => createTaskMutation.mutate(task)}
+                disabled={!isValid}
+              >
+                {translation.create}
+              </Button>
+            )
         }
       </div>
     </div>

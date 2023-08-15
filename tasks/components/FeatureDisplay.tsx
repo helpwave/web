@@ -2,13 +2,7 @@ import { tw, tx } from '@helpwave/common/twind'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import Link from 'next/link'
 import { Span } from '@helpwave/common/components/Span'
-
-export type Feature = {
-  title: string,
-  date: Date,
-  description: (string | URL)[],
-  externalResource?: URL
-}
+import type { Feature } from '../utils/features'
 
 export type FeatureDisplayProps = {
   feature: Feature,

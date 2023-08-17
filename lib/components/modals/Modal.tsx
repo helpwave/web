@@ -34,6 +34,10 @@ export const Modal = ({
   const modalRoot = document.getElementById(modalRootName)
   const { register, addToRegister, removeFromRegister } = useContext(ModalContext)
 
+  if (!id) {
+    console.error('the id cannot be empty')
+  }
+
   useEffect(() => {
     if (isOpen) {
       addToRegister(id)

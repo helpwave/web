@@ -20,9 +20,11 @@ export const ModalRegister = ({
   children
 }: PropsWithChildren) => {
   const [register, setRegister] = useState<string[]>([])
+
   const inRegister = (id: string) => {
     return !!register.find(value => value === id)
   }
+
   const addToRegister = (id: string) => {
     if (!inRegister(id)) {
       setRegister([...register, id])

@@ -34,6 +34,8 @@ import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { GetPatientDetailsResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import TaskStatus = GetPatientDetailsResponse.TaskStatus
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -49,7 +51,9 @@ type TaskDetailViewTranslation = {
   create: string,
   update: string,
   delete: string,
-  publish: string
+  publish: string,
+  publishTask: string,
+  publishTaskDescription: string
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -67,7 +71,9 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     create: 'Create',
     update: 'Update',
     delete: 'Delete',
-    publish: 'Publish'
+    publish: 'Publish',
+    publishTask: 'Publish Task',
+    publishTaskDescription: 'This cannot be undone',
   },
   de: {
     close: 'Schließen',
@@ -83,7 +89,9 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     create: 'Hinzufügen',
     update: 'Ändern',
     delete: 'Löschen',
-    publish: 'Veröffentlichen'
+    publish: 'Veröffentlichen',
+    publishTask: 'Task Veröffentlichen',
+    publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
   }
 }
 
@@ -107,6 +115,7 @@ export const TaskDetailView = ({
   const router = useRouter()
   const { id: wardId } = router.query
   const { user } = useAuth()
+  const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
@@ -156,6 +165,21 @@ export const TaskDetailView = ({
 
   const tasksDetails = (
     <div className={tx('flex flex-col', { 'pl-6': isCreating, 'px-2': !isCreating })}>
+      <ConfirmDialog
+        id="TaskDetailView-PublishDialog"
+        isOpen={isShowingPublicDialog}
+        onBackgroundClick={() => setIsShowingPublicDialog(false)}
+        onCancel={() => setIsShowingPublicDialog(false)}
+        onConfirm={() => {
+          setIsShowingPublicDialog(false)
+          setTask({
+            ...task,
+            isPublicVisible: true
+          })
+        }}
+        title={translation.publishTask}
+        description={translation.publishTaskDescription}
+      />
       <div className={tw('flex flex-row justify-between')}>
         <div className={tw('mr-2')}>
           <ToggleableInput
@@ -248,22 +272,25 @@ export const TaskDetailView = ({
                 setTask({ ...task, status })
               }}/>
             </div>
-            <div>
+            <div className={tw('select-none')}>
               <label><Span type="labelMedium">{translation.visibility}</Span></label>
               <div className={tw('flex flex-row justify-between items-center')}>
                 <Span>{task.isPublicVisible ? translation.public : translation.private}</Span>
-                {!task.isPublicVisible && (
+                {!task.isPublicVisible && !isCreating && (
                   <Button
                     color="neutral"
                     variant="tertiary"
                     className={tw('!py-1 !px-2')}
-                    onClick={() => setTask({
-                      ...task,
-                      isPublicVisible: true
-                    })}
+                    onClick={() => setIsShowingPublicDialog(true)}
                   >
                     <Span>{translation.publish}</Span>
                   </Button>
+                )}
+                {isCreating && (
+                  <Checkbox
+                    checked={task.isPublicVisible}
+                    onChange={() => setTask({ ...task, isPublicVisible: !task.isPublicVisible })}
+                  />
                 )}
               </div>
             </div>

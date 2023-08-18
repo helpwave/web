@@ -114,6 +114,7 @@ export const WardDetail = ({
         errorProps={{ classname: tw('!h-full') }}
       >
         <ConfirmDialog
+          id="WardDetail-DeleteDialog"
           title={translation.deleteConfirmText}
           description={translation.dangerZoneText}
           isOpen={isShowingConfirmDialog}

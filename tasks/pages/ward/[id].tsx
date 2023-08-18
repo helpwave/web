@@ -197,6 +197,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         <title>{titleWrapper(translation.roomOverview)}</title>
       </Head>
       <ConfirmDialog
+        id="WardOverview-AddPatientDialog"
         isOpen={isShowingPatientDialog}
         title={translation.addPatientDialogTitle}
         onConfirm={() => {

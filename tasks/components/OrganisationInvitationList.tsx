@@ -96,6 +96,7 @@ export const OrganisationInvitationList = ({
     >
       {isShowingInviteMemberModal && (
         <InputModal
+          id="inviteMemberModal"
           modalClassName={tw('min-w-[400px]')}
           isOpen={isShowingInviteMemberModal}
           onBackgroundClick={() => setInviteMemberModalEmail(undefined)}

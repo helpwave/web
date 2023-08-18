@@ -1,9 +1,6 @@
-import type { Languages } from '../../hooks/useLanguage'
 import type { ConfirmDialogProps } from './ConfirmDialog'
 import { ConfirmDialog } from './ConfirmDialog'
 import type { InputProps } from '../user_input/Input'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
 import { Input } from '../user_input/Input'
 
 export type InputModalProps = ConfirmDialogProps & {
@@ -11,7 +8,7 @@ export type InputModalProps = ConfirmDialogProps & {
 }
 
 /**
- * Description
+ * A modal for receiving multiple inputs
  */
 export const InputModal = ({
   inputs,

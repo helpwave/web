@@ -34,6 +34,8 @@ import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { GetPatientDetailsResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import TaskStatus = GetPatientDetailsResponse.TaskStatus
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -48,7 +50,10 @@ type TaskDetailViewTranslation = {
   public: string,
   create: string,
   update: string,
-  delete: string
+  delete: string,
+  publish: string,
+  publishTask: string,
+  publishTaskDescription: string
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -65,7 +70,10 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     public: 'public',
     create: 'Create',
     update: 'Update',
-    delete: 'Delete'
+    delete: 'Delete',
+    publish: 'Publish',
+    publishTask: 'Publish Task',
+    publishTaskDescription: 'This cannot be undone',
   },
   de: {
     close: 'Schließen',
@@ -80,7 +88,10 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     public: 'öffentlich',
     create: 'Hinzufügen',
     update: 'Ändern',
-    delete: 'Löschen'
+    delete: 'Löschen',
+    publish: 'Veröffentlichen',
+    publishTask: 'Task Veröffentlichen',
+    publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
   }
 }
 
@@ -104,6 +115,7 @@ export const TaskDetailView = ({
   const router = useRouter()
   const { id: wardId } = router.query
   const { user } = useAuth()
+  const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
@@ -148,8 +160,26 @@ export const TaskDetailView = ({
     return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
   }
 
+  const taskNameMinimumLength = 1
+  const isValid = task.name.length >= taskNameMinimumLength
+
   const tasksDetails = (
     <div className={tx('flex flex-col', { 'pl-6': isCreating, 'px-2': !isCreating })}>
+      <ConfirmDialog
+        id="TaskDetailView-PublishDialog"
+        isOpen={isShowingPublicDialog}
+        onBackgroundClick={() => setIsShowingPublicDialog(false)}
+        onCancel={() => setIsShowingPublicDialog(false)}
+        onConfirm={() => {
+          setIsShowingPublicDialog(false)
+          setTask({
+            ...task,
+            isPublicVisible: true
+          })
+        }}
+        title={translation.publishTask}
+        description={translation.publishTaskDescription}
+      />
       <div className={tw('flex flex-row justify-between')}>
         <div className={tw('mr-2')}>
           <ToggleableInput
@@ -183,8 +213,7 @@ export const TaskDetailView = ({
           }}/>
         </div>
         { /* TODO create a new component for this */}
-        <div className={tw('flex flex-col justify-between min-w-[250px]')}>
-          <div className={tw('flex flex-col gap-y-4')}>
+        <div className={tw('flex flex-col min-w-[250px] gap-y-4')}>
             <div className={tw('hidden')} /* TODO enable later */ >
               <label><Span type="labelMedium">{translation.assignee}</Span></label>
               <Select
@@ -243,16 +272,27 @@ export const TaskDetailView = ({
                 setTask({ ...task, status })
               }}/>
             </div>
-            <div className={tw('hidden')} /* TODO enable later */>
+            <div className={tw('select-none')}>
               <label><Span type="labelMedium">{translation.visibility}</Span></label>
-              <Select
-                value={task.isPublicVisible}
-                options={[
-                  { label: translation.private, value: false },
-                  { label: translation.public, value: true }
-                ]}
-                onChange={isPublicVisible => setTask({ ...task, isPublicVisible })}
-              />
+              <div className={tw('flex flex-row justify-between items-center')}>
+                <Span>{task.isPublicVisible ? translation.public : translation.private}</Span>
+                {!task.isPublicVisible && !isCreating && (
+                  <Button
+                    color="neutral"
+                    variant="tertiary"
+                    className={tw('!py-1 !px-2')}
+                    onClick={() => setIsShowingPublicDialog(true)}
+                  >
+                    <Span>{translation.publish}</Span>
+                  </Button>
+                )}
+                {isCreating && (
+                  <Checkbox
+                    checked={task.isPublicVisible}
+                    onChange={() => setTask({ ...task, isPublicVisible: !task.isPublicVisible })}
+                  />
+                )}
+              </div>
             </div>
             {task.creationDate && (
               <div className={tw('flex flex-col gap-y-1')}>
@@ -261,16 +301,36 @@ export const TaskDetailView = ({
               </div>
             )}
           </div>
-        </div>
       </div>
       <div className={tw('flex flex-row justify-end gap-x-8')}>
-        {!isCreating ? (
-            <>
-              <Button color="negative" onClick={() => deleteTaskMutation.mutate(task.id)}>{translation.delete}</Button>
-              <Button color="accent" onClick={() => updateTaskMutation.mutate(task)}>{translation.update}</Button>
-            </>
-        )
-          : <Button color="accent" onClick={() => createTaskMutation.mutate(task)}>{translation.create}</Button>
+        {!isCreating ?
+            (
+              <>
+                <Button
+                  color="negative"
+                  onClick={() => deleteTaskMutation.mutate(task.id)}
+                >
+                  {translation.delete}
+                </Button>
+                <Button
+                  color="accent"
+                  onClick={() => updateTaskMutation.mutate(task)}
+                  disabled={!isValid}
+                >
+                  {translation.update}
+                </Button>
+              </>
+            )
+          :
+            (
+              <Button
+                color="accent"
+                onClick={() => createTaskMutation.mutate(task)}
+                disabled={!isValid}
+              >
+                {translation.create}
+              </Button>
+            )
         }
       </div>
     </div>

@@ -139,6 +139,7 @@ export const RoomList = ({
   return (
     <div className={tw('flex flex-col')}>
       <ConfirmDialog
+        id="roomlist-DeleteBedsDialog"
         title={translation.deleteConfirmText(multipleInDelete)}
         description={translation.dangerZoneText(multipleInDelete)}
         isOpen={deletionConfirmDialogElement !== undefined}
@@ -159,6 +160,7 @@ export const RoomList = ({
       />
       {managedRoom && context.state.wardId && (
         <ManageBedsModal
+          id="roomlist-ManageBedModal"
           isOpen={!!managedRoom}
           wardId={context.state.wardId}
           roomId={managedRoom}

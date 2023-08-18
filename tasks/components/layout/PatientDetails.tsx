@@ -115,6 +115,7 @@ export const PatientDetail = ({
         )
       }
       <ConfirmDialog
+        id="PatientDetail-DischargeDialog"
         title={translation.dischargeConfirmText}
         isOpen={isShowingDischargeDialog}
         onCancel={() => setIsShowingDischargeDialog(false)}
@@ -128,6 +129,7 @@ export const PatientDetail = ({
       {/* taskId === '' is create and if set it's the tasks id */}
       {isShowingTask && (
         <TaskDetailModal
+          id="PatientDetail-TaskDetailModal"
           isOpen={true}
           onBackgroundClick={() => setTaskId(undefined)}
           onClose={() => setTaskId(undefined)}

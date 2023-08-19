@@ -6,6 +6,7 @@ import { UserMenu } from '../UserMenu'
 import type { Crumb } from '../BreadCrumb'
 import { BreadCrumb } from '../BreadCrumb'
 import { useAuth } from '../../hooks/useAuth'
+import { FeedbackButton } from '../FeedbackButton'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[]
@@ -28,6 +29,7 @@ export const PageWithHeader = ({
 
   if (!user) return null
 
+  const feedbackButton = <FeedbackButton/>
   const userMenu = <UserMenu />
 
   return (
@@ -36,7 +38,7 @@ export const PageWithHeader = ({
         title={title}
         withIcon={withIcon}
         leftSide={[(crumbs ? <BreadCrumb crumbs={crumbs}/> : undefined), ...(leftSide ?? [])]}
-        rightSide={[...(rightSide ?? []), userMenu]}
+        rightSide={[...(rightSide ?? []), feedbackButton, userMenu]}
       />
       {children}
     </div>

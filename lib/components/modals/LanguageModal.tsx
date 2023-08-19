@@ -40,16 +40,15 @@ type LanguageModalProps = ModalProps & {
  * The State of open needs to be managed by the parent
  */
 export const LanguageModal = ({
-  isOpen,
   onDone,
   onBackgroundClick,
+  ...modalProps
 }: PropsWithLanguage<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
 
   return (
     <Modal
-      isOpen={isOpen}
       title={translation.message}
       onBackgroundClick={(eventData) => {
         onDone()
@@ -58,6 +57,7 @@ export const LanguageModal = ({
           onBackgroundClick(eventData)
         }
       }}
+      {...modalProps}
     >
       <div className={tw('w-[320px]')}>
         <Select

@@ -1,13 +1,15 @@
 import { tw, tx, css } from '../../twind'
 import type { TextareaHTMLAttributes } from 'react'
 import { useState } from 'react'
+import useSaveDelay from '../../hooks/useSaveDelay'
 
 type TextareaProps = {
   headline?: string,
   id?: string,
   resizable?: boolean,
   onChange?: (text: string) => void,
-  disclaimer?: string
+  disclaimer?: string,
+  onEditCompleted?: (text: string) => void
 } & Omit<TextareaHTMLAttributes<Element>, 'id' | 'onChange'>
 
 const noop = () => { /* noop */ }
@@ -24,8 +26,23 @@ const globalStyles = css`
  *
  * The State is managed by the parent
  */
-export const Textarea = ({ headline, id, resizable = false, onChange = noop, disclaimer, ...props }: TextareaProps) => {
+export const Textarea = ({
+  headline,
+  id,
+  resizable = false,
+  onChange = noop,
+  disclaimer,
+  onBlur,
+  onEditCompleted = noop,
+  ...props
+}: TextareaProps) => {
   const [hasFocus, setHasFocus] = useState(false)
+  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => undefined, 3000)
+
+  const onEditCompletedWrapper = (text: string) => {
+    onEditCompleted(text)
+    clearUpdateTimer()
+  }
 
   return (
     <div className={tw(globalStyles)}>
@@ -36,11 +53,21 @@ export const Textarea = ({ headline, id, resizable = false, onChange = noop, dis
         <textarea
           id={id}
           className={tx('pt-0 border-transparent focus:border-transparent focus:ring-0 h-32 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable })}
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event) => {
+            const value = event.target.value
+            restartTimer(() => {
+              onEditCompletedWrapper(value)
+            })
+            onChange(value)
+          }}
           onFocus={() => {
             setHasFocus(true)
           }}
-          onBlur={() => {
+          onBlur={(event) => {
+            if (onBlur) {
+              onBlur(event)
+            }
+            onEditCompletedWrapper(event.target.value)
             setHasFocus(false)
           }}
           {...props}

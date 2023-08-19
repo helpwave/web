@@ -3,8 +3,8 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ColumnTitle } from '../ColumnTitle'
-import type { Feature } from '../FeatureDisplay'
 import { FeatureDisplay } from '../FeatureDisplay'
+import type { Feature } from '../../utils/features'
 
 type FeatureDetailsTranslation = {
   title: string

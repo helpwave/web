@@ -374,7 +374,7 @@ export const useTaskToDoneMutation = (callback: () => void = noop) => {
 }
 
 // TODO: taskId: string | undefined => taskId: string -> A taskId is always required to create a SubTask
-export const useSubTaskAddMutation = (callback: (subtask: SubTaskDTO) => void = noop, taskId: string | undefined) => {
+export const useSubTaskAddMutation = (taskId: string | undefined, callback: (subtask: SubTaskDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (subtask: CreateSubTaskDTO) => {

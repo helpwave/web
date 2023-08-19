@@ -125,7 +125,7 @@ export const TaskDetailView = ({
 
   const [task, setTask] = useState<TaskDTO>({ ...emptyTask })
 
-  const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskId)
+  const addSubtaskMutation = useSubTaskAddMutation(taskId)
 
   const createTaskMutation = useTaskCreateMutation(newTask => {
     newTask.subtasks.forEach(value =>
@@ -163,6 +163,13 @@ export const TaskDetailView = ({
   const taskNameMinimumLength = 1
   const isValid = task.name.length >= taskNameMinimumLength
 
+  const updateLocallyAndExternally = (task: TaskDTO) => {
+    setTask(task)
+    if (!isCreating) {
+      updateTaskMutation.mutate(task)
+    }
+  }
+
   const tasksDetails = (
     <div className={tx('flex flex-col', { 'pl-6': isCreating, 'px-2': !isCreating })}>
       <ConfirmDialog
@@ -172,10 +179,9 @@ export const TaskDetailView = ({
         onCancel={() => setIsShowingPublicDialog(false)}
         onConfirm={() => {
           setIsShowingPublicDialog(false)
-          setTask({
-            ...task,
-            isPublicVisible: true
-          })
+          const newTask = { ...task, isPublicVisible: true }
+          setTask(newTask)
+          updateLocallyAndExternally(newTask)
         }}
         title={translation.publishTask}
         description={translation.publishTaskDescription}
@@ -183,11 +189,12 @@ export const TaskDetailView = ({
       <div className={tw('flex flex-row justify-between')}>
         <div className={tw('mr-2')}>
           <ToggleableInput
-            autoFocus
+            autoFocus={isCreating}
             initialState="editing"
             id="name"
             value={task.name}
             onChange={name => setTask({ ...task, name })}
+            onEditCompleted={text => updateLocallyAndExternally({ ...task, name: text })}
             labelClassName={tw('text-2xl font-bold')}
             minLength={minTaskNameLength}
             maxLength={maxTaskNameLength}
@@ -206,6 +213,7 @@ export const TaskDetailView = ({
               headline={translation.notes}
               value={task.notes}
               onChange={description => setTask({ ...task, notes: description })}
+              onEditCompleted={text => updateLocallyAndExternally({ ...task, notes: text })}
             />
           </div>
           <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange= {subtasks => {
@@ -225,7 +233,7 @@ export const TaskDetailView = ({
                   { label: 'Assignee 4', value: 'assignee4' }
                 ]}
                 onChange={assignee => {
-                  setTask({ ...task, assignee })
+                  updateLocallyAndExternally({ ...task, assignee })
                 }}
               />
             </div>
@@ -237,8 +245,7 @@ export const TaskDetailView = ({
                   type="datetime-local"
                   onChange={value => {
                     const dueDate = new Date(value)
-                    setTask({ ...task, dueDate })
-                    // Maybe add some auto save here after a validation
+                    updateLocallyAndExternally({ ...task, dueDate })
                   }}
                 />
                 { /* TODO reenable when backend has implemented a remove duedate

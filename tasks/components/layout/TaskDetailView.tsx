@@ -31,11 +31,10 @@ import {
 } from '../../mutations/task_mutations'
 import { useEffect, useState } from 'react'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
-import { GetPatientDetailsResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
-import TaskStatus = GetPatientDetailsResponse.TaskStatus
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -98,7 +97,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
 export type TaskDetailViewProps = {
   taskId: string,
   patientId: string,
-  onClose: () => void
+  onClose: () => void,
+  initialStatus?: TaskStatus
 }
 
 /**
@@ -108,6 +108,7 @@ export const TaskDetailView = ({
   language,
   patientId,
   taskId,
+  initialStatus,
   onClose
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
@@ -123,7 +124,7 @@ export const TaskDetailView = ({
   const isCreating = taskId === ''
   const { data, isLoading, isError } = useTaskQuery(taskId)
 
-  const [task, setTask] = useState<TaskDTO>({ ...emptyTask })
+  const [task, setTask] = useState<TaskDTO>({ ...emptyTask, status: initialStatus ?? TaskStatus.TASK_STATUS_TODO })
 
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
 
@@ -264,20 +265,22 @@ export const TaskDetailView = ({
               <label><Span type="labelMedium">{translation.status}</Span></label>
               <TaskStatusSelect
                 value={task.status}
-                isDisabled={isCreating}
+                removeOptions={isCreating ? [TaskStatus.TASK_STATUS_DONE] : []}
                 onChange={status => {
-                  switch (status) {
-                    case TaskStatus.TASK_STATUS_TODO:
-                      toToDoMutation.mutate(task.id)
-                      break
-                    case TaskStatus.TASK_STATUS_IN_PROGRESS:
-                      toInProgressMutation.mutate(task.id)
-                      break
-                    case TaskStatus.TASK_STATUS_DONE:
-                      toDoneMutation.mutate(task.id)
-                      break
-                    default:
-                      break
+                  if (!isCreating) {
+                    switch (status) {
+                      case TaskStatus.TASK_STATUS_TODO:
+                        toToDoMutation.mutate(task.id)
+                        break
+                      case TaskStatus.TASK_STATUS_IN_PROGRESS:
+                        toInProgressMutation.mutate(task.id)
+                        break
+                      case TaskStatus.TASK_STATUS_DONE:
+                        toDoneMutation.mutate(task.id)
+                        break
+                      default:
+                        break
+                    }
                   }
                   setTask({ ...task, status })
                 }}

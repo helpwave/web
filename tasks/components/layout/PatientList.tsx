@@ -213,26 +213,21 @@ export const PatientList = ({
                   header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
                 >
                   {filteredDischarged.map(patient => (
-                    <Draggable id={patient.id} key={patient.id} data={patient}>
-                      {() => (
-                        <div
-                          key={patient.id}
-                          className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
-                          onClick={() => updateContext({ wardId: context.wardId, patientId: patient.id })}
-                        >
-                          <Span className={tw('font-space font-bold')}>{patient.name}</Span>
-                          { /* TODO implement when backend endpoint exists
-                            <Button color="negative" variant="textButton" onClick={event => {
-                              event.stopPropagation()
-                              // TODO delete
-                            }}>
-                              {translation.delete}
-                            </Button>
-                            */
-                          }
-                        </div>
-                      )}
-                    </Draggable>
+                      <div
+                        key={patient.id}
+                        className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
+                      >
+                        <Span className={tw('font-space font-bold')}>{patient.name}</Span>
+                        { /* TODO implement when backend endpoint exists
+                          <Button color="negative" variant="textButton" onClick={event => {
+                            event.stopPropagation()
+                            // TODO delete
+                          }}>
+                            {translation.delete}
+                          </Button>
+                          */
+                        }
+                      </div>
                   ))}
                 </HideableContentSection>
               </div>

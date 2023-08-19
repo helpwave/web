@@ -223,14 +223,12 @@ export const PatientList = ({
                           onClick={() => updateContext({ wardId: context.wardId, patientId: patient.id })}
                         >
                           <Span className={tw('font-space font-bold')}>{patient.name}</Span>
-                          {
-                            <Button color="negative" variant="textButton" onClick={event => {
-                              event.stopPropagation()
-                              deletePatientMutation.mutate(patient.id)
-                            }}>
-                              {translation.delete}
-                            </Button>
-                          }
+                          <Button color="negative" variant="textButton" onClick={event => {
+                            event.stopPropagation()
+                            deletePatientMutation.mutate(patient.id)
+                          }}>
+                            {translation.delete}
+                          </Button>
                         </div>
                       )}
                     </Draggable>

@@ -78,6 +78,7 @@ export const TwoColumn = ({
   }
 
   // TODO Update this to be more clear and use all/better constraints
+  // LINTER: needs this anonymous function to be happy :(
   const calcPosition = (() => (dragPosition: number) => {
     const leftMin = convertToLeftWidth(constraints.left?.min ?? defaultConstraint.left.min, fullWidth)
     const rightMin = convertToLeftWidth(constraints.right?.min ?? defaultConstraint.left.min, fullWidth)

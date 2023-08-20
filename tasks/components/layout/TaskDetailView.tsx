@@ -96,7 +96,10 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
 }
 
 export type TaskDetailViewProps = {
-  taskId: string,
+  /**
+   * A not set or empty taskId is seen as creating a new task
+   */
+  taskId?: string,
   patientId: string,
   onClose: () => void
 }
@@ -107,7 +110,7 @@ export type TaskDetailViewProps = {
 export const TaskDetailView = ({
   language,
   patientId,
-  taskId,
+  taskId = '',
   onClose
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)

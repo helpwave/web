@@ -218,7 +218,6 @@ export const PatientList = ({
                     <div
                       key={patient.id}
                       className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
-                      onClick={() => updateContext({ wardId: context.wardId, patientId: patient.id })}
                     >
                       <Span className={tw('font-space font-bold')}>{patient.name}</Span>
                       <Button color="negative" variant="textButton" onClick={event => {

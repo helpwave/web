@@ -8,6 +8,7 @@ import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { PatientDTO, PatientWithBedAndRoomDTO } from '../../mutations/patient_mutations'
 import {
+  useDeletePatientMutation,
   usePatientDischargeMutation,
   usePatientListQuery
 } from '../../mutations/patient_mutations'
@@ -97,6 +98,7 @@ export const PatientList = ({
   const { data, isLoading, isError } = usePatientListQuery()
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
+  const deletePatientMutation = useDeletePatientMutation()
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
@@ -213,21 +215,18 @@ export const PatientList = ({
                   header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
                 >
                   {filteredDischarged.map(patient => (
-                      <div
-                        key={patient.id}
-                        className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
-                      >
-                        <Span className={tw('font-space font-bold')}>{patient.name}</Span>
-                        { /* TODO implement when backend endpoint exists
-                          <Button color="negative" variant="textButton" onClick={event => {
-                            event.stopPropagation()
-                            // TODO delete
-                          }}>
-                            {translation.delete}
-                          </Button>
-                          */
-                        }
-                      </div>
+                    <div
+                      key={patient.id}
+                      className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
+                    >
+                      <Span className={tw('font-space font-bold')}>{patient.name}</Span>
+                      <Button color="negative" variant="textButton" onClick={event => {
+                        event.stopPropagation()
+                        deletePatientMutation.mutate(patient.id)
+                      }}>
+                        {translation.delete}
+                      </Button>
+                    </div>
                   ))}
                 </HideableContentSection>
               </div>

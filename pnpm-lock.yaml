@@ -143,6 +143,9 @@ importers:
       webpack:
         specifier: 5.88.2
         version: 5.88.2(@swc/core@1.3.72)(esbuild@0.18.17)
+      zod:
+        specifier: 3.22.2
+        version: 3.22.2
     devDependencies:
       '@babel/preset-env':
         specifier: 7.22.10
@@ -11383,4 +11386,3 @@ packages:
   /zod@3.22.2:
     resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
     dev: false
-

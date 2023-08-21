@@ -7,13 +7,15 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/layout/TwoColumn'
-import { FeatureDetails } from '../components/layout/FeatureDetails'
+import { NewsFeed } from '../components/layout/NewsFeed'
 import { DashboardDisplay } from '../components/layout/DashboardDisplay'
 import { useWardOverviewsQuery } from '../mutations/ward_mutations'
 import { useOrganizationsByUserQuery } from '../mutations/organization_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { tw } from '@twind/core'
-import { featuresSchema, fetchFeatures } from '../utils/features'
+import { fetchLocalizedNews } from '../utils/news'
+import type { LocalizedNews } from '@helpwave/common/util/news'
+import { localizedNewsSchema } from '@helpwave/common/util/news'
 
 type DashboardTranslation = {
   dashboard: string
@@ -33,7 +35,7 @@ type DashboardServerSideProps = {
 }
 
 export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = async () => {
-  const json = await fetchFeatures()
+  const json = await fetchLocalizedNews()
   return { props: { jsonFeed: json } }
 }
 
@@ -66,9 +68,10 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServe
             )
             )}
             right={width => (
-              <FeatureDetails
+              <NewsFeed
                 width={width}
-                features={featuresSchema.parse(jsonFeed)}
+                // TODO fix typing
+                localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
               />
             )}
           />

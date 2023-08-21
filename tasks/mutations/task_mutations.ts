@@ -213,6 +213,7 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       req.setPatientId(patientId)
       req.setDescription(task.notes)
       req.setPublic(task.isPublicVisible)
+      req.setInitialStatus(task.status)
       req.setDueAt(task.dueDate ? dateToTimestamp(task.dueDate) : undefined)
 
       const res = await taskService.createTask(req, getAuthenticatedGrpcMetadata())

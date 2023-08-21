@@ -23,6 +23,7 @@ import { WardOverviewContext } from '../../pages/ward/[id]'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { RoomBedDropDown } from '../RoomBedDropDown'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -80,6 +81,7 @@ export const PatientDetail = ({
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [taskId, setTaskId] = useState<string>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
+  const [initialTaskStatus, setInitialTaskStatus] = useState<TaskStatus>()
 
   const maxHumanReadableIdentifierLength = 24
 
@@ -134,6 +136,7 @@ export const PatientDetail = ({
         onClose={() => setTaskId(undefined)}
         taskId={taskId}
         patientId={newPatient.id}
+        initialStatus={initialTaskStatus}
       />
       <ColumnTitle title={translation.patientDetails}/>
       <LoadingAndErrorComponent
@@ -178,6 +181,7 @@ export const PatientDetail = ({
             patientId={newPatient.id}
             editedTaskId={taskId}
             onEditTask={task => {
+              setInitialTaskStatus(task.status === TaskStatus.TASK_STATUS_DONE ? TaskStatus.TASK_STATUS_TODO : task.status)
               setTaskId(task.id)
             }}
           />

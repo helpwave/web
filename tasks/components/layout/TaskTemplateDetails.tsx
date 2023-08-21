@@ -109,6 +109,7 @@ export const TaskTemplateDetails = ({
   return (
     <div className={tw('flex flex-col py-4 px-6')}>
       <ConfirmDialog
+        id="TaskTemplateDetails-DeleteDialog"
         title={translation.deleteConfirmText}
         description={translation.deleteConfirmText}
         isOpen={isShowingConfirmDialog}

@@ -55,13 +55,9 @@ export type ConfirmDialogProps = ModalProps & {
 export const ConfirmDialog = ({
   language,
   children,
-  isOpen,
-  title,
-  description,
   onCancel,
   onConfirm,
   onDecline,
-  onBackgroundClick,
   confirmType = 'positive',
   buttonOverwrites,
   ...restProps
@@ -69,12 +65,7 @@ export const ConfirmDialog = ({
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
 
   return (
-    <Modal
-      isOpen={isOpen}
-      title={title} description={description}
-      onBackgroundClick={onBackgroundClick}
-      {...restProps}
-    >
+    <Modal {...restProps}>
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
         {onCancel && (

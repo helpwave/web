@@ -9,10 +9,13 @@ import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
 import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
-import {
-  useSubTaskTemplateAddMutation
-} from '../mutations/task_template_mutations'
 import { TaskTemplateContext } from '../pages/templates'
+import {
+  useSubTaskAddMutation,
+  useSubTaskDeleteMutation,
+  useSubTaskToDoneMutation, useSubTaskToToDoMutation,
+  useSubTaskUpdateMutation
+} from '../mutations/task_mutations'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -61,8 +64,12 @@ export const SubtaskView = ({
   const scrollableRef = useRef<SimpleBarCore>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
-  // TODO: Remove ?? '' once the mutate functions are passed properly
-  useSubTaskTemplateAddMutation(taskTemplateId ?? '')
+  const isCreatingTask = taskId === ''
+  const addSubtaskMutation = useSubTaskAddMutation(taskId)
+  const deleteSubtaskMutation = useSubTaskDeleteMutation()
+  const updateSubtaskMutation = useSubTaskUpdateMutation()
+  const setSubtaskToToDoMutation = useSubTaskToToDoMutation()
+  const setSubtaskToDoneMutation = useSubTaskToDoneMutation()
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
     const scrollableElement = scrollableRef.current?.getScrollElement()
@@ -78,8 +85,11 @@ export const SubtaskView = ({
         <Span type="subsectionTitle">{translation.subtasks}</Span>
         <Button
           onClick={() => {
-            const newSubtask = { id: '', name: translation.newSubtask, isDone: false }
+            const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
             onChange([...subtasks, newSubtask])
+            if (!isCreatingTask) {
+              addSubtaskMutation.mutate(newSubtask)
+            }
             setScrollToBottom(true)
           }}
         >
@@ -101,9 +111,15 @@ export const SubtaskView = ({
                   newSubtasks[index] = newSubtask
                   onChange(newSubtasks)
                 }}
+                onNameEditCompleted={newSubtask => {
+                  if (!isCreatingTask) {
+                    updateSubtaskMutation.mutate(newSubtask)
+                  }
+                }}
                 onRemoveClick={() => {
                   const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
-                  if (!taskId) {
+                  // undefined because taskId === "" would mean task creation
+                  if (taskId === undefined) {
                     context.updateContext({
                       ...context.state,
                       template: { ...context.state.template, subtasks: filteredSubtasks },
@@ -111,12 +127,20 @@ export const SubtaskView = ({
                     })
                   } else {
                     onChange(filteredSubtasks)
+                    deleteSubtaskMutation.mutate(subtask.id)
                   }
                 }}
                 onDoneChange={done => {
                   // taskTemplateId === "" for the creation of a template
                   if (taskTemplateId !== undefined) {
                     return
+                  }
+                  if (!isCreatingTask) {
+                    if (done) {
+                      setSubtaskToDoneMutation.mutate(subtask.id)
+                    } else {
+                      setSubtaskToToDoMutation.mutate(subtask.id)
+                    }
                   }
 
                   subtask.isDone = done

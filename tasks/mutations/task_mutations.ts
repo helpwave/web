@@ -51,7 +51,7 @@ export const emptyTask: TaskDTO = {
   notes: '',
   status: TaskStatus.TASK_STATUS_TODO,
   subtasks: [],
-  dueDate: new Date(),
+  dueDate: undefined,
   isPublicVisible: false
 }
 
@@ -213,6 +213,7 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       req.setPatientId(patientId)
       req.setDescription(task.notes)
       req.setPublic(task.isPublicVisible)
+      req.setDueAt(task.dueDate ? dateToTimestamp(task.dueDate) : undefined)
 
       const res = await taskService.createTask(req, getAuthenticatedGrpcMetadata())
       const newTask = { ...task, id: res.getId() }
@@ -373,7 +374,7 @@ export const useTaskToDoneMutation = (callback: () => void = noop) => {
 }
 
 // TODO: taskId: string | undefined => taskId: string -> A taskId is always required to create a SubTask
-export const useSubTaskAddMutation = (callback: (subtask: SubTaskDTO) => void = noop, taskId: string | undefined) => {
+export const useSubTaskAddMutation = (taskId: string | undefined, callback: (subtask: SubTaskDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (subtask: CreateSubTaskDTO) => {

@@ -101,7 +101,7 @@ export const PatientDetail = ({
     restartTimer(() => updateMutation.mutate(patient))
   }
 
-  const isShowingTask = (!!taskId || taskId === '')
+  const isShowingTask = !!taskId || taskId === ''
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
@@ -115,6 +115,7 @@ export const PatientDetail = ({
         )
       }
       <ConfirmDialog
+        id="PatientDetail-DischargeDialog"
         title={translation.dischargeConfirmText}
         isOpen={isShowingDischargeDialog}
         onCancel={() => setIsShowingDischargeDialog(false)}
@@ -126,15 +127,14 @@ export const PatientDetail = ({
         confirmType="negative"
       />
       {/* taskId === '' is create and if set it's the tasks id */}
-      {isShowingTask && (
-        <TaskDetailModal
-          isOpen={true}
-          onBackgroundClick={() => setTaskId(undefined)}
-          onClose={() => setTaskId(undefined)}
-          taskId={taskId}
-          patientId={newPatient.id}
-        />
-      )}
+      <TaskDetailModal
+        id="PatientDetail-TaskDetailModal"
+        isOpen={isShowingTask}
+        onBackgroundClick={() => setTaskId(undefined)}
+        onClose={() => setTaskId(undefined)}
+        taskId={taskId}
+        patientId={newPatient.id}
+      />
       <ColumnTitle title={translation.patientDetails}/>
       <LoadingAndErrorComponent
         isLoading={isLoading}

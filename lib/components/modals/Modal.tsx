@@ -1,14 +1,17 @@
 import { tw, tx } from '../../twind'
 import type { MouseEventHandler, PropsWithChildren } from 'react'
-import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
+import { useContext, useEffect } from 'react'
+import { ModalContext } from './ModalRegister'
+
+export const modalRootName = 'modal-root'
 
 export type ModalProps = {
+  id: string,
   isOpen: boolean,
   title?: string,
   description?: string,
   onBackgroundClick?: MouseEventHandler<HTMLDivElement>,
-  portalRootName?: string,
   backgroundClassName?: string,
   modalClassName?: string
 }
@@ -20,30 +23,51 @@ export type ModalProps = {
  */
 export const Modal = ({
   children,
+  id,
   isOpen,
   title,
   description,
   onBackgroundClick,
-  portalRootName = 'portal-root',
   backgroundClassName = '',
   modalClassName = ''
 }: PropsWithChildren<ModalProps>) => {
-  const modalRoot = document.getElementById('modal-root')
+  const modalRoot = document.getElementById(modalRootName)
+  const { register, addToRegister, removeFromRegister } = useContext(ModalContext)
 
-  useEffect(() => () => {
-    const portalElement = document.getElementById(portalRootName)
-    if (portalElement === null) return
-    modalRoot?.removeChild(portalElement)
-  })
+  if (!id) {
+    console.error('the id cannot be empty')
+  }
 
-  if (modalRoot === null) return null
+  useEffect(() => {
+    if (isOpen) {
+      addToRegister(id)
+    } else {
+      removeFromRegister(id)
+    }
+  }, [addToRegister, id, removeFromRegister, isOpen])
+
+  if (modalRoot === null || !isOpen) return null
+
+  const isLast = register.length < 1 || register[register.length - 1] === id
+  const isSecondLast = register.length < 2 || register[register.length - 2] === id
+
+  const backgroundNormal = (
+    <div
+      className={tx('fixed inset-0 h-screen w-screen bg-black/70', backgroundClassName)}
+    />
+  )
+
+  const clickTargetBackground = (
+    <div
+      className={tx('fixed inset-0 h-screen w-screen')}
+      onClick={onBackgroundClick}
+    />
+  )
 
   return ReactDOM.createPortal(
-    <div className={tx('fixed inset-0 overflow-y-auto z-[99]', { hidden: !isOpen }) + ` ${portalRootName}`}>
-      <div
-        className={tx('fixed inset-0 h-screen w-screen bg-black/70', backgroundClassName)}
-        onClick={onBackgroundClick}
-      />
+    <div className={tx('fixed inset-0 overflow-y-auto z-[99]')} id={id}>
+      {isLast && register.length === 1 && backgroundNormal}
+      {clickTargetBackground}
       <div
         className={tx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
         {title && (
@@ -54,7 +78,9 @@ export const Modal = ({
         {description && <span className={tw('mb-3 text-gray-400')}>{description}</span>}
         {children}
       </div>
+      {isSecondLast && register.length > 1 && backgroundNormal}
     </div>,
-    modalRoot
+    modalRoot,
+    id
   )
 }

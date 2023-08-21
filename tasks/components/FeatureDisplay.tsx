@@ -14,12 +14,14 @@ export type FeatureDisplayProps = {
  */
 export const FeatureDisplay = ({ feature, titleOnTop = true }: FeatureDisplayProps) => {
   const content = (
-    <div className={tx('flex', { 'flex-col': titleOnTop, 'flex-row': !titleOnTop })}>
+    <div className={tx('flex', { 'flex-col gap-y-2': titleOnTop, 'flex-row gap-x-2': !titleOnTop })}>
       <div className={tx('flex gap-x-2', {
         'flex-col w-1/3': !titleOnTop,
-        'flex-row-reverse items-center justify-between mb-2': titleOnTop
+        'flex-row-reverse items-center justify-between': titleOnTop
       })}>
-        <TimeDisplay date={feature.date} mode="date"/>
+        <div className={tw('min-w-[100px]')}>
+          <TimeDisplay date={feature.date} mode="date"/>
+        </div>
         <Span type="title" className={tw('text-hw-primary-700')}>{feature.title}</Span>
       </div>
       <div className={tw('flex flex-col gap-y-2 flex-1')}>

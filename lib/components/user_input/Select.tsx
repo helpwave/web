@@ -8,7 +8,7 @@ type Option<T> = {
   disabled?: boolean
 }
 
-type SelectProps<T> = {
+export type SelectProps<T> = {
   value?: T,
   label?: string,
   options: Option<T>[],
@@ -52,7 +52,13 @@ export const Select = <T, >({
         {({ open }) => (
           <>
             <Menu.Button
-              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 hover:bg-gray-100 font-medium', { 'rounded-b-lg': !open })}
+              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium',
+                {
+                  'rounded-b-lg': !open,
+                  'hover:bg-gray-100': !isDisabled,
+                  'bg-gray-100 cursor-not-allowed text-gray-500': isDisabled
+                }
+              )}
               disabled={isDisabled}
             >
               <span>{options.find(option => option.value === value)?.label ?? hintText}</span>

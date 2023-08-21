@@ -1,8 +1,8 @@
+import type { SelectProps } from '@helpwave/common/components/user_input/Select'
 import { Select } from '@helpwave/common/components/user_input/Select'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { GetPatientDetailsResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
-import TaskStatus = GetPatientDetailsResponse.TaskStatus;
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 type TaskStatusSelectTranslation = {
   unscheduled: string,
@@ -26,9 +26,11 @@ const defaultTaskStatusSelectTranslation = {
   }
 }
 
-type TaskStatusSelectProps = {
-  value: TaskStatus | undefined,
-  onChange: (status: TaskStatus) => void
+type TaskStatusSelectProps = Omit<SelectProps<TaskStatus>, 'options'> & {
+  /**
+   * All entries within this array will be removed as options
+   */
+  removeOptions?: TaskStatus[]
 }
 
 /**
@@ -38,19 +40,29 @@ type TaskStatusSelectProps = {
  */
 export const TaskStatusSelect = ({
   language,
+  removeOptions = [],
   value,
-  onChange
+  ...selectProps
 }: PropsWithLanguage<TaskStatusSelectTranslation, TaskStatusSelectProps>) => {
   const translation = useTranslation(language, defaultTaskStatusSelectTranslation)
+  const defaultOptions = [
+    { value: TaskStatus.TASK_STATUS_TODO, label: translation.unscheduled },
+    { value: TaskStatus.TASK_STATUS_IN_PROGRESS, label: translation.inProgress },
+    { value: TaskStatus.TASK_STATUS_DONE, label: translation.done }
+  ]
+
+  const filteredOptions = defaultOptions.filter(defaultValue => !removeOptions?.find(value2 => value2 === defaultValue.value))
+  if (removeOptions?.find(value2 => value2 === value)) {
+    console.error(`The selected value ${value} cannot be in the remove list`)
+    value = filteredOptions.length > 0 ? filteredOptions[0].value : undefined
+    console.warn(`Overwriting with ${value} instead`)
+  }
+
   return (
     <Select
       value={value}
-      options={[
-        { value: TaskStatus.TASK_STATUS_TODO, label: translation.unscheduled },
-        { value: TaskStatus.TASK_STATUS_IN_PROGRESS, label: translation.inProgress },
-        { value: TaskStatus.TASK_STATUS_DONE, label: translation.done }
-      ]}
-      onChange={onChange}
+      options={filteredOptions}
+      {...selectProps}
     />
   )
 }

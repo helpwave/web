@@ -20,6 +20,7 @@ import {
 } from '../../mutations/ward_mutations'
 import { OrganizationOverviewContext } from '../../pages/organizations/[id]'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useRouter } from 'next/router'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -81,7 +82,9 @@ export const WardDetail = ({
   const translation = useTranslation(language, defaultWardDetailTranslations)
 
   const context = useContext(OrganizationOverviewContext)
-  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId)
+  const router = useRouter()
+  const { id } = router.query
+  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, id as string)
 
   const isCreatingNewWard = context.state.wardId === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
@@ -95,11 +98,11 @@ export const WardDetail = ({
     }
   }, [data, isCreatingNewWard])
 
-  const createWardMutation = useWardCreateMutation((ward) => context.updateContext({ ...context.state, wardId: ward.id }))
-  const updateWardMutation = useWardUpdateMutation((ward) => {
+  const createWardMutation = useWardCreateMutation(id as string, (ward) => context.updateContext({ ...context.state, wardId: ward.id }))
+  const updateWardMutation = useWardUpdateMutation(id as string, (ward) => {
     setNewWard({ ...newWard, name: ward.name })
   })
-  const deleteWardMutation = useWardDeleteMutation(() => context.updateContext({ ...context.state, wardId: '' }))
+  const deleteWardMutation = useWardDeleteMutation(id as string, () => context.updateContext({ ...context.state, wardId: '' }))
 
   // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
   const minimumWidthOfCards = 200

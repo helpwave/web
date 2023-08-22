@@ -8,6 +8,7 @@ import {
   UpdateWardRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
 import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
+import { noop } from '@helpwave/common/util/noop'
 
 export const wardsQueryKey = 'wards'
 
@@ -61,13 +62,12 @@ export const emptyWard: WardDetailDTO = {
   task_templates: []
 }
 
-export const wardOverviewsQueryKey = 'overviews'
-export const useWardOverviewsQuery = () => {
+export const useWardOverviewsQuery = (organisationId?: string) => {
   return useQuery({
-    queryKey: [wardsQueryKey, wardOverviewsQueryKey],
+    queryKey: [wardsQueryKey, organisationId],
     queryFn: async () => {
       const req = new GetWardOverviewsRequest()
-      const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata())
+      const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata(organisationId))
 
       const wards: WardOverviewDTO[] = res.getWardsList().map((ward) => ({
         id: ward.getId(),
@@ -83,7 +83,7 @@ export const useWardOverviewsQuery = () => {
   })
 }
 
-export const useWardDetailsQuery = (wardId?: string) => {
+export const useWardDetailsQuery = (wardId?: string, organisationId?: string) => {
   return useQuery({
     queryKey: [wardsQueryKey, wardId],
     enabled: !!wardId,
@@ -92,7 +92,7 @@ export const useWardDetailsQuery = (wardId?: string) => {
 
       const req = new GetWardDetailsRequest()
       req.setId(wardId)
-      const res = await wardService.getWardDetails(req, getAuthenticatedGrpcMetadata())
+      const res = await wardService.getWardDetails(req, getAuthenticatedGrpcMetadata(organisationId))
 
       const ward: WardDetailDTO = {
         id: res.getId(),
@@ -119,28 +119,28 @@ export const useWardDetailsQuery = (wardId?: string) => {
   })
 }
 
-export const useWardQuery = (id: string) => {
+export const useWardQuery = (id: string, organisationId?: string) => {
   return useQuery({
     queryKey: [wardsQueryKey, id],
     enabled: !!id,
     queryFn: async (): Promise<WardDTO> => {
       const req = new GetWardRequest()
       req.setId(id)
-      const res = await wardService.getWard(req, getAuthenticatedGrpcMetadata())
+      const res = await wardService.getWard(req, getAuthenticatedGrpcMetadata(organisationId))
 
       return res.toObject()
     }
   })
 }
 
-export const useWardUpdateMutation = (callback: (ward:WardDTO) => void) => {
+export const useWardUpdateMutation = (organisationId?: string, callback: (ward:WardDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward: WardDTO) => {
       const req = new UpdateWardRequest()
       req.setId(ward.id)
       req.setName(ward.name)
-      await wardService.updateWard(req, getAuthenticatedGrpcMetadata())
+      await wardService.updateWard(req, getAuthenticatedGrpcMetadata(organisationId))
 
       callback(ward)
     },
@@ -150,13 +150,13 @@ export const useWardUpdateMutation = (callback: (ward:WardDTO) => void) => {
   })
 }
 
-export const useWardCreateMutation = (callback: (ward: WardDTO) => void) => {
+export const useWardCreateMutation = (organisationId?: string, callback: (ward: WardDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward:WardDTO) => {
       const createWardRequest = new CreateWardRequest()
       createWardRequest.setName(ward.name)
-      const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata())
+      const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata(organisationId))
       const newWard: WardDTO = { ...ward, id: res.getId() }
 
       callback(newWard)
@@ -167,13 +167,13 @@ export const useWardCreateMutation = (callback: (ward: WardDTO) => void) => {
   })
 }
 
-export const useWardDeleteMutation = (callback: () => void) => {
+export const useWardDeleteMutation = (organisationId?: string, callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (wardId: string) => {
       const req = new DeleteWardRequest()
       req.setId(wardId)
-      await wardService.deleteWard(req, getAuthenticatedGrpcMetadata())
+      await wardService.deleteWard(req, getAuthenticatedGrpcMetadata(organisationId))
 
       callback()
     },

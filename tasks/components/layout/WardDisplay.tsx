@@ -43,8 +43,9 @@ export const WardDisplay = ({
   const translation = useTranslation(language, defaultWardDisplayTranslations)
   const router = useRouter()
   const { id } = router.query
+  const organisationId = id as string
   const context = useContext(OrganizationOverviewContext)
-  const { data, isLoading, isError } = useWardOverviewsQuery(id as string)
+  const { data, isLoading, isError } = useWardOverviewsQuery(organisationId)
 
   const wards = data
   selectedWardId ??= context.state.wardId

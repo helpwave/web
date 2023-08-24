@@ -1,12 +1,12 @@
 import { tw } from '@helpwave/common/twind'
-import { Edit, Mail } from 'lucide-react'
-import type { CardProps } from '@helpwave/common/components/Card'
-import { Card } from '@helpwave/common/components/Card'
+import { Mail } from 'lucide-react'
 import { AvatarGroup } from '../AvatarGroup'
 import type { OrganizationDTO } from '../../mutations/organization_mutations'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { EditCardProps } from './EditCard'
+import { EditCard } from './EditCard'
 
 type OrganizationCardTranslation = {
   member: string,
@@ -24,10 +24,9 @@ const defaultOrganizationCardTranslation: Record<Languages, OrganizationCardTran
   }
 }
 
-export type OrganizationCardProps = CardProps & {
+export type OrganizationCardProps = EditCardProps & {
   maxShownWards?: number,
-  organization: OrganizationDTO,
-  onEditClick?: () => void
+  organization: OrganizationDTO
 }
 
 /**
@@ -35,48 +34,32 @@ export type OrganizationCardProps = CardProps & {
  */
 export const OrganizationCard = ({
   language,
-  isSelected,
   organization,
-  onTileClick = () => undefined,
-  onEditClick
+  ...editCardProps
 }: PropsWithLanguage<Languages, OrganizationCardProps>) => {
   const translation = useTranslation(language, defaultOrganizationCardTranslation)
   const organizationMemberCount = organization.members.length
 
   return (
-    <Card
-      onTileClick={onTileClick}
-      isSelected={isSelected}
-      className={tw('group cursor-pointer justify-between flex flex-col')}
-    >
-      <div className={tw('flex flex-row justify-between w-full gap-x-2 items-start')}>
+    <EditCard {...editCardProps}>
+      <div className={tw('flex flex-col gap-y-2 overflow-hidden')}>
         <div className={tw('flex flex-row gap-x-1 font-bold font-space overflow-hidden')}>
-          <span
-            className={tw('text-ellipsis whitespace-nowrap overflow-hidden flex-1')}>{`${organization.longName}`}</span>
+          <span className={tw('truncate flex-1')}>
+            {`${organization.longName}`}
+          </span>
           <span>{`(${organization.shortName})`}</span>
         </div>
-        {onEditClick && (
-          <button
-            onClick={event => {
-              onEditClick()
-              event.stopPropagation()
-            }}
-            className={tw('text-transparent group-hover:text-black')}
-          >
-            <Edit size={24}/>
-          </button>
-        )}
-      </div>
-      <div className={tw('truncate flex flex-row items-center')}>
-        <Mail/>
-        <span className={tw('w-full truncate ml-2 text-sm')}>{organization.email}</span>
-      </div>
-      <div className={tw('flex flex-row justify-between')}>
-        <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm truncate')}>
-          {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation.members : translation.member}`}
+        <div className={tw('flex flex-row items-center overflow-hidden gap-x-2')}>
+          <Mail/>
+          <span className={tw('w-full truncate text-sm')}>{organization.email}</span>
         </div>
-        <AvatarGroup users={organization.members}/>
+        <div className={tw('flex flex-row justify-between')}>
+          <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm truncate')}>
+            {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation.members : translation.member}`}
+          </div>
+          <AvatarGroup users={organization.members}/>
+        </div>
       </div>
-    </Card>
+    </EditCard>
   )
 }

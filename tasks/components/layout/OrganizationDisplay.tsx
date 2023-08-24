@@ -69,7 +69,7 @@ export const OrganizationDisplay = ({
           text={translation.addOrganization}
           onTileClick={() => context.updateContext({ ...context.state, organizationId: '' })}
           isSelected={usedSelectedId === ''}
-          className={tw('h-24')}
+          className={tw('h-full')}
         />
       </div>
     </div>

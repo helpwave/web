@@ -84,8 +84,8 @@ export const WardDetail = ({
   const context = useContext(OrganizationOverviewContext)
   const router = useRouter()
   const { id } = router.query
-  const organisationId = id as string
-  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organisationId)
+  const organizationId = id as string
+  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organizationId)
 
   const isCreatingNewWard = context.state.wardId === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
@@ -99,11 +99,11 @@ export const WardDetail = ({
     }
   }, [data, isCreatingNewWard])
 
-  const createWardMutation = useWardCreateMutation(organisationId, (ward) => context.updateContext({ ...context.state, wardId: ward.id }))
-  const updateWardMutation = useWardUpdateMutation(organisationId, (ward) => {
+  const createWardMutation = useWardCreateMutation(organizationId, (ward) => context.updateContext({ ...context.state, wardId: ward.id }))
+  const updateWardMutation = useWardUpdateMutation(organizationId, (ward) => {
     setNewWard({ ...newWard, name: ward.name })
   })
-  const deleteWardMutation = useWardDeleteMutation(organisationId, () => context.updateContext({ ...context.state, wardId: '' }))
+  const deleteWardMutation = useWardDeleteMutation(organizationId, () => context.updateContext({ ...context.state, wardId: '' }))
 
   // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
   const minimumWidthOfCards = 200

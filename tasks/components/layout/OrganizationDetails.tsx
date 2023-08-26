@@ -16,8 +16,8 @@ import {
   useOrganizationQuery, useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
 import { OrganizationContext } from '../../pages/organizations'
-import type { OrganisationInvitation } from '../OrganisationInvitationList'
-import { OrganisationInvitationList } from '../OrganisationInvitationList'
+import type { OrganizationInvitation } from '../OrganizationInvitationList'
+import { OrganizationInvitationList } from '../OrganizationInvitationList'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -71,7 +71,7 @@ export const OrganizationDetail = ({
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
-  const [organizationInvites, setOrganizationInvites] = useState<OrganisationInvitation[]>([])
+  const [organizationInvites, setOrganizationInvites] = useState<OrganizationInvitation[]>([])
 
   useEffect(() => {
     if (data && !isCreatingNewOrganization) {
@@ -140,7 +140,7 @@ export const OrganizationDetail = ({
         {!isCreatingNewOrganization && (
           <OrganizationMemberList />
         )}
-        <OrganisationInvitationList
+        <OrganizationInvitationList
           onChange={setOrganizationInvites}
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
           organizationId={contextState.organizationId}

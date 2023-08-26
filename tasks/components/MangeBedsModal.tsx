@@ -71,7 +71,7 @@ export const ManageBedsModal = ({
   roomId,
   onClose = noop,
   modalClassName,
-  ...ModalProps
+  ...modalProps
 }: PropsWithLanguage<ManageBedsModalTranslation, ManageBedsModalProps>) => {
   const translation = useTranslation(language, defaultManageBedsModalTranslation)
   const { data, isLoading, isError } = useRoomOverviewsQuery(wardId) // Todo use more optimized query later
@@ -96,7 +96,7 @@ export const ManageBedsModal = ({
 
   const identifierMapping = (bed: BedWithPatientWithTasksNumberDTO) => bed.id
   return (
-    <Modal modalClassName={tx('min-w-[600px]', modalClassName)} {...ModalProps}>
+    <Modal modalClassName={tx('min-w-[600px]', modalClassName)} {...modalProps}>
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}

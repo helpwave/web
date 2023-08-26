@@ -10,14 +10,14 @@ import { Button } from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { OrganizationContext } from '../pages/organizations'
 import {
-  useInvitationsByOrganisationQuery,
+  useInvitationsByOrganizationQuery,
   useInviteMemberMutation, useInviteRevokeMutation
 } from '../mutations/organization_mutations'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
-type OrganisationInvitationListTranslation = {
+type OrganizationInvitationListTranslation = {
   remove: string,
   email: string,
   addAndNext: string,
@@ -26,7 +26,7 @@ type OrganisationInvitationListTranslation = {
   inviteMember: string
 }
 
-const defaultOrganisationInvitationListTranslation: Record<Languages, OrganisationInvitationListTranslation> = {
+const defaultOrganizationInvitationListTranslation: Record<Languages, OrganizationInvitationListTranslation> = {
   en: {
     remove: 'Remove',
     email: 'Email',
@@ -45,32 +45,32 @@ const defaultOrganisationInvitationListTranslation: Record<Languages, Organisati
   }
 }
 
-export type OrganisationInvitation = {
+export type OrganizationInvitation = {
   id: string,
   email: string
 }
 
-export type OrganisationInvitationListProps = {
+export type OrganizationInvitationListProps = {
   organizationId: string,
-  invitations?: OrganisationInvitation[],
-  onChange: (invites: OrganisationInvitation[]) => void
+  invitations?: OrganizationInvitation[],
+  onChange: (invites: OrganizationInvitation[]) => void
 }
 
 /**
- * A List showing all members invited to an organisation
+ * A List showing all members invited to an organization
  */
-export const OrganisationInvitationList = ({
+export const OrganizationInvitationList = ({
   language,
   organizationId,
   invitations,
   onChange
-}: PropsWithLanguage<OrganisationInvitationListTranslation, OrganisationInvitationListProps>) => {
-  const translation = useTranslation(language, defaultOrganisationInvitationListTranslation)
+}: PropsWithLanguage<OrganizationInvitationListTranslation, OrganizationInvitationListProps>) => {
+  const translation = useTranslation(language, defaultOrganizationInvitationListTranslation)
 
   const context = useContext(OrganizationContext)
   const usedOrganizationId = organizationId ?? context.state.organizationId
   const isCreatingOrganization = usedOrganizationId === ''
-  const { data, isLoading, isError } = useInvitationsByOrganisationQuery(context.state.organizationId)
+  const { data, isLoading, isError } = useInvitationsByOrganizationQuery(context.state.organizationId)
   const [tableState, setTableState] = useState<TableState>({
     pagination: {
       ...defaultTableStatePagination,
@@ -79,11 +79,11 @@ export const OrganisationInvitationList = ({
   })
   const [inviteMemberModalEmail, setInviteMemberModalEmail] = useState<string>()
   // Maybe move this filter to the endpoint or the query
-  const usedInvitations: OrganisationInvitation[] = invitations ?? (data ?? []).filter(value => value.state === InvitationState.INVITATION_STATE_PENDING)
+  const usedInvitations: OrganizationInvitation[] = invitations ?? (data ?? []).filter(value => value.state === InvitationState.INVITATION_STATE_PENDING)
 
   const inviteMemberMutation = useInviteMemberMutation(usedOrganizationId)
   const revokeInviteMutation = useInviteRevokeMutation()
-  const idMapping = (invite: OrganisationInvitation) => invite.email
+  const idMapping = (invite: OrganizationInvitation) => invite.email
   const isValidEmail = !!inviteMemberModalEmail && validateEmail(inviteMemberModalEmail)
   const isShowingInviteMemberModal = inviteMemberModalEmail !== undefined
 

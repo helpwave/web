@@ -184,7 +184,7 @@ export const useInvitationsByUserQuery = (state?: InvitationState) => {
   })
 }
 
-export const useInvitationsByOrganisationQuery = (organizationId: string | undefined) => {
+export const useInvitationsByOrganizationQuery = (organizationId: string | undefined) => {
   return useQuery({
     queryKey: [invitationsQueryKey, organizationQueryKey],
     enabled: !!organizationId,

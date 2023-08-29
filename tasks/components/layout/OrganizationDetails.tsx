@@ -16,9 +16,9 @@ import {
   useOrganizationQuery, useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
 import { OrganizationContext } from '../../pages/organizations'
-import type { OrganisationInvitation } from '../OrganisationInvitationList'
-import { OrganisationInvitationList } from '../OrganisationInvitationList'
 import { ReSignInModal } from '../ReSignInModal'
+import type { OrganizationInvitation } from '../OrganizationInvitationList'
+import { OrganizationInvitationList } from '../OrganizationInvitationList'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,

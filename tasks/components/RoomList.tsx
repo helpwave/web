@@ -158,16 +158,14 @@ export const RoomList = ({
         }}
         confirmType="negative"
       />
-      {managedRoom && context.state.wardId && (
-        <ManageBedsModal
-          id="roomlist-ManageBedModal"
-          isOpen={!!managedRoom}
-          wardId={context.state.wardId}
-          roomId={managedRoom}
-          onBackgroundClick={() => setManagedRoom(undefined)}
-          onClose={() => setManagedRoom(undefined)}
-        />
-      )}
+      <ManageBedsModal
+        id="roomlist-ManageBedModal"
+        isOpen={!!managedRoom}
+        wardId={context.state.wardId}
+        roomId={managedRoom ?? ''}
+        onBackgroundClick={() => setManagedRoom(undefined)}
+        onClose={() => setManagedRoom(undefined)}
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}

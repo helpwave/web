@@ -73,7 +73,7 @@ export const OrganizationDetail = ({
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState(false)
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
-  const [organizationInvites, setOrganizationInvites] = useState<OrganisationInvitation[]>([])
+  const [organizationInvites, setOrganizationInvites] = useState<OrganizationInvitation[]>([])
 
   useEffect(() => {
     if (data && !isCreatingNewOrganization) {
@@ -151,7 +151,7 @@ export const OrganizationDetail = ({
         {!isCreatingNewOrganization && (
           <OrganizationMemberList />
         )}
-        <OrganisationInvitationList
+        <OrganizationInvitationList
           onChange={setOrganizationInvites}
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
           organizationId={contextState.organizationId}

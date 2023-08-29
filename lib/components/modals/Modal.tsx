@@ -20,6 +20,8 @@ export type ModalProps = {
  * A Generic Modal Window
  *
  * The state needs to be managed by the parent of this component
+ *
+ * DO NOT Conditionally render this always use the isOpen to ensure that the ModalRegister is working properly
  */
 export const Modal = ({
   children,

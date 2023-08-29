@@ -50,7 +50,7 @@ export const DashboardDisplay = ({
 }: PropsWithLanguage<DashboardDisplayTranslation, DashboardDisplayProps>) => {
   const translation = useTranslation(language, defaultDashboardDisplayTranslations)
   const router = useRouter()
-  const minimumWidthOfCards = 260 // the value of much space a card and the surrounding gap requires, given in px
+  const minimumWidthOfCards = 220 // the value of much space a card and the surrounding gap requires, given in px
   const columns = !width ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>

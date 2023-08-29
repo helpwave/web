@@ -18,6 +18,7 @@ import {
 import { OrganizationContext } from '../../pages/organizations'
 import type { OrganisationInvitation } from '../OrganisationInvitationList'
 import { OrganisationInvitationList } from '../OrganisationInvitationList'
+import { ReSignInModal } from '../ReSignInModal'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -70,6 +71,7 @@ export const OrganizationDetail = ({
   const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
+  const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState(false)
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
   const [organizationInvites, setOrganizationInvites] = useState<OrganisationInvitation[]>([])
 
@@ -91,6 +93,7 @@ export const OrganizationDetail = ({
       organizationId: organization.id
     }))
     updateContext({ organizationId: organization.id })
+    setIsShowingReSignInDialog(true)
   })
 
   const updateMutation = useOrganizationUpdateMutation(organization => {
@@ -124,6 +127,14 @@ export const OrganizationDetail = ({
           deleteMutation.mutate(contextState.organizationId)
         }}
         confirmType="negative"
+      />
+      <ReSignInModal
+        id="OrganizationDetail-ReSignInModal"
+        isOpen={isShowingReSignInDialog}
+        onConfirm={() => {
+          setIsShowingReSignInDialog(false)
+          // TODO do the resign in
+        }}
       />
       <ColumnTitle title={translation.organizationDetail}/>
       <div className={tw('flex flex-col gap-y-4 max-w-[500px]')}>

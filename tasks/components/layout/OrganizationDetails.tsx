@@ -71,7 +71,7 @@ export const OrganizationDetail = ({
   const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
-  const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState(false)
+  const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
   const [organizationInvites, setOrganizationInvites] = useState<OrganizationInvitation[]>([])
 
@@ -92,8 +92,7 @@ export const OrganizationDetail = ({
       email: invite.email,
       organizationId: organization.id
     }))
-    updateContext({ organizationId: organization.id })
-    setIsShowingReSignInDialog(true)
+    setIsShowingReSignInDialog(organization.id)
   })
 
   const updateMutation = useOrganizationUpdateMutation(organization => {
@@ -130,9 +129,12 @@ export const OrganizationDetail = ({
       />
       <ReSignInModal
         id="OrganizationDetail-ReSignInModal"
-        isOpen={isShowingReSignInDialog}
+        isOpen={!!isShowingReSignInDialog}
         onConfirm={() => {
-          setIsShowingReSignInDialog(false)
+          if (isShowingReSignInDialog) {
+            updateContext({ organizationId: isShowingReSignInDialog })
+          }
+          setIsShowingReSignInDialog(undefined)
           // TODO do the resign in
         }}
       />

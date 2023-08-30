@@ -108,7 +108,6 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
             <LoadingAndErrorComponent
               isLoading={isLoading}
               hasError={isError}
-              minimumLoadingDuration={3000}
             >
               {data && (
                 <TaskTemplateDisplay

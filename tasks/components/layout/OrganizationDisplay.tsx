@@ -51,7 +51,7 @@ export const OrganizationDisplay = ({
   let usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
   const { organizations: tokenOrganizations } = useAuth()
 
-  usedOrganizations = usedOrganizations.filter(value => tokenOrganizations.includes(value.id))
+  usedOrganizations = usedOrganizations.filter((organization) => tokenOrganizations.includes(organization.id))
   const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)
 
   const usedSelectedId = selectedOrganizationId ?? context.state.organizationId

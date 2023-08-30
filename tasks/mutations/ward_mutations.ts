@@ -14,7 +14,8 @@ export const wardsQueryKey = 'wards'
 
 export type WardDTO = {
   id: string,
-  name: string
+  name: string,
+  organizationId?: string
 }
 
 export type WardOverviewDTO = {

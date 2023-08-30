@@ -138,7 +138,6 @@ export const WardDetail = ({
           <WardForm
             key={newWard.id}
             ward={newWard}
-            usedWardNames={newWard.rooms.map(ward => ward.name)}
             onChange={(wardInfo, isValid) => {
               setNewWard({ ...newWard, ...wardInfo })
               setFilledRequired(isValid)

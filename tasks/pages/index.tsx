@@ -9,7 +9,6 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/layout/TwoColumn'
 import { NewsFeed } from '../components/layout/NewsFeed'
 import { DashboardDisplay } from '../components/layout/DashboardDisplay'
-import { useWardOverviewsQuery } from '../mutations/ward_mutations'
 import { useOrganizationsByUserQuery } from '../mutations/organization_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { tw } from '@twind/core'
@@ -42,8 +41,7 @@ export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = 
 const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, language }) => {
   const translation = useTranslation(language, defaultDashboardTranslations)
   const { user } = useAuth()
-  const { data: wards, isLoading: isLoadingWards } = useWardOverviewsQuery()
-  const { data: organizations, isLoading: isLoadingOrganizations } = useOrganizationsByUserQuery()
+  const { data: organizations, isLoading } = useOrganizationsByUserQuery()
 
   return (
     <PageWithHeader
@@ -53,16 +51,15 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServe
         <title>{titleWrapper()}</title>
       </Head>
       <LoadingAndErrorComponent
-        isLoading={isLoadingWards || isLoadingOrganizations || !user || !wards || !organizations}
+        isLoading={isLoading || !user || !organizations}
         loadingProps={{ classname: tw('!h-full') }}
       >
-        {organizations && wards && (
+        {organizations && (
           <TwoColumn
             disableResize={false}
             left={width => ((
                 <DashboardDisplay
                   organizations={organizations}
-                  wards={wards}
                   width={width}
                 />
             )

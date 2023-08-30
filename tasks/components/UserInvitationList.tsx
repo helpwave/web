@@ -17,6 +17,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { ReSignInModal } from './ReSignInModal'
+import { useAuth } from '../hooks/useAuth'
 
 type UserInvitationListTranslation = {
   accept: string,
@@ -49,6 +50,7 @@ export const UserInvitationList = ({
   const [tableState, setTableState] = useState<TableState>({ pagination: { ...defaultTableStatePagination, entriesPerPage: 10 } })
   const { data, isLoading, isError } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState(false)
+  const { signOut } = useAuth()
 
   const declineInviteMutation = useInviteDeclineMutation()
   const acceptInviteMutation = useInviteAcceptMutation(() => setIsShowingReSignInDialog(true))
@@ -62,7 +64,7 @@ export const UserInvitationList = ({
         isOpen={isShowingReSignInDialog}
         onConfirm={() => {
           setIsShowingReSignInDialog(false)
-          // TODO do the resign in
+          signOut()
         }}
       />
       <LoadingAndErrorComponent
@@ -82,7 +84,7 @@ export const UserInvitationList = ({
               <></>
             ]}
             rowMappingToCells={invite => [
-              <div key="name" className={tw('flex flex-row justify-start gap-x-2')}>
+              <div key="name" className={tw('flex flex-row justify-start items-center gap-x-2')}>
                 <Avatar avatarUrl={invite.organization.id} alt=""/>
                 <Span>{invite.organization.longName}</Span>
               </div>,

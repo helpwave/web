@@ -23,27 +23,19 @@ const defaultReSignInModalTranslation: Record<Languages, ReSignInModalTranslatio
     no: 'No, later.'
   },
   de: {
-    pleaseReSignIn: 'Deine Aktion erfordert eine erneute anmeldung!',
+    pleaseReSignIn: 'Deine Aktion erfordert eine erneute Anmeldung!',
     description: 'Um deine organisatorischen Änderungen zu sehen, musst du dich erneut bei helpwave tasks anmelden. Danach werden deine Änderungen sichtbar.',
     yes: 'Ja, logge mich aus!',
     no: 'Nein, später.'
   }
 }
-export const ReSignInModal = ({ language, onConfirm, ...modalProps }: PropsWithLanguage<ReSignInModalTranslation, ReSignInModalProps>) => {
+export const ReSignInModal = ({ language, ...modalProps }: PropsWithLanguage<ReSignInModalTranslation, ReSignInModalProps>) => {
   const translation = useTranslation(language, defaultReSignInModalTranslation)
-
-  const onConfirmOverwrite = () => {
-    alert('Re-Signin')
-    if (onConfirm) {
-      onConfirm()
-    }
-  }
 
   return (
     <ConfirmDialog
       backgroundClassName={tw('w-5')}
       title={translation.pleaseReSignIn}
-      onConfirm={onConfirmOverwrite}
       buttonOverwrites={[
         {},
         {

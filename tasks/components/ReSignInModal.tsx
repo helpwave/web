@@ -13,7 +13,7 @@ type ReSignInModalTranslation = {
   no: string
 }
 
-type ReSignInModalProps = Omit<ConfirmDialogProps, 'title'|'description'>
+type ReSignInModalProps = Omit<ConfirmDialogProps, 'title'|'description'|'children'>
 
 const defaultReSignInModalTranslation: Record<Languages, ReSignInModalTranslation> = {
   en: {

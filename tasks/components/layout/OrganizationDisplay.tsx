@@ -10,6 +10,7 @@ import type { OrganizationDTO } from '../../mutations/organization_mutations'
 import { useOrganizationsByUserQuery } from '../../mutations/organization_mutations'
 import { useContext } from 'react'
 import { OrganizationContext } from '../../pages/organizations'
+import { useAuth } from '../../hooks/useAuth'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -47,8 +48,10 @@ export const OrganizationDisplay = ({
 
   const context = useContext(OrganizationContext)
   const { data } = useOrganizationsByUserQuery()
-  const usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
+  let usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
+  const { organizations: tokenOrganizations } = useAuth()
 
+  usedOrganizations = usedOrganizations.filter(value => tokenOrganizations.includes(value.id))
   const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)
 
   const usedSelectedId = selectedOrganizationId ?? context.state.organizationId

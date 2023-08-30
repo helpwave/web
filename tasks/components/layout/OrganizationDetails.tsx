@@ -128,7 +128,7 @@ export const OrganizationDetail = ({
         confirmType="negative"
       />
       <ReSignInModal
-        id="OrganizationDetail-ReSignInModal"
+        id="organizationDetail-ReSignInModal"
         isOpen={!!isShowingReSignInDialog}
         onConfirm={() => {
           if (isShowingReSignInDialog) {

@@ -6,7 +6,11 @@ import React, { useContext, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
-import type { PatientDTO, PatientWithBedAndRoomDTO } from '../../mutations/patient_mutations'
+import type {
+  PatientDTO,
+  PatientMinimalDTO,
+  PatientWithBedAndRoomDTO
+} from '../../mutations/patient_mutations'
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
@@ -20,6 +24,7 @@ import { Draggable } from '../dnd-kit/Draggable'
 import { Droppable } from '../dnd-kit/Droppable'
 import { WardOverviewContext } from '../../pages/ward/[id]'
 import { AddPatientModal } from '../AddPatientModal'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 
 type PatientListTranslation = {
   patients: string,
@@ -33,7 +38,10 @@ type PatientListTranslation = {
   deleteDescriptionText: string,
   addPatient: string,
   search: string,
-  bed: string
+  bed: string,
+  followingPatient: string,
+  dischargePatient: string,
+  dischargePatientDescription: string
 }
 
 const defaultPatientListTranslations: Record<Languages, PatientListTranslation> = {
@@ -50,6 +58,9 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     addPatient: 'Add Patient',
     search: 'Search',
     bed: 'Bed',
+    followingPatient: 'Following Patient',
+    dischargePatient: 'Discharge Patient',
+    dischargePatientDescription: 'This cannot be undo for now, be careful.'
   },
   de: {
     patients: 'Patienten',
@@ -64,6 +75,9 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     addPatient: 'Patient hinzufügen',
     search: 'Suchen',
     bed: 'Bett',
+    followingPatient: 'Folgender Patient',
+    dischargePatient: 'Patient entlassen',
+    dischargePatientDescription: 'Diese Aktion kann nicht rückgängig gemacht werden, vorsicht.'
   }
 }
 
@@ -99,6 +113,7 @@ export const PatientList = ({
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const deletePatientMutation = useDeletePatientMutation()
+  const [dischargingPatient, setIsDischargingPatient] = useState<PatientMinimalDTO>()
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
@@ -108,6 +123,23 @@ export const PatientList = ({
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
+      <ConfirmDialog
+        id="patientList-DischargeDialog"
+        isOpen={!!dischargingPatient}
+        onConfirm={() => {
+          if (dischargingPatient) {
+            dischargeMutation.mutate(dischargingPatient.id)
+          }
+          setIsDischargingPatient(undefined)
+        }}
+        onBackgroundClick={() => setIsDischargingPatient(undefined)}
+        onCancel={() => setIsDischargingPatient(undefined)}
+        title={translation.dischargePatient}
+        buttonOverwrites={[{}, {}, { color: 'negative' }]}
+      >
+        <Span>{translation.dischargePatientDescription}</Span>
+        {dischargingPatient && <Span>{`${translation.followingPatient}: ${dischargingPatient.name}`}</Span>}
+      </ConfirmDialog>
       <AddPatientModal
         id="patientList-AddPatientModal"
         key={isShowingAddPatientModal}
@@ -155,7 +187,7 @@ export const PatientList = ({
                         <Label name={activeLabelText(patient)} color="blue"/>
                         <Button color="negative" variant="textButton" onClick={event => {
                           event.stopPropagation()
-                          dischargeMutation.mutate(patient.id)
+                          setIsDischargingPatient(patient)
                         }}>
                           {translation.discharge}
                         </Button>
@@ -190,7 +222,7 @@ export const PatientList = ({
                             <Label name={`${translation.unassigned}`} color="yellow"/>
                             <Button color="negative" variant="textButton" onClick={event => {
                               event.stopPropagation()
-                              dischargeMutation.mutate(patient.id)
+                              setIsDischargingPatient(patient)
                             }}>
                               {translation.discharge}
                             </Button>
@@ -203,35 +235,28 @@ export const PatientList = ({
               </div>
             )}
           </Droppable>
-          <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
-            {({ isOver }) => (
-              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
-                'border-hw-primary-700': isOver,
-                'border-transparent': !isOver
-              })}>
-                <HideableContentSection
-                  initiallyOpen={initialOpenedSections?.discharged}
-                  disabled={filteredDischarged.length <= 0}
-                  header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
+          <div className={tx('p-2 border-2 border-transparent rounded-xl')}>
+            <HideableContentSection
+              initiallyOpen={initialOpenedSections?.discharged}
+              disabled={filteredDischarged.length <= 0}
+              header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
+            >
+              {filteredDischarged.map(patient => (
+                <div
+                  key={patient.id}
+                  className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
                 >
-                  {filteredDischarged.map(patient => (
-                    <div
-                      key={patient.id}
-                      className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
-                    >
-                      <Span className={tw('font-space font-bold')}>{patient.name}</Span>
-                      <Button color="negative" variant="textButton" onClick={event => {
-                        event.stopPropagation()
-                        deletePatientMutation.mutate(patient.id)
-                      }}>
-                        {translation.delete}
-                      </Button>
-                    </div>
-                  ))}
-                </HideableContentSection>
-              </div>
-            )}
-          </Droppable>
+                  <Span className={tw('font-space font-bold')}>{patient.name}</Span>
+                  <Button color="negative" variant="textButton" onClick={event => {
+                    event.stopPropagation()
+                    deletePatientMutation.mutate(patient.id)
+                  }}>
+                    {translation.delete}
+                  </Button>
+                </div>
+              ))}
+            </HideableContentSection>
+          </div>
         </div>
       </LoadingAndErrorComponent>
     </div>

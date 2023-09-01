@@ -129,7 +129,7 @@ export const RoomBedDropDown = ({
     <div className={tw('flex flex-row justify-between items-center')}>
       <div>
         {isShowingRevert && (
-          <div className={tw('cursor-pointer underline text-hw-primary-400 flex flex-row gap-x-2 items-center')}
+          <div className={tw('mr-2 cursor-pointer underline text-hw-primary-400 flex flex-row gap-x-2 items-center')}
                onClick={() => {
                  if (hasChanges) {
                    setCurrentSelection({ ...initialRoomAndBed })
@@ -160,9 +160,9 @@ export const RoomBedDropDown = ({
         )}
       </div>
       {touched && !isSubmitting && !isCreating && (
-        <Span className={tx({
+        <Span className={tx('truncate', {
           '!text-hw-negative-400': hasChanges,
-          '!text-hw-positive-400': !hasChanges
+          '!text-hw-positive-400': !hasChanges,
         })}>
           {hasChanges ? translation.unsaved : translation.saved}
         </Span>

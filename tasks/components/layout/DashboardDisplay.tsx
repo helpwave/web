@@ -12,6 +12,7 @@ import type { OrganizationDTO } from '../../mutations/organization_mutations'
 import { InvitationBanner } from '../InvitationBanner'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useAuth } from '../../hooks/useAuth'
+import { getConfig } from '../../utils/config'
 
 type DashboardDisplayTranslation = {
   organizations: string,
@@ -54,8 +55,9 @@ export const DashboardDisplay = ({
   const columns = !width ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
   const { organizations: tokenOrganizations } = useAuth()
   const { data: wards, isLoading: isLoadingWards } = useWardOverviewsQuery(organizations.length > 0 ? organizations[0].id : undefined)
+  const { fakeTokenEnable } = getConfig()
 
-  organizations = organizations.filter((organization) => tokenOrganizations.includes(organization.id))
+  organizations = organizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
 
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>

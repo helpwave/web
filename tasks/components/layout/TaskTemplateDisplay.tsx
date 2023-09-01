@@ -88,7 +88,6 @@ export const TaskTemplateDisplay = ({
           isSelected={selectedId === ''}
           onTileClick={() => onSelectChange(undefined)}
           text={translation.addNewTaskTemplate}
-          className={tw('h-auto')}
         />
       </div>
     </div>

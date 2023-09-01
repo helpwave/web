@@ -10,6 +10,7 @@ import MobileInterceptor from '../components/MobileInterceptor'
 import titleWrapper from '../utils/titleWrapper'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
+import { getConfig } from '../utils/config'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,7 +22,7 @@ const spaceGrotesk = SpaceGrotesk({
   variable: '--font-space-grotesk'
 })
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({ defaultOptions: { queries: { refetchInterval: getConfig().queryRefetchTime } } })
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

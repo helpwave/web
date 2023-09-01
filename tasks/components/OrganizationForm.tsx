@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -58,24 +57,34 @@ const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTra
     invalidEmail: 'Ungültige Email Adresse'
   }
 }
+export type OrganizationFormTouchedType = {
+  shortName: boolean,
+  longName: boolean,
+  email: boolean
+}
 
 export type OrganizationFormType = {
   isValid: boolean,
   hasChanges: boolean,
-  organization: OrganizationMinimalDTO
+  organization: OrganizationMinimalDTO,
+  touched: OrganizationFormTouchedType
 }
 
 export const emptyOrganizationForm: OrganizationFormType = {
   isValid: false,
   hasChanges: false,
-  organization: emptyOrganization
+  organization: emptyOrganization,
+  touched: {
+    shortName: false,
+    longName: false,
+    email: false
+  }
 }
 
 // TODO make sure the Organization type only has the used values shortName, longName, email, isVerified
 export type OrganizationFormProps = {
-  organizationForm?: OrganizationFormType,
-  onChange: (organizationForm: OrganizationFormType, shouldUpdate: boolean) => void,
-  isShowingErrorsDirectly?: boolean
+  organizationForm: OrganizationFormType,
+  onChange: (organizationForm: OrganizationFormType, shouldUpdate: boolean) => void
 }
 
 /**
@@ -87,14 +96,8 @@ export const OrganizationForm = ({
   language,
   organizationForm = emptyOrganizationForm,
   onChange = () => undefined,
-  isShowingErrorsDirectly = false
 }: PropsWithLanguage<OrganizationFormTranslation, OrganizationFormProps>) => {
   const translation = useTranslation(language, defaultOrganizationFormTranslations)
-  const [touched, setTouched] = useState({
-    shortName: isShowingErrorsDirectly,
-    longName: isShowingErrorsDirectly,
-    email: isShowingErrorsDirectly
-  })
 
   const minShortNameLength = 2
   const minLongNameLength = 4
@@ -136,18 +139,18 @@ export const OrganizationForm = ({
     }
   }
 
-  function triggerOnChange(newOrganization: OrganizationMinimalDTO, shouldUpdate: boolean) {
+  function triggerOnChange(newOrganization: OrganizationMinimalDTO, shouldUpdate: boolean, touched: OrganizationFormTouchedType) {
     const isValid = validateShortName(newOrganization) === undefined && validateLongName(newOrganization) === undefined && validateEmailWithOrganization(newOrganization) === undefined
-    onChange({ hasChanges: true, isValid, organization: newOrganization }, shouldUpdate && isValid) // this might lead to confusing behaviour where changes aren't saved on invalid input
+    onChange({ hasChanges: true, isValid, organization: newOrganization, touched }, shouldUpdate && isValid) // this might lead to confusing behaviour where changes aren't saved on invalid input
   }
 
   const shortNameErrorMessage: string | undefined = validateShortName(organizationForm.organization)
   const longNameErrorMessage: string | undefined = validateLongName(organizationForm.organization)
   const emailErrorMessage: string | undefined = validateEmailWithOrganization(organizationForm.organization)
 
-  const isDisplayingShortNameError = shortNameErrorMessage && touched.shortName
-  const isDisplayingLongNameError = longNameErrorMessage && touched.longName
-  const isDisplayingEmailNameError = emailErrorMessage && touched.email
+  const isDisplayingShortNameError = shortNameErrorMessage && organizationForm.touched.shortName
+  const isDisplayingLongNameError = longNameErrorMessage && organizationForm.touched.longName
+  const isDisplayingEmailNameError = emailErrorMessage && organizationForm.touched.email
 
   return (
     <LoadingAndErrorComponent
@@ -161,9 +164,9 @@ export const OrganizationForm = ({
           id="shortName"
           value={organizationForm.organization.shortName}
           label={translation.shortName}
-          onBlur={() => setTouched({ ...touched, shortName: true })}
-          onChange={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, false)}
-          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, true)}
+          onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, shortName: true })}
+          onChange={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, false, { ...organizationForm.touched })}
+          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, true, { ...organizationForm.touched, shortName: true })}
           maxLength={maxShortNameLength}
           className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
@@ -175,9 +178,9 @@ export const OrganizationForm = ({
           id="longName"
           value={organizationForm.organization.longName}
           label={translation.longName}
-          onBlur={() => setTouched({ ...touched, longName: true })}
-          onChange={text => triggerOnChange({ ...organizationForm.organization, longName: text }, false)}
-          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, longName: text }, true)}
+          onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, longName: true })}
+          onChange={text => triggerOnChange({ ...organizationForm.organization, longName: text }, false, { ...organizationForm.touched })}
+          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, longName: text }, true, { ...organizationForm.touched, longName: true })}
           maxLength={maxLongNameLength}
           className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
@@ -191,9 +194,9 @@ export const OrganizationForm = ({
               id="email"
               value={organizationForm.organization.email}
               label={translation.contactEmail} type="email"
-              onBlur={() => setTouched({ ...touched, email: true })}
-              onChange={text => triggerOnChange({ ...organizationForm.organization, email: text }, false)}
-              onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, email: text }, true)}
+              onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, email: true })}
+              onChange={text => triggerOnChange({ ...organizationForm.organization, email: text }, false, { ...organizationForm.touched })}
+              onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, email: text }, true, { ...organizationForm.touched, email: true })}
               maxLength={maxMailLength}
               className={tx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
             />

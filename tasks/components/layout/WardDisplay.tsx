@@ -42,8 +42,10 @@ export const WardDisplay = ({
 }: PropsWithLanguage<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation(language, defaultWardDisplayTranslations)
   const router = useRouter()
+  const { id } = router.query
+  const organizationId = id as string
   const context = useContext(OrganizationOverviewContext)
-  const { data, isLoading, isError } = useWardOverviewsQuery()
+  const { data, isLoading, isError } = useWardOverviewsQuery(organizationId)
 
   const wards = data
   selectedWardId ??= context.state.wardId

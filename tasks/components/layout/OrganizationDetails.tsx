@@ -16,8 +16,10 @@ import {
   useOrganizationQuery, useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
 import { OrganizationContext } from '../../pages/organizations'
+import { ReSignInModal } from '../ReSignInModal'
 import type { OrganizationInvitation } from '../OrganizationInvitationList'
 import { OrganizationInvitationList } from '../OrganizationInvitationList'
+import { useAuth } from '../../hooks/useAuth'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -67,18 +69,30 @@ export const OrganizationDetail = ({
     updateContext
   } = useContext(OrganizationContext)
 
-  const isCreatingNewOrganization = contextState.organizationId === ''
+  const { signOut, organizations } = useAuth()
+  const isCreatingNewOrganization = contextState.organizationId === '' || !organizations.includes(contextState.organizationId)
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
+  const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
   const [organizationInvites, setOrganizationInvites] = useState<OrganizationInvitation[]>([])
+
+  const resetForm = () => {
+    setOrganizationForm(emptyOrganizationForm)
+    setOrganizationInvites([])
+  }
 
   useEffect(() => {
     if (data && !isCreatingNewOrganization) {
       setOrganizationForm({
         isValid: true,
         hasChanges: false,
-        organization: { ...data }
+        organization: { ...data },
+        touched: {
+          shortName: false,
+          longName: false,
+          email: false
+        }
       })
     }
   }, [data, isCreatingNewOrganization])
@@ -90,7 +104,7 @@ export const OrganizationDetail = ({
       email: invite.email,
       organizationId: organization.id
     }))
-    updateContext({ organizationId: organization.id })
+    setIsShowingReSignInDialog(organization.id)
   })
 
   const updateMutation = useOrganizationUpdateMutation(organization => {
@@ -99,7 +113,8 @@ export const OrganizationDetail = ({
       hasChanges: false,
       organization: {
         ...organization
-      }
+      },
+      touched: organizationForm.touched
     })
   })
 
@@ -125,11 +140,29 @@ export const OrganizationDetail = ({
         }}
         confirmType="negative"
       />
+      <ReSignInModal
+        id="organizationDetail-ReSignInModal"
+        isOpen={!!isShowingReSignInDialog}
+        onBackgroundClick={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
+        onDecline={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
+        onConfirm={() => {
+          if (isShowingReSignInDialog) {
+            updateContext({ organizationId: isShowingReSignInDialog })
+          }
+          setIsShowingReSignInDialog(undefined)
+          signOut()
+        }}
+      />
       <ColumnTitle title={translation.organizationDetail}/>
       <div className={tw('flex flex-col gap-y-4 max-w-[500px]')}>
         <OrganizationForm
           organizationForm={organizationForm}
-          isShowingErrorsDirectly={!isCreatingNewOrganization}
           onChange={(organizationForm, shouldUpdate) => {
             setOrganizationForm(organizationForm)
             if (shouldUpdate) {

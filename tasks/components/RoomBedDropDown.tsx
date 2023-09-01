@@ -4,7 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { usePatientAssignmentByWardQuery } from '../mutations/patient_mutations'
 import { useEffect, useRef, useState } from 'react'
-import { Undo2, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { Select } from '@helpwave/common/components/user_input/Select'
 import { Span } from '@helpwave/common/components/Span'
 import { noop } from '@helpwave/common/util/noop'
@@ -129,21 +129,15 @@ export const RoomBedDropDown = ({
     <div className={tw('flex flex-row justify-between items-center')}>
       <div>
         {isShowingRevert && (
-          <Button
-            onClick={() => {
-              if (hasChanges) {
-                setCurrentSelection({ ...initialRoomAndBed })
-                setTouched(false)
-              }
-            }}
-            variant="tertiary"
-            disabled={!hasChanges}
-          >
-            <div className={tw('flex flex-row gap-x-2 items-center')}>
-              {translation.revert}
-              <Undo2 size={16}/>
-            </div>
-          </Button>
+          <div className={tw('cursor-pointer underline text-hw-primary-400 flex flex-row gap-x-2 items-center')}
+               onClick={() => {
+                 if (hasChanges) {
+                   setCurrentSelection({ ...initialRoomAndBed })
+                   setTouched(false)
+                 }
+               }}>
+            {translation.revert}
+          </div>
         )}
         {isShowingClear && (
           <Button

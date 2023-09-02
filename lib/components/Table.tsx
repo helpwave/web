@@ -3,6 +3,8 @@ import type { ReactElement } from 'react'
 import { Checkbox } from './user_input/Checkbox'
 import { Pagination } from './Pagination'
 import { noop } from '../util/noop'
+import { Scrollbars } from 'react-custom-scrollbars-2'
+import { useEffect, useRef, useState } from 'react'
 
 export type TableStatePagination = {
   currentPage: number,
@@ -228,29 +230,41 @@ export const Table = <T, >({
   const headerPaddingBody = 'pt-2'
   const cellPadding = 'py-1 px-2'
 
+  const [scrollbarsAutoHeightMin, setScrollbarsAutoHeightMin] = useState(0)
+  const tableRef = useRef<HTMLTableElement>(null)
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const tableHeight = tableRef.current.offsetHeight
+      const offset = 25
+      setScrollbarsAutoHeightMin(tableHeight + offset)
+    }
+  }, [data, currentPage])
+
   return (
     <div className={tw('flex flex-col gap-y-4 overflow-hidden')}>
       <div>
-          <table className={tw('w-full mb-[12px]')}>
+        <Scrollbars autoHeight autoHeightMin={scrollbarsAutoHeightMin}>
+          <table ref={tableRef} className={tw('w-full mb-[12px]')}>
             <thead>
-              <tr className={headerRow}>
-                {header && tableState.selection && (
-                  <th className={headerPaddingHead}>
-                    <Checkbox
-                      checked={tableState.selection.hasSelectedSome ? 'indeterminate' : tableState.selection.hasSelectedAll}
-                      onChange={() => updateTableState(changeTableSelectionAll(tableState, data, identifierMapping))}
-                    />
-                  </th>
-                )}
-                {header && header.map((value, index) => (
+            <tr className={headerRow}>
+              {header && tableState.selection && (
+                <th className={headerPaddingHead}>
+                  <Checkbox
+                    checked={tableState.selection.hasSelectedSome ? 'indeterminate' : tableState.selection.hasSelectedAll}
+                    onChange={() => updateTableState(changeTableSelectionAll(tableState, data, identifierMapping))}
+                  />
+                </th>
+              )}
+              {header && header.map((value, index) => (
                   <th key={`tableHeader${index}`} className={headerPaddingHead}>
                     <div className={tw('flex flex-row justify-start px-2')}>
                       {value}
                     </div>
                   </th>
-                )
-                )}
-              </tr>
+              )
+              )}
+            </tr>
             </thead>
             <tbody>
             {shownElements.map((value, rowIndex) => (
@@ -270,6 +284,7 @@ export const Table = <T, >({
             ))}
             </tbody>
           </table>
+        </Scrollbars>
       </div>
       <div className={tw('flex flex-row justify-center')}>
         {tableState.pagination &&

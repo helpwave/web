@@ -8,7 +8,7 @@ import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import { TaskTemplateContext } from '../pages/templates'
-import { Scrollbars } from 'react-custom-scrollbars'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 import {
   useSubTaskAddMutation,
   useSubTaskDeleteMutation,

@@ -6,7 +6,7 @@ import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { Span } from '@helpwave/common/components/Span'
 import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
 import { Edit } from 'lucide-react'
-import { Scrollbars } from 'react-custom-scrollbars'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,

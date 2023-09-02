@@ -79,7 +79,7 @@ importers:
         version: 17.1.0(eslint-plugin-import@2.28.1)(eslint-plugin-n@16.0.2)(eslint-plugin-promise@6.1.1)(eslint@8.48.0)
       eslint-plugin-import:
         specifier: 2.28.1
-        version: 2.28.1(@typescript-eslint/parser@6.5.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.48.0)
+        version: 2.28.1(@typescript-eslint/parser@6.5.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.47.0)
       eslint-plugin-n:
         specifier: 16.0.2
         version: 16.0.2(eslint@8.48.0)
@@ -240,9 +240,6 @@ importers:
       '@types/google-protobuf':
         specifier: 3.15.6
         version: 3.15.6
-      '@types/react-custom-scrollbars':
-        specifier: ^4.0.10
-        version: 4.0.10
       cookies-next:
         specifier: 2.1.2
         version: 2.1.2
@@ -267,9 +264,9 @@ importers:
       react:
         specifier: 18.2.0
         version: 18.2.0
-      react-custom-scrollbars:
-        specifier: ^4.2.1
-        version: 4.2.1(react-dom@18.2.0)(react@18.2.0)
+      react-custom-scrollbars-2:
+        specifier: ^4.5.0
+        version: 4.5.0(react-dom@18.2.0)(react@18.2.0)
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
@@ -315,7 +312,7 @@ importers:
         version: 17.1.0(eslint-plugin-import@2.28.1)(eslint-plugin-n@16.0.1)(eslint-plugin-promise@6.1.1)(eslint@8.47.0)
       eslint-plugin-import:
         specifier: 2.28.1
-        version: 2.28.1(@typescript-eslint/parser@6.5.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.48.0)
+        version: 2.28.1(@typescript-eslint/parser@6.5.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.47.0)
       eslint-plugin-n:
         specifier: 16.0.1
         version: 16.0.1(eslint@8.47.0)
@@ -4854,12 +4851,6 @@ packages:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
     dev: true
 
-  /@types/react-custom-scrollbars@4.0.10:
-    resolution: {integrity: sha512-1T430E+usndUjymkXB8k/zGpWehggircq/QaQMuFLMJceccAcD9vcmbUXF1LjeVP/+P4wI/bad6BF1E+7IGlqA==}
-    dependencies:
-      '@types/react': 18.2.21
-    dev: false
-
   /@types/react-dom@18.2.7:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
     dependencies:
@@ -7098,7 +7089,7 @@ packages:
       eslint-plugin-promise: ^6.0.0
     dependencies:
       eslint: 8.47.0
-      eslint-plugin-import: 2.28.1(@typescript-eslint/parser@6.5.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.48.0)
+      eslint-plugin-import: 2.28.1(@typescript-eslint/parser@6.5.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.47.0)
       eslint-plugin-n: 16.0.1(eslint@8.47.0)
       eslint-plugin-promise: 6.1.1(eslint@8.47.0)
     dev: true
@@ -7113,7 +7104,7 @@ packages:
       eslint-plugin-promise: ^6.0.0
     dependencies:
       eslint: 8.48.0
-      eslint-plugin-import: 2.28.1(@typescript-eslint/parser@6.5.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.48.0)
+      eslint-plugin-import: 2.28.1(@typescript-eslint/parser@6.5.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.47.0)
       eslint-plugin-n: 16.0.2(eslint@8.48.0)
       eslint-plugin-promise: 6.1.1(eslint@8.48.0)
     dev: true
@@ -10353,6 +10344,19 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: true
 
+  /react-custom-scrollbars-2@4.5.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-/z0nWAeXfMDr4+OXReTpYd1Atq9kkn4oI3qxq3iMXGQx1EEfwETSqB8HTAvg1X7dEqcCachbny1DRNGlqX5bDQ==}
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      dom-css: 2.1.0
+      prop-types: 15.8.1
+      raf: 3.4.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /react-custom-scrollbars@4.2.1(react-dom@16.14.0)(react@16.14.0):
     resolution: {integrity: sha512-VtJTUvZ7kPh/auZWIbBRceGPkE30XBYe+HktFxuMWBR2eVQQ+Ur6yFJMoaYcNpyGq22uYJ9Wx4UAEcC0K+LNPQ==}
     peerDependencies:
@@ -10364,19 +10368,6 @@ packages:
       raf: 3.4.1
       react: 16.14.0
       react-dom: 16.14.0(react@16.14.0)
-    dev: false
-
-  /react-custom-scrollbars@4.2.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-VtJTUvZ7kPh/auZWIbBRceGPkE30XBYe+HktFxuMWBR2eVQQ+Ur6yFJMoaYcNpyGq22uYJ9Wx4UAEcC0K+LNPQ==}
-    peerDependencies:
-      react: ^0.14.0 || ^15.0.0 || ^16.0.0
-      react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      dom-css: 2.1.0
-      prop-types: 15.8.1
-      raf: 3.4.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-docgen-typescript@2.2.2(typescript@5.1.6):

@@ -9,9 +9,9 @@ This repository is split up into multiple subprojects using [pnpm](https://pnpm.
 
 ## Getting Started
 1. `pnpm install`
-1. `cd <project>`
-1. `pnpm run dev`
-1. open [`http://localhost:3000`](http://localhost:3000)
+2. `cd <project>`
+3. `pnpm run dev`
+4. open [`http://localhost:3000`](http://localhost:3000)
 
 ## Storybook
 `pnpm run storybook` in the lib folder
@@ -25,4 +25,13 @@ This project is tested with [BrowserStack](https://www.browserstack.com).
 
 ## Linter
 1. `cd <project>`
-1. `pnpm run lint` or `pnpm run lint --fix`
+2. `pnpm run lint` or `pnpm run lint --fix`
+
+## Boilerplate generation
+The script lies in [scripts](/scripts)
+
+Execution with 
+- `node generate_boilerplate <relative filepath>`
+- `pnpm run generate <relative filepath>` (within the projects)
+
+All options can be seen with the `--help` flag

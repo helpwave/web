@@ -2,11 +2,24 @@ const fs = require('fs')
 const path = require('path')
 
 if (process.argv.length < 1) {
-  console.error('only accepts one argument <filename> (without the .tsx)')
+  console.error('use --help to get all commands')
   process.exit(1)
 }
 
-const args = process.argv.slice(3)
+const args = process.argv.slice(2)
+const helpText =
+`usage: generate [options] [relative filepath]
+Options and arguments:
+--help         :  prints all options
+--no-props     :  sets the component props to Record<string, never>
+ -nop          :  sets the component props to Record<string, never>
+--no-translate :  generates the component without a translation
+ -notl         :  generates the component without a translation`
+if (args.find(value => value === '--help')) {
+  console.log(helpText)
+  process.exit(0)
+}
+
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
@@ -15,7 +28,11 @@ function removeNonAlphanumeric(str) {
   return str.replace(/[^a-zA-Z0-9]/g, '')
 }
 
-let filePathInput = process.argv[2]
+let filePathInput = args.find(value => !value.startsWith('-'))
+if (!filePathInput) {
+  console.error('the file can\'t start with the character - and must be given\nuse --help to get all commands')
+  process.exit(1)
+}
 filePathInput = filePathInput + (filePathInput.endsWith('.tsx') || filePathInput.endsWith('.ts') ? '' : '.tsx')
 const filePath = path.resolve(process.cwd(), filePathInput)
 const componentName = capitalize(removeNonAlphanumeric(path.parse(filePathInput).name))

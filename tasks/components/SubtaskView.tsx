@@ -1,15 +1,14 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
-import SimpleBarReact from 'simplebar-react'
 import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskTile } from './SubtaskTile'
 import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
-import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import { TaskTemplateContext } from '../pages/templates'
+import { Scrollbars } from 'react-custom-scrollbars'
 import {
   useSubTaskAddMutation,
   useSubTaskDeleteMutation,
@@ -61,20 +60,20 @@ export const SubtaskView = ({
   const context = useContext(TaskTemplateContext)
 
   const translation = useTranslation(language, defaultSubtaskViewTranslation)
-  const scrollableRef = useRef<SimpleBarCore>(null)
-  const [scrollToBottomFlag, setScrollToBottom] = useState(false)
-
   const isCreatingTask = taskId === ''
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
   const deleteSubtaskMutation = useSubTaskDeleteMutation()
   const updateSubtaskMutation = useSubTaskUpdateMutation()
   const setSubtaskToToDoMutation = useSubTaskToToDoMutation()
   const setSubtaskToDoneMutation = useSubTaskToDoneMutation()
+
+  const scrollableRef = useRef<Scrollbars>(null)
+  const [scrollToBottomFlag, setScrollToBottom] = useState(false)
+
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
-    const scrollableElement = scrollableRef.current?.getScrollElement()
-    if (scrollableElement && scrollToBottomFlag) {
-      scrollableElement.scrollTop = scrollableElement.scrollHeight
+    if (scrollableRef.current && scrollToBottomFlag) {
+      scrollableRef.current.scrollToBottom()
     }
     setScrollToBottom(false)
   }, [scrollToBottomFlag, subtasks])
@@ -100,7 +99,7 @@ export const SubtaskView = ({
         </Button>
       </div>
       <div className={tw('max-h-[500px] overflow-hidden')}>
-        <SimpleBarReact className="h-screen" ref={scrollableRef} style={{ maxHeight: 250 }}>
+        <Scrollbars autoHide={true} ref={scrollableRef} className={tw('h-screen')} style={{ minHeight: 250 }}>
           <div className={tw('grid grid-cols-1 gap-y-2')}>
             {subtasks.map((subtask, index) => (
               <SubtaskTile
@@ -142,13 +141,12 @@ export const SubtaskView = ({
                       setSubtaskToToDoMutation.mutate(subtask.id)
                     }
                   }
-
                   subtask.isDone = done
                 }}
               />
             ))}
           </div>
-        </SimpleBarReact>
+        </Scrollbars>
       </div>
     </div>
   )

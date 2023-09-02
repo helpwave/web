@@ -3,7 +3,6 @@ import type { ReactElement } from 'react'
 import { Checkbox } from './user_input/Checkbox'
 import { Pagination } from './Pagination'
 import { noop } from '../util/noop'
-import SimpleBarReact from 'simplebar-react'
 
 export type TableStatePagination = {
   currentPage: number,
@@ -232,7 +231,6 @@ export const Table = <T, >({
   return (
     <div className={tw('flex flex-col gap-y-4 overflow-hidden')}>
       <div>
-        <SimpleBarReact>
           <table className={tw('w-full mb-[12px]')}>
             <thead>
               <tr className={headerRow}>
@@ -272,7 +270,6 @@ export const Table = <T, >({
             ))}
             </tbody>
           </table>
-        </SimpleBarReact>
       </div>
       <div className={tw('flex flex-row justify-center')}>
         {tableState.pagination &&

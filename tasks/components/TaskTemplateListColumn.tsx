@@ -5,8 +5,8 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { Span } from '@helpwave/common/components/Span'
 import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
-import SimpleBarReact from 'simplebar-react'
 import { Edit } from 'lucide-react'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
@@ -61,7 +61,7 @@ export const TaskTemplateListColumn = ({
       </div>
       <div className={tw('overflow-hidden h-full')} ref={ref}>
         <div>
-          <SimpleBarReact style={{ maxHeight: height }}>
+          <Scrollbars autoHide={true} style={{ maxHeight: height }}>
             <div className={tw('flex flex-col gap-y-2 pr-3')}>
               {taskTemplates.map((taskTemplateExtension, index) => (
                 <TaskTemplateCard
@@ -75,7 +75,7 @@ export const TaskTemplateListColumn = ({
                 />
               ))}
             </div>
-          </SimpleBarReact>
+          </Scrollbars>
         </div>
       </div>
     </div>

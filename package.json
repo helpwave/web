@@ -9,5 +9,8 @@
   "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/helpwave/web/issues"
+  },
+  "dependencies": {
+    "react-custom-scrollbars": "^4.2.1"
   }
 }

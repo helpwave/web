@@ -1,11 +1,8 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { ReactNode } from 'react'
-import SimpleBarReact from 'simplebar-react'
-import 'simplebar-react/dist/simplebar.min.css'
-import { createRef, useEffect, useRef, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
-import type SimpleBarCore from 'simplebar-core'
-
+import { Scrollbars } from 'react-custom-scrollbars-2'
 /**
  * Only px and %
  * e.g. 250px or 10%
@@ -102,20 +99,10 @@ export const TwoColumn = ({
   }, [ref, fullWidth, baseLayoutValue, calcPosition, leftWidth])
 
   const leftFocus = convertToLeftWidth(baseLayoutValue, fullWidth) < leftWidth - dividerHitBoxWidth / 2
-
-  const scrollableRefRight = useRef<SimpleBarCore>(null)
-  const scrollableRefLeft = useRef<SimpleBarCore>(null)
-  const [simpleBarMaxHeight, setSimpleBarMaxHeight] = useState(800)
+  const [scrollbarsBarMaxHeight, setScrollbarsBarMaxHeight] = useState(800)
 
   const handleWindowResize = () => {
-    setSimpleBarMaxHeight(window.innerHeight - headerHeight)
-
-    const scrollableElementRight = scrollableRefRight.current
-    const scrollableElementLeft = scrollableRefLeft.current
-    if (scrollableElementRight && scrollableElementLeft) {
-      scrollableElementRight.recalculate()
-      scrollableElementLeft.recalculate()
-    }
+    setScrollbarsBarMaxHeight(window.innerHeight - headerHeight)
   }
 
   useEffect(() => {
@@ -145,9 +132,9 @@ export const TwoColumn = ({
             className={tw(`overflow-hidden`)}
             style={{ width: leftWidth + 'px' }}
           >
-            <SimpleBarReact ref={scrollableRefLeft} style={{ maxHeight: simpleBarMaxHeight }}>
+            <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: leftWidth }}>
               {left(leftWidth)}
-            </SimpleBarReact>
+            </Scrollbars>
           </div>
           <div
             onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
@@ -175,9 +162,9 @@ export const TwoColumn = ({
             className={tw(`overflow-hidden`)}
             style={{ width: (rightWidth) + 'px' }}
           >
-            <SimpleBarReact ref={scrollableRefRight} style={{ maxHeight: simpleBarMaxHeight }}>
+            <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: rightWidth }}>
               {right(rightWidth)}
-            </SimpleBarReact>
+            </Scrollbars>
           </div>
         </>
       )}

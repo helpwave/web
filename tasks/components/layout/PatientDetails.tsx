@@ -8,7 +8,6 @@ import { Button } from '@helpwave/common/components/Button'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
 import { TasksKanbanBoard } from './TasksKanabanBoard'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { TaskDetailModal } from '../TaskDetailModal'
 import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
 import {
@@ -24,6 +23,7 @@ import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { RoomBedDropDown } from '../RoomBedDropDown'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { PatientDischargeModal } from '../PatientDischargeModal'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -116,9 +116,8 @@ export const PatientDetail = ({
           </div>
         )
       }
-      <ConfirmDialog
+      <PatientDischargeModal
         id="PatientDetail-DischargeDialog"
-        title={translation.dischargeConfirmText}
         isOpen={isShowingDischargeDialog}
         onCancel={() => setIsShowingDischargeDialog(false)}
         onBackgroundClick={() => setIsShowingDischargeDialog(false)}
@@ -126,7 +125,7 @@ export const PatientDetail = ({
           dischargeMutation.mutate(newPatient.id)
           setIsShowingDischargeDialog(false)
         }}
-        confirmType="negative"
+        patient={newPatient}
       />
       {/* taskId === '' is create and if set it's the tasks id */}
       <TaskDetailModal

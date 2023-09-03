@@ -24,7 +24,7 @@ import { Draggable } from '../dnd-kit/Draggable'
 import { Droppable } from '../dnd-kit/Droppable'
 import { WardOverviewContext } from '../../pages/ward/[id]'
 import { AddPatientModal } from '../AddPatientModal'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { PatientDischargeModal } from '../PatientDischargeModal'
 
 type PatientListTranslation = {
   patients: string,
@@ -38,10 +38,7 @@ type PatientListTranslation = {
   deleteDescriptionText: string,
   addPatient: string,
   search: string,
-  bed: string,
-  followingPatient: string,
-  dischargePatient: string,
-  dischargePatientDescription: string
+  bed: string
 }
 
 const defaultPatientListTranslations: Record<Languages, PatientListTranslation> = {
@@ -58,9 +55,6 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     addPatient: 'Add Patient',
     search: 'Search',
     bed: 'Bed',
-    followingPatient: 'Following Patient',
-    dischargePatient: 'Discharge Patient',
-    dischargePatientDescription: 'This cannot be undo for now, be careful.'
   },
   de: {
     patients: 'Patienten',
@@ -75,9 +69,6 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     addPatient: 'Patient hinzufügen',
     search: 'Suchen',
     bed: 'Bett',
-    followingPatient: 'Folgender Patient',
-    dischargePatient: 'Patient entlassen',
-    dischargePatientDescription: 'Diese Aktion kann nicht rückgängig gemacht werden, vorsicht.'
   }
 }
 
@@ -113,7 +104,7 @@ export const PatientList = ({
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const deletePatientMutation = useDeletePatientMutation()
-  const [dischargingPatient, setIsDischargingPatient] = useState<PatientMinimalDTO>()
+  const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
@@ -123,23 +114,19 @@ export const PatientList = ({
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
-      <ConfirmDialog
+      <PatientDischargeModal
         id="patientList-DischargeDialog"
         isOpen={!!dischargingPatient}
         onConfirm={() => {
           if (dischargingPatient) {
             dischargeMutation.mutate(dischargingPatient.id)
           }
-          setIsDischargingPatient(undefined)
+          setDischargingPatient(undefined)
         }}
-        onBackgroundClick={() => setIsDischargingPatient(undefined)}
-        onCancel={() => setIsDischargingPatient(undefined)}
-        title={translation.dischargePatient}
-        buttonOverwrites={[{}, {}, { color: 'negative' }]}
-      >
-        <Span>{translation.dischargePatientDescription}</Span>
-        {dischargingPatient && <Span>{`${translation.followingPatient}: ${dischargingPatient.name}`}</Span>}
-      </ConfirmDialog>
+        onBackgroundClick={() => setDischargingPatient(undefined)}
+        onCancel={() => setDischargingPatient(undefined)}
+        patient={dischargingPatient}
+      />
       <AddPatientModal
         id="patientList-AddPatientModal"
         key={isShowingAddPatientModal}
@@ -187,7 +174,7 @@ export const PatientList = ({
                         <Label name={activeLabelText(patient)} color="blue"/>
                         <Button color="negative" variant="textButton" onClick={event => {
                           event.stopPropagation()
-                          setIsDischargingPatient(patient)
+                          setDischargingPatient(patient)
                         }}>
                           {translation.discharge}
                         </Button>
@@ -222,7 +209,7 @@ export const PatientList = ({
                             <Label name={`${translation.unassigned}`} color="yellow"/>
                             <Button color="negative" variant="textButton" onClick={event => {
                               event.stopPropagation()
-                              setIsDischargingPatient(patient)
+                              setDischargingPatient(patient)
                             }}>
                               {translation.discharge}
                             </Button>

@@ -51,7 +51,7 @@ jobs:
 #      url: ${{ steps.deploy.outputs.url }}
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      FLY_REGION: ${{ vars.PREVIEW_FLY_REGION || ams }}
+      FLY_REGION: ${{ vars.PREVIEW_FLY_REGION || 'ams' }}
       FLY_ORG: ${{ vars.PREVIEW_FLY_ORGANIZATION }}
     steps:
 

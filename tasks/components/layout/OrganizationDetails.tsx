@@ -20,6 +20,7 @@ import { ReSignInModal } from '../ReSignInModal'
 import type { OrganizationInvitation } from '../OrganizationInvitationList'
 import { OrganizationInvitationList } from '../OrganizationInvitationList'
 import { useAuth } from '../../hooks/useAuth'
+import { getConfig } from '../../utils/config';
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -70,7 +71,8 @@ export const OrganizationDetail = ({
   } = useContext(OrganizationContext)
 
   const { signOut, organizations } = useAuth()
-  const isCreatingNewOrganization = contextState.organizationId === '' || !organizations.includes(contextState.organizationId)
+  const { fakeTokenEnable } = getConfig()
+  const isCreatingNewOrganization = contextState.organizationId === '' || !(fakeTokenEnable || organizations.includes(contextState.organizationId))
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()

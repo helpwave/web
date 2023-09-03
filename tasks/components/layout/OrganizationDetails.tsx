@@ -12,15 +12,17 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import {
   useInviteMemberMutation,
-  useOrganizationCreateMutation, useOrganizationDeleteMutation,
-  useOrganizationQuery, useOrganizationUpdateMutation
+  useOrganizationCreateMutation,
+  useOrganizationDeleteMutation,
+  useOrganizationQuery,
+  useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
 import { OrganizationContext } from '../../pages/organizations'
 import { ReSignInModal } from '../ReSignInModal'
 import type { OrganizationInvitation } from '../OrganizationInvitationList'
 import { OrganizationInvitationList } from '../OrganizationInvitationList'
 import { useAuth } from '../../hooks/useAuth'
-import { getConfig } from '../../utils/config';
+import { getConfig } from '../../utils/config'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,

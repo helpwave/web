@@ -74,7 +74,7 @@ export const OrganizationDetail = ({
 
   const { signOut, organizations } = useAuth()
   const { fakeTokenEnable } = getConfig()
-  const isCreatingNewOrganization = contextState.organizationId === '' || !(fakeTokenEnable || organizations.includes(contextState.organizationId))
+  const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()

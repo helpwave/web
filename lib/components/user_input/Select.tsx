@@ -67,7 +67,7 @@ export const Select = <T, >({
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items
-              className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg min-h-[200px] max-h-[30vh] overflow-y-auto')}>
+              className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg max-h-[30vh] overflow-y-auto')}>
               {filteredOptions.map((option, index) => (
                 <Menu.Item key={`item${index}`}>
                   {

@@ -90,6 +90,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const wardId = id as string
   const { data: ward } = useWardQuery(wardId)
 
+  const organizationId = ward?.organizationId ?? ''
   const [contextState, setContextState] = useState<WardOverviewContextState>({
     wardId
   })
@@ -168,7 +169,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     setContextState({ wardId })
   }, [wardId])
 
-  const createMutation = usePatientCreateMutation(patient => {
+  const createMutation = usePatientCreateMutation(organizationId, patient => {
     const updatedContext = contextState
     updatedContext.patient = patient
 

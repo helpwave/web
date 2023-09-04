@@ -11,6 +11,7 @@ import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import { noop } from '@helpwave/common/util/noop'
 import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '../mutations/patient_mutations'
+import { useWardQuery } from '../mutations/ward_mutations'
 
 type AddPatientModalTranslation = {
   addPatient: string,
@@ -53,7 +54,9 @@ export const AddPatientModal = ({
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)
   const assignBedMutation = useAssignBedMutation()
-  const createPatientMutation = usePatientCreateMutation(patient => {
+  const { data: ward } = useWardQuery(wardId)
+  const organisationId = ward?.organizationId ?? ''
+  const createPatientMutation = usePatientCreateMutation(organisationId, patient => {
     if (dropdownId.bedId) {
       assignBedMutation.mutate({ id: dropdownId.bedId, patientId: patient.id })
     }

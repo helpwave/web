@@ -231,14 +231,18 @@ export const usePatientListQuery = (organizationId?: string) => {
   })
 }
 
-export const usePatientCreateMutation = (callback: (patient: PatientDTO) => void) => {
+export const usePatientCreateMutation = (organisationId: string, callback: (patient: PatientDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
+      if (!organisationId) {
+        console.error('no valid organisation id provided in PatientCreate')
+        return
+      }
       const req = new CreatePatientRequest()
       req.setNotes(patient.note)
       req.setHumanReadableIdentifier(patient.name)
-      const res = await patientService.createPatient(req, getAuthenticatedGrpcMetadata())
+      const res = await patientService.createPatient(req, getAuthenticatedGrpcMetadata(organisationId))
 
       if (!res.getId()) {
         console.error('create room failed')

@@ -43,7 +43,7 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
   },
   de: {
     organizationDetail: 'Organisations Details',
-    dangerZone: 'Gefahren Zone',
+    dangerZone: 'Risikobereich',
     dangerZoneText: 'Das Löschen einer Organisation ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
     deleteConfirmText: 'Wollen Sie wirklich diese Organisation löschen?',
     deleteOrganization: 'Organisation löschen',

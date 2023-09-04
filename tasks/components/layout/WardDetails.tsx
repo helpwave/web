@@ -55,10 +55,10 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
     updateWardSubtitle: 'Hier kannst du die Details der Station ändern.',
     createWard: 'Station erstellen',
     createWardSubtitle: 'Hier setzt du die Details der Station.',
-    dangerZone: 'Gefahren Zone',
-    dangerZoneText: 'Das Löschen einer Station is permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+    dangerZone: 'Risikobereich',
+    dangerZoneText: 'Das Löschen einer Station ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
     deleteConfirmText: 'Wollen Sie wirklich diese Station löschen?',
-    deleteWard: 'Station Löschen',
+    deleteWard: 'Station löschen',
     create: 'Erstellen',
     update: 'Ändern',
     roomsNotOnCreate: 'Räume können erst hinzugefügt werden, wenn die Station erstellt wurde'

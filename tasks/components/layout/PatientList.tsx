@@ -44,9 +44,9 @@ type PatientListTranslation = {
 const defaultPatientListTranslations: Record<Languages, PatientListTranslation> = {
   en: {
     patients: 'Patients',
-    active: 'Active',
+    active: 'Assigned',
     unassigned: 'Unassigned',
-    discharged: 'Discharged',
+    discharged: 'Discharged Patients',
     discharge: 'Discharge',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
     delete: 'Delete',
@@ -58,9 +58,9 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
   },
   de: {
     patients: 'Patienten',
-    active: 'Active',
+    active: 'Zugeordnet',
     unassigned: 'Nicht zugeordnet',
-    discharged: 'Entlassene',
+    discharged: 'Entlassene Patienten',
     discharge: 'Entlassen',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
     delete: 'Löschen',

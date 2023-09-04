@@ -37,7 +37,7 @@ type PatientDetailTranslation = {
 
 const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
   en: {
-    patientDetails: 'Patient Details',
+    patientDetails: 'Details',
     notes: 'Notes',
     saveChanges: 'Save Changes',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
@@ -46,7 +46,7 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     unassign: 'Unassign'
   },
   de: {
-    patientDetails: 'Patienten Details',
+    patientDetails: 'Details',
     notes: 'Notizen',
     saveChanges: 'Speichern',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',

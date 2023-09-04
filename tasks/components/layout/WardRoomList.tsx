@@ -24,7 +24,7 @@ const defaultWardRoomListTranslation: Record<Languages, WardRoomListTranslation>
   },
   de: {
     roomOverview: 'Raum Übersicht',
-    showPatientList: 'Patienten Liste'
+    showPatientList: 'Patientenliste'
   }
 }
 

@@ -61,7 +61,7 @@ export const TaskTemplateListColumn = ({
       </div>
       <div className={tw('overflow-hidden h-full')} ref={ref}>
         <div>
-          <Scrollbars autoHide={true} style={{ maxHeight: height }}>
+          <Scrollbars autoHeight autoHeightMin={height} autoHide >
             <div className={tw('flex flex-col gap-y-2 pr-3')}>
               {taskTemplates.map((taskTemplateExtension, index) => (
                 <TaskTemplateCard

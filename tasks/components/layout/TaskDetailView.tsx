@@ -75,7 +75,7 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publish: 'Publish',
     publishTask: 'Publish Task',
     publishTaskDescription: 'This cannot be undone',
-    finish: 'Task finished',
+    finish: 'Finish Task',
   },
   de: {
     close: 'Schließen',

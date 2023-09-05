@@ -355,15 +355,17 @@ export const TaskDetailView = ({
                 >
                   {translation.delete}
                 </Button>
-                <Button
-                  color="positive"
-                  onClick={() => {
-                    toDoneMutation.mutate(task.id)
-                    onClose()
-                  }}
-                >
-                  {translation.finish}
-                </Button>
+                {task.status !== TaskStatus.TASK_STATUS_DONE && (
+                  <Button
+                    color="positive"
+                    onClick={() => {
+                      toDoneMutation.mutate(task.id)
+                      onClose()
+                    }}
+                  >
+                    {translation.finish}
+                  </Button>
+                )}
                 <Button
                   color="accent"
                   onClick={() => updateTaskMutation.mutate(task)}

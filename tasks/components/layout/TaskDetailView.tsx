@@ -94,7 +94,7 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publish: 'Veröffentlichen',
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
-    finish: 'Task abgeschlossen',
+    finish: 'Fertigstellen',
   }
 }
 

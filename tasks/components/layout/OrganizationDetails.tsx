@@ -12,8 +12,10 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import {
   useInviteMemberMutation,
-  useOrganizationCreateMutation, useOrganizationDeleteMutation,
-  useOrganizationQuery, useOrganizationUpdateMutation
+  useOrganizationCreateMutation,
+  useOrganizationDeleteMutation,
+  useOrganizationQuery,
+  useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
 import { OrganizationContext } from '../../pages/organizations'
 import { ReSignInModal } from '../ReSignInModal'
@@ -69,8 +71,8 @@ export const OrganizationDetail = ({
     updateContext
   } = useContext(OrganizationContext)
 
-  const { signOut, organizations } = useAuth()
-  const isCreatingNewOrganization = contextState.organizationId === '' || !organizations.includes(contextState.organizationId)
+  const { signOut } = useAuth()
+  const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()

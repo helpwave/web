@@ -15,8 +15,8 @@ import {
   Table
 } from '@helpwave/common/components/Table'
 import type { OrgMember } from '../mutations/organization_member_mutations'
-import { Role } from '../mutations/organization_member_mutations'
-import { useOrganizationsForUserQuery, useRemoveMemberMutation } from '../mutations/organization_mutations'
+import { Role, useMembersByOrganizationQuery } from '../mutations/organization_member_mutations'
+import { useRemoveMemberMutation } from '../mutations/organization_mutations'
 import { OrganizationContext } from '../pages/organizations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 

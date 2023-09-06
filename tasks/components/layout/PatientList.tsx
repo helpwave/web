@@ -6,7 +6,11 @@ import React, { useContext, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user_input/Input'
-import type { PatientDTO, PatientWithBedAndRoomDTO } from '../../mutations/patient_mutations'
+import type {
+  PatientDTO,
+  PatientMinimalDTO,
+  PatientWithBedAndRoomDTO
+} from '../../mutations/patient_mutations'
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
@@ -20,6 +24,7 @@ import { Draggable } from '../dnd-kit/Draggable'
 import { Droppable } from '../dnd-kit/Droppable'
 import { WardOverviewContext } from '../../pages/ward/[id]'
 import { AddPatientModal } from '../AddPatientModal'
+import { PatientDischargeModal } from '../PatientDischargeModal'
 
 type PatientListTranslation = {
   patients: string,
@@ -39,9 +44,9 @@ type PatientListTranslation = {
 const defaultPatientListTranslations: Record<Languages, PatientListTranslation> = {
   en: {
     patients: 'Patients',
-    active: 'Active',
+    active: 'Assigned',
     unassigned: 'Unassigned',
-    discharged: 'Discharged',
+    discharged: 'Discharged Patients',
     discharge: 'Discharge',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
     delete: 'Delete',
@@ -53,9 +58,9 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
   },
   de: {
     patients: 'Patienten',
-    active: 'Active',
+    active: 'Zugeordnet',
     unassigned: 'Nicht zugeordnet',
-    discharged: 'Entlassene',
+    discharged: 'Entlassene Patienten',
     discharge: 'Entlassen',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
     delete: 'Löschen',
@@ -99,6 +104,7 @@ export const PatientList = ({
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const deletePatientMutation = useDeletePatientMutation()
+  const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
@@ -108,6 +114,19 @@ export const PatientList = ({
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
+      <PatientDischargeModal
+        id="patientList-DischargeDialog"
+        isOpen={!!dischargingPatient}
+        onConfirm={() => {
+          if (dischargingPatient) {
+            dischargeMutation.mutate(dischargingPatient.id)
+          }
+          setDischargingPatient(undefined)
+        }}
+        onBackgroundClick={() => setDischargingPatient(undefined)}
+        onCancel={() => setDischargingPatient(undefined)}
+        patient={dischargingPatient}
+      />
       <AddPatientModal
         id="patientList-AddPatientModal"
         key={isShowingAddPatientModal}
@@ -155,7 +174,7 @@ export const PatientList = ({
                         <Label name={activeLabelText(patient)} color="blue"/>
                         <Button color="negative" variant="textButton" onClick={event => {
                           event.stopPropagation()
-                          dischargeMutation.mutate(patient.id)
+                          setDischargingPatient(patient)
                         }}>
                           {translation.discharge}
                         </Button>
@@ -190,7 +209,7 @@ export const PatientList = ({
                             <Label name={`${translation.unassigned}`} color="yellow"/>
                             <Button color="negative" variant="textButton" onClick={event => {
                               event.stopPropagation()
-                              dischargeMutation.mutate(patient.id)
+                              setDischargingPatient(patient)
                             }}>
                               {translation.discharge}
                             </Button>
@@ -203,35 +222,28 @@ export const PatientList = ({
               </div>
             )}
           </Droppable>
-          <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
-            {({ isOver }) => (
-              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
-                'border-hw-primary-700': isOver,
-                'border-transparent': !isOver
-              })}>
-                <HideableContentSection
-                  initiallyOpen={initialOpenedSections?.discharged}
-                  disabled={filteredDischarged.length <= 0}
-                  header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
+          <div className={tx('p-2 border-2 border-transparent rounded-xl')}>
+            <HideableContentSection
+              initiallyOpen={initialOpenedSections?.discharged}
+              disabled={filteredDischarged.length <= 0}
+              header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
+            >
+              {filteredDischarged.map(patient => (
+                <div
+                  key={patient.id}
+                  className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
                 >
-                  {filteredDischarged.map(patient => (
-                    <div
-                      key={patient.id}
-                      className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
-                    >
-                      <Span className={tw('font-space font-bold')}>{patient.name}</Span>
-                      <Button color="negative" variant="textButton" onClick={event => {
-                        event.stopPropagation()
-                        deletePatientMutation.mutate(patient.id)
-                      }}>
-                        {translation.delete}
-                      </Button>
-                    </div>
-                  ))}
-                </HideableContentSection>
-              </div>
-            )}
-          </Droppable>
+                  <Span className={tw('font-space font-bold')}>{patient.name}</Span>
+                  <Button color="negative" variant="textButton" onClick={event => {
+                    event.stopPropagation()
+                    deletePatientMutation.mutate(patient.id)
+                  }}>
+                    {translation.delete}
+                  </Button>
+                </div>
+              ))}
+            </HideableContentSection>
+          </div>
         </div>
       </LoadingAndErrorComponent>
     </div>

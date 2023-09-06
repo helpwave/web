@@ -14,13 +14,15 @@ const IdTokenClaimsSchema = z.object({
   sub: z.string().uuid(),
   email: z.string().email(),
   name: z.string(),
-  nickname: z.string()
+  nickname: z.string(),
+  organizations: z.array(z.string())
 }).transform((obj) => ({
   id: obj.sub,
   email: obj.email,
   name: obj.name,
   nickname: obj.nickname,
-  avatarUrl: `https://source.boringavatars.com/marble/80/${obj.sub}`
+  avatarUrl: `https://source.boringavatars.com/marble/80/${obj.sub}`,
+  organizations: obj.organizations
 }))
 
 export type User = z.output<typeof IdTokenClaimsSchema>
@@ -100,5 +102,5 @@ export const useAuth = () => {
       })
   }, [])
 
-  return { user, signOut, token: idToken, organization: '' }
+  return { user, signOut, token: idToken, organizations: user?.organizations ?? [] }
 }

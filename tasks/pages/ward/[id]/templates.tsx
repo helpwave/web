@@ -18,6 +18,7 @@ import { useRouter } from 'next/router'
 import type { TaskTemplateContextState } from '../../templates'
 import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState } from '../../templates'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useWardQuery } from '../../../mutations/ward_mutations'
 
 type WardTaskTemplateTranslation = {
   taskTemplates: string,
@@ -47,6 +48,7 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
   const { id: wardId, templateId } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId?.toString())
+  const { data: ward } = useWardQuery(wardId?.toString() as string)
 
   const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
@@ -88,15 +90,11 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     setUsedQueryParam(true)
   }
 
-  // TODO load organization id of ward
-  const organizationId = 'org1'
-
-  // TODO update breadcrumbs
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: `/organizations?organizationId=${organizationId}` },
-        { display: translation.ward, link: `/organizations/${organizationId}?wardId=${wardId}` },
+        { display: translation.organization, link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations' },
+        { display: translation.ward, link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations' },
         { display: translation.taskTemplates, link: `/ward/${wardId}/templates` }
       ]}
     >
@@ -110,7 +108,6 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
             <LoadingAndErrorComponent
               isLoading={isLoading}
               hasError={isError}
-              minimumLoadingDuration={3000}
             >
               {data && (
                 <TaskTemplateDisplay

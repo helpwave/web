@@ -18,22 +18,13 @@ import {
   usePatientDischargeMutation,
   useUnassignMutation
 } from '../../mutations/patient_mutations'
-import type {
-  DragEndEvent,
-  DragStartEvent
-} from '@dnd-kit/core'
-import {
-  DndContext,
-  DragOverlay,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors
-} from '@dnd-kit/core'
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
+import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { DragCard } from '../../components/cards/DragCard'
 import { Span } from '@helpwave/common/components/Span'
 import type { BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
 import { PatientCard } from '../../components/cards/PatientCard'
+import { useWardQuery } from '../../mutations/ward_mutations'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -47,7 +38,7 @@ type WardOverviewTranslation = {
 const defaultWardOverviewTranslation = {
   en: {
     beds: 'Betten',
-    roomOverview: 'Room Overview',
+    roomOverview: 'Ward Overview',
     organization: 'Organization',
     ward: 'Ward',
     room: 'Room',
@@ -55,7 +46,7 @@ const defaultWardOverviewTranslation = {
   },
   de: {
     beds: 'Bett',
-    roomOverview: 'Raum Übersicht',
+    roomOverview: 'Stationsübersicht',
     organization: 'Organisation',
     ward: 'Station',
     room: 'Raum',
@@ -72,11 +63,13 @@ export type WardOverviewContextState = {
   patientId?: string,
   bedId?: string,
   roomId?: string,
-  wardId: string
+  wardId: string,
+  organizationId?: string
 }
 
 const emptyWardOverviewContextState = {
-  wardId: ''
+  wardId: '',
+  organizationId: '',
 }
 
 export type WardOverviewContextType = {
@@ -95,6 +88,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const [draggedPatient, setDraggedPatient] = useState<{ patient?: PatientMinimalDTO, bed?: BedWithPatientWithTasksNumberDTO }>()
   const { id } = router.query
   const wardId = id as string
+  const { data: ward } = useWardQuery(wardId)
 
   const [contextState, setContextState] = useState<WardOverviewContextState>({
     wardId
@@ -170,7 +164,6 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const isShowingPatientDialog = !!contextState.patient
   const isShowingPatientList = contextState.patientId === undefined || isShowingPatientDialog
 
-  const organizationId = 'org1' // TODO get this information somewhere
   useEffect(() => {
     setContextState({ wardId })
   }, [wardId])
@@ -188,8 +181,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: `/organizations?organizationId=${organizationId}` },
-        { display: translation.ward, link: `/organizations/${organizationId}?wardId=${wardId}` },
+        { display: translation.organization, link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations' },
+        { display: translation.ward, link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations' },
         { display: translation.room, link: `/ward/${wardId}` }
       ]}
     >

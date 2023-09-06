@@ -87,9 +87,8 @@ export const OrganizationMemberList = ({
 
   const context = useContext(OrganizationContext)
   organizationId ??= context.state.organizationId
-  // const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId) TODO use later
-  const { data, isError, isLoading } = useOrganizationsForUserQuery()
-  const membersByOrganization = data?.find(value => value.id === organizationId)?.members ?? []
+  const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
+  const membersByOrganization = data ?? []
   const usedMembers: OrgMember[] = members ?? membersByOrganization ?? []
   const removeMemberMutation = useRemoveMemberMutation(organizationId)
 

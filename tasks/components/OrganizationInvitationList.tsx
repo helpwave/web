@@ -94,44 +94,49 @@ export const OrganizationInvitationList = ({
       errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
       loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
     >
-      {isShowingInviteMemberModal && (
-        <InputModal
-          id="inviteMemberModal"
-          modalClassName={tw('min-w-[400px]')}
-          isOpen={isShowingInviteMemberModal}
-          onBackgroundClick={() => setInviteMemberModalEmail(undefined)}
-          onConfirm={() => {
-            if (!isCreatingOrganization) {
-              inviteMemberMutation.mutate({ email: inviteMemberModalEmail })
-            }
-            onChange([...usedInvitations, {
-              id: '',
-              email: inviteMemberModalEmail
-            }])
-            setInviteMemberModalEmail(undefined)
-          }} inputs={[{
-            label: translation.email,
-            value: inviteMemberModalEmail,
-            onChange: text => setInviteMemberModalEmail(text)
-          }]}
-          // Overwritten button doesn't do anything regarding decline
-          onDecline={() => {
-            if (!isCreatingOrganization) {
-              inviteMemberMutation.mutate({ email: inviteMemberModalEmail })
-            }
-            onChange([...usedInvitations, {
-              id: '',
-              email: inviteMemberModalEmail
-            }])
-            setInviteMemberModalEmail('')
-          }}
-          buttonOverwrites={[
-            {},
-            { disabled: !isValidEmail, color: 'positive', text: translation.addAndNext },
-            { disabled: !isValidEmail, color: 'accent', text: translation.add }
-          ]}
-        />
-      )}
+      <InputModal
+        id="inviteMemberModal"
+        modalClassName={tw('min-w-[400px]')}
+        isOpen={isShowingInviteMemberModal}
+        onBackgroundClick={() => setInviteMemberModalEmail(undefined)}
+        onConfirm={() => {
+          if (!isShowingInviteMemberModal) {
+            return
+          }
+          if (!isCreatingOrganization) {
+            inviteMemberMutation.mutate({ email: inviteMemberModalEmail })
+          }
+          onChange([...usedInvitations, {
+            id: '',
+            email: inviteMemberModalEmail
+          }])
+          setInviteMemberModalEmail(undefined)
+        }}
+        // Overwritten button doesn't do anything regarding decline
+        onDecline={() => {
+          if (!isShowingInviteMemberModal) {
+            return
+          }
+          if (!isCreatingOrganization) {
+            inviteMemberMutation.mutate({ email: inviteMemberModalEmail })
+          }
+          onChange([...usedInvitations, {
+            id: '',
+            email: inviteMemberModalEmail
+          }])
+          setInviteMemberModalEmail('')
+        }}
+        inputs={[{
+          label: translation.email,
+          value: inviteMemberModalEmail ?? '',
+          onChange: text => setInviteMemberModalEmail(text)
+        }]}
+        buttonOverwrites={[
+          {},
+          { disabled: !isValidEmail, color: 'positive', text: translation.addAndNext },
+          { disabled: !isValidEmail, color: 'accent', text: translation.add }
+        ]}
+      />
       <div className={tw('flex flex-row justify-between')}>
         <Span type="tableName">{`${translation.invitations} (${usedInvitations.length})`}</Span>
         <Button

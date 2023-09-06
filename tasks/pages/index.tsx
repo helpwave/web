@@ -10,7 +10,7 @@ import { TwoColumn } from '../components/layout/TwoColumn'
 import { NewsFeed } from '../components/layout/NewsFeed'
 import { DashboardDisplay } from '../components/layout/DashboardDisplay'
 import { useWardOverviewsQuery } from '../mutations/ward_mutations'
-import { useOrganizationsByUserQuery } from '../mutations/organization_mutations'
+import { useOrganizationsForUserQuery } from '../mutations/organization_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { tw } from '@twind/core'
 import { fetchLocalizedNews } from '../utils/news'
@@ -43,7 +43,7 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServe
   const translation = useTranslation(language, defaultDashboardTranslations)
   const { user } = useAuth()
   const { data: wards, isLoading: isLoadingWards } = useWardOverviewsQuery()
-  const { data: organizations, isLoading: isLoadingOrganizations } = useOrganizationsByUserQuery()
+  const { data: organizations, isLoading: isLoadingOrganizations } = useOrganizationsForUserQuery()
 
   return (
     <PageWithHeader

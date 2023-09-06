@@ -16,7 +16,7 @@ import {
 } from '@helpwave/common/components/Table'
 import type { OrgMember } from '../mutations/organization_member_mutations'
 import { Role } from '../mutations/organization_member_mutations'
-import { useOrganizationsByUserQuery, useRemoveMemberMutation } from '../mutations/organization_mutations'
+import { useOrganizationsForUserQuery, useRemoveMemberMutation } from '../mutations/organization_mutations'
 import { OrganizationContext } from '../pages/organizations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
@@ -88,7 +88,7 @@ export const OrganizationMemberList = ({
   const context = useContext(OrganizationContext)
   organizationId ??= context.state.organizationId
   // const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId) TODO use later
-  const { data, isError, isLoading } = useOrganizationsByUserQuery()
+  const { data, isError, isLoading } = useOrganizationsForUserQuery()
   const membersByOrganization = data?.find(value => value.id === organizationId)?.members ?? []
   const usedMembers: OrgMember[] = members ?? membersByOrganization ?? []
   const removeMemberMutation = useRemoveMemberMutation(organizationId)

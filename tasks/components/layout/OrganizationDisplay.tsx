@@ -7,7 +7,7 @@ import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
 import { useRouter } from 'next/router'
 import type { OrganizationDTO } from '../../mutations/organization_mutations'
-import { useOrganizationsByUserQuery } from '../../mutations/organization_mutations'
+import { useOrganizationsForUserQuery } from '../../mutations/organization_mutations'
 import { useContext } from 'react'
 import { OrganizationContext } from '../../pages/organizations'
 
@@ -46,7 +46,7 @@ export const OrganizationDisplay = ({
   const router = useRouter()
 
   const context = useContext(OrganizationContext)
-  const { data } = useOrganizationsByUserQuery()
+  const { data } = useOrganizationsForUserQuery()
   const usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
 
   const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)

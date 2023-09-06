@@ -7,13 +7,12 @@ import {
   DeleteOrganizationRequest,
   GetInvitationsByUserRequest,
   GetOrganizationRequest,
-  GetOrganizationsByUserRequest,
   UpdateOrganizationRequest,
   InviteMemberRequest,
   RemoveMemberRequest,
   AddMemberRequest,
   GetInvitationsByOrganizationRequest,
-  RevokeInvitationRequest
+  RevokeInvitationRequest, GetOrganizationsForUserRequest
 } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import { getAuthenticatedGrpcMetadata, organizationService } from '../utils/grpc'
 import { noop } from '@helpwave/common/util/noop'
@@ -116,14 +115,14 @@ export const useOrganizationQuery = (organizationId: string | undefined) => {
   })
 }
 
-export const organizationsByUserQueryKey = 'organizationsByUser'
-export const useOrganizationsByUserQuery = () => {
+export const organizationsForUserQueryKey = 'organizationsForUser'
+export const useOrganizationsForUserQuery = () => {
   return useQuery({
-    queryKey: [organizationQueryKey, organizationsByUserQueryKey],
+    queryKey: [organizationQueryKey, organizationsForUserQueryKey],
     queryFn: async () => {
-      const req = new GetOrganizationsByUserRequest()
+      const req = new GetOrganizationsForUserRequest()
 
-      const res = await organizationService.getOrganizationsByUser(req, getAuthenticatedGrpcMetadata())
+      const res = await organizationService.getOrganizationsForUser(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('OrganizationsByUser failed')

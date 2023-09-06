@@ -93,6 +93,7 @@ export const ToggleableInput = ({
               className={tx(labelClassName, `w-full border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4`, {
                 underline: isEditing
               })}
+              onFocus={event => event.target.select()}
             />
           ) : (
             <span

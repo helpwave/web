@@ -26,6 +26,7 @@ import { WardOverviewContext } from '../../pages/ward/[id]'
 import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
 import { useRouter } from 'next/router'
+import { useWardQuery } from '../../mutations/ward_mutations'
 
 type PatientListTranslation = {
   patients: string,
@@ -103,8 +104,9 @@ export const PatientList = ({
   const router = useRouter()
   const { id } = router.query
   const wardId = id as string
+  const { data: ward } = useWardQuery(wardId)
   const { state: context, updateContext } = useContext(WardOverviewContext)
-  const { data, isLoading, isError } = usePatientListQuery(wardId)
+  const { data, isLoading, isError } = usePatientListQuery(ward?.organizationId, wardId)
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const deletePatientMutation = useDeletePatientMutation()

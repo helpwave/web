@@ -12,15 +12,16 @@ import { noop } from '@helpwave/common/util/noop'
 
 export const wardsQueryKey = 'wards'
 
-export type WardDTO = {
+export type WardMinimalDTO = {
   id: string,
-  name: string,
-  organizationId?: string
+  name: string
 }
 
-export type WardOverviewDTO = {
-  id: string,
-  name: string,
+export type WardWithOrganizationIdDTO = WardMinimalDTO & {
+  organizationId: string
+}
+
+export type WardOverviewDTO = WardMinimalDTO & {
   bedCount: number,
   unscheduled: number,
   inProgress: number,
@@ -36,9 +37,7 @@ export const emptyWardOverview: WardOverviewDTO = {
   done: 0
 }
 
-export type WardDetailDTO = {
-  id: string,
-  name: string,
+export type WardDetailDTO = WardMinimalDTO & {
   rooms: {
     id: string,
     name: string,
@@ -124,20 +123,29 @@ export const useWardQuery = (id: string, organisationId?: string) => {
   return useQuery({
     queryKey: [wardsQueryKey, id],
     enabled: !!id,
-    queryFn: async (): Promise<WardDTO> => {
+    queryFn: async (): Promise<WardWithOrganizationIdDTO> => {
       const req = new GetWardRequest()
       req.setId(id)
       const res = await wardService.getWard(req, getAuthenticatedGrpcMetadata(organisationId))
 
-      return res.toObject()
+      if (!res.toObject()) {
+        console.error('error in Ward query')
+      }
+
+      const ward: WardWithOrganizationIdDTO = {
+        id: res.getId(),
+        name: res.getName(),
+        organizationId: res.getOrganizationId()
+      }
+      return ward
     }
   })
 }
 
-export const useWardUpdateMutation = (organisationId?: string, callback: (ward:WardDTO) => void = noop) => {
+export const useWardUpdateMutation = (organisationId?: string, callback: (ward:WardMinimalDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (ward: WardDTO) => {
+    mutationFn: async (ward: WardMinimalDTO) => {
       const req = new UpdateWardRequest()
       req.setId(ward.id)
       req.setName(ward.name)
@@ -151,14 +159,14 @@ export const useWardUpdateMutation = (organisationId?: string, callback: (ward:W
   })
 }
 
-export const useWardCreateMutation = (organisationId?: string, callback: (ward: WardDTO) => void = noop) => {
+export const useWardCreateMutation = (organisationId?: string, callback: (ward: WardMinimalDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (ward:WardDTO) => {
+    mutationFn: async (ward:WardMinimalDTO) => {
       const createWardRequest = new CreateWardRequest()
       createWardRequest.setName(ward.name)
       const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata(organisationId))
-      const newWard: WardDTO = { ...ward, id: res.getId() }
+      const newWard: WardMinimalDTO = { ...ward, id: res.getId() }
 
       callback(newWard)
     },

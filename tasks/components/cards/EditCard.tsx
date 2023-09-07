@@ -19,7 +19,7 @@ export const EditCard = ({
 }: EditCardProps) => {
   return (
     <Card className={tx('w-full', { 'pr-2': !!onEditClick }, className)} {...cardProps}>
-      <div className={tw('flex flex-row gap-x-4 justify-between overflow-hidden')}>
+      <div className={tw('flex flex-row gap-x-4 justify-between overflow-hidden h-full')}>
         {children}
         {onEditClick && (
           <button

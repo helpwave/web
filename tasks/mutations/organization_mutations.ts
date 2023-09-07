@@ -7,7 +7,7 @@ import {
   DeleteOrganizationRequest,
   GetInvitationsByUserRequest,
   GetOrganizationRequest,
-  GetOrganizationsByUserRequest,
+  GetOrganizationsForUserRequest,
   UpdateOrganizationRequest,
   InviteMemberRequest,
   RemoveMemberRequest,
@@ -121,9 +121,9 @@ export const useOrganizationsByUserQuery = () => {
   return useQuery({
     queryKey: [organizationQueryKey, organizationsByUserQueryKey],
     queryFn: async () => {
-      const req = new GetOrganizationsByUserRequest()
+      const req = new GetOrganizationsForUserRequest()
 
-      const res = await organizationService.getOrganizationsByUser(req, getAuthenticatedGrpcMetadata())
+      const res = await organizationService.getOrganizationsForUser(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('OrganizationsByUser failed')

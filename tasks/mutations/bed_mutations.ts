@@ -8,7 +8,7 @@ import {
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_pb'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 import { noop } from '@helpwave/common/util/noop'
-import { wardOverviewsQueryKey, wardsQueryKey } from './ward_mutations'
+import { wardsQueryKey } from './ward_mutations'
 
 export type BedMinimalDTO = {
   id: string,
@@ -95,7 +95,7 @@ export const useBedCreateMutation = (callback: (bed: BedMinimalDTO) => void = no
     onSuccess: () => {
       queryClient.refetchQueries([bedService]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([wardsQueryKey, wardOverviewsQueryKey]).then()
+      queryClient.refetchQueries([wardsQueryKey]).then()
     },
   })
 }
@@ -144,7 +144,7 @@ export const useBedDeleteMutation = (callback: () => void = noop) => {
     onSuccess: () => {
       queryClient.refetchQueries([bedService]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([wardsQueryKey, wardOverviewsQueryKey]).then()
+      queryClient.refetchQueries([wardsQueryKey]).then()
     },
   })
 }

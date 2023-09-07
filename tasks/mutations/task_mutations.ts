@@ -13,7 +13,7 @@ import {
   UpdateTaskRequest,
   SubTaskToDoneRequest,
   SubTaskToToDoRequest,
-  GetTasksByPatientSortedByStatusRequest
+  GetTasksByPatientSortedByStatusRequest, AssignTaskToUserRequest, UnassignTaskFromUserRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { getAuthenticatedGrpcMetadata, taskService } from '../utils/grpc'
 import type { GetTasksByPatientSortedByStatusResponse } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
@@ -464,6 +464,49 @@ export const useSubTaskToDoneMutation = (callback: () => void = noop) => {
       const req = new SubTaskToDoneRequest()
       req.setId(subtaskId)
       await taskService.subTaskToDone(req, getAuthenticatedGrpcMetadata())
+
+      callback()
+      return req.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+    }
+  })
+}
+
+export const useAssignTaskToUserMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (taskAndUser: {taskId: string, userId: string}) => {
+      const req = new AssignTaskToUserRequest()
+      req.setId(taskAndUser.taskId)
+      req.setUserId(taskAndUser.userId)
+      const res = await taskService.assignTaskToUser(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in AssignTaskToUser')
+      }
+
+      callback()
+      return req.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries([tasksQueryKey]).then()
+    }
+  })
+}
+
+export const useUnassignTaskToUserMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (taskId: string) => {
+      const req = new UnassignTaskFromUserRequest()
+      req.setId(taskId)
+      const res = await taskService.unassignTaskFromUser(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        console.error('error in UnAssignTaskToUser')
+      }
 
       callback()
       return req.toObject()

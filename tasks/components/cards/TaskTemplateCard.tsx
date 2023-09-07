@@ -2,11 +2,10 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { CardProps } from '@helpwave/common/components/Card'
-import { Card } from '@helpwave/common/components/Card'
-import { Edit } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
 import { Label } from '../Label'
+import type { EditCardProps } from './EditCard'
+import { EditCard } from './EditCard'
 
 type TaskTemplateCardTranslation = {
   subtask: string,
@@ -23,17 +22,16 @@ const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTra
     ward: 'Ward'
   },
   de: {
-    subtask: 'Unteraufgabe',
+    subtask: 'Unteraufgaben',
     edit: 'Bearbeiten',
     personal: 'Persönlich',
     ward: 'Station'
   }
 }
 
-export type TaskTemplateCardProps = CardProps & {
+export type TaskTemplateCardProps = EditCardProps & {
   name: string,
   subtaskCount: number,
-  onEditClick?: () => void,
   typeForLabel?: 'ward' | 'personal'
 }
 
@@ -41,43 +39,31 @@ export type TaskTemplateCardProps = CardProps & {
  * A Card showing a TaskTemplate
  */
 export const TaskTemplateCard = ({
-  isSelected = false,
+  language,
   name,
   subtaskCount,
-  language,
-  onTileClick = () => undefined,
-  onEditClick,
+  typeForLabel,
   className,
-  typeForLabel
+  ...editCardProps
 }: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
   return (
-    <Card
-      onTileClick={onTileClick}
-      isSelected={isSelected}
+    <EditCard
       className={tx('group flex flex-col bg-white', className)}
+      {...editCardProps}
     >
-      <div className={tw('flex flex-row items-start overflow-hidden gap-x-1')}>
-        <Span type="subsubsectionTitle" className={tw('!flex-1')}>{name}</Span>
-        {typeForLabel && (
-          <Label
-            name={typeForLabel === 'ward' ? translation.ward : translation.personal}
-            color={typeForLabel === 'ward' ? 'blue' : 'pink'}
-          />
-        )}
-        {onEditClick && (
-          <button
-            onClick={event => {
-              onEditClick()
-              event.stopPropagation()
-            }}
-            className={tw('text-transparent group-hover:text-black')}
-          >
-            <Edit size={24}/>
-          </button>
-        )}
+      <div className={tw('overflow-hidden h-full')}>
+        <div className={tw('flex flex-row items-start overflow-hidden gap-x-1')}>
+          <Span type="subsubsectionTitle" className={tw('!flex-1')}>{name}</Span>
+          {typeForLabel && (
+            <Label
+              name={typeForLabel === 'ward' ? translation.ward : translation.personal}
+              color={typeForLabel === 'ward' ? 'blue' : 'pink'}
+            />
+          )}
+        </div>
+        <Span>{subtaskCount + ' ' + translation.subtask}</Span>
       </div>
-      <Span>{subtaskCount + ' ' + translation.subtask}</Span>
-    </Card>
+    </EditCard>
   )
 }

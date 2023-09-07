@@ -1,9 +1,11 @@
 import { tw, tx } from '../../twind'
 import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { Span } from '../Span'
 
 type Option<T> = {
-  label: string,
+  label: ReactNode,
   value: T,
   disabled?: boolean
 }
@@ -61,13 +63,13 @@ export const Select = <T, >({
               )}
               disabled={isDisabled}
             >
-              <span>{options.find(option => option.value === value)?.label ?? hintText}</span>
+              <Span>{options.find(option => option.value === value)?.label ?? hintText}</Span>
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items
               className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg max-h-[30vh] overflow-y-auto')}>
               {filteredOptions.map((option, index) => (
-                <Menu.Item key={option.label}>
+                <Menu.Item key={`item${index}`}>
                   {
                     <div
                       className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {

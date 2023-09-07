@@ -3,7 +3,6 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw, tx } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import { Select } from '@helpwave/common/components/user_input/Select'
 import { TaskStatusSelect } from '../user_input/TaskStatusSelect'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskView } from '../SubtaskView'
@@ -19,7 +18,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import {
-  emptyTask,
+  emptyTask, useAssignTaskToUserMutation,
   useSubTaskAddMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
@@ -27,7 +26,7 @@ import {
   useTaskToDoneMutation,
   useTaskToInProgressMutation,
   useTaskToToDoMutation,
-  useTaskUpdateMutation
+  useTaskUpdateMutation, useUnassignTaskToUserMutation
 } from '../../mutations/task_mutations'
 import { useEffect, useState } from 'react'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
@@ -35,6 +34,8 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { AssigneeSelect } from '../AssigneeSelect'
+import { useWardQuery } from '../../mutations/ward_mutations'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -52,7 +53,8 @@ type TaskDetailViewTranslation = {
   delete: string,
   publish: string,
   publishTask: string,
-  publishTaskDescription: string
+  publishTaskDescription: string,
+  finish: string
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -73,6 +75,7 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publish: 'Publish',
     publishTask: 'Publish Task',
     publishTaskDescription: 'This cannot be undone',
+    finish: 'Finish Task',
   },
   de: {
     close: 'Schließen',
@@ -91,6 +94,7 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publish: 'Veröffentlichen',
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
+    finish: 'Fertigstellen',
   }
 }
 
@@ -120,6 +124,7 @@ export const TaskDetailView = ({
   const { id: wardId } = router.query
   const { user } = useAuth()
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
+  const { data: ward } = useWardQuery(wardId as string)
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
@@ -131,17 +136,22 @@ export const TaskDetailView = ({
 
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
 
-  const createTaskMutation = useTaskCreateMutation(newTask => {
-    newTask.subtasks.forEach(value =>
-      addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
-    onClose()
-  }, patientId)
-
+  const assignTaskToUserMutation = useAssignTaskToUserMutation()
+  const unassignTaskToUserMutation = useUnassignTaskToUserMutation()
   const updateTaskMutation = useTaskUpdateMutation()
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
   const toToDoMutation = useTaskToToDoMutation()
   const toInProgressMutation = useTaskToInProgressMutation()
   const toDoneMutation = useTaskToDoneMutation()
+
+  const createTaskMutation = useTaskCreateMutation(newTask => {
+    newTask.subtasks.forEach(value =>
+      addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
+    if (newTask.assignee) {
+      assignTaskToUserMutation.mutate({ taskId: newTask.id, userId: newTask.assignee })
+    }
+    onClose()
+  }, patientId)
 
   useEffect(() => {
     if (data && taskId) {
@@ -226,20 +236,36 @@ export const TaskDetailView = ({
         </div>
         { /* TODO create a new component for this */}
         <div className={tw('flex flex-col min-w-[250px] gap-y-4')}>
-            <div className={tw('hidden')} /* TODO enable later */ >
+            <div>
               <label><Span type="labelMedium">{translation.assignee}</Span></label>
-              <Select
-                value={task.assignee}
-                options={[
-                  { label: 'Assignee 1', value: 'assignee1' },
-                  { label: 'Assignee 2', value: 'assignee2' },
-                  { label: 'Assignee 3', value: 'assignee3' },
-                  { label: 'Assignee 4', value: 'assignee4' }
-                ]}
-                onChange={assignee => {
-                  updateLocallyAndExternally({ ...task, assignee })
-                }}
-              />
+              <div className={tw('flex flex-row items-center gap-x-2')}>
+                <AssigneeSelect
+                  organizationId={ward?.organizationId ?? ''}
+                  value={task.assignee}
+                  onChange={assignee => {
+                    setTask({ ...task, assignee })
+                    if (!isCreating) {
+                      assignTaskToUserMutation.mutate({ taskId: task.id, userId: assignee })
+                    }
+                  }}
+                />
+                <Button
+                  onClick={() => {
+                    setTask({
+                      ...task,
+                      assignee: ''
+                    })
+                    if (!isCreating) {
+                      unassignTaskToUserMutation.mutate(task.id)
+                    }
+                  }}
+                  variant="textButton"
+                  color="negative"
+                  disabled={!task.assignee}
+                >
+                  <X size={24}/>
+                </Button>
+              </div>
             </div>
             <div>
               <label><Span type="labelMedium">{translation.dueDate}</Span></label>
@@ -329,6 +355,17 @@ export const TaskDetailView = ({
                 >
                   {translation.delete}
                 </Button>
+                {task.status !== TaskStatus.TASK_STATUS_DONE && (
+                  <Button
+                    color="positive"
+                    onClick={() => {
+                      toDoneMutation.mutate(task.id)
+                      onClose()
+                    }}
+                  >
+                    {translation.finish}
+                  </Button>
+                )}
                 <Button
                   color="accent"
                   onClick={() => updateTaskMutation.mutate(task)}

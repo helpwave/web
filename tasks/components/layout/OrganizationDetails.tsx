@@ -12,12 +12,16 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import {
   useInviteMemberMutation,
-  useOrganizationCreateMutation, useOrganizationDeleteMutation,
-  useOrganizationQuery, useOrganizationUpdateMutation
+  useOrganizationCreateMutation,
+  useOrganizationDeleteMutation,
+  useOrganizationQuery,
+  useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
 import { OrganizationContext } from '../../pages/organizations'
+import { ReSignInModal } from '../ReSignInModal'
 import type { OrganizationInvitation } from '../OrganizationInvitationList'
 import { OrganizationInvitationList } from '../OrganizationInvitationList'
+import { useAuth } from '../../hooks/useAuth'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -41,7 +45,7 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
   },
   de: {
     organizationDetail: 'Organisations Details',
-    dangerZone: 'Gefahren Zone',
+    dangerZone: 'Risikobereich',
     dangerZoneText: 'Das Löschen einer Organisation ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
     deleteConfirmText: 'Wollen Sie wirklich diese Organisation löschen?',
     deleteOrganization: 'Organisation löschen',
@@ -67,18 +71,30 @@ export const OrganizationDetail = ({
     updateContext
   } = useContext(OrganizationContext)
 
+  const { signOut } = useAuth()
   const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
+  const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
   const [organizationInvites, setOrganizationInvites] = useState<OrganizationInvitation[]>([])
+
+  const resetForm = () => {
+    setOrganizationForm(emptyOrganizationForm)
+    setOrganizationInvites([])
+  }
 
   useEffect(() => {
     if (data && !isCreatingNewOrganization) {
       setOrganizationForm({
         isValid: true,
         hasChanges: false,
-        organization: { ...data }
+        organization: { ...data },
+        touched: {
+          shortName: false,
+          longName: false,
+          email: false
+        }
       })
     }
   }, [data, isCreatingNewOrganization])
@@ -90,7 +106,7 @@ export const OrganizationDetail = ({
       email: invite.email,
       organizationId: organization.id
     }))
-    updateContext({ organizationId: organization.id })
+    setIsShowingReSignInDialog(organization.id)
   })
 
   const updateMutation = useOrganizationUpdateMutation(organization => {
@@ -99,7 +115,8 @@ export const OrganizationDetail = ({
       hasChanges: false,
       organization: {
         ...organization
-      }
+      },
+      touched: organizationForm.touched
     })
   })
 
@@ -125,11 +142,29 @@ export const OrganizationDetail = ({
         }}
         confirmType="negative"
       />
+      <ReSignInModal
+        id="organizationDetail-ReSignInModal"
+        isOpen={!!isShowingReSignInDialog}
+        onBackgroundClick={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
+        onDecline={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
+        onConfirm={() => {
+          if (isShowingReSignInDialog) {
+            updateContext({ organizationId: isShowingReSignInDialog })
+          }
+          setIsShowingReSignInDialog(undefined)
+          signOut()
+        }}
+      />
       <ColumnTitle title={translation.organizationDetail}/>
       <div className={tw('flex flex-col gap-y-4 max-w-[500px]')}>
         <OrganizationForm
           organizationForm={organizationForm}
-          isShowingErrorsDirectly={!isCreatingNewOrganization}
           onChange={(organizationForm, shouldUpdate) => {
             setOrganizationForm(organizationForm)
             if (shouldUpdate) {

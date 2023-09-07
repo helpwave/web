@@ -23,9 +23,9 @@ const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDispl
     wardTaskTemplates: 'Ward Task Templates'
   },
   de: {
-    addNewTaskTemplate: 'Neues Template hinzufügen',
-    personalTaskTemplates: 'Persönliche Task Templates',
-    wardTaskTemplates: 'Stations Task Templates'
+    addNewTaskTemplate: 'Neues Vorlagen hinzufügen',
+    personalTaskTemplates: 'Persönliche Vorlagen',
+    wardTaskTemplates: 'Stations Vorlagen'
   }
 }
 
@@ -88,7 +88,6 @@ export const TaskTemplateDisplay = ({
           isSelected={selectedId === ''}
           onTileClick={() => onSelectChange(undefined)}
           text={translation.addNewTaskTemplate}
-          className={tw('h-auto')}
         />
       </div>
     </div>

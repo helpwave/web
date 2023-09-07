@@ -20,6 +20,7 @@ import {
 } from '../../mutations/ward_mutations'
 import { OrganizationOverviewContext } from '../../pages/organizations/[id]'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useRouter } from 'next/router'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -54,10 +55,10 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
     updateWardSubtitle: 'Hier kannst du die Details der Station ändern.',
     createWard: 'Station erstellen',
     createWardSubtitle: 'Hier setzt du die Details der Station.',
-    dangerZone: 'Gefahren Zone',
-    dangerZoneText: 'Das Löschen einer Station is permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+    dangerZone: 'Risikobereich',
+    dangerZoneText: 'Das Löschen einer Station ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
     deleteConfirmText: 'Wollen Sie wirklich diese Station löschen?',
-    deleteWard: 'Station Löschen',
+    deleteWard: 'Station löschen',
     create: 'Erstellen',
     update: 'Ändern',
     roomsNotOnCreate: 'Räume können erst hinzugefügt werden, wenn die Station erstellt wurde'
@@ -81,7 +82,10 @@ export const WardDetail = ({
   const translation = useTranslation(language, defaultWardDetailTranslations)
 
   const context = useContext(OrganizationOverviewContext)
-  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId)
+  const router = useRouter()
+  const { id } = router.query
+  const organizationId = id as string
+  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organizationId)
 
   const isCreatingNewWard = context.state.wardId === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
@@ -95,11 +99,11 @@ export const WardDetail = ({
     }
   }, [data, isCreatingNewWard])
 
-  const createWardMutation = useWardCreateMutation((ward) => context.updateContext({ ...context.state, wardId: ward.id }))
-  const updateWardMutation = useWardUpdateMutation((ward) => {
+  const createWardMutation = useWardCreateMutation(organizationId, (ward) => context.updateContext({ ...context.state, wardId: ward.id }))
+  const updateWardMutation = useWardUpdateMutation(organizationId, (ward) => {
     setNewWard({ ...newWard, name: ward.name })
   })
-  const deleteWardMutation = useWardDeleteMutation(() => context.updateContext({ ...context.state, wardId: '' }))
+  const deleteWardMutation = useWardDeleteMutation(organizationId, () => context.updateContext({ ...context.state, wardId: '' }))
 
   // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
   const minimumWidthOfCards = 200
@@ -134,7 +138,6 @@ export const WardDetail = ({
           <WardForm
             key={newWard.id}
             ward={newWard}
-            usedWardNames={newWard.rooms.map(ward => ward.name)}
             onChange={(wardInfo, isValid) => {
               setNewWard({ ...newWard, ...wardInfo })
               setFilledRequired(isValid)

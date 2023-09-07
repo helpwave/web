@@ -2,7 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { WardOverviewDTO } from '../../mutations/ward_mutations'
+import { useWardOverviewsQuery } from '../../mutations/ward_mutations'
 import { Button } from '@helpwave/common/components/Button'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { WardCard } from '../cards/WardCard'
@@ -10,6 +10,9 @@ import { useRouter } from 'next/router'
 import { Span } from '@helpwave/common/components/Span'
 import type { OrganizationDTO } from '../../mutations/organization_mutations'
 import { InvitationBanner } from '../InvitationBanner'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useAuth } from '../../hooks/useAuth'
+import { getConfig } from '../../utils/config'
 
 type DashboardDisplayTranslation = {
   organizations: string,
@@ -34,7 +37,6 @@ const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTra
 }
 
 export type DashboardDisplayProps = {
-  wards: WardOverviewDTO[],
   organizations: OrganizationDTO[],
   width?: number
 }
@@ -44,7 +46,6 @@ export type DashboardDisplayProps = {
  */
 export const DashboardDisplay = ({
   language,
-  wards,
   organizations,
   width
 }: PropsWithLanguage<DashboardDisplayTranslation, DashboardDisplayProps>) => {
@@ -52,6 +53,12 @@ export const DashboardDisplay = ({
   const router = useRouter()
   const minimumWidthOfCards = 220 // the value of much space a card and the surrounding gap requires, given in px
   const columns = !width ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
+  const { organizations: tokenOrganizations } = useAuth()
+  const { data: wards, isLoading: isLoadingWards } = useWardOverviewsQuery(organizations.length > 0 ? organizations[0].id : undefined)
+  const { fakeTokenEnable } = getConfig()
+
+  organizations = organizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
+
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
       <InvitationBanner />
@@ -80,12 +87,18 @@ export const DashboardDisplay = ({
           ))}
         </div>
       </div>
-      <div className={tw('flex flex-col gap-y-1')}>
-        <Span type="subsectionTitle">{translation.wards}</Span>
-        <div className={tw(`grid grid-cols-${columns} gap-6`)}>
-          {wards.map(ward => <WardCard key={ward.id} ward={ward} onTileClick={() => router.push(`/ward/${ward.id}`)}/>)}
-        </div>
-      </div>
+      {organizations.length > 0 && (
+        <LoadingAndErrorComponent isLoading={isLoadingWards}>
+            <div className={tw('flex flex-col gap-y-1')}>
+              <Span type="subsectionTitle">{translation.wards}</Span>
+              {wards && wards.length > 0 ? (
+                <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+                  {wards?.map(ward => <WardCard key={ward.id} ward={ward} onTileClick={() => router.push(`/ward/${ward.id}`)}/>)}
+                </div>
+              ) : <Span type="accent">No wards</Span>}
+            </div>
+        </LoadingAndErrorComponent>
+      )}
     </div>
   )
 }

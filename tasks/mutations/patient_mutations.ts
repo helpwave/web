@@ -195,7 +195,7 @@ export const usePatientListQuery = (wardId?: string) => {
       if (wardId) {
         req.setWardId(wardId)
       }
-      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata(wardId))
+      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata())
 
       const patientList: PatientListDTO = {
         active: res.getActiveList().map(value => {

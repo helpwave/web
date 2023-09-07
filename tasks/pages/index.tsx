@@ -9,7 +9,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/layout/TwoColumn'
 import { NewsFeed } from '../components/layout/NewsFeed'
 import { DashboardDisplay } from '../components/layout/DashboardDisplay'
-import { useOrganizationsByUserQuery } from '../mutations/organization_mutations'
+import { useOrganizationsForUserQuery } from '../mutations/organization_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { tw } from '@twind/core'
 import { fetchLocalizedNews } from '../utils/news'
@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = 
 const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, language }) => {
   const translation = useTranslation(language, defaultDashboardTranslations)
   const { user } = useAuth()
-  const { data: organizations, isLoading } = useOrganizationsByUserQuery()
+  const { data: organizations, isLoading } = useOrganizationsForUserQuery()
 
   return (
     <PageWithHeader

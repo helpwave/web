@@ -19,12 +19,12 @@ type WardRoomListTranslation = {
 
 const defaultWardRoomListTranslation: Record<Languages, WardRoomListTranslation> = {
   en: {
-    roomOverview: 'Room Overview',
+    roomOverview: 'Ward Overview',
     showPatientList: 'Show Patient List'
   },
   de: {
-    roomOverview: 'Raum Übersicht',
-    showPatientList: 'Patienten Liste'
+    roomOverview: 'Stationsübersicht',
+    showPatientList: 'Patientenliste'
   }
 }
 

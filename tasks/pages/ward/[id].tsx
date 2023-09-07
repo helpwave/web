@@ -38,7 +38,7 @@ type WardOverviewTranslation = {
 const defaultWardOverviewTranslation = {
   en: {
     beds: 'Betten',
-    roomOverview: 'Room Overview',
+    roomOverview: 'Ward Overview',
     organization: 'Organization',
     ward: 'Ward',
     room: 'Room',
@@ -46,7 +46,7 @@ const defaultWardOverviewTranslation = {
   },
   de: {
     beds: 'Bett',
-    roomOverview: 'Raum Übersicht',
+    roomOverview: 'Stationsübersicht',
     organization: 'Organisation',
     ward: 'Station',
     room: 'Raum',

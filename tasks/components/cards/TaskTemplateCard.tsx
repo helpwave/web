@@ -22,7 +22,7 @@ const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTra
     ward: 'Ward'
   },
   de: {
-    subtask: 'Unteraufgabe',
+    subtask: 'Unteraufgaben',
     edit: 'Bearbeiten',
     personal: 'Persönlich',
     ward: 'Station'

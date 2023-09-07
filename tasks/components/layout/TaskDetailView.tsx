@@ -53,7 +53,8 @@ type TaskDetailViewTranslation = {
   delete: string,
   publish: string,
   publishTask: string,
-  publishTaskDescription: string
+  publishTaskDescription: string,
+  finish: string
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -74,6 +75,7 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publish: 'Publish',
     publishTask: 'Publish Task',
     publishTaskDescription: 'This cannot be undone',
+    finish: 'Finish Task',
   },
   de: {
     close: 'Schließen',
@@ -92,6 +94,7 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publish: 'Veröffentlichen',
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
+    finish: 'Fertigstellen',
   }
 }
 
@@ -352,6 +355,17 @@ export const TaskDetailView = ({
                 >
                   {translation.delete}
                 </Button>
+                {task.status !== TaskStatus.TASK_STATUS_DONE && (
+                  <Button
+                    color="positive"
+                    onClick={() => {
+                      toDoneMutation.mutate(task.id)
+                      onClose()
+                    }}
+                  >
+                    {translation.finish}
+                  </Button>
+                )}
                 <Button
                   color="accent"
                   onClick={() => updateTaskMutation.mutate(task)}

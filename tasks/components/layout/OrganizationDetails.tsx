@@ -12,8 +12,10 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import {
   useInviteMemberMutation,
-  useOrganizationCreateMutation, useOrganizationDeleteMutation,
-  useOrganizationQuery, useOrganizationUpdateMutation
+  useOrganizationCreateMutation,
+  useOrganizationDeleteMutation,
+  useOrganizationQuery,
+  useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
 import { OrganizationContext } from '../../pages/organizations'
 import { ReSignInModal } from '../ReSignInModal'
@@ -43,7 +45,7 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
   },
   de: {
     organizationDetail: 'Organisations Details',
-    dangerZone: 'Gefahren Zone',
+    dangerZone: 'Risikobereich',
     dangerZoneText: 'Das Löschen einer Organisation ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
     deleteConfirmText: 'Wollen Sie wirklich diese Organisation löschen?',
     deleteOrganization: 'Organisation löschen',
@@ -69,8 +71,8 @@ export const OrganizationDetail = ({
     updateContext
   } = useContext(OrganizationContext)
 
-  const { signOut, organizations } = useAuth()
-  const isCreatingNewOrganization = contextState.organizationId === '' || !organizations.includes(contextState.organizationId)
+  const { signOut } = useAuth()
+  const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()

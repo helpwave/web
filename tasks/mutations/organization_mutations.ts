@@ -116,10 +116,10 @@ export const useOrganizationQuery = (organizationId: string | undefined) => {
   })
 }
 
-export const organizationsByUserQueryKey = 'organizationsByUser'
-export const useOrganizationsByUserQuery = () => {
+export const organizationsForUserQueryKey = 'organizationsForUser'
+export const useOrganizationsForUserQuery = () => {
   return useQuery({
-    queryKey: [organizationQueryKey, organizationsByUserQueryKey],
+    queryKey: [organizationQueryKey, organizationsForUserQueryKey],
     queryFn: async () => {
       const req = new GetOrganizationsForUserRequest()
 

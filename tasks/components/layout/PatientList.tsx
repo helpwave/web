@@ -25,6 +25,7 @@ import { Droppable } from '../dnd-kit/Droppable'
 import { WardOverviewContext } from '../../pages/ward/[id]'
 import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
+import { useRouter } from 'next/router'
 
 type PatientListTranslation = {
   patients: string,
@@ -99,8 +100,11 @@ export const PatientList = ({
 }: PropsWithLanguage<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(language, defaultPatientListTranslations)
   const [search, setSearch] = useState('')
+  const router = useRouter()
+  const { id } = router.query
+  const wardId = id as string
   const { state: context, updateContext } = useContext(WardOverviewContext)
-  const { data, isLoading, isError } = usePatientListQuery()
+  const { data, isLoading, isError } = usePatientListQuery(wardId)
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const deletePatientMutation = useDeletePatientMutation()

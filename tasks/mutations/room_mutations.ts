@@ -98,7 +98,7 @@ export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) 
       return room
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.invalidateQueries([roomsQueryKey]).then()
     },
   })
 }
@@ -121,7 +121,8 @@ export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void =
       return room
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey]).then()
+      queryClient.refetchQueries([wardsQueryKey]).then()
     }
   })
 }
@@ -142,7 +143,7 @@ export const useRoomDeleteMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey]).then()
       queryClient.refetchQueries([wardsQueryKey]).then()
     }
   })

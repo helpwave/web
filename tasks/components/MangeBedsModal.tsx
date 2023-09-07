@@ -78,18 +78,19 @@ export const ManageBedsModal = ({
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination
   })
+  const [isEditing, setIsEditing] = useState(false)
   const [beds, setBeds] = useState<BedWithPatientWithTasksNumberDTO[]>([])
   const room = data?.find(value => value.id === roomId)
 
   useEffect(() => {
-    if (data) {
+    if (data && !isEditing) {
       const beds = room?.beds ?? []
       setBeds(beds)
     }
-  }, [data, room])
+  }, [data, room, isEditing])
 
   const addBedMutation = useBedCreateMutation()
-  const updateBedMutation = useBedUpdateMutation()
+  const updateBedMutation = useBedUpdateMutation(() => setIsEditing(false))
   const deleteBedMutation = useBedDeleteMutation()
 
   const maxBedNameLength = 16
@@ -131,6 +132,7 @@ export const ManageBedsModal = ({
                     value={bed.name}
                     maxLength={maxBedNameLength}
                     onChange={text => {
+                      setIsEditing(true)
                       setBeds(beds.map(value => value.id === bed.id ? { ...value, name: text } : value))
                     }}
                     onEditCompleted={text => updateBedMutation.mutate({ id: bed.id, name: text, roomId: room.id })}

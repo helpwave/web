@@ -87,6 +87,7 @@ export const WardDetail = ({
   const organizationId = id as string
   const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organizationId)
 
+  const [isEditing, setIsEditing] = useState(false)
   const isCreatingNewWard = context.state.wardId === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
 
@@ -94,14 +95,15 @@ export const WardDetail = ({
   const [newWard, setNewWard] = useState<WardDetailDTO>(emptyWard)
 
   useEffect(() => {
-    if (data && !isCreatingNewWard) {
+    if (data && !isCreatingNewWard && !isEditing) {
       setNewWard(data)
     }
-  }, [data, isCreatingNewWard])
+  }, [data, isCreatingNewWard, isEditing])
 
   const createWardMutation = useWardCreateMutation(organizationId, (ward) => context.updateContext({ ...context.state, wardId: ward.id }))
   const updateWardMutation = useWardUpdateMutation(organizationId, (ward) => {
     setNewWard({ ...newWard, name: ward.name })
+    setIsEditing(false)
   })
   const deleteWardMutation = useWardDeleteMutation(organizationId, () => context.updateContext({ ...context.state, wardId: '' }))
 
@@ -139,6 +141,7 @@ export const WardDetail = ({
             key={newWard.id}
             ward={newWard}
             onChange={(wardInfo, isValid) => {
+              setIsEditing(true)
               setNewWard({ ...newWard, ...wardInfo })
               setFilledRequired(isValid)
             }}

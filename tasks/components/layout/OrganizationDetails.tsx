@@ -72,6 +72,7 @@ export const OrganizationDetail = ({
   } = useContext(OrganizationContext)
 
   const { signOut } = useAuth()
+  const [isEditing, setIsEditing] = useState(false)
   const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
@@ -85,7 +86,7 @@ export const OrganizationDetail = ({
   }
 
   useEffect(() => {
-    if (data && !isCreatingNewOrganization) {
+    if (data && !isCreatingNewOrganization && !isEditing) {
       setOrganizationForm({
         isValid: true,
         hasChanges: false,
@@ -97,7 +98,7 @@ export const OrganizationDetail = ({
         }
       })
     }
-  }, [data, isCreatingNewOrganization])
+  }, [data, isCreatingNewOrganization, isEditing])
 
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 
@@ -107,6 +108,7 @@ export const OrganizationDetail = ({
       organizationId: organization.id
     }))
     setIsShowingReSignInDialog(organization.id)
+    setIsEditing(false)
   })
 
   const updateMutation = useOrganizationUpdateMutation(organization => {
@@ -118,6 +120,7 @@ export const OrganizationDetail = ({
       },
       touched: organizationForm.touched
     })
+    setIsEditing(false)
   })
 
   const deleteMutation = useOrganizationDeleteMutation(() => updateContext({
@@ -166,6 +169,7 @@ export const OrganizationDetail = ({
         <OrganizationForm
           organizationForm={organizationForm}
           onChange={(organizationForm, shouldUpdate) => {
+            setIsEditing(true)
             setOrganizationForm(organizationForm)
             if (shouldUpdate) {
               updateMutation.mutate(organizationForm.organization)
@@ -183,7 +187,13 @@ export const OrganizationDetail = ({
         <div className={tw('flex flex-row justify-end')}>
           <Button
             className={tw('w-auto')}
-            onClick={() => isCreatingNewOrganization ? createMutation.mutate(organizationForm.organization) : updateMutation.mutate(organizationForm.organization)}
+            onClick={() => {
+              if (isCreatingNewOrganization) {
+                createMutation.mutate(organizationForm.organization)
+              } else {
+                updateMutation.mutate(organizationForm.organization)
+              }
+            }}
             disabled={!organizationForm.isValid}>
             {isCreatingNewOrganization ? translation.create : translation.update}
           </Button>

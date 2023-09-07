@@ -132,13 +132,14 @@ export const TaskDetailView = ({
   const isCreating = taskId === ''
   const { data, isLoading, isError } = useTaskQuery(taskId)
 
+  const [isEditing, setIsEditing] = useState(false)
   const [task, setTask] = useState<TaskDTO>({ ...emptyTask, status: initialStatus ?? TaskStatus.TASK_STATUS_TODO })
 
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
 
   const assignTaskToUserMutation = useAssignTaskToUserMutation()
   const unassignTaskToUserMutation = useUnassignTaskToUserMutation()
-  const updateTaskMutation = useTaskUpdateMutation()
+  const updateTaskMutation = useTaskUpdateMutation(() => setIsEditing(false))
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
   const toToDoMutation = useTaskToToDoMutation()
   const toInProgressMutation = useTaskToInProgressMutation()
@@ -154,10 +155,10 @@ export const TaskDetailView = ({
   }, patientId)
 
   useEffect(() => {
-    if (data && taskId) {
+    if (data && taskId && !isEditing) {
       setTask(data)
     }
-  }, [data, taskId])
+  }, [data, taskId, isEditing])
 
   const {
     data: personalTaskTemplatesData,
@@ -207,7 +208,13 @@ export const TaskDetailView = ({
             initialState="editing"
             id="name"
             value={task.name}
-            onChange={name => setTask({ ...task, name })}
+            onChange={name => {
+              setIsEditing(true)
+              setTask({
+                ...task,
+                name
+              })
+            }}
             onEditCompleted={text => updateLocallyAndExternally({ ...task, name: text })}
             labelClassName={tw('text-2xl font-bold')}
             minLength={minTaskNameLength}
@@ -226,7 +233,13 @@ export const TaskDetailView = ({
             <Textarea
               headline={translation.notes}
               value={task.notes}
-              onChange={description => setTask({ ...task, notes: description })}
+              onChange={description => {
+                setIsEditing(true)
+                setTask({
+                  ...task,
+                  notes: description
+                })
+              }}
               onEditCompleted={text => updateLocallyAndExternally({ ...task, notes: text })}
             />
           </div>

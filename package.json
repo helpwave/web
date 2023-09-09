@@ -11,6 +11,6 @@
     "url": "https://github.com/helpwave/web/issues"
   },
   "dependencies": {
-    "react-custom-scrollbars-2": "^4.5.0"
+    "react-custom-scrollbars-2": "4.5.0"
   }
 }

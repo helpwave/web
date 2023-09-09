@@ -1,11 +1,11 @@
-import Head from 'next/head'
-import type { AppProps } from 'next/app'
-import { Toaster } from 'react-hot-toast'
-import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
-import { tw } from '@helpwave/common/twind'
-import withNextApp from '@helpwave/common/twind/next/app'
-import { config } from '@helpwave/common/twind/config'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
+import { tw } from '@helpwave/common/twind'
+import { config } from '@helpwave/common/twind/config'
+import withNextApp from '@helpwave/common/twind/next/app'
+import type { AppProps } from 'next/app'
+import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
+import Head from 'next/head'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({
   subsets: ['latin'],

@@ -1,23 +1,21 @@
 import { Span } from '@helpwave/common/components/Span'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import Link from 'next/link'
 
 const items = [
   { name: 'home', url: '/' },
   { name: 'tasks', url: '/tasks' },
-  { name: 'scaffold', url: '/scaffold' },
-  { name: 'team', url: '/team' },
-  { name: 'imprint', url: '/imprint' },
+  { name: 'story', url: '/story' },
+  { name: 'talks', url: '/talks' },
+  { name: 'contact', url: '/contact' },
 ]
 
 const Navigation = () => {
   return (
-    <div className={tw('max-w-screen fixed left-1/2 top-[40px] -translate-x-1/2')}>
-      <div className={tw('flex flex-wrap gap-8 items-center justify-between mx-auto p-4')}>
-        <Helpwave />
+    <div className={tw('shadow-lg px-5 max-w-screen fixed left-1/2 top-[40px] -translate-x-1/2 rounded-md border bg-white z-50')}>
+      <div className={tw('h-[64px] align-middle flex flex-wrap gap-8 items-center justify-between mx-auto p-4')}>
         {items.map(({ name, url }) => (
-          <div key={url} className={tw('text-xl group')}>
+        <div key={url} className={tw('text-xl group')}>
             <Link href={url}>
               <Span type="navigationItem">
                 {name}

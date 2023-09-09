@@ -13,6 +13,9 @@ importers:
       '@helpwave/common':
         specifier: workspace:*
         version: link:../lib
+      '@helpwave/tasks':
+        specifier: workspace:*
+        version: link:../tasks
       '@radix-ui/react-checkbox':
         specifier: 1.0.4
         version: 1.0.4(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)

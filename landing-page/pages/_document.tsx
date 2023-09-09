@@ -1,6 +1,6 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
-import withNextDocument from '@helpwave/common/twind/next/document'
 import { config } from '@helpwave/common/twind/config'
+import withNextDocument from '@helpwave/common/twind/next/document'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document {
   render() {

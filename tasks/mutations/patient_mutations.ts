@@ -187,15 +187,23 @@ export const usePatientAssignmentByWardQuery = (wardId: string) => {
   })
 }
 
-export const usePatientListQuery = (wardId?: string) => {
+export const usePatientListQuery = (organisationId?: string, wardId?: string) => {
   return useQuery({
     queryKey: [patientsQueryKey, 'patientList', wardId],
+    enabled: !!organisationId,
     queryFn: async () => {
       const req = new GetPatientListRequest()
+      if (!organisationId) {
+        return {
+          active: [],
+          discharged: [],
+          unassigned: []
+        }
+      }
       if (wardId) {
         req.setWardId(wardId)
       }
-      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata())
+      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata(organisationId))
 
       const patientList: PatientListDTO = {
         active: res.getActiveList().map(value => {

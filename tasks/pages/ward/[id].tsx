@@ -15,7 +15,7 @@ import type { PatientDTO, PatientMinimalDTO } from '../../mutations/patient_muta
 import {
   useAssignBedMutation,
   usePatientCreateMutation,
-  usePatientDischargeMutation,
+  usePatientDischargeMutation, useReadmitPatientMutation,
   useUnassignMutation
 } from '../../mutations/patient_mutations'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
@@ -85,7 +85,10 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
 const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
   const router = useRouter()
-  const [draggedPatient, setDraggedPatient] = useState<{ patient?: PatientMinimalDTO, bed?: BedWithPatientWithTasksNumberDTO }>()
+  const [draggedPatient, setDraggedPatient] = useState<{
+    patient?: PatientMinimalDTO,
+    bed?: BedWithPatientWithTasksNumberDTO
+  }>()
   const { id } = router.query
   const wardId = id as string
   const { data: ward } = useWardQuery(wardId)
@@ -117,6 +120,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   })
   const unassignMutation = useUnassignMutation()
   const dischargeMutation = usePatientDischargeMutation()
+  const readmitPatientMutation = useReadmitPatientMutation()
 
   const sensorOptions = { activationConstraint: { distance: 8 } }
   const sensors = useSensors(
@@ -137,21 +141,33 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   }, [])
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event
+    const {
+      active,
+      over
+    } = event
     const overData = over?.data.current
     const patientId = draggedPatient?.patient?.id ?? draggedPatient?.bed?.patient?.id ?? ''
     if (overData && active.data.current) {
       if (overData.patientListSection) {
         // Moving in patientlist
         if (overData.patientListSection === 'unassigned') {
-          unassignMutation.mutate(patientId) // TODO this doesn't work for unassigned patients
+          console.log(active.data.current)
+          if (active.data.current.discharged) {
+            readmitPatientMutation.mutate(patientId)
+          } else {
+            unassignMutation.mutate(patientId)
+          }
+          unassignMutation.mutate(patientId)
         } else if (overData.patientListSection === 'discharged') {
           dischargeMutation.mutate(patientId)
         }
       } else {
         // Moving on bed cards
         setDraggingRoomId(overData.room.id)
-        assignBedMutation.mutate({ id: overData.bed.id, patientId })
+        assignBedMutation.mutate({
+          id: overData.bed.id,
+          patientId
+        })
       }
     }
 
@@ -174,7 +190,10 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     updatedContext.patient = patient
 
     if (contextState.bedId) {
-      assignBedMutation.mutate({ id: contextState.bedId, patientId: patient.id })
+      assignBedMutation.mutate({
+        id: contextState.bedId,
+        patientId: patient.id
+      })
     }
     setContextState(updatedContext)
   })
@@ -182,9 +201,18 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations' },
-        { display: translation.ward, link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations' },
-        { display: translation.room, link: `/ward/${wardId}` }
+        {
+          display: translation.organization,
+          link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations'
+        },
+        {
+          display: translation.ward,
+          link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations'
+        },
+        {
+          display: translation.room,
+          link: `/ward/${wardId}`
+        }
       ]}
     >
       <Head>
@@ -198,17 +226,32 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           if (contextState.patient) {
             createMutation.mutate(contextState.patient)
           } else {
-            setContextState({ ...emptyWardOverviewContextState, wardId: contextState.wardId, patient: undefined })
+            setContextState({
+              ...emptyWardOverviewContextState,
+              wardId: contextState.wardId,
+              patient: undefined
+            })
           }
         }}
         onCancel={() => {
-          setContextState({ ...emptyWardOverviewContextState, wardId: contextState.wardId, patient: undefined })
+          setContextState({
+            ...emptyWardOverviewContextState,
+            wardId: contextState.wardId,
+            patient: undefined
+          })
         }}
         onBackgroundClick={() => {
-          setContextState({ ...emptyWardOverviewContextState, wardId: contextState.wardId, patient: undefined })
+          setContextState({
+            ...emptyWardOverviewContextState,
+            wardId: contextState.wardId,
+            patient: undefined
+          })
         }}
       />
-      <WardOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
+      <WardOverviewContext.Provider value={{
+        state: contextState,
+        updateContext: setContextState
+      }}>
         <DndContext
           sensors={sensors}
           onDragStart={handleDragStart}
@@ -217,12 +260,15 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         >
           <TwoColumn
             disableResize={false}
-            constraints={{ right: { min: '580px' }, left: { min: '33%' } }}
+            constraints={{
+              right: { min: '580px' },
+              left: { min: '33%' }
+            }}
             baseLayoutValue="-580px"
             left={() => (<WardRoomList key={wardId}/>)}
             right={width =>
               isShowingPatientList ? (
-                    <PatientList width={width}/>
+                  <PatientList width={width}/>
               ) :
                 contextState.patientId && (
                   <div>
@@ -236,8 +282,10 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           />
           {/* TODO Later reenable the dropAnimation */}
           <DragOverlay style={{ width: '200px' }} dropAnimation={null}>
-            {draggedPatient && (draggedPatient.patient ?
-              <DragCard cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.patient.name}</Span></DragCard>
+            {draggedPatient && (draggedPatient.patient ? (
+                <DragCard
+                  cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.patient.name}</Span></DragCard>
+            )
               : draggedPatient.bed && draggedPatient.bed.patient && (
                 <PatientCard
                   bedName={draggedPatient.bed.name}

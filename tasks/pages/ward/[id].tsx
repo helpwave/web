@@ -140,6 +140,14 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     }
   }, [])
 
+  const readmitAndAssignPatient = async (patientId: string, bedId: string) => {
+    await readmitPatientMutation.mutate(patientId)
+    assignBedMutation.mutate({
+      id: bedId,
+      patientId
+    })
+  }
+
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const {
       active,
@@ -151,7 +159,6 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       if (overData.patientListSection) {
         // Moving in patientlist
         if (overData.patientListSection === 'unassigned') {
-          console.log(active.data.current)
           if (active.data.current.discharged) {
             readmitPatientMutation.mutate(patientId)
           } else {
@@ -164,10 +171,14 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       } else {
         // Moving on bed cards
         setDraggingRoomId(overData.room.id)
-        assignBedMutation.mutate({
-          id: overData.bed.id,
-          patientId
-        })
+        if (active.data.current.discharged) {
+          readmitAndAssignPatient(patientId, overData.bed.id).then()
+        } else {
+          assignBedMutation.mutate({
+            id: overData.bed.id,
+            patientId
+          })
+        }
       }
     }
 
@@ -283,8 +294,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           {/* TODO Later reenable the dropAnimation */}
           <DragOverlay style={{ width: '200px' }} dropAnimation={null}>
             {draggedPatient && (draggedPatient.patient ? (
-                <DragCard
-                  cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.patient.name}</Span></DragCard>
+                  <DragCard
+                    cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.patient.name}</Span></DragCard>
             )
               : draggedPatient.bed && draggedPatient.bed.patient && (
                 <PatientCard

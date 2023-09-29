@@ -14,7 +14,8 @@ import type {
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
-  usePatientListQuery, useReadmitPatientMutation
+  usePatientListQuery,
+  useReadmitPatientMutation
 } from '../../mutations/patient_mutations'
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'

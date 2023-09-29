@@ -12,7 +12,8 @@ import {
   GetPatientDetailsResponse,
   GetPatientAssignmentByWardRequest,
   GetPatientListRequest,
-  DeletePatientRequest, ReadmitPatientRequest
+  DeletePatientRequest,
+  ReadmitPatientRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedWithPatientId } from './bed_mutations'

@@ -15,7 +15,8 @@ import type { PatientDTO, PatientMinimalDTO } from '../../mutations/patient_muta
 import {
   useAssignBedMutation,
   usePatientCreateMutation,
-  usePatientDischargeMutation, useReadmitPatientMutation,
+  usePatientDischargeMutation,
+  useReadmitPatientMutation
   useUnassignMutation
 } from '../../mutations/patient_mutations'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'

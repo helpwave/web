@@ -16,7 +16,7 @@ import {
   useAssignBedMutation,
   usePatientCreateMutation,
   usePatientDischargeMutation,
-  useReadmitPatientMutation
+  useReadmitPatientMutation,
   useUnassignMutation
 } from '../../mutations/patient_mutations'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
@@ -99,6 +99,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     wardId
   })
   const [draggingRoomId, setDraggingRoomId] = useState<string>()
+  const [draggingBedId, setDraggingBedId] = useState<string>()
+
   const assignBedMutation = useAssignBedMutation(bed => {
     if (draggingRoomId) {
       setContextState({
@@ -121,7 +123,14 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   })
   const unassignMutation = useUnassignMutation()
   const dischargeMutation = usePatientDischargeMutation()
-  const readmitPatientMutation = useReadmitPatientMutation()
+  const readmitPatientMutation = useReadmitPatientMutation(patientId => {
+    if (draggingBedId) {
+      assignBedMutation.mutate({
+        id: draggingBedId,
+        patientId
+      })
+    }
+  })
 
   const sensorOptions = { activationConstraint: { distance: 8 } }
   const sensors = useSensors(
@@ -141,13 +150,10 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     }
   }, [])
 
-  const readmitAndAssignPatient = async (patientId: string, bedId: string) => {
-    await readmitPatientMutation.mutate(patientId)
-    assignBedMutation.mutate({
-      id: bedId,
-      patientId
-    })
-  }
+  const readmitAndAssignPatient = useCallback(async (patientId: string, bedId: string) => {
+    setDraggingBedId(bedId)
+    readmitPatientMutation.mutate(patientId)
+  }, [readmitPatientMutation])
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const {
@@ -184,7 +190,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     }
 
     setDraggedPatient(undefined)
-  }, [assignBedMutation, unassignMutation, dischargeMutation, draggedPatient])
+  }, [assignBedMutation, unassignMutation, readmitPatientMutation, readmitAndAssignPatient, dischargeMutation, draggedPatient])
 
   const handleDragCancel = useCallback(() => {
     setDraggedPatient(undefined)

@@ -386,7 +386,7 @@ export const useDeletePatientMutation = () => {
   })
 }
 
-export const useReadmitPatientMutation = () => {
+export const useReadmitPatientMutation = (callback: (patientId: string) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patientId: string) => {
@@ -395,6 +395,7 @@ export const useReadmitPatientMutation = () => {
 
       const res = await patientService.readmitPatient(req, getAuthenticatedGrpcMetadata())
 
+      callback(patientId)
       return res.toObject()
     },
     onSuccess: () => {

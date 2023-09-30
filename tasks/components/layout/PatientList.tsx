@@ -14,7 +14,8 @@ import type {
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
-  usePatientListQuery
+  usePatientListQuery,
+  useReadmitPatientMutation
 } from '../../mutations/patient_mutations'
 import { Label } from '../Label'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
@@ -33,6 +34,7 @@ type PatientListTranslation = {
   active: string,
   unassigned: string,
   discharged: string,
+  readmit: string,
   discharge: string,
   dischargeConfirmText: string,
   delete: string,
@@ -50,6 +52,7 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     unassigned: 'Unassigned',
     discharged: 'Discharged Patients',
     discharge: 'Discharge',
+    readmit: 'Readmit',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
     delete: 'Delete',
     deleteConfirmText: 'Do you really want to delete the patient?',
@@ -64,6 +67,7 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     unassigned: 'Nicht zugeordnet',
     discharged: 'Entlassene Patienten',
     discharge: 'Entlassen',
+    readmit: 'Wiederaufnehmen',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
     delete: 'Löschen',
     deleteConfirmText: 'Willst du den Patienten wirklich löschen?',
@@ -105,11 +109,19 @@ export const PatientList = ({
   const { id } = router.query
   const wardId = id as string
   const { data: ward } = useWardQuery(wardId)
-  const { state: context, updateContext } = useContext(WardOverviewContext)
-  const { data, isLoading, isError } = usePatientListQuery(ward?.organizationId, wardId)
+  const {
+    state: context,
+    updateContext
+  } = useContext(WardOverviewContext)
+  const {
+    data,
+    isLoading,
+    isError
+  } = usePatientListQuery(ward?.organizationId, wardId)
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const deletePatientMutation = useDeletePatientMutation()
+  const readmitPatientMutation = useReadmitPatientMutation()
   const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
@@ -169,11 +181,19 @@ export const PatientList = ({
               header={<Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>}
             >
               {filteredActive.map(patient => (
-                <Draggable id={patient.id + 'patientList'} key={patient.id} data={{ id: patient.id, name: patient.name }}>
+                <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
+                  id: patient.id,
+                  name: patient.name
+                }}>
                   {() => (
                     <div
                       className={tw('flex flex-row pt-2 border-b-2 justify-between items-center cursor-pointer')}
-                      onClick={() => updateContext({ ...context, patientId: patient.id, roomId: patient.room.id, bedId: patient.bed.id })}
+                      onClick={() => updateContext({
+                        ...context,
+                        patientId: patient.id,
+                        roomId: patient.room.id,
+                        bedId: patient.bed.id
+                      })}
                     >
                       <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                       <div className={tw('flex flex-row flex-1 justify-between items-center')}>
@@ -200,7 +220,11 @@ export const PatientList = ({
                 <HideableContentSection
                   initiallyOpen={initialOpenedSections?.unassigned}
                   disabled={filteredUnassigned.length <= 0}
-                  header={(<Span type="accent" className={tw('text-hw-label-yellow-text')}>{`${translation.unassigned} (${filteredUnassigned.length})`}</Span>)}
+                  header={(
+                    <Span type="accent" className={tw('text-hw-label-yellow-text')}>
+                      {`${translation.unassigned} (${filteredUnassigned.length})`}
+                    </Span>
+                  )}
                 >
                   {filteredUnassigned.map(patient => (
                     <Draggable id={patient.id} key={patient.id} data={patient}>
@@ -208,7 +232,10 @@ export const PatientList = ({
                         <div
                           key={patient.id}
                           className={tw('flex flex-row pt-2 border-b-2 items-center cursor-pointer')}
-                          onClick={() => updateContext({ wardId: context.wardId, patientId: patient.id })}
+                          onClick={() => updateContext({
+                            wardId: context.wardId,
+                            patientId: patient.id
+                          })}
                         >
                           <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                           <div className={tw('flex flex-row flex-1 justify-between items-center')}>
@@ -228,28 +255,47 @@ export const PatientList = ({
               </div>
             )}
           </Droppable>
-          <div className={tx('p-2 border-2 border-transparent rounded-xl')}>
-            <HideableContentSection
-              initiallyOpen={initialOpenedSections?.discharged}
-              disabled={filteredDischarged.length <= 0}
-              header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
-            >
-              {filteredDischarged.map(patient => (
-                <div
-                  key={patient.id}
-                  className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
+          <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
+            {({ isOver }) => (
+              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
+                'border-hw-primary-700': isOver,
+                'border-transparent': !isOver
+              })}>
+                <HideableContentSection
+                  initiallyOpen={initialOpenedSections?.discharged}
+                  disabled={filteredDischarged.length <= 0}
+                  header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
                 >
-                  <Span className={tw('font-space font-bold')}>{patient.name}</Span>
-                  <Button color="negative" variant="textButton" onClick={event => {
-                    event.stopPropagation()
-                    deletePatientMutation.mutate(patient.id)
-                  }}>
-                    {translation.delete}
-                  </Button>
-                </div>
-              ))}
-            </HideableContentSection>
-          </div>
+                  {filteredDischarged.map(patient => (
+                    <Draggable id={patient.id} key={patient.id} data={{ ...patient, discharged: true }}>
+                      {() => (
+                        <div
+                          key={patient.id}
+                          className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
+                        >
+                          <Span className={tw('font-space font-bold')}>{patient.name}</Span>
+                          <div className={tw('flex flex-row gap-x-4')}>
+                            <Button color="accent" variant="textButton" onClick={event => {
+                              event.stopPropagation()
+                              readmitPatientMutation.mutate(patient.id)
+                            }}>
+                              {translation.readmit}
+                            </Button>
+                            <Button color="negative" variant="textButton" onClick={event => {
+                              event.stopPropagation()
+                              deletePatientMutation.mutate(patient.id)
+                            }}>
+                              {translation.delete}
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </HideableContentSection>
+              </div>
+            )}
+          </Droppable>
         </div>
       </LoadingAndErrorComponent>
     </div>

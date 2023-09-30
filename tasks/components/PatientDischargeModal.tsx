@@ -10,20 +10,17 @@ import { tw } from '@helpwave/common/twind'
 
 type PatientDischargeModalTranslation = {
   followingPatient: string,
-  dischargePatient: string,
-  dischargePatientDescription: string
+  dischargePatient: string
 }
 
 const defaultPatientDischargeModalTranslation: Record<Languages, PatientDischargeModalTranslation > = {
   en: {
     followingPatient: 'The following patient will be discharged',
     dischargePatient: 'Discharge Patient?',
-    dischargePatientDescription: 'This cannot be undone for now, be careful.'
   },
   de: {
     followingPatient: 'Der folgende Patient wird entlassen',
     dischargePatient: 'Patient entlassen?',
-    dischargePatientDescription: 'Diese Aktion kann aktuell nicht rückgängig gemacht werden, vorsicht.'
   }
 }
 
@@ -49,7 +46,6 @@ export const PatientDischargeModal = ({
       buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'negative' }]}
     >
       {patient && <><Span>{`${translation.followingPatient}: `}</Span><Span className={tw('!font-medium')}>{patient.name}</Span></>}
-      <Span className={tw('text-hw-warn-400')}>{translation.dischargePatientDescription}</Span>
     </ConfirmDialog>
   )
 }

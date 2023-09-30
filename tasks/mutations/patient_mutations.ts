@@ -12,7 +12,8 @@ import {
   GetPatientDetailsResponse,
   GetPatientAssignmentByWardRequest,
   GetPatientListRequest,
-  DeletePatientRequest
+  DeletePatientRequest,
+  ReadmitPatientRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedWithPatientId } from './bed_mutations'
@@ -376,6 +377,25 @@ export const useDeletePatientMutation = () => {
 
       const res = await patientService.deletePatient(req, getAuthenticatedGrpcMetadata())
 
+      return res.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([patientsQueryKey]).then()
+    }
+  })
+}
+
+export const useReadmitPatientMutation = (callback: (patientId: string) => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (patientId: string) => {
+      const req = new ReadmitPatientRequest()
+      req.setPatientId(patientId)
+
+      const res = await patientService.readmitPatient(req, getAuthenticatedGrpcMetadata())
+
+      callback(patientId)
       return res.toObject()
     },
     onSuccess: () => {

@@ -1,20 +1,78 @@
-import { tw, tx } from '../../twind'
-import type { MouseEventHandler, PropsWithChildren } from 'react'
+import { tx, tw } from '../../twind'
+import type { MouseEventHandler, PropsWithChildren, ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import { useContext, useEffect } from 'react'
 import { ModalContext } from './ModalRegister'
+import { Span } from '../Span'
+import { X } from 'lucide-react'
+import type { Languages } from '../../hooks/useLanguage'
+import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
+
+type ModalHeaderTranslation = {
+  close: string
+}
+
+const defaultModalHeaderTranslation: Record<Languages, ModalHeaderTranslation> = {
+  en: {
+    close: 'Close'
+  },
+  de: {
+    close: 'Schließen'
+  }
+}
+
+export type ModalHeaderProps = {
+  onCloseClick?: () => void,
+  title?: ReactNode,
+  titleText?: string,
+  description?: ReactNode,
+  descriptionText?: string
+}
+
+/**
+ * A default Header to be used by modals to have a uniform design
+ */
+export const ModalHeader = ({
+  language,
+  onCloseClick,
+  title,
+  titleText = '',
+  description,
+  descriptionText = ''
+}: PropsWithLanguage<ModalHeaderTranslation, ModalHeaderProps>) => {
+  const translation = useTranslation(language, defaultModalHeaderTranslation)
+  return (
+    <div className={tw('flex flex-col')}>
+      <div className={tw('flex flex-row justify-between gap-x-2')}>
+        {title ?? (
+          <Span type="modalTitle" className={tx({
+            'mb-1': description || descriptionText,
+          })}>
+            {titleText}
+          </Span>
+        )}
+        {!!onCloseClick && (
+          <button className={tw('flex flex-row gap-x-2')} onClick={onCloseClick}>
+            <Span>{translation.close}</Span>
+            <X/>
+          </button>
+        )}
+      </div>
+      {description ?? (<Span type="description">{descriptionText}</Span>)}
+    </div>
+  )
+}
 
 export const modalRootName = 'modal-root'
 
 export type ModalProps = {
   id: string,
   isOpen: boolean,
-  title?: string,
-  description?: string,
   onBackgroundClick?: MouseEventHandler<HTMLDivElement>,
   backgroundClassName?: string,
   modalClassName?: string
-}
+} & ModalHeaderProps
 
 /**
  * A Generic Modal Window
@@ -27,14 +85,17 @@ export const Modal = ({
   children,
   id,
   isOpen,
-  title,
-  description,
   onBackgroundClick,
   backgroundClassName = '',
-  modalClassName = ''
+  modalClassName = '',
+  ...modalHeaderProps
 }: PropsWithChildren<ModalProps>) => {
   const modalRoot = document.getElementById(modalRootName)
-  const { register, addToRegister, removeFromRegister } = useContext(ModalContext)
+  const {
+    register,
+    addToRegister,
+    removeFromRegister
+  } = useContext(ModalContext)
 
   if (!id) {
     console.error('the id cannot be empty')
@@ -72,12 +133,7 @@ export const Modal = ({
       {clickTargetBackground}
       <div
         className={tx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
-        {title && (
-          <span className={tx('text-lg font-semibold', { 'mb-1': description, 'mb-3': !description })}>
-              {title}
-          </span>
-        )}
-        {description && <span className={tw('mb-3 text-gray-400')}>{description}</span>}
+        <ModalHeader {...modalHeaderProps} />
         {children}
       </div>
       {isSecondLast && register.length > 1 && backgroundNormal}

@@ -143,6 +143,7 @@ export const PatientList = ({
         }}
         onBackgroundClick={() => setDischargingPatient(undefined)}
         onCancel={() => setDischargingPatient(undefined)}
+        onCloseClick={() => setDischargingPatient(undefined)}
         patient={dischargingPatient}
       />
       <AddPatientModal

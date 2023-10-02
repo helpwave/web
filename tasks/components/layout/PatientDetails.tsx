@@ -121,6 +121,7 @@ export const PatientDetail = ({
         isOpen={isShowingDischargeDialog}
         onCancel={() => setIsShowingDischargeDialog(false)}
         onBackgroundClick={() => setIsShowingDischargeDialog(false)}
+        onCloseClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
           dischargeMutation.mutate(newPatient.id)
           setIsShowingDischargeDialog(false)

@@ -2,7 +2,7 @@ import type { DetailedHTMLProps, HTMLAttributes, PropsWithChildren } from 'react
 import { tx } from '../twind'
 
 export type SpanProps = DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> & {
-  type?: 'normal' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'tableHeader' | 'formError' | 'formDescription',
+  type?: 'normal' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'tableHeader' | 'formError' | 'formDescription' | 'modalTitle',
   className?: string
 }
 
@@ -16,6 +16,7 @@ export const Span = ({ children, type = 'normal', className = '', ...restProps }
     <span
       className={tx({
         'text-xl font-space font-bold': type === 'title',
+        'font-bold text-lg': type === 'modalTitle',
         'font-semibold text-lg': type === 'subsectionTitle',
         'font-space font-bold': type === 'subsubsectionTitle',
         'text-sm text-gray-600 font-bold': type === 'accent',
@@ -25,7 +26,7 @@ export const Span = ({ children, type = 'normal', className = '', ...restProps }
         'text-lg font-space font-medium': type === 'tableName',
         'text-gray-600 font-bold': type === 'tableHeader',
         'text-hw-negative-500 text-sm': type === 'formError',
-        'text-gray-500 text-sm': type === 'formDescription'
+        'text-gray-500 text-sm': type === 'formDescription',
       },
       className)}
       {...restProps}

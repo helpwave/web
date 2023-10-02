@@ -13,12 +13,12 @@ import {
   GetPatientAssignmentByWardRequest,
   GetPatientListRequest,
   DeletePatientRequest,
-  ReadmitPatientRequest
+  ReadmitPatientRequest, GetRecentPatientsRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedWithPatientId } from './bed_mutations'
 import type { RoomWithMinimalBedAndPatient } from './room_mutations'
-import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
+import { roomOverviewsQueryKey, roomsQueryKey, useRoomQuery } from './room_mutations'
 import { noop } from '@helpwave/common/util/noop'
 
 export type PatientMinimalDTO = {
@@ -59,18 +59,24 @@ export type PatientWithBedAndRoomDTO = PatientMinimalDTO & {
   bed: { id: string, name: string }
 }
 
+export type RecentPatientDTO = PatientMinimalDTO & {
+  wardId?: string,
+  room?: { id: string, name: string },
+  bed?: { id: string, name: string }
+}
+
 export type PatientListDTO = {
   active: PatientWithBedAndRoomDTO[],
   unassigned: PatientMinimalDTO[],
   discharged: PatientMinimalDTO[]
 }
 
-export type PatientWithBedIdDTO = PatientMinimalDTO &{
+export type PatientWithBedIdDTO = PatientMinimalDTO & {
   note: string,
   bedId: string
 }
 
-export type PatientDetailsDTO = PatientMinimalDTO &{
+export type PatientDetailsDTO = PatientMinimalDTO & {
   note: string,
   tasks: TaskDTO[]
 }
@@ -221,8 +227,14 @@ export const usePatientListQuery = (organisationId?: string, wardId?: string) =>
           return ({
             id: value.getId(),
             name: value.getHumanReadableIdentifier(),
-            bed: { id: bed?.getId() ?? '', name: bed?.getName() ?? '' },
-            room: { id: room?.getId() ?? '', name: room?.getName() ?? '' }
+            bed: {
+              id: bed?.getId() ?? '',
+              name: bed?.getName() ?? ''
+            },
+            room: {
+              id: room?.getId() ?? '',
+              name: room?.getName() ?? ''
+            }
           })
         }),
         discharged: res.getDischargedPatientsList().map(value => ({
@@ -236,6 +248,42 @@ export const usePatientListQuery = (organisationId?: string, wardId?: string) =>
       }
 
       return patientList
+    }
+  })
+}
+
+export const useRecentPatientsQuery = () => {
+  const query = useRoomQuery
+  return useQuery({
+    queryKey: [patientsQueryKey],
+    queryFn: async () => {
+      const req = new GetRecentPatientsRequest()
+      const res = await patientService.getRecentPatients(req, getAuthenticatedGrpcMetadata())
+
+      const patients: RecentPatientDTO[] = []
+      for (const patient of res.getRecentPatientsList()) {
+        const room = patient.getRoom()
+        const bed = patient.getBed()
+        let wardId: string | undefined // TODO get wardId from query once implemented
+        if (room) {
+          const roomByQuery = await query(room.getId())
+          if (roomByQuery.data) {
+            wardId = roomByQuery.data.id
+          } else {
+            console.error('RecentPatientsQuery failed room not loaded')
+          }
+        }
+
+        patients.push({
+          id: patient.getId(),
+          name: patient.getHumanReadableIdentifier(),
+          wardId,
+          bed: bed ? { id: bed.getId(), name: bed.getName() } : undefined,
+          room: room ? { id: room.getId(), name: room.getId() } : undefined
+        })
+      }
+
+      return patients
     }
   })
 }
@@ -257,7 +305,10 @@ export const usePatientCreateMutation = (organisationId: string, callback: (pati
         console.error('create room failed')
       }
 
-      patient = { ...patient, id: res.getId() }
+      patient = {
+        ...patient,
+        id: res.getId()
+      }
 
       callback(patient)
       return patient

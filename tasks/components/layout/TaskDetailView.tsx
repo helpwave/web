@@ -208,6 +208,7 @@ export const TaskDetailView = ({
         isOpen={isShowingPublicDialog}
         onBackgroundClick={() => setIsShowingPublicDialog(false)}
         onCancel={() => setIsShowingPublicDialog(false)}
+        onCloseClick={() => setIsShowingPublicDialog(false)}
         onConfirm={() => {
           setIsShowingPublicDialog(false)
           const newTask = {
@@ -217,8 +218,8 @@ export const TaskDetailView = ({
           setTask(newTask)
           updateLocallyAndExternally(newTask)
         }}
-        title={translation.publishTask}
-        description={translation.publishTaskDescription}
+        titleText={translation.publishTask}
+        descriptionText={translation.publishTaskDescription}
       />
       <ModalHeader
         title={(

@@ -152,6 +152,7 @@ export const PatientList = ({
         isOpen={isShowingAddPatientModal !== 0}
         onConfirm={() => setIsShowingAddPatientModal(0)}
         onCancel={() => setIsShowingAddPatientModal(0)}
+        onCloseClick={() => setIsShowingAddPatientModal(0)}
         onBackgroundClick={() => setIsShowingAddPatientModal(0)}
         wardId={context.wardId}
       />

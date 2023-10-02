@@ -13,7 +13,7 @@ type PatientDischargeModalTranslation = {
   dischargePatient: string
 }
 
-const defaultPatientDischargeModalTranslation: Record<Languages, PatientDischargeModalTranslation > = {
+const defaultPatientDischargeModalTranslation: Record<Languages, PatientDischargeModalTranslation> = {
   en: {
     followingPatient: 'The following patient will be discharged',
     dischargePatient: 'Discharge Patient?',
@@ -24,7 +24,7 @@ const defaultPatientDischargeModalTranslation: Record<Languages, PatientDischarg
   }
 }
 
-export type PatientDischargeModalProps = Omit<ConfirmDialogProps, 'title'|'descriptionText'> & {
+export type PatientDischargeModalProps = Omit<ConfirmDialogProps, 'title' | 'descriptionText'> & {
   patient?: PatientMinimalDTO
 }
 
@@ -45,7 +45,12 @@ export const PatientDischargeModal = ({
       buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'negative' }]}
       {...confirmDialogProps}
     >
-      {patient && <><Span className={tw('mt-2')}>{`${translation.followingPatient}: `}</Span><Span className={tw('!font-medium')}>{patient.name}</Span></>}
+      {patient && (
+        <>
+          <Span className={tw('mt-2')}>{`${translation.followingPatient}: `}</Span>
+          <Span className={tw('!font-medium')}>{patient.name}</Span>
+        </>
+      )}
     </ConfirmDialog>
   )
 }

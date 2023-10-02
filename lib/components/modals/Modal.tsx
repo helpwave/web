@@ -44,7 +44,7 @@ export const ModalHeader = ({
   const translation = useTranslation(language, defaultModalHeaderTranslation)
   return (
     <div className={tw('flex flex-col')}>
-      <div className={tw('flex flex-row justify-between gap-x-2')}>
+      <div className={tw('flex flex-row justify-between items-start gap-x-8')}>
         {title ?? (
           <Span type="modalTitle" className={tx({
             'mb-1': description || descriptionText,

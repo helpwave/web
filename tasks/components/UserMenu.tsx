@@ -56,7 +56,13 @@ export const UserMenu = ({
 
   return (
     <div className={tw('relative z-10')}>
-      <LanguageModal id="userMenu-LanguageModal" onDone={() => setLanguageModalOpen(false)} isOpen={isLanguageModalOpen} />
+      <LanguageModal
+        id="userMenu-LanguageModal"
+        onDone={() => setLanguageModalOpen(false)}
+        onBackgroundClick={() => setLanguageModalOpen(false)}
+        onCloseClick={() => setLanguageModalOpen(false)}
+        isOpen={isLanguageModalOpen}
+      />
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick} className={tw('flex gap-2 relative items-center group cursor-pointer select-none')}>
           <div className={tw('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.name}</div>

@@ -16,8 +16,7 @@ export const Span = ({ children, type = 'normal', className = '', ...restProps }
     <span
       className={tx({
         'text-xl font-space font-bold': type === 'title',
-        'font-bold text-lg': type === 'modalTitle',
-        'font-semibold text-lg': type === 'subsectionTitle',
+        'font-semibold text-lg': type === 'subsectionTitle' || type === 'modalTitle',
         'font-space font-bold': type === 'subsubsectionTitle',
         'text-sm text-gray-600 font-bold': type === 'accent',
         'text-gray-400': type === 'description',

@@ -140,11 +140,12 @@ export const RoomList = ({
     <div className={tw('flex flex-col')}>
       <ConfirmDialog
         id="roomlist-DeleteBedsDialog"
-        title={translation.deleteConfirmText(multipleInDelete)}
-        description={translation.dangerZoneText(multipleInDelete)}
+        titleText={translation.deleteConfirmText(multipleInDelete)}
+        descriptionText={translation.dangerZoneText(multipleInDelete)}
         isOpen={deletionConfirmDialogElement !== undefined}
         onCancel={() => setDeletionConfirmDialogElement(undefined)}
         onBackgroundClick={() => setDeletionConfirmDialogElement(undefined)}
+        onCloseClick={() => setDeletionConfirmDialogElement(undefined)}
         onConfirm={() => {
           let toDeleteElements: RoomOverviewDTO[]
           if (deletionConfirmDialogElement) {
@@ -164,7 +165,7 @@ export const RoomList = ({
         wardId={context.state.wardId}
         roomId={managedRoom ?? ''}
         onBackgroundClick={() => setManagedRoom(undefined)}
-        onClose={() => setManagedRoom(undefined)}
+        onCloseClick={() => setManagedRoom(undefined)}
       />
       <LoadingAndErrorComponent
         isLoading={isLoading}

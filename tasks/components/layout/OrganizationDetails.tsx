@@ -131,11 +131,12 @@ export const OrganizationDetail = ({
     >
       <ConfirmDialog
         id="organizationDetail-DeleteDialog"
-        title={translation.deleteConfirmText}
-        description={translation.dangerZoneText}
+        titleText={translation.deleteConfirmText}
+        descriptionText={translation.dangerZoneText}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
         onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+        onCloseClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
           deleteMutation.mutate(contextState.organizationId)
@@ -150,6 +151,10 @@ export const OrganizationDetail = ({
           resetForm()
         }}
         onDecline={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
+        onCloseClick={() => {
           setIsShowingReSignInDialog(undefined)
           resetForm()
         }}
@@ -173,7 +178,7 @@ export const OrganizationDetail = ({
           }}
         />
         {!isCreatingNewOrganization && (
-          <OrganizationMemberList />
+          <OrganizationMemberList/>
         )}
         <OrganizationInvitationList
           onChange={setOrganizationInvites}

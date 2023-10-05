@@ -239,7 +239,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       <ConfirmDialog
         id="WardOverview-AddPatientDialog"
         isOpen={isShowingPatientDialog}
-        title={translation.addPatientDialogTitle}
+        titleText={translation.addPatientDialogTitle}
         onConfirm={() => {
           if (contextState.patient) {
             createMutation.mutate(contextState.patient)
@@ -252,6 +252,13 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           }
         }}
         onCancel={() => {
+          setContextState({
+            ...emptyWardOverviewContextState,
+            wardId: contextState.wardId,
+            patient: undefined
+          })
+        }}
+        onCloseClick={() => {
           setContextState({
             ...emptyWardOverviewContextState,
             wardId: contextState.wardId,

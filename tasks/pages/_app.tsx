@@ -10,6 +10,7 @@ import MobileInterceptor from '../components/MobileInterceptor'
 import titleWrapper from '../utils/titleWrapper'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
+import { isMobile } from 'react-device-detect'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -23,31 +24,33 @@ const spaceGrotesk = SpaceGrotesk({
 
 const queryClient = new QueryClient()
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({
+  Component,
+  pageProps
+}: AppProps) {
   return (
     <ProvideLanguage>
-      <div className={tw('mobile:hidden')}>
-        <Head>
-          <title>{titleWrapper()}</title>
-          <style>{`
+      { /* v Scans the user agent */}
+      {!isMobile ? (
+        <>
+          <Head>
+            <title>{titleWrapper()}</title>
+            <style>{`
         :root {
           --font-inter: ${inter.style.fontFamily};
           --font-space: ${spaceGrotesk.style.fontFamily};
         }
       `}</style>
-        </Head>
-        <QueryClientProvider client={queryClient}>
-          <ModalRegister>
-            <div className={tw('font-sans')} id={modalRootName}>
-              <Component {...pageProps} />
-            </div>
-          </ModalRegister>
-        </QueryClientProvider>
-      </div>
-
-      <div className={tw('desktop:hidden')}>
-        <MobileInterceptor {...pageProps} />
-      </div>
+          </Head>
+          <QueryClientProvider client={queryClient}>
+            <ModalRegister>
+              <div className={tw('font-sans')} id={modalRootName}>
+                <Component {...pageProps} />
+              </div>
+            </ModalRegister>
+          </QueryClientProvider>
+        </>
+      ) : (<MobileInterceptor {...pageProps} />)}
     </ProvideLanguage>
   )
 }

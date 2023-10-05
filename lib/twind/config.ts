@@ -143,10 +143,6 @@ export const config = defineConfig({
         sans: ['var(--font-inter)', ...fontFamily.sans],
         space: ['var(--font-space)', ...fontFamily.sans]
       },
-      screens: {
-        desktop: { min: '1350px' },
-        mobile: { max: '1350px' },
-      },
       animation: {
         'fade': 'fadeOut 3s ease-in-out',
         'wave-big-left-up': 'bigLeftUp 1.7s ease-in 0s infinite normal',

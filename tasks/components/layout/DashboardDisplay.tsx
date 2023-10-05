@@ -63,7 +63,7 @@ export const DashboardDisplay = ({
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
       <InvitationBanner />
       <div className={tw('flex flex-col')}>
-        <div className={tw('flex flex-row justify-between mb-1')}>
+        <div className={tw('flex flex-row justify-between mb-1 gap-x-2')}>
           <div className={tw('flex flex-col')}>
             <Span className={tw('font-bold text-gray-700')}>{translation.recent}</Span>
             <Span type="subsectionTitle">{translation.organizations}</Span>

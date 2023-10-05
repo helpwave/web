@@ -4,22 +4,28 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Span } from '../Span'
 
-type Option<T> = {
+export type SelectOption<T> = {
   label: ReactNode,
   value: T,
-  disabled?: boolean
+  disabled?: boolean,
+  className?: string
 }
 
 export type SelectProps<T> = {
   value?: T,
   label?: string,
-  options: Option<T>[],
+  options: SelectOption<T>[],
   onChange: (value: T) => void,
   isHidingCurrentValue?: boolean,
   hintText?: string,
   showDisabledOptions?: boolean,
   className?: string,
-  isDisabled?: boolean
+  isDisabled?: boolean,
+  /**
+   * The items will be at the start of the select and aren't selectable
+   */
+  additionalItems?: ReactNode[],
+  selectedDisplayOverwrite?: ReactNode
 };
 
 /**
@@ -36,7 +42,9 @@ export const Select = <T, >({
   hintText = '',
   showDisabledOptions = true,
   isDisabled,
-  className
+  className,
+  additionalItems,
+  selectedDisplayOverwrite,
 }: SelectProps<T>) => {
   // Notice: for more complex types this check here might need an additional compare method
   let filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
@@ -63,22 +71,33 @@ export const Select = <T, >({
               )}
               disabled={isDisabled}
             >
-              <Span>{options.find(option => option.value === value)?.label ?? hintText}</Span>
+              <Span>{selectedDisplayOverwrite ?? options.find(option => option.value === value)?.label ?? hintText}</Span>
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items
-              className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg max-h-[30vh] overflow-y-auto')}>
+              className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg max-h-[30vh] overflow-y-auto')}
+            >
+              {(additionalItems ?? []).map((item, index) => (
+                <div key={`additionalItems${index}`}
+                     className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
+                       'border-b-0 rounded-b-lg': filteredOptions.length === 0 && index === (additionalItems?.length ?? 1) - 1,
+                     })}
+                >
+                  {item}
+                </div>
+              ))}
               {filteredOptions.map((option, index) => (
                 <Menu.Item key={`item${index}`}>
                   {
                     <div
-                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
-                        'bg-gray-100': option.value === value,
-                        'bg-gray-50': index % 2 === 1,
-                        'text-gray-300 cursor-not-allowed': !!option.disabled,
-                        'hover:bg-gray-100 cursor-pointer': !option.disabled,
-                        'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
-                      })}
+                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0',
+                        option.className, {
+                          'bg-gray-100': option.value === value,
+                          'bg-gray-50': index % 2 === 1,
+                          'text-gray-300 cursor-not-allowed': !!option.disabled,
+                          'hover:bg-gray-100 cursor-pointer': !option.disabled,
+                          'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
+                        })}
                       onClick={() => {
                         if (!option.disabled) {
                           onChange(option.value)

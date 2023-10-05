@@ -3,9 +3,8 @@ import { useMembersByOrganizationQuery } from '../mutations/organization_member_
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { tx } from '@helpwave/common/twind'
 import { SearchableSelect } from '@helpwave/common/components/user_input/SearchableSelect'
-import type { OrgMember } from '../mutations/organization_mutations'
 
-export type AssigneeSelectProps = Omit<SelectProps<OrgMember>, 'options'> & {
+export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {
   organizationId: string
 }
 
@@ -13,9 +12,11 @@ export type AssigneeSelectProps = Omit<SelectProps<OrgMember>, 'options'> & {
  * A Select component for picking an assignee
  */
 export const AssigneeSelect = ({
+  value,
   organizationId,
   className,
   isHidingCurrentValue = false,
+  onChange,
   ...selectProps
 } : AssigneeSelectProps) => {
   const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
@@ -27,10 +28,12 @@ export const AssigneeSelect = ({
     >
       <SearchableSelect
         // TODO update later with avatar of assignee
+        value={data?.find(user => user.id === value)}
         options={(data ?? []).map(value => ({ value, label: value.name }))}
         isHidingCurrentValue={ isHidingCurrentValue}
         className={tx('w-full', className)}
         searchMapping={value => [value.value.id, value.value.email]}
+        onChange={(user) => { onChange(user.id) }}
         {...selectProps}
       />
     </LoadingAndErrorComponent>

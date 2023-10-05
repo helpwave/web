@@ -110,11 +110,11 @@ export const TaskTemplateDetails = ({
     <div className={tw('flex flex-col py-4 px-6')}>
       <ConfirmDialog
         id="TaskTemplateDetails-DeleteDialog"
-        title={translation.deleteConfirmText}
-        description={translation.deleteConfirmText}
+        titleText={translation.deleteConfirmText}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
         onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+        onCloseClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
           onDelete(context.state.template)

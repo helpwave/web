@@ -2,7 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreateRoomRequest,
   DeleteRoomRequest,
-  GetRoomOverviewsByWardRequest, GetRoomRequest,
+  GetRoomOverviewsByWardRequest,
+  GetRoomRequest,
   UpdateRoomRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'

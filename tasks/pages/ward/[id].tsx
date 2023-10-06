@@ -224,7 +224,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations'
         },
         {
-          display: translation.ward,
+          display: ward?.name ?? translation.ward,
           link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations'
         },
         {

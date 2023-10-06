@@ -49,10 +49,7 @@ export const UserMenu = ({
 }: PropsWithLanguage<UserMenuTranslation>) => {
   const translation = useTranslation(language, defaultUserMenuTranslations)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
-  const {
-    user,
-    signOut
-  } = useAuth()
+  const { user,    signOut  } = useAuth()
   const router = useRouter()
 
   if (!user) return null
@@ -62,8 +59,13 @@ export const UserMenu = ({
 
   return (
     <div className={tw('relative z-10')}>
-      <LanguageModal id="userMenu-LanguageModal" onDone={() => setLanguageModalOpen(false)}
-                     isOpen={isLanguageModalOpen}/>
+      <LanguageModal
+        id="userMenu-LanguageModal"
+        onDone={() => setLanguageModalOpen(false)}
+        onBackgroundClick={() => setLanguageModalOpen(false)}
+        onCloseClick={() => setLanguageModalOpen(false)}
+        isOpen={isLanguageModalOpen}
+      />
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick}
              className={tw('flex gap-2 relative items-center group cursor-pointer select-none')}>

@@ -17,8 +17,6 @@ import {
 import { useEffect, useState } from 'react'
 import type { BedWithPatientWithTasksNumberDTO } from '../mutations/bed_mutations'
 import { useBedCreateMutation, useBedDeleteMutation, useBedUpdateMutation } from '../mutations/bed_mutations'
-import { noop } from '@helpwave/common/util/noop'
-import { X } from 'lucide-react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Input } from '@helpwave/common/components/user_input/Input'
 
@@ -56,10 +54,9 @@ const defaultManageBedsModalTranslation: Record<Languages, ManageBedsModalTransl
   }
 }
 
-export type ManageBedsModalProps = Omit<ModalProps, 'title'|'description'> & {
+export type ManageBedsModalProps = ModalProps & {
   wardId: string, // TODO remove later
-  roomId: string,
-  onClose?: () => void
+  roomId: string
 }
 
 /**
@@ -69,8 +66,8 @@ export const ManageBedsModal = ({
   language,
   wardId,
   roomId,
-  onClose = noop,
   modalClassName,
+  titleText,
   ...modalProps
 }: PropsWithLanguage<ManageBedsModalTranslation, ManageBedsModalProps>) => {
   const translation = useTranslation(language, defaultManageBedsModalTranslation)
@@ -96,7 +93,11 @@ export const ManageBedsModal = ({
 
   const identifierMapping = (bed: BedWithPatientWithTasksNumberDTO) => bed.id
   return (
-    <Modal modalClassName={tx('min-w-[600px]', modalClassName)} {...modalProps}>
+    <Modal
+      titleText={titleText ?? (room ? `${translation.manageBedsIn} ${room.name}` : '')}
+      modalClassName={tx('min-w-[600px]', modalClassName)}
+      {...modalProps}
+    >
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}
@@ -105,14 +106,7 @@ export const ManageBedsModal = ({
       >
         {room && beds && (
           <>
-            <div className={tw('flex flex-row justify-between items-center mb-4')}>
-              <Span className={tw('text-lg font-semibold')}>{`${translation.manageBedsIn} ${room.name}`}</Span>
-              <div className={tw('flex flex-row gap-x-4 items-end')} onClick={() => onClose()}>
-                <Span>{translation.close}</Span>
-                <X/>
-              </div>
-            </div>
-            <div className={tw('flex flex-row justify-between items-end mb-2')}>
+            <div className={tw('flex flex-row justify-between items-end mb-2 mt-4')}>
               <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
               <Button color="positive" onClick={() => addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1 ?? 1}`, roomId })}>{translation.addBed}</Button>
             </div>

@@ -45,7 +45,7 @@ export type AddPatientModalProps = ConfirmDialogProps & {
 export const AddPatientModal = ({
   language,
   wardId,
-  title,
+  titleText,
   onConfirm = noop,
   ...modalProps
 }: PropsWithLanguage<AddPatientModalTranslation, AddPatientModalProps>) => {
@@ -70,7 +70,7 @@ export const AddPatientModal = ({
 
   return (
     <ConfirmDialog
-      title={title ?? translation.addPatient}
+      titleText={titleText ?? translation.addPatient}
       onConfirm={() => {
         onConfirm()
         createPatientMutation.mutate({ ...emptyPatient, name: trimmedPatientName })

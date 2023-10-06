@@ -119,11 +119,12 @@ export const WardDetail = ({
       >
         <ConfirmDialog
           id="WardDetail-DeleteDialog"
-          title={translation.deleteConfirmText}
-          description={translation.dangerZoneText}
+          titleText={translation.deleteConfirmText}
+          descriptionText={translation.dangerZoneText}
           isOpen={isShowingConfirmDialog}
           onCancel={() => setIsShowingConfirmDialog(false)}
           onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+          onCloseClick={() => setIsShowingConfirmDialog(false)}
           onConfirm={() => {
             setIsShowingConfirmDialog(false)
             deleteWardMutation.mutate(newWard.id)

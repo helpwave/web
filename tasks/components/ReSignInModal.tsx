@@ -29,13 +29,13 @@ const defaultReSignInModalTranslation: Record<Languages, ReSignInModalTranslatio
     no: 'Nein, später.'
   }
 }
-export const ReSignInModal = ({ language, ...modalProps }: PropsWithLanguage<ReSignInModalTranslation, ReSignInModalProps>) => {
+export const ReSignInModal = ({ language, titleText, ...modalProps }: PropsWithLanguage<ReSignInModalTranslation, ReSignInModalProps>) => {
   const translation = useTranslation(language, defaultReSignInModalTranslation)
 
   return (
     <ConfirmDialog
       backgroundClassName={tw('w-5')}
-      title={translation.pleaseReSignIn}
+      titleText={titleText ?? translation.pleaseReSignIn}
       buttonOverwrites={[
         {},
         {

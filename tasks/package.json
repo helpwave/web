@@ -37,7 +37,8 @@
     "simplebar-core": "1.2.4",
     "simplebar-react": "3.2.4",
     "typescript": "5.2.2",
-    "zod": "3.22.2"
+    "zod": "3.22.2",
+    "react-device-detect": "2.2.3"
   },
   "devDependencies": {
     "@types/js-cookie": "3.0.3",

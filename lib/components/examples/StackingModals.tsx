@@ -20,6 +20,7 @@ export const StackingModals = () => {
         isOpen={modal1}
         onConfirm={() => setModal1(false)}
         onBackgroundClick={() => setModal1(false)}
+        onCloseClick={() => setModal1(false)}
         modalClassName={tw('!bg-yellow-200 min-h-[300px]')}
       >
         {'I\'m Modal 1'}
@@ -30,6 +31,7 @@ export const StackingModals = () => {
         isOpen={modal2}
         onConfirm={() => setModal2(false)}
         onBackgroundClick={() => setModal2(false)}
+        onCloseClick={() => setModal2(false)}
         modalClassName={tw('!bg-green-200 min-w-[300px]')}
       >
         {'The next layer of Modals!'}
@@ -41,6 +43,7 @@ export const StackingModals = () => {
         isOpen={modal3}
         onConfirm={() => setModal3(false)}
         onBackgroundClick={() => setModal3(false)}
+        onCloseClick={() => setModal3(false)}
       >
         This is Modal 3!
       </ConfirmDialog>

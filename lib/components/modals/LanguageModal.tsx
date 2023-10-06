@@ -21,11 +21,11 @@ type LanguageModalTranslation = {
 
 const defaultConfirmDialogTranslation = {
   en: {
-    message: 'Choose your language:',
+    message: 'Choose your language',
     done: 'Done',
   },
   de: {
-    message: 'Wählen Sie Ihre Sprache:',
+    message: 'Wählen Sie Ihre Sprache',
     done: 'Fertig',
   }
 }
@@ -49,7 +49,7 @@ export const LanguageModal = ({
 
   return (
     <Modal
-      title={translation.message}
+      titleText={translation.message}
       onBackgroundClick={(eventData) => {
         onDone()
 
@@ -61,6 +61,7 @@ export const LanguageModal = ({
     >
       <div className={tw('w-[320px]')}>
         <Select
+            className={tw('mt-2')}
             value={language}
             options={Object.entries(languageDetails).map(([tag, name]) => ({ label: name, value: tag }))}
             onChange={(language: string) => setLanguage(language as Languages)}

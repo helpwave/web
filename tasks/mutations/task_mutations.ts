@@ -51,7 +51,7 @@ export const emptyTask: TaskDTO = {
   notes: '',
   status: TaskStatus.TASK_STATUS_TODO,
   subtasks: [],
-  dueDate: undefined,
+  dueDate: new Date(new Date().valueOf() + 8 * 60 * 60 * 1000),
   isPublicVisible: false
 }
 

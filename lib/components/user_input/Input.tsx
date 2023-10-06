@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
 import { Span } from '../Span'
@@ -23,6 +23,7 @@ export type InputProps = {
    * @default noop
    */
   onChange?: (text: string) => void,
+  onChangeEvent?: (event: React.ChangeEvent<HTMLInputElement>) => void,
   className?: string,
   onEditCompleted?: (text: string) => void
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
@@ -38,6 +39,7 @@ const ControlledInput = ({
   value,
   label,
   onChange = noop,
+  onChangeEvent = noop,
   className = '',
   onEditCompleted,
   onBlur,
@@ -81,6 +83,7 @@ const ControlledInput = ({
             })
           }
           onChange(value)
+          onChangeEvent(e)
         }}
         {...restProps}
       />

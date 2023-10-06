@@ -19,7 +19,7 @@ import {
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { BedWithPatientId } from './bed_mutations'
 import type { RoomWithMinimalBedAndPatient } from './room_mutations'
-import { roomOverviewsQueryKey, roomsQueryKey, useRoomQuery } from './room_mutations'
+import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 import { noop } from '@helpwave/common/util/noop'
 
 export type PatientMinimalDTO = {
@@ -254,7 +254,6 @@ export const usePatientListQuery = (organisationId?: string, wardId?: string) =>
 }
 
 export const useRecentPatientsQuery = () => {
-  const query = useRoomQuery
   return useQuery({
     queryKey: [patientsQueryKey],
     queryFn: async () => {
@@ -265,14 +264,9 @@ export const useRecentPatientsQuery = () => {
       for (const patient of res.getRecentPatientsList()) {
         const room = patient.getRoom()
         const bed = patient.getBed()
-        let wardId: string | undefined // TODO get wardId from query once implemented
+        const wardId: string | undefined = undefined// TODO get wardId from query once implemented
         if (room) {
-          const roomByQuery = await query(room.getId())
-          if (roomByQuery.data) {
-            wardId = roomByQuery.data.id
-          } else {
-            console.error('RecentPatientsQuery failed room not loaded')
-          }
+          // wardId = roomByQuery.data.id
         }
 
         patients.push({

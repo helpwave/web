@@ -29,11 +29,16 @@ export const AssigneeSelect = ({
       <SearchableSelect
         // TODO update later with avatar of assignee
         value={data?.find(user => user.id === value)}
-        options={(data ?? []).map(value => ({ value, label: value.name }))}
-        isHidingCurrentValue={ isHidingCurrentValue}
+        options={(data ?? []).map(value => ({
+          value,
+          label: value.name
+        }))}
+        isHidingCurrentValue={isHidingCurrentValue}
         className={tx('w-full', className)}
         searchMapping={value => [value.value.id, value.value.email]}
-        onChange={(user) => { onChange(user.id) }}
+        onChange={(user) => {
+          onChange(user.id)
+        }}
         {...selectProps}
       />
     </LoadingAndErrorComponent>

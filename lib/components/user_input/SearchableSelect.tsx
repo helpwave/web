@@ -28,7 +28,7 @@ export const SearchableSelect = <T, >({
       selectedDisplayOverwrite={options.find(option => option.value === value)?.label}
       additionalItems={[(
         <div key="selectSearch" className={tw('flex flex-row gap-x-2 items-center')}>
-          <Input value={search} onChange={setSearch}/>
+          <Input autoFocus={true} value={search} onChange={setSearch} />
           <Search/>
         </div>
       )]}

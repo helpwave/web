@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
 import { Span } from '../Span'
@@ -43,12 +43,22 @@ const ControlledInput = ({
   onBlur,
   ...restProps
 }: InputProps) => {
-  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => undefined, 3000)
+  const {
+    restartTimer,
+    clearUpdateTimer
+  } = useSaveDelay(() => undefined, 3000)
+  const ref = useRef<HTMLInputElement>(null)
 
+  useEffect(() => {
+    if (restProps.autoFocus) {
+      ref.current?.focus()
+    }
+  }, [restProps.autoFocus])
   return (
     <div className={tw('w-full')}>
       {label && <label htmlFor={id} className={tw('mb-1')}><Span type="labelSmall">{label}</Span></label>}
       <input
+        ref={ref}
         value={value}
         id={id}
         type={type}
@@ -88,9 +98,13 @@ type UncontrolledInputProps = Omit<InputProps, 'value'> & {
 /**
  * A Component for inputting text or other information
  *
- * It's state is managed by the component itself
+ * Its state is managed by the component itself
  */
-const UncontrolledInput = ({ defaultValue = '', onChange = noop, ...props }: UncontrolledInputProps) => {
+const UncontrolledInput = ({
+  defaultValue = '',
+  onChange = noop,
+  ...props
+}: UncontrolledInputProps) => {
   const [value, setValue] = useState(defaultValue)
 
   const handleChange = (text: string) => {

@@ -312,8 +312,12 @@ export const TaskDetailView = ({
               <Input
                 value={task.dueDate ? formatDate(task.dueDate) : ''}
                 type="datetime-local"
-                onChange={value => {
-                  const dueDate = new Date(value)
+                onChangeEvent={event => {
+                  if (!event.target.value) {
+                    event.preventDefault()
+                    return
+                  }
+                  const dueDate = new Date(event.target.value)
                   updateLocallyAndExternally({
                     ...task,
                     dueDate

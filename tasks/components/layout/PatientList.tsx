@@ -18,7 +18,7 @@ import {
   useReadmitPatientMutation
 } from '../../mutations/patient_mutations'
 import { Label } from '../Label'
-import { MultiSearchWithMapping, SimpleSearchWithMapping } from '../../utils/simpleSearch'
+import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { Draggable } from '../dnd-kit/Draggable'

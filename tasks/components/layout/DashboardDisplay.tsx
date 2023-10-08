@@ -69,15 +69,17 @@ export const DashboardDisplay = ({
         isLoading={isLoadingPatients}
       >
         <Span type="subsectionTitle">{translation.patients}</Span>
-        {patients?.map(patient => (
-          <PatientCard
-            key={patient.id}
-            className={tx({ '!cursor-not-allowed': !patient.wardId })}
-            bedName={patient.bed?.name}
-            patientName={patient.name}
-            onTileClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
-          />
-        ))}
+        <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+          {patients?.map(patient => (
+            <PatientCard
+              key={patient.id}
+              className={tx({ '!cursor-not-allowed': !patient.wardId })}
+              bedName={patient.bed?.name}
+              patientName={patient.name}
+              onTileClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
+            />
+          ))}
+        </div>
       </LoadingAndErrorComponent>
       <LoadingAndErrorComponent isLoading={isLoadingWards}>
         <div className={tw('flex flex-col gap-y-1')}>

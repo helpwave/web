@@ -49,7 +49,7 @@ export const UserMenu = ({
 }: PropsWithLanguage<UserMenuTranslation>) => {
   const translation = useTranslation(language, defaultUserMenuTranslations)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
-  const { user,    signOut  } = useAuth()
+  const { user, signOut } = useAuth()
   const router = useRouter()
 
   if (!user) return null

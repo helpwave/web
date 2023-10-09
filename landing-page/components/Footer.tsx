@@ -22,6 +22,7 @@ const linkGroups = [
   {
     General: [
       { name: 'Imprint', link: 'https://cdn.helpwave.de/imprint.html' },
+      { name: 'Privacy', link: 'https://cdn.helpwave.de/privacy.html' },
       { name: 'Contact', link: 'mailto:contact@helpwave.de' },
       { name: 'Pitchdeck', link: 'https://cdn.helpwave.de/helpwave_pitchdeck.pdf' },
       { name: 'Onepager', link: 'https://cdn.helpwave.de/helpwave_onepager.pdf' },

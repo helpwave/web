@@ -1,5 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import Image from 'next/image'
+import React from 'react'
 
 const images = {
   'REACH': 'https://cdn.helpwave.de/partners/reach.svg',

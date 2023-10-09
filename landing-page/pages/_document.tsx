@@ -7,7 +7,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="icon" href="/favicon.svg" />
+          <link rel="icon" href="/favicon.ico" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="canonical" href="https://helpwave.de/" />
           <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />

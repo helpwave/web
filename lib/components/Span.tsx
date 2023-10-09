@@ -2,7 +2,7 @@ import type { DetailedHTMLProps, HTMLAttributes, PropsWithChildren } from 'react
 import { tx } from '../twind'
 
 export type SpanProps = DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> & {
-  type?: 'normal' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError' | 'formDescription',
+  type?: 'normal' | 'heading' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError' | 'formDescription',
   className?: string
 }
 
@@ -15,6 +15,7 @@ export const Span = ({ children, type = 'normal', className = '', ...restProps }
   return (
     <span
       className={tx({
+        'text-2xl font-space font-bold': type === 'heading',
         'text-xl font-space font-bold': type === 'title',
         'font-semibold text-lg': type === 'subsectionTitle',
         'font-space font-bold': type === 'subsubsectionTitle',

@@ -23,7 +23,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "node_modules/@helpwave/common"
-  ],
+    "node_modules/@helpwave/common",
+    "node_modules/@helpwave/tasks"
+   ],
   "exclude": []
 }

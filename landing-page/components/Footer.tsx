@@ -53,20 +53,20 @@ const Footer = () => {
   const year = new Date().getFullYear()
 
   return (
-    <div className={tw('h-1/2 w-screen relative bg-black text-white')}>
-      <div className={tw('relative w-5/12 flex left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
-        <div className={tw('w-1/4 font-space')}>
-          <Helpwave color="white" />
-          <Span>&copy; {year} helpwave</Span>
-        </div>
-
+    <div className={tw('w-screen bg-black text-white py-[64px] flex items-center justify-center')}>
+      <div className={tw('mobile:w-full mobile:p-16 desktop:w-5/12 flex flex-wrap justify-between')}>
         {linkGroups.map((group, index) => (
-          <div key={index} className={tw('w-1/4 justify-center')}>
+          <div key={index} className={tw('mobile:w-full desktop:w-[192px] mobile:text-center')}>
             {Object.entries(group).map(([title, links]) => (
               <FooterLinkGroup key={title} title={title} links={links}></FooterLinkGroup>
             ))}
           </div>
         ))}
+
+        <div className={tw('mobile:w-full items-center desktop:w-[192px] h-[128px] font-space flex flex-wrap mobile:justify-center')}>
+          <Helpwave color="white" size={128} />
+          <Span type="subsectionTitle">&copy; {year} helpwave</Span>
+        </div>
       </div>
     </div>
   )

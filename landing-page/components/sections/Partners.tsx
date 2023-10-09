@@ -11,7 +11,7 @@ const PartnerSection = () => {
   const size = 128
 
   return (
-    <div className={tw('flex gap-16 py-16 select-none')}>
+    <div className={tw('flex gap-16 py-16 select-none overflow-x-auto')}>
       {Object.entries(images).map(([title, src]) => (
         <Image key={title} alt={title} src={src} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] grayscale`)}/>
       ))}

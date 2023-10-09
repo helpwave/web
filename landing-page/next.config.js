@@ -4,8 +4,9 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   transpilePackages: ['@helpwave/common'],
-  output: 'standalone',
+  output: 'export',
   images: {
+    unoptimized: true,
     domains: ['cdn.helpwave.de']
   }
 }

@@ -1,6 +1,5 @@
 import { Button } from '@helpwave/common/components/Button'
 import { tw } from '@helpwave/common/twind'
-import { PatientCard } from '@helpwave/tasks/components/cards/PatientCard'
 
 const StartSection = () => {
   const githubURL = 'https://github.com/helpwave'
@@ -32,7 +31,6 @@ const StartSection = () => {
       </div>
 
       <div className={tw('mobile:hidden w-2/7')}>
-        <PatientCard bedName="Bett" patientName="Linden, Franziska" unscheduledTasks={4} inProgressTasks={2} doneTasks={9}/>
       </div>
     </div>
   )

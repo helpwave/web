@@ -8,7 +8,7 @@ const StorySection = () => {
         <h1 className={tw('text-4xl font-space font-bold')}>We enable healthcare workers</h1>
         <br />
         <p className={tw('text-md text-justify')}>
-          At helpwave, we're not just creating healthcare software; we're co-creating it with you, the end-users. By directly involving you in the process, we're elevating quality and nurturing stronger development relationships. This unique approach allows our dedicated developers and engineers to laser-focus on turning your requirements into innovative software features.
+          At helpwave, we&#39;re not just creating healthcare software; we&#39;re co-creating it with you, the end-users. By directly involving you in the process, we&#39;re elevating quality and nurturing stronger development relationships. This unique approach allows our dedicated developers and engineers to laser-focus on turning your requirements into innovative software features.
         </p>
       </div>
 

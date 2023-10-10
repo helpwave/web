@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "cf:pages": "next build && next export"
+    "cf:pages": "next build && next export -o /out"
   },
   "dependencies": {
     "@helpwave/common": "workspace:*",

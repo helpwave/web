@@ -1,6 +1,9 @@
-import { tw } from '@helpwave/common/twind'
-import React from 'react'
+import { tx } from '@helpwave/common/twind'
 
-export const Divider = () => (<div className={tw('w-full border border-dashed border-spacing-20')} />)
+export type DividerProps = {
+  rotate?: number
+}
+
+export const Divider = ({ rotate = 0 }: DividerProps) => (<div className={tx(`w-full border border-dashed border-spacing-20 rotate-[${rotate}deg]`)} />)
 
 export default Divider

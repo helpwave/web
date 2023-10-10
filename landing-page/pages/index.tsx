@@ -23,7 +23,7 @@ const Home: NextPage = () => {
       <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
         <StorySection />
       </div>
-      <div className={tw('w-screen parent bg-indigo-900')}>
+      <div className={tw('w-screen parent bg-hw-primary-900')}>
         <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 pt-16 text-white')}>
           <ExpansionSection />
         </div>

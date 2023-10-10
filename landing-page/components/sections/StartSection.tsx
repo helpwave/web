@@ -12,7 +12,7 @@ const StartSection = () => {
 
         <div className={tw('font-sans text-2xl font-medium mt-2 text-end')}>
           {'empowering '}
-          <span className={tw('text-hw-primary-400')}>{'medical heroes'}</span>
+          <span className={tw('text-hw-primary-800')}>{'medical heroes'}</span>
           {', '}
           <br className={tw('mobile:hidden')}/>
           {'united in '}

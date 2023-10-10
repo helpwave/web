@@ -12,19 +12,19 @@ const Home: NextPage = () => {
   return (
     <div className={tw('w-screen h-screen bg-white parent relative z-0 overflow-x-hidden')}>
       <Header />
-      <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8')}>
+      <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
         <StartSection />
       </div>
       <Divider rotate={3} />
-      <div className={tw('desktop:w-5/12 desktop:mx-auto tablet:mx-16 phone:mx-8')}>
+      <div className={tw('desktop:w-5/12 desktop:mx-auto tablet:mx-16 phone:mx-8 relative z-[1]')}>
         <PartnerSection />
       </div>
       <Divider rotate={3} />
-      <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8')}>
+      <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
         <StorySection />
       </div>
       <div className={tw('w-screen bg-indigo-900 parent')}>
-        <div className={tw('w-screen -translate-y-1/2 h-[120px] rotate-[-3deg] bg-white')} />
+        <div className={tw('w-[10000px] z-[0] -translate-x-1/2 -translate-y-1/2 h-[128px] rotate-[-2deg] bg-white')} />
         <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 text-white')}>
           <ExpansionSection />
         </div>

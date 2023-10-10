@@ -15,17 +15,16 @@ const Home: NextPage = () => {
       <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
         <StartSection />
       </div>
-      <Divider rotate={3} />
+      <Divider rotate={1} />
       <div className={tw('desktop:w-5/12 desktop:mx-auto tablet:mx-16 phone:mx-8 relative z-[1]')}>
         <PartnerSection />
       </div>
-      <Divider rotate={3} />
+      <Divider rotate={1} />
       <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
         <StorySection />
       </div>
-      <div className={tw('w-screen bg-indigo-900 parent')}>
-        <div className={tw('w-[10000px] z-[0] -translate-x-1/2 -translate-y-1/2 h-[128px] rotate-[-2deg] bg-white')} />
-        <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 text-white')}>
+      <div className={tw('w-screen parent bg-indigo-900')}>
+        <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 pt-16 text-white')}>
           <ExpansionSection />
         </div>
       </div>

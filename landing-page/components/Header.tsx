@@ -3,7 +3,7 @@ import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const items = [
   { name: 'home', url: '/' },
@@ -19,7 +19,7 @@ const Header = () => {
   return (
     <div>
       <div className={tw('w-screen z-[50] fixed shadow-sm top-0 border bg-white')}>
-        <nav className={tw('flex mobile:p-5 desktop:w-5/12 items-center justify-between mx-auto')}>
+        <nav className={tw('flex mobile:p-2 desktop:w-5/12 items-center justify-between mx-auto')}>
           <Link href="/">
             <Helpwave />
           </Link>
@@ -38,7 +38,8 @@ const Header = () => {
             </div>
           </div>
 
-          <div className={tw('tablet:hidden desktop:hidden content-end')}>
+          <div className={tw('w-full tablet:hidden desktop:hidden flex justify-between')}>
+            <h1 className={tw('text-center text-2xl font-bold font-space')}>helpwave</h1>
             <button onClick={() => setNavbarOpen(true)} className={tw('tablet:hidden desktop:hidden content-end')} aria-controls="navbar" aria-expanded="false">
               <Menu size={32}/>
             </button>

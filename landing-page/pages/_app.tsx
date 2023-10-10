@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>helpwave</title>
+        <title>helpwave ~ empowering medical heroes, united in technology</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
         <style>{`
           :root {

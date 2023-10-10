@@ -68,33 +68,39 @@ export const DashboardDisplay = ({
       <LoadingAndErrorComponent
         isLoading={isLoadingPatients}
       >
-        <Span type="subsectionTitle">{translation.patients}</Span>
-        <div className={tw(`grid grid-cols-${columns} gap-6`)}>
-          {patients?.map(patient => (
-            <PatientCard
-              key={patient.id}
-              className={tx({ '!cursor-not-allowed': !patient.wardId })}
-              bedName={patient.bed?.name}
-              patientName={patient.name}
-              onTileClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
-            />
-          ))}
-        </div>
-      </LoadingAndErrorComponent>
-      <LoadingAndErrorComponent isLoading={isLoadingWards}>
-        <div className={tw('flex flex-col gap-y-1')}>
-          <Span type="subsectionTitle">{translation.wards}</Span>
-          {wards && wards.length > 0 ? (
+        {patients && patients.length > 0 && (
+          <>
+            <Span type="subsectionTitle">{translation.patients}</Span>
             <div className={tw(`grid grid-cols-${columns} gap-6`)}>
-              {wards?.map(ward => (
-                <WardCard
-                  key={ward.id}
-                  ward={ward}
-                  onTileClick={() => router.push(`/ward/${ward.id}`)}
+              {patients?.map(patient => (
+                <PatientCard
+                  key={patient.id}
+                  className={tx({ '!cursor-not-allowed': !patient.wardId })}
+                  bedName={patient.bed?.name}
+                  patientName={patient.name}
+                  onTileClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
                 />
               ))}
             </div>
-          ) : <Span type="accent">No wards</Span>}
+          </>
+        )}
+      </LoadingAndErrorComponent>
+      <LoadingAndErrorComponent isLoading={isLoadingWards}>
+        <div className={tw('flex flex-col gap-y-1')}>
+          {wards && wards.length > 0 && (
+            <>
+              <Span type="subsectionTitle">{translation.wards}</Span>
+              <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+                {wards?.map(ward => (
+                  <WardCard
+                    key={ward.id}
+                    ward={ward}
+                    onTileClick={() => router.push(`/ward/${ward.id}`)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </LoadingAndErrorComponent>
     </div>

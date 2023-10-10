@@ -55,7 +55,7 @@ const Footer = () => {
 
   return (
     <div className={tw('w-screen bg-black text-white py-[64px] flex items-center justify-center')}>
-      <div className={tw('mobile:w-full mobile:p-16 desktop:w-5/12 flex flex-wrap justify-between')}>
+      <div className={tw('mobile:w-full mobile:p-16 desktop:w-5/12 flex flex-wrap mx-auto justify-between')}>
         {linkGroups.map((group, index) => (
           <div key={index} className={tw('mobile:w-full desktop:w-[192px] mobile:text-center')}>
             {Object.entries(group).map(([title, links]) => (
@@ -64,7 +64,7 @@ const Footer = () => {
           </div>
         ))}
 
-        <div className={tw('mobile:w-full items-center desktop:w-[192px] h-[128px] font-space flex flex-wrap mobile:justify-center')}>
+        <div className={tw('mobile:w-full items-center justify-center desktop:w-[192px] mx-auto h-[128px] font-space flex flex-wrap mobile:justify-center')}>
           <Helpwave color="white" size={128} />
           <Span type="subsectionTitle">&copy; {year} helpwave</Span>
         </div>

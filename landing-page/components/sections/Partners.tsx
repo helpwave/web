@@ -1,6 +1,5 @@
 import { tw, tx } from '@helpwave/common/twind'
 import Image from 'next/image'
-import React from 'react'
 
 const images = {
   'REACH': 'https://cdn.helpwave.de/partners/reach.svg',
@@ -12,7 +11,7 @@ const PartnerSection = () => {
   const size = 128
 
   return (
-    <div className={tw('flex gap-16 py-16 select-none overflow-x-auto')}>
+    <div className={tw('flex gap-16 py-16 select-none overflow-x-auto justify-center items-center')}>
       {Object.entries(images).map(([title, src]) => (
         <Image key={title} alt={title} src={src} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] grayscale`)}/>
       ))}

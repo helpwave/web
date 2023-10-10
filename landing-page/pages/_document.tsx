@@ -8,6 +8,10 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="/touch-icon-128.png" />
+          <link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-152.png" />
+          <link rel="apple-touch-icon" sizes="167x167" href="/touch-icon-167.png" />
+          <link rel="apple-touch-icon" sizes="180x180" href="/touch-icon-180.png" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="canonical" href="https://helpwave.de/" />
           <meta name="theme-color" media="(prefers-color-scheme: light)" content="white" />

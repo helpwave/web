@@ -1,7 +1,7 @@
 import type { SVGProps } from 'react'
 import { tx } from '../twind'
 
-export type HelpwaveSpinnerProps = SVGProps<SVGSVGElement> & {
+export type HelpwaveProps = SVGProps<SVGSVGElement> & {
   color?: string,
   animate?: 'none' | 'loading' | 'pulse' | 'bounce',
   size?: number
@@ -15,7 +15,7 @@ export const Helpwave = ({
   animate = 'none',
   size = 64,
   ...props
-}: HelpwaveSpinnerProps) => {
+}: HelpwaveProps) => {
   const isLoadingAnimation = animate === 'loading'
   let svgAnimationKey = ''
 

@@ -6,11 +6,11 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 const items = [
-  { name: 'home', url: '/' },
-  { name: 'tasks', url: 'https://tasks.helpwave.de' },
-  { name: 'story', url: '/' },
-  { name: 'talks', url: '/' },
-  { name: 'contact', url: '/' },
+  { name: 'tasks', url: '/tasks' },
+  { name: 'story', url: '/story' },
+  { name: 'team', url: '/team' },
+  { name: 'talks', url: '/talks' },
+  { name: 'contact', url: '/contact' },
 ]
 
 const Header = () => {

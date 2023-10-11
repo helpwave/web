@@ -44,8 +44,7 @@ const linkGroups = [
       { name: 'web', link: 'https://github.com/helpwave/web' },
       { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },
       { name: 'services', link: 'https://github.com/helpwave/services' },
-      { name: 'Environment ~ tasks', link: 'https://staging-tasks.helpwave.de' },
-      { name: 'Bug Bounty Program', link: 'https://github.com/helpwave/web/issues' },
+      { name: 'Staging  ~ tasks', link: 'https://staging-tasks.helpwave.de' },
     ]
   },
 ]
@@ -59,7 +58,7 @@ const Footer = () => {
         {linkGroups.map((group, index) => (
           <div key={index} className={tw('mobile:w-full desktop:w-[192px] mobile:text-center')}>
             {Object.entries(group).map(([title, links]) => (
-              <FooterLinkGroup key={title} title={title} links={links}></FooterLinkGroup>
+              <FooterLinkGroup key={title} title={title} links={links} />
             ))}
           </div>
         ))}

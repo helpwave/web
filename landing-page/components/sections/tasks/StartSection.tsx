@@ -13,7 +13,7 @@ const StartSection = () => {
         The first open-source team management platform for healthcare workers
       </div>
 
-      <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-2xl w-full rounded-md mt-8`)}/>
+      <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)}/>
     </div>
   )
 }

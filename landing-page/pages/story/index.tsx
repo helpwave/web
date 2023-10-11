@@ -3,7 +3,7 @@ import type { NextPage } from 'next'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 
-const Team: NextPage = () => {
+const Story: NextPage = () => {
   return (
     <div className={tw('w-screen h-screen bg-white parent relative z-0 overflow-x-hidden')}>
       <Header />
@@ -12,4 +12,4 @@ const Team: NextPage = () => {
   )
 }
 
-export default Team
+export default Story

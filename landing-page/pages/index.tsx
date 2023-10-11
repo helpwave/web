@@ -3,10 +3,10 @@ import type { NextPage } from 'next'
 import Divider from '../components/Divider'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
-import ExpansionSection from '../components/sections/ExpansionSection'
-import PartnerSection from '../components/sections/Partners'
-import StartSection from '../components/sections/StartSection'
-import StorySection from '../components/sections/Story'
+import ExpansionSection from '../components/sections/landing/ExpansionSection'
+import PartnerSection from '../components/sections/landing/Partners'
+import StartSection from '../components/sections/landing/StartSection'
+import StorySection from '../components/sections/landing/Story'
 
 const Home: NextPage = () => {
   return (

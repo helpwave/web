@@ -5,6 +5,8 @@ import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 
+const homeURL = '/'
+
 const items = [
   { name: 'tasks', url: '/tasks' },
   { name: 'story', url: '/story' },
@@ -20,7 +22,7 @@ const Header = () => {
     <div>
       <div className={tw('w-screen z-[50] fixed shadow-sm top-0 border bg-white')}>
         <nav className={tw('flex mobile:p-2 desktop:w-5/12 items-center justify-between mx-auto')}>
-          <Link href="/">
+          <Link href={homeURL}>
             <Helpwave />
           </Link>
 
@@ -39,7 +41,7 @@ const Header = () => {
           </div>
 
           <div className={tw('w-full tablet:hidden desktop:hidden flex justify-between mx-2')}>
-            <Link href="/"><span className={tw('text-center text-2xl font-bold font-space')}>helpwave</span></Link>
+            <Link href={homeURL}><span className={tw('text-center text-2xl font-bold font-space')}>helpwave</span></Link>
             <button onClick={() => setNavbarOpen(true)} className={tw('tablet:hidden desktop:hidden content-end')} aria-controls="navbar" aria-expanded="false">
               <Menu size={32}/>
             </button>
@@ -53,6 +55,7 @@ const Header = () => {
             <button onClick={() => setNavbarOpen(false)} className={tw('mb-5')}>
               <X size={64} />
             </button>
+
             {items.map(({ name, url }) => (
               <div key={name} className={tw('w-full p-2')}>
                 <Link href={url} onClick={() => setNavbarOpen(false)}>

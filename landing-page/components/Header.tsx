@@ -8,7 +8,7 @@ import { useState } from 'react'
 const homeURL = '/'
 
 const items = [
-  { name: 'tasks', url: '/tasks' },
+  { name: 'tasks', url: '/product/tasks' },
   { name: 'story', url: '/story' },
   { name: 'team', url: '/team' },
   { name: 'talks', url: '/talks' },

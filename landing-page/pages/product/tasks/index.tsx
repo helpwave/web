@@ -1,8 +1,8 @@
 import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
-import Footer from '../../components/Footer'
-import Header from '../../components/Header'
-import StartSection from '../../components/sections/tasks/StartSection'
+import Footer from '../../../components/Footer'
+import Header from '../../../components/Header'
+import StartSection from '../../../components/sections/tasks/StartSection'
 
 const Tasks: NextPage = () => {
   return (

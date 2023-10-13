@@ -1,18 +1,20 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
-import SimpleBarReact from 'simplebar-react'
 import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskTile } from './SubtaskTile'
 import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
-import type SimpleBarCore from 'simplebar-core'
 import type { SubTaskDTO } from '../mutations/task_mutations'
-import {
-  useSubTaskTemplateAddMutation
-} from '../mutations/task_template_mutations'
 import { TaskTemplateContext } from '../pages/templates'
+import { Scrollbars } from 'react-custom-scrollbars-2'
+import {
+  useSubTaskAddMutation,
+  useSubTaskDeleteMutation,
+  useSubTaskToDoneMutation, useSubTaskToToDoMutation,
+  useSubTaskUpdateMutation
+} from '../mutations/task_mutations'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -39,7 +41,7 @@ const defaultSubtaskViewTranslation = {
 type SubtaskViewProps = {
   // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
   subtasks: SubTaskDTO[],
-  taskID?: string,
+  taskId?: string,
   createdBy?: string,
   taskTemplateId?: string,
   onChange: (subtasks: SubTaskDTO[]) => void
@@ -51,23 +53,27 @@ type SubtaskViewProps = {
 export const SubtaskView = ({
   language,
   subtasks,
-  taskID,
+  taskId,
   taskTemplateId,
   onChange,
 }: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
 
   const translation = useTranslation(language, defaultSubtaskViewTranslation)
-  const scrollableRef = useRef<SimpleBarCore>(null)
+  const isCreatingTask = taskId === ''
+  const addSubtaskMutation = useSubTaskAddMutation(taskId)
+  const deleteSubtaskMutation = useSubTaskDeleteMutation()
+  const updateSubtaskMutation = useSubTaskUpdateMutation()
+  const setSubtaskToToDoMutation = useSubTaskToToDoMutation()
+  const setSubtaskToDoneMutation = useSubTaskToDoneMutation()
+
+  const scrollableRef = useRef<Scrollbars>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
-  // TODO: Remove ?? '' once the mutate functions are passed properly
-  useSubTaskTemplateAddMutation(taskTemplateId ?? '')
   // Automatic scrolling to the last element to give the user a visual feedback
   useEffect(() => {
-    const scrollableElement = scrollableRef.current?.getScrollElement()
-    if (scrollableElement && scrollToBottomFlag) {
-      scrollableElement.scrollTop = scrollableElement.scrollHeight
+    if (scrollableRef.current && scrollToBottomFlag) {
+      scrollableRef.current.scrollToBottom()
     }
     setScrollToBottom(false)
   }, [scrollToBottomFlag, subtasks])
@@ -78,8 +84,11 @@ export const SubtaskView = ({
         <Span type="subsectionTitle">{translation.subtasks}</Span>
         <Button
           onClick={() => {
-            const newSubtask = { id: '', name: translation.newSubtask, isDone: false }
+            const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
             onChange([...subtasks, newSubtask])
+            if (!isCreatingTask) {
+              addSubtaskMutation.mutate(newSubtask)
+            }
             setScrollToBottom(true)
           }}
         >
@@ -90,7 +99,7 @@ export const SubtaskView = ({
         </Button>
       </div>
       <div className={tw('max-h-[500px] overflow-hidden')}>
-        <SimpleBarReact className="h-screen" ref={scrollableRef} style={{ maxHeight: 250 }}>
+        <Scrollbars autoHide={true} ref={scrollableRef} className={tw('h-screen')} style={{ minHeight: 250 }}>
           <div className={tw('grid grid-cols-1 gap-y-2')}>
             {subtasks.map((subtask, index) => (
               <SubtaskTile
@@ -101,9 +110,15 @@ export const SubtaskView = ({
                   newSubtasks[index] = newSubtask
                   onChange(newSubtasks)
                 }}
+                onNameEditCompleted={newSubtask => {
+                  if (!isCreatingTask) {
+                    updateSubtaskMutation.mutate(newSubtask)
+                  }
+                }}
                 onRemoveClick={() => {
                   const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
-                  if (!taskID) {
+                  // undefined because taskId === "" would mean task creation
+                  if (taskId === undefined) {
                     context.updateContext({
                       ...context.state,
                       template: { ...context.state.template, subtasks: filteredSubtasks },
@@ -111,6 +126,7 @@ export const SubtaskView = ({
                     })
                   } else {
                     onChange(filteredSubtasks)
+                    deleteSubtaskMutation.mutate(subtask.id)
                   }
                 }}
                 onDoneChange={done => {
@@ -118,13 +134,19 @@ export const SubtaskView = ({
                   if (taskTemplateId !== undefined) {
                     return
                   }
-
+                  if (!isCreatingTask) {
+                    if (done) {
+                      setSubtaskToDoneMutation.mutate(subtask.id)
+                    } else {
+                      setSubtaskToToDoMutation.mutate(subtask.id)
+                    }
+                  }
                   subtask.isDone = done
                 }}
               />
             ))}
           </div>
-        </SimpleBarReact>
+        </Scrollbars>
       </div>
     </div>
   )

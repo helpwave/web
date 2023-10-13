@@ -30,6 +30,8 @@ export const exampleData: DataType[] = [
   { id: 'data8', name: 'Name 8', age: 31 }
 ]
 
+type SortingKeys = 'id'|'name'|'age'
+
 const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>) => {
   const [data, setData] = useState<DataType[]>(initialData)
   const [tableState, setTableState] = useState<TableState>({
@@ -41,11 +43,11 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
     setData(initialData)
   }, [initialData])
 
-  const [sorting, setSorting] = useState<[string, TableSortingType]>()
+  const [sorting, setSorting] = useState<[SortingKeys, TableSortingType]>()
   const [sortingKey, ascending] = sorting ?? ['', 'ascending']
   const idMapping = (data: DataType) => data.id
 
-  const sortingFunctions: Record<string, Record<TableSortingType, TableSortingFunctionType<DataType>>> = {
+  const sortingFunctions: Record<SortingKeys, Record<TableSortingType, TableSortingFunctionType<DataType>>> = {
     id: {
       ascending: (t1, t2) => t1.id.localeCompare(t2.id),
       descending: (t1, t2) => t1.id.localeCompare(t2.id) * -1,
@@ -92,14 +94,14 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
         ]}
         header={[
           <SortButton
-            key="headerID"
+            key="headerId"
             ascending={sortingKey === 'id' ? ascending : undefined}
             onClick={newTableSorting => {
               setSorting(['id', newTableSorting])
               setData(data.sort(sortingFunctions.id[newTableSorting]))
             }}
           >
-            <Span type="tableHeader">ID</Span>
+            <Span type="tableHeader">Id</Span>
           </SortButton>,
           <SortButton
             key="name"

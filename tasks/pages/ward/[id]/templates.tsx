@@ -17,6 +17,8 @@ import { TaskTemplateDetails } from '../../../components/layout/TaskTemplateDeta
 import { useRouter } from 'next/router'
 import type { TaskTemplateContextState } from '../../templates'
 import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState } from '../../templates'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useWardQuery } from '../../../mutations/ward_mutations'
 
 type WardTaskTemplateTranslation = {
   taskTemplates: string,
@@ -43,9 +45,10 @@ const defaultWardTaskTemplateTranslations = {
 const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
   const router = useRouter()
-  const { uuid: wardId, templateID } = router.query
+  const { id: wardId, templateId } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId?.toString())
+  const { data: ward } = useWardQuery(wardId?.toString() as string)
 
   const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
@@ -76,8 +79,8 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     })
   )
 
-  if (!contextState.hasChanges && templateID && !usedQueryParam) {
-    const newSelected = data?.find(value => value.id === templateID) ?? emptyTaskTemplate
+  if (!contextState.hasChanges && templateId && !usedQueryParam) {
+    const newSelected = data?.find(value => value.id === templateId) ?? emptyTaskTemplate
     setContextState({
       ...contextState,
       isValid: newSelected.id !== '',
@@ -87,25 +90,11 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     setUsedQueryParam(true)
   }
 
-  // TODO load organization id of ward
-  const organizationID = 'org1'
-
-  // TODO add view for loading
-  if (isLoading) {
-    return <div>Loading Widget</div>
-  }
-
-  // TODO add view for error or error handling
-  if (isError) {
-    return <div>Error Message</div>
-  }
-
-  // TODO update breadcrumbs
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: `/organizations?organizationID=${organizationID}` },
-        { display: translation.ward, link: `/organizations/${organizationID}?wardID=${wardId}` },
+        { display: translation.organization, link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations' },
+        { display: ward?.name ?? translation.ward, link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations' },
         { display: translation.taskTemplates, link: `/ward/${wardId}/templates` }
       ]}
     >
@@ -116,21 +105,31 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
         <TwoColumn
           disableResize={false}
           left={width => (
-            <TaskTemplateDisplay
-              width={width}
-              onSelectChange={taskTemplate => {
-                setContextState({
-                  ...contextState,
-                  template: taskTemplate ?? { ...emptyTaskTemplate, wardId: wardId as string | undefined },
-                  hasChanges: false,
-                  isValid: taskTemplate !== undefined,
-                  deletedSubtaskIds: []
-                })
-              }}
-              selectedID={contextState.template.id}
-              taskTemplates={data}
-              variant="wardTemplates"
-            />
+            <LoadingAndErrorComponent
+              isLoading={isLoading}
+              hasError={isError}
+            >
+              {data && (
+                <TaskTemplateDisplay
+                  width={width}
+                  onSelectChange={taskTemplate => {
+                    setContextState({
+                      ...contextState,
+                      template: taskTemplate ?? {
+                        ...emptyTaskTemplate,
+                        wardId: wardId as string | undefined
+                      },
+                      hasChanges: false,
+                      isValid: taskTemplate !== undefined,
+                      deletedSubtaskIds: []
+                    })
+                  }}
+                  selectedId={contextState.template.id}
+                  taskTemplates={data}
+                  variant="wardTemplates"
+                />
+              )}
+            </LoadingAndErrorComponent>
           )}
           right={width => (
             <TaskTemplateDetails

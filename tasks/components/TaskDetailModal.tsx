@@ -1,18 +1,21 @@
 import { tx } from '@helpwave/common/twind'
-import type { ModalProps } from '@helpwave/common/components/modals/Modal'
+import type { ModalHeaderProps, ModalProps } from '@helpwave/common/components/modals/Modal'
 import type { TaskDetailViewProps } from './layout/TaskDetailView'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { TaskDetailView } from './layout/TaskDetailView'
 
-export type TaskDetailModalProps = ModalProps & TaskDetailViewProps
+export type TaskDetailModalProps =
+  Omit<ModalProps, keyof ModalHeaderProps>
+  & TaskDetailViewProps
 
 /**
  * A Modal Wrapper for the task detail view
  */
 export const TaskDetailModal = ({
-  taskID,
-  patientID,
+  taskId,
+  patientId,
   onClose,
+  initialStatus,
   modalClassName,
   ...modalProps
 }: TaskDetailModalProps) => {
@@ -21,7 +24,7 @@ export const TaskDetailModal = ({
       modalClassName={tx(modalClassName)}
       {...modalProps}
     >
-      <TaskDetailView patientID={patientID} taskID={taskID} onClose={onClose}/>
+      <TaskDetailView patientId={patientId} taskId={taskId} onClose={onClose} initialStatus={initialStatus}/>
     </Modal>
   )
 }

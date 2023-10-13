@@ -3,7 +3,7 @@ import { RoomOverview } from '../RoomOverview'
 import type { RoomOverviewDTO } from '../../mutations/room_mutations'
 import type { BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
 import { useContext } from 'react'
-import { WardOverviewContext } from '../../pages/ward/[uuid]'
+import { WardOverviewContext } from '../../pages/ward/[id]'
 import { useRoomOverviewsQuery } from '../../mutations/room_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -19,12 +19,12 @@ type WardRoomListTranslation = {
 
 const defaultWardRoomListTranslation: Record<Languages, WardRoomListTranslation> = {
   en: {
-    roomOverview: 'Room Overview',
+    roomOverview: 'Ward Overview',
     showPatientList: 'Show Patient List'
   },
   de: {
-    roomOverview: 'Raum Übersicht',
-    showPatientList: 'Patienten Liste'
+    roomOverview: 'Stationsübersicht',
+    showPatientList: 'Patientenliste'
   }
 }
 
@@ -42,7 +42,7 @@ export const WardRoomList = ({
 }: PropsWithLanguage<WardRoomListTranslation, WardRoomListProps>) => {
   const translation = useTranslation(language, defaultWardRoomListTranslation)
   const context = useContext(WardOverviewContext)
-  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardID)
+  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId)
 
   rooms ??= data
 
@@ -52,13 +52,13 @@ export const WardRoomList = ({
 
   return (
     <div className={tw('flex flex-col px-6 py-4')}
-      onClick={() => context.updateContext({ wardID: context.state.wardID })}
+      onClick={() => context.updateContext({ wardId: context.state.wardId })}
     >
       <div className={tw('flex flex-row justify-between items-center pb-4')}>
         <Span type="title">{translation.roomOverview}</Span>
         <Button onClick={event => {
           event.stopPropagation()
-          context.updateContext({ wardID: context.state.wardID })
+          context.updateContext({ wardId: context.state.wardId })
         }}>
           {translation.showPatientList}
         </Button>

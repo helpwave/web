@@ -1,22 +1,31 @@
 import { tw, tx } from '../../twind'
 import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { Span } from '../Span'
 
-type Option<T> = {
-  label: string,
+export type SelectOption<T> = {
+  label: ReactNode,
   value: T,
-  disabled?: boolean
+  disabled?: boolean,
+  className?: string
 }
 
-type SelectProps<T> = {
+export type SelectProps<T> = {
   value?: T,
   label?: string,
-  options: Option<T>[],
+  options: SelectOption<T>[],
   onChange: (value: T) => void,
   isHidingCurrentValue?: boolean,
   hintText?: string,
   showDisabledOptions?: boolean,
-  className?: string
+  className?: string,
+  isDisabled?: boolean,
+  /**
+   * The items will be at the start of the select and aren't selectable
+   */
+  additionalItems?: ReactNode[],
+  selectedDisplayOverwrite?: ReactNode
 };
 
 /**
@@ -32,7 +41,10 @@ export const Select = <T, >({
   isHidingCurrentValue = true,
   hintText = '',
   showDisabledOptions = true,
-  className
+  isDisabled,
+  className,
+  additionalItems,
+  selectedDisplayOverwrite,
 }: SelectProps<T>) => {
   // Notice: for more complex types this check here might need an additional compare method
   let filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
@@ -50,24 +62,42 @@ export const Select = <T, >({
         {({ open }) => (
           <>
             <Menu.Button
-              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 hover:bg-gray-100 font-medium', { 'rounded-b-lg': !open })}
+              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium',
+                {
+                  'rounded-b-lg': !open,
+                  'hover:bg-gray-100': !isDisabled,
+                  'bg-gray-100 cursor-not-allowed text-gray-500': isDisabled
+                }
+              )}
+              disabled={isDisabled}
             >
-              <span>{options.find(option => option.value === value)?.label ?? hintText}</span>
+              <Span>{selectedDisplayOverwrite ?? options.find(option => option.value === value)?.label ?? hintText}</Span>
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items
-              className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg')}>
+              className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg max-h-[30vh] overflow-y-auto')}
+            >
+              {(additionalItems ?? []).map((item, index) => (
+                <div key={`additionalItems${index}`}
+                     className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
+                       'border-b-0 rounded-b-lg': filteredOptions.length === 0 && index === (additionalItems?.length ?? 1) - 1,
+                     })}
+                >
+                  {item}
+                </div>
+              ))}
               {filteredOptions.map((option, index) => (
-                <Menu.Item key={option.label}>
+                <Menu.Item key={`item${index}`}>
                   {
                     <div
-                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
-                        'bg-gray-100': option.value === value,
-                        'bg-gray-50': index % 2 === 1,
-                        'text-gray-300 cursor-not-allowed': !!option.disabled,
-                        'hover:bg-gray-100 cursor-pointer': !option.disabled,
-                        'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
-                      })}
+                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0',
+                        option.className, {
+                          'bg-gray-100': option.value === value,
+                          'bg-gray-50': index % 2 === 1,
+                          'text-gray-300 cursor-not-allowed': !!option.disabled,
+                          'hover:bg-gray-100 cursor-pointer': !option.disabled,
+                          'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
+                        })}
                       onClick={() => {
                         if (!option.disabled) {
                           onChange(option.value)

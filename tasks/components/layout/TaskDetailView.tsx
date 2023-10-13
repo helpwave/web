@@ -1,9 +1,8 @@
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import { Select } from '@helpwave/common/components/user_input/Select'
 import { TaskStatusSelect } from '../user_input/TaskStatusSelect'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskView } from '../SubtaskView'
@@ -14,24 +13,30 @@ import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { Input } from '@helpwave/common/components/user_input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import {
-  usePersonalTaskTemplateQuery,
-  useWardTaskTemplateQuery
-} from '../../mutations/task_template_mutations'
+import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery } from '../../mutations/task_template_mutations'
 import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import {
-  emptyTask,
+  emptyTask, useAssignTaskToUserMutation,
   useSubTaskAddMutation,
-  useTaskCreateMutation, useTaskDeleteMutation,
+  useTaskCreateMutation,
+  useTaskDeleteMutation,
   useTaskQuery,
-  useTaskUpdateMutation
+  useTaskToDoneMutation,
+  useTaskToInProgressMutation,
+  useTaskToToDoMutation,
+  useTaskUpdateMutation, useUnassignTaskToUserMutation
 } from '../../mutations/task_mutations'
 import { useEffect, useState } from 'react'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
-import { tx } from '@twind/core'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { AssigneeSelect } from '../AssigneeSelect'
+import { useWardQuery } from '../../mutations/ward_mutations'
+import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -46,7 +51,11 @@ type TaskDetailViewTranslation = {
   public: string,
   create: string,
   update: string,
-  delete: string
+  delete: string,
+  publish: string,
+  publishTask: string,
+  publishTaskDescription: string,
+  finish: string
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -63,7 +72,11 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     public: 'public',
     create: 'Create',
     update: 'Update',
-    delete: 'Delete'
+    delete: 'Delete',
+    publish: 'Publish',
+    publishTask: 'Publish Task',
+    publishTaskDescription: 'This cannot be undone',
+    finish: 'Finish Task',
   },
   de: {
     close: 'Schließen',
@@ -78,14 +91,22 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     public: 'öffentlich',
     create: 'Hinzufügen',
     update: 'Ändern',
-    delete: 'Löschen'
+    delete: 'Löschen',
+    publish: 'Veröffentlichen',
+    publishTask: 'Task Veröffentlichen',
+    publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
+    finish: 'Fertigstellen',
   }
 }
 
 export type TaskDetailViewProps = {
-  taskID: string,
-  patientID: string,
-  onClose: () => void
+  /**
+   * A not set or empty taskId is seen as creating a new task
+   */
+  taskId?: string,
+  patientId: string,
+  onClose: () => void,
+  initialStatus?: TaskStatus
 }
 
 /**
@@ -93,40 +114,64 @@ export type TaskDetailViewProps = {
  */
 export const TaskDetailView = ({
   language,
-  patientID,
-  taskID,
+  patientId,
+  taskId = '',
+  initialStatus,
   onClose
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplateDTO | undefined>(undefined)
   const router = useRouter()
-  const { uuid: wardId } = router.query
+  const { id: wardId } = router.query
   const { user } = useAuth()
+  const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
+  const { data: ward } = useWardQuery(wardId as string)
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
 
-  const isCreating = taskID === ''
-  const { data, isLoading, isError } = useTaskQuery(taskID)
+  const isCreating = taskId === ''
+  const {
+    data,
+    isLoading,
+    isError
+  } = useTaskQuery(taskId)
 
-  const [task, setTask] = useState<TaskDTO>({ ...emptyTask })
+  const [task, setTask] = useState<TaskDTO>({
+    ...emptyTask,
+    status: initialStatus ?? TaskStatus.TASK_STATUS_TODO
+  })
 
-  const addSubtaskMutation = useSubTaskAddMutation(() => undefined, taskID)
+  const addSubtaskMutation = useSubTaskAddMutation(taskId)
+
+  const assignTaskToUserMutation = useAssignTaskToUserMutation()
+  const unassignTaskToUserMutation = useUnassignTaskToUserMutation()
+  const updateTaskMutation = useTaskUpdateMutation()
+  const deleteTaskMutation = useTaskDeleteMutation(onClose)
+  const toToDoMutation = useTaskToToDoMutation()
+  const toInProgressMutation = useTaskToInProgressMutation()
+  const toDoneMutation = useTaskToDoneMutation()
 
   const createTaskMutation = useTaskCreateMutation(newTask => {
     newTask.subtasks.forEach(value =>
-      addSubtaskMutation.mutate({ ...value, taskID: newTask.id }))
+      addSubtaskMutation.mutate({
+        ...value,
+        taskId: newTask.id
+      }))
+    if (newTask.assignee) {
+      assignTaskToUserMutation.mutate({
+        taskId: newTask.id,
+        userId: newTask.assignee
+      })
+    }
     onClose()
-  }, patientID)
-
-  const updateTaskMutation = useTaskUpdateMutation()
-  const deleteTaskMutation = useTaskDeleteMutation(onClose)
+  }, patientId)
 
   useEffect(() => {
-    if (data && taskID) {
+    if (data && taskId) {
       setTask(data)
     }
-  }, [data, taskID])
+  }, [data, taskId])
 
   const {
     data: personalTaskTemplatesData,
@@ -143,101 +188,255 @@ export const TaskDetailView = ({
     return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
   }
 
+  const taskNameMinimumLength = 1
+  const isValid = task.name.length >= taskNameMinimumLength
+
+  const updateLocallyAndExternally = (task: TaskDTO) => {
+    setTask(task)
+    if (!isCreating) {
+      updateTaskMutation.mutate(task)
+    }
+  }
+
   const tasksDetails = (
-    <div className={tx('flex flex-col', { 'pl-6': isCreating, 'px-2': !isCreating })}>
-      <div className={tw('flex flex-row justify-between')}>
-        <div className={tw('mr-2')}>
+    <div className={tx('flex flex-col', {
+      'pl-6': isCreating,
+      'px-2': !isCreating
+    })}>
+      <ConfirmDialog
+        id="TaskDetailView-PublishDialog"
+        isOpen={isShowingPublicDialog}
+        onBackgroundClick={() => setIsShowingPublicDialog(false)}
+        onCancel={() => setIsShowingPublicDialog(false)}
+        onCloseClick={() => setIsShowingPublicDialog(false)}
+        onConfirm={() => {
+          setIsShowingPublicDialog(false)
+          const newTask = {
+            ...task,
+            isPublicVisible: true
+          }
+          setTask(newTask)
+          updateLocallyAndExternally(newTask)
+        }}
+        titleText={translation.publishTask}
+        descriptionText={translation.publishTaskDescription}
+      />
+      <ModalHeader
+        title={(
           <ToggleableInput
-            autoFocus
+            autoFocus={isCreating}
             initialState="editing"
             id="name"
             value={task.name}
-            onChange={name => setTask({ ...task, name })}
+            onChange={name => setTask({
+              ...task,
+              name
+            })}
+            onEditCompleted={text => updateLocallyAndExternally({
+              ...task,
+              name: text
+            })}
             labelClassName={tw('text-2xl font-bold')}
             minLength={minTaskNameLength}
             maxLength={maxTaskNameLength}
             size={24}
           />
-        </div>
-        <button className={tw('flex flex-row gap-x-2')} onClick={onClose}>
-          <Span>{translation.close}</Span>
-          <X/>
-        </button>
-      </div>
+        )}
+        onCloseClick={onClose}
+      />
       <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
         <div className={tw('flex flex-col gap-y-8 w-[60%] min-w-[500px]')}>
           <div className={tw('min-h-[25%]')}>
             <Textarea
               headline={translation.notes}
               value={task.notes}
-              onChange={description => setTask({ ...task, notes: description })}
+              onChange={description => setTask({
+                ...task,
+                notes: description
+              })}
+              onEditCompleted={text => updateLocallyAndExternally({
+                ...task,
+                notes: text
+              })}
             />
           </div>
-          <SubtaskView subtasks={task.subtasks} taskID={taskID} onChange= {subtasks => {
-            setTask({ ...task, subtasks })
+          <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={subtasks => {
+            setTask({
+              ...task,
+              subtasks
+            })
           }}/>
         </div>
         { /* TODO create a new component for this */}
-        <div className={tw('flex flex-col justify-between min-w-[250px]')}>
-          <div className={tw('flex flex-col gap-y-4 hidden')}>
-            <div>
-              <label><Span type="labelMedium">{translation.assignee}</Span></label>
-              <Select
+        <div className={tw('flex flex-col min-w-[250px] gap-y-4')}>
+          <div>
+            <label><Span type="labelMedium">{translation.assignee}</Span></label>
+            <div className={tw('flex flex-row items-center gap-x-2')}>
+              <AssigneeSelect
+                organizationId={ward?.organizationId ?? ''}
                 value={task.assignee}
-                options={[
-                  { label: 'Assignee 1', value: 'assignee1' },
-                  { label: 'Assignee 2', value: 'assignee2' },
-                  { label: 'Assignee 3', value: 'assignee3' },
-                  { label: 'Assignee 4', value: 'assignee4' }
-                ]}
                 onChange={assignee => {
-                  setTask({ ...task, assignee })
+                  setTask({
+                    ...task,
+                    assignee
+                  })
+                  if (!isCreating) {
+                    assignTaskToUserMutation.mutate({
+                      taskId: task.id,
+                      userId: assignee
+                    })
+                  }
                 }}
               />
-            </div>
-            <div>
-              <label><Span type="labelMedium">{translation.dueDate}</Span></label>
-              <Input
-                value={formatDate(task.dueDate)}
-                type="datetime-local"
-                onChange={value => {
-                  const dueDate = new Date(value)
-                  setTask({ ...task, dueDate })
+              <Button
+                onClick={() => {
+                  setTask({
+                    ...task,
+                    assignee: ''
+                  })
+                  if (!isCreating) {
+                    unassignTaskToUserMutation.mutate(task.id)
+                  }
                 }}
-              />
+                variant="textButton"
+                color="negative"
+                disabled={!task.assignee}
+              >
+                <X size={24}/>
+              </Button>
             </div>
-            <div>
-              <label><Span type="labelMedium">{translation.status}</Span></label>
-              <TaskStatusSelect value={task.status} onChange={status => setTask({ ...task, status })}/>
-            </div>
-            <div>
-              <label><Span type="labelMedium">{translation.visibility}</Span></label>
-              <Select
-                value={task.isPublicVisible}
-                options={[
-                  { label: translation.private, value: false },
-                  { label: translation.public, value: true }
-                ]}
-                onChange={isPublicVisible => setTask({ ...task, isPublicVisible })}
-              />
-            </div>
-            {task.creationDate && (
-              <div className={tw('flex flex-col gap-y-1')}>
-                <Span type="labelMedium">{translation.creationTime}</Span>
-                <TimeDisplay date={new Date(task.creationDate)}/>
-              </div>
-            )}
           </div>
+          <div>
+            <label><Span type="labelMedium">{translation.dueDate}</Span></label>
+            <div className={tw('flex flex-row items-center gap-x-2')}>
+              <Input
+                value={task.dueDate ? formatDate(task.dueDate) : ''}
+                type="datetime-local"
+                onChangeEvent={event => {
+                  if (!event.target.value) {
+                    event.preventDefault()
+                    return
+                  }
+                  const dueDate = new Date(event.target.value)
+                  updateLocallyAndExternally({
+                    ...task,
+                    dueDate
+                  })
+                }}
+              />
+              { /* TODO reenable when backend has implemented a remove duedate
+                  <Button
+                    onClick={() => setTask({ ...task, dueDate: undefined })}
+                    variant="textButton"
+                    color="negative"
+                    disabled={!task.dueDate}
+                  >
+                    <X size={24}/>
+                  </Button>
+                  */}
+            </div>
+          </div>
+          <div>
+            <label><Span type="labelMedium">{translation.status}</Span></label>
+            <TaskStatusSelect
+              value={task.status}
+              removeOptions={isCreating ? [TaskStatus.TASK_STATUS_DONE] : []}
+              onChange={status => {
+                if (!isCreating) {
+                  switch (status) {
+                    case TaskStatus.TASK_STATUS_TODO:
+                      toToDoMutation.mutate(task.id)
+                      break
+                    case TaskStatus.TASK_STATUS_IN_PROGRESS:
+                      toInProgressMutation.mutate(task.id)
+                      break
+                    case TaskStatus.TASK_STATUS_DONE:
+                      toDoneMutation.mutate(task.id)
+                      break
+                    default:
+                      break
+                  }
+                }
+                setTask({
+                  ...task,
+                  status
+                })
+              }}
+            />
+          </div>
+          <div className={tw('select-none')}>
+            <label><Span type="labelMedium">{translation.visibility}</Span></label>
+            <div className={tw('flex flex-row justify-between items-center')}>
+              <Span>{task.isPublicVisible ? translation.public : translation.private}</Span>
+              {!task.isPublicVisible && !isCreating && (
+                <Button
+                  color="neutral"
+                  variant="tertiary"
+                  className={tw('!py-1 !px-2')}
+                  onClick={() => setIsShowingPublicDialog(true)}
+                >
+                  <Span>{translation.publish}</Span>
+                </Button>
+              )}
+              {isCreating && (
+                <Checkbox
+                  checked={task.isPublicVisible}
+                  onChange={() => setTask({
+                    ...task,
+                    isPublicVisible: !task.isPublicVisible
+                  })}
+                />
+              )}
+            </div>
+          </div>
+          {task.creationDate && (
+            <div className={tw('flex flex-col gap-y-1')}>
+              <Span type="labelMedium">{translation.creationTime}</Span>
+              <TimeDisplay date={new Date(task.creationDate)}/>
+            </div>
+          )}
         </div>
       </div>
       <div className={tw('flex flex-row justify-end gap-x-8')}>
-        {!isCreating ? (
+        {!isCreating ?
+            (
             <>
-              <Button color="negative" onClick={() => deleteTaskMutation.mutate(task.id)}>{translation.delete}</Button>
-              <Button color="accent" onClick={() => updateTaskMutation.mutate(task)}>{translation.update}</Button>
+              <Button
+                color="negative"
+                onClick={() => deleteTaskMutation.mutate(task.id)}
+              >
+                {translation.delete}
+              </Button>
+              {task.status !== TaskStatus.TASK_STATUS_DONE && (
+                <Button
+                  color="positive"
+                  onClick={() => {
+                    toDoneMutation.mutate(task.id)
+                    onClose()
+                  }}
+                >
+                  {translation.finish}
+                </Button>
+              )}
+              <Button
+                color="accent"
+                onClick={() => updateTaskMutation.mutate(task)}
+                disabled={!isValid}
+              >
+                {translation.update}
+              </Button>
             </>
-        )
-          : <Button color="accent" onClick={() => createTaskMutation.mutate(task)}>{translation.create}</Button>
+            )
+          :
+            (
+            <Button
+              color="accent"
+              onClick={() => createTaskMutation.mutate(task)}
+              disabled={!isValid}
+            >
+              {translation.create}
+            </Button>
+            )
         }
       </div>
     </div>
@@ -245,7 +444,7 @@ export const TaskDetailView = ({
 
   const templateSidebar = (
     <div
-        className={tw('fixed flex flex-col w-[250px] -translate-x-[250px] -translate-y-4 overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full')}
+      className={tw('fixed flex flex-col w-[250px] -translate-x-[250px] -translate-y-4 overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full')}
     >
       {personalTaskTemplatesData && wardTaskTemplatesData && (
         <TaskTemplateListColumn
@@ -253,9 +452,12 @@ export const TaskDetailView = ({
             taskTemplate,
             type: 'personal' as const
           }))),
-          ...(wardTaskTemplatesData.map(taskTemplate => ({ taskTemplate, type: 'ward' as const })))]
+          ...(wardTaskTemplatesData.map(taskTemplate => ({
+            taskTemplate,
+            type: 'ward' as const
+          })))]
             .sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))}
-          selectedID={selectedTemplate?.id ?? ''}
+          selectedId={selectedTemplate?.id ?? ''}
           onTileClick={(taskTemplate) => {
             setSelectedTemplate(taskTemplate)
             setTask({
@@ -269,9 +471,10 @@ export const TaskDetailView = ({
         />
       )}
       <>
-        {((personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading) || (personalTaskTemplatesError || wardTaskTemplatesError)) && <LoadingAnimation />}
+        {((personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading) || (personalTaskTemplatesError || wardTaskTemplatesError)) &&
+          <LoadingAnimation/>}
       </>
-  </div>
+    </div>
   )
 
   return (

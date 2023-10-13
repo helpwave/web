@@ -7,7 +7,7 @@ import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
-import { OrganizationOverviewContext } from '../../pages/organizations/[uuid]'
+import { OrganizationOverviewContext } from '../../pages/organizations/[id]'
 import { useWardOverviewsQuery } from '../../mutations/ward_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
@@ -28,25 +28,27 @@ const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> 
 }
 
 export type WardDisplayProps = {
-  selectedWardID?: string,
+  selectedWardId?: string,
   width?: number
 }
 
 /**
- * The left side of the organizations/[uuid].tsx page showing the wards within the organizations
+ * The left side of the organizations/[id].tsx page showing the wards within the organizations
  */
 export const WardDisplay = ({
   language,
-  selectedWardID,
+  selectedWardId,
   width
 }: PropsWithLanguage<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation(language, defaultWardDisplayTranslations)
   const router = useRouter()
+  const { id } = router.query
+  const organizationId = id as string
   const context = useContext(OrganizationOverviewContext)
-  const { data, isLoading, isError } = useWardOverviewsQuery()
+  const { data, isLoading, isError } = useWardOverviewsQuery(organizationId)
 
   const wards = data
-  selectedWardID ??= context.state.wardID
+  selectedWardId ??= context.state.wardId
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / 250), 1)
 
   return (
@@ -62,10 +64,10 @@ export const WardDisplay = ({
               <WardCard
                 key={ward.id}
                 ward={ward}
-                isSelected={selectedWardID === ward.id}
+                isSelected={selectedWardId === ward.id}
                 onEditClick={() => context.updateContext({
                   ...context.state,
-                  wardID: ward.id
+                  wardId: ward.id
                 })}
                 onTileClick={async () => await router.push(`/ward/${ward.id}`)}
               />
@@ -75,9 +77,9 @@ export const WardDisplay = ({
               text={translation.addWard}
               onTileClick={() => context.updateContext({
                 ...context.state,
-                wardID: ''
+                wardId: ''
               })}
-              isSelected={!selectedWardID}
+              isSelected={!selectedWardId}
             />
           </div>
         )}

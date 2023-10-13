@@ -99,7 +99,8 @@ const buildAuthorizationUrl = (params: {
 
 export const getAuthorizationUrl = async (): Promise<string> => {
   if (config.fakeTokenEnable) {
-    const url = new URL(config.oauth.redirectUri)
+    const url = new URL(window.location.origin)
+    url.pathname = '/auth/callback'
     url.searchParams.set('fake_token', config.fakeToken)
     return url.toString()
   }
@@ -132,7 +133,7 @@ export const handleCodeExchange = async (): Promise<{ id_token: string, refresh_
     if (fakeToken) return { id_token: fakeToken, refresh_token: fakeToken }
   }
 
-  // issuerUrl -> WORK AROUND - Ory does not set the "iss"-Claim of the ID Token to "auth.helpwave.de". We will ask Ory about this.
+  // issuerUrl -> WORK AROUND - Ory does not set the "iss"-Claim of the Id Token to "auth.helpwave.de". We will ask Ory about this.
   const { authorizationServer, client } = await getCommonOAuthEntities()
 
   const state = retrieveState()

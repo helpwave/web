@@ -7,7 +7,8 @@ import {
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
 import type { BedDTO, BedWithPatientWithTasksNumberDTO, BedWithMinimalPatientDTO } from './bed_mutations'
-import { wardOverviewsQueryKey, wardsQueryKey } from './ward_mutations'
+import { wardsQueryKey } from './ward_mutations'
+import { noop } from '@helpwave/common/util/noop'
 
 export const roomsQueryKey = 'rooms'
 
@@ -45,14 +46,14 @@ export const useRoomQuery = () => {
 }
 
 export const roomOverviewsQueryKey = 'roomOverview'
-export const useRoomOverviewsQuery = (wardUUID: string | undefined) => {
+export const useRoomOverviewsQuery = (wardId: string | undefined) => {
   return useQuery({
     queryKey: [roomsQueryKey, roomOverviewsQueryKey],
-    enabled: !!wardUUID,
+    enabled: !!wardId,
     queryFn: async () => {
       const req = new GetRoomOverviewsByWardRequest()
-      if (wardUUID) {
-        req.setId(wardUUID)
+      if (wardId) {
+        req.setId(wardId)
       }
       const res = await roomService.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
 
@@ -97,17 +98,17 @@ export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) 
       return room
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.invalidateQueries([roomsQueryKey]).then()
     },
   })
 }
 
-export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, wardUUID: string) => {
+export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void = noop, wardId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (room: RoomMinimalDTO) => {
       const req = new CreateRoomRequest()
-      req.setWardId(wardUUID)
+      req.setWardId(wardId)
       req.setName(room.name)
       const res = await roomService.createRoom(req, getAuthenticatedGrpcMetadata())
 
@@ -120,17 +121,18 @@ export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void, 
       return room
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey]).then()
+      queryClient.refetchQueries([wardsQueryKey]).then()
     }
   })
 }
 
-export const useRoomDeleteMutation = (callback: () => void) => {
+export const useRoomDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (roomUUID: string) => {
+    mutationFn: async (roomId: string) => {
       const req = new DeleteRoomRequest()
-      req.setId(roomUUID)
+      req.setId(roomId)
       const res = await roomService.deleteRoom(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
@@ -141,8 +143,8 @@ export const useRoomDeleteMutation = (callback: () => void) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([wardsQueryKey, wardOverviewsQueryKey]).then()
+      queryClient.refetchQueries([roomsQueryKey]).then()
+      queryClient.refetchQueries([wardsQueryKey]).then()
     }
   })
 }

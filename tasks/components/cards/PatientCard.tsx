@@ -1,15 +1,15 @@
 import { tw } from '@helpwave/common/twind'
-import type { CardProps } from '@helpwave/common/components/Card'
-import { Card } from '@helpwave/common/components/Card'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import { Span } from '@helpwave/common/components/Span'
+import type { DragCardProps } from './DragCard'
+import { DragCard } from './DragCard'
 
-export type PatientCardProps = CardProps & {
+export type PatientCardProps = DragCardProps & {
   bedName: string,
   patientName: string,
-  unscheduledTasks: number,
-  inProgressTasks: number,
-  doneTasks: number
+  unscheduledTasks?: number,
+  inProgressTasks?: number,
+  doneTasks?: number
 }
 
 /**
@@ -23,9 +23,10 @@ export const PatientCard = ({
   doneTasks,
   isSelected,
   onTileClick,
+  ...restCardProps
 }: PatientCardProps) => {
   return (
-    <Card isSelected={isSelected} onTileClick={onTileClick}>
+    <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
       <div className={tw('flex flex-row justify-between')}>
         <Span className={tw('whitespace-nowrap')} type="subsubsectionTitle">{bedName}</Span>
         <Span className={tw('ml-2 truncate')}>{patientName}</Span>
@@ -37,6 +38,6 @@ export const PatientCard = ({
           unscheduledCount={unscheduledTasks}
         />
       </div>
-    </Card>
+    </DragCard>
   )
 }

@@ -11,10 +11,12 @@ import {
   UnassignBedRequest,
   GetPatientDetailsResponse,
   GetPatientAssignmentByWardRequest,
-  GetPatientListRequest
+  GetPatientListRequest,
+  DeletePatientRequest,
+  ReadmitPatientRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
-import type { BedWithPatientID } from './bed_mutations'
+import type { BedWithPatientId } from './bed_mutations'
 import type { RoomWithMinimalBedAndPatient } from './room_mutations'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 import { noop } from '@helpwave/common/util/noop'
@@ -63,9 +65,9 @@ export type PatientListDTO = {
   discharged: PatientMinimalDTO[]
 }
 
-export type PatientWithBedIDTO = PatientMinimalDTO &{
+export type PatientWithBedIdDTO = PatientMinimalDTO &{
   note: string,
-  bedID: string
+  bedId: string
 }
 
 export type PatientDetailsDTO = PatientMinimalDTO &{
@@ -82,17 +84,17 @@ export const emptyPatientDetails: PatientDetailsDTO = {
 
 const patientsQueryKey = 'patients'
 
-export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) => void, patientID:string | undefined) => {
+export const usePatientDetailsQuery = (patientId: string | undefined) => {
   return useQuery({
-    queryKey: [patientsQueryKey, patientID],
-    enabled: !!patientID,
+    queryKey: [patientsQueryKey, patientId],
+    enabled: !!patientId,
     queryFn: async () => {
-      if (!patientID) {
+      if (!patientId) {
         return
       }
 
       const req = new GetPatientDetailsRequest()
-      req.setId(patientID)
+      req.setId(patientId)
 
       const res = await patientService.getPatientDetails(req, getAuthenticatedGrpcMetadata())
 
@@ -127,25 +129,24 @@ export const usePatientDetailsQuery = (callback: (patient: PatientDetailsDTO) =>
         }))
       }
 
-      callback(patient)
       return patient
     },
   })
 }
 
-export const usePatientsByWardQuery = (wardID: string) => {
+export const usePatientsByWardQuery = (wardId: string) => {
   return useQuery({
     queryKey: [patientsQueryKey, 'details'],
     queryFn: async () => {
       const req = new GetPatientsByWardRequest()
-      req.setWardId(wardID)
+      req.setWardId(wardId)
       const res = await patientService.getPatientsByWard(req, getAuthenticatedGrpcMetadata())
 
-      const patients: PatientWithBedIDTO[] = res.getPatientsList().map((patient) => ({
+      const patients: PatientWithBedIdDTO[] = res.getPatientsList().map((patient) => ({
         id: patient.getId(),
         name: patient.getHumanReadableIdentifier(),
         note: patient.getNotes(),
-        bedID: patient.getBedId(),
+        bedId: patient.getBedId(),
       }))
 
       return patients
@@ -153,12 +154,13 @@ export const usePatientsByWardQuery = (wardID: string) => {
   })
 }
 
-export const usePatientAssignmentByWardQuery = (wardID: string) => {
+export const usePatientAssignmentByWardQuery = (wardId: string) => {
   return useQuery({
     queryKey: [roomsQueryKey, 'patientAssignments'],
+    enabled: !!wardId,
     queryFn: async () => {
       const req = new GetPatientAssignmentByWardRequest()
-      req.setWardId(wardID)
+      req.setWardId(wardId)
       const res = await patientService.getPatientAssignmentByWard(req, getAuthenticatedGrpcMetadata())
 
       const rooms: RoomWithMinimalBedAndPatient[] = res.getRoomsList().map((room) => ({
@@ -186,15 +188,23 @@ export const usePatientAssignmentByWardQuery = (wardID: string) => {
   })
 }
 
-export const usePatientListQuery = (organisationID?: string) => {
+export const usePatientListQuery = (organisationId?: string, wardId?: string) => {
   return useQuery({
-    queryKey: [patientsQueryKey, 'patientList'],
+    queryKey: [patientsQueryKey, 'patientList', wardId],
+    enabled: !!organisationId,
     queryFn: async () => {
       const req = new GetPatientListRequest()
-      if (organisationID) {
-        req.setOrganisationId(organisationID)
+      if (!organisationId) {
+        return {
+          active: [],
+          discharged: [],
+          unassigned: []
+        }
       }
-      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata())
+      if (wardId) {
+        req.setWardId(wardId)
+      }
+      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata(organisationId))
 
       const patientList: PatientListDTO = {
         active: res.getActiveList().map(value => {
@@ -230,14 +240,18 @@ export const usePatientListQuery = (organisationID?: string) => {
   })
 }
 
-export const usePatientCreateMutation = (callback: (patient: PatientDTO) => void) => {
+export const usePatientCreateMutation = (organisationId: string, callback: (patient: PatientDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
+      if (!organisationId) {
+        console.error('no valid organisation id provided in PatientCreate')
+        return
+      }
       const req = new CreatePatientRequest()
       req.setNotes(patient.note)
       req.setHumanReadableIdentifier(patient.name)
-      const res = await patientService.createPatient(req, getAuthenticatedGrpcMetadata())
+      const res = await patientService.createPatient(req, getAuthenticatedGrpcMetadata(organisationId))
 
       if (!res.getId()) {
         console.error('create room failed')
@@ -285,9 +299,9 @@ export const usePatientUpdateMutation = (callback: (patient: PatientDTO) => void
 export const usePatientDischargeMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (patientID: string) => {
+    mutationFn: async (patientId: string) => {
       const req = new DischargePatientRequest()
-      req.setId(patientID)
+      req.setId(patientId)
 
       const res = await patientService.dischargePatient(req, getAuthenticatedGrpcMetadata())
 
@@ -305,12 +319,12 @@ export const usePatientDischargeMutation = (callback: () => void = noop) => {
   })
 }
 
-export const useAssignBedMutation = (callback: (bed: BedWithPatientID) => void = noop) => {
+export const useAssignBedMutation = (callback: (bed: BedWithPatientId) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (bed: BedWithPatientID) => {
+    mutationFn: async (bed: BedWithPatientId) => {
       const req = new AssignBedRequest()
-      req.setId(bed.patientID)
+      req.setId(bed.patientId)
       req.setBedId(bed.id)
 
       const res = await patientService.assignBed(req, getAuthenticatedGrpcMetadata())
@@ -330,12 +344,12 @@ export const useAssignBedMutation = (callback: (bed: BedWithPatientID) => void =
   })
 }
 
-export const useUnassignMutation = (callback: () => void) => {
+export const useUnassignMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (patientID: string) => {
+    mutationFn: async (patientId: string) => {
       const req = new UnassignBedRequest()
-      req.setId(patientID)
+      req.setId(patientId)
 
       const res = await patientService.unassignBed(req, getAuthenticatedGrpcMetadata())
 
@@ -345,6 +359,43 @@ export const useUnassignMutation = (callback: () => void) => {
       }
 
       callback()
+      return res.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([patientsQueryKey]).then()
+    }
+  })
+}
+
+export const useDeletePatientMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (patientId: string) => {
+      const req = new DeletePatientRequest()
+      req.setId(patientId)
+
+      const res = await patientService.deletePatient(req, getAuthenticatedGrpcMetadata())
+
+      return res.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([patientsQueryKey]).then()
+    }
+  })
+}
+
+export const useReadmitPatientMutation = (callback: (patientId: string) => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (patientId: string) => {
+      const req = new ReadmitPatientRequest()
+      req.setPatientId(patientId)
+
+      const res = await patientService.readmitPatient(req, getAuthenticatedGrpcMetadata())
+
+      callback(patientId)
       return res.toObject()
     },
     onSuccess: () => {

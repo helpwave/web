@@ -5,8 +5,8 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { Span } from '@helpwave/common/components/Span'
 import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
-import SimpleBarReact from 'simplebar-react'
 import { Edit } from 'lucide-react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
@@ -29,7 +29,7 @@ export type TaskTemplateDTOExtension = {taskTemplate: TaskTemplateDTO, type: 'pe
 export type TaskTemplateListColumnProps = {
   taskTemplates: TaskTemplateDTOExtension[],
   onTileClick: (taskTemplate: TaskTemplateDTO) => void,
-  selectedID?: string,
+  selectedId?: string,
   onColumnEditClick?: () => void
 }
 
@@ -40,7 +40,7 @@ export const TaskTemplateListColumn = ({
   language,
   taskTemplates,
   onTileClick,
-  selectedID = '',
+  selectedId = '',
   onColumnEditClick
 }: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateListColumnTranslation)
@@ -61,21 +61,21 @@ export const TaskTemplateListColumn = ({
       </div>
       <div className={tw('overflow-hidden h-full')} ref={ref}>
         <div>
-          <SimpleBarReact style={{ maxHeight: height }}>
+          <Scrollbars autoHeight autoHeightMin={height} autoHide >
             <div className={tw('flex flex-col gap-y-2 pr-3')}>
               {taskTemplates.map((taskTemplateExtension, index) => (
                 <TaskTemplateCard
                   key={taskTemplateExtension.taskTemplate.id}
                   name={taskTemplateExtension.taskTemplate.name}
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
-                  isSelected={selectedID === taskTemplateExtension.taskTemplate.id}
+                  isSelected={selectedId === taskTemplateExtension.taskTemplate.id}
                   onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
                   className={tx('border-2 border-gray-300 !pr-2', { 'mb-2': index === taskTemplates.length - 1 })}
                   typeForLabel={taskTemplateExtension.type}
                 />
               ))}
             </div>
-          </SimpleBarReact>
+          </Scrollbars>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import useLocalStorage from './useLocalStorage'
 
-const languages = ['en', 'de'] as const
+export const languages = ['en', 'de'] as const
 export type Languages = typeof languages[number]
 
 export const DEFAULT_LANGUAGE = 'en'

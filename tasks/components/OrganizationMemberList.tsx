@@ -15,8 +15,8 @@ import {
   Table
 } from '@helpwave/common/components/Table'
 import type { OrgMember } from '../mutations/organization_member_mutations'
-import { Role } from '../mutations/organization_member_mutations'
-import { useOrganizationsByUserQuery, useRemoveMemberMutation } from '../mutations/organization_mutations'
+import { Role, useMembersByOrganizationQuery } from '../mutations/organization_member_mutations'
+import { useRemoveMemberMutation } from '../mutations/organization_mutations'
 import { OrganizationContext } from '../pages/organizations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
@@ -70,7 +70,7 @@ type DeleteDialogState = {isShowing: boolean, member?: OrgMember}
 const defaultDeleteDialogState: DeleteDialogState = { isShowing: false }
 
 export type OrganizationMemberListProps = {
-  organizationID?: string,
+  organizationId?: string,
   members?: OrgMember[]
 }
 
@@ -79,19 +79,18 @@ export type OrganizationMemberListProps = {
  */
 export const OrganizationMemberList = ({
   language,
-  organizationID,
+  organizationId,
   members
 }: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
   const [tableState, setTableState] = useState<TableState>({ pagination: defaultTableStatePagination, selection: defaultTableStateSelection })
 
   const context = useContext(OrganizationContext)
-  organizationID ??= context.state.organizationID
-  // const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationID) TODO use later
-  const { data, isError, isLoading } = useOrganizationsByUserQuery()
-  const membersByOrganization = data?.find(value => value.id === organizationID)?.members ?? []
+  organizationId ??= context.state.organizationId
+  const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
+  const membersByOrganization = data ?? []
   const usedMembers: OrgMember[] = members ?? membersByOrganization ?? []
-  const removeMemberMutation = useRemoveMemberMutation(organizationID)
+  const removeMemberMutation = useRemoveMemberMutation(organizationId)
 
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
 
@@ -100,8 +99,8 @@ export const OrganizationMemberList = ({
 
   // TODO move this filtering to the Table component
   const admins = usedMembers.filter(value => value.role === Role.admin).map(idMapping)
-  if (tableState.selection?.currentSelection.find(value => admins.find(adminID => adminID === value))) {
-    const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminID => adminID === value))
+  if (tableState.selection?.currentSelection.find(value => admins.find(adminId => adminId === value))) {
+    const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminId => adminId === value))
     setTableState({
       ...tableState,
       selection: {
@@ -116,6 +115,7 @@ export const OrganizationMemberList = ({
   return (
     <div className={tw('flex flex-col')}>
       <ConfirmDialog
+        id="organizationMemberList-DeleteDialog"
         title={translation.deleteConfirmText(hasSelectedMultiple)}
         description={translation.dangerZoneText(hasSelectedMultiple)}
         isOpen={deleteDialogState.isShowing}

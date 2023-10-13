@@ -6,6 +6,7 @@ import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { Button } from '@helpwave/common/components/Button'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import { useEffect, useState } from 'react'
+import { noop } from '@helpwave/common/util/noop'
 
 type SubtaskTileTranslation = {
   subtasks: string,
@@ -27,6 +28,7 @@ type SubtaskTileProps = {
   subtask: SubTaskDTO,
   onRemoveClick: () => void,
   onNameChange: (subtask: SubTaskDTO) => void,
+  onNameEditCompleted?: (subtask: SubTaskDTO) => void,
   onDoneChange: (done: boolean) => void
 }
 
@@ -38,6 +40,7 @@ export const SubtaskTile = ({
   subtask,
   onRemoveClick,
   onNameChange,
+  onNameEditCompleted = noop,
   onDoneChange
 }: PropsWithLanguage<SubtaskTileTranslation, SubtaskTileProps>) => {
   const translation = useTranslation(language, defaultSubtaskTileTranslation)
@@ -65,6 +68,7 @@ export const SubtaskTile = ({
         value={subtask.name}
         className={tw('')}
         onChange={text => onNameChange({ ...subtask, name: text })}
+        onEditCompleted={text => onNameEditCompleted({ ...subtask, name: text })}
         id={subtask.name}
         minLength={minTaskNameLength}
         maxLength={maxTaskNameLength}

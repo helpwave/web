@@ -28,11 +28,12 @@ type AuthenticatedGrpcMetadata = {
   'X-Organization': string
 }
 
-export const getAuthenticatedGrpcMetadata = (): AuthenticatedGrpcMetadata => {
+const defaultOrganization = `3b25c6f5-4705-4074-9fc6-a50c28eba406`
+export const getAuthenticatedGrpcMetadata = (organizationID: string = defaultOrganization): AuthenticatedGrpcMetadata => {
   // TODO: Implement way better API for get the current id token and DONT hardcode the organization id
   const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
   return {
     'Authorization': `Bearer ${idToken}`,
-    'X-Organization': `3b25c6f5-4705-4074-9fc6-a50c28eba406`
+    'X-Organization': organizationID
   }
 }

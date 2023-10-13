@@ -7,9 +7,11 @@ import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
 import { useRouter } from 'next/router'
 import type { OrganizationDTO } from '../../mutations/organization_mutations'
-import { useOrganizationsByUserQuery } from '../../mutations/organization_mutations'
+import { useOrganizationsForUserQuery } from '../../mutations/organization_mutations'
 import { useContext } from 'react'
 import { OrganizationContext } from '../../pages/organizations'
+import { useAuth } from '../../hooks/useAuth'
+import { getConfig } from '../../utils/config'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -28,7 +30,7 @@ const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisp
 }
 
 export type OrganizationDisplayProps = {
-  selectedOrganizationID?: string,
+  selectedOrganizationId?: string,
   organizations?: OrganizationDTO[],
   width?: number
 }
@@ -38,7 +40,7 @@ export type OrganizationDisplayProps = {
  */
 export const OrganizationDisplay = ({
   language,
-  selectedOrganizationID,
+  selectedOrganizationId,
   organizations,
   width
 }: PropsWithLanguage<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
@@ -46,12 +48,15 @@ export const OrganizationDisplay = ({
   const router = useRouter()
 
   const context = useContext(OrganizationContext)
-  const { data } = useOrganizationsByUserQuery()
-  const usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
+  const { data } = useOrganizationsForUserQuery()
+  let usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
+  const { organizations: tokenOrganizations } = useAuth()
+  const { fakeTokenEnable } = getConfig()
 
+  usedOrganizations = usedOrganizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
   const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)
 
-  const usedSelectedID = selectedOrganizationID ?? context.state.organizationID
+  const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.yourOrganizations}/>
@@ -60,16 +65,16 @@ export const OrganizationDisplay = ({
           <OrganizationCard
             key={organization.id}
             organization={organization}
-            isSelected={usedSelectedID === organization.id}
-            onEditClick={() => context.updateContext({ ...context.state, organizationID: organization.id })}
+            isSelected={usedSelectedId === organization.id}
+            onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
             onTileClick={async () => await router.push(`/organizations/${organization.id}`)}
           />
         ))}
         <AddCard
           text={translation.addOrganization}
-          onTileClick={() => context.updateContext({ ...context.state, organizationID: '' })}
-          isSelected={usedSelectedID === ''}
-          className={tw('h-24')}
+          onTileClick={() => context.updateContext({ ...context.state, organizationId: '' })}
+          isSelected={usedSelectedId === ''}
+          className={tw('h-full')}
         />
       </div>
     </div>

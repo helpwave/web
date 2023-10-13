@@ -3,6 +3,7 @@ import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
 import { noop } from './Input'
 import { Pencil } from 'lucide-react'
+import useSaveDelay from '../../hooks/useSaveDelay'
 
 type InputProps = {
   /**
@@ -24,7 +25,8 @@ type InputProps = {
   labelClassName?: string,
   initialState?: 'editing' | 'display',
   size?: number,
-  disclaimer?: string
+  disclaimer?: string,
+  onEditCompleted?: (text: string) => void
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 /**
@@ -42,9 +44,18 @@ export const ToggleableInput = ({
   initialState = 'display',
   size = 20,
   disclaimer,
+  onBlur,
+  onEditCompleted = noop,
   ...restProps
 }: InputProps) => {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
+  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => undefined, 3000)
+
+  const onEditCompletedWrapper = (text: string) => {
+    onEditCompleted(text)
+    clearUpdateTimer()
+  }
+
   return (
     <div>
       <div
@@ -59,18 +70,30 @@ export const ToggleableInput = ({
               value={value}
               type={type}
               id={id}
-              onChange={event => onChange(event.target.value)}
-              onBlur={() => {
+              onChange={event => {
+                const value = event.target.value
+                restartTimer(() => {
+                  onEditCompletedWrapper(value)
+                })
+                onChange(value)
+              }}
+              onBlur={(event) => {
+                if (onBlur) {
+                  onBlur(event)
+                }
+                onEditCompletedWrapper(value)
                 setIsEditing(false)
               }}
               onKeyPress={event => {
                 if (event.key === 'Enter') {
                   setIsEditing(false)
+                  onEditCompletedWrapper(value)
                 }
               }}
               className={tx(labelClassName, `w-full border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4`, {
                 underline: isEditing
               })}
+              onFocus={event => event.target.select()}
             />
           ) : (
             <span

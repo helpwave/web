@@ -12,12 +12,16 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import {
   useInviteMemberMutation,
-  useOrganizationCreateMutation, useOrganizationDeleteMutation,
-  useOrganizationQuery, useOrganizationUpdateMutation
+  useOrganizationCreateMutation,
+  useOrganizationDeleteMutation,
+  useOrganizationQuery,
+  useOrganizationUpdateMutation
 } from '../../mutations/organization_mutations'
 import { OrganizationContext } from '../../pages/organizations'
-import type { OrganisationInvitation } from '../OrganisationInvitationList'
-import { OrganisationInvitationList } from '../OrganisationInvitationList'
+import { ReSignInModal } from '../ReSignInModal'
+import type { OrganizationInvitation } from '../OrganizationInvitationList'
+import { OrganizationInvitationList } from '../OrganizationInvitationList'
+import { useAuth } from '../../hooks/useAuth'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -41,7 +45,7 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
   },
   de: {
     organizationDetail: 'Organisations Details',
-    dangerZone: 'Gefahren Zone',
+    dangerZone: 'Risikobereich',
     dangerZoneText: 'Das Löschen einer Organisation ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
     deleteConfirmText: 'Wollen Sie wirklich diese Organisation löschen?',
     deleteOrganization: 'Organisation löschen',
@@ -67,30 +71,42 @@ export const OrganizationDetail = ({
     updateContext
   } = useContext(OrganizationContext)
 
-  const isCreatingNewOrganization = contextState.organizationID === ''
-  const { data } = useOrganizationQuery(contextState.organizationID)
+  const { signOut } = useAuth()
+  const isCreatingNewOrganization = contextState.organizationId === ''
+  const { data } = useOrganizationQuery(contextState.organizationId)
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
+  const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
-  const [organizationInvites, setOrganizationInvites] = useState<OrganisationInvitation[]>([])
+  const [organizationInvites, setOrganizationInvites] = useState<OrganizationInvitation[]>([])
+
+  const resetForm = () => {
+    setOrganizationForm(emptyOrganizationForm)
+    setOrganizationInvites([])
+  }
 
   useEffect(() => {
     if (data && !isCreatingNewOrganization) {
       setOrganizationForm({
         isValid: true,
         hasChanges: false,
-        organization: { ...data }
+        organization: { ...data },
+        touched: {
+          shortName: false,
+          longName: false,
+          email: false
+        }
       })
     }
   }, [data, isCreatingNewOrganization])
 
-  const inviteMemberMutation = useInviteMemberMutation(contextState.organizationID)
+  const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 
   const createMutation = useOrganizationCreateMutation(organization => {
     organizationInvites.forEach(invite => inviteMemberMutation.mutate({
       email: invite.email,
-      organizationID: organization.id
+      organizationId: organization.id
     }))
-    updateContext({ organizationID: organization.id })
+    setIsShowingReSignInDialog(organization.id)
   })
 
   const updateMutation = useOrganizationUpdateMutation(organization => {
@@ -99,36 +115,61 @@ export const OrganizationDetail = ({
       hasChanges: false,
       organization: {
         ...organization
-      }
+      },
+      touched: organizationForm.touched
     })
   })
 
   const deleteMutation = useOrganizationDeleteMutation(() => updateContext({
-    organizationID: ''
+    organizationId: ''
   }))
 
   return (
     <div
-      key={contextState.organizationID}
+      key={contextState.organizationId}
       className={tw('flex flex-col py-4 px-6')}
     >
       <ConfirmDialog
-        title={translation.deleteConfirmText}
-        description={translation.dangerZoneText}
+        id="organizationDetail-DeleteDialog"
+        titleText={translation.deleteConfirmText}
+        descriptionText={translation.dangerZoneText}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
         onBackgroundClick={() => setIsShowingConfirmDialog(false)}
+        onCloseClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          deleteMutation.mutate(contextState.organizationID)
+          deleteMutation.mutate(contextState.organizationId)
         }}
         confirmType="negative"
+      />
+      <ReSignInModal
+        id="organizationDetail-ReSignInModal"
+        isOpen={!!isShowingReSignInDialog}
+        onBackgroundClick={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
+        onDecline={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
+        onCloseClick={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
+        onConfirm={() => {
+          if (isShowingReSignInDialog) {
+            updateContext({ organizationId: isShowingReSignInDialog })
+          }
+          setIsShowingReSignInDialog(undefined)
+          signOut()
+        }}
       />
       <ColumnTitle title={translation.organizationDetail}/>
       <div className={tw('flex flex-col gap-y-4 max-w-[500px]')}>
         <OrganizationForm
           organizationForm={organizationForm}
-          isShowingErrorsDirectly={!isCreatingNewOrganization}
           onChange={(organizationForm, shouldUpdate) => {
             setOrganizationForm(organizationForm)
             if (shouldUpdate) {
@@ -137,12 +178,12 @@ export const OrganizationDetail = ({
           }}
         />
         {!isCreatingNewOrganization && (
-          <OrganizationMemberList />
+          <OrganizationMemberList/>
         )}
-        <OrganisationInvitationList
+        <OrganizationInvitationList
           onChange={setOrganizationInvites}
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
-          organizationID={contextState.organizationID}
+          organizationId={contextState.organizationId}
         />
         <div className={tw('flex flex-row justify-end')}>
           <Button

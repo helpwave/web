@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { useAuth } from '../hooks/useAuth'
 import { PageWithHeader } from '../components/layout/PageWithHeader'
@@ -7,12 +7,14 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '../components/layout/TwoColumn'
-import { FeatureDetails } from '../components/layout/FeatureDetails'
+import { NewsFeed } from '../components/layout/NewsFeed'
 import { DashboardDisplay } from '../components/layout/DashboardDisplay'
-import { useWardOverviewsQuery } from '../mutations/ward_mutations'
-import { useOrganizationsByUserQuery } from '../mutations/organization_mutations'
+import { useOrganizationsForUserQuery } from '../mutations/organization_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { tw } from '@twind/core'
+import { fetchLocalizedNews } from '../utils/news'
+import type { LocalizedNews } from '@helpwave/common/util/news'
+import { localizedNewsSchema } from '@helpwave/common/util/news'
 
 type DashboardTranslation = {
   dashboard: string
@@ -27,11 +29,19 @@ const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
   }
 }
 
-const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslation>) => {
+type DashboardServerSideProps = {
+  jsonFeed: unknown
+}
+
+export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = async () => {
+  const json = await fetchLocalizedNews()
+  return { props: { jsonFeed: json } }
+}
+
+const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, language }) => {
   const translation = useTranslation(language, defaultDashboardTranslations)
   const { user } = useAuth()
-  const { data: wards, isLoading: isLoadingWards } = useWardOverviewsQuery()
-  const { data: organizations, isLoading: isLoadingOrganizations } = useOrganizationsByUserQuery()
+  const { data: organizations, isLoading } = useOrganizationsForUserQuery()
 
   return (
     <PageWithHeader
@@ -41,43 +51,24 @@ const Dashboard: NextPage = ({ language }: PropsWithLanguage<DashboardTranslatio
         <title>{titleWrapper()}</title>
       </Head>
       <LoadingAndErrorComponent
-        isLoading={isLoadingWards || isLoadingOrganizations || !user || !wards || !organizations}
+        isLoading={isLoading || !user || !organizations}
         loadingProps={{ classname: tw('!h-full') }}
       >
-        {organizations && wards && (
+        {organizations && (
           <TwoColumn
             disableResize={false}
             left={width => ((
                 <DashboardDisplay
                   organizations={organizations}
-                  wards={wards}
                   width={width}
                 />
             )
             )}
             right={width => (
-              <FeatureDetails
+              <NewsFeed
                 width={width}
-                features={[
-                  {
-                    title: 'mission - Was ist helpwave?',
-                    date: new Date('10 July 2023'),
-                    externalResource: new URL('https://podcasters.spotify.com/pod/show/helpwave/episodes/mission---Was-ist-helpwave-e26n9gi/a-aa3paqd'),
-                    description: [
-                      new URL('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'),
-                      'Hallo, willkommen zur allerersten richtigen Folge von helpwave talks! Heute wird es konkret: Was ist eigentlich helpwave? Was ist die Vision? Und vor allem wer ist helpwave und wie genau will helpwave mittels Informatik das Gesundheitswesen revolutionieren? Max Schäfer und Christian Porschen haben die Antworten und geben einen detaillieren Einblick in das "Was", "Wie" und vor allem "Warum" von helpwave.'
-                    ]
-                  },
-                  {
-                    title: 'trailer - Fusionsküche Medizin und Informatik',
-                    date: new Date('30 June 2023'),
-                    externalResource: new URL('https://podcasters.spotify.com/pod/show/helpwave/episodes/trailer---Fusionskche-Medizin-und-Informatik-e26dbf7/a-aa2rb9o'),
-                    description: [
-                      new URL('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80'),
-                      'Hey! Willkommen bei helpwave talks unserem einzigartigen Format rund um die medizinische Informatik mit vielen interessanten Gästen aus Forschung, Entwicklung, Pflege, Recht, ...'
-                    ]
-                  },
-                ]}
+                // TODO fix typing
+                localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
               />
             )}
           />

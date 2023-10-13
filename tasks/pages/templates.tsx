@@ -80,7 +80,7 @@ export const TaskTemplateContext = createContext<TaskTemplateContextType>({
 const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<PersonalTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultPersonalTaskTemplateTranslations)
   const router = useRouter()
-  const { templateID } = router.query
+  const { templateId } = router.query
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { user } = useAuth()
   const { isLoading, isError, data } = usePersonalTaskTemplateQuery(user?.id)
@@ -112,8 +112,8 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
       template: taskTemplate ?? emptyTaskTemplate
     }))
 
-  if (!contextState.hasChanges && templateID && !usedQueryParam) {
-    const newSelected = data?.find(value => value.id === templateID) ?? emptyTaskTemplate
+  if (!contextState.hasChanges && templateId && !usedQueryParam) {
+    const newSelected = data?.find(value => value.id === templateId) ?? emptyTaskTemplate
     setContextState({
       ...contextState,
       isValid: newSelected.id !== '',
@@ -148,7 +148,7 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
                       deletedSubtaskIds: []
                     })
                   }}
-                  selectedID={contextState.template.id}
+                  selectedId={contextState.template.id}
                   taskTemplates={data}
                   variant="personalTemplates"
                 />

@@ -1,11 +1,8 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { ReactNode } from 'react'
-import SimpleBarReact from 'simplebar-react'
-import 'simplebar-react/dist/simplebar.min.css'
-import { createRef, useEffect, useRef, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
-import type SimpleBarCore from 'simplebar-core'
-
+import { Scrollbars } from 'react-custom-scrollbars-2'
 /**
  * Only px and %
  * e.g. 250px or 10%
@@ -77,16 +74,9 @@ export const TwoColumn = ({
     }
   }
 
-  useEffect(() => {
-    const newFullWidth = ref.current?.clientWidth ?? 0
-    if (fullWidth === 0) {
-      setLeftWidth(convertToLeftWidth(baseLayoutValue, newFullWidth))
-    }
-    setFullWidth(newFullWidth)
-  }, [ref.current?.clientWidth])
-
   // TODO Update this to be more clear and use all/better constraints
-  const calcPosition = (dragPosition: number) => {
+  // LINTER: needs this anonymous function to be happy :(
+  const calcPosition = (() => (dragPosition: number) => {
     const leftMin = convertToLeftWidth(constraints.left?.min ?? defaultConstraint.left.min, fullWidth)
     const rightMin = convertToLeftWidth(constraints.right?.min ?? defaultConstraint.left.min, fullWidth)
     let left = dragPosition
@@ -96,23 +86,23 @@ export const TwoColumn = ({
       left = fullWidth - rightMin
     }
     return left
-  }
+  })()
+
+  useEffect(() => {
+    const newFullWidth = ref.current?.clientWidth ?? 0
+    if (fullWidth === 0) {
+      setLeftWidth(convertToLeftWidth(baseLayoutValue, newFullWidth))
+    } else if (newFullWidth !== 0) {
+      setLeftWidth(calcPosition(leftWidth / fullWidth * newFullWidth))
+    }
+    setFullWidth(newFullWidth)
+  }, [ref, fullWidth, baseLayoutValue, calcPosition, leftWidth])
 
   const leftFocus = convertToLeftWidth(baseLayoutValue, fullWidth) < leftWidth - dividerHitBoxWidth / 2
-
-  const scrollableRefRight = useRef<SimpleBarCore>(null)
-  const scrollableRefLeft = useRef<SimpleBarCore>(null)
-  const [simpleBarMaxHeight, setSimpleBarMaxHeight] = useState(800)
+  const [scrollbarsBarMaxHeight, setScrollbarsBarMaxHeight] = useState(800)
 
   const handleWindowResize = () => {
-    setSimpleBarMaxHeight(window.innerHeight - headerHeight)
-
-    const scrollableElementRight = scrollableRefRight.current
-    const scrollableElementLeft = scrollableRefLeft.current
-    if (scrollableElementRight && scrollableElementLeft) {
-      scrollableElementRight.recalculate()
-      scrollableElementLeft.recalculate()
-    }
+    setScrollbarsBarMaxHeight(window.innerHeight - headerHeight)
   }
 
   useEffect(() => {
@@ -122,8 +112,9 @@ export const TwoColumn = ({
     }
   }, [])
 
-  useEffect(handleWindowResize, [window.innerHeight])
+  useEffect(handleWindowResize)
 
+  const rightWidth = fullWidth - leftWidth - dividerHitBoxWidth
   return (
     <div
       ref={ref} className={tx(`relative flex flex-row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
@@ -141,9 +132,9 @@ export const TwoColumn = ({
             className={tw(`overflow-hidden`)}
             style={{ width: leftWidth + 'px' }}
           >
-            <SimpleBarReact ref={scrollableRefLeft} style={{ overflowX: 'hidden', maxHeight: simpleBarMaxHeight }}>
+            <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: leftWidth }}>
               {left(leftWidth)}
-            </SimpleBarReact>
+            </Scrollbars>
           </div>
           <div
             onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
@@ -169,11 +160,11 @@ export const TwoColumn = ({
           </div>
           <div
             className={tw(`overflow-hidden`)}
-            style={{ width: (fullWidth - leftWidth) + 'px' }}
+            style={{ width: (rightWidth) + 'px' }}
           >
-            <SimpleBarReact ref={scrollableRefRight} style={{ overflowX: 'hidden', maxHeight: simpleBarMaxHeight }}>
-              {right(fullWidth - leftWidth)}
-            </SimpleBarReact>
+            <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: rightWidth }}>
+              {right(rightWidth)}
+            </Scrollbars>
           </div>
         </>
       )}

@@ -23,14 +23,14 @@ const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDispl
     wardTaskTemplates: 'Ward Task Templates'
   },
   de: {
-    addNewTaskTemplate: 'Neues Template hinzufügen',
-    personalTaskTemplates: 'Persönliche Task Templates',
-    wardTaskTemplates: 'Stations Task Templates'
+    addNewTaskTemplate: 'Neues Vorlagen hinzufügen',
+    personalTaskTemplates: 'Persönliche Vorlagen',
+    wardTaskTemplates: 'Stations Vorlagen'
   }
 }
 
 export type TaskTemplateDisplayProps = {
-  selectedID: string,
+  selectedId: string,
   onSelectChange: (taskTemplate: TaskTemplateDTO | undefined) => void,
   taskTemplates: TaskTemplateDTO[],
   variant: 'wardTemplates' | 'personalTemplates',
@@ -42,7 +42,7 @@ export type TaskTemplateDisplayProps = {
  */
 export const TaskTemplateDisplay = ({
   language,
-  selectedID,
+  selectedId,
   onSelectChange,
   taskTemplates,
   variant,
@@ -50,20 +50,20 @@ export const TaskTemplateDisplay = ({
 }: PropsWithLanguage<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateDisplayTranslation)
   const router = useRouter()
-  const { uuid, wardID } = router.query
+  const { id, wardId } = router.query
   const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))
 
-  const switchToPersonalLink = uuid ? `/templates?wardID=${uuid}` : '/templates'
+  const switchToPersonalLink = id ? `/templates?wardId=${id}` : '/templates'
   return (
     <div className={tw('py-4 px-6')}>
       <div className={tw('flex flex-row items-center justify-between mb-4')}>
         <Span type="subsectionTitle">
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
         </Span>
-        { (variant === 'wardTemplates' || wardID) && (
+        { (variant === 'wardTemplates' || wardId) && (
           <Button
             onClick={() => {
-              router.push(variant === 'personalTemplates' ? `/ward/${wardID}/templates` : switchToPersonalLink).then()
+              router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).then()
             }}
             className={tw('flex flex-row gap-x-1 items-center w-auto')}
           >
@@ -79,16 +79,15 @@ export const TaskTemplateDisplay = ({
             key={taskTemplate.id}
             name={taskTemplate.name}
             subtaskCount={taskTemplate.subtasks.length}
-            isSelected={selectedID === taskTemplate.id}
+            isSelected={selectedId === taskTemplate.id}
             onEditClick={() => onSelectChange(taskTemplate)}
             onTileClick={() => onSelectChange(taskTemplate)}
           />
         ))}
         <AddCard
-          isSelected={selectedID === ''}
+          isSelected={selectedId === ''}
           onTileClick={() => onSelectChange(undefined)}
           text={translation.addNewTaskTemplate}
-          className={tw('h-auto')}
         />
       </div>
     </div>

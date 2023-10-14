@@ -6,8 +6,8 @@ const StartSection = () => {
   const demoURL = 'https://tasks.helpwave.de'
 
   return (
-    <div className={tw('pt-48 pb-16 flex gap-32 items-center justify-center')}>
-      <div className={tw('desktop:w-1/2')}>
+    <div className={tw('pt-32 pb-16 flex gap-32 items-center justify-center')}>
+      <div className={tw('desktop:w-3/4')}>
         <div className={tw('font-space text-6xl font-bold')}>helpwave</div>
 
         <div className={tw('font-sans text-2xl font-medium mt-2 text-end')}>

@@ -4,7 +4,7 @@ import Image from 'next/image'
 const images = {
   'REACH': 'https://cdn.helpwave.de/partners/reach.svg',
   'digitalHub Münsterland': 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png',
-  'helpwave': 'https://cdn.helpwave.de/logo/logo.png',
+  'Münsterhack': 'https://cdn.helpwave.de/partners/mshack_2023.png',
 }
 
 const PartnerSection = () => {
@@ -13,7 +13,7 @@ const PartnerSection = () => {
   return (
     <div className={tw('flex gap-16 my-16 select-none overflow-x-auto justify-between items-center')}>
       {Object.entries(images).map(([title, src]) => (
-        <Image key={title} alt={title} src={src} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] grayscale`)}/>
+        <Image key={title} alt={title} src={src} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] grayscale`)} />
       ))}
     </div>
   )

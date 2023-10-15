@@ -12,7 +12,7 @@ const items = [
   { name: 'story', url: '/story' },
   { name: 'team', url: '/team' },
   { name: 'talks', url: '/talks' },
-  { name: 'contact', url: '/contact' },
+  { name: 'contact', url: 'mailto:contact@helpwave.de' },
 ]
 
 const Header = () => {

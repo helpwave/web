@@ -27,7 +27,7 @@ class MyDocument extends Document {
           <meta property="og:description" content="Next generation healthcare software approach!" />
           <meta property="og:url" content="https://helpwave.de/" />
           <meta property="og:type" content="website" />
-          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:site" content="@helpwave_org" />
           <meta name="twitter:creator" content="@helpwave_org" />
           <meta property="og:locale" content="en_US" />

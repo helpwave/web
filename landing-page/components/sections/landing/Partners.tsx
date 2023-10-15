@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const images = {
   'REACH': 'https://cdn.helpwave.de/partners/reach.svg',
-  'digitalHub Münsterland': 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png',
+  'Digital Hub münsterland': 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png',
   'Münsterhack': 'https://cdn.helpwave.de/partners/mshack_2023.png',
 }
 

@@ -57,6 +57,7 @@ const teamData = {
     {
       name: 'Felix Thape',
       role: 'fullstack developer',
+      pictureURL: pictureURL('felix_thape'),
       tags: ['maintainer', 'web', 'mobile'],
       socials: [
         { name: 'mail', url: 'mailto:felix.thape@helpwave.de' },
@@ -66,6 +67,7 @@ const teamData = {
     {
       name: 'Florian Sabonchi',
       role: 'fullstack developer',
+      pictureURL: pictureURL('florian_sabonchi'),
       tags: ['flutter', 'react', 'go'],
       socials: [
         { name: 'linkedin', url: 'https://www.linkedin.com/in/florian-s-599819211/' },
@@ -76,6 +78,7 @@ const teamData = {
     {
       name: 'Max Baumann',
       role: 'backend magician',
+      pictureURL: pictureURL('max_baumann'),
       tags: ['microservices', 'deployment', 'database'],
       socials: [
         { name: 'mail', url: 'mailto:max.baumann@helpwave.de' },
@@ -97,8 +100,8 @@ const teamData = {
     {
       name: 'Friedjof Noweck',
       role: 'backend developer',
-      tags: ['microservices', 'python', 'database'],
       pictureURL: pictureURL('friedjof_noweck'),
+      tags: ['microservices', 'python', 'database'],
       socials: [
         { name: 'mail', url: 'mailto:friedjof.noweck@helpwave.de' },
         { name: 'linkedin', url: 'https://www.linkedin.com/in/friedjof-noweck-02a4401aa/' },

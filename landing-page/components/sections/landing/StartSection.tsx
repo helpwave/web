@@ -2,7 +2,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { tw } from '@helpwave/common/twind'
 
 const StartSection = () => {
-  const githubURL = 'https://github.com/helpwave'
+  const exploreURL = '/story'
   const demoURL = 'https://tasks.helpwave.de'
 
   return (
@@ -19,13 +19,13 @@ const StartSection = () => {
           <span className={tw('text-green-600')}>{'technology'}</span>
         </div>
 
-        <div className={tw('flex my-8 gap-8 mobile:justify-evenly')}>
-          <Button variant="tertiary" color="neutral" onClick={() => { window.open(githubURL, '_blank') }} className={tw('flex items-center gap-2')}>
-            explore
+        <div className={tw('flex my-8 gap-8 justify-end mobile:justify-evenly')}>
+          <Button variant="tertiary" color="warn" onClick={() => { window.location.href = exploreURL }}>
+            Discover Our Vision
           </Button>
 
-          <Button variant="textButton" color="neutral" onClick={() => { window.open(demoURL, '_blank') }} className={tw('flex items-center gap-2')}>
-            try our demo!
+          <Button variant="textButton" color="neutral" onClick={() => { window.open(demoURL, '_blank') }}>
+            Try the demo!
           </Button>
         </div>
       </div>

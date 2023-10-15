@@ -17,7 +17,7 @@ const StartSection = () => {
         </div>
       </Link>
 
-      <div className={tw('font-sans text-2xl font-medium mt-2')}>
+      <div className={tw('font-sans text-2xl font-medium mt-2 text-gray-600')}>
         The first open-source team management platform for healthcare workers
       </div>
 

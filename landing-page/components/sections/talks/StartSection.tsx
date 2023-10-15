@@ -1,7 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
-import Image from 'next/image'
-
 import { Link as LinkIcon } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 const StartSection = () => {
@@ -10,7 +9,7 @@ const StartSection = () => {
   const size = 1024
 
   return (
-    <div className={tw('pt-32 pb-16')}>
+    <div className={tw('pt-32')}>
       <Link href={podcastURL} target="_blank">
         <div className={tw('font-space text-6xl font-bold')}>
           helpwave <span className={tw('text-hw-pool-orange')}>talks</span>

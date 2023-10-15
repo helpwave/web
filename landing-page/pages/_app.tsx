@@ -2,6 +2,7 @@ import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import { tw } from '@helpwave/common/twind'
 import { config } from '@helpwave/common/twind/config'
 import withNextApp from '@helpwave/common/twind/next/app'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import Head from 'next/head'
@@ -18,6 +19,8 @@ const spaceGrotesk = SpaceGrotesk({
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const queryClient = new QueryClient()
+
   return (
     <>
       <Head>
@@ -30,12 +33,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}</style>
       </Head>
-      <ProvideLanguage>
-        <div className={tw('font-sans')}>
-          <Component {...pageProps} />
-          <Toaster />
-        </div>
-      </ProvideLanguage>
+
+      <QueryClientProvider client={queryClient}>
+        <ProvideLanguage>
+          <div className={tw('font-sans')}>
+            <Component {...pageProps} />
+            <Toaster />
+          </div>
+        </ProvideLanguage>
+      </QueryClientProvider>
     </>
   )
 }

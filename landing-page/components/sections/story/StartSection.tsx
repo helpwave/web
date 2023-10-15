@@ -11,7 +11,7 @@ const StartSection = () => {
 
       <div className={tw('m-8 parent')}>
         <h2 className={tw('font-space text-4xl font-light')}>
-          1. helpwave&lsquo;s Journey Unfolds
+          1. helpwave&#39;s Journey Unfolds
         </h2>
         <p className={tw('mt-2')}>
           helpwave emerged during the Münsterhack 2022, where it initially began as a first-aid app for citizens. Our team clinched the Viewers Choice award, and later, we received support through the Solution Enabler Program 2022. It was during this hackathon that the worlds of medicine and technology merged to form what we now know as helpwave.<br />
@@ -24,7 +24,7 @@ const StartSection = () => {
           2. Development of tasks Takes Shape
         </h2>
         <p className={tw('mt-2')}>
-          It became evident that helpwave&lsquo;s primary focus lay in data governance. This means that, before diving into advanced data science applications for healthcare, helpwave prioritized access, storage, and data management. This approach also extended to helpwave tasks, which initially assists in aggregating and processing event data from existing hospital processes.<br />
+          It became evident that helpwave&#39;s primary focus lay in data governance. This means that, before diving into advanced data science applications for healthcare, helpwave prioritized access, storage, and data management. This approach also extended to helpwave tasks, which initially assists in aggregating and processing event data from existing hospital processes.<br />
 
           Even when used as a simple productivity tool (a to-do app), helpwave tasks offers significant benefits to hospitals and their staff. It can save up to 3 hours per shift on documentation and collaboration planning, resulting in remarkable efficiency gains.<br />
 
@@ -37,7 +37,7 @@ const StartSection = () => {
           3. Market Entry Planning
         </h2>
         <p className={tw('mt-2')}>
-          Thanks to the RWTH Innovation Ideation Program, helpwave has taken a significant step toward its first sale by September 2023. It is now clear that helpwave tasks is in demand at various clinics in Germany and will have a profound impact on the country&lsquo;s healthcare sector.<br />
+          Thanks to the RWTH Innovation Ideation Program, helpwave has taken a significant step toward its first sale by September 2023. It is now clear that helpwave tasks is in demand at various clinics in Germany and will have a profound impact on the country&#39;s healthcare sector.<br />
 
           Furthermore, the expansion of our product portfolio with helpwave cloud (private cloud infrastructure for each clinic on-site) and helpwave scaffold (digital twin of each clinic for gathering core information and real-time updates from stations) now presents a coherent digitalization strategy for all major hospitals.<br />
 

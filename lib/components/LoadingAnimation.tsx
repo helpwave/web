@@ -1,8 +1,8 @@
-import { tx } from '../twind'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsWithLanguage } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
-import { HelpwaveSpinner } from '../icons/HelpwaveSpinner'
+import { Helpwave } from '../icons/Helpwave'
+import { tx } from '../twind'
 
 type LoadingAnimationTranslation = {
   loading: string
@@ -33,7 +33,7 @@ export const LoadingAnimation = ({
   const translation = useTranslation(language, defaultLoadingAnimationTranslation)
   return (
     <div className={tx('flex flex-col items-center justify-center gap-y-2 w-full h-24', classname)}>
-      <HelpwaveSpinner />
+      <Helpwave animate="loading" />
       {loadingText ?? `${translation.loading}...`}
     </div>
   )

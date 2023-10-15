@@ -1,11 +1,11 @@
-import { tw } from '@helpwave/common/twind'
+import { Span } from '@helpwave/common/components/Span'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Link from 'next/link'
-import HelpwaveLogo from '@helpwave/common/icons/HelpwaveRect'
+import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
+import Link from 'next/link'
 import { getConfig } from '../utils/config'
-import { Span } from '@helpwave/common/components/Span'
 
 type MobileInterceptorTranslation = {
   pleaseDownloadApp: string,
@@ -39,7 +39,7 @@ const MobileInterceptor: NextPage = ({ language }: PropsWithLanguage<MobileInter
   const appstoreLink = config.appstoreLinks.appStore
   return (
     <div className={tw('w-screen h-[80vh] flex flex-col items-center justify-center')}>
-      <HelpwaveLogo className={tw('w-1/3 mx-auto h-auto mb-2 text-black')}/>
+      <Helpwave className={tw('w-1/3 mx-auto h-auto mb-2 text-black')}/>
       <Span type="subsectionTitle" className={tw('mb-8')}>{translation.pleaseDownloadApp}</Span>
       <Link href={playStoreLink}>{translation.playStore}</Link>
       <Link href={appstoreLink}>{translation.appStore}</Link>

@@ -1,11 +1,12 @@
-import Head from 'next/head'
-import type { AppProps } from 'next/app'
-import { Toaster } from 'react-hot-toast'
-import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
-import { tw } from '@helpwave/common/twind'
-import withNextApp from '@helpwave/common/twind/next/app'
-import { config } from '@helpwave/common/twind/config'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
+import { tw } from '@helpwave/common/twind'
+import { config } from '@helpwave/common/twind/config'
+import withNextApp from '@helpwave/common/twind/next/app'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import type { AppProps } from 'next/app'
+import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
+import Head from 'next/head'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -18,10 +19,12 @@ const spaceGrotesk = SpaceGrotesk({
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const queryClient = new QueryClient()
+
   return (
     <>
       <Head>
-        <title>helpwave</title>
+        <title>helpwave ~ empowering medical heroes, united in technology</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
         <style>{`
           :root {
@@ -30,12 +33,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}</style>
       </Head>
-      <ProvideLanguage>
-        <div className={tw('font-sans')}>
-          <Component {...pageProps} />
-          <Toaster />
-        </div>
-      </ProvideLanguage>
+
+      <QueryClientProvider client={queryClient}>
+        <ProvideLanguage>
+          <div className={tw('font-sans')}>
+            <Component {...pageProps} />
+            <Toaster />
+          </div>
+        </ProvideLanguage>
+      </QueryClientProvider>
     </>
   )
 }

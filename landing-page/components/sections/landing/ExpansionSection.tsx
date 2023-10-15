@@ -19,9 +19,9 @@ const ExpansionSection = () => {
           </div>
 
           <div className={tw('text-center')}>
-            <span className={tw('text-4xl')}>12,10</span>
+            <span className={tw('text-4xl')}>12,10 %</span>
             <br />
-            <h4>% of GDP</h4>
+            <h4>of GDP</h4>
           </div>
         </div>
     </div>

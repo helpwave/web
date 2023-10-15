@@ -29,12 +29,12 @@ const linkGroups = [
       { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' }
     ],
     Products: [
-      { name: 'scaffold', link: '/product/scaffold' },
       { name: 'tasks', link: '/product/tasks' },
+      /* { name: 'scaffold', link: '/product/scaffold' },
       { name: 'cloud', link: '/product/cloud' },
       { name: 'impulse', link: '/product/impulse' },
       { name: 'analytics', link: '/product/analytics' },
-      { name: 'core', link: '/product/core' },
+      { name: 'core', link: '/product/core' }, */
     ]
   },
 

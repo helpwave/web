@@ -56,6 +56,14 @@ const Header = () => {
               <X size={64} />
             </button>
 
+            <div className={tw('w-full p-2')}>
+              <Link href="/" onClick={() => setNavbarOpen(false)}>
+                <Span type="heading">
+                  home
+                </Span>
+              </Link>
+            </div>
+
             {items.map(({ name, url }) => (
               <div key={name} className={tw('w-full p-2')}>
                 <Link href={url} onClick={() => setNavbarOpen(false)}>

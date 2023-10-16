@@ -94,7 +94,7 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
     <PageWithHeader
       crumbs={[
         { display: translation.organization, link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations' },
-        { display: translation.ward, link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations' },
+        { display: ward?.name ?? translation.ward, link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations' },
         { display: translation.taskTemplates, link: `/ward/${wardId}/templates` }
       ]}
     >

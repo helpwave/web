@@ -2,6 +2,10 @@
 
 The official helpwave web frontends.
 
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/helpwave/web/badge)](https://securityscorecards.dev/viewer/?uri=github.com/helpwave/web)
+
+---
+
 ## Projects 
 This repository is split up into multiple subprojects using [pnpm](https://pnpm.io) workspaces.
 - helpwave tasks (see [tasks](/tasks))

@@ -3,9 +3,25 @@ import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import { Span } from '@helpwave/common/components/Span'
 import type { DragCardProps } from './DragCard'
 import { DragCard } from './DragCard'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+
+type PatientCardTranslation = {
+  bedNotAssigned: string
+}
+
+const defaultPatientCardTranslations: Record<Languages, PatientCardTranslation> = {
+  en: {
+    bedNotAssigned: 'Not Assigned',
+  },
+  de: {
+    bedNotAssigned: 'Nicht Zugewiesen',
+  }
+}
 
 export type PatientCardProps = DragCardProps & {
-  bedName: string,
+  bedName?: string,
   patientName: string,
   unscheduledTasks?: number,
   inProgressTasks?: number,
@@ -16,6 +32,7 @@ export type PatientCardProps = DragCardProps & {
  * A Card for displaying a Patient and the tasks
  */
 export const PatientCard = ({
+  language,
   bedName,
   patientName,
   unscheduledTasks,
@@ -24,11 +41,12 @@ export const PatientCard = ({
   isSelected,
   onTileClick,
   ...restCardProps
-}: PatientCardProps) => {
+}: PropsWithLanguage<PatientCardTranslation, PatientCardProps>) => {
+  const translation = useTranslation(language, defaultPatientCardTranslations)
   return (
     <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
       <div className={tw('flex flex-row justify-between')}>
-        <Span className={tw('whitespace-nowrap')} type="subsubsectionTitle">{bedName}</Span>
+        <Span className={tw('whitespace-nowrap')} type="subsubsectionTitle">{bedName ?? translation.bedNotAssigned}</Span>
         <Span className={tw('ml-2 truncate')}>{patientName}</Span>
       </div>
       <div className={tw('min-w-[150px] max-w-[200px] mt-1')}>

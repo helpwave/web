@@ -3,6 +3,7 @@ import {
   CreateRoomRequest,
   DeleteRoomRequest,
   GetRoomOverviewsByWardRequest,
+  GetRoomRequest,
   UpdateRoomRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/room_svc_pb'
 import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
@@ -35,12 +36,27 @@ export type RoomWithMinimalBedAndPatient = RoomMinimalDTO & {
   beds: BedWithMinimalPatientDTO[]
 }
 
-export const useRoomQuery = () => {
+export const useRoomQuery = (roomId?: string) => {
   return useQuery({
-    queryKey: [roomsQueryKey],
+    queryKey: [roomsQueryKey, roomId],
+    enabled: !!roomId,
     queryFn: async () => {
-      // TODO fetch user rooms
-      return [] as RoomDTO[]
+      const req = new GetRoomRequest()
+      if (roomId) {
+        req.setId(roomId)
+      }
+      const res = await roomService.getRoom(req, getAuthenticatedGrpcMetadata())
+
+      const room: RoomDTO = {
+        id: res.getId(),
+        name: res.getName(),
+        beds: res.getBedsList().map(bed => ({
+          id: bed.getId(),
+          name: bed.getName()
+        }))
+      }
+
+      return room
     },
   })
 }

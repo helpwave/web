@@ -59,7 +59,6 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServe
             disableResize={false}
             left={width => ((
                 <DashboardDisplay
-                  organizations={organizations}
                   width={width}
                 />
             )

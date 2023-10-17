@@ -18,7 +18,8 @@ type UserMenuTranslation = {
   language: string,
   signOut: string,
   taskTemplates: string,
-  invitations: string
+  invitations: string,
+  organizations: string
 }
 
 const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
@@ -27,14 +28,16 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     language: 'Language',
     signOut: 'Sign Out',
     taskTemplates: 'Task Templates',
-    invitations: 'Invitations'
+    invitations: 'Invitations',
+    organizations: 'Organizations'
   },
   de: {
     profile: 'Profil',
     language: 'Sprache',
     signOut: 'Ausloggen',
     taskTemplates: 'Task Templates',
-    invitations: 'Einladungen'
+    invitations: 'Einladungen',
+    organizations: 'Organisationen'
   }
 }
 
@@ -64,15 +67,24 @@ export const UserMenu = ({
         isOpen={isLanguageModalOpen}
       />
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
-        <div ref={ref} onClick={onClick} className={tw('flex gap-2 relative items-center group cursor-pointer select-none')}>
+        <div ref={ref} onClick={onClick}
+             className={tw('flex gap-2 relative items-center group cursor-pointer select-none')}>
           <div className={tw('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.name}</div>
-          <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small" />
-      </div>
+          <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
+        </div>
       )}>
         <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
-        <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem alignment="left">{translation.language}</MenuItem></div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/templates')}><MenuItem alignment="left">{translation.taskTemplates}</MenuItem></div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/invitations')}><MenuItem alignment="left">{translation.invitations}</MenuItem></div>
+        <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem
+          alignment="left">{translation.language}</MenuItem></div>
+        <div className={tw('cursor-pointer')} onClick={() => router.push('/templates')}>
+          <MenuItem alignment="left">{translation.taskTemplates}</MenuItem>
+        </div>
+        <div className={tw('cursor-pointer')} onClick={() => router.push('/organizations')}>
+          <MenuItem alignment="left">{translation.organizations}</MenuItem>
+        </div>
+        <div className={tw('cursor-pointer')} onClick={() => router.push('/invitations')}>
+          <MenuItem alignment="left">{translation.invitations}</MenuItem>
+        </div>
         <div
           className={tw('cursor-pointer text-hw-negative-400 hover:text-hw-negative-500')}
           onClick={() => signOut()}

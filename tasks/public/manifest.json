@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "helpwave tasks",
+  "short_name": "helpwave tasks",
+  "lang": "en",
+  "scope": "/",
+  "start_url": "/",
+  "description": "The first open-source team management platform for healthcare workers",
+  "orientation": "portrait",
+  "categories": ["software", "medical", "health", "healthcare", "company", "management", "team", "workers"],
+  "background_color": "#281c20",
+  "theme_color": "#281c20",
+  "display": "browser",
+  "display_override": ["fullscreen", "minimal-ui"],
+  "prefer_related_applications": true,
+  "related_applications": [],
+  "protocol_handlers": [],
+  "screenshots": [],
+  "shortcuts" : []
+}

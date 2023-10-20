@@ -19,6 +19,7 @@ import type { TaskTemplateContextState } from '../../templates'
 import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState } from '../../templates'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useWardQuery } from '../../../mutations/ward_mutations'
+import { useOrganizationQuery } from '../../../mutations/organization_mutations'
 
 type WardTaskTemplateTranslation = {
   taskTemplates: string,
@@ -49,6 +50,7 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId?.toString())
   const { data: ward } = useWardQuery(wardId?.toString() as string)
+  const { data: organization } = useOrganizationQuery(ward?.organizationId)
 
   const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
@@ -93,7 +95,7 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organization, link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations' },
+        { display: organization?.shortName ?? translation.organization, link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations' },
         { display: ward?.name ?? translation.ward, link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations' },
         { display: translation.taskTemplates, link: `/ward/${wardId}/templates` }
       ]}

@@ -26,6 +26,7 @@ import { Span } from '@helpwave/common/components/Span'
 import type { BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
 import { PatientCard } from '../../components/cards/PatientCard'
 import { useWardQuery } from '../../mutations/ward_mutations'
+import { useOrganizationQuery } from '../../mutations/organization_mutations'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -95,6 +96,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const { data: ward } = useWardQuery(wardId)
 
   const organizationId = ward?.organizationId ?? ''
+  const { data: organization } = useOrganizationQuery(organizationId)
+
   const [contextState, setContextState] = useState<WardOverviewContextState>({
     wardId
   })
@@ -220,7 +223,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     <PageWithHeader
       crumbs={[
         {
-          display: translation.organization,
+          display: organization?.shortName ?? translation.organization,
           link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations'
         },
         {
@@ -290,10 +293,10 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
               left: { min: '33%' }
             }}
             baseLayoutValue="-580px"
-            left={() => (<WardRoomList key={wardId}/>)}
+            left={() => (<WardRoomList key={wardId} />)}
             right={width =>
               isShowingPatientList ? (
-                  <PatientList width={width}/>
+                <PatientList width={width} />
               ) :
                 contextState.patientId && (
                   <div>
@@ -308,8 +311,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
           {/* TODO Later reenable the dropAnimation */}
           <DragOverlay style={{ width: '200px' }} dropAnimation={null}>
             {draggedPatient && (draggedPatient.patient ? (
-                  <DragCard
-                    cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.patient.name}</Span></DragCard>
+              <DragCard
+                cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.patient.name}</Span></DragCard>
             )
               : draggedPatient.bed && draggedPatient.bed.patient && (
                 <PatientCard

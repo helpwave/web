@@ -42,6 +42,7 @@ export const TaskCard = ({
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== TaskStatus.TASK_STATUS_DONE
 
   // TODO replace by user avatar
+  // Fetch for specific assignee https://github.com/helpwave/services/blob/c1c88ebaad136aef92954bf774b1e89c6a10d97f/services/user-svc/internal/models/user_models.go#L7
   const tempURL = 'https://source.boringavatars.com/marble/128/'
   const hasAssignee = !!task.assignee && task.assignee !== '00000000-0000-0000-0000-000000000000'
 

@@ -6,6 +6,23 @@ import { Span } from '@helpwave/common/components/Span'
 import type { TaskDTO } from '../../mutations/task_mutations'
 import { LockIcon } from 'lucide-react'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { Avatar } from '../Avatar'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+
+type TaskCardTranslation = {
+  assigned: string
+}
+
+const defaultTaskCardTranslations: Record<Languages, TaskCardTranslation> = {
+  en: {
+    assigned: 'assigned'
+  },
+  de: {
+    assigned: 'zugewiesen'
+  }
+}
 
 export type TaskCardProps = CardProps & {
   task: TaskDTO
@@ -15,23 +32,29 @@ export type TaskCardProps = CardProps & {
  * A Card displaying the information about
  */
 export const TaskCard = ({
+  language,
   task,
   isSelected = false,
   onTileClick = () => undefined
-}: TaskCardProps) => {
+}: PropsWithLanguage<TaskCardTranslation, TaskCardProps>) => {
+  const translation = useTranslation(language, defaultTaskCardTranslations)
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== TaskStatus.TASK_STATUS_DONE
+
+  // TODO replace by user avatar
+  const tempURL = 'https://source.boringavatars.com/marble/128/'
+  const hasAssignee = !!task.assignee && task.assignee !== '00000000-0000-0000-0000-000000000000'
 
   return (
     <Card
       onTileClick={onTileClick}
       isSelected={isSelected}
-      className={tx('bg-white', {
+      className={tx('bg-white !p-2', {
         '!border-hw-negative-400 !hover:border-hw-negative-600': isOverDue,
         '!border-hw-negative-600': isOverDue && isSelected,
       })}
     >
-      <div className={tw('flex flex-row justify-between w-full')}>
+      <div className={tw('flex flex-row justify-between w-full gap-x-2')}>
         <div className={tw('flex flex-col overflow-hidden')}>
           <div className={tw('flex flex-row overflow-hidden items-center gap-x-1')}>
             {!task.isPublicVisible && <div className={tw('w-[12px]')}><LockIcon size={12}/></div>}
@@ -41,11 +64,12 @@ export const TaskCard = ({
             {task.notes}
           </Span>
         </div>
-        {task.subtasks.length > 0 && (
-          <div className={tw('w-fit mt-1 ml-2')}>
+        <div className={tw('flex flex-col gap-y-1 w-[24px]')}>
+          {hasAssignee && <Avatar avatarUrl={tempURL} alt={translation.assigned} size="tiny"/>}
+          {task.subtasks.length > 0 && (
             <ProgressIndicator progress={progress}/>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </Card>
   )

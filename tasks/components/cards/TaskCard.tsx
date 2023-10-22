@@ -10,6 +10,7 @@ import { Avatar } from '../Avatar'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useUserQuery } from '../../mutations/user_mutations'
 
 type TaskCardTranslation = {
   assigned: string
@@ -41,10 +42,7 @@ export const TaskCard = ({
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== TaskStatus.TASK_STATUS_DONE
 
-  // TODO replace by user avatar
-  // Fetch for specific assignee https://github.com/helpwave/services/blob/c1c88ebaad136aef92954bf774b1e89c6a10d97f/services/user-svc/internal/models/user_models.go#L7
-  const tempURL = 'https://source.boringavatars.com/marble/128/'
-  const hasAssignee = !!task.assignee && task.assignee !== '00000000-0000-0000-0000-000000000000'
+  const { data: assignee } = useUserQuery(task.assignee)
 
   return (
     <Card
@@ -66,7 +64,7 @@ export const TaskCard = ({
           </Span>
         </div>
         <div className={tw('flex flex-col gap-y-1 w-[24px]')}>
-          {hasAssignee && <Avatar avatarUrl={tempURL} alt={translation.assigned} size="tiny"/>}
+          {assignee && <Avatar avatarUrl={assignee.avatarUrl} alt={translation.assigned} size="tiny"/>}
           {task.subtasks.length > 0 && (
             <ProgressIndicator progress={progress}/>
           )}

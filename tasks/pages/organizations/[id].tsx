@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -71,6 +71,10 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
     })
     setUsedQueryParam(true)
   }
+
+  useEffect(() => {
+    setContextState({ ...contextState, organizationId })
+  }, [organizationId])
 
   return (
     <PageWithHeader

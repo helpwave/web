@@ -6,7 +6,7 @@ const StartSection = () => {
     <div className={tw('pt-32')}>
       <div className={tw('ml-8 font-inter text-6xl font-light font-hw-error mobile:text-center')}>
         <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full mobile:mt-2 mr-16')}/>
-        Story time!
+        Our Story
       </div>
 
       <div className={tw('m-8 parent')}>

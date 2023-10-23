@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -9,6 +9,7 @@ import { WardDisplay } from '../../components/layout/WardDisplay'
 import { WardDetail } from '../../components/layout/WardDetails'
 import { PageWithHeader } from '../../components/layout/PageWithHeader'
 import titleWrapper from '../../utils/titleWrapper'
+import { useOrganizationQuery } from '../../mutations/organization_mutations'
 
 type WardsPageTranslation = {
   wards: string,
@@ -60,6 +61,7 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
   const router = useRouter()
   const { id, wardId } = router.query
   const organizationId = id as string
+  const { data: organization } = useOrganizationQuery(organizationId)
 
   if (wardId && !usedQueryParam) {
     setContextState({
@@ -70,10 +72,14 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
     setUsedQueryParam(true)
   }
 
+  useEffect(() => {
+    setContextState({ ...contextState, organizationId })
+  }, [organizationId])
+
   return (
     <PageWithHeader
       crumbs={[
-        { display: translation.organizations, link: `/organizations?organizationId=${organizationId}` },
+        { display: organization?.shortName ?? translation.organizations, link: `/organizations?organizationId=${organizationId}` },
         { display: translation.wards, link: `/organizations/${organizationId}` }
       ]}
     >
@@ -83,7 +89,7 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
       <OrganizationOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn
           disableResize={false}
-          left={width => (<WardDisplay width={width}/>)}
+          left={width => (<WardDisplay width={width} />)}
           right={width => (
             <WardDetail
               key={contextState.wardId}

@@ -16,7 +16,7 @@ const StoryBlock = ({
       <div className={tw('flex flex-column h-[48px] items-end')}>
         <h4 className={tw('text-xl text-green-600')}>{beforeHeader}</h4>
       </div>
-      <h1 className={tw('text-4xl font-space font-bold')}>{header}</h1>
+      <h2 className={tw('text-4xl font-space font-bold')}>{header}</h2>
       <br/>
       <p className={tw('text-md text-justify')}>
         {mainText}

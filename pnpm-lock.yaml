@@ -55,6 +55,9 @@ importers:
       react-intersection-observer:
         specifier: 9.5.2
         version: 9.5.2(react@18.2.0)
+      vanilla-cookieconsent:
+        specifier: 3.0.0-rc.16
+        version: 3.0.0-rc.16
     devDependencies:
       '@types/node':
         specifier: 20.8.7
@@ -11275,6 +11278,10 @@ packages:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
     dev: true
+
+  /vanilla-cookieconsent@3.0.0-rc.16:
+    resolution: {integrity: sha512-H1ShihSrrQ4xJdN4gS2lQMPxzW8DIsYu/xhKqpRbDUZYYVXFLsuLycZB1IWkLhN3mU0bJLL4Eu+A0UlCipdi1w==}
+    dev: false
 
   /vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}

@@ -16,6 +16,7 @@ const getConfig = () => {
       // sameSite: "Lax",
       // expiresAfterDays: 365,
     },
+    disablePageInteraction: true,
 
     /**
      * Callback functions

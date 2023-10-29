@@ -2,8 +2,6 @@ import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import FooterLinkGroup from './FooterLinkGroup'
-import * as CookieConsent from 'vanilla-cookieconsent'
-import getConfig from './CookieConsentConfig'
 
 const linkGroups = [
   {

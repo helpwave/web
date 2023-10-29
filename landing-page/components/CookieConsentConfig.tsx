@@ -48,7 +48,7 @@ const getConfig = () => {
     // https://cookieconsent.orestbida.com/reference/configuration-reference.html#guioptions
     guiOptions: {
       consentModal: {
-        layout: 'box inline',
+        layout: 'box wide',
         position: 'middle center',
         equalWeightButtons: true,
         flipButtons: false,
@@ -84,11 +84,6 @@ const getConfig = () => {
             onAccept: () => {},
             onReject: () => {},
           },
-          youtube: {
-            label: 'Youtube Embed',
-            onAccept: () => {},
-            onReject: () => {},
-          },
         },
       },
       ads: {},
@@ -96,37 +91,36 @@ const getConfig = () => {
 
     language: {
       default: 'en',
+      autoDetect: 'browser',
       translations: {
         en: {
           consentModal: {
-            title: 'We use cookies',
+            title: 'This website uses cookies.',
             description:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            acceptAllBtn: 'Accept all',
-            acceptNecessaryBtn: 'Reject all',
-            showPreferencesBtn: 'Manage Individual preferences',
+              'We use cookies and similar technologies ( referred to as cookies in the following) for statistical usage analysis, to optimize this site, to adapt the content to your usage habits and for suitable advertising also on third-party sites (retargeting).' +
+              '\n' +
+              'By clicking on "Allow all cookies" you accept the processing of your data and the transfer to our contractual partners.\n' +
+              '\n' +
+              'You can find more information in the imprint and in our privacy policy. In these, you can adjust your selection at any time under "Manage cookie settings".\n',
+            acceptAllBtn: 'Allow all cookies',
+            acceptNecessaryBtn: 'Allow only necessary cookies',
+            showPreferencesBtn: 'Manage cookie settings',
             // closeIconLabel: 'Reject all and close modal',
-            footer: `
-                        <a href="#path-to-impressum.html" target="_blank">Impressum</a>
-                        <a href="#path-to-privacy-policy.html" target="_blank">Privacy Policy</a>
-                    `,
           },
           preferencesModal: {
             title: 'Manage cookie preferences',
-            acceptAllBtn: 'Accept all',
-            acceptNecessaryBtn: 'Reject all',
+            acceptAllBtn: 'Allow all cookies',
             savePreferencesBtn: 'Accept current selection',
             closeIconLabel: 'Close modal',
             serviceCounterLabel: 'Service|Services',
             sections: [
               {
-                title: 'Your Privacy Choices',
-                description: `In this panel you can express some preferences related to the processing of your personal information. You may review and change expressed choices at any time by resurfacing this panel via the provided link. To deny your consent to the specific processing activities described below, switch the toggles to off or use the “Reject all” button and confirm you want to save your choices.`,
+                description: `We use cookies and similar technologies (hereinafter referred to as cookies) for statistical usage analysis, to optimize this site, to adapt the content to your usage habits and for suitable advertising also on third-party sites (retargeting). By clicking on "Allow all cookies" you accept the processing of your data and the transfer to our contractual partners. You can find more information in the imprint and in our privacy policy. In these, you can adjust your selection at any time under "Manage cookie settings".`,
               },
               {
                 title: 'Strictly Necessary',
                 description:
-                  'These cookies are essential for the proper functioning of the website and cannot be disabled.',
+                  'These cookies ensure the core functions of the website and cannot be turned off.',
 
                 // this field will generate a toggle linked to the 'necessary' category
                 linkedCategory: 'necessary',
@@ -134,39 +128,87 @@ const getConfig = () => {
               {
                 title: 'Performance and Analytics',
                 description:
-                  'These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.',
+                  'These cookies ensure the display of advertising customized to you.',
                 linkedCategory: 'analytics',
                 cookieTable: {
-                  caption: 'Cookie table',
                   headers: {
-                    name: 'Cookie',
-                    domain: 'Domain',
-                    desc: 'Description',
+                    name: 'Processor on behalf of helpwave',
+                    purpose: 'Purpose',
+                    duration: 'Storage duration',
                   },
                   body: [
                     {
-                      name: '_ga',
-                      domain: location.hostname,
-                      desc: 'Description 1',
-                    },
-                    {
-                      name: '_gid',
-                      domain: location.hostname,
-                      desc: 'Description 2',
+                      name: 'Google Commerce Limited, Gordon House, Barrow Street, Dublin 4, Ireland',
+                      purpose: 'Reach measurement',
+                      duration: '1 years',
                     },
                   ],
                 },
               },
               {
-                title: 'Targeting and Advertising',
-                description:
-                  'These cookies are used to make advertising messages more relevant to you and your interests. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
-                linkedCategory: 'ads',
-              },
-              {
                 title: 'More information',
                 description:
-                  'For any queries in relation to my policy on cookies and your choices, please <a href="#contact-page">contact us</a>',
+                  'For more information about cookies and your choices, please read our <a href="https://cdn.helpwave.de/privacy.html">privacy policy</a>.',
+              },
+            ],
+          },
+        },
+        de: {
+          consentModal: {
+            title: 'Diese Webseite verwendet Cookies.',
+            description: 'Wir verwenden Cookies und ähnliche Technologien (im Folgenden Cookies genannt) zur statistischen Nutzungsanalyse, zur Optimierung dieser Seite, zur Anpassung der Inhalte an Ihre Nutzungsgewohnheiten und für passende Werbung auch auf Drittanbieterseiten (Retargeting).\n' +
+              '\n' +
+              'Mit einem Klick auf „Alle Cookies zulassen“ akzeptieren Sie die Verarbeitung Ihrer Daten und die Weitergabe an unsere Vertragspartner.\n' +
+              '\n' +
+              'Weitere Informationen finden Sie im Impressum und in unseren Datenschutzhinweisen. In diesen können Sie unter „Cookie-Einstellungen verwalten“ Ihre Auswahl jederzeit anpassen.\n' +
+              '\n',
+            acceptAllBtn: 'Alle Cookies zulassen',
+            acceptNecessaryBtn: 'Nur notwendige Cookies zulassen',
+            showPreferencesBtn: 'Cookie-Einstellungen verwalten',
+            // closeIconLabel: 'Reject all and close modal',
+          },
+          preferencesModal: {
+            title: 'Verwalten Sie Ihre Cookie-Einstellungen',
+            acceptAllBtn: 'Alle Cookies zulassen',
+            savePreferencesBtn: 'Ausgewählte Cookies zulassen',
+            closeIconLabel: 'Close modal',
+            serviceCounterLabel: 'Service|Services',
+            sections: [
+              {
+                description: `Um Ihnen ein optimales Nutzungserlebnis zu bieten, setzen wir Cookies und ähnliche Technologien ein. Dazu zählen Cookies für den Betrieb und die Optimierung der Seite als auch für an Ihrem Online-Nutzungsverhalten orientierte Werbung.`,
+              },
+              {
+                title: 'Erforderlich',
+                description:
+                  'Diese Cookies stellen die Kernfunktionen der Webseite sicher und können nicht ausgeschaltet werden.',
+
+                // this field will generate a toggle linked to the 'necessary' category
+                linkedCategory: 'necessary',
+              },
+              {
+                title: 'Marketing',
+                description:
+                  'Diese Cookies sorgen für die Anzeige von auf Sie zugeschnittener Werbung.',
+                linkedCategory: 'analytics',
+                cookieTable: {
+                  headers: {
+                    name: 'Verarbeiter im Auftrag von helpwave',
+                    purpose: 'Zweck',
+                    duration: 'Speicherdauer',
+                  },
+                  body: [
+                    {
+                      name: 'Google Commerce Limited, Gordon House, Barrow Street, Dublin 4, Ireland',
+                      purpose: 'Reichweitenmessung',
+                      duration: '1 Jahr',
+                    },
+                  ],
+                }
+              },
+              {
+                title: 'Mehr Informationen',
+                description:
+                  'Für weitere Informationen zu Cookies und Ihren Wahlmöglichkeiten lesen Sie bitte unsere <a href="https://cdn.helpwave.de/privacy.html">Datenschutzhinweise</a>.',
               },
             ],
           },

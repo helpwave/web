@@ -7,7 +7,7 @@ import ExpansionSection from '../components/sections/landing/ExpansionSection'
 import PartnerSection from '../components/sections/landing/Partners'
 import StartSection from '../components/sections/landing/StartSection'
 import StorySection from '../components/sections/landing/Story'
-import CookieConsentComponent from '../components/CookieConsent'
+import CookieConsent from "../components/CookieConsent";
 
 const Home: NextPage = () => {
   return (
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <Footer />
-      <CookieConsentComponent />
+      <CookieConsent />
     </div>
   )
 }

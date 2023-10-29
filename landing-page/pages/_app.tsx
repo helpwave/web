@@ -6,12 +6,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import Head from 'next/head'
+import Script from 'next/script'
 import { Toaster } from 'react-hot-toast'
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter'
-})
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 const spaceGrotesk = SpaceGrotesk({
   subsets: ['latin'],
@@ -24,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>helpwave ~ empowering medical heroes, united in technology</title>
+        <title>helpwave</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
         <style>{`
           :root {
@@ -33,6 +31,17 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}</style>
       </Head>
+
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQDJEWMMX6" />
+      <Script>
+      {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZQDJEWMMX6');
+      `}
+      </Script>
 
       <QueryClientProvider client={queryClient}>
         <ProvideLanguage>

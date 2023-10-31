@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import Head from 'next/head'
-import Script from 'next/script'
 import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })

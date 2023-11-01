@@ -2,6 +2,10 @@ import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import FooterLinkGroup from './FooterLinkGroup'
+import { useEffect } from 'react'
+import * as CookieConsent from 'vanilla-cookieconsent'
+import 'vanilla-cookieconsent/dist/cookieconsent.css'
+import pluginConfig from './CookieConsentConfig'
 
 const linkGroups = [
   {
@@ -37,7 +41,6 @@ const linkGroups = [
       { name: 'core', link: '/product/core' }, */
     ]
   },
-
   {
     Development: [
       { name: 'Status', link: 'https://helpwave.betteruptime.com/' },
@@ -47,10 +50,19 @@ const linkGroups = [
       { name: 'Staging  ~ tasks', link: 'https://staging-tasks.helpwave.de' },
     ]
   },
+  {
+    Cookies: [
+      { name: 'settings', link: '', onClick: () => CookieConsent.showPreferences() },
+    ]
+  }
 ]
 
 const Footer = () => {
   const year = new Date().getFullYear()
+
+  useEffect(() => {
+    CookieConsent.run(pluginConfig)
+  }, [])
 
   return (
     <div className={tw('w-screen bg-black text-white py-[32px] flex items-center justify-center')}>

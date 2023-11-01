@@ -59,6 +59,12 @@ const pluginConfig: CookieConsentConfig = {
               CookieConsent.loadScript('ga.js')
             })
           },
+          onReject: async () => {
+            // disable Google Analytics see https://developers.google.com/tag-platform/security/guides/consent
+            typeof gtag === 'function' && gtag('consent', 'update', {
+              analytics_storage: 'denied'
+            })
+          }
         },
       },
     },

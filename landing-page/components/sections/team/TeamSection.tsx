@@ -82,7 +82,7 @@ const teamData = {
       tags: ['microservices', 'deployment', 'database'],
       socials: [
         { name: 'mail', url: 'mailto:max.baumann@helpwave.de' },
-        { name: 'website', url: 'https://fosefx.com' },
+        { name: 'website', url: 'https://bmn.dev' },
         { name: 'linkedin', url: 'https://www.linkedin.com/in/max-bmn/' },
       ]
     },

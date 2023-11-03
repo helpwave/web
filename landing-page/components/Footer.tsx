@@ -5,7 +5,7 @@ import FooterLinkGroup from './FooterLinkGroup'
 import { useEffect } from 'react'
 import * as CookieConsent from 'vanilla-cookieconsent'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
-import pluginConfig from './CookieConsentConfig'
+import pluginConfig from '../utils/CookieConsentConfig'
 
 const linkGroups = [
   {

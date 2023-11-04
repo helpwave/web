@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "node_modules/@helpwave/common",
-    "node_modules/@helpwave/tasks"
-   ],
+    "public/ga.js"
+  ],
   "exclude": []
 }

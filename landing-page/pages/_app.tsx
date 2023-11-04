@@ -8,10 +8,7 @@ import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter'
-})
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 const spaceGrotesk = SpaceGrotesk({
   subsets: ['latin'],
@@ -24,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>helpwave ~ empowering medical heroes, united in technology</title>
+        <title>helpwave</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
         <style>{`
           :root {
@@ -33,7 +30,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}</style>
       </Head>
-
       <QueryClientProvider client={queryClient}>
         <ProvideLanguage>
           <div className={tw('font-sans')}>

@@ -2,6 +2,10 @@ import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import FooterLinkGroup from './FooterLinkGroup'
+import { useEffect } from 'react'
+import * as CookieConsent from 'vanilla-cookieconsent'
+import 'vanilla-cookieconsent/dist/cookieconsent.css'
+import pluginConfig from '../utils/CookieConsentConfig'
 
 const linkGroups = [
   {
@@ -23,6 +27,7 @@ const linkGroups = [
     General: [
       { name: 'Imprint', link: 'https://cdn.helpwave.de/imprint.html' },
       { name: 'Privacy', link: 'https://cdn.helpwave.de/privacy.html' },
+      { name: 'Cookies', link: '', onClick: () => CookieConsent.showPreferences() },
       { name: 'Contact', link: 'mailto:contact@helpwave.de' },
       { name: 'Pitchdeck', link: 'https://cdn.helpwave.de/helpwave_pitchdeck.pdf' },
       { name: 'Onepager', link: 'https://cdn.helpwave.de/helpwave_onepager.pdf' },
@@ -37,7 +42,6 @@ const linkGroups = [
       { name: 'core', link: '/product/core' }, */
     ]
   },
-
   {
     Development: [
       { name: 'Status', link: 'https://helpwave.betteruptime.com/' },
@@ -51,6 +55,10 @@ const linkGroups = [
 
 const Footer = () => {
   const year = new Date().getFullYear()
+
+  useEffect(() => {
+    CookieConsent.run(pluginConfig)
+  }, [])
 
   return (
     <div className={tw('w-screen bg-black text-white py-[32px] flex items-center justify-center')}>

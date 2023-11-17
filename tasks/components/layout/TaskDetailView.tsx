@@ -4,6 +4,7 @@ import { tw, tx } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user_input/Textarea'
 import { TaskStatusSelect } from '../user_input/TaskStatusSelect'
+import { TaskVisibilitySelect } from '../user_input/TaskVisibilitySelect'
 import { Button } from '@helpwave/common/components/Button'
 import { SubtaskView } from '../SubtaskView'
 import { X } from 'lucide-react'
@@ -32,7 +33,6 @@ import { useEffect, useState } from 'react'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Checkbox } from '@helpwave/common/components/user_input/Checkbox'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { AssigneeSelect } from '../AssigneeSelect'
 import { useWardQuery } from '../../mutations/ward_mutations'
@@ -265,7 +265,7 @@ export const TaskDetailView = ({
               ...task,
               subtasks
             })
-          }}/>
+          }} />
         </div>
         { /* TODO create a new component for this */}
         <div className={tw('flex flex-col min-w-[250px] gap-y-4')}>
@@ -302,7 +302,7 @@ export const TaskDetailView = ({
                 color="negative"
                 disabled={!task.assignee}
               >
-                <X size={24}/>
+                <X size={24} />
               </Button>
             </div>
           </div>
@@ -366,33 +366,37 @@ export const TaskDetailView = ({
           </div>
           <div className={tw('select-none')}>
             <label><Span type="labelMedium">{translation.visibility}</Span></label>
-            <div className={tw('flex flex-row justify-between items-center')}>
-              <Span>{task.isPublicVisible ? translation.public : translation.private}</Span>
-              {!task.isPublicVisible && !isCreating && (
-                <Button
-                  color="neutral"
-                  variant="tertiary"
-                  className={tw('!py-1 !px-2')}
-                  onClick={() => setIsShowingPublicDialog(true)}
-                >
-                  <Span>{translation.publish}</Span>
-                </Button>
-              )}
-              {isCreating && (
-                <Checkbox
-                  checked={task.isPublicVisible}
-                  onChange={() => setTask({
+            {!isCreating ? (
+              <div className={tw('flex flex-row justify-between items-center')}>
+                <Span>{task.isPublicVisible ? translation.public : translation.private}</Span>
+                {!task.isPublicVisible && !isCreating && (
+                  <Button
+                    color="neutral"
+                    variant="tertiary"
+                    className={tw('!py-1 !px-2')}
+                    onClick={() => setIsShowingPublicDialog(true)}
+                  >
+                    <Span>{translation.publish}</Span>
+                  </Button>
+                )}
+              </div>
+            ) : <></>}
+            {isCreating && (
+              <TaskVisibilitySelect
+                value={task.isPublicVisible}
+                onChange={() => {
+                  setTask({
                     ...task,
                     isPublicVisible: !task.isPublicVisible
-                  })}
-                />
-              )}
-            </div>
+                  })
+                }}
+              />
+            )}
           </div>
           {task.creationDate && (
             <div className={tw('flex flex-col gap-y-1')}>
               <Span type="labelMedium">{translation.creationTime}</Span>
-              <TimeDisplay date={new Date(task.creationDate)}/>
+              <TimeDisplay date={new Date(task.creationDate)} />
             </div>
           )}
         </div>
@@ -439,7 +443,7 @@ export const TaskDetailView = ({
             )
         }
       </div>
-    </div>
+    </div >
   )
 
   const templateSidebar = (
@@ -472,7 +476,7 @@ export const TaskDetailView = ({
       )}
       <>
         {((personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading) || (personalTaskTemplatesError || wardTaskTemplatesError)) &&
-          <LoadingAnimation/>}
+          <LoadingAnimation />}
       </>
     </div>
   )

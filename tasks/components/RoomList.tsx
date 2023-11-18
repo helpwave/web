@@ -69,7 +69,7 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     selectAll: 'Alle auswählen',
     roomName: 'Zimmer',
     room: 'Raum',
-    rooms: 'Räume',
+    rooms: 'Zimmer',
     addRoom: 'Raum hinzufügen',
     bedCount: 'Bettenanzahl',
     manageBeds: 'Betten verwalten',

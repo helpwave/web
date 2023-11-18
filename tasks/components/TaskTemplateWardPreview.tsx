@@ -22,8 +22,8 @@ const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateW
     taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
   },
   de: {
-    showAllTaskTemplates: 'Alle Task Templates anzeigen',
-    taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
+    showAllTaskTemplates: 'Alle Vorlagen anzeigen',
+    taskTemplates: (numberOfTemplates) => `Vorlagen (${numberOfTemplates})`
   }
 }
 

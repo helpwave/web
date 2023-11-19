@@ -443,7 +443,7 @@ export const TaskDetailView = ({
             )
         }
       </div>
-    </div >
+    </div>
   )
 
   const templateSidebar = (

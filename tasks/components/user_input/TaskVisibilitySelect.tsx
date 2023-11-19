@@ -22,7 +22,7 @@ const defaultTaskVisibilitySelectTranslation = {
 type TaskVisibilitySelectProps = Omit<SelectProps<boolean>, 'options'>
 
 /**
- * A component for selecting a TaskStatus
+ * A component for selecting a TaskVisibility
  *
  * The state is managed by the parent
  */

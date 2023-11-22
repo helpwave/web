@@ -3,7 +3,7 @@ import { tw } from '@helpwave/common/twind'
 
 const StartSection = () => {
   const exploreURL = '/story'
-  const demoURL = 'https://tasks.helpwave.de'
+  const demoURL = 'https://staging-tasks.helpwave.de'
 
   return (
     <div className={tw('pt-32 pb-16 flex gap-32 items-center justify-center')}>

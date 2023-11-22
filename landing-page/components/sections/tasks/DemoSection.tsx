@@ -3,7 +3,7 @@ import { Link as LinkIcon } from 'lucide-react'
 import Link from 'next/link'
 
 const DemoSection = () => {
-  const demoURL = 'https://tasks.helpwave.de'
+  const demoURL = 'https://staging-tasks.helpwave.de'
 
   return (
     <div className={tw('py-16')}>

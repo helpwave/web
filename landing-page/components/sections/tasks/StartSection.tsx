@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const StartSection = () => {
-  const demoURL = 'https://tasks.helpwave.de'
+  const demoURL = 'https://staging-tasks.helpwave.de'
   const screenshotURL = 'https://cdn.helpwave.de/screenshots/tasks_1.png'
   const size = 1024
 

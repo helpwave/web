@@ -41,17 +41,6 @@ const teamData = {
         { name: 'github', url: 'https://github.com/aegis301' },
       ]
     },
-    {
-      name: 'Yvonne Steernberg',
-      title: 'Dr. phil., Dipl-Betriebswirtin',
-      role: 'Chief Business Officer',
-      pictureURL: pictureURL('yvonne_steernberg'),
-      tags: ['sales', 'marketing', 'hospitalmanagement'],
-      socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/dr-phil-yvonne-m-a-steernberg-180786137/' },
-        { name: 'mail', url: 'mailto:yvonne.steernberg.de' },
-      ]
-    },
   ],
   'development': [
     {
@@ -141,6 +130,17 @@ const teamData = {
     },
   ],
   'sales & marketing': [
+    {
+      name: 'Yvonne Steernberg',
+      title: 'Dr. phil., Dipl-Betriebswirtin',
+      role: 'Lead Customer Support',
+      pictureURL: pictureURL('yvonne_steernberg'),
+      tags: ['sales', 'marketing', 'hospitalmanagement'],
+      socials: [
+        { name: 'linkedin', url: 'https://www.linkedin.com/in/dr-phil-yvonne-m-a-steernberg-180786137/' },
+        { name: 'mail', url: 'mailto:yvonne.steernberg.de' },
+      ]
+    },
     {
       name: 'Yari Hernandez',
       role: 'sales genius',

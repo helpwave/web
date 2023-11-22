@@ -31,8 +31,8 @@ const defaultPersonalTaskTemplateTranslations = {
     personalTaskTemplates: 'Personal Task Templates'
   },
   de: {
-    taskTemplates: 'Task Vorlagen',
-    personalTaskTemplates: 'Persönliche Task Templates'
+    taskTemplates: 'Vorlagen',
+    personalTaskTemplates: 'Persönliche Vorlagen'
   }
 }
 

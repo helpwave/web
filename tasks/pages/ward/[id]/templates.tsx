@@ -36,10 +36,10 @@ const defaultWardTaskTemplateTranslations = {
     wardTaskTemplates: 'Ward Task Templates'
   },
   de: {
-    taskTemplates: 'Task Vorlagen',
+    taskTemplates: 'Vorlagen',
     organization: 'Organisationen',
     ward: 'Station',
-    wardTaskTemplates: 'Stations Task Templates'
+    wardTaskTemplates: 'Stations Vorlagen'
   }
 }
 

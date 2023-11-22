@@ -61,7 +61,7 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
     deleteWard: 'Station löschen',
     create: 'Erstellen',
     update: 'Ändern',
-    roomsNotOnCreate: 'Räume können erst hinzugefügt werden, wenn die Station erstellt wurde'
+    roomsNotOnCreate: 'Zimmer können erst hinzugefügt werden, wenn die Station erstellt wurde'
   }
 }
 

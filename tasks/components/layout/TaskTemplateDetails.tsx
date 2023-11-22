@@ -47,7 +47,7 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
   },
   de: {
     updateTaskTemplate: 'Task Template bearbeiten',
-    updateTaskTemplateDescription: 'Hier kannst du deine Task Templates bearbeiten',
+    updateTaskTemplateDescription: 'Hier kannst du deine Vorlagen bearbeiten',
     createTaskTemplate: 'Task Template erstellen',
     name: 'Name',
     notes: 'Notizen',

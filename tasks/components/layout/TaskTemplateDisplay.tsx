@@ -24,7 +24,7 @@ const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDispl
   },
   de: {
     addNewTaskTemplate: 'Neues Vorlagen hinzufügen',
-    personalTaskTemplates: 'Persönliche Vorlagen',
+    personalTaskTemplates: 'Meine Vorlagen',
     wardTaskTemplates: 'Stations Vorlagen'
   }
 }

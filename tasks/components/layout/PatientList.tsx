@@ -28,6 +28,7 @@ import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
 import { useRouter } from 'next/router'
 import { useWardQuery } from '../../mutations/ward_mutations'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 
 type PatientListTranslation = {
   patients: string,
@@ -123,6 +124,7 @@ export const PatientList = ({
   const deletePatientMutation = useDeletePatientMutation()
   const readmitPatientMutation = useReadmitPatientMutation()
   const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
+  const [deletePatient, setDeletePatient] = useState<PatientMinimalDTO>()
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
 
@@ -132,6 +134,24 @@ export const PatientList = ({
 
   return (
     <div className={tw('relative flex flex-col py-4 px-6')}>
+      <ConfirmDialog
+        id="patientList-DeleteDialog"
+        isOpen={!!deletePatient}
+        titleText={translation.deleteConfirmText}
+        descriptionText={translation.deleteDescriptionText}
+        onConfirm={() => {
+          if (deletePatient) {
+            deletePatientMutation.mutate(deletePatient.id)
+          }
+          setDeletePatient(undefined)
+        }}
+        confirmType="negative"
+        onBackgroundClick={() => { setDeletePatient(undefined) }}
+        onCancel={() => setDeletePatient(undefined)}
+        onCloseClick={() => setDeletePatient(undefined)}
+      >
+
+      </ConfirmDialog>
       <PatientDischargeModal
         id="patientList-DischargeDialog"
         isOpen={!!dischargingPatient}
@@ -285,7 +305,7 @@ export const PatientList = ({
                             </Button>
                             <Button color="negative" variant="textButton" onClick={event => {
                               event.stopPropagation()
-                              deletePatientMutation.mutate(patient.id)
+                              setDeletePatient(patient)
                             }}>
                               {translation.delete}
                             </Button>

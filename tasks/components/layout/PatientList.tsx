@@ -28,7 +28,7 @@ import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
 import { useRouter } from 'next/router'
 import { useWardQuery } from '../../mutations/ward_mutations'
-import {ConfirmDialog} from "@helpwave/common/components/modals/ConfirmDialog";
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 
 type PatientListTranslation = {
   patients: string,
@@ -140,13 +140,13 @@ export const PatientList = ({
         titleText={translation.deleteConfirmText}
         descriptionText={translation.deleteDescriptionText}
         onConfirm={() => {
-          if(deletePatient) {
+          if (deletePatient) {
             deletePatientMutation.mutate(deletePatient.id)
           }
           setDeletePatient(undefined)
         }}
         confirmType="negative"
-        onBackgroundClick={() => {setDeletePatient(undefined)}}
+        onBackgroundClick={() => { setDeletePatient(undefined) }}
         onCancel={() => setDeletePatient(undefined)}
         onCloseClick={() => setDeletePatient(undefined)}
       >

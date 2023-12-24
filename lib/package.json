@@ -2,6 +2,12 @@
   "name": "@helpwave/common",
   "version": "1.0.0",
   "main": "index.ts",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "generate": "node ../scripts/generate_boilerplate.js",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx . && tsc --noEmit"
+  },
   "dependencies": {
     "@babel/core": "7.23.6",
     "@headlessui/react": "1.7.17",
@@ -23,6 +29,7 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
+    "@helpwave/eslint-config": "workspace:*",
     "@babel/preset-env": "7.23.6",
     "@babel/preset-react": "7.23.3",
     "@babel/preset-typescript": "7.23.3",
@@ -42,10 +49,5 @@
   "peerDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0"
-  },
-  "scripts": {
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "generate": "node ../scripts/generate_boilerplate.js"
   }
 }

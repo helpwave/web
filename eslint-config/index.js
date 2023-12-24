@@ -1,10 +1,10 @@
+/** @type {import('eslint').Linter.Config} */
 module.exports = {
   extends: [
     'standard',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:@next/next/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -12,6 +12,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
+    // 'import/order': 'error', // TODO: enable later on; don't want to have such a huge diff in a single PR
     'space-before-function-paren': 'off',
     // the behaviour of ternary operators is often more clear than using '||', '&&' or '??'
     'no-unneeded-ternary': 'off',
@@ -44,6 +45,7 @@ module.exports = {
     'quote-props': ['warn', 'consistent-as-needed'],
     '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     '@typescript-eslint/no-use-before-define': ['error'],
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     // use commas in typescript types as they are closely related to object literals
     '@typescript-eslint/member-delimiter-style': [
       'warn',

@@ -1,10 +1,13 @@
 class StorageSerice {
+  // this seems to be a bug in eslint as 'paramter-properties' is a special syntax of typescript
+  // eslint-disable-next-line no-useless-constructor
   constructor(private storage: Storage) {}
 
-  public get<T>(key: string): T | null{
-    let value = this.storage.getItem(key)
-    if (value === null)
+  public get<T>(key: string): T | null {
+    const value = this.storage.getItem(key)
+    if (value === null) {
       return null
+    }
     return JSON.parse(value)
   }
 

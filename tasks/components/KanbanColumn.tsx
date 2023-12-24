@@ -1,7 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useDroppable } from '@dnd-kit/core'
 import {
   SortableContext,
@@ -9,11 +8,10 @@ import {
 } from '@dnd-kit/sortable'
 import type { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { Plus } from 'lucide-react'
-import type { TaskDTO } from '../mutations/task_mutations'
-import { emptyTask } from '../mutations/task_mutations'
 import { Sortable } from './dnd-kit/Sortable'
 import { TaskCard } from './cards/TaskCard'
 import { PillLabel, TaskState } from './pill/PillLabel'
+import { emptyTask, type TaskDTO } from '@/mutations/task_mutations'
 
 type KanbanColumnsTranslation = {
   addTask: string

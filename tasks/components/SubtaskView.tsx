@@ -1,18 +1,18 @@
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
 import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import type { SubTaskDTO } from '../mutations/task_mutations'
 import { TaskTemplateContext } from '../pages/templates'
 import {
   useSubTaskAddMutation,
   useSubTaskDeleteMutation,
-  useSubTaskToDoneMutation, useSubTaskToToDoMutation,
-  useSubTaskUpdateMutation
+  useSubTaskToDoneMutation,
+  useSubTaskToToDoMutation,
+  useSubTaskUpdateMutation,
+  type SubTaskDTO
 } from '../mutations/task_mutations'
 import { SubtaskTile } from './SubtaskTile'
 

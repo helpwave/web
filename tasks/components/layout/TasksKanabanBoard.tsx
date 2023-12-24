@@ -12,17 +12,20 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import type { SortedTasks, TaskDTO } from '../../mutations/task_mutations'
 import {
   emptySortedTasks,
-  useTasksByPatientSortedByStatusQuery, useTaskToDoneMutation, useTaskToInProgressMutation,
-  useTaskToToDoMutation
-} from '../../mutations/task_mutations'
+  useTasksByPatientSortedByStatusQuery,
+  useTaskToDoneMutation,
+  useTaskToInProgressMutation,
+  useTaskToToDoMutation,
+  type SortedTasks,
+  type TaskDTO
+} from '@/mutations/task_mutations'
 
 export type KanbanBoardObject = {
   draggedId?: string,

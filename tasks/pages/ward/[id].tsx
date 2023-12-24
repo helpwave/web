@@ -2,31 +2,30 @@ import { createContext, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
-import { TwoColumn } from '../../components/layout/TwoColumn'
-import { PatientDetail } from '../../components/layout/PatientDetails'
-import { PageWithHeader } from '../../components/layout/PageWithHeader'
-import titleWrapper from '../../utils/titleWrapper'
-import { WardRoomList } from '../../components/layout/WardRoomList'
-import { PatientList } from '../../components/layout/PatientList'
-import type { PatientDTO, PatientMinimalDTO } from '../../mutations/patient_mutations'
+import { TwoColumn } from '@/components/layout/TwoColumn'
+import { PatientDetail } from '@/components/layout/PatientDetails'
+import { PageWithHeader } from '@/components/layout/PageWithHeader'
+import titleWrapper from '@/utils/titleWrapper'
+import { WardRoomList } from '@/components/layout/WardRoomList'
+import { PatientList } from '@/components/layout/PatientList'
+import type { PatientDTO, PatientMinimalDTO } from '@/mutations/patient_mutations'
 import {
   useAssignBedMutation,
   usePatientCreateMutation,
   usePatientDischargeMutation,
   useReadmitPatientMutation,
   useUnassignMutation
-} from '../../mutations/patient_mutations'
-import { DragCard } from '../../components/cards/DragCard'
-import type { BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
-import { PatientCard } from '../../components/cards/PatientCard'
-import { useWardQuery } from '../../mutations/ward_mutations'
-import { useOrganizationQuery } from '../../mutations/organization_mutations'
+} from '@/mutations/patient_mutations'
+import { DragCard } from '@/components/cards/DragCard'
+import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
+import { PatientCard } from '@/components/cards/PatientCard'
+import { useWardQuery } from '@/mutations/ward_mutations'
+import { useOrganizationQuery } from '@/mutations/organization_mutations'
 
 type WardOverviewTranslation = {
   beds: string,

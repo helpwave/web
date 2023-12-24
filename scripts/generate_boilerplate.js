@@ -43,8 +43,7 @@ const isUsingProps = args.indexOf('--no-props') === -1 && args.indexOf('-nop') =
 const standardImports = `import { tw } from '@helpwave/common/twind'`
 const translationImports =
 `import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'`
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'`
 const imports = standardImports + (isUsingTranslation ? `\n` + translationImports : '')
 
 const translation = isUsingTranslation ?

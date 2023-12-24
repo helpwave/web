@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
 
 const Test: NextPage = () => {
   const { user, signOut } = useAuth()

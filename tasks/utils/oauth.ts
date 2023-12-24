@@ -1,4 +1,3 @@
-import { getConfig } from './config'
 import type { AuthorizationServer, Client } from 'oauth4webapi'
 import * as oauth from 'oauth4webapi'
 import {
@@ -11,6 +10,7 @@ import {
   validateAuthResponse
 } from 'oauth4webapi'
 import { getCookie, setCookie } from 'cookies-next'
+import { getConfig } from './config'
 
 const config = getConfig()
 const codeChallengeMethod = 'S256'

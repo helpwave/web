@@ -1,5 +1,5 @@
-import type { CookieConsentConfig } from 'vanilla-cookieconsent'
 import * as CookieConsent from 'vanilla-cookieconsent'
+import type { CookieConsentConfig } from 'vanilla-cookieconsent'
 
 const pluginConfig: CookieConsentConfig = {
   // root: 'body',

@@ -1,11 +1,10 @@
-import { Span } from '@helpwave/common/components/Span'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
-import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
+import { tw } from '@helpwave/common/twind'
+import { Span } from '@helpwave/common/components/Span'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import Link from 'next/link'
-import { getConfig } from '../utils/config'
+import { getConfig } from '@/utils/config'
 
 type MobileInterceptorTranslation = {
   pleaseDownloadApp: string,

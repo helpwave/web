@@ -1,7 +1,5 @@
-import type { SelectProps } from '@helpwave/common/components/user-input/Select'
-import { Select } from '@helpwave/common/components/user-input/Select'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Select, type SelectProps } from '@helpwave/common/components/user-input/Select'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 
 type TaskStatusSelectTranslation = {

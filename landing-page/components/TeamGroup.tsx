@@ -1,6 +1,5 @@
 import { tw } from '@helpwave/common/twind'
-import type { TeamMemberProps } from './TeamMember'
-import TeamMember from './TeamMember'
+import TeamMember, { type TeamMemberProps } from './TeamMember'
 
 export type TeamGroupProps = {
   name: string,

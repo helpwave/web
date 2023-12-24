@@ -1,24 +1,22 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { useContext, useState } from 'react'
 import { Span } from '@helpwave/common/components/Span'
-import type { TableState } from '@helpwave/common/components/Table'
 import {
   defaultTableStatePagination,
   defaultTableStateSelection,
   removeFromTableSelection,
-  Table
+  Table,
+  type TableState
 } from '@helpwave/common/components/Table'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import type { OrgMember } from '../mutations/organization_member_mutations'
-import { Role, useMembersByOrganizationQuery } from '../mutations/organization_member_mutations'
-import { useRemoveMemberMutation } from '../mutations/organization_mutations'
-import { OrganizationContext } from '../pages/organizations'
-import { Avatar } from './Avatar'
+import { Role, useMembersByOrganizationQuery, type OrgMember } from '../mutations/organization_member_mutations'
+import { useRemoveMemberMutation } from '@/mutations/organization_mutations'
+import { OrganizationContext } from '@/pages/organizations'
+import { Avatar } from '@/components/Avatar'
 
 type OrganizationMemberListTranslation = {
   edit: string,

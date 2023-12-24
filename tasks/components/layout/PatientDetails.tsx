@@ -1,7 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import React, { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -10,20 +9,20 @@ import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { TaskDetailModal } from '../TaskDetailModal'
-import type { PatientDetailsDTO } from '../../mutations/patient_mutations'
+import { RoomBedDropDown } from '../RoomBedDropDown'
+import { ColumnTitle } from '../ColumnTitle'
+import { PatientDischargeModal } from '../PatientDischargeModal'
+import { TasksKanbanBoard } from './TasksKanabanBoard'
+import { WardOverviewContext } from '@/pages/ward/[id]'
 import {
   emptyPatientDetails,
   useAssignBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,
-  useUnassignMutation
-} from '../../mutations/patient_mutations'
-import { WardOverviewContext } from '../../pages/ward/[id]'
-import { RoomBedDropDown } from '../RoomBedDropDown'
-import { ColumnTitle } from '../ColumnTitle'
-import { PatientDischargeModal } from '../PatientDischargeModal'
-import { TasksKanbanBoard } from './TasksKanabanBoard'
+  useUnassignMutation,
+  type PatientDetailsDTO
+} from '@/mutations/patient_mutations'
 
 type PatientDetailTranslation = {
   patientDetails: string,

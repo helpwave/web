@@ -2,9 +2,8 @@ import { tw, tx } from '@helpwave/common/twind'
 import { Bed } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
 import { PillLabelBox } from '../pill/PillLabelBox'
-import type { WardOverviewDTO } from '../../mutations/ward_mutations'
-import type { EditCardProps } from './EditCard'
-import { EditCard } from './EditCard'
+import { EditCard, type EditCardProps } from './EditCard'
+import type { WardOverviewDTO } from '@/mutations/ward_mutations'
 
 export type WardCardProps = EditCardProps & {
   ward: WardOverviewDTO

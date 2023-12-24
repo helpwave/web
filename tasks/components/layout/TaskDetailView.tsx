@@ -1,5 +1,4 @@
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { tw, tx } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -16,12 +15,16 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery } from '../../mutations/task_template_mutations'
-import { useAuth } from '../../hooks/useAuth'
-import type { TaskDTO } from '../../mutations/task_mutations'
+import { AssigneeSelect } from '../AssigneeSelect'
+import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
+import { SubtaskView } from '../SubtaskView'
+import { TaskVisibilitySelect } from '../user-input/TaskVisibilitySelect'
+import { TaskStatusSelect } from '../user-input/TaskStatusSelect'
+import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery, type TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import { useAuth } from '@/hooks/useAuth'
 import {
-  emptyTask, useAssignTaskToUserMutation,
+  emptyTask,
+  useAssignTaskToUserMutation,
   useSubTaskAddMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
@@ -29,14 +32,11 @@ import {
   useTaskToDoneMutation,
   useTaskToInProgressMutation,
   useTaskToToDoMutation,
-  useTaskUpdateMutation, useUnassignTaskToUserMutation
-} from '../../mutations/task_mutations'
-import { AssigneeSelect } from '../AssigneeSelect'
-import { useWardQuery } from '../../mutations/ward_mutations'
-import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import { SubtaskView } from '../SubtaskView'
-import { TaskVisibilitySelect } from '../user-input/TaskVisibilitySelect'
-import { TaskStatusSelect } from '../user-input/TaskStatusSelect'
+  useTaskUpdateMutation,
+  useUnassignTaskToUserMutation,
+  type TaskDTO
+} from '@/mutations/task_mutations'
+import { useWardQuery } from '@/mutations/ward_mutations'
 
 type TaskDetailViewTranslation = {
   close: string,

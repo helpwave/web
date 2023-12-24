@@ -1,11 +1,9 @@
 import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
-import { DragCard } from './DragCard'
-import type { DragCardProps } from './DragCard'
+import { DragCard, type DragCardProps } from './DragCard'
 
 type PatientCardTranslation = {
   bedNotAssigned: string

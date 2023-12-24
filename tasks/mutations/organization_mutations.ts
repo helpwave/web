@@ -15,9 +15,9 @@ import {
   GetInvitationsByOrganizationRequest,
   RevokeInvitationRequest
 } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
-import { getAuthenticatedGrpcMetadata, organizationService } from '../utils/grpc'
 import { noop } from '@helpwave/common/util/noop'
 import { Role } from './organization_member_mutations'
+import { getAuthenticatedGrpcMetadata, organizationService } from '@/utils/grpc'
 
 export const organizationQueryKey = 'organizations'
 export const invitationsQueryKey = 'invitations'

@@ -1,7 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import React, { useContext, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
@@ -11,24 +10,22 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { useRouter } from 'next/router'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type {
-  PatientDTO,
-  PatientMinimalDTO,
-  PatientWithBedAndRoomDTO
-} from '../../mutations/patient_mutations'
+import { Label } from '../Label'
+import { Draggable } from '../dnd-kit/Draggable'
+import { Droppable } from '../dnd-kit/Droppable'
+import { AddPatientModal } from '../AddPatientModal'
+import { PatientDischargeModal } from '../PatientDischargeModal'
+import { WardOverviewContext } from '@/pages/ward/[id]'
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
   usePatientListQuery,
-  useReadmitPatientMutation
-} from '../../mutations/patient_mutations'
-import { Label } from '../Label'
-import { Draggable } from '../dnd-kit/Draggable'
-import { Droppable } from '../dnd-kit/Droppable'
-import { WardOverviewContext } from '../../pages/ward/[id]'
-import { AddPatientModal } from '../AddPatientModal'
-import { PatientDischargeModal } from '../PatientDischargeModal'
-import { useWardQuery } from '../../mutations/ward_mutations'
+  useReadmitPatientMutation,
+  type PatientDTO,
+  type PatientMinimalDTO,
+  type PatientWithBedAndRoomDTO
+} from '@/mutations/patient_mutations'
+import { useWardQuery } from '@/mutations/ward_mutations'
 
 type PatientListTranslation = {
   patients: string,

@@ -1,8 +1,8 @@
+import type { ReactNode } from 'react'
+import Link from 'next/link'
+import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
-import { tw } from '@helpwave/common/twind'
-import Link from 'next/link'
-import type { ReactNode } from 'react'
 
 export type HeaderProps = {
   title?: string,

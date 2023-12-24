@@ -1,7 +1,6 @@
-import { tx } from '@helpwave/common/twind'
 import type { PropsWithChildren } from 'react'
-import type { CardProps } from '@helpwave/common/components/Card'
-import { Card } from '@helpwave/common/components/Card'
+import { tx } from '@helpwave/common/twind'
+import { Card, type CardProps } from '@helpwave/common/components/Card'
 
 export type CardDragProperties = {
   isDragging?: boolean,

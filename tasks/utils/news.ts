@@ -1,6 +1,5 @@
+import { localizedNewsSchema, type LocalizedNews } from '@helpwave/common/util/news'
 import { getConfig } from './config'
-import type { LocalizedNews } from '@helpwave/common/util/news'
-import { localizedNewsSchema } from '@helpwave/common/util/news'
 
 export const fetchLocalizedNews = (): Promise<LocalizedNews> => {
   const { featuresFeedUrl } = getConfig()

@@ -10,8 +10,8 @@ import {
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
 import { useRouter } from 'next/router'
 import { getAuthenticatedGrpcMetadata, taskTemplateService } from '../utils/grpc'
-import type { TaskTemplateFormType } from '../pages/templates'
 import type { SubTaskDTO } from './task_mutations'
+import type { TaskTemplateFormType } from '@/pages/templates'
 import SubTask = CreateTaskTemplateRequest.SubTask
 
 export type TaskTemplateDTO = {

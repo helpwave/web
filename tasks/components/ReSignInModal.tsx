@@ -1,8 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import { tw } from '@twind/core'
 

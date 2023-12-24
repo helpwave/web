@@ -1,7 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -12,15 +11,15 @@ import { ColumnTitle } from '../ColumnTitle'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
 import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
-import type { WardDetailDTO } from '../../mutations/ward_mutations'
 import {
   emptyWard,
   useWardCreateMutation,
   useWardDeleteMutation,
   useWardUpdateMutation,
-  useWardDetailsQuery
-} from '../../mutations/ward_mutations'
-import { OrganizationOverviewContext } from '../../pages/organizations/[id]'
+  useWardDetailsQuery,
+  type WardDetailDTO
+} from '@/mutations/ward_mutations'
+import { OrganizationOverviewContext } from '@/pages/organizations/[id]'
 
 type WardDetailTranslation = {
   updateWard: string,

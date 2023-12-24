@@ -1,15 +1,14 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
-import { OrganizationOverviewContext } from '../../pages/organizations/[id]'
-import { useWardOverviewsQuery } from '../../mutations/ward_mutations'
+import { OrganizationOverviewContext } from '@/pages/organizations/[id]'
+import { useWardOverviewsQuery } from '@/mutations/ward_mutations'
 
 type WardDisplayTranslation = {
   wards: string,

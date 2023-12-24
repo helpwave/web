@@ -1,11 +1,12 @@
+import { useEffect } from 'react'
+import * as CookieConsent from 'vanilla-cookieconsent'
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
-import FooterLinkGroup from './FooterLinkGroup'
-import { useEffect } from 'react'
-import * as CookieConsent from 'vanilla-cookieconsent'
-import 'vanilla-cookieconsent/dist/cookieconsent.css'
 import pluginConfig from '../utils/CookieConsentConfig'
+import FooterLinkGroup from './FooterLinkGroup'
+
+import 'vanilla-cookieconsent/dist/cookieconsent.css'
 
 const linkGroups = [
   {

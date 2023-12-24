@@ -1,10 +1,10 @@
+import { useState } from 'react'
+import { Search } from 'lucide-react'
 import { tw } from '../../twind'
+import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import type { SelectOption, SelectProps } from './Select'
 import { Select } from './Select'
-import { useState } from 'react'
-import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import { Input } from './Input'
-import { Search } from 'lucide-react'
 
 export type SearchableSelectProps<T> = Omit<SelectProps<T>, 'selectedDisplayOverwrite'> & {
   searchMapping: (value: SelectOption<T>) => string[]

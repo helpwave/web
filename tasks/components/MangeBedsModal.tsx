@@ -4,7 +4,6 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { ModalProps } from '@helpwave/common/components/modals/Modal'
 import { Modal } from '@helpwave/common/components/modals/Modal'
-import { useRoomOverviewsQuery } from '../mutations/room_mutations'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import type {
@@ -15,10 +14,11 @@ import {
   Table, updatePagination
 } from '@helpwave/common/components/Table'
 import { useEffect, useState } from 'react'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { Input } from '@helpwave/common/components/user-input/Input'
 import type { BedWithPatientWithTasksNumberDTO } from '../mutations/bed_mutations'
 import { useBedCreateMutation, useBedDeleteMutation, useBedUpdateMutation } from '../mutations/bed_mutations'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { useRoomOverviewsQuery } from '../mutations/room_mutations'
 
 type ManageBedsModalTranslation = {
   manageBedsIn: string,

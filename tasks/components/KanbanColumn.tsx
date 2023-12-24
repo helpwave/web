@@ -1,19 +1,19 @@
 import { tw, tx } from '@helpwave/common/twind'
-import { PillLabel, TaskState } from './pill/PillLabel'
-import { TaskCard } from './cards/TaskCard'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useDroppable } from '@dnd-kit/core'
-import { Sortable } from './dnd-kit/Sortable'
 import {
   SortableContext,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable'
-import type { TaskDTO } from '../mutations/task_mutations'
 import type { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { Plus } from 'lucide-react'
+import type { TaskDTO } from '../mutations/task_mutations'
 import { emptyTask } from '../mutations/task_mutations'
+import { Sortable } from './dnd-kit/Sortable'
+import { TaskCard } from './cards/TaskCard'
+import { PillLabel, TaskState } from './pill/PillLabel'
 
 type KanbanColumnsTranslation = {
   addTask: string

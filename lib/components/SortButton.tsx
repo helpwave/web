@@ -1,7 +1,7 @@
+import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
 import { tw } from '../twind'
 import type { ButtonProps } from './Button'
 import { Button } from './Button'
-import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
 import type { TableSortingType } from './Table'
 
 export type SortButtonProps = Omit<ButtonProps, 'onClick'> & {

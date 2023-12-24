@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import type { CheckedState } from '@radix-ui/react-checkbox'
-import { tw, tx } from '../../twind'
 import { Check, Minus } from 'lucide-react'
+import { tw, tx } from '../../twind'
 
 type CheckboxProps = {
   /**

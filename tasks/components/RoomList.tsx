@@ -5,8 +5,17 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Button } from '@helpwave/common/components/Button'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
+import type {
+  TableState
+} from '@helpwave/common/components/Table'
+import {
+  defaultTableStatePagination,
+  defaultTableStateSelection, removeFromTableSelection,
+  Table
+} from '@helpwave/common/components/Table'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { OrganizationOverviewContext } from '../pages/organizations/[id]'
 import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import {
@@ -16,16 +25,7 @@ import {
   useRoomOverviewsQuery,
   useRoomUpdateMutation
 } from '../mutations/room_mutations'
-import type {
-  TableState
-} from '@helpwave/common/components/Table'
-import {
-  defaultTableStatePagination,
-  defaultTableStateSelection, removeFromTableSelection,
-  Table
-} from '@helpwave/common/components/Table'
 import { ManageBedsModal } from './MangeBedsModal'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 type RoomListTranslation = {
   edit: string,

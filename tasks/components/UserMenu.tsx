@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { tw } from '@helpwave/common/twind'
-import { Menu, MenuItem } from '@helpwave/common/components/user_input/Menu'
-import { Avatar } from './Avatar'
-import { useAuth } from '../hooks/useAuth'
+import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { getConfig } from '../utils/config'
 import { useRouter } from 'next/router'
+import { getConfig } from '../utils/config'
+import { useAuth } from '../hooks/useAuth'
+import { Avatar } from './Avatar'
 
 const config = getConfig()
 

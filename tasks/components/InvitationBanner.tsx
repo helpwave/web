@@ -1,10 +1,10 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useInvitationsByUserQuery } from '../mutations/organization_mutations'
 import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import { tw } from '@helpwave/common/twind'
 import { Mail } from 'lucide-react'
+import { useInvitationsByUserQuery } from '../mutations/organization_mutations'
 
 type InvitationBannerTranslation = {
   openInvites: string

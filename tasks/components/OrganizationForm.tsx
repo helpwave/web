@@ -2,12 +2,12 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
-import type { OrganizationMinimalDTO } from '../mutations/organization_mutations'
-import { emptyOrganization } from '../mutations/organization_mutations'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import type { OrganizationMinimalDTO } from '../mutations/organization_mutations'
+import { emptyOrganization } from '../mutations/organization_mutations'
 
 type OrganizationFormTranslation = {
   general: string,

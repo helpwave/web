@@ -12,7 +12,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
-    // 'import/order': 'error', // TODO: enable later on; don't want to have such a huge diff in a single PR
+    'import/order': 'error',
     'space-before-function-paren': 'off',
     // the behaviour of ternary operators is often more clear than using '||', '&&' or '??'
     'no-unneeded-ternary': 'off',

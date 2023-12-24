@@ -1,7 +1,7 @@
-import { tw, tx } from '../twind'
 import type { PropsWithChildren } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import React, { useState } from 'react'
+import { tw, tx } from '../twind'
 
 export type HideableContentSectionProps = PropsWithChildren & {
   initiallyOpen?: boolean,

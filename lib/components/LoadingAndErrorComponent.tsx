@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from 'react'
+import { useState } from 'react'
 import type { LoadingAnimationProps } from './LoadingAnimation'
 import type { ErrorComponentProps } from './ErrorComponent'
 import { LoadingAnimation } from './LoadingAnimation'
 import { ErrorComponent } from './ErrorComponent'
-import { useState } from 'react'
 
 export type LoadingAndErrorComponentProps = PropsWithChildren<{
   isLoading?: boolean,

@@ -12,7 +12,7 @@ import {
 } from '@helpwave/common/components/Table'
 import { useState } from 'react'
 import { Span } from '@helpwave/common/components/Span'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { Input } from '@helpwave/common/components/user-input/Input'
 import { Button } from '@helpwave/common/components/Button'
 import { SortButton } from '@helpwave/common/components/SortButton'
 import { tw } from '@helpwave/common/twind'

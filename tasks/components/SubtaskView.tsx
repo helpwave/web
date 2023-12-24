@@ -3,18 +3,18 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
 import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
-import { SubtaskTile } from './SubtaskTile'
 import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 import { TaskTemplateContext } from '../pages/templates'
-import { Scrollbars } from 'react-custom-scrollbars-2'
 import {
   useSubTaskAddMutation,
   useSubTaskDeleteMutation,
   useSubTaskToDoneMutation, useSubTaskToToDoMutation,
   useSubTaskUpdateMutation
 } from '../mutations/task_mutations'
+import { SubtaskTile } from './SubtaskTile'
 
 type SubtaskViewTranslation = {
   subtasks: string,

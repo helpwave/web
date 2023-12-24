@@ -3,7 +3,6 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
-import { Avatar } from './Avatar'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { useContext, useState } from 'react'
 import { Span } from '@helpwave/common/components/Span'
@@ -14,11 +13,12 @@ import {
   removeFromTableSelection,
   Table
 } from '@helpwave/common/components/Table'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { OrgMember } from '../mutations/organization_member_mutations'
 import { Role, useMembersByOrganizationQuery } from '../mutations/organization_member_mutations'
 import { useRemoveMemberMutation } from '../mutations/organization_mutations'
 import { OrganizationContext } from '../pages/organizations'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { Avatar } from './Avatar'
 
 type OrganizationMemberListTranslation = {
   edit: string,

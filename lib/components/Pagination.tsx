@@ -1,5 +1,5 @@
-import { tw, tx } from '../twind'
 import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
+import { tw, tx } from '../twind'
 import type { PropsWithLanguage } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import type { Languages } from '../hooks/useLanguage'

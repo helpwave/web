@@ -1,10 +1,10 @@
-import { tw, tx } from '../twind'
 import type { ReactElement } from 'react'
-import { Checkbox } from './user_input/Checkbox'
-import { Pagination } from './Pagination'
-import { noop } from '../util/noop'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useEffect, useRef, useState } from 'react'
+import { tw, tx } from '../twind'
+import { noop } from '../util/noop'
+import { Checkbox } from './user-input/Checkbox'
+import { Pagination } from './Pagination'
 
 export type TableStatePagination = {
   currentPage: number,

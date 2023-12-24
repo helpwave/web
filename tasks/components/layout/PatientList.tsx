@@ -5,7 +5,12 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import React, { useContext, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { Input } from '@helpwave/common/components/user-input/Input'
+import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
+import { useRouter } from 'next/router'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type {
   PatientDTO,
   PatientMinimalDTO,
@@ -18,17 +23,12 @@ import {
   useReadmitPatientMutation
 } from '../../mutations/patient_mutations'
 import { Label } from '../Label'
-import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { Draggable } from '../dnd-kit/Draggable'
 import { Droppable } from '../dnd-kit/Droppable'
 import { WardOverviewContext } from '../../pages/ward/[id]'
 import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
-import { useRouter } from 'next/router'
 import { useWardQuery } from '../../mutations/ward_mutations'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 
 type PatientListTranslation = {
   patients: string,

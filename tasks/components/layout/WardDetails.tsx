@@ -3,12 +3,14 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { Span } from '@helpwave/common/components/Span'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useRouter } from 'next/router'
+import { ColumnTitle } from '../ColumnTitle'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
-import { Span } from '@helpwave/common/components/Span'
 import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
 import type { WardDetailDTO } from '../../mutations/ward_mutations'
 import {
@@ -19,8 +21,6 @@ import {
   useWardDetailsQuery
 } from '../../mutations/ward_mutations'
 import { OrganizationOverviewContext } from '../../pages/organizations/[id]'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { useRouter } from 'next/router'
 
 type WardDetailTranslation = {
   updateWard: string,

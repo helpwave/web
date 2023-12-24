@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import type { TableProps, TableSortingFunctionType, TableSortingType, TableState } from '../Table'
 import {
   addElementToTable,
@@ -8,10 +9,9 @@ import {
 } from '../Table'
 import { tw } from '../../twind'
 import { Span } from '../Span'
-import { Input } from '../user_input/Input'
+import { Input } from '../user-input/Input'
 import { Button } from '../Button'
 import { SortButton } from '../SortButton'
-import { useEffect, useState } from 'react'
 
 export type DataType = {
   id: string,

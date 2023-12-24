@@ -1,10 +1,10 @@
 import { tw } from '@helpwave/common/twind'
 import { Mail } from 'lucide-react'
-import { AvatarGroup } from '../AvatarGroup'
-import type { OrganizationDTO } from '../../mutations/organization_mutations'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { OrganizationDTO } from '../../mutations/organization_mutations'
+import { AvatarGroup } from '../AvatarGroup'
 import type { EditCardProps } from './EditCard'
 import { EditCard } from './EditCard'
 

@@ -11,6 +11,9 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import React, { useEffect, useState } from 'react'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
@@ -20,9 +23,6 @@ import {
   useTasksByPatientSortedByStatusQuery, useTaskToDoneMutation, useTaskToInProgressMutation,
   useTaskToToDoMutation
 } from '../../mutations/task_mutations'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import React, { useEffect, useState } from 'react'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 
 export type KanbanBoardObject = {
   draggedId?: string,

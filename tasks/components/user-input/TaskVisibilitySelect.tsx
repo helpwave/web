@@ -1,5 +1,5 @@
-import { Select } from '@helpwave/common/components/user_input/Select'
-import type { SelectProps } from '@helpwave/common/components/user_input/Select'
+import { Select } from '@helpwave/common/components/user-input/Select'
+import type { SelectProps } from '@helpwave/common/components/user-input/Select'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 

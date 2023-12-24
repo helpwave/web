@@ -1,6 +1,6 @@
+import { z } from 'zod'
 import type { Languages } from '../hooks/useLanguage'
 import { languages } from '../hooks/useLanguage'
-import { z } from 'zod'
 
 export type News = {
   title: string,

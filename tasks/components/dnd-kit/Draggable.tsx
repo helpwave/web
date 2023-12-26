@@ -1,5 +1,4 @@
-import type { Active, Over } from '@dnd-kit/core'
-import { useDraggable } from '@dnd-kit/core'
+import { useDraggable, type Active, type Over } from '@dnd-kit/core'
 import type { Data } from '@dnd-kit/core/dist/store/types'
 
 export type DraggableBuilderProps = {

@@ -1,6 +1,6 @@
-import { Span } from '@helpwave/common/components/Span'
-import { tw, tx } from '@helpwave/common/twind'
 import Link from 'next/link'
+import { tw, tx } from '@helpwave/common/twind'
+import { Span } from '@helpwave/common/components/Span'
 
 export type Crumb = {
   display: string,

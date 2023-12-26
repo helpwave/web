@@ -1,14 +1,14 @@
+import { useEffect, useRef, useState } from 'react'
+import { Undo2, X } from 'lucide-react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useEffect, useRef, useState } from 'react'
-import { Undo2, X } from 'lucide-react'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { Span } from '@helpwave/common/components/Span'
 import { noop } from '@helpwave/common/util/noop'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Button } from '@helpwave/common/components/Button'
-import { usePatientAssignmentByWardQuery } from '../mutations/patient_mutations'
+import { usePatientAssignmentByWardQuery } from '@/mutations/patient_mutations'
 
 type RoomBedDropDownTranslation = {
   saved: string,

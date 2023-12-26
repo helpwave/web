@@ -1,5 +1,4 @@
-import React, { useRef } from 'react'
-import type { PropsWithChildren, ReactNode, RefObject } from 'react'
+import { useRef, useState, type PropsWithChildren, type ReactNode, type RefObject } from 'react'
 import { tw, tx } from '../../twind'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 
@@ -23,7 +22,7 @@ const MenuItem = ({ children, onClick, alignment = 'left' }: PropsWithChildren<{
  * A Menu Component to allow the user to see different functions
  */
 const Menu = <T extends HTMLElement>({ trigger, children, alignment = 'tl' }: MenuProps<T>) => {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   const triggerRef = useRef<T>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   useOutsideClick([triggerRef, menuRef], () => setOpen(false))

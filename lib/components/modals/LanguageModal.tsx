@@ -1,13 +1,12 @@
 import { type PropsWithChildren } from 'react'
-import { tw } from '@twind/core'
+import { tw } from '../../twind'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user-input/Select'
 import type { Languages } from '../../hooks/useLanguage'
 import { useLanguage } from '../../hooks/useLanguage'
 import { Button } from '../Button'
-import { Modal } from './Modal'
-import type { ModalProps } from './Modal'
+import { Modal, type ModalProps } from './Modal'
 
 const languageDetails = {
   en: 'English',

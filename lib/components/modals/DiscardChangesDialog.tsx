@@ -3,8 +3,7 @@ import { tw } from '../../twind'
 import { Button } from '../Button'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
-import { Modal } from './Modal'
-import type { ModalProps } from './Modal'
+import { Modal, type ModalProps } from './Modal'
 
 type DiscardChangesDialogTranslation = {
   save: string,

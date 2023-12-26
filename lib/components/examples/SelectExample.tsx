@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { SelectProps } from '../user-input/Select'
-import { Select } from '../user-input/Select'
+import { Select, type SelectProps } from '../user-input/Select'
 
 type SelectExampleProps<T> = Omit<SelectProps<T>, 'onChange'>
 

@@ -1,6 +1,5 @@
-import type { MouseEventHandler, PropsWithChildren, ReactNode } from 'react'
+import { useContext, useEffect, type MouseEventHandler, type PropsWithChildren, type ReactNode } from 'react'
 import ReactDOM from 'react-dom'
-import { useContext, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { Span } from '../Span'
 import { tx, tw } from '../../twind'

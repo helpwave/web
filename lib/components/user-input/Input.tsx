@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react'
 import { tw, tx } from '../../twind'
 import { Span } from '../Span'
 import useSaveDelay from '../../hooks/useSaveDelay'
@@ -23,7 +22,7 @@ export type InputProps = {
    * @default noop
    */
   onChange?: (text: string) => void,
-  onChangeEvent?: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  onChangeEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
   className?: string,
   onEditCompleted?: (text: string) => void
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>

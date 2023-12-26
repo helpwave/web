@@ -1,5 +1,4 @@
-import type { Active, Over } from '@dnd-kit/core'
-import { useDroppable } from '@dnd-kit/core'
+import { useDroppable, type Active, type Over } from '@dnd-kit/core'
 import type { Data } from '@dnd-kit/core/dist/store/types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -4,8 +4,7 @@ import type { ButtonColorType } from '../Button'
 import { Button } from '../Button'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
-import { Modal } from './Modal'
-import type { ModalProps } from './Modal'
+import { Modal, type ModalProps } from './Modal'
 
 type ConfirmDialogTranslation = {
   confirm: string,

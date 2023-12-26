@@ -1,10 +1,9 @@
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
-import React from 'react'
-import { tw } from '@helpwave/common/twind'
-import type { PatientMinimalDTO } from '../mutations/patient_mutations'
+import type { PatientMinimalDTO } from '@/mutations/patient_mutations'
 
 type PatientDischargeModalTranslation = {
   followingPatient: string,

@@ -79,6 +79,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
               </Droppable>
             ) : (
               // Maybe also wrap inside the drag and drop later
+              // TODO: could we use a generic parameter here somewhere to get rid of the AnyData type?
               <Droppable key={bed.id} id={bed.id} data={{ bed, room }}>
                 {({ isOver, active }) => (!isOver ? (
                   <BedCard

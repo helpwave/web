@@ -1,3 +1,4 @@
+// TODO: what are the examples doing here anyway, can we move these to somewhere else?
 import type { NextPage } from 'next'
 import type {
   TableState,
@@ -34,6 +35,21 @@ const exampleData: DataType[] = [
   { id: 'data8', name: 'Name 8', age: 31 }
 ]
 
+const sortingFunctions = {
+  id: {
+    ascending: (t1, t2) => t1.id.localeCompare(t2.id),
+    descending: (t1, t2) => t1.id.localeCompare(t2.id) * -1,
+  },
+  name: {
+    ascending: (t1, t2) => t1.name.localeCompare(t2.name),
+    descending: (t1, t2) => t1.name.localeCompare(t2.name) * -1,
+  },
+  age: {
+    ascending: (t1, t2) => t1.age - t2.age,
+    descending: (t1, t2) => (t1.age - t2.age) * -1,
+  }
+} satisfies Record<string, Record<TableSortingType, TableSortingFunctionType<DataType>>>
+
 const TablePage: NextPage = () => {
   const [data, setData] = useState<DataType[]>(exampleData)
   const [tableState, setTableState] = useState<TableState>({
@@ -41,24 +57,9 @@ const TablePage: NextPage = () => {
     selection: defaultTableStateSelection
   })
 
-  const [sorting, setSorting] = useState<[string, TableSortingType]>()
+  const [sorting, setSorting] = useState<[keyof typeof sortingFunctions, TableSortingType]>()
   const [sortingKey, ascending] = sorting ?? ['', 'ascending']
   const idMapping = (data: DataType) => data.id
-
-  const sortingFunctions: Record<string, Record<TableSortingType, TableSortingFunctionType<DataType>>> = {
-    id: {
-      ascending: (t1, t2) => t1.id.localeCompare(t2.id),
-      descending: (t1, t2) => t1.id.localeCompare(t2.id) * -1,
-    },
-    name: {
-      ascending: (t1, t2) => t1.name.localeCompare(t2.name),
-      descending: (t1, t2) => t1.name.localeCompare(t2.name) * -1,
-    },
-    age: {
-      ascending: (t1, t2) => t1.age - t2.age,
-      descending: (t1, t2) => (t1.age - t2.age) * -1,
-    }
-  }
 
   return (
     <div className={tw('flex flex-col gap-y-12 items-center')}>

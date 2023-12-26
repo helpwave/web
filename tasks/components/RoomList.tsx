@@ -23,7 +23,7 @@ import {
   useRoomUpdateMutation,
   type RoomOverviewDTO
 } from '../mutations/room_mutations'
-import { ManageBedsModal } from './MangeBedsModal'
+import { ManageBedsModal } from './ManageBedsModal'
 
 type RoomListTranslation = {
   edit: string,

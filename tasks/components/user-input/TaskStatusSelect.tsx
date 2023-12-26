@@ -52,7 +52,7 @@ export const TaskStatusSelect = ({
   const filteredOptions = defaultOptions.filter(defaultValue => !removeOptions?.find(value2 => value2 === defaultValue.value))
   if (removeOptions?.find(value2 => value2 === value)) {
     console.error(`The selected value ${value} cannot be in the remove list`)
-    value = filteredOptions.length > 0 ? filteredOptions[0].value : undefined
+    value = filteredOptions.length > 0 ? filteredOptions[0]!.value : undefined
     console.warn(`Overwriting with ${value} instead`)
   }
 

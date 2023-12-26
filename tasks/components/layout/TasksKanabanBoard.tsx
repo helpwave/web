@@ -126,7 +126,12 @@ export const TasksKanbanBoard = ({
     const activeIndex = activeItems.findIndex(item => item.id === active.id)
     const overIndex = overItems.findIndex(item => item.id !== over?.id)
 
-    sortedTasks[activeColumn][activeIndex].status = overColumn
+    if (activeIndex === -1 || overIndex === -1) {
+      return
+    }
+
+    // The last array access is safe as we checked the index before (> -1 and < length; findIndex will not return something >= length)
+    sortedTasks[activeColumn][activeIndex]!.status = overColumn
     setSortedTasks({
       ...sortedTasks,
       [activeColumn]: [

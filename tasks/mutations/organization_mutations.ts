@@ -91,6 +91,7 @@ export const useOrganizationQuery = (organizationId: string | undefined) => {
     enabled: !!organizationId,
     queryFn: async () => {
       const req = new GetOrganizationRequest()
+      // TODO: would `organizationId !== undefined` also work here or are empty strings also possible?
       if (organizationId) {
         req.setId(organizationId)
       }

@@ -1,11 +1,12 @@
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 import { tw } from '@helpwave/common/twind'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
-import { TaskTemplateContext } from '../pages/templates'
+import { SubtaskTile } from './SubtaskTile'
+import { TaskTemplateContext } from '@/pages/templates'
 import {
   useSubTaskAddMutation,
   useSubTaskDeleteMutation,
@@ -13,8 +14,7 @@ import {
   useSubTaskToToDoMutation,
   useSubTaskUpdateMutation,
   type SubTaskDTO
-} from '../mutations/task_mutations'
-import { SubtaskTile } from './SubtaskTile'
+} from '@/mutations/task_mutations'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -78,6 +78,37 @@ export const SubtaskView = ({
     setScrollToBottom(false)
   }, [scrollToBottomFlag, subtasks])
 
+  const removeSubtask = (subtask: SubTaskDTO, index: number) => {
+    const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
+    // undefined because taskId === "" would mean task creation // TODO: this seems like a terrible way of differentiating things..
+    if (taskId === undefined) {
+      context.updateContext({
+        ...context.state,
+        template: { ...context.state.template, subtasks: filteredSubtasks },
+        // index access is safe as the index comes from mapping over the subtasks
+        deletedSubtaskIds: [...context.state.deletedSubtaskIds ?? [], subtasks[index]!.id]
+      })
+    } else {
+      onChange(filteredSubtasks)
+      deleteSubtaskMutation.mutate(subtask.id)
+    }
+  }
+
+  const changeSubtaskState = (subtask: SubTaskDTO, done: boolean) => {
+    // taskTemplateId === "" for the creation of a template // TODO: this seems like a terrible way of differentiating things..
+    if (taskTemplateId !== undefined) {
+      return
+    }
+    if (!isCreatingTask) {
+      if (done) {
+        setSubtaskToDoneMutation.mutate(subtask.id)
+      } else {
+        setSubtaskToToDoMutation.mutate(subtask.id)
+      }
+    }
+    subtask.isDone = done
+  }
+
   return (
     <div className={tw('flex flex-col gap-y-2')}>
       <div className={tw('flex flex-row items-center justify-between')}>
@@ -115,34 +146,8 @@ export const SubtaskView = ({
                     updateSubtaskMutation.mutate(newSubtask)
                   }
                 }}
-                onRemoveClick={() => {
-                  const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
-                  // undefined because taskId === "" would mean task creation
-                  if (taskId === undefined) {
-                    context.updateContext({
-                      ...context.state,
-                      template: { ...context.state.template, subtasks: filteredSubtasks },
-                      deletedSubtaskIds: [...context.state.deletedSubtaskIds ?? [], subtasks[index].id]
-                    })
-                  } else {
-                    onChange(filteredSubtasks)
-                    deleteSubtaskMutation.mutate(subtask.id)
-                  }
-                }}
-                onDoneChange={done => {
-                  // taskTemplateId === "" for the creation of a template
-                  if (taskTemplateId !== undefined) {
-                    return
-                  }
-                  if (!isCreatingTask) {
-                    if (done) {
-                      setSubtaskToDoneMutation.mutate(subtask.id)
-                    } else {
-                      setSubtaskToToDoMutation.mutate(subtask.id)
-                    }
-                  }
-                  subtask.isDone = done
-                }}
+                onRemoveClick={() => removeSubtask(subtask, index)}
+                onDoneChange={(done) => changeSubtaskState(subtask, done)}
               />
             ))}
           </div>

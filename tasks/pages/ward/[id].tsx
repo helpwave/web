@@ -4,9 +4,9 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
-import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
+import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit/typesafety'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PatientDetail } from '@/components/layout/PatientDetails'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -91,9 +91,8 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     patient?: PatientMinimalDTO,
     bed?: BedWithPatientWithTasksNumberDTO
   }>()
-  const { id } = router.query
-  const wardId = id as string
-  const { data: ward } = useWardQuery(wardId)
+  const wardId = router.query.id as string
+  const ward = useWardQuery(wardId).data
 
   // TODO: is using '' as an org id a good idea?
   const organizationId = ward?.organizationId ?? ''
@@ -142,7 +141,9 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     useSensor(TouchSensor, sensorOptions)
   )
 
-  const handleDragStart = useCallback(({ active }: DragStartEvent) => {
+  // TODO: this'll get fixed soon
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDragStart = useCallback(({ active }: DragStartEvent<any, any>) => {
     // TODO: I am unfamiliar with the code base and types, is this a good way of dealing with this?
     if (!active.data.current) {
       return
@@ -162,7 +163,9 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     readmitPatientMutation.mutate(patientId)
   }, [readmitPatientMutation])
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
+  // TODO: this'll get fixed soon
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDragEnd = useCallback((event: DragEndEvent<any, any>) => {
     const {
       active,
       over
@@ -285,7 +288,9 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         state: contextState,
         updateContext: setContextState
       }}>
-        <DndContext
+        {/* TODO: this'll get fixed soon */}
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <DndContext<any, any>
           sensors={sensors}
           onDragStart={handleDragStart}
           onDragCancel={handleDragCancel}

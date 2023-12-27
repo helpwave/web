@@ -251,7 +251,7 @@ const TaskDetailViewSidebar = ({ language, task, setTask, ward, isCreating }: Pr
               </Button>
             )}
           </div>
-        ) : <></>}
+        ) : null}
         {isCreating && (
           <TaskVisibilitySelect
             value={task.isPublicVisible}
@@ -321,16 +321,9 @@ export const TaskDetailView = ({
   const toDoneMutation = useTaskToDoneMutation()
 
   const createTaskMutation = useTaskCreateMutation(newTask => {
-    newTask.subtasks.forEach(value =>
-      addSubtaskMutation.mutate({
-        ...value,
-        taskId: newTask.id
-      }))
+    newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
     if (newTask.assignee) {
-      assignTaskToUserMutation.mutate({
-        taskId: newTask.id,
-        userId: newTask.assignee
-      })
+      assignTaskToUserMutation.mutate({ taskId: newTask.id, userId: newTask.assignee })
     }
     onClose()
   }, patientId)
@@ -433,11 +426,11 @@ export const TaskDetailView = ({
   const taskTemplates =
     personalTaskTemplatesData && wardTaskTemplatesData
       ? [
-          ...(personalTaskTemplatesData.map(taskTemplate => ({
+          ...(personalTaskTemplatesData.map((taskTemplate) => ({
             taskTemplate,
             type: 'personal' as const
           }))),
-          ...(wardTaskTemplatesData.map(taskTemplate => ({
+          ...(wardTaskTemplatesData.map((taskTemplate) => ({
             taskTemplate,
             type: 'ward' as const
           })))

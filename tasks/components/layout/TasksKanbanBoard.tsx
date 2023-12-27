@@ -16,7 +16,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent } from '@/components/dnd-kit/typesafety'
+import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent } from '@/components/dnd-kit-instances/tasks'
 import {
   emptySortedTasks,
   useTasksByPatientSortedByStatusQuery,
@@ -107,15 +107,11 @@ export const TasksKanbanBoard = ({
     return undefined
   }
 
-  // TODO: this'll get fixed soon
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDragStart = ({ active }: DragStartEvent<any, unknown>) => {
+  const handleDragStart = ({ active }: DragStartEvent) => {
     setBoardObject({ ...boardObject, draggedId: active.id as string })
   }
 
-  // TODO: this'll get fixed soon
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDragOver = ({ active, over }: DragOverEvent<any, any>) => {
+  const handleDragOver = ({ active, over }: DragOverEvent) => {
     const activeColumn = findColumn(active.id as string)
     const overColumn = findColumn(over?.id as string)
 
@@ -151,9 +147,7 @@ export const TasksKanbanBoard = ({
     setBoardObject({ ...boardObject, overColumn })
   }
 
-  // TODO: this'll get fixed soon
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDragEnd = ({ active, over }: DragEndEvent<any, any>) => {
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
     const activeColumn = findColumn(active.id as string)
     const overColumn = findColumn(over?.id as string)
 

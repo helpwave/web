@@ -6,7 +6,7 @@ import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/u
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
-import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit/typesafety'
+import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit-instances/patients'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PatientDetail } from '@/components/layout/PatientDetails'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -141,20 +141,18 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     useSensor(TouchSensor, sensorOptions)
   )
 
-  // TODO: this'll get fixed soon
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDragStart = useCallback(({ active }: DragStartEvent<any, any>) => {
+  const handleDragStart = useCallback(({ active }: DragStartEvent) => {
+    const source = active.data.current
+
     // TODO: I am unfamiliar with the code base and types, is this a good way of dealing with this?
-    if (!active.data.current) {
+    if (!source) {
       return
     }
 
-    const data = active.data.current as { bed: BedWithPatientWithTasksNumberDTO } | PatientMinimalDTO
-
-    if ('bed' in data) {
-      setDraggedPatient({ bed: { ...(data.bed) } })
+    if ('bed' in source) {
+      setDraggedPatient({ bed: source.bed })
     } else {
-      setDraggedPatient({ patient: data })
+      setDraggedPatient({ patient: source.patient })
     }
   }, [])
 
@@ -163,37 +161,35 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     readmitPatientMutation.mutate(patientId)
   }, [readmitPatientMutation])
 
-  // TODO: this'll get fixed soon
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDragEnd = useCallback((event: DragEndEvent<any, any>) => {
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
     const {
       active,
       over
     } = event
-    const overData = over?.data.current
+    const source = active.data.current
+    const target = over?.data.current
+
     const patientId = draggedPatient?.patient?.id ?? draggedPatient?.bed?.patient?.id ?? ''
 
-    if (overData && active.data.current) {
-      if (overData.patientListSection) {
-        // Moving in patientlist
-        if (overData.patientListSection === 'unassigned') {
-          if (active.data.current.discharged) {
+    if (source && target) {
+      if ('patientListSection' in target) {
+        // Moving inside of patient list
+        if (target.patientListSection === 'unassigned') {
+          if ('discharged' in source && source.discharged) {
             readmitPatientMutation.mutate(patientId)
-          } else {
-            unassignMutation.mutate(patientId)
           }
-          unassignMutation.mutate(patientId)
-        } else if (overData.patientListSection === 'discharged') {
+          unassignMutation.mutate(patientId) // TODO: is this correct?, doing two mutations for a patient if previously discharged?
+        } else if (target.patientListSection === 'discharged') { // TODO: can we unify the formats for patients PREVIOUSLY having been discharged and patients BEING discharged? (boolean vs.patientListSection)
           dischargeMutation.mutate(patientId)
         }
       } else {
         // Moving on bed cards
-        setDraggingRoomId(overData.room.id)
-        if (active.data.current.discharged) {
-          readmitAndAssignPatient(patientId, overData.bed.id).then()
+        setDraggingRoomId(target.room.id)
+        if ('discharged' in source && source.discharged) {
+          readmitAndAssignPatient(patientId, target.bed.id).then()
         } else {
           assignBedMutation.mutate({
-            id: overData.bed.id,
+            id: target.bed.id,
             patientId
           })
         }
@@ -288,9 +284,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         state: contextState,
         updateContext: setContextState
       }}>
-        {/* TODO: this'll get fixed soon */}
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <DndContext<any, any>
+        <DndContext
           sensors={sensors}
           onDragStart={handleDragStart}
           onDragCancel={handleDragCancel}

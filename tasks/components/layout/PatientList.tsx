@@ -11,8 +11,7 @@ import { HideableContentSection } from '@helpwave/common/components/HideableCont
 import { useRouter } from 'next/router'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Label } from '../Label'
-import { Draggable } from '../dnd-kit/Draggable'
-import { Droppable } from '../dnd-kit/Droppable'
+import { Draggable, Droppable } from '../dnd-kit-instances/patients'
 import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
 import { WardOverviewContext } from '@/pages/ward/[id]'
@@ -201,8 +200,11 @@ export const PatientList = ({
             >
               {filteredActive.map(patient => (
                 <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
-                  id: patient.id,
-                  name: patient.name
+                  patient: {
+                    id: patient.id,
+                    name: patient.name
+                  },
+                  discharged: false
                 }}>
                   {() => (
                     <div
@@ -245,8 +247,8 @@ export const PatientList = ({
                     </Span>
                   )}
                 >
-                  {filteredUnassigned.map(patient => (
-                    <Draggable id={patient.id} key={patient.id} data={patient}>
+                  {filteredUnassigned.map((patient) => (
+                    <Draggable id={patient.id} key={patient.id} data={{ patient, discharged: false }}>
                       {() => (
                         <div
                           key={patient.id}
@@ -286,7 +288,7 @@ export const PatientList = ({
                   header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
                 >
                   {filteredDischarged.map(patient => (
-                    <Draggable id={patient.id} key={patient.id} data={{ ...patient, discharged: true }}>
+                    <Draggable id={patient.id} key={patient.id} data={{ patient, discharged: true }}>
                       {() => (
                         <div
                           key={patient.id}

@@ -12,7 +12,7 @@ import { TaskDetailModal } from '../TaskDetailModal'
 import { RoomBedDropDown } from '../RoomBedDropdown'
 import { ColumnTitle } from '../ColumnTitle'
 import { PatientDischargeModal } from '../PatientDischargeModal'
-import { TasksKanbanBoard } from './TasksKanabanBoard'
+import { TasksKanbanBoard } from './TasksKanbanBoard'
 import { WardOverviewContext } from '@/pages/ward/[id]'
 import {
   emptyPatientDetails,

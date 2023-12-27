@@ -28,6 +28,7 @@ const configSchema = z.object({
   NODE_ENV: z.literal('production').or(z.literal('development')).default('production'),
   NEXT_PUBLIC_API_URL: z.string().url().default('https://api.helpwave.de'),
   NEXT_PUBLIC_MOCK: z.literal('true').or(z.literal('false')).optional(),
+  NEXT_PUBLIC_SHOW_STAGING_DISCLAIMER_MODAL: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_REQUEST_LOGGING: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_PLAYSTORE_LINK: z.string().url().default('https://play.google.com/store/apps'),
   NEXT_PUBLIC_APPSTORE_LINK: z.string().url().default('https://www.apple.com/de/app-store/'),
@@ -43,6 +44,7 @@ const configSchema = z.object({
   env: obj.NODE_ENV,
   apiUrl: obj.NEXT_PUBLIC_API_URL,
   mock: obj.NEXT_PUBLIC_MOCK === 'true',
+  showStagingDisclaimerModal: obj.NEXT_PUBLIC_SHOW_STAGING_DISCLAIMER_MODAL === 'true',
   requestLogging: obj.NEXT_PUBLIC_REQUEST_LOGGING === 'true',
   appstoreLinks: {
     playStore: obj.NEXT_PUBLIC_PLAYSTORE_LINK,
@@ -70,6 +72,7 @@ const getConfig = () => {
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_MOCK: process.env.NEXT_PUBLIC_MOCK,
+    NEXT_PUBLIC_SHOW_STAGING_DISCLAIMER_MODAL: process.env.NEXT_PUBLIC_SHOW_STAGING_DISCLAIMER_MODAL,
     NEXT_PUBLIC_REQUEST_LOGGING: process.env.NEXT_PUBLIC_REQUEST_LOGGING,
     NEXT_PUBLIC_PLAYSTORE_LINK: process.env.NEXT_PUBLIC_PLAYSTORE_LINK,
     NEXT_PUBLIC_APPSTORE_LINK: process.env.NEXT_PUBLIC_APPSTORE_LINK,

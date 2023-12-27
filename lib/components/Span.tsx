@@ -1,9 +1,8 @@
-import type { DetailedHTMLProps, HTMLAttributes, PropsWithChildren } from 'react'
 import { tx } from '../twind'
+import type { NativeProps } from '../util/types'
 
-export type SpanProps = DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> & {
-  type?: 'normal' | 'heading' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError' | 'formDescription' | 'modalTitle',
-  className?: string
+export type SpanProps = NativeProps<'span'> & {
+  type?: 'normal' | 'heading' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError' | 'formDescription' | 'modalTitle'
 }
 
 /**
@@ -11,7 +10,7 @@ export type SpanProps = DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLS
  *
  * The type of text is defined by the type attribute
  */
-export const Span = ({ children, type = 'normal', className = '', ...restProps }: PropsWithChildren<SpanProps>) => {
+export const Span = ({ children, type = 'normal', className, ...restProps }: SpanProps) => {
   return (
     <span
       className={tx({

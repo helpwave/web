@@ -2,3 +2,4 @@ packages:
   - lib
   - tasks
   - landing-page
+  - eslint-config

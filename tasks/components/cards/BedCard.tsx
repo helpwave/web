@@ -1,11 +1,9 @@
 import { tw, tx } from '@helpwave/common/twind'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { DragCardProps } from './DragCard'
-import { DragCard } from './DragCard'
+import { DragCard, type DragCardProps } from './DragCard'
 
 type BedCardTranslation = {
   nobody: string

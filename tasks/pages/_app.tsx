@@ -1,16 +1,16 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
+import { isMobile } from 'react-device-detect'
 import { tw } from '@helpwave/common/twind'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '@helpwave/common/twind/next/app'
 import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import MobileInterceptor from '../components/MobileInterceptor'
-import titleWrapper from '../utils/titleWrapper'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
-import { isMobile } from 'react-device-detect'
+import titleWrapper from '@/utils/titleWrapper'
+import MobileInterceptor from '@/components/MobileInterceptor'
 
 const inter = Inter({
   subsets: ['latin'],

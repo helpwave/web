@@ -1,7 +1,5 @@
-import { Select } from '@helpwave/common/components/user_input/Select'
-import type { SelectProps } from '@helpwave/common/components/user_input/Select'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Select, type SelectProps } from '@helpwave/common/components/user-input/Select'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 
 type TaskVisibilitySelectTranslation = {
   private: string,

@@ -1,6 +1,6 @@
-import { tx } from '../twind'
 import type { MouseEventHandler, PropsWithChildren } from 'react'
 import type { Class } from '@twind/core'
+import { tx } from '../twind'
 import { noop } from '../util/noop'
 
 export type CardProps = {

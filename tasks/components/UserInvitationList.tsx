@@ -1,23 +1,21 @@
+import { useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Invitation } from '../mutations/organization_mutations'
-import {
-  useInvitationsByUserQuery,
-  useInviteAcceptMutation,
-  useInviteDeclineMutation
-} from '../mutations/organization_mutations'
-import type { TableState } from '@helpwave/common/components/Table'
-import { defaultTableStatePagination, Table } from '@helpwave/common/components/Table'
-import { useState } from 'react'
-import { Avatar } from './Avatar'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { Avatar } from './Avatar'
 import { ReSignInModal } from './ReSignInModal'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
+import {
+  useInvitationsByUserQuery,
+  useInviteAcceptMutation,
+  useInviteDeclineMutation,
+  type Invitation
+} from '@/mutations/organization_mutations'
 
 type UserInvitationListTranslation = {
   accept: string,

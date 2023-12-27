@@ -28,7 +28,8 @@ const IdTokenClaimsSchema = z.object({
 export type User = z.output<typeof IdTokenClaimsSchema>
 
 const parseJwtPayload = (token: string) => {
-  const payloadBase64 = token.split('.')[1]
+  // can safely cast to string here, we know JWTs have 3 parts
+  const payloadBase64 = token.split('.')[1] as string
   const decodedPayload = Buffer.from(payloadBase64, 'base64').toString()
   return JSON.parse(decodedPayload)
 }
@@ -48,7 +49,8 @@ const isJwtExpired = (token: string) => {
   if (config.fakeTokenEnable) {
     return tokenToUser(token) === null
   }
-  const payloadBase64 = token.split('.')[1]
+  // can safely cast to string here, we know JWTs have 3 parts
+  const payloadBase64 = token.split('.')[1] as string
   const decodedPayload = Buffer.from(payloadBase64, 'base64').toString()
   const parsedPayload = JSON.parse(decodedPayload)
   const exp = parsedPayload.exp

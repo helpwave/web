@@ -1,14 +1,13 @@
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TwoColumn } from '../components/layout/TwoColumn'
-import { OrganizationDisplay } from '../components/layout/OrganizationDisplay'
-import { OrganizationDetail } from '../components/layout/OrganizationDetails'
-import { PageWithHeader } from '../components/layout/PageWithHeader'
-import titleWrapper from '../utils/titleWrapper'
 import { useRouter } from 'next/router'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { TwoColumn } from '@/components/layout/TwoColumn'
+import { OrganizationDisplay } from '@/components/layout/OrganizationDisplay'
+import { OrganizationDetail } from '@/components/layout/OrganizationDetails'
+import { PageWithHeader } from '@/components/layout/PageWithHeader'
+import titleWrapper from '@/utils/titleWrapper'
 
 type OrganizationsPageTranslation = {
   organizations: string

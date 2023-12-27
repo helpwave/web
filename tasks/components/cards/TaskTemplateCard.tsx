@@ -1,11 +1,9 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { Label } from '../Label'
-import type { EditCardProps } from './EditCard'
-import { EditCard } from './EditCard'
+import { EditCard, type EditCardProps } from './EditCard'
 
 type TaskTemplateCardTranslation = {
   subtask: string,

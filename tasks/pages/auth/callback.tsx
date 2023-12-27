@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
-import { handleCodeExchange } from '../../utils/oauth'
-import { COOKIE_ID_TOKEN_KEY, LOCALSTORAGE_HREF_AFTER_AUTH_KEY } from '../../hooks/useAuth'
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
+import { handleCodeExchange } from '@/utils/oauth'
+import { COOKIE_ID_TOKEN_KEY, LOCALSTORAGE_HREF_AFTER_AUTH_KEY } from '@/hooks/useAuth'
 
 const AuthCallback: NextPage = () => {
   useEffect(() => {

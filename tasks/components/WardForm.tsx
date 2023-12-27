@@ -1,9 +1,8 @@
+import { useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Input } from '@helpwave/common/components/user_input/Input'
-import { useState } from 'react'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
 
 type WardFormTranslation = {

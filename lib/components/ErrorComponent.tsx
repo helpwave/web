@@ -1,8 +1,8 @@
+import { AlertOctagon } from 'lucide-react'
 import { tw, tx } from '../twind'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsWithLanguage } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
-import { AlertOctagon } from 'lucide-react'
 
 type ErrorComponentTranslation = {
   errorOccurred: string

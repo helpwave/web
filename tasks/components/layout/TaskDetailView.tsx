@@ -1,25 +1,30 @@
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { tw, tx } from '@helpwave/common/twind'
-import { ToggleableInput } from '@helpwave/common/components/user_input/ToggleableInput'
-import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import { TaskStatusSelect } from '../user_input/TaskStatusSelect'
-import { TaskVisibilitySelect } from '../user_input/TaskVisibilitySelect'
+import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
+import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { Button } from '@helpwave/common/components/Button'
-import { SubtaskView } from '../SubtaskView'
 import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import { Span } from '@helpwave/common/components/Span'
-import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { Input } from '@helpwave/common/components/user-input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery } from '../../mutations/task_template_mutations'
-import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/router'
-import type { TaskDTO } from '../../mutations/task_mutations'
+import { useEffect, useState } from 'react'
+import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { ModalHeader } from '@helpwave/common/components/modals/Modal'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { AssigneeSelect } from '../AssigneeSelect'
+import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
+import { SubtaskView } from '../SubtaskView'
+import { TaskVisibilitySelect } from '../user-input/TaskVisibilitySelect'
+import { TaskStatusSelect } from '../user-input/TaskStatusSelect'
+import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery, type TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import { useAuth } from '@/hooks/useAuth'
 import {
-  emptyTask, useAssignTaskToUserMutation,
+  emptyTask,
+  useAssignTaskToUserMutation,
   useSubTaskAddMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
@@ -27,16 +32,11 @@ import {
   useTaskToDoneMutation,
   useTaskToInProgressMutation,
   useTaskToToDoMutation,
-  useTaskUpdateMutation, useUnassignTaskToUserMutation
-} from '../../mutations/task_mutations'
-import { useEffect, useState } from 'react'
-import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import { AssigneeSelect } from '../AssigneeSelect'
-import { useWardQuery } from '../../mutations/ward_mutations'
-import { ModalHeader } from '@helpwave/common/components/modals/Modal'
+  useTaskUpdateMutation,
+  useUnassignTaskToUserMutation,
+  type TaskDTO
+} from '@/mutations/task_mutations'
+import { useWardQuery } from '@/mutations/ward_mutations'
 
 type TaskDetailViewTranslation = {
   close: string,

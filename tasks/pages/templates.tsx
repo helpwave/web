@@ -1,24 +1,23 @@
-import { tw } from '@helpwave/common/twind'
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TwoColumn } from '../components/layout/TwoColumn'
-import { PageWithHeader } from '../components/layout/PageWithHeader'
-import titleWrapper from '../utils/titleWrapper'
-import { TaskTemplateDisplay } from '../components/layout/TaskTemplateDisplay'
-import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
+import { tw } from '@helpwave/common/twind'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useRouter } from 'next/router'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { TwoColumn } from '@/components/layout/TwoColumn'
+import { PageWithHeader } from '@/components/layout/PageWithHeader'
+import { TaskTemplateDisplay } from '@/components/layout/TaskTemplateDisplay'
+import { TaskTemplateDetails } from '@/components/layout/TaskTemplateDetails'
+import titleWrapper from '@/utils/titleWrapper'
+import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
 import {
   useCreateMutation,
   useDeleteMutation,
   usePersonalTaskTemplateQuery,
   useUpdateMutation
-} from '../mutations/task_template_mutations'
-import { TaskTemplateDetails } from '../components/layout/TaskTemplateDetails'
-import { useRouter } from 'next/router'
-import { useAuth } from '../hooks/useAuth'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+} from '@/mutations/task_template_mutations'
+import { useAuth } from '@/hooks/useAuth'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,

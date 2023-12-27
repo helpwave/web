@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
-import TeamGroup from '../../TeamGroup'
-import type { TeamMemberProps } from '../../TeamMember'
+import TeamGroup from '@/components/TeamGroup'
+import type { TeamMemberProps } from '@/components/TeamMember'
 
 const pictureURL = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 

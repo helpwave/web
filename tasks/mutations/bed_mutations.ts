@@ -1,14 +1,14 @@
-import type { PatientDTO, PatientWithTasksNumberDTO, PatientMinimalDTO } from './patient_mutations'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { bedService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import {
   CreateBedRequest, DeleteBedRequest,
   GetBedRequest,
   UpdateBedRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_pb'
-import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 import { noop } from '@helpwave/common/util/noop'
+import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
+import type { PatientDTO, PatientWithTasksNumberDTO, PatientMinimalDTO } from './patient_mutations'
 import { wardsQueryKey } from './ward_mutations'
+import { bedService, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 
 export type BedMinimalDTO = {
   id: string,

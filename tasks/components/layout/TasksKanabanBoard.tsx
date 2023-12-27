@@ -11,18 +11,21 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { useEffect, useState } from 'react'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import type { SortedTasks, TaskDTO } from '../../mutations/task_mutations'
 import {
   emptySortedTasks,
-  useTasksByPatientSortedByStatusQuery, useTaskToDoneMutation, useTaskToInProgressMutation,
-  useTaskToToDoMutation
-} from '../../mutations/task_mutations'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import React, { useEffect, useState } from 'react'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+  useTasksByPatientSortedByStatusQuery,
+  useTaskToDoneMutation,
+  useTaskToInProgressMutation,
+  useTaskToToDoMutation,
+  type SortedTasks,
+  type TaskDTO
+} from '@/mutations/task_mutations'
 
 export type KanbanBoardObject = {
   draggedId?: string,
@@ -123,7 +126,12 @@ export const TasksKanbanBoard = ({
     const activeIndex = activeItems.findIndex(item => item.id === active.id)
     const overIndex = overItems.findIndex(item => item.id !== over?.id)
 
-    sortedTasks[activeColumn][activeIndex].status = overColumn
+    if (activeIndex === -1 || overIndex === -1) {
+      return
+    }
+
+    // The last array access is safe as we checked the index before (> -1 and < length; findIndex will not return something >= length)
+    sortedTasks[activeColumn][activeIndex]!.status = overColumn
     setSortedTasks({
       ...sortedTasks,
       [activeColumn]: [

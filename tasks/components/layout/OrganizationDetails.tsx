@@ -1,27 +1,24 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import type { OrganizationFormType } from '../OrganizationForm'
-import { emptyOrganizationForm, OrganizationForm } from '../OrganizationForm'
-import { OrganizationMemberList } from '../OrganizationMemberList'
-import { ColumnTitle } from '../ColumnTitle'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
+import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
+import { OrganizationMemberList } from '../OrganizationMemberList'
+import { ColumnTitle } from '../ColumnTitle'
+import { ReSignInModal } from '../ReSignInModal'
+import { OrganizationInvitationList, type OrganizationInvitation } from '../OrganizationInvitationList'
+import { OrganizationContext } from '@/pages/organizations'
 import {
   useInviteMemberMutation,
   useOrganizationCreateMutation,
   useOrganizationDeleteMutation,
   useOrganizationQuery,
   useOrganizationUpdateMutation
-} from '../../mutations/organization_mutations'
-import { OrganizationContext } from '../../pages/organizations'
-import { ReSignInModal } from '../ReSignInModal'
-import type { OrganizationInvitation } from '../OrganizationInvitationList'
-import { OrganizationInvitationList } from '../OrganizationInvitationList'
-import { useAuth } from '../../hooks/useAuth'
+} from '@/mutations/organization_mutations'
+import { useAuth } from '@/hooks/useAuth'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,

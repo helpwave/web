@@ -1,24 +1,15 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { ModalProps } from '@helpwave/common/components/modals/Modal'
-import { Modal } from '@helpwave/common/components/modals/Modal'
-import { useRoomOverviewsQuery } from '../mutations/room_mutations'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { Modal, type ModalProps } from '@helpwave/common/components/modals/Modal'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
-import type {
-  TableState
-} from '@helpwave/common/components/Table'
-import {
-  defaultTableStatePagination,
-  Table, updatePagination
-} from '@helpwave/common/components/Table'
+import { defaultTableStatePagination, Table, updatePagination, type TableState } from '@helpwave/common/components/Table'
 import { useEffect, useState } from 'react'
-import type { BedWithPatientWithTasksNumberDTO } from '../mutations/bed_mutations'
-import { useBedCreateMutation, useBedDeleteMutation, useBedUpdateMutation } from '../mutations/bed_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { Input } from '@helpwave/common/components/user-input/Input'
+import { useBedCreateMutation, useBedDeleteMutation, useBedUpdateMutation, type BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
+import { useRoomOverviewsQuery } from '@/mutations/room_mutations'
 
 type ManageBedsModalTranslation = {
   manageBedsIn: string,

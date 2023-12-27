@@ -2,31 +2,30 @@ import { createContext, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TwoColumn } from '../../components/layout/TwoColumn'
-import { PatientDetail } from '../../components/layout/PatientDetails'
-import { PageWithHeader } from '../../components/layout/PageWithHeader'
-import titleWrapper from '../../utils/titleWrapper'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { WardRoomList } from '../../components/layout/WardRoomList'
-import { PatientList } from '../../components/layout/PatientList'
-import type { PatientDTO, PatientMinimalDTO } from '../../mutations/patient_mutations'
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
+import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { Span } from '@helpwave/common/components/Span'
+import { TwoColumn } from '@/components/layout/TwoColumn'
+import { PatientDetail } from '@/components/layout/PatientDetails'
+import { PageWithHeader } from '@/components/layout/PageWithHeader'
+import titleWrapper from '@/utils/titleWrapper'
+import { WardRoomList } from '@/components/layout/WardRoomList'
+import { PatientList } from '@/components/layout/PatientList'
+import type { PatientDTO, PatientMinimalDTO } from '@/mutations/patient_mutations'
 import {
   useAssignBedMutation,
   usePatientCreateMutation,
   usePatientDischargeMutation,
   useReadmitPatientMutation,
   useUnassignMutation
-} from '../../mutations/patient_mutations'
-import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
-import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
-import { DragCard } from '../../components/cards/DragCard'
-import { Span } from '@helpwave/common/components/Span'
-import type { BedWithPatientWithTasksNumberDTO } from '../../mutations/bed_mutations'
-import { PatientCard } from '../../components/cards/PatientCard'
-import { useWardQuery } from '../../mutations/ward_mutations'
-import { useOrganizationQuery } from '../../mutations/organization_mutations'
+} from '@/mutations/patient_mutations'
+import { DragCard } from '@/components/cards/DragCard'
+import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
+import { PatientCard } from '@/components/cards/PatientCard'
+import { useWardQuery } from '@/mutations/ward_mutations'
+import { useOrganizationQuery } from '@/mutations/organization_mutations'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -87,6 +86,7 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
 const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
   const router = useRouter()
+  // TODO: could we differentiate between the two using two different states?
   const [draggedPatient, setDraggedPatient] = useState<{
     patient?: PatientMinimalDTO,
     bed?: BedWithPatientWithTasksNumberDTO
@@ -95,6 +95,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   const wardId = id as string
   const { data: ward } = useWardQuery(wardId)
 
+  // TODO: is using '' as an org id a good idea?
   const organizationId = ward?.organizationId ?? ''
   const { data: organization } = useOrganizationQuery(organizationId)
 
@@ -142,14 +143,17 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   )
 
   const handleDragStart = useCallback(({ active }: DragStartEvent) => {
-    if (active.data.current?.bed) {
-      setDraggedPatient({
-        bed: { ...(active.data.current.bed as BedWithPatientWithTasksNumberDTO) }
-      })
+    // TODO: I am unfamiliar with the code base and types, is this a good way of dealing with this?
+    if (!active.data.current) {
+      return
+    }
+
+    const data = active.data.current as { bed: BedWithPatientWithTasksNumberDTO } | PatientMinimalDTO
+
+    if ('bed' in data) {
+      setDraggedPatient({ bed: { ...(data.bed) } })
     } else {
-      setDraggedPatient({
-        patient: { ...(active.data.current as PatientMinimalDTO) }
-      })
+      setDraggedPatient({ patient: data })
     }
   }, [])
 
@@ -165,6 +169,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     } = event
     const overData = over?.data.current
     const patientId = draggedPatient?.patient?.id ?? draggedPatient?.bed?.patient?.id ?? ''
+
     if (overData && active.data.current) {
       if (overData.patientListSection) {
         // Moving in patientlist

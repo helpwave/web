@@ -1,6 +1,6 @@
+import Link from 'next/link'
 import { tw, tx } from '@helpwave/common/twind'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
-import Link from 'next/link'
 import { Span } from '@helpwave/common/components/Span'
 import type { News } from '@helpwave/common/util/news'
 

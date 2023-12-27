@@ -1,7 +1,7 @@
-import { tw, tx } from '../../twind'
 import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { tw, tx } from '../../twind'
 import { Span } from '../Span'
 
 export type SelectOption<T> = {

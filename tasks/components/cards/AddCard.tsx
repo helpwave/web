@@ -1,7 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import { Plus } from 'lucide-react'
-import type { CardProps } from '@helpwave/common/components/Card'
-import { Card } from '@helpwave/common/components/Card'
+import { Card, type CardProps } from '@helpwave/common/components/Card'
 import { Span } from '@helpwave/common/components/Span'
 
 export type AddCardProps = CardProps & {

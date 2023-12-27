@@ -1,25 +1,23 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TwoColumn } from '../../../components/layout/TwoColumn'
-import { PageWithHeader } from '../../../components/layout/PageWithHeader'
-import titleWrapper from '../../../utils/titleWrapper'
-import { TaskTemplateDisplay } from '../../../components/layout/TaskTemplateDisplay'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useRouter } from 'next/router'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState, type TaskTemplateContextState } from '@/pages/templates'
+import { TwoColumn } from '@/components/layout/TwoColumn'
+import { PageWithHeader } from '@/components/layout/PageWithHeader'
+import titleWrapper from '@/utils/titleWrapper'
+import { TaskTemplateDisplay } from '@/components/layout/TaskTemplateDisplay'
 import {
   useCreateMutation,
   useDeleteMutation,
   useUpdateMutation,
   useWardTaskTemplateQuery
-} from '../../../mutations/task_template_mutations'
-import { TaskTemplateDetails } from '../../../components/layout/TaskTemplateDetails'
-import { useRouter } from 'next/router'
-import type { TaskTemplateContextState } from '../../templates'
-import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState } from '../../templates'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { useWardQuery } from '../../../mutations/ward_mutations'
-import { useOrganizationQuery } from '../../../mutations/organization_mutations'
+} from '@/mutations/task_template_mutations'
+import { TaskTemplateDetails } from '@/components/layout/TaskTemplateDetails'
+import { useWardQuery } from '@/mutations/ward_mutations'
+import { useOrganizationQuery } from '@/mutations/organization_mutations'
 
 type WardTaskTemplateTranslation = {
   taskTemplates: string,

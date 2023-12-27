@@ -1,13 +1,12 @@
-import { tx, tw } from '../../twind'
-import type { MouseEventHandler, PropsWithChildren, ReactNode } from 'react'
+import { useContext, useEffect, type MouseEventHandler, type PropsWithChildren, type ReactNode } from 'react'
 import ReactDOM from 'react-dom'
-import { useContext, useEffect } from 'react'
-import { ModalContext } from './ModalRegister'
-import { Span } from '../Span'
 import { X } from 'lucide-react'
+import { Span } from '../Span'
+import { tx, tw } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
+import { ModalContext } from './ModalRegister'
 
 type ModalHeaderTranslation = {
   close: string

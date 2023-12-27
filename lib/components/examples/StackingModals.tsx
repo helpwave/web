@@ -1,5 +1,5 @@
-import { ModalRegister } from '../modals/ModalRegister'
 import { useState } from 'react'
+import { ModalRegister } from '../modals/ModalRegister'
 import { ConfirmDialog } from '../modals/ConfirmDialog'
 import { Button } from '../Button'
 import { tw } from '../../twind'

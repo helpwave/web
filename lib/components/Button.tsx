@@ -1,4 +1,3 @@
-import React from 'react'
 import type { PropsWithChildren, ButtonHTMLAttributes, MouseEventHandler } from 'react'
 import { tx } from '../twind'
 

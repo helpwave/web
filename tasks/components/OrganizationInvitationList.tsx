@@ -1,21 +1,19 @@
+import { useContext, useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { TableState } from '@helpwave/common/components/Table'
-import { defaultTableStatePagination, Table } from '@helpwave/common/components/Table'
-import { useContext, useState } from 'react'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
-import { OrganizationContext } from '../pages/organizations'
+import { validateEmail } from '@helpwave/common/util/emailValidation'
+import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import {
   useInvitationsByOrganizationQuery,
   useInviteMemberMutation, useInviteRevokeMutation
 } from '../mutations/organization_mutations'
-import { validateEmail } from '@helpwave/common/util/emailValidation'
-import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { OrganizationContext } from '../pages/organizations'
 
 type OrganizationInvitationListTranslation = {
   remove: string,

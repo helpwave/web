@@ -1,8 +1,7 @@
-import { tw, tx } from '@helpwave/common/twind'
-import type { ReactNode } from 'react'
-import { createRef, useEffect, useState } from 'react'
-import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
+import { createRef, useEffect, useState, type ReactNode } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
+import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
+import { tw, tx } from '@helpwave/common/twind'
 /**
  * Only px and %
  * e.g. 250px or 10%

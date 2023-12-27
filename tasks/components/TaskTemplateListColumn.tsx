@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TaskTemplateCard } from './cards/TaskTemplateCard'
-import { Span } from '@helpwave/common/components/Span'
-import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
-import { Edit } from 'lucide-react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
+import { tw, tx } from '@helpwave/common/twind'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { Span } from '@helpwave/common/components/Span'
+import { Edit } from 'lucide-react'
+import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
+import { TaskTemplateCard } from './cards/TaskTemplateCard'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,

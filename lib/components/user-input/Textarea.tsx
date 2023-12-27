@@ -1,6 +1,6 @@
-import { tw, tx, css } from '../../twind'
 import type { TextareaHTMLAttributes } from 'react'
 import { useState } from 'react'
+import { tw, tx, css } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
 
 type TextareaProps = {

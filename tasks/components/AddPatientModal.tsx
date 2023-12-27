@@ -1,17 +1,14 @@
+import { useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { RoomBedDropDownIds } from './RoomBedDropDown'
-import { RoomBedDropDown } from './RoomBedDropDown'
-import React, { useState } from 'react'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { Input } from '@helpwave/common/components/user-input/Input'
 import { noop } from '@helpwave/common/util/noop'
 import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '../mutations/patient_mutations'
 import { useWardQuery } from '../mutations/ward_mutations'
+import { RoomBedDropDown, type RoomBedDropDownIds } from './RoomBedDropdown'
 
 type AddPatientModalTranslation = {
   addPatient: string,

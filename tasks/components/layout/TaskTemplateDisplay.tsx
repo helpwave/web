@@ -1,14 +1,13 @@
-import { tw } from '@helpwave/common/twind'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { LucideArrowLeftRight } from 'lucide-react'
-import { TaskTemplateCard } from '../cards/TaskTemplateCard'
-import { Button } from '@helpwave/common/components/Button'
-import { AddCard } from '../cards/AddCard'
 import { useRouter } from 'next/router'
-import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
+import { tw } from '@helpwave/common/twind'
+import { LucideArrowLeftRight } from 'lucide-react'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { AddCard } from '../cards/AddCard'
+import { TaskTemplateCard } from '../cards/TaskTemplateCard'
+import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,

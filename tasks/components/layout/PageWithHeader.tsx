@@ -1,12 +1,10 @@
-import { tw } from '@helpwave/common/twind'
-import type { HeaderProps } from '../Header'
-import { Header } from '../Header'
 import type { PropsWithChildren } from 'react'
-import { UserMenu } from '../UserMenu'
-import type { Crumb } from '../BreadCrumb'
-import { BreadCrumb } from '../BreadCrumb'
-import { useAuth } from '../../hooks/useAuth'
-import { FeedbackButton } from '../FeedbackButton'
+import { tw } from '@helpwave/common/twind'
+import { UserMenu } from '@/components/UserMenu'
+import { Header, type HeaderProps } from '@/components/Header'
+import { BreadCrumb, type Crumb } from '@/components/BreadCrumb'
+import { FeedbackButton } from '@/components/FeedbackButton'
+import { useAuth } from '@/hooks/useAuth'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[]

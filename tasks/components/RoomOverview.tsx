@@ -1,13 +1,12 @@
 import { tw } from '@helpwave/common/twind'
-import { PatientCard } from './cards/PatientCard'
-import { BedCard } from './cards/BedCard'
-import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import { Span } from '@helpwave/common/components/Span'
-import type { BedMinimalDTO } from '../mutations/bed_mutations'
 import { useContext, useEffect, useRef, useState } from 'react'
+import type { RoomOverviewDTO } from '../mutations/room_mutations'
+import type { BedMinimalDTO } from '../mutations/bed_mutations'
 import { WardOverviewContext } from '../pages/ward/[id]'
-import type { PatientDTO } from '../mutations/patient_mutations'
-import { emptyPatient } from '../mutations/patient_mutations'
+import { emptyPatient, type PatientDTO } from '../mutations/patient_mutations'
+import { BedCard } from './cards/BedCard'
+import { PatientCard } from './cards/PatientCard'
 import { Droppable } from './dnd-kit/Droppable'
 import { Draggable } from './dnd-kit/Draggable'
 import { DragCard } from './cards/DragCard'
@@ -80,6 +79,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
               </Droppable>
             ) : (
               // Maybe also wrap inside the drag and drop later
+              // TODO: could we use a generic parameter here somewhere to get rid of the AnyData type?
               <Droppable key={bed.id} id={bed.id} data={{ bed, room }}>
                 {({ isOver, active }) => (!isOver ? (
                   <BedCard

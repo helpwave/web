@@ -1,12 +1,10 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { ColumnTitle } from '../ColumnTitle'
-import { NewsDisplay } from '../NewsDisplay'
-import type { LocalizedNews } from '@helpwave/common/util/news'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import { filterNews } from '@helpwave/common/util/news'
+import { filterNews, type LocalizedNews } from '@helpwave/common/util/news'
+import { NewsDisplay } from '../NewsDisplay'
+import { ColumnTitle } from '../ColumnTitle'
 
 type NewsFeedTranslation = {
   title: string,

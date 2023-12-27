@@ -1,19 +1,16 @@
+import { useContext, useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useContext, useState } from 'react'
-import { ColumnTitle } from '../ColumnTitle'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { TaskTemplateDTO } from '../../mutations/task_template_mutations'
-import { SubtaskView } from '../SubtaskView'
-import { Input } from '@helpwave/common/components/user_input/Input'
+import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
-import { Textarea } from '@helpwave/common/components/user_input/Textarea'
-import type { TaskTemplateFormType } from '../../pages/templates'
-
-import { TaskTemplateContext } from '../../pages/templates'
+import { Textarea } from '@helpwave/common/components/user-input/Textarea'
+import { SubtaskView } from '../SubtaskView'
+import { ColumnTitle } from '../ColumnTitle'
+import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import { TaskTemplateContext, type TaskTemplateFormType } from '@/pages/templates'
 
 type TaskTemplateDetailsTranslation = {
   updateTaskTemplate: string,

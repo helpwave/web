@@ -1,17 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { noop } from '@helpwave/common/components/user_input/Input'
-import { getAuthenticatedGrpcMetadata, taskTemplateService } from '../utils/grpc'
+import { noop } from '@helpwave/common/components/user-input/Input'
 import {
-  CreateTaskTemplateRequest, CreateTaskTemplateSubTaskRequest,
+  CreateTaskTemplateRequest,
+  CreateTaskTemplateSubTaskRequest,
   DeleteTaskTemplateRequest,
   DeleteTaskTemplateSubTaskRequest,
   GetAllTaskTemplatesByCreatorRequest,
   GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
-import SubTask = CreateTaskTemplateRequest.SubTask
-import type { SubTaskDTO } from './task_mutations'
 import { useRouter } from 'next/router'
-import type { TaskTemplateFormType } from '../pages/templates'
+import { getAuthenticatedGrpcMetadata, taskTemplateService } from '../utils/grpc'
+import type { SubTaskDTO } from './task_mutations'
+import type { TaskTemplateFormType } from '@/pages/templates'
+import SubTask = CreateTaskTemplateRequest.SubTask // TODO: what even is this syntax???
 
 export type TaskTemplateDTO = {
   wardId? : string,

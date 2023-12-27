@@ -1,15 +1,14 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useWardOverviewsQuery } from '../../mutations/ward_mutations'
-import { WardCard } from '../cards/WardCard'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
 import { Span } from '@helpwave/common/components/Span'
-import { InvitationBanner } from '../InvitationBanner'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { useRecentPatientsQuery } from '../../mutations/patient_mutations'
+import { WardCard } from '../cards/WardCard'
+import { InvitationBanner } from '../InvitationBanner'
 import { PatientCard } from '../cards/PatientCard'
+import { useRecentPatientsQuery } from '@/mutations/patient_mutations'
+import { useWardOverviewsQuery } from '@/mutations/ward_mutations'
 
 type DashboardDisplayTranslation = {
   patients: string,

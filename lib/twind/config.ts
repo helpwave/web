@@ -1,5 +1,4 @@
-import type { TwindConfig } from '@twind/core'
-import { defineConfig } from '@twind/core'
+import { defineConfig, type TwindConfig } from '@twind/core'
 import presetAutoprefix from '@twind/preset-autoprefix'
 import presetTailwind from '@twind/preset-tailwind'
 import presetTailwindForms from '@twind/preset-tailwind-forms'

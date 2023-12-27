@@ -1,7 +1,7 @@
+import { Input } from '../user-input/Input'
+import type { InputProps } from '../user-input/Input'
 import type { ConfirmDialogProps } from './ConfirmDialog'
 import { ConfirmDialog } from './ConfirmDialog'
-import type { InputProps } from '../user_input/Input'
-import { Input } from '../user_input/Input'
 
 export type InputModalProps = ConfirmDialogProps & {
   inputs: InputProps[]

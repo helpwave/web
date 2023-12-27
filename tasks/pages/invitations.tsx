@@ -1,11 +1,10 @@
+import Head from 'next/head'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import titleWrapper from '../utils/titleWrapper'
-import Head from 'next/head'
-import { PageWithHeader } from '../components/layout/PageWithHeader'
-import { UserInvitationList } from '../components/UserInvitationList'
+import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { PageWithHeader } from '@/components/layout/PageWithHeader'
+import { UserInvitationList } from '@/components/UserInvitationList'
+import titleWrapper from '@/utils/titleWrapper'
 
 type InvitationsPageTranslation = {
   invitations: string

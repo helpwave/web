@@ -1,5 +1,4 @@
-import React, { forwardRef } from 'react'
-import type { SVGProps } from 'react'
+import { forwardRef, type SVGProps } from 'react'
 
 export default forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(function Check(props, ref) {
   return (

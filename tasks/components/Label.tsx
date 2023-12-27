@@ -1,6 +1,6 @@
+import type { PropsWithChildren } from 'react'
 import { Span } from '@helpwave/common/components/Span'
 import { tx } from '@helpwave/common/twind'
-import type { PropsWithChildren } from 'react'
 
 type ColorTypes = 'label-1' | 'label-2' | 'label-3' | 'blue' | 'pink' | 'yellow'; // extended these colors for more variations
 

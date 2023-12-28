@@ -14,7 +14,6 @@ jobs:
     permissions:
       contents: read # this is needed by version-metadata
       pull-requests: read # this is needed by version-metadata
-      packages: write
     steps:
 
       # General actions setup (checkout, pnpm, node, caching)
@@ -43,8 +42,6 @@ jobs:
           key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-cache-
-
-
 
       # Publishing specific steps
       - name: Determine last published version of @helpwave/eslint-config
@@ -82,8 +79,6 @@ jobs:
 
       - if: steps.publish-eslint.outputs.publish == 'true'
         run: pnpm install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - if: steps.publish-eslint.outputs.publish == 'true'
         run: |

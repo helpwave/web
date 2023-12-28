@@ -18,12 +18,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup nodejs
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@helpwave"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -49,5 +51,5 @@ jobs:
       - name: Install pnpm dependencies
         run: pnpm install
 
-      - run: pnpm --filter "*" build
-      - run: pnpm --filter "*" lint
+      - run: pnpm --filter "@helpwave/*" lint
+      - run: pnpm --filter "@helpwave/*" build

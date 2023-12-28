@@ -38,7 +38,7 @@ jobs:
       IMAGE: ${{ env.IMAGE_NAME }}@${{ steps.docker-build-and-push.outputs.digest }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Lowercase github.repository_owner
         run: |

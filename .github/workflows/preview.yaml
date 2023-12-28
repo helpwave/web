@@ -15,7 +15,7 @@ jobs:
       projects: ${{ steps.changes.outputs.all_changed_files }}
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -55,7 +55,7 @@ jobs:
       FLY_ORG: ${{ vars.PREVIEW_FLY_ORGANIZATION }}
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # --copy-config uses a fly.toml from the current working directory
       # as a base configuration for the new app

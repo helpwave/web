@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          registry-url: "https://npm.pkg.github.com"
+          registry-url: "https://registry.npmjs.org"
           scope: "@helpwave"
       - name: Get pnpm cache directory
         id: pnpm-cache
@@ -51,9 +51,9 @@ jobs:
         run: |
           set +e # disable pipefail, error handling is done manually below
           # get version or fall back to `0.0.0` if the package doesn't exist (yet)
-          echo "GPR_PUBLISHED_VERSION_ESLINT=$(npm show @helpwave/eslint-config version || echo "0.0.0")" >> $GITHUB_ENV
+          echo "NPM_PUBLISHED_VERSION_ESLINT=$(npm show @helpwave/eslint-config version || echo "0.0.0")" >> $GITHUB_ENV
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - id: version-metadata-eslint
         uses: Quantco/ui-actions/version-metadata@v1.0.13
@@ -67,13 +67,13 @@ jobs:
           increment-type: minor
           relevant-files: '[".github/**", "eslint-config/**"]'
           package-json-file-path: lib/package.json
-          latest-registry-version: ${{ env.GPR_PUBLISHED_VERSION_ESLINT }}
+          latest-registry-version: ${{ env.NPM_PUBLISHED_VERSION_ESLINT }}
           version-metadata-json: ${{ steps.version-metadata-eslint.outputs.json }}
 
       - run: |
           echo "### Version metadata for @helpwave/eslint-config"
           echo ""
-          echo "gpr latest version:      $GPR_PUBLISHED_VERSION_ESLINT"
+          echo "npm latest version:      $NPM_PUBLISHED_VERSION_ESLINT"
           echo "json (version-metadata): $VERSION_METADATA_JSON_ESLINT"
           echo "json (publish)           $PUBLISH_JSON_ESLINT"
         env:
@@ -83,7 +83,7 @@ jobs:
       - if: steps.publish-eslint.outputs.publish == 'true'
         run: pnpm install
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - if: steps.publish-eslint.outputs.publish == 'true'
         run: |
@@ -91,7 +91,7 @@ jobs:
           pnpm --filter @helpwave/eslint-config exec npm version --git-tag-version false --allow-same-version true ${{ steps.publish-eslint.outputs.version }}
           pnpm publish --filter @helpwave/eslint-config --no-git-checks
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create action summary
         run: |

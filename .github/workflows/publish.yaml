@@ -84,7 +84,7 @@ jobs:
         run: |
           echo "Publishing version ${{ steps.publish-eslint.outputs.version }}"
           pnpm --filter @helpwave/eslint-config exec npm version --git-tag-version false --allow-same-version true ${{ steps.publish-eslint.outputs.version }}
-          pnpm publish --filter @helpwave/eslint-config --no-git-checks
+          pnpm publish --filter @helpwave/eslint-config --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useRouter } from 'next/router'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState, type TaskTemplateContextState } from '@/pages/templates'
 import { TwoColumn } from '@/components/layout/TwoColumn'
@@ -18,6 +17,7 @@ import {
 import { TaskTemplateDetails } from '@/components/layout/TaskTemplateDetails'
 import { useWardQuery } from '@/mutations/ward_mutations'
 import { useOrganizationQuery } from '@/mutations/organization_mutations'
+import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardTaskTemplateTranslation = {
   taskTemplates: string,
@@ -43,16 +43,15 @@ const defaultWardTaskTemplateTranslations = {
 
 const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
-  const router = useRouter()
-  const { id: wardId, templateId } = router.query
+  const { wardId, templateId } = useRouteParameters<'wardId', 'templateId'>()
   const [usedQueryParam, setUsedQueryParam] = useState(false)
-  const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId?.toString())
-  const { data: ward } = useWardQuery(wardId?.toString() as string)
+  const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId)
+  const { data: ward } = useWardQuery(wardId)
   const { data: organization } = useOrganizationQuery(ward?.organizationId)
 
   const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
-  const createMutation = useCreateMutation('wardTaskTemplates', taskTemplate =>
+  const createMutation = useCreateMutation(wardId, 'wardTaskTemplates', taskTemplate =>
     setContextState({
       ...contextState,
       hasChanges: false,
@@ -117,13 +116,14 @@ const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTas
                       ...contextState,
                       template: taskTemplate ?? {
                         ...emptyTaskTemplate,
-                        wardId: wardId as string | undefined
+                        wardId
                       },
                       hasChanges: false,
                       isValid: taskTemplate !== undefined,
                       deletedSubtaskIds: []
                     })
                   }}
+                  wardId={wardId}
                   selectedId={contextState.template.id}
                   taskTemplates={data}
                   variant="wardTemplates"

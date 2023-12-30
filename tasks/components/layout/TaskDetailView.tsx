@@ -276,6 +276,7 @@ export type TaskDetailViewProps = {
    * A not set or empty taskId is seen as creating a new task
    */
   taskId?: string,
+  wardId: string,
   patientId: string,
   onClose: () => void,
   initialStatus?: TaskStatus
@@ -288,15 +289,15 @@ export const TaskDetailView = ({
   language,
   patientId,
   taskId = '',
+  wardId,
   initialStatus,
   onClose
 }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const router = useRouter()
-  const wardId = router.query.id
   const { user } = useAuth()
-  const ward = useWardQuery(wardId as string).data
+  const ward = useWardQuery(wardId).data
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
@@ -343,7 +344,7 @@ export const TaskDetailView = ({
     data: wardTaskTemplatesData,
     isLoading: wardTaskTemplatesIsLoading,
     error: wardTaskTemplatesError
-  } = useWardTaskTemplateQuery(wardId?.toString())
+  } = useWardTaskTemplateQuery(wardId)
 
   const taskNameMinimumLength = 1
   const isValid = task.name.length >= taskNameMinimumLength

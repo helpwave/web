@@ -6,7 +6,7 @@ import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/u
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { OrganizationOverviewContext } from '../pages/organizations/[id]'
+import { OrganizationOverviewContext } from '../pages/organizations/[organizationId]'
 import { useWardTaskTemplateQuery } from '../mutations/task_template_mutations'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 

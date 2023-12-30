@@ -8,13 +8,12 @@ import { Input } from '@helpwave/common/components/user-input/Input'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
-import { useRouter } from 'next/router'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Label } from '../Label'
 import { Draggable, Droppable } from '../dnd-kit-instances/patients'
 import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
-import { WardOverviewContext } from '@/pages/ward/[id]'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
@@ -89,6 +88,7 @@ export const defaultPatientListOpenedSections: PatientListOpenedSectionsType = {
 
 export type PatientListProps = {
   onDischarge?: (patient: PatientDTO) => void,
+  wardId: string,
   initialOpenedSections?: PatientListOpenedSectionsType,
   width?: number
 }
@@ -98,14 +98,12 @@ export type PatientListProps = {
  */
 export const PatientList = ({
   language,
+  wardId,
   initialOpenedSections = defaultPatientListOpenedSections
 }: PropsWithLanguage<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(language, defaultPatientListTranslations)
   const [search, setSearch] = useState('')
-  const router = useRouter()
-  const { id } = router.query
-  const wardId = id as string
-  const { data: ward } = useWardQuery(wardId)
+  const ward = useWardQuery(wardId).data
   const {
     state: context,
     updateContext

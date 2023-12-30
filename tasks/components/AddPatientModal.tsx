@@ -8,7 +8,7 @@ import { Input } from '@helpwave/common/components/user-input/Input'
 import { noop } from '@helpwave/common/util/noop'
 import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '../mutations/patient_mutations'
 import { useWardQuery } from '../mutations/ward_mutations'
-import { RoomBedDropDown, type RoomBedDropDownIds } from './RoomBedDropdown'
+import { RoomBedDropdown, type RoomBedDropdownIds } from './RoomBedDropdown'
 
 type AddPatientModalTranslation = {
   addPatient: string,
@@ -47,7 +47,7 @@ export const AddPatientModal = ({
   ...modalProps
 }: PropsWithLanguage<AddPatientModalTranslation, AddPatientModalProps>) => {
   const translation = useTranslation(language, defaultAddPatientModalTranslation)
-  const [dropdownId, setDropdownId] = useState<RoomBedDropDownIds>({})
+  const [dropdownId, setDropdownId] = useState<RoomBedDropdownIds>({})
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)
   const assignBedMutation = useAssignBedMutation()
@@ -80,17 +80,17 @@ export const AddPatientModal = ({
           <Span type="labelMedium">{translation.name}</Span>
           <Input
             value={patientName}
-            onChange={text => {
+            onChange={(text) => {
               setTouched(true)
               setPatientName(text)
             }}
           />
           {isShowingError && <Span type="formError">{translation.minimumLength(minimumNameLength)}</Span>}
         </div>
-        <RoomBedDropDown
+        <RoomBedDropdown
           initialRoomAndBed={dropdownId}
           wardId={wardId}
-          onChange={roomBedDropDownIds => setDropdownId(roomBedDropDownIds)}
+          onChange={(roomBedDropdownIds) => setDropdownId(roomBedDropdownIds)}
           isClearable={true}
         />
         <Span className={tx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</Span>

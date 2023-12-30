@@ -1,13 +1,13 @@
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { OrganizationDisplay } from '@/components/layout/OrganizationDisplay'
 import { OrganizationDetail } from '@/components/layout/OrganizationDetails'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
+import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type OrganizationsPageTranslation = {
   organizations: string
@@ -45,8 +45,7 @@ export const OrganizationContext = createContext<OrganizationContextType>({
  */
 const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsPageTranslation>) => {
   const translation = useTranslation(language, defaultOrganizationsPageTranslation)
-  const router = useRouter()
-  const { organizationId } = router.query
+  const organizationId = useRouteParameters<never, 'organizationId'>().organizationId
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const [context, setContext] = useState<OrganizationContextState>(emptyOrganizationContextState)
 

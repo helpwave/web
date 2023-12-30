@@ -3,7 +3,7 @@ import Head from 'next/head'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { tw } from '@twind/core' // TODO: is this correct?
+import { tw } from '@helpwave/common/twind'
 import { localizedNewsSchema, type LocalizedNews } from '@helpwave/common/util/news'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { TwoColumn } from '@/components/layout/TwoColumn'

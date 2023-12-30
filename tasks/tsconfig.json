@@ -19,7 +19,7 @@
     "incremental": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    // "noPropertyAccessFromIndexSignature": true, // TODO: reenable later (didn't know that tsconfig.json supported comments lol)
+    "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "plugins": [
       {

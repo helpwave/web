@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
@@ -19,7 +18,7 @@ import {
   useWardDetailsQuery,
   type WardDetailDTO
 } from '@/mutations/ward_mutations'
-import { OrganizationOverviewContext } from '@/pages/organizations/[id]'
+import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 
 type WardDetailTranslation = {
   updateWard: string,
@@ -65,6 +64,7 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
 }
 
 export type WardDetailProps = {
+  organizationId: string,
   ward?: WardDetailDTO,
   width?: number
 }
@@ -75,15 +75,13 @@ export type WardDetailProps = {
  */
 export const WardDetail = ({
   language,
+  organizationId,
   ward,
   width
 }: PropsWithLanguage<WardDetailTranslation, WardDetailProps>) => {
   const translation = useTranslation(language, defaultWardDetailTranslations)
 
   const context = useContext(OrganizationOverviewContext)
-  const router = useRouter()
-  const { id } = router.query
-  const organizationId = id as string
   const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organizationId)
 
   const isCreatingNewWard = context.state.wardId === ''

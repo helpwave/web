@@ -1,7 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
@@ -26,6 +25,7 @@ import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations
 import { PatientCard } from '@/components/cards/PatientCard'
 import { useWardQuery } from '@/mutations/ward_mutations'
 import { useOrganizationQuery } from '@/mutations/organization_mutations'
+import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -85,13 +85,12 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
 
 const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
-  const router = useRouter()
   // TODO: could we differentiate between the two using two different states?
   const [draggedPatient, setDraggedPatient] = useState<{
     patient?: PatientMinimalDTO,
     bed?: BedWithPatientWithTasksNumberDTO
   }>()
-  const wardId = router.query.id as string
+  const wardId = useRouteParameters<'wardId'>().wardId
   const ward = useWardQuery(wardId).data
 
   // TODO: is using '' as an org id a good idea?
@@ -300,12 +299,13 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
             left={() => (<WardRoomList key={wardId} />)}
             right={width =>
               isShowingPatientList ? (
-                <PatientList width={width} />
+                <PatientList width={width} wardId={wardId} />
               ) :
                 contextState.patientId && (
                   <div>
                     <PatientDetail
                       key={contextState.patient?.id}
+                      wardId={wardId}
                       width={width}
                     />
                   </div>

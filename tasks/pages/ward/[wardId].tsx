@@ -209,18 +209,24 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     setContextState({ wardId })
   }, [wardId])
 
-  const createMutation = usePatientCreateMutation(organizationId, patient => {
-    const updatedContext = contextState
-    updatedContext.patient = patient
+  const createPatientMutation = usePatientCreateMutation(organizationId)
 
-    if (contextState.bedId) {
-      assignBedMutation.mutate({
-        id: contextState.bedId,
-        patientId: patient.id
+  // TOOD: can we somehow assert that the patient is not undefined here?
+  const createPatient = () => contextState.patient && createPatientMutation.mutateAsync(contextState.patient)
+    .then((patient) => {
+      // TODO: is it a good idea to have this much state in one object?, also this shouldn't be called context I think
+      setContextState({
+        ...contextState,
+        patient,
       })
-    }
-    setContextState(updatedContext)
-  })
+
+      if (contextState.bedId) {
+        return assignBedMutation.mutateAsync({
+          id: contextState.bedId,
+          patientId: patient.id
+        })
+      }
+    })
 
   return (
     <PageWithHeader
@@ -248,7 +254,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         titleText={translation.addPatientDialogTitle}
         onConfirm={() => {
           if (contextState.patient) {
-            createMutation.mutate(contextState.patient)
+            createPatient()
           } else {
             setContextState({
               ...emptyWardOverviewContextState,

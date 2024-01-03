@@ -51,13 +51,9 @@ export const AddPatientModal = ({
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)
   const assignBedMutation = useAssignBedMutation()
-  const { data: ward } = useWardQuery(wardId)
+  const ward = useWardQuery(wardId).data
   const organisationId = ward?.organizationId ?? ''
-  const createPatientMutation = usePatientCreateMutation(organisationId, patient => {
-    if (dropdownId.bedId) {
-      assignBedMutation.mutate({ id: dropdownId.bedId, patientId: patient.id })
-    }
-  })
+  const createPatientMutation = usePatientCreateMutation(organisationId)
 
   const minimumNameLength = 4
   const trimmedPatientName = patientName.trim()
@@ -65,12 +61,19 @@ export const AddPatientModal = ({
   const validRoomAndBed = dropdownId.roomId && dropdownId.bedId
   const isShowingError = touched && !validPatientName
 
+  const createPatient = () => createPatientMutation.mutateAsync({ ...emptyPatient, name: trimmedPatientName })
+    .then((patient) => {
+      if (dropdownId.bedId) {
+        return assignBedMutation.mutateAsync({ id: dropdownId.bedId, patientId: patient.id })
+      }
+    })
+
   return (
     <ConfirmDialog
       titleText={titleText ?? translation.addPatient}
       onConfirm={() => {
         onConfirm()
-        createPatientMutation.mutate({ ...emptyPatient, name: trimmedPatientName })
+        createPatient()
       }}
       buttonOverwrites={[{}, {}, { disabled: !validPatientName }]}
       {...modalProps}

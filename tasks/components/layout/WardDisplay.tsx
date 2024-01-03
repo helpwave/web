@@ -68,7 +68,7 @@ export const WardDisplay = ({
                   ...context.state,
                   wardId: ward.id
                 })}
-                onTileClick={async () => await router.push(`/ward/${ward.id}`)}
+                onTileClick={() => router.push(`/ward/${ward.id}`)}
               />
             ))}
             <AddCard

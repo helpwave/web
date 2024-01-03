@@ -74,7 +74,7 @@ export const PatientDetail = ({
 
   const context = useContext(WardOverviewContext)
 
-  const updateMutation = usePatientUpdateMutation(() => undefined)
+  const updateMutation = usePatientUpdateMutation()
   const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardId: context.state.wardId }))
   const unassignMutation = useUnassignMutation(() => context.updateContext({ wardId: context.state.wardId }))
   const { data, isError, isLoading } = usePatientDetailsQuery(context.state.patientId)

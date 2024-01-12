@@ -74,6 +74,7 @@ const teamData = {
       socials: [
         { name: 'mail', url: 'mailto:max.baumann@helpwave.de' },
         { name: 'website', url: 'https://bmn.dev' },
+        { name: 'github', url: 'https://github.com/fosefx' },
         { name: 'linkedin', url: 'https://www.linkedin.com/in/max-bmn/' },
       ]
     },
@@ -85,6 +86,7 @@ const teamData = {
       socials: [
         { name: 'linkedin', url: 'https://www.linkedin.com/in/florian-s-599819211/' },
         { name: 'mail', url: 'mailto:florian.sabonchi@helpwave.de' },
+        { name: 'medium', url: 'https://medium.com/@sabonchi' },
         { name: 'github', url: 'https://github.com/florian-sabonchi' },
       ]
     },
@@ -96,6 +98,7 @@ const teamData = {
       socials: [
         { name: 'mail', url: 'mailto:paul.kalhorn@helpwave.de' },
         { name: 'website', url: 'https://kalhorn.io/' },
+        { name: 'github', url: 'https://github.com/PaulKalho' },
         { name: 'linkedin', url: 'https://www.linkedin.com/in/paul-kalhorn-7b2343228/' },
       ]
     },

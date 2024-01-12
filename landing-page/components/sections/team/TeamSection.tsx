@@ -21,7 +21,7 @@ const teamData = {
       name: 'Felix Evers',
       role: 'Chief Executive Officer',
       pictureURL: pictureURL('felix_evers'),
-      tags: ['strategic', 'management', 'business'],
+      tags: ['strategic', 'management', 'innovation'],
       socials: [
         { name: 'linkedin', url: 'https://www.linkedin.com/in/f-evers/' },
         { name: 'mail', url: 'mailto:felix.evers@helpwave.de' },
@@ -34,7 +34,7 @@ const teamData = {
       title: 'Dr. med.',
       role: 'Chief Medical Officer',
       pictureURL: pictureURL('christian_porschen'),
-      tags: ['socialmedia', 'medicine', 'doctor'],
+      tags: ['ai', 'science', 'doctor'],
       socials: [
         { name: 'linkedin', url: 'https://www.linkedin.com/in/cpors/' },
         { name: 'mail', url: 'mailto:christian.porschen@helpwave.de' },
@@ -42,26 +42,28 @@ const teamData = {
       ]
     },
   ],
+  'management': [
+    {
+      name: 'Yvonne Steernberg',
+      title: 'Dr. phil., Dipl-Betriebswirtin',
+      role: 'Scientific Project Manager',
+      pictureURL: pictureURL('yvonne_steernberg'),
+      tags: ['funding', 'sales', 'hospitalmanagement'],
+      socials: [
+        { name: 'linkedin', url: 'https://www.linkedin.com/in/dr-phil-yvonne-m-a-steernberg-180786137/' },
+        { name: 'mail', url: 'mailto:yvonne.steernberg.de' },
+      ]
+    },
+  ],
   'development': [
     {
       name: 'Felix Thape',
-      role: 'fullstack developer',
+      role: 'fullstack wizard',
       pictureURL: pictureURL('felix_thape'),
       tags: ['maintainer', 'web', 'mobile'],
       socials: [
         { name: 'mail', url: 'mailto:felix.thape@helpwave.de' },
         { name: 'github', url: 'https://github.com/DasProffi' },
-      ]
-    },
-    {
-      name: 'Florian Sabonchi',
-      role: 'fullstack developer',
-      pictureURL: pictureURL('florian_sabonchi'),
-      tags: ['flutter', 'react', 'go'],
-      socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/florian-s-599819211/' },
-        { name: 'mail', url: 'mailto:florian.sabonchi@helpwave.de' },
-        { name: 'github', url: 'https://github.com/florian-sabonchi' },
       ]
     },
     {
@@ -73,6 +75,28 @@ const teamData = {
         { name: 'mail', url: 'mailto:max.baumann@helpwave.de' },
         { name: 'website', url: 'https://bmn.dev' },
         { name: 'linkedin', url: 'https://www.linkedin.com/in/max-bmn/' },
+      ]
+    },
+    {
+      name: 'Florian Sabonchi',
+      role: 'fullstack sorcerer',
+      pictureURL: pictureURL('florian_sabonchi'),
+      tags: ['flutter', 'react', 'go'],
+      socials: [
+        { name: 'linkedin', url: 'https://www.linkedin.com/in/florian-s-599819211/' },
+        { name: 'mail', url: 'mailto:florian.sabonchi@helpwave.de' },
+        { name: 'github', url: 'https://github.com/florian-sabonchi' },
+      ]
+    },
+    {
+      name: 'Paul Kalhorn',
+      role: 'fullstack jedi',
+      tags: ['microservices', 'web', 'grpc'],
+      pictureURL: pictureURL('paul_kalhorn'),
+      socials: [
+        { name: 'mail', url: 'mailto:paul.kalhorn@helpwave.de' },
+        { name: 'website', url: 'https://kalhorn.io/' },
+        { name: 'linkedin', url: 'https://www.linkedin.com/in/paul-kalhorn-7b2343228/' },
       ]
     },
     {
@@ -98,14 +122,15 @@ const teamData = {
       ]
     },
   ],
-
   'medical': [
     {
       name: 'Ludwig Maidowski',
       role: 'medical professional & legal',
       tags: ['law', 'doctor', 'product'],
+      pictureURL: pictureURL('ludwig_maidowski'),
       socials: [
         { name: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
+        { name: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
       ]
     },
     {
@@ -129,18 +154,7 @@ const teamData = {
       ]
     },
   ],
-  'sales & marketing': [
-    {
-      name: 'Yvonne Steernberg',
-      title: 'Dr. phil., Dipl-Betriebswirtin',
-      role: 'Lead Customer Support',
-      pictureURL: pictureURL('yvonne_steernberg'),
-      tags: ['sales', 'marketing', 'hospitalmanagement'],
-      socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/dr-phil-yvonne-m-a-steernberg-180786137/' },
-        { name: 'mail', url: 'mailto:yvonne.steernberg.de' },
-      ]
-    },
+  'support': [
     {
       name: 'Yari Hernandez',
       role: 'sales genius',

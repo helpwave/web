@@ -53,13 +53,13 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - id: version-metadata-eslint
-        uses: Quantco/ui-actions/version-metadata@v1.0.13
+        uses: Quantco/ui-actions/version-metadata@v1.0.15
         with:
           file: "eslint-config/package.json"
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - id: publish-eslint
-        uses: Quantco/ui-actions/publish@v1.0.13
+        uses: Quantco/ui-actions/publish@v1.0.15
         with:
           increment-type: minor
           relevant-files: '[".github/**", "eslint-config/**"]'

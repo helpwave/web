@@ -62,7 +62,7 @@ export type PatientDetailProps = {
 }
 
 /**
- * The right side of the ward/[id].tsx page showing the detailed information about the patient
+ * The right side of the ward/[wardId].tsx page showing the detailed information about the patient
  */
 export const PatientDetail = ({
   language,

@@ -33,7 +33,7 @@ export type WardDisplayProps = {
 }
 
 /**
- * The left side of the organizations/[id].tsx page showing the wards within the organizations
+ * The left side of the organizations/[organizationId].tsx page showing the wards within the organizations
  */
 export const WardDisplay = ({
   language,

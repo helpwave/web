@@ -70,7 +70,7 @@ export type WardDetailProps = {
 }
 
 /**
- * The right side of the organizations/[id].tsx page showing the ward. This screen also affords to edit
+ * The right side of the organizations/[organizationId].tsx page showing the ward. This screen also affords to edit
  * the Ward
  */
 export const WardDetail = ({

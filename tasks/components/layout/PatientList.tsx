@@ -94,7 +94,7 @@ export type PatientListProps = {
 }
 
 /**
- * The right side of the ward/[id].tsx page showing the detailed information about the patients in the ward
+ * The right side of the ward/[wardId].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
   language,
@@ -112,7 +112,7 @@ export const PatientList = ({
     data,
     isLoading,
     isError
-  } = usePatientListQuery(ward?.organizationId, wardId)
+  } = usePatientListQuery(ward?.organizationId, wardId) // TODO: is this the right organizationId?; related: https://github.com/helpwave/web/issues/793
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const deletePatientMutation = useDeletePatientMutation()

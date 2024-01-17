@@ -14,7 +14,7 @@ import {
   type TableState
 } from '@helpwave/common/components/Table'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { OrganizationOverviewContext } from '../pages/organizations/[id]'
+import { OrganizationOverviewContext } from '../pages/organizations/[organizationId]'
 import {
   emptyRoomOverview,
   useRoomCreateMutation,
@@ -78,7 +78,7 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
 }
 
 export type RoomListProps = {
-  rooms?: RoomOverviewDTO[], // TODO replace with more optimized RoonDTO
+  rooms?: RoomOverviewDTO[], // TODO replace with more optimized RoomDTO
   roomsPerPage?: number
 }
 

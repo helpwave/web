@@ -1,13 +1,12 @@
-import type { DragEndEvent, DragOverEvent, DragStartEvent, DropAnimation } from '@dnd-kit/core'
 import {
   closestCorners,
   defaultDropAnimation,
-  DndContext,
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors
+  useSensors,
+  type DropAnimation
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
@@ -17,6 +16,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
+import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent } from '@/components/dnd-kit-instances/tasks'
 import {
   emptySortedTasks,
   useTasksByPatientSortedByStatusQuery,

@@ -212,7 +212,7 @@ export const useInvitationsByOrganizationQuery = (organizationId: string | undef
   })
 }
 
-export const useOrganizationCreateMutation = (callback: (organization: OrganizationMinimalDTO) => void = noop) => {
+export const useOrganizationCreateMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organization: OrganizationMinimalDTO) => {
@@ -224,12 +224,10 @@ export const useOrganizationCreateMutation = (callback: (organization: Organizat
       const res = await organizationService.createOrganization(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
-        console.error('error in OrganizationCreate')
+        throw new Error('error in OrganizationCreate')
       }
 
-      const newOrganization: OrganizationMinimalDTO = { ...organization, id: res.getId() }
-      callback(newOrganization)
-      return newOrganization
+      return { ...organization, id: res.getId() }
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [organizationQueryKey] }).then()
@@ -237,7 +235,7 @@ export const useOrganizationCreateMutation = (callback: (organization: Organizat
   })
 }
 
-export const useOrganizationUpdateMutation = (callback: (organization: OrganizationMinimalDTO) => void = noop) => {
+export const useOrganizationUpdateMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organization: OrganizationMinimalDTO) => {
@@ -251,12 +249,10 @@ export const useOrganizationUpdateMutation = (callback: (organization: Organizat
       const res = await organizationService.updateOrganization(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
-        console.error('error in OrganizationUpdate')
+        throw new Error('error in OrganizationUpdate')
       }
 
-      const newOrganization: OrganizationMinimalDTO = { ...organization }
-      callback(newOrganization)
-      return newOrganization
+      return organization
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [organizationQueryKey] }).then()
@@ -264,7 +260,7 @@ export const useOrganizationUpdateMutation = (callback: (organization: Organizat
   })
 }
 
-export const useOrganizationDeleteMutation = (callback: () => void = noop) => {
+export const useOrganizationDeleteMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organizationId: string) => {
@@ -272,12 +268,13 @@ export const useOrganizationDeleteMutation = (callback: () => void = noop) => {
       req.setId(organizationId)
       const res = await organizationService.deleteOrganization(req, getAuthenticatedGrpcMetadata())
 
-      if (!res.toObject()) {
-        console.error('error in OrganizationDelete')
+      const obj = res.toObject() // TODO: what is the type of this?
+
+      if (!obj) {
+        throw new Error('error in OrganizationDelete')
       }
 
-      callback()
-      return res.toObject()
+      return obj
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [organizationQueryKey] }).then()
@@ -285,7 +282,7 @@ export const useOrganizationDeleteMutation = (callback: () => void = noop) => {
   })
 }
 
-export const useInviteDeclineMutation = (callback: () => void = noop) => {
+export const useInviteDeclineMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (inviteId: string) => {
@@ -293,12 +290,13 @@ export const useInviteDeclineMutation = (callback: () => void = noop) => {
       req.setInvitationId(inviteId)
       const res = await organizationService.declineInvitation(req, getAuthenticatedGrpcMetadata())
 
-      if (!res.toObject()) {
-        console.error('error in InviteDecline')
+      const obj = res.toObject() // TODO: what is the type of this?
+
+      if (!obj) {
+        throw new Error('error in InviteDecline')
       }
 
-      callback()
-      return res.toObject()
+      return obj
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [invitationsQueryKey] }).then()
@@ -306,7 +304,7 @@ export const useInviteDeclineMutation = (callback: () => void = noop) => {
   })
 }
 
-export const useInviteRevokeMutation = (callback: () => void = noop) => {
+export const useInviteRevokeMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (inviteId: string) => {
@@ -314,12 +312,13 @@ export const useInviteRevokeMutation = (callback: () => void = noop) => {
       req.setInvitationId(inviteId)
       const res = await organizationService.revokeInvitation(req, getAuthenticatedGrpcMetadata())
 
-      if (!res.toObject()) {
-        console.error('error in InviteDecline')
+      const obj = res.toObject() // TODO: what is the type of this?
+
+      if (!obj) {
+        throw new Error('error in InviteDecline')
       }
 
-      callback()
-      return res.toObject()
+      return obj
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [invitationsQueryKey] }).then()
@@ -346,7 +345,7 @@ export const useInviteMemberMutation = (organizationId: string, callback: (invit
       const res = await organizationService.inviteMember(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getId()) {
-        console.error('InviteMember failed')
+        throw new Error('InviteMember failed')
       }
 
       callback(res.getId())
@@ -358,20 +357,20 @@ export const useInviteMemberMutation = (organizationId: string, callback: (invit
   })
 }
 
-export const useInviteAcceptMutation = (callback: () => void = noop) => {
+export const useInviteAcceptMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (inviteId: string) => {
       const req = new AcceptInvitationRequest()
       req.setInvitationId(inviteId)
       const res = await organizationService.acceptInvitation(req, getAuthenticatedGrpcMetadata())
+      const obj = res.toObject()
 
-      if (!res.toObject()) {
-        console.error('error in InviteAccept')
+      if (!obj) {
+        throw new Error('error in InviteAccept')
       }
 
-      callback()
-      return res.toObject()
+      return obj
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [invitationsQueryKey] }).then()
@@ -379,7 +378,7 @@ export const useInviteAcceptMutation = (callback: () => void = noop) => {
   })
 }
 
-export const useAddMemberMutation = (callback: () => void, organizationId: string) => {
+export const useAddMemberMutation = (organizationId: string) => { // TODO: unused?
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (userId: string) => {
@@ -388,13 +387,13 @@ export const useAddMemberMutation = (callback: () => void, organizationId: strin
       req.setUserId(userId)
 
       const res = await organizationService.addMember(req, getAuthenticatedGrpcMetadata())
+      const obj = res.toObject() // TODO: what is the type of this?
 
-      if (!res.toObject()) {
-        // TODO some check whether request was successful
-        console.error('DeclineInvitation failed')
+      if (!obj) {
+        throw new Error('DeclineInvitation failed')
       }
-      callback()
-      return res.toObject()
+
+      return obj
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [invitationsQueryKey] }).then()
@@ -402,7 +401,7 @@ export const useAddMemberMutation = (callback: () => void, organizationId: strin
   })
 }
 
-export const useRemoveMemberMutation = (organizationId: string, callback: () => void = noop) => {
+export const useRemoveMemberMutation = (organizationId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (userId: string) => {
@@ -411,13 +410,13 @@ export const useRemoveMemberMutation = (organizationId: string, callback: () => 
       req.setUserId(userId)
 
       const res = await organizationService.removeMember(req, getAuthenticatedGrpcMetadata())
+      const obj = res.toObject() // TODO: what is the type of this?
 
-      if (!res.toObject()) {
-        // TODO some check whether request was successful
-        console.error('DeclineInvitation failed')
+      if (!obj) {
+        throw new Error('DeclineInvitation failed')
       }
-      callback()
-      return res.toObject()
+
+      return obj
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [invitationsQueryKey] }).then()

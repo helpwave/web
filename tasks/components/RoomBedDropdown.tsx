@@ -10,7 +10,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { Button } from '@helpwave/common/components/Button'
 import { usePatientAssignmentByWardQuery } from '@/mutations/patient_mutations'
 
-type RoomBedDropDownTranslation = {
+type RoomBedDropdownTranslation = {
   saved: string,
   unsaved: string,
   valid: string,
@@ -21,7 +21,7 @@ type RoomBedDropDownTranslation = {
   submitting: string
 }
 
-const defaultRoomBedDropDownTranslation: Record<Languages, RoomBedDropDownTranslation> = {
+const defaultRoomBedDropdownTranslation: Record<Languages, RoomBedDropdownTranslation> = {
   en: {
     saved: 'saved',
     unsaved: 'not saved',
@@ -45,7 +45,7 @@ const defaultRoomBedDropDownTranslation: Record<Languages, RoomBedDropDownTransl
   }
 }
 
-export type RoomBedDropDownIds = {
+export type RoomBedDropdownIds = {
   /**
    * undefined value here means select a room and bed
    */
@@ -53,31 +53,31 @@ export type RoomBedDropDownIds = {
   bedId?: string
 }
 
-export type RoomBedDropDownProps = {
-  initialRoomAndBed: RoomBedDropDownIds,
+export type RoomBedDropdownProps = {
+  initialRoomAndBed: RoomBedDropdownIds,
   wardId: string,
   /**
    * Only triggers on valid input
    */
-  onChange?: (roomBedDropDownIds:RoomBedDropDownIds) => void,
+  onChange?: (roomBedDropdownIds:RoomBedDropdownIds) => void,
   isSubmitting?: boolean,
   isClearable?: boolean
 }
 
 /**
- * A DropDown to move a patient to a new bed
+ * A Dropdown to move a patient to a new bed
  */
-export const RoomBedDropDown = ({
+export const RoomBedDropdown = ({
   language,
   initialRoomAndBed,
   wardId,
   isSubmitting = false,
   isClearable = false,
   onChange = noop
-}: PropsWithLanguage<RoomBedDropDownTranslation, RoomBedDropDownProps>) => {
-  const translation = useTranslation(language, defaultRoomBedDropDownTranslation)
+}: PropsWithLanguage<RoomBedDropdownTranslation, RoomBedDropdownProps>) => {
+  const translation = useTranslation(language, defaultRoomBedDropdownTranslation)
   const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardId)
-  const [currentSelection, setCurrentSelection] = useState<RoomBedDropDownIds>({ ...initialRoomAndBed })
+  const [currentSelection, setCurrentSelection] = useState<RoomBedDropdownIds>({ ...initialRoomAndBed })
   const ref = useRef<HTMLDivElement>(null)
   const currentRoom = data?.find(value => value.id === currentSelection.roomId)
   const [touched, setTouched] = useState(false)

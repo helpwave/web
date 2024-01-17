@@ -3,14 +3,14 @@ import { RoomServicePromiseClient } from '@helpwave/proto-ts/proto/services/task
 import { BedServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_grpc_web_pb'
 import { PatientServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_grpc_web_pb'
 import Cookies from 'js-cookie'
-import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
 import {
   TaskTemplateServicePromiseClient
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_grpc_web_pb'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_grpc_web_pb'
 import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
-import { getConfig } from './config'
 import { UserServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/user_svc_grpc_web_pb';
+import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
+import { getConfig } from './config'
 
 const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
 const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`

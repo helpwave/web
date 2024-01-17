@@ -1,12 +1,11 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
-import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
+import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit-instances/patients'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PatientDetail } from '@/components/layout/PatientDetails'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -26,6 +25,7 @@ import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations
 import { PatientCard } from '@/components/cards/PatientCard'
 import { useWardQuery } from '@/mutations/ward_mutations'
 import { useOrganizationQuery } from '@/mutations/organization_mutations'
+import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -85,15 +85,13 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
 
 const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
-  const router = useRouter()
   // TODO: could we differentiate between the two using two different states?
   const [draggedPatient, setDraggedPatient] = useState<{
     patient?: PatientMinimalDTO,
     bed?: BedWithPatientWithTasksNumberDTO
   }>()
-  const { id } = router.query
-  const wardId = id as string
-  const { data: ward } = useWardQuery(wardId)
+  const wardId = useRouteParameters<'wardId'>().wardId
+  const ward = useWardQuery(wardId).data
 
   // TODO: is using '' as an org id a good idea?
   const organizationId = ward?.organizationId ?? ''
@@ -143,17 +141,17 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
   )
 
   const handleDragStart = useCallback(({ active }: DragStartEvent) => {
+    const source = active.data.current
+
     // TODO: I am unfamiliar with the code base and types, is this a good way of dealing with this?
-    if (!active.data.current) {
+    if (!source) {
       return
     }
 
-    const data = active.data.current as { bed: BedWithPatientWithTasksNumberDTO } | PatientMinimalDTO
-
-    if ('bed' in data) {
-      setDraggedPatient({ bed: { ...(data.bed) } })
+    if ('bed' in source) {
+      setDraggedPatient({ bed: source.bed })
     } else {
-      setDraggedPatient({ patient: data })
+      setDraggedPatient({ patient: source.patient })
     }
   }, [])
 
@@ -167,30 +165,30 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
       active,
       over
     } = event
-    const overData = over?.data.current
+    const source = active.data.current
+    const target = over?.data.current
+
     const patientId = draggedPatient?.patient?.id ?? draggedPatient?.bed?.patient?.id ?? ''
 
-    if (overData && active.data.current) {
-      if (overData.patientListSection) {
-        // Moving in patientlist
-        if (overData.patientListSection === 'unassigned') {
-          if (active.data.current.discharged) {
+    if (source && target) {
+      if ('patientListSection' in target) {
+        // Moving inside of patient list
+        if (target.patientListSection === 'unassigned') {
+          if ('discharged' in source && source.discharged) {
             readmitPatientMutation.mutate(patientId)
-          } else {
-            unassignMutation.mutate(patientId)
           }
-          unassignMutation.mutate(patientId)
-        } else if (overData.patientListSection === 'discharged') {
+          unassignMutation.mutate(patientId) // TODO: is this correct?, doing two mutations for a patient if previously discharged?
+        } else if (target.patientListSection === 'discharged') { // TODO: can we unify the formats for patients PREVIOUSLY having been discharged and patients BEING discharged? (boolean vs.patientListSection)
           dischargeMutation.mutate(patientId)
         }
       } else {
         // Moving on bed cards
-        setDraggingRoomId(overData.room.id)
-        if (active.data.current.discharged) {
-          readmitAndAssignPatient(patientId, overData.bed.id).then()
+        setDraggingRoomId(target.room.id)
+        if ('discharged' in source && source.discharged) {
+          readmitAndAssignPatient(patientId, target.bed.id).then()
         } else {
           assignBedMutation.mutate({
-            id: overData.bed.id,
+            id: target.bed.id,
             patientId
           })
         }
@@ -211,18 +209,24 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
     setContextState({ wardId })
   }, [wardId])
 
-  const createMutation = usePatientCreateMutation(organizationId, patient => {
-    const updatedContext = contextState
-    updatedContext.patient = patient
+  const createPatientMutation = usePatientCreateMutation(organizationId)
 
-    if (contextState.bedId) {
-      assignBedMutation.mutate({
-        id: contextState.bedId,
-        patientId: patient.id
+  // TOOD: can we somehow assert that the patient is not undefined here?
+  const createPatient = () => contextState.patient && createPatientMutation.mutateAsync(contextState.patient)
+    .then((patient) => {
+      // TODO: is it a good idea to have this much state in one object?, also this shouldn't be called context I think
+      setContextState({
+        ...contextState,
+        patient,
       })
-    }
-    setContextState(updatedContext)
-  })
+
+      if (contextState.bedId) {
+        return assignBedMutation.mutateAsync({
+          id: contextState.bedId,
+          patientId: patient.id
+        })
+      }
+    })
 
   return (
     <PageWithHeader
@@ -250,7 +254,7 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
         titleText={translation.addPatientDialogTitle}
         onConfirm={() => {
           if (contextState.patient) {
-            createMutation.mutate(contextState.patient)
+            createPatient()
           } else {
             setContextState({
               ...emptyWardOverviewContextState,
@@ -301,12 +305,13 @@ const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTran
             left={() => (<WardRoomList key={wardId} />)}
             right={width =>
               isShowingPatientList ? (
-                <PatientList width={width} />
+                <PatientList width={width} wardId={wardId} />
               ) :
                 contextState.patientId && (
                   <div>
                     <PatientDetail
                       key={contextState.patient?.id}
+                      wardId={wardId}
                       width={width}
                     />
                   </div>

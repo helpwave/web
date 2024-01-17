@@ -51,7 +51,10 @@ export const UserInvitationList = ({
   const { signOut } = useAuth()
 
   const declineInviteMutation = useInviteDeclineMutation()
-  const acceptInviteMutation = useInviteAcceptMutation(() => setIsShowingReSignInDialog(true))
+  const acceptInviteMutation = useInviteAcceptMutation()
+
+  const acceptInvite = (inviteId: string) => acceptInviteMutation.mutateAsync(inviteId)
+    .then(() => setIsShowingReSignInDialog(true))
 
   const idMapping = (invite: Invitation) => invite.id
 
@@ -89,7 +92,7 @@ export const UserInvitationList = ({
               <Button
                 key="accept"
                 color="positive"
-                onClick={() => acceptInviteMutation.mutate(invite.id)}
+                onClick={() => acceptInvite(invite.id)}
               >
                 {translation.accept}
               </Button>,

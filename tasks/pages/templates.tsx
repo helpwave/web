@@ -3,7 +3,6 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { tw } from '@helpwave/common/twind'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { useRouter } from 'next/router'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -18,6 +17,7 @@ import {
   useUpdateMutation
 } from '@/mutations/task_template_mutations'
 import { useAuth } from '@/hooks/useAuth'
+import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,
@@ -78,15 +78,15 @@ export const TaskTemplateContext = createContext<TaskTemplateContextType>({
 
 const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<PersonalTaskTemplateTranslation>) => {
   const translation = useTranslation(language, defaultPersonalTaskTemplateTranslations)
-  const router = useRouter()
-  const { templateId } = router.query
+  const templateId = useRouteParameters<never, 'templateId'>().templateId
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { user } = useAuth()
   const { isLoading, isError, data } = usePersonalTaskTemplateQuery(user?.id)
 
   const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
-  const createMutation = useCreateMutation('personalTaskTemplates', taskTemplate =>
+  const wardId = '' // TODO: why is this empty? (tracing back where is value originally came from lead me to the fact that this value would always be undefined or an empty string, thus I hardcoded it here now but it would be great to know if this is correct)
+  const createMutation = useCreateMutation(wardId, 'personalTaskTemplates', taskTemplate =>
     setContextState({
       ...contextState,
       hasChanges: false,
@@ -147,6 +147,7 @@ const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<Per
                       deletedSubtaskIds: []
                     })
                   }}
+                  wardId={wardId}
                   selectedId={contextState.template.id}
                   taskTemplates={data}
                   variant="personalTemplates"

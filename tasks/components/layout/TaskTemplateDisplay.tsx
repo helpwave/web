@@ -29,6 +29,7 @@ const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDispl
 }
 
 export type TaskTemplateDisplayProps = {
+  wardId: string,
   selectedId: string,
   onSelectChange: (taskTemplate: TaskTemplateDTO | undefined) => void,
   taskTemplates: TaskTemplateDTO[],
@@ -41,6 +42,7 @@ export type TaskTemplateDisplayProps = {
  */
 export const TaskTemplateDisplay = ({
   language,
+  wardId,
   selectedId,
   onSelectChange,
   taskTemplates,
@@ -48,11 +50,11 @@ export const TaskTemplateDisplay = ({
   width
 }: PropsWithLanguage<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateDisplayTranslation)
+
   const router = useRouter()
-  const { id, wardId } = router.query
   const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))
 
-  const switchToPersonalLink = id ? `/templates?wardId=${id}` : '/templates'
+  const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
   return (
     <div className={tw('py-4 px-6')}>
       <div className={tw('flex flex-row items-center justify-between mb-4')}>

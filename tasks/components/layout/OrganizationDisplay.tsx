@@ -65,7 +65,7 @@ export const OrganizationDisplay = ({
             organization={organization}
             isSelected={usedSelectedId === organization.id}
             onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
-            onTileClick={async () => await router.push(`/organizations/${organization.id}`)}
+            onTileClick={() => router.push(`/organizations/${organization.id}`)}
           />
         ))}
         <AddCard

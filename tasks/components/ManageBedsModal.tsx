@@ -80,6 +80,8 @@ export const ManageBedsModal = ({
   const updateBedMutation = useBedUpdateMutation()
   const deleteBedMutation = useBedDeleteMutation()
 
+  const addBed = () => room && addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1 ?? 1}`, roomId })
+
   const maxBedNameLength = 16
 
   const identifierMapping = (bed: BedWithPatientWithTasksNumberDTO) => bed.id
@@ -99,7 +101,7 @@ export const ManageBedsModal = ({
           <>
             <div className={tw('flex flex-row justify-between items-end mb-2 mt-4')}>
               <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
-              <Button color="positive" onClick={() => addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1 ?? 1}`, roomId })}>{translation.addBed}</Button>
+              <Button color="positive" onClick={addBed}>{translation.addBed}</Button>
             </div>
             <Table
               data={beds}
@@ -115,10 +117,10 @@ export const ManageBedsModal = ({
                   <Input
                     value={bed.name}
                     maxLength={maxBedNameLength}
-                    onChange={text => {
+                    onChange={(text) => {
                       setBeds(beds.map(value => value.id === bed.id ? { ...value, name: text } : value))
                     }}
-                    onEditCompleted={text => updateBedMutation.mutate({ id: bed.id, name: text, roomId: room.id })}
+                    onEditCompleted={(text) => updateBedMutation.mutate({ id: bed.id, name: text, roomId: room.id })}
                   />
                 </div>,
                 <div key="patient" className={tw('w-20')}>

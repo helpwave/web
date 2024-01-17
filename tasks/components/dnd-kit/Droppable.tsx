@@ -1,30 +1,26 @@
-import { useDroppable, type Active, type Over } from '@dnd-kit/core'
-import type { Data } from '@dnd-kit/core/dist/store/types'
+import { useDroppable, type Active, type Over } from './typesafety'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyData = Record<string, any>
-
-export type DroppableBuilderProps = {
+export type DroppableBuilderProps<DraggableData, DroppableData> = {
   isOver: boolean,
-  active: Active | null,
-  over: Over | null
+  active: Active<DraggableData> | null,
+  over: Over<DroppableData> | null
 }
 
-export type DroppableProps<InputData> = {
-  children: ((droppableBuilderProps: DroppableBuilderProps) => React.ReactNode | undefined),
+export type DroppableProps<DraggableData, DroppableData> = {
+  children: ((droppableBuilderProps: DroppableBuilderProps<DraggableData, DroppableData>) => React.ReactNode | undefined),
   id: string,
-  data?: Data<InputData>
+  data: DroppableData
 }
 
 /**
  * A Component for the dnd kit droppable
  */
-export const Droppable = <InputData = AnyData>({
+export const Droppable = <DraggableData, DroppableData>({
   children,
   id,
   data
-}: DroppableProps<InputData>) => {
-  const { setNodeRef, ...droppableBuilderProps } = useDroppable({ id, data })
+}: DroppableProps<DraggableData, DroppableData>) => {
+  const { setNodeRef, ...droppableBuilderProps } = useDroppable<DraggableData, DroppableData>({ id, data })
 
   return (
     <div ref={setNodeRef}>

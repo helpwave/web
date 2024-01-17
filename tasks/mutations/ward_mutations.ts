@@ -7,8 +7,8 @@ import {
   GetWardRequest,
   UpdateWardRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
-import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
 import { noop } from '@helpwave/common/util/noop'
+import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
 
 export const wardsQueryKey = 'wards'
 
@@ -119,28 +119,26 @@ export const useWardDetailsQuery = (wardId?: string, organisationId?: string) =>
   })
 }
 
-export const useWardQuery = (id: string, organisationId?: string) => {
-  return useQuery({
-    queryKey: [wardsQueryKey, id],
-    enabled: !!id,
-    queryFn: async (): Promise<WardWithOrganizationIdDTO> => {
-      const req = new GetWardRequest()
-      req.setId(id)
-      const res = await wardService.getWard(req, getAuthenticatedGrpcMetadata(organisationId))
+export const useWardQuery = (id: string, organisationId?: string) => useQuery({
+  queryKey: [wardsQueryKey, id],
+  enabled: !!id,
+  queryFn: async (): Promise<WardWithOrganizationIdDTO> => {
+    const req = new GetWardRequest()
+    req.setId(id)
+    const res = await wardService.getWard(req, getAuthenticatedGrpcMetadata(organisationId))
 
-      if (!res.toObject()) {
-        console.error('error in Ward query')
-      }
-
-      const ward: WardWithOrganizationIdDTO = {
-        id: res.getId(),
-        name: res.getName(),
-        organizationId: res.getOrganizationId()
-      }
-      return ward
+    if (!res.toObject()) {
+      console.error('error in Ward query')
     }
-  })
-}
+
+    const ward: WardWithOrganizationIdDTO = {
+      id: res.getId(),
+      name: res.getName(),
+      organizationId: res.getOrganizationId()
+    }
+    return ward
+  }
+})
 
 export const useWardUpdateMutation = (organisationId?: string, callback: (ward:WardMinimalDTO) => void = noop) => {
   const queryClient = useQueryClient()

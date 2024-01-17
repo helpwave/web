@@ -7,7 +7,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
-import { OrganizationOverviewContext } from '@/pages/organizations/[id]'
+import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 import { useWardOverviewsQuery } from '@/mutations/ward_mutations'
 
 type WardDisplayTranslation = {
@@ -27,22 +27,22 @@ const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> 
 }
 
 export type WardDisplayProps = {
+  organizationId: string,
   selectedWardId?: string,
   width?: number
 }
 
 /**
- * The left side of the organizations/[id].tsx page showing the wards within the organizations
+ * The left side of the organizations/[organizationId].tsx page showing the wards within the organizations
  */
 export const WardDisplay = ({
   language,
+  organizationId,
   selectedWardId,
   width
 }: PropsWithLanguage<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation(language, defaultWardDisplayTranslations)
   const router = useRouter()
-  const { id } = router.query
-  const organizationId = id as string
   const context = useContext(OrganizationOverviewContext)
   const { data, isLoading, isError } = useWardOverviewsQuery(organizationId)
 
@@ -68,7 +68,7 @@ export const WardDisplay = ({
                   ...context.state,
                   wardId: ward.id
                 })}
-                onTileClick={async () => await router.push(`/ward/${ward.id}`)}
+                onTileClick={() => router.push(`/ward/${ward.id}`)}
               />
             ))}
             <AddCard

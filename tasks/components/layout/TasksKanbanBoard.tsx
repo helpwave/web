@@ -132,7 +132,6 @@ export const TasksKanbanBoard = ({
       return
     }
 
-    console.log(overIndex)
     // -1 means, that there was no task found, which you dragged your task over
     const insertAtIndex = overIndex === -1 ? 0 : overIndex
     // Insert task at insertAtIndex in the overColumn

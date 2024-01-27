@@ -8,7 +8,6 @@ import { Select } from '@helpwave/common/components/user-input/Select'
 import { useMemo, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
-import { useOrganizationsForUserQuery } from '@/mutations/organization_mutations'
 
 type OrganizationSwitchModalTranslation = {
   switchOrganization: string,
@@ -16,6 +15,7 @@ type OrganizationSwitchModalTranslation = {
 }
 
 type OrganizationSwitchModalProps = ModalProps & {
+  organizations?: OrganizationDTO[],
   onDone: (organization?: OrganizationDTO) => void
 }
 
@@ -37,9 +37,8 @@ const organizationsToOptions = (organizations?: OrganizationDTO[]): SelectOption
   }))
 }
 
-export const OrganizationSwitchModal = ({ language, onDone: onDoneToCaller, ...modalProps }: PropsWithLanguage<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
+export const OrganizationSwitchModal = ({ language, onDone: onDoneToCaller, organizations, ...modalProps }: PropsWithLanguage<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
   const translation = useTranslation(language, defaultOrganizationSwitchModalTranslation)
-  const { data: organizations } = useOrganizationsForUserQuery()
   const [organization, setOrganization] = useState('')
   const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])
 

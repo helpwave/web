@@ -1,10 +1,12 @@
 import type { PropsWithChildren } from 'react'
 import { tw } from '@helpwave/common/twind'
+import { Span } from '@helpwave/common/components/Span'
 import { UserMenu } from '@/components/UserMenu'
 import { Header, type HeaderProps } from '@/components/Header'
 import { BreadCrumb, type Crumb } from '@/components/BreadCrumb'
 import { FeedbackButton } from '@/components/FeedbackButton'
 import { useAuth } from '@/hooks/useAuth'
+import { useOrganization } from '@/hooks/useOrganization'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[]
@@ -24,10 +26,12 @@ export const PageWithHeader = ({
   crumbs
 }: PropsWithChildren<PageWithHeaderProps>) => {
   const { user } = useAuth()
+  const { organization, setOrganization } = useOrganization()
 
   if (!user) return null
 
   const feedbackButton = <FeedbackButton/>
+  const organizationName = (organization?.shortName && <Span onClick={() => setOrganization(undefined)}>{organization.shortName}</Span>)
   const userMenu = <UserMenu />
 
   return (
@@ -36,7 +40,7 @@ export const PageWithHeader = ({
         title={title}
         withIcon={withIcon}
         leftSide={[(crumbs ? <BreadCrumb crumbs={crumbs}/> : undefined), ...(leftSide ?? [])]}
-        rightSide={[...(rightSide ?? []), feedbackButton, userMenu]}
+        rightSide={[...(rightSide ?? []), feedbackButton, organizationName, userMenu]}
       />
       {children}
     </div>

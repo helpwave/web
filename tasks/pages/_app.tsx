@@ -9,8 +9,10 @@ import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
+import { ProvideOrganization } from '@/hooks/useOrganization'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -45,9 +47,12 @@ function MyApp({
           <QueryClientProvider client={queryClient}>
             <ModalRegister>
               <div className={tw('font-sans')} id={modalRootName}>
-                <Component {...pageProps} />
+                <ProvideOrganization>
+                  <Component {...pageProps} />
+                </ProvideOrganization>
               </div>
             </ModalRegister>
+            <ReactQueryDevtools buttonPosition="bottom-left" position="left" />
           </QueryClientProvider>
         </>
       ) : (<MobileInterceptor {...pageProps} />)}

@@ -76,9 +76,14 @@ export const ProvideOrganization = ({
         id="organization-switch-modal"
         isOpen={isOrganizationSwitchModalOpen}
         organizations={organizations}
-        onDone={setOrganization}
+        onDone={(organization) => {
+          setOrganization(organization)
+
+          // A manual switch of the organization will result in a page reload to refetch all the queries
+          window.location.reload()
+        }}
       />
-      { organization && children }
+      { children }
     </OrganizationContext.Provider>
   )
 }

@@ -34,7 +34,7 @@ export const PageWithHeader = ({
   if (!user) return null
 
   const feedbackButton = <FeedbackButton/>
-  const organizationName = (organization?.shortName && <Span onClick={() => setOrganization(undefined)}>{organization.shortName}</Span>)
+  const organizationName = (organization?.shortName && <Span onClick={() => setOrganization(undefined)} className={tw('cursor-pointer hover:cursor-pointer')}>{organization.shortName}</Span>)
   const userMenu = <UserMenu />
 
   return (

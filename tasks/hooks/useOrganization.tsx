@@ -1,9 +1,10 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect } from 'react'
 import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
 import { useOrganizationsForUserQuery } from '@/mutations/organization_mutations'
 import { OrganizationSwitchModal } from '@/components/OrganizationSwitchModal'
+import { useAuth } from '@/hooks/useAuth'
 
 export const LOCALSTORAGE_ORGANIZATION_KEY = 'organization'
 
@@ -21,14 +22,35 @@ export const OrganizationContext = createContext<OrganizationContextValue>({
 
 export const useOrganization = () => useContext(OrganizationContext)
 
-export const ProvideOrganization = ({ children }: PropsWithChildren) => {
+/**
+ * TODO: Not a big fan of this useState() passing
+ * but I need to use the current organization AND applying ProvideOrganization in the same component
+ * See PageWithHeader.tsx
+ * @MaxSchaefer
+ */
+type ProvideOrganizationProps = {
+  isOrganizationSwitchModalOpen: boolean,
+  setOrganizationSwitchModalOpen: Dispatch<SetStateAction<boolean>>,
+  organization: OrganizationDTO | undefined,
+  setOrganization: Dispatch<SetStateAction<OrganizationDTO | undefined>>
+}
+
+export const ProvideOrganization = ({
+  children,
+  organization,
+  setOrganization,
+  isOrganizationSwitchModalOpen,
+  setOrganizationSwitchModalOpen
+}: PropsWithChildren<ProvideOrganizationProps>) => {
+  useAuth() // Calling useAuth() to prepare the context for later operations
+
   const { data: organizations } = useOrganizationsForUserQuery()
-  const [organization, setOrganization] = useState<OrganizationDTO>()
-  const [isOrganizationSwitchModalOpen, setOrganizationSwitchModalOpen] = useState(false)
   const [storedOrganization, setStoredOrganization] = useLocalStorage<OrganizationDTO | undefined>(LOCALSTORAGE_ORGANIZATION_KEY, undefined)
+  // TOOD: See #26
+  // const [organization, setOrganization] = useState<OrganizationDTO>()
+  // const [isOrganizationSwitchModalOpen, setOrganizationSwitchModalOpen] = useState(false)
 
   useEffect(() => {
-    console.log(storedOrganization)
     if (storedOrganization) {
       setOrganization(storedOrganization)
     }
@@ -41,7 +63,12 @@ export const ProvideOrganization = ({ children }: PropsWithChildren) => {
     }
   }, [organization])
 
-  const setOrganizationId = (organizationId: string) => setOrganization(organizations?.find((organization) => organization.id === organizationId))
+  const setOrganizationId = (organizationId: string) => {
+    const organization = organizations?.find((organization) => organization.id === organizationId)
+    if (organization) {
+      setOrganization(organization)
+    }
+  }
 
   return (
     <OrganizationContext.Provider value={{ organization, setOrganization, setOrganizationId }}>

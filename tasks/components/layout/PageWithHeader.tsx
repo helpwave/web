@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react'
+import { useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import { UserMenu } from '@/components/UserMenu'
@@ -6,7 +7,8 @@ import { Header, type HeaderProps } from '@/components/Header'
 import { BreadCrumb, type Crumb } from '@/components/BreadCrumb'
 import { FeedbackButton } from '@/components/FeedbackButton'
 import { useAuth } from '@/hooks/useAuth'
-import { useOrganization } from '@/hooks/useOrganization'
+import { ProvideOrganization } from '@/hooks/useOrganization'
+import type { OrganizationDTO } from '@/mutations/organization_mutations'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[]
@@ -26,7 +28,8 @@ export const PageWithHeader = ({
   crumbs
 }: PropsWithChildren<PageWithHeaderProps>) => {
   const { user } = useAuth()
-  const { organization, setOrganization } = useOrganization()
+  const [isOrganizationSwitchModalOpen, setOrganizationSwitchModalOpen] = useState(false)
+  const [organization, setOrganization] = useState<OrganizationDTO>()
 
   if (!user) return null
 
@@ -42,7 +45,14 @@ export const PageWithHeader = ({
         leftSide={[(crumbs ? <BreadCrumb crumbs={crumbs}/> : undefined), ...(leftSide ?? [])]}
         rightSide={[...(rightSide ?? []), feedbackButton, organizationName, userMenu]}
       />
-      {children}
+      <ProvideOrganization
+        organization={organization}
+        setOrganization={setOrganization}
+        isOrganizationSwitchModalOpen={isOrganizationSwitchModalOpen}
+        setOrganizationSwitchModalOpen={setOrganizationSwitchModalOpen}
+      >
+        {children}
+      </ProvideOrganization>
     </div>
   )
 }

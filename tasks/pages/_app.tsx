@@ -12,7 +12,6 @@ import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
-import { ProvideOrganization } from '@/hooks/useOrganization'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -47,9 +46,7 @@ function MyApp({
           <QueryClientProvider client={queryClient}>
             <ModalRegister>
               <div className={tw('font-sans')} id={modalRootName}>
-                <ProvideOrganization>
-                  <Component {...pageProps} />
-                </ProvideOrganization>
+                <Component {...pageProps} />
               </div>
             </ModalRegister>
             <ReactQueryDevtools buttonPosition="bottom-left" position="left" />

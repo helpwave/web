@@ -237,13 +237,13 @@ export const TechRadar = ({
   return (
     <>
       <Script
-        src="https://d3js.org/d3.v4.min.js"
+        src="https://cdn.helpwave.de/js/d3.v4.min.js"
         onLoad={() => {
           setIsD3Loaded(true)
         }}
       />
       <Script
-        src="https://opensource.zalando.com/tech-radar/release/radar-0.8.js"
+        src="https://cdn.helpwave.de/js/radar-0.8.js"
         onLoad={() => {
           setIsRadarLoaded(true)
         }}

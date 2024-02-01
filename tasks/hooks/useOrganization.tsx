@@ -1,6 +1,7 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect } from 'react'
 import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
+import { useQueryClient } from '@tanstack/react-query'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
 import { useOrganizationsForUserQuery } from '@/mutations/organization_mutations'
 import { OrganizationSwitchModal } from '@/components/OrganizationSwitchModal'
@@ -44,6 +45,7 @@ export const ProvideOrganization = ({
 }: PropsWithChildren<ProvideOrganizationProps>) => {
   useAuth() // Calling useAuth() to prepare the context for later operations
 
+  const queryClient = useQueryClient()
   const { data: organizations } = useOrganizationsForUserQuery()
   const [storedOrganization, setStoredOrganization] = useLocalStorage<OrganizationDTO | undefined>(LOCALSTORAGE_ORGANIZATION_KEY, undefined)
   // TOOD: See #26
@@ -79,9 +81,7 @@ export const ProvideOrganization = ({
         organizations={organizations}
         onDone={(organization) => {
           setOrganization(organization)
-
-          // A manual switch of the organization will result in a page reload to refetch all the queries
-          window.location.reload()
+          queryClient.resetQueries()
         }}
       />
       { children }

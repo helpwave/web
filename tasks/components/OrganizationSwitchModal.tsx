@@ -5,7 +5,7 @@ import type { ModalProps } from '@helpwave/common/components/modals/Modal'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import type { SelectOption } from '@helpwave/common/components/user-input/Select'
 import { Select } from '@helpwave/common/components/user-input/Select'
-import { Dispatch, SetStateAction, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
 

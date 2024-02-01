@@ -5,7 +5,7 @@ import type { ModalProps } from '@helpwave/common/components/modals/Modal'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import type { SelectOption } from '@helpwave/common/components/user-input/Select'
 import { Select } from '@helpwave/common/components/user-input/Select'
-import { useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
 
@@ -15,6 +15,7 @@ type OrganizationSwitchModalTranslation = {
 }
 
 type OrganizationSwitchModalProps = ModalProps & {
+  currentOrganization?: string,
   organizations?: OrganizationDTO[],
   onDone: (organization?: OrganizationDTO) => void
 }
@@ -37,9 +38,9 @@ const organizationsToOptions = (organizations?: OrganizationDTO[]): SelectOption
   }))
 }
 
-export const OrganizationSwitchModal = ({ language, onDone: onDoneToCaller, organizations, ...modalProps }: PropsWithLanguage<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
+export const OrganizationSwitchModal = ({ language, onDone: onDoneToCaller, currentOrganization, organizations, ...modalProps }: PropsWithLanguage<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
   const translation = useTranslation(language, defaultOrganizationSwitchModalTranslation)
-  const [organization, setOrganization] = useState('')
+  const [organization, setOrganization] = useState(currentOrganization ?? '')
   const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])
 
   const onDone = () => {

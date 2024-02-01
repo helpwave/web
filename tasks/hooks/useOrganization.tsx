@@ -75,6 +75,7 @@ export const ProvideOrganization = ({
       <OrganizationSwitchModal
         id="organization-switch-modal"
         isOpen={isOrganizationSwitchModalOpen}
+        currentOrganization={storedOrganization?.id}
         organizations={organizations}
         onDone={(organization) => {
           setOrganization(organization)

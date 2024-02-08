@@ -1,13 +1,12 @@
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
-import { Menu, X } from 'lucide-react'
+import { X, Menu as MenuIcon } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
-import { MenuItem } from '@helpwave/common/components/user-input/Menu'
-import { router } from 'next/client'
+import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 
-const homeURL = '/'
+const homeURL: string = '/'
 
 type LinkType = {
   name: string,
@@ -70,17 +69,25 @@ const Header = () => {
                       </Span>
                     </Link>
                   ) : (
-                    <Menu name={name}>
+                    <Menu<HTMLDivElement> alignment="tl" trigger={(onClick, ref) => (
+                      <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
+                        <Span type="navigationItem">
+                          {name}
+                        </Span>
+                      </div>
+                    )}>
                       {subpage.map(({
                         name: subPageName,
                         url: subPageUrl
                       }) =>
                         (
-                          <MenuItem key={subPageName} onClick={() => router.push(url + subPageUrl)}>
-                            <Span type="navigationItem">
-                              {subPageName}
-                            </Span>
-                          </MenuItem>
+                          <Link key={subPageName} className={tw('cursor-pointer')} href={url + subPageUrl}>
+                            <MenuItem alignment="left">
+                              <Span type="navigationItem">
+                                {subPageName}
+                              </Span>
+                            </MenuItem>
+                          </Link>
                         ))}
                     </Menu>
                   )}
@@ -94,7 +101,7 @@ const Header = () => {
               className={tw('text-center text-2xl font-bold font-space')}>helpwave</span></Link>
             <button onClick={() => setNavbarOpen(true)} className={tw('tablet:hidden desktop:hidden content-end')}
                     aria-controls="navbar" aria-expanded="false">
-              <Menu size={32}/>
+              <MenuIcon size={32}/>
             </button>
           </div>
         </nav>
@@ -117,14 +124,39 @@ const Header = () => {
 
             {items.map(({
               name,
-              url
+              url,
+              subpage
             }) => (
               <div key={name} className={tw('w-full p-2')}>
-                <Link href={url} onClick={() => setNavbarOpen(false)}>
-                  <Span type="heading">
-                    {name}
-                  </Span>
-                </Link>
+                {subpage === undefined ? (
+                  <Link href={url} onClick={() => setNavbarOpen(false)}>
+                    <Span type="heading">
+                      {name}
+                    </Span>
+                  </Link>
+                ) : (
+                  <Menu<HTMLDivElement> alignment="tl" trigger={(onClick, ref) => (
+                    <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
+                      <Span type="heading">
+                        {name}
+                      </Span>
+                    </div>
+                  )}>
+                    {subpage.map(({
+                      name: subPageName,
+                      url: subPageUrl
+                    }) =>
+                      (
+                        <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)} href={url + subPageUrl}>
+                          <MenuItem alignment="left">
+                            <Span type="heading">
+                              {subPageName}
+                            </Span>
+                          </MenuItem>
+                        </Link>
+                      ))}
+                  </Menu>
+                )}
               </div>
             ))}
           </div>

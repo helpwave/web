@@ -19,12 +19,22 @@ type SubLinkType = LinkType & {
 
 const items: SubLinkType[] = [
   {
-    name: 'product',
+    name: 'products',
     url: '/product',
-    subpage: [{
-      name: 'tasks',
-      url: '/tasks',
-    }]
+    subpage: [
+      {
+        name: 'tasks',
+        url: '/tasks',
+      },
+      {
+        name: 'impulse',
+        url: '/impulse',
+      },
+      {
+        name: 'cloud',
+        url: '/cloud',
+      }
+    ]
   },
   {
     name: 'story',
@@ -69,13 +79,17 @@ const Header = () => {
                       </Span>
                     </Link>
                   ) : (
-                    <Menu<HTMLDivElement> alignment="tl" trigger={(onClick, ref) => (
-                      <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
-                        <Span type="navigationItem">
-                          {name}
-                        </Span>
-                      </div>
-                    )}>
+                    <Menu<HTMLDivElement>
+                      alignment="tl"
+                      trigger={(onClick, ref) => (
+                        <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
+                          <Span type="navigationItem">
+                            {name}
+                          </Span>
+                        </div>
+                      )}
+                      showOnHover={true}
+                    >
                       {subpage.map(({
                         name: subPageName,
                         url: subPageUrl
@@ -147,7 +161,8 @@ const Header = () => {
                       url: subPageUrl
                     }) =>
                       (
-                        <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)} href={url + subPageUrl}>
+                        <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)}
+                              href={url + subPageUrl}>
                           <MenuItem alignment="left">
                             <Span type="heading">
                               {subPageName}

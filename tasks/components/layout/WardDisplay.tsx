@@ -9,6 +9,7 @@ import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 import { useWardOverviewsQuery } from '@/mutations/ward_mutations'
+import { useOrganization } from '@/hooks/useOrganization'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -50,6 +51,8 @@ export const WardDisplay = ({
   selectedWardId ??= context.state.wardId
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / 250), 1)
 
+  const { setOrganizationId } = useOrganization()
+
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.wards}/>
@@ -68,7 +71,10 @@ export const WardDisplay = ({
                   ...context.state,
                   wardId: ward.id
                 })}
-                onTileClick={() => router.push(`/ward/${ward.id}`)}
+                onTileClick={() => {
+                  setOrganizationId(organizationId)
+                  router.push(`/ward/${ward.id}`)
+                }}
               />
             ))}
             <AddCard

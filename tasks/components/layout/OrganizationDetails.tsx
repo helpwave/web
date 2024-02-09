@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { type PropsWithLanguage, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -9,7 +9,7 @@ import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } fr
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { ReSignInModal } from '../ReSignInModal'
-import { OrganizationInvitationList, type OrganizationInvitation } from '../OrganizationInvitationList'
+import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
 import { OrganizationContext } from '@/pages/organizations'
 import {
   type OrganizationMinimalDTO,
@@ -20,6 +20,7 @@ import {
   useOrganizationUpdateMutation
 } from '@/mutations/organization_mutations'
 import { useAuth } from '@/hooks/useAuth'
+import { useOrganization } from '@/hooks/useOrganization'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -96,6 +97,12 @@ export const OrganizationDetail = ({
       })
     }
   }, [data, isCreatingNewOrganization])
+
+  const { setOrganizationId } = useOrganization()
+
+  useEffect(() => {
+    setOrganizationId(contextState.organizationId)
+  }, [contextState.organizationId])
 
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 

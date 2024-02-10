@@ -241,7 +241,7 @@ importers:
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query-devtools':
-        specifier: ^5.20.1
+        specifier: 5.20.1
         version: 5.20.1(@tanstack/react-query@4.36.1)(react@18.2.0)
       '@tanstack/react-table':
         specifier: 8.11.8

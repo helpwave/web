@@ -19,7 +19,7 @@ type NewsLetterFormTranslation = {
   email: string,
   company: string,
   industry: string,
-  commit: string,
+  callToAction: string,
   industryNames: (instdustry: Industry) => string,
   select: string
 }
@@ -32,7 +32,7 @@ const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslat
     email: 'Email',
     company: 'Company',
     industry: 'Industry',
-    commit: 'Commit',
+    callToAction: 'Stay In the Loop',
     industryNames: (industry: Industry) => {
       switch (industry) {
         case 'investment':
@@ -56,7 +56,7 @@ const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslat
     email: 'Email',
     company: 'Firma',
     industry: 'Industry',
-    commit: 'Commit',
+    callToAction: 'Bleib informiert',
     industryNames: (industry: Industry) => {
       switch (industry) {
         case 'investment':
@@ -173,8 +173,8 @@ export const NewsLetterForm = ({
             />
           </div>
           <div className={tw('flex flex-row justify-end mt-4')}>
-            <Button onClick={() => onSubmit(formState)} size="large" className={tw('min-w-[120px] w-1/5 max-w-[20%]')}>
-              {translation.commit}
+            <Button onClick={() => onSubmit(formState)} size="medium" className={tw('min-w-[120px] w-fit')}>
+              {translation.callToAction}
             </Button>
           </div>
         </div>

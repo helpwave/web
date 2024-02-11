@@ -9,8 +9,8 @@ import { useState } from 'react'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { Button } from '@helpwave/common/components/Button'
 
-const positionList = ['employee', 'manager', 'investor', 'medical_personal'] as const
-export type Position = typeof positionList[number]
+const industryList = ['investment', 'hospital', 'patient_care', 'research', 'development'] as const
+export type Industry = typeof industryList[number]
 
 type NewsLetterFormTranslation = {
   title: string,
@@ -18,9 +18,9 @@ type NewsLetterFormTranslation = {
   name: string,
   email: string,
   company: string,
-  position: string,
+  industry: string,
   commit: string,
-  positionNames: (position: Position) => string,
+  industryNames: (instdustry: Industry) => string,
   select: string
 }
 
@@ -31,18 +31,20 @@ const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslat
     name: 'Name',
     email: 'Email',
     company: 'Company',
-    position: 'Position',
+    industry: 'Industry',
     commit: 'Commit',
-    positionNames: (position: Position) => {
-      switch (position) {
-        case 'medical_personal':
-          return 'Medical Personal'
-        case 'manager':
-          return 'Manager'
-        case 'employee':
-          return 'Employee'
-        case 'investor':
-          return 'Investor'
+    industryNames: (industry: Industry) => {
+      switch (industry) {
+        case 'investment':
+          return 'Investment'
+        case 'hospital':
+          return 'Hospital'
+        case 'patient_care':
+          return 'Patient Care'
+        case 'research':
+          return 'Research'
+        case 'development':
+          return 'Development'
       }
     },
     select: 'Select'
@@ -53,18 +55,20 @@ const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslat
     name: 'Name',
     email: 'Email',
     company: 'Firma',
-    position: 'Position',
+    industry: 'Industry',
     commit: 'Commit',
-    positionNames: (position: Position) => {
-      switch (position) {
-        case 'medical_personal':
-          return 'Medizinisches Personal'
-        case 'manager':
-          return 'Manager'
-        case 'employee':
-          return 'Arbeitnehmer'
-        case 'investor':
-          return 'Investor'
+    industryNames: (industry: Industry) => {
+      switch (industry) {
+        case 'investment':
+          return 'Investment'
+        case 'hospital':
+          return 'Krankenhaus'
+        case 'patient_care':
+          return 'Patientenversorgung'
+        case 'research':
+          return 'Wissenschaft'
+        case 'development':
+          return 'Entwicklung'
       }
     },
     select: 'Auswählen'
@@ -75,7 +79,7 @@ export type NewsLetterFormType = {
   name: string,
   email: string,
   company: string,
-  position?: Position
+  industry?: Industry
 }
 
 export type NewsLetterFormProps = Partial<NewsLetterFormType> & {
@@ -87,7 +91,7 @@ export const NewsLetterForm = ({
   name = '',
   email = '',
   company = '',
-  position,
+  industry,
   onSubmit = noop,
 }: PropsWithLanguage<NewsLetterFormTranslation, NewsLetterFormProps>) => {
   const translation = useTranslation(language, defaultNewsLetterFormTranslation)
@@ -95,11 +99,11 @@ export const NewsLetterForm = ({
     name,
     email,
     company,
-    position,
+    industry,
   })
 
   return (
-    <div className={tw('rounded-md py-2 px-4 border border-2 w-full border-hw-primary-400')}>
+    <div className={tw('rounded-md py-2 px-4 w-full')}>
       <div className={tw('flex flex-col')}>
         <Span type="title">{translation.title}</Span>
         <Span type="formDescription">{translation.subtitle}</Span>
@@ -154,11 +158,11 @@ export const NewsLetterForm = ({
               maxLength={255}
             />
             <Select
-              label={translation.position}
+              label={translation.industry}
               labelClassName="text-sm text-gray-700 font-semibold" // TODO use the relation to <SPAN> type labelSmall
-              value={formState.position}
-              options={positionList.map(value => ({
-                label: translation.positionNames(value),
+              value={formState.industry}
+              options={industryList.map(value => ({
+                label: translation.industryNames(value),
                 value
               }))}
               onChange={position => setFormState(prevState => ({

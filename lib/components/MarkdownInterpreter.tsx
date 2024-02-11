@@ -35,6 +35,22 @@ const markers: Marker[] = [
     id: 'space',
     className: 'font-space'
   },
+  {
+    id: 'primary',
+    className: 'text-hw-primary-400'
+  },
+  {
+    id: 'warn',
+    className: 'text-hw-warn-400'
+  },
+  {
+    id: 'positive',
+    className: 'text-hw-positive-400'
+  },
+  {
+    id: 'negative',
+    className: 'text-hw-negative-400'
+  },
 ]
 
 const replacements: Replace[] = [
@@ -91,8 +107,25 @@ export const MarkdownInterpreter = ({
     return <span>{text}</span>
   }
 
-  const firstClose = text.indexOf(close, firstOpen)
-  if (firstClose === -1) {
+  let closing = -1
+  let index = firstOpen + 1
+  let counter = 1
+  let escaping = false
+  while (index < text.length) {
+    if (text[index] === open && !escaping) {
+      counter++
+    }
+    if (text[index] === close && !escaping) {
+      counter--
+      if (counter === 0) {
+        closing = index
+        break
+      }
+    }
+    escaping = text[index] === commandStart
+    index++
+  }
+  if (closing === -1) {
     return <span>{text}</span>
   }
 
@@ -106,9 +139,9 @@ export const MarkdownInterpreter = ({
         <>
           {text.substring(0, firstMarker)}
           <span className={tw(marker.className)}>
-            {text.substring(firstMarker + marker.id.length + 2, firstClose)}
+            <MarkdownInterpreter text={text.substring(firstMarker + marker.id.length + 2, closing)}/>
           </span>
-          {text.length > firstClose + 1 ? (<MarkdownInterpreter text={text.substring(firstClose + 1)}/>) : null}
+          {text.length > closing + 1 ? (<MarkdownInterpreter text={text.substring(closing + 1)}/>) : null}
         </>
       )
     }

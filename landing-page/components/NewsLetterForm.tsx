@@ -165,9 +165,9 @@ export const NewsLetterForm = ({
                 label: translation.industryNames(value),
                 value
               }))}
-              onChange={position => setFormState(prevState => ({
+              onChange={industry => setFormState(prevState => ({
                 ...prevState,
-                position
+                industry
               }))}
               className={tw('!w-full')}
             />

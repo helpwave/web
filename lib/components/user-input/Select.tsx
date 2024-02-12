@@ -20,6 +20,7 @@ export type SelectProps<T> = {
   hintText?: string,
   showDisabledOptions?: boolean,
   className?: string,
+  labelClassName?: string,
   isDisabled?: boolean,
   /**
    * The items will be at the start of the select and aren't selectable
@@ -43,6 +44,7 @@ export const Select = <T, >({
   showDisabledOptions = true,
   isDisabled,
   className,
+  labelClassName = 'text-lg font-semibold',
   additionalItems,
   selectedDisplayOverwrite,
 }: SelectProps<T>) => {
@@ -54,7 +56,7 @@ export const Select = <T, >({
   return (
     <div className={tx(className)}>
       {label && (
-        <label htmlFor={label} className={tw('text-lg font-semibold mb-1')}>
+        <label htmlFor={label} className={tx(' mb-1', labelClassName)}>
           {label}
         </label>
       )}

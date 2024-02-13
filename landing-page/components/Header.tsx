@@ -25,14 +25,6 @@ const items: SubLinkType[] = [
       {
         name: 'tasks',
         url: '/tasks',
-      },
-      {
-        name: 'impulse',
-        url: '/impulse',
-      },
-      {
-        name: 'cloud',
-        url: '/cloud',
       }
     ]
   },

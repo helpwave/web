@@ -11,6 +11,7 @@ export type TaskDetailModalProps =
  */
 export const TaskDetailModal = ({
   taskId,
+  wardId,
   patientId,
   onClose,
   initialStatus,
@@ -22,7 +23,7 @@ export const TaskDetailModal = ({
       modalClassName={tx(modalClassName)}
       {...modalProps}
     >
-      <TaskDetailView patientId={patientId} taskId={taskId} onClose={onClose} initialStatus={initialStatus}/>
+      <TaskDetailView patientId={patientId} wardId={wardId} taskId={taskId} onClose={onClose} initialStatus={initialStatus}/>
     </Modal>
   )
 }

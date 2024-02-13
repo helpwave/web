@@ -32,7 +32,8 @@ const linkGroups = [
       { name: 'Contact', link: 'mailto:contact@helpwave.de' },
       { name: 'Pitchdeck', link: 'https://cdn.helpwave.de/helpwave_pitchdeck.pdf' },
       { name: 'Onepager', link: 'https://cdn.helpwave.de/helpwave_onepager.pdf' },
-      { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' }
+      { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' },
+      { name: 'Tech-Radar', link: '/tech-radar', openInCurrentTab: true },
     ],
     Products: [
       { name: 'tasks', link: '/product/tasks' },

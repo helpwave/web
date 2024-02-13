@@ -7,7 +7,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { RoomOverview } from '../RoomOverview'
 import { useRoomOverviewsQuery, type RoomOverviewDTO } from '@/mutations/room_mutations'
-import { WardOverviewContext } from '@/pages/ward/[id]'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
 
 type WardRoomListTranslation = {

@@ -8,7 +8,6 @@ import {
   GetAllTaskTemplatesByCreatorRequest,
   GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
-import { useRouter } from 'next/router'
 import { getAuthenticatedGrpcMetadata, taskTemplateService } from '../utils/grpc'
 import type { SubTaskDTO } from './task_mutations'
 import type { TaskTemplateFormType } from '@/pages/templates'
@@ -158,10 +157,8 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
   })
 }
 
-export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
+export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
-  const router = useRouter()
-  const { id: wardId } = router.query
 
   return useMutation({
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {
@@ -176,7 +173,7 @@ export const useCreateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       }))
 
       if (wardId) {
-        createTaskTemplate.setWardId(wardId.toString())
+        createTaskTemplate.setWardId(wardId)
       }
 
       const res = await taskTemplateService.createTaskTemplate(createTaskTemplate, getAuthenticatedGrpcMetadata())

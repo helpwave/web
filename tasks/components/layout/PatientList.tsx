@@ -8,14 +8,12 @@ import { Input } from '@helpwave/common/components/user-input/Input'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
-import { useRouter } from 'next/router'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Label } from '../Label'
-import { Draggable } from '../dnd-kit/Draggable'
-import { Droppable } from '../dnd-kit/Droppable'
+import { Draggable, Droppable } from '../dnd-kit-instances/patients'
 import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
-import { WardOverviewContext } from '@/pages/ward/[id]'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
@@ -90,23 +88,22 @@ export const defaultPatientListOpenedSections: PatientListOpenedSectionsType = {
 
 export type PatientListProps = {
   onDischarge?: (patient: PatientDTO) => void,
+  wardId: string,
   initialOpenedSections?: PatientListOpenedSectionsType,
   width?: number
 }
 
 /**
- * The right side of the ward/[id].tsx page showing the detailed information about the patients in the ward
+ * The right side of the ward/[wardId].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
   language,
+  wardId,
   initialOpenedSections = defaultPatientListOpenedSections
 }: PropsWithLanguage<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(language, defaultPatientListTranslations)
   const [search, setSearch] = useState('')
-  const router = useRouter()
-  const { id } = router.query
-  const wardId = id as string
-  const { data: ward } = useWardQuery(wardId)
+  const ward = useWardQuery(wardId).data
   const {
     state: context,
     updateContext
@@ -115,7 +112,7 @@ export const PatientList = ({
     data,
     isLoading,
     isError
-  } = usePatientListQuery(ward?.organizationId, wardId)
+  } = usePatientListQuery(ward?.organizationId, wardId) // TODO: is this the right organizationId?; related: https://github.com/helpwave/web/issues/793
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const deletePatientMutation = useDeletePatientMutation()
@@ -201,8 +198,11 @@ export const PatientList = ({
             >
               {filteredActive.map(patient => (
                 <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
-                  id: patient.id,
-                  name: patient.name
+                  patient: {
+                    id: patient.id,
+                    name: patient.name
+                  },
+                  discharged: false
                 }}>
                   {() => (
                     <div
@@ -245,8 +245,8 @@ export const PatientList = ({
                     </Span>
                   )}
                 >
-                  {filteredUnassigned.map(patient => (
-                    <Draggable id={patient.id} key={patient.id} data={patient}>
+                  {filteredUnassigned.map((patient) => (
+                    <Draggable id={patient.id} key={patient.id} data={{ patient, discharged: false }}>
                       {() => (
                         <div
                           key={patient.id}
@@ -286,7 +286,7 @@ export const PatientList = ({
                   header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
                 >
                   {filteredDischarged.map(patient => (
-                    <Draggable id={patient.id} key={patient.id} data={{ ...patient, discharged: true }}>
+                    <Draggable id={patient.id} key={patient.id} data={{ patient, discharged: true }}>
                       {() => (
                         <div
                           key={patient.id}

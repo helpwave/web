@@ -4,7 +4,6 @@ import {
   GetBedRequest,
   UpdateBedRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_pb'
-import { noop } from '@helpwave/common/util/noop'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 import type { PatientDTO, PatientWithTasksNumberDTO, PatientMinimalDTO } from './patient_mutations'
 import { wardsQueryKey } from './ward_mutations'
@@ -72,7 +71,7 @@ export const useBedQuery = (bedId: string | undefined) => {
   })
 }
 
-export const useBedCreateMutation = (callback: (bed: BedMinimalDTO) => void = noop) => {
+export const useBedCreateMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed: BedWithRoomId) => {
@@ -85,12 +84,7 @@ export const useBedCreateMutation = (callback: (bed: BedMinimalDTO) => void = no
         console.log('error in BedCreate')
       }
 
-      const newBed: BedMinimalDTO = {
-        id: res.getId(),
-        name: res.getName()
-      }
-      callback(newBed)
-      return newBed
+      return { id: res.getId(), name: res.getName() }
     },
     onSuccess: () => {
       queryClient.refetchQueries([bedService]).then()
@@ -100,7 +94,7 @@ export const useBedCreateMutation = (callback: (bed: BedMinimalDTO) => void = no
   })
 }
 
-export const useBedUpdateMutation = (callback: () => void = noop) => {
+export const useBedUpdateMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bed: BedWithRoomId) => {
@@ -111,12 +105,13 @@ export const useBedUpdateMutation = (callback: () => void = noop) => {
 
       const res = await bedService.updateBed(req, getAuthenticatedGrpcMetadata())
 
-      if (!res.toObject()) {
-        console.log('error in BedUpdate')
+      const obj = res.toObject() // TODO: what is the type of this?
+
+      if (!obj) {
+        throw new Error('error in BedUpdate')
       }
 
-      callback()
-      return res.toObject()
+      return obj
     },
     onSuccess: () => {
       queryClient.refetchQueries([bedService]).then()
@@ -125,7 +120,7 @@ export const useBedUpdateMutation = (callback: () => void = noop) => {
   })
 }
 
-export const useBedDeleteMutation = (callback: () => void = noop) => {
+export const useBedDeleteMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (bedId: string) => {
@@ -134,12 +129,13 @@ export const useBedDeleteMutation = (callback: () => void = noop) => {
 
       const res = await bedService.deleteBed(req, getAuthenticatedGrpcMetadata())
 
-      if (!res.toObject()) {
-        console.log('error in BedDelete')
+      const obj = res.toObject() // TODO: what is the type of this?
+
+      if (!obj) {
+        throw new Error('error in BedDelete')
       }
 
-      callback()
-      return res.toObject()
+      return obj
     },
     onSuccess: () => {
       queryClient.refetchQueries([bedService]).then()

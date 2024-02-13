@@ -3,14 +3,19 @@ import { RoomServicePromiseClient } from '@helpwave/proto-ts/proto/services/task
 import { BedServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_grpc_web_pb'
 import { PatientServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_grpc_web_pb'
 import Cookies from 'js-cookie'
-import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
 import {
   TaskTemplateServicePromiseClient
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_grpc_web_pb'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_grpc_web_pb'
-import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
+import {
+  OrganizationServicePromiseClient
+} from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_grpc_web_pb'
+import { UserServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/user_svc_grpc_web_pb'
+import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
 import { getConfig } from './config'
-import { UserServicePromiseClient } from '@helpwave/proto-ts/proto/services/user_svc/v1/user_svc_grpc_web_pb';
+import { LOCALSTORAGE_ORGANIZATION_KEY } from '@/hooks/useOrganization'
+import type { OrganizationDTO } from '@/mutations/organization_mutations'
+import { LocalStorageService } from '@helpwave/common/util/storage';
 
 const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
 const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`
@@ -34,6 +39,16 @@ const defaultOrganization = `3b25c6f5-4705-4074-9fc6-a50c28eba406`
 export const getAuthenticatedGrpcMetadata = (organizationID: string = defaultOrganization): AuthenticatedGrpcMetadata => {
   // TODO: Implement way better API for get the current id token and DONT hardcode the organization id
   const idToken = Cookies.get(COOKIE_ID_TOKEN_KEY)
+
+  const localStorageService = new LocalStorageService()
+  const organization = localStorageService.get<OrganizationDTO>(LOCALSTORAGE_ORGANIZATION_KEY)
+
+  if (organization) {
+    organizationID = organization.id
+  } else {
+    console.warn('Fallback to default organization')
+  }
+
   return {
     'Authorization': `Bearer ${idToken}`,
     'X-Organization': organizationID

@@ -9,11 +9,11 @@ import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { TaskDetailModal } from '../TaskDetailModal'
-import { RoomBedDropDown } from '../RoomBedDropdown'
+import { RoomBedDropdown } from '../RoomBedDropdown'
 import { ColumnTitle } from '../ColumnTitle'
 import { PatientDischargeModal } from '../PatientDischargeModal'
-import { TasksKanbanBoard } from './TasksKanabanBoard'
-import { WardOverviewContext } from '@/pages/ward/[id]'
+import { TasksKanbanBoard } from './TasksKanbanBoard'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import {
   emptyPatientDetails,
   useAssignBedMutation,
@@ -56,15 +56,17 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
 }
 
 export type PatientDetailProps = {
+  wardId: string,
   patient?: PatientDetailsDTO,
   width?: number
 }
 
 /**
- * The right side of the ward/[id].tsx page showing the detailed information about the patient
+ * The right side of the ward/[wardId].tsx page showing the detailed information about the patient
  */
 export const PatientDetail = ({
   language,
+  wardId,
   patient = emptyPatientDetails
 }: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
@@ -72,7 +74,7 @@ export const PatientDetail = ({
 
   const context = useContext(WardOverviewContext)
 
-  const updateMutation = usePatientUpdateMutation(() => undefined)
+  const updateMutation = usePatientUpdateMutation()
   const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardId: context.state.wardId }))
   const unassignMutation = useUnassignMutation(() => context.updateContext({ wardId: context.state.wardId }))
   const { data, isError, isLoading } = usePatientDetailsQuery(context.state.patientId)
@@ -133,6 +135,7 @@ export const PatientDetail = ({
         isOpen={isShowingTask}
         onBackgroundClick={() => setTaskId(undefined)}
         onClose={() => setTaskId(undefined)}
+        wardId={wardId}
         taskId={taskId}
         patientId={newPatient.id}
         initialStatus={initialTaskStatus}
@@ -154,13 +157,13 @@ export const PatientDetail = ({
                 onChange={name => changeSavedValue({ ...newPatient, name })}
               />
             </div>
-            <RoomBedDropDown
+            <RoomBedDropdown
               initialRoomAndBed={{ roomId: context.state.roomId ?? '', bedId: context.state.bedId ?? '' }}
               wardId={context.state.wardId}
-              onChange={roomBedDropDownIds => {
-                if (roomBedDropDownIds.bedId && context.state.patientId) {
-                  context.updateContext({ ...context.state, ...roomBedDropDownIds })
-                  assignBedMutation.mutate({ id: roomBedDropDownIds.bedId, patientId: context.state.patientId })
+              onChange={(roomBedDropdownIds) => {
+                if (roomBedDropdownIds.bedId && context.state.patientId) {
+                  context.updateContext({ ...context.state, ...roomBedDropdownIds })
+                  assignBedMutation.mutate({ id: roomBedDropdownIds.bedId, patientId: context.state.patientId })
                 }
               }}
               isSubmitting={isSubmitting}

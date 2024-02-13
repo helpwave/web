@@ -1,27 +1,26 @@
-import { useDraggable, type Active, type Over } from '@dnd-kit/core'
-import type { Data } from '@dnd-kit/core/dist/store/types'
+import { useDraggable, type Active, type Over } from './typesafety'
 
-export type DraggableBuilderProps = {
+export type DraggableBuilderProps<DraggableData, DroppableData> = {
   isDragging: boolean,
-  active: Active | null,
-  over: Over | null
+  active: Active<DraggableData> | null,
+  over: Over<DroppableData> | null
 }
 
-export type DraggableProps = {
-  children: ((draggableBuilderProps: DraggableBuilderProps) => React.ReactNode | undefined),
+export type DraggableProps<DraggableData, DroppableData> = {
+  children: ((draggableBuilderProps: DraggableBuilderProps<DraggableData, DroppableData>) => React.ReactNode | undefined),
   id: string,
-  data?: Data
+  data: DraggableData
 }
 
 /**
  * A Component for the dnd kit draggable
  */
-export const Draggable = ({
+export const Draggable = <DraggableData, DroppableData>({
   children,
   id,
   data
-}: DraggableProps) => {
-  const { attributes, listeners, setNodeRef, transform, ...draggableBuilderProps } = useDraggable({
+}: DraggableProps<DraggableData, DroppableData>) => {
+  const { attributes, listeners, setNodeRef, transform, ...draggableBuilderProps } = useDraggable<DraggableData, DroppableData>({
     id,
     data
   })

@@ -26,9 +26,9 @@ const defaultTaskTemplateListColumnTranslation = {
 export type TaskTemplateDTOExtension = {taskTemplate: TaskTemplateDTO, type: 'personal' | 'ward'}
 
 export type TaskTemplateListColumnProps = {
-  taskTemplates: TaskTemplateDTOExtension[],
+  templates: TaskTemplateDTOExtension[],
+  activeId: string | undefined,
   onTileClick: (taskTemplate: TaskTemplateDTO) => void,
-  selectedId?: string,
   onColumnEditClick?: () => void
 }
 
@@ -36,13 +36,13 @@ export type TaskTemplateListColumnProps = {
  * A column for showing TaskTemplates either for Ward or Private templates
  */
 export const TaskTemplateListColumn = ({
-  language,
-  taskTemplates,
+  templates,
+  activeId,
   onTileClick,
-  selectedId = '',
-  onColumnEditClick
+  onColumnEditClick,
+  language: maybeLanguage
 }: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
-  const translation = useTranslation(language, defaultTaskTemplateListColumnTranslation)
+  const translation = useTranslation(maybeLanguage, defaultTaskTemplateListColumnTranslation)
   const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -62,14 +62,14 @@ export const TaskTemplateListColumn = ({
         <div>
           <Scrollbars autoHeight autoHeightMin={height} autoHide >
             <div className={tw('flex flex-col gap-y-2 pr-3')}>
-              {taskTemplates.map((taskTemplateExtension, index) => (
+              {templates.map((taskTemplateExtension, index) => (
                 <TaskTemplateCard
                   key={taskTemplateExtension.taskTemplate.id}
                   name={taskTemplateExtension.taskTemplate.name}
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
-                  isSelected={selectedId === taskTemplateExtension.taskTemplate.id}
+                  isSelected={activeId === taskTemplateExtension.taskTemplate.id}
                   onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
-                  className={tx('border-2 border-gray-300 !pr-2', { 'mb-2': index === taskTemplates.length - 1 })}
+                  className={tx('border-2 border-gray-300 !pr-2', { 'mb-2': index === templates.length - 1 })}
                   typeForLabel={taskTemplateExtension.type}
                 />
               ))}

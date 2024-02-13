@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { WardDisplay } from '@/components/layout/WardDisplay'
@@ -9,6 +8,7 @@ import { WardDetail } from '@/components/layout/WardDetails'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
 import { useOrganizationQuery } from '@/mutations/organization_mutations'
+import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardsPageTranslation = {
   wards: string,
@@ -57,15 +57,13 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
   const [contextState, setContextState] = useState<OrganizationOverviewContextState>(emptyOrganizationOverviewContextState)
   const [usedQueryParam, setUsedQueryParam] = useState(false)
 
-  const router = useRouter()
-  const { id, wardId } = router.query
-  const organizationId = id as string
+  const { organizationId, wardId } = useRouteParameters<'organizationId', 'wardId'>()
   const { data: organization } = useOrganizationQuery(organizationId)
 
   if (wardId && !usedQueryParam) {
     setContextState({
       ...emptyOrganizationOverviewContextState,
-      wardId: wardId as string,
+      wardId,
       organizationId
     })
     setUsedQueryParam(true)
@@ -88,10 +86,11 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslatio
       <OrganizationOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn
           disableResize={false}
-          left={width => (<WardDisplay width={width} />)}
+          left={width => (<WardDisplay organizationId={organizationId} width={width} />)}
           right={width => (
             <WardDetail
               key={contextState.wardId}
+              organizationId={organizationId}
               width={width}
             />
           )}

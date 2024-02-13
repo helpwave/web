@@ -3,12 +3,11 @@ import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
 import type { RoomOverviewDTO } from '../mutations/room_mutations'
 import type { BedMinimalDTO } from '../mutations/bed_mutations'
-import { WardOverviewContext } from '../pages/ward/[id]'
+import { WardOverviewContext } from '../pages/ward/[wardId]'
 import { emptyPatient, type PatientDTO } from '../mutations/patient_mutations'
 import { BedCard } from './cards/BedCard'
 import { PatientCard } from './cards/PatientCard'
-import { Droppable } from './dnd-kit/Droppable'
-import { Draggable } from './dnd-kit/Draggable'
+import { Droppable, Draggable } from './dnd-kit-instances/patients'
 import { DragCard } from './cards/DragCard'
 
 export type RoomOverviewProps = {
@@ -47,14 +46,14 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
         <Span type="subsectionTitle">{room.name}</Span>
       </div>
       <div className={tw(`grid grid-cols-${columns} gap-4`)}>
-        {room.beds.map(bed => bed.patient && bed.patient?.id ?
+        {room.beds.map((bed) => bed.patient && bed.patient?.id ?
             (
-              <Droppable id={bed.id} key={bed.id} data={{ bed, room }}>
+              <Droppable id={bed.id} key={bed.id} data={{ bed, room, patient: bed.patient }}>
                 {({ isOver }) => bed.patient && bed.patient?.id && (
                   <DragCard
                     className={tw('!p-0 !border-0')}
                   >
-                    <Draggable id={bed.patient.id + 'roomOverview'} data={{ bed }}>
+                    <Draggable id={bed.patient.id + 'roomOverview'} data={{ bed, room, patient: bed.patient }}>
                       {() => bed.patient && bed.patient?.id && (
                         <PatientCard
                           bedName={bed.name}
@@ -79,30 +78,36 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
               </Droppable>
             ) : (
               // Maybe also wrap inside the drag and drop later
-              // TODO: could we use a generic parameter here somewhere to get rid of the AnyData type?
-              <Droppable key={bed.id} id={bed.id} data={{ bed, room }}>
-                {({ isOver, active }) => (!isOver ? (
-                  <BedCard
-                    bedName={bed.name}
-                    // TODO move patient creation to here
-                    onTileClick={(event) => {
-                      event.stopPropagation()
-                      setSelectedBed(room, bed, undefined, {
-                        ...emptyPatient,
-                        id: '',
-                        name: `Patient ${room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
-                      })
-                    }}
-                    isSelected={selectedBedId === bed.id}
-                  />
-                ) : (
-                  <PatientCard
-                    bedName={bed.name}
-                    patientName={active?.data.current?.bed?.patient?.name ?? active?.data.current?.name}
-                    cardDragProperties={{ isOver }}
-                  />
-                )
-                )}
+              <Droppable key={bed.id} id={bed.id} data={{ bed, room, patient: bed.patient }}>
+                {({ isOver, active }) => {
+                  const source = active?.data.current
+
+                  if (isOver) {
+                    return (
+                      <PatientCard
+                        bedName={bed.name}
+                        patientName={source?.patient?.name ?? ''} // TODO: bad!
+                        cardDragProperties={{ isOver }}
+                      />
+                    )
+                  } else {
+                    return (
+                      <BedCard
+                        bedName={bed.name}
+                        // TODO move patient creation to here
+                        onTileClick={(event) => {
+                          event.stopPropagation()
+                          setSelectedBed(room, bed, undefined, {
+                            ...emptyPatient,
+                            id: '',
+                            name: `Patient ${room?.beds.findIndex(bedOfRoom => bedOfRoom.id === bed.id) ?? 1}`
+                          })
+                        }}
+                        isSelected={selectedBedId === bed.id}
+                      />
+                    )
+                  }
+                }}
               </Droppable>
             )
         )}

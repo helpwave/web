@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { type PropsWithLanguage, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -9,9 +9,10 @@ import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } fr
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { ReSignInModal } from '../ReSignInModal'
-import { OrganizationInvitationList, type OrganizationInvitation } from '../OrganizationInvitationList'
+import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
 import { OrganizationContext } from '@/pages/organizations'
 import {
+  type OrganizationMinimalDTO,
   useInviteMemberMutation,
   useOrganizationCreateMutation,
   useOrganizationDeleteMutation,
@@ -19,6 +20,7 @@ import {
   useOrganizationUpdateMutation
 } from '@/mutations/organization_mutations'
 import { useAuth } from '@/hooks/useAuth'
+import { useOrganization } from '@/hooks/useOrganization'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -96,30 +98,45 @@ export const OrganizationDetail = ({
     }
   }, [data, isCreatingNewOrganization])
 
+  const { setOrganizationId } = useOrganization()
+
+  useEffect(() => {
+    setOrganizationId(contextState.organizationId)
+  }, [contextState.organizationId])
+
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 
-  const createMutation = useOrganizationCreateMutation(organization => {
-    organizationInvites.forEach(invite => inviteMemberMutation.mutate({
-      email: invite.email,
-      organizationId: organization.id
-    }))
-    setIsShowingReSignInDialog(organization.id)
-  })
+  const createOrganizationMutation = useOrganizationCreateMutation()
+  const updateOrganizationMutation = useOrganizationUpdateMutation()
+  const deleteOrganizationMutation = useOrganizationDeleteMutation()
 
-  const updateMutation = useOrganizationUpdateMutation(organization => {
-    setOrganizationForm({
-      isValid: true,
-      hasChanges: false,
-      organization: {
-        ...organization
-      },
-      touched: organizationForm.touched
+  const createOrganization = (organization: OrganizationMinimalDTO) => createOrganizationMutation.mutateAsync(organization)
+    .then((organization) => {
+      organizationInvites.forEach(invite => inviteMemberMutation.mutate({
+        email: invite.email,
+        organizationId: organization.id
+      }))
+      setIsShowingReSignInDialog(organization.id)
     })
-  })
 
-  const deleteMutation = useOrganizationDeleteMutation(() => updateContext({
-    organizationId: ''
-  }))
+  const updateOrganization = (organization: OrganizationMinimalDTO) => updateOrganizationMutation.mutateAsync(organization)
+    .then((organization) => {
+      setOrganizationForm({
+        isValid: true,
+        hasChanges: false,
+        organization: {
+          ...organization
+        },
+        touched: organizationForm.touched
+      })
+    })
+
+  const deleteOrganization = (organizationId: string) => deleteOrganizationMutation.mutateAsync(organizationId)
+    .then(() => {
+      updateContext({
+        organizationId: '' // TODO: bad!
+      })
+    })
 
   return (
     <div
@@ -136,7 +153,7 @@ export const OrganizationDetail = ({
         onCloseClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          deleteMutation.mutate(contextState.organizationId)
+          deleteOrganization(contextState.organizationId)
         }}
         confirmType="negative"
       />
@@ -170,7 +187,7 @@ export const OrganizationDetail = ({
           onChange={(organizationForm, shouldUpdate) => {
             setOrganizationForm(organizationForm)
             if (shouldUpdate) {
-              updateMutation.mutate(organizationForm.organization)
+              updateOrganization(organizationForm.organization)
             }
           }}
         />
@@ -185,7 +202,7 @@ export const OrganizationDetail = ({
         <div className={tw('flex flex-row justify-end')}>
           <Button
             className={tw('w-auto')}
-            onClick={() => isCreatingNewOrganization ? createMutation.mutate(organizationForm.organization) : updateMutation.mutate(organizationForm.organization)}
+            onClick={() => isCreatingNewOrganization ? createOrganization(organizationForm.organization) : updateOrganization(organizationForm.organization)}
             disabled={!organizationForm.isValid}>
             {isCreatingNewOrganization ? translation.create : translation.update}
           </Button>

@@ -89,7 +89,7 @@ export const Modal = ({
   modalClassName = '',
   ...modalHeaderProps
 }: PropsWithChildren<ModalProps>) => {
-  const modalRoot = document.getElementById(modalRootName)
+  const modalRoot = typeof window !== 'undefined' ? document.getElementById(modalRootName) : null
   const {
     register,
     addToRegister,

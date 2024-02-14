@@ -8,7 +8,7 @@ const DemoSection = () => {
   return (
     <div className={tw('py-16')}>
       <Link href={demoURL} target="_blank">
-        <div className={tw('font-space text-4xl font-bold underline text-center justify-center animate-pulse')}>
+        <div className={tw('font-space text-4xl font-bold underline text-center justify-center')}>
           Try <span className={tw('text-blue-400 text-6xl')}>Open Beta</span> now!
           <LinkIcon className={tw('ml-4 inline text-gray-400')} />
         </div>

@@ -38,7 +38,7 @@ jobs:
           scope: "@helpwave"
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         id: pnpm-install
         with:
           version: ${{ env.PNPM_VERSION }}

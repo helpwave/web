@@ -12,7 +12,9 @@ export type DescriptionWithActionProps = {
   trailing?: ReactNode,
   trailingButtonText?: string,
   trailingButtonFunction?: () => void,
-  className?: string
+  className?: string,
+  titleClassName?: string,
+  descriptionClassName?: string
 }
 
 /**
@@ -26,6 +28,8 @@ export const DescriptionWithAction = ({
   trailingButtonText = '',
   trailingButtonFunction = noop,
   className = '',
+  titleClassName = '',
+  descriptionClassName = ''
 }: DescriptionWithActionProps) => {
   let leading
   switch (leadingIcon) {
@@ -45,8 +49,8 @@ export const DescriptionWithAction = ({
         </div>
       )}
       <div className={tw('flex flex-col')}>
-        <Span type="title">{title}</Span>
-        <Span type="description">{description}</Span>
+        <Span type="title" className={tx(titleClassName)}>{title}</Span>
+        <Span type="description" className={tx(descriptionClassName)}>{description}</Span>
       </div>
       {trailing}
       {!trailing && trailingButtonText && (

@@ -159,7 +159,6 @@ export type RadialRingsProps = {
   waveBaseColor?: string
 };
 
-// eslint-disable-next-line no-empty-pattern
 export const RadialRings = ({
   color1 = 'hw-primary-700',
   color2 = 'hw-primary-500',

@@ -152,10 +152,20 @@ export const RingWave = ({
   )
 }
 
-export type RadialRingsProps = NonNullable<unknown>;
+export type RadialRingsProps = {
+  color1?: string,
+  color2?: string,
+  color3?: string,
+  waveBaseColor?: string
+};
 
 // eslint-disable-next-line no-empty-pattern
-export const RadialRings = ({}: RadialRingsProps) => {
+export const RadialRings = ({
+  color1 = 'hw-primary-700',
+  color2 = 'hw-primary-500',
+  color3 = 'hw-primary-400',
+  waveBaseColor = 'white'
+}: RadialRingsProps) => {
   const [currentRing, setCurrentRing] = useState(0)
   const size = 400
 
@@ -163,7 +173,7 @@ export const RadialRings = ({}: RadialRingsProps) => {
     <div className={tw(`relative w-[${size}px] h-[${size}px]`)}>
       <Circle
         radius={50}
-        color="hw-primary-700"
+        color={color1}
         className={tw(
           `absolute z-[10] left-[${size / 2}px] top-[${
             size / 2
@@ -174,7 +184,7 @@ export const RadialRings = ({}: RadialRingsProps) => {
         <AnimatedRing
           innerSize={100}
           width={50}
-          color="hw-primary-500"
+          color={color2}
           onAnimationFinished={() =>
             currentRing === 0 ? setCurrentRing(1) : null
           }
@@ -192,7 +202,7 @@ export const RadialRings = ({}: RadialRingsProps) => {
           startInnerSize={100 - 10}
           endInnerSize={200}
           width={10}
-          color="white"
+          color={waveBaseColor}
           repeating={true}
           className={tx(
             `absolute z-[9] left-[${size / 2}px] top-[${
@@ -203,7 +213,7 @@ export const RadialRings = ({}: RadialRingsProps) => {
       ) : null}
       <Circle
         radius={100}
-        color="hw-primary-500"
+        color={color2}
         className={tx(
           { 'opacity-20': currentRing < 1 },
           `absolute z-[8] left-[${size / 2}px] top-[${
@@ -215,7 +225,7 @@ export const RadialRings = ({}: RadialRingsProps) => {
         <AnimatedRing
           innerSize={199}
           width={50}
-          color="hw-primary-400"
+          color={color3}
           onAnimationFinished={() =>
             currentRing === 1 ? setCurrentRing(2) : null
           }
@@ -232,7 +242,7 @@ export const RadialRings = ({}: RadialRingsProps) => {
           startInnerSize={200}
           endInnerSize={300 - 10}
           width={10}
-          color="white"
+          color={waveBaseColor}
           repeating={true}
           className={tx(
             `absolute z-[7] left-[${size / 2}px] top-[${
@@ -243,7 +253,7 @@ export const RadialRings = ({}: RadialRingsProps) => {
       ) : null}
       <Circle
         radius={150}
-        color="hw-primary-400"
+        color={color3}
         className={tx(
           { 'opacity-20': currentRing < 2 },
           `absolute z-[6] left-[${size / 2}px] top-[${

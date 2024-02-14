@@ -103,7 +103,7 @@ export const NewsLetterForm = ({
   })
 
   return (
-    <div className={tw('rounded-md py-2 px-4 w-full')}>
+    <div className={tw('rounded-lg py-2 px-4 w-full bg-[#FFFFFFEE] border border-2')}>
       <div className={tw('flex flex-col')}>
         <Span type="title">{translation.title}</Span>
         <Span type="formDescription">{translation.subtitle}</Span>

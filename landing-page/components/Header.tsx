@@ -41,6 +41,10 @@ const items: SubLinkType[] = [
     url: '/talks'
   },
   {
+    name: 'newsletter',
+    url: '/newsletter'
+  },
+  {
     name: 'contact',
     url: 'mailto:contact@helpwave.de'
   },

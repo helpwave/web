@@ -5,7 +5,6 @@ export type FormField<T = string|number> = {
 }
 
 export const submitHubSpotForm = (portalId: string, formId: string, formFields: FormField[]) => {
-
   return fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`, {
     method: 'POST',
     headers: {

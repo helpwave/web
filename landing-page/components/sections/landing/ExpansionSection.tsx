@@ -1,21 +1,46 @@
 import { tw } from '@helpwave/common/twind'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
-const ExpansionSection = () => {
+type ExpansionTranslation = {
+  germanyHealthcareSystem: string,
+  hospitals: string,
+  healthcareWorkers: string,
+  gdp: string
+}
+
+const defaultExpansionTranslation = {
+  en: {
+    germanyHealthcareSystem: 'Germany\'s Healthcare System',
+    hospitals: 'hospitals',
+    healthcareWorkers: 'healthcare workers',
+    gdp: 'of GDP'
+  },
+  de: {
+    germanyHealthcareSystem: 'Deutsches Gesundheitssystem',
+    hospitals: 'Krankenhäuser',
+    healthcareWorkers: 'Gesundheitspersonal',
+    gdp: 'des BIP'
+  }
+}
+
+const ExpansionSection = ({ language }: PropsWithLanguage<ExpansionTranslation>) => {
+  const translation = useTranslation(language, defaultExpansionTranslation)
   return (
     <div className={tw('pb-16')}>
-        <h1 className={tw('w-full text-3xl text-center font-space')}>Germany&#39;s Healthcare System</h1>
+        <h1 className={tw('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>
 
         <div className={tw('mt-8 w-full flex flex-wrap gap-16 justify-evenly items-center')}>
           <div className={tw('text-center')}>
             <span className={tw('text-4xl')}>1.800</span>
             <br />
-            <h4>hospitals</h4>
+            <h4>{translation.hospitals}</h4>
           </div>
 
           <div className={tw('text-center')}>
             <span className={tw('text-4xl')}>1.000.000</span>
             <br />
-            <h4>healthcare workers</h4>
+            <h4>{translation.healthcareWorkers}</h4>
           </div>
 
           <div className={tw('text-center')}>

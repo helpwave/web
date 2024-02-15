@@ -1,7 +1,26 @@
 import { Button } from '@helpwave/common/components/Button'
 import { tw } from '@helpwave/common/twind'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
-const StartSection = () => {
+type landingPageTranslation = {
+  tryTheDemo: string,
+  discoverOurVision: string
+}
+
+const defaultLandingPageTranslation = {
+  en: {
+    tryTheDemo: 'Try the demo!',
+    discoverOurVision: 'Discover Our Vision'
+  },
+  de: {
+    tryTheDemo: 'Probieren Sie die Demo!',
+    discoverOurVision: 'Entdecken Sie unsere Vision'
+  }
+}
+
+const StartSection = ({ language }: PropsWithLanguage<landingPageTranslation>) => {
+  const translation = useTranslation(language, defaultLandingPageTranslation)
   const exploreURL = '/story'
   const demoURL = 'https://staging-tasks.helpwave.de'
 
@@ -21,11 +40,11 @@ const StartSection = () => {
 
         <div className={tw('flex my-8 gap-8 justify-end mobile:justify-evenly')}>
           <Button variant="tertiary" color="warn" onClick={() => { window.location.href = exploreURL }}>
-            Discover Our Vision
+            {translation.discoverOurVision}
           </Button>
 
           <Button variant="textButton" color="neutral" onClick={() => { window.open(demoURL, '_blank') }}>
-            Try the demo!
+            {translation.tryTheDemo}
           </Button>
         </div>
       </div>

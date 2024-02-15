@@ -1,12 +1,35 @@
 import { useEffect } from 'react'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import pluginConfig from '../utils/CookieConsentConfig'
 import FooterLinkGroup from './FooterLinkGroup'
-
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
+
+type FooterTranslation = {
+    Socials: string,
+    General: string,
+    Products: string,
+    Development: string
+}
+
+const defaultFooterTranslation = {
+  en: {
+    Socials: 'Socials',
+    General: 'General',
+    Products: 'Products',
+    Development: 'Development',
+  },
+  de: {
+    Socials: 'Social media',
+    General: 'Allgemein',
+    Products: 'Produkte',
+    Development: 'Entwicklung',
+  }
+}
 
 const linkGroups = [
   {
@@ -55,8 +78,9 @@ const linkGroups = [
   },
 ]
 
-const Footer = () => {
+const Footer = ({ language }: PropsWithLanguage<FooterTranslation>) => {
   const year = new Date().getFullYear()
+  const translation = useTranslation(language, defaultFooterTranslation)
 
   useEffect(() => {
     CookieConsent.run(pluginConfig)
@@ -68,7 +92,7 @@ const Footer = () => {
         {linkGroups.map((group, index) => (
           <div key={index} className={tw('mobile:w-full desktop:w-[192px] mobile:text-center')}>
             {Object.entries(group).map(([title, links]) => (
-              <FooterLinkGroup key={title} title={title} links={links} />
+              <FooterLinkGroup key={title} title={translation[title as keyof typeof translation] } links={links} />
             ))}
           </div>
         ))}

@@ -4,6 +4,21 @@ import Link from 'next/link'
 
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { useQuery } from '@tanstack/react-query'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+
+type EpisodeTranslation = {
+  allEpisodes: string
+}
+
+const defaultEpisodeTranslation = {
+  en: {
+    allEpisodes: 'All the episodes...'
+  },
+  de: {
+    allEpisodes: 'Alle Episoden...'
+  }
+}
 
 const getEpisodes = async (): Promise<{id: string, title: string, description: string, date: Date, link: string, imageURL: string}[]> => {
   const podcastRSS = 'https://anchor.fm/s/e5155fa0/podcast/rss'
@@ -43,7 +58,8 @@ const getEpisodes = async (): Promise<{id: string, title: string, description: s
     })
 }
 
-const EpisodeSection = () => {
+const EpisodeSection = ({ language }: PropsWithLanguage<EpisodeTranslation>) => {
+  const translation = useTranslation(language, defaultEpisodeTranslation)
   const { isLoading, data } = useQuery({ queryKey: ['episodes'], queryFn: getEpisodes })
 
   const size = 1024
@@ -51,7 +67,7 @@ const EpisodeSection = () => {
   return (
     <div className={tw('pt-16 pb-16')}>
       <div className={tw('flex-wrap gap-16 w-full justify-center')}>
-        <h1 className={tw('font-space text-5xl overline')}>All the episodes...</h1>
+        <h1 className={tw('font-space text-5xl overline')}>{translation.allEpisodes}</h1>
         {isLoading ? (<LoadingAnimation />) : data?.map(episode => (
           <Link key={episode.id} href={episode.link} target="_blank">
             <div className={tw('w-full shadow-sm hover:border-solid hover:border-hw-pool-orange rounded-md transition-all duration-500 border-dashed border-2 p-8 my-8 flex gap-16')}>

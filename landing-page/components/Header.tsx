@@ -5,6 +5,10 @@ import { X, Menu as MenuIcon } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useLanguage } from '@helpwave/common/hooks/useLanguage'
+import { Select } from '@helpwave/common/components/user-input/Select'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 const homeURL: string = '/'
 
@@ -46,13 +50,32 @@ const items: SubLinkType[] = [
   },
 ]
 
+const defaultHeaderTranslation = {
+  en: {
+    products: 'products',
+    story: 'story',
+    team: 'team',
+    talks: 'talks',
+    contact: 'contact',
+  },
+  de: {
+    products: 'Produkte',
+    story: 'Geschichte',
+    team: 'Team',
+    talks: 'tasks',
+    contact: 'Kontakt',
+  }
+}
+
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false)
+  const { language, setLanguage } = useLanguage()
+  const translation = useTranslation(language, defaultHeaderTranslation)
 
   return (
     <div>
-      <div className={tw('w-screen z-[50] fixed shadow-sm top-0 border bg-white')}>
-        <nav className={tw('flex mobile:p-2 desktop:w-5/12 items-center justify-between mx-auto')}>
+      <div className={tw('w-screen z-[50] shadow-sm top-0 border bg-white')}>
+        <nav className={tw('z-40 flex mobile:p-2 desktop:w-5/12 items-center justify-between mx-auto')}>
           <Link href={homeURL}>
             <Helpwave/>
           </Link>
@@ -67,7 +90,7 @@ const Header = () => {
                   {subpage === undefined ? (
                     <Link href={url}>
                       <Span type="navigationItem">
-                        {name}
+                        {translation[name as keyof typeof translation]}
                       </Span>
                     </Link>
                   ) : (
@@ -76,7 +99,7 @@ const Header = () => {
                       trigger={(onClick, ref) => (
                         <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
                           <Span type="navigationItem">
-                            {name}
+                            {translation[name as keyof typeof translation]}
                           </Span>
                         </div>
                       )}
@@ -110,6 +133,14 @@ const Header = () => {
               <MenuIcon size={32}/>
             </button>
           </div>
+          <Select
+            value={language}
+            onChange={(language: string) => setLanguage(language as Languages)}
+            options={[
+              { value: 'de', label: 'Deutsch' },
+              { value: 'en', label: 'Englisch' }
+            ]} >
+          </Select>
         </nav>
       </div>
 

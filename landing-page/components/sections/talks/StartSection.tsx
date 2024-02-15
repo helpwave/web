@@ -2,8 +2,25 @@ import { tw, tx } from '@helpwave/common/twind'
 import { Link as LinkIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
-const StartSection = () => {
+type taskTranslation = {
+  fusionOfHealthcareAndComputerScience: string
+
+}
+
+const defaultTaskTranslation = {
+  en: {
+    fusionOfHealthcareAndComputerScience: 'Fusion of healthcare and computer science. Interviews. Retrospectives. Foundation.',
+  },
+  de: {
+    fusionOfHealthcareAndComputerScience: 'Fusion von Gesundheitswesen und Informatik. Interviews. Retrospektiven. Grundlagen.',
+  }
+}
+
+const StartSection = ({ language }: PropsWithLanguage<taskTranslation>) => {
+  const translation = useTranslation(language, defaultTaskTranslation)
   const podcastURL = 'https://podcasters.spotify.com/pod/show/helpwave/'
   const screenshotURL = 'https://cdn.helpwave.de/thumbnail/thumbnail_03.png'
   const size = 1024
@@ -18,7 +35,7 @@ const StartSection = () => {
       </Link>
 
       <h4 className={tw('font-sans text-2xl font-medium mt-2 text-gray-600')}>
-        Fusion of healthcare and computer science. Interviews. Retrospectives. Foundation.
+        {translation.fusionOfHealthcareAndComputerScience}
       </h4>
 
       <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)}/>

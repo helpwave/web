@@ -42,19 +42,6 @@ const teamData = {
       ]
     },
   ],
-  'management': [
-    {
-      name: 'Yvonne Steernberg',
-      title: 'Dr. phil., Dipl-Betriebswirtin',
-      role: 'Scientific Project Manager',
-      pictureURL: pictureURL('yvonne_steernberg'),
-      tags: ['funding', 'sales', 'hospitalmanagement'],
-      socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/dr-phil-yvonne-m-a-steernberg-180786137/' },
-        { name: 'mail', url: 'mailto:yvonne.steernberg.de' },
-      ]
-    },
-  ],
   'development': [
     {
       name: 'Felix Thape',
@@ -112,18 +99,7 @@ const teamData = {
         { name: 'website', url: 'https://www.jonasester.de/' },
         { name: 'linkedin', url: 'https://www.linkedin.com/in/jonas-ester-b063a8188/' },
       ]
-    },
-    {
-      name: 'Friedjof Noweck',
-      role: 'backend developer',
-      pictureURL: pictureURL('friedjof_noweck'),
-      tags: ['microservices', 'python', 'database'],
-      socials: [
-        { name: 'mail', url: 'mailto:friedjof.noweck@helpwave.de' },
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/friedjof-noweck-02a4401aa/' },
-        { name: 'github', url: 'https://github.com/friedjof/' },
-      ]
-    },
+    }
   ],
   'medical': [
     {
@@ -154,28 +130,6 @@ const teamData = {
       socials: [
         { name: 'linkedin', url: 'https://www.linkedin.com/in/pierre-d-02239011a/' },
         { name: 'mail', url: 'mailto:pierre.duergen@helpwave.de' },
-      ]
-    },
-  ],
-  'support': [
-    {
-      name: 'Yari Hernandez',
-      role: 'sales genius',
-      pictureURL: pictureURL('yari_hernandez'),
-      tags: ['marketing', 'business', 'backoffice'],
-      socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/yarimar-fajardo-hernandez-66b603272/' },
-        { name: 'mail', url: 'mailto:yari.hernandez@helpwave.de' },
-      ]
-    },
-    {
-      name: 'Jonas Evers',
-      role: 'allrounder',
-      pictureURL: pictureURL('jonas_evers'),
-      tags: ['organization', 'marketing', 'events'],
-      socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/jonas-evers/' },
-        { name: 'mail', url: 'mailto:jonas.evers@helpwave.de' },
       ]
     },
   ],

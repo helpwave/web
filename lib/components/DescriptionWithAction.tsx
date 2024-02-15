@@ -42,7 +42,7 @@ export const DescriptionWithAction = ({
   }
 
   return (
-    <div className={tx('rounded-lg bg-white flex flex-row gap-x-1 py-2 px-4', className)}>
+    <div className={tx('rounded-lg bg-white flex flex-row gap-x-1 py-8 px-16', className)}>
       {leading && (
         <div className={tw('w-4 h-4 mt-[6px]')}>
           {leading}

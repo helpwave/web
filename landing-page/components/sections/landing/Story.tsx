@@ -17,7 +17,7 @@ const StoryBlock = ({
         <h4 className={tw('text-xl text-green-600')}>{beforeHeader}</h4>
       </div>
       <h2 className={tw('text-4xl font-space font-bold')}>{header}</h2>
-      <br/>
+      <br />
       <p className={tw('text-md text-justify')}>
         {mainText}
       </p>
@@ -29,14 +29,22 @@ const StorySection = () => {
   return (
     <div className={tw('m-auto pb-16 pt-8 relative flex mobile:flex-wrap gap-16')}>
       <StoryBlock
-        beforeHeader="Providing healthcare solutions"
+        beforeHeader="Open Innovation"
         header="Providing healthcare solutions"
         mainText={'At helpwave, we\'re not just creating healthcare software; we\'re co-creating it with you, the'
-           + ' end-users. By directly involving you in the process, we\'re elevating quality and nurturing stronger'
+          + ' end-users. By directly involving you in the process, we\'re elevating quality and nurturing stronger'
           + ' development relationships. This unique approach allows our dedicated developers and engineers to laser-focus'
           + ' on turning your requirements into innovative software features.'}
       />
       <StoryBlock
+        beforeHeader="Disrupting the market"
+        header="Providing healthcare solutions"
+        mainText={'When did you last feel like the software you\'re using is worth billions? We didn\'t think so.'
+          + ' Regulatory overhead and high entry barriers are making it hard for small companies to enter the market which leads to a lack of competition.'
+          + ' helpwave is here to change that. We are providing a platform that invites everyone to the table, not just only the big players.'}
+      />
+      <StoryBlock
+        beforeHeader='Join our mission'
         header={'Passion is key for helpwave\'s vision!'}
         mainText={'Our commitment to maintaining the highest level of agility, much like what helpwave embodies, is driving'
           + ' unprecedented innovation across medical branches. Experience a healthcare software development like never'

@@ -44,7 +44,7 @@ const StorySection = () => {
           + ' helpwave is here to change that. We are providing a platform that invites everyone to the table, not just only the big players.'}
       />
       <StoryBlock
-        beforeHeader='Join our mission'
+        beforeHeader="Join our mission"
         header={'Passion is key for helpwave\'s vision!'}
         mainText={'Our commitment to maintaining the highest level of agility, much like what helpwave embodies, is driving'
           + ' unprecedented innovation across medical branches. Experience a healthcare software development like never'

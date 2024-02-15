@@ -5,7 +5,7 @@ import type { TeamMemberProps } from '@/components/TeamMember'
 const pictureURL = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 
 const teamData = {
-  'founders': [
+  founders: [
     {
       name: 'Max Schäfer',
       role: 'Chief Technology Officer',
@@ -42,7 +42,7 @@ const teamData = {
       ]
     },
   ],
-  'development': [
+  development: [
     {
       name: 'Felix Thape',
       role: 'fullstack wizard',
@@ -101,7 +101,7 @@ const teamData = {
       ]
     }
   ],
-  'medical': [
+  medical: [
     {
       name: 'Ludwig Maidowski',
       role: 'medical professional & legal',

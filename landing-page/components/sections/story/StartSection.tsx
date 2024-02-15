@@ -14,9 +14,11 @@ const StartSection = () => {
           1. Identifying the Problem
         </h2>
         <p className={tw('mt-2')}>
-          helpwave emerged from a simple problem: how can we use our knowledge on software and digital tools to make the lifes of healthcare workers easier? And what is software currently used in the healthcare system lacking? All of us who work at the frontline of healthcare have experienced the frustration of outdated, inefficient, and non-intuitive software. We have seen the consequences of this in our daily work, and we have seen the consequences of this in the lives of our patients and the consequences on our lifes, too!<br />
-          The even more frustrating part: Hospitals spend millions of their budget on tools that are inefficient and make our lifes harder. The global healthcare software as a service market size was valued around 28 billion USD in 2022, with an expected growth to over 75 billion USD in the next ten years alone. Well, you guys work in the healthcare system, when did you last feel like the software you're using is worth billions? We didn't think so.<br />
-          helpwave wants to do things differently: Delivering the software to healthcare heros that they deserve. Great tools that don't bleed out the hosptials budget. Giving control back to the hospitals over their infrastructure and their data. Enabling researchers to access data to improve patient care. And most importantly: Making the lifes of healthcare workers easier.
+          {`
+            helpwave emerged from a simple problem: how can we use our knowledge on software and digital tools to make the lifes of healthcare workers easier? And what is software currently used in the healthcare system lacking? All of us who work at the frontline of healthcare have experienced the frustration of outdated, inefficient, and non-intuitive software. We have seen the consequences of this in our daily work, and we have seen the consequences of this in the lives of our patients and the consequences on our lifes, too!<br />
+            The even more frustrating part: Hospitals spend millions of their budget on tools that are inefficient and make our lifes harder. The global healthcare software as a service market size was valued around 28 billion USD in 2022, with an expected growth to over 75 billion USD in the next ten years alone. Well, you guys work in the healthcare system, when did you last feel like the software you're using is worth billions? We didn't think so.<br />
+            helpwave wants to do things differently: Delivering the software to healthcare heros that they deserve. Great tools that don't bleed out the hosptials budget. Giving control back to the hospitals over their infrastructure and their data. Enabling researchers to access data to improve patient care. And most importantly: Making the lifes of healthcare workers easier.
+          `}
         </p>
       </div>
 

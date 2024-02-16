@@ -18,16 +18,16 @@ type FooterTranslation = {
 
 const defaultFooterTranslation = {
   en: {
-    Socials: 'Socials',
-    General: 'General',
-    Products: 'Products',
-    Development: 'Development',
+    socials: 'Socials',
+    general: 'General',
+    products: 'Products',
+    development: 'Development',
   },
   de: {
-    Socials: 'social',
-    General: 'allgemein',
-    Products: 'produkte',
-    Development: 'entwicklung',
+    socials: 'social',
+    general: 'allgemein',
+    products: 'produkte',
+    development: 'entwicklung',
   }
 }
 

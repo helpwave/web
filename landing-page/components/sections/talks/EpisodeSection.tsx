@@ -13,7 +13,7 @@ type EpisodeTranslation = {
 
 const defaultEpisodeTranslation = {
   en: {
-    allEpisodes: 'All the episodes...'
+    allEpisodes: 'All episodes...'
   },
   de: {
     allEpisodes: 'Alle Episoden...'

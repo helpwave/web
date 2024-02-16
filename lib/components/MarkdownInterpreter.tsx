@@ -1,17 +1,10 @@
 import { tw } from '../twind'
 
-type ASTNodeModifierType =
-  'none'
-  | 'italic'
-  | 'bold'
-  | 'underline'
-  | 'font-space'
-  | 'primary'
-  | 'warn'
-  | 'positive'
-  | 'negative'
-/** Replaces the given ASTNode with a */
-type ASTNodeInserterType = 'helpwave'
+const astNodeModifierTypes = ['none', 'italic', 'bold', 'underline', 'font-space', 'primary', 'warn', 'positive', 'negative'] as const
+type ASTNodeModifierType = typeof astNodeModifierTypes[number]
+
+const astNodeInserterType = ['helpwave'] as const
+type ASTNodeInserterType = typeof astNodeInserterType[number]
 type ASTNodeDefaultType = 'text'
 
 type ASTNode = {
@@ -30,7 +23,7 @@ export type ASTNodeInterpreterProps = {
 }
 export const ASTNodeInterpreter = ({
   node,
-  isRoot = true
+  isRoot = false
 }: ASTNodeInterpreterProps) => {
   switch (node.type) {
     case 'text':
@@ -38,7 +31,8 @@ export const ASTNodeInterpreter = ({
     case 'helpwave':
       return (<span className={tw('font-bold font-space no-underline')}>helpwave</span>)
     case 'none':
-      return <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
+      return isRoot ? <span>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</span> :
+        <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
     case 'bold':
       return <b>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</b>
     case 'italic':
@@ -208,12 +202,55 @@ const parseMarkdown = (
   }
 }
 
+const optimizeTree = (node: ASTNode) => {
+  if (node.type === 'text') {
+    return !node.text ? undefined : node
+  }
+  if (astNodeInserterType.some(value => value === node.type)) {
+    return node
+  }
+
+  const currentNode = node as
+    { type: ASTNodeModifierType, children: ASTNode[] }
+
+  if (currentNode.children.length === 0) {
+    return undefined
+  }
+
+  // TODO probably loop this
+  let children: ASTNode[] = []
+  for (let i = 0; i < currentNode.children.length; i++) {
+    const child = currentNode.children[i]!
+    if (child.type === 'none') {
+      children.push(...child.children)
+    } else {
+      children.push(child)
+    }
+  }
+
+  currentNode.children = children
+  children = []
+
+  for (let i = 0; i < currentNode.children.length; i++) {
+    const child = optimizeTree(currentNode.children[i]!)
+    if (child) {
+      if (child.type === 'text' && children[children.length - 1]?.type === 'text') {
+        (children[children.length - 1]! as { type: ASTNodeDefaultType, text: string }).text += child.text
+      } else {
+        children.push(child)
+      }
+    }
+  }
+  currentNode.children = children
+  return currentNode
+}
+
 export type MarkdownInterpreterProps = {
   text: string
 }
 
 export const MarkdownInterpreter = ({ text }: MarkdownInterpreterProps) => {
   const tree = parseMarkdown(text)
-  console.log(tree)
-  return <ASTNodeInterpreter node={tree}/>
+  const optimizedTree = optimizeTree(tree)!
+  return <ASTNodeInterpreter node={optimizedTree} isRoot={true}/>
 }

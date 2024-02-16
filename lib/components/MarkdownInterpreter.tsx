@@ -149,7 +149,6 @@ const parseMarkdown = (
     if (modifier) {
       // check brackets
       if (text[modifier.id.length + 1] !== open) {
-        console.log('no open', text.substring(0, 12), text[modifier.id.length + 2])
         children.push({
           type: 'text',
           text: text.substring(0, modifier.id.length + 1)
@@ -217,10 +216,12 @@ const optimizeTree = (node: ASTNode) => {
     return undefined
   }
 
-  // TODO probably loop this
   let children: ASTNode[] = []
   for (let i = 0; i < currentNode.children.length; i++) {
-    const child = currentNode.children[i]!
+    const child = optimizeTree(currentNode.children[i]!)
+    if (!child) {
+      continue
+    }
     if (child.type === 'none') {
       children.push(...child.children)
     } else {
@@ -232,7 +233,7 @@ const optimizeTree = (node: ASTNode) => {
   children = []
 
   for (let i = 0; i < currentNode.children.length; i++) {
-    const child = optimizeTree(currentNode.children[i]!)
+    const child = currentNode.children[i]!
     if (child) {
       if (child.type === 'text' && children[children.length - 1]?.type === 'text') {
         (children[children.length - 1]! as { type: ASTNodeDefaultType, text: string }).text += child.text

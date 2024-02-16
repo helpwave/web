@@ -24,10 +24,10 @@ const defaultFooterTranslation = {
     Development: 'Development',
   },
   de: {
-    Socials: 'Social media',
-    General: 'Allgemein',
-    Products: 'Produkte',
-    Development: 'Entwicklung',
+    Socials: 'social',
+    General: 'allgemein',
+    Products: 'produkte',
+    Development: 'entwicklung',
   }
 }
 

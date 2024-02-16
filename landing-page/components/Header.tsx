@@ -59,11 +59,11 @@ const defaultHeaderTranslation = {
     contact: 'contact',
   },
   de: {
-    products: 'Produkte',
-    story: 'Geschichte',
-    team: 'Team',
+    products: 'produkte',
+    story: 'geschichte',
+    team: 'team',
     talks: 'tasks',
-    contact: 'Kontakt',
+    contact: 'kontakt',
   }
 }
 

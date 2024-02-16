@@ -15,7 +15,7 @@ const defaultLandingPageTranslation = {
   },
   de: {
     tryTheDemo: 'Teste die Demo!',
-    discoverOurVision: 'Entdecken Sie unsere Vision'
+    discoverOurVision: 'Entdecken unsere Vision'
   }
 }
 

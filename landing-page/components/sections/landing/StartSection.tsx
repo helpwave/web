@@ -14,7 +14,7 @@ const defaultLandingPageTranslation = {
     discoverOurVision: 'Discover Our Vision'
   },
   de: {
-    tryTheDemo: 'Probieren Sie die Demo!',
+    tryTheDemo: 'Teste die Demo!',
     discoverOurVision: 'Entdecken Sie unsere Vision'
   }
 }

@@ -33,7 +33,7 @@ const defaultFooterTranslation = {
 
 const linkGroups = [
   {
-    Socials: [
+    socials: [
       { name: 'GitHub', link: 'https://github.com/helpwave/' },
       { name: 'LinkedIn', link: 'https://linkedin.com/company/helpwave/' },
       { name: 'Instagram', link: 'https://instagram.com/helpwave_de/' },
@@ -48,7 +48,7 @@ const linkGroups = [
   },
 
   {
-    General: [
+    general: [
       { name: 'Imprint', link: 'https://cdn.helpwave.de/imprint.html' },
       { name: 'Privacy', link: 'https://cdn.helpwave.de/privacy.html' },
       { name: 'Cookies', link: '', onClick: () => CookieConsent.showPreferences() },
@@ -58,7 +58,7 @@ const linkGroups = [
       { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' },
       { name: 'Tech-Radar', link: '/tech-radar', openInCurrentTab: true },
     ],
-    Products: [
+    products: [
       { name: 'tasks', link: '/product/tasks' },
       /* { name: 'scaffold', link: '/product/scaffold' },
       { name: 'cloud', link: '/product/cloud' },
@@ -68,7 +68,7 @@ const linkGroups = [
     ]
   },
   {
-    Development: [
+    development: [
       { name: 'Status', link: 'https://helpwave.betteruptime.com/' },
       { name: 'web', link: 'https://github.com/helpwave/web' },
       { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },

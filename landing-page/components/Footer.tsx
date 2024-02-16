@@ -10,10 +10,10 @@ import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
 
 type FooterTranslation = {
-    Socials: string,
-    General: string,
-    Products: string,
-    Development: string
+    socials: string,
+    general: string,
+    products: string,
+    development: string
 }
 
 const defaultFooterTranslation = {

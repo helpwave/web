@@ -19,7 +19,7 @@ const defaultExpansionTranslation = {
   de: {
     germanyHealthcareSystem: 'Deutsches Gesundheitssystem',
     hospitals: 'Krankenhäuser',
-    healthcareWorkers: 'Gesundheitspersonal',
+    healthcareWorkers: 'healthcare workers',
     gdp: 'des BIP'
   }
 }

@@ -62,7 +62,7 @@ export const TaskCard = ({
           </Span>
         </div>
         <div className={tw('flex flex-col gap-y-1 w-[24px]')}>
-          {assignee && <Avatar avatarUrl={assignee.avatarUrl} alt={translation.assigned} size="tiny"/>}
+          {assignee && <Avatar avatarUrl={assignee.avatarUrl ?? ''} alt={translation.assigned} size="tiny"/>}
           {task.subtasks.length > 0 && (
             <ProgressIndicator progress={progress}/>
           )}

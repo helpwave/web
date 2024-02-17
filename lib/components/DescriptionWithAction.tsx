@@ -42,7 +42,7 @@ export const DescriptionWithAction = ({
   }
 
   return (
-    <div className={tx('rounded-lg bg-white flex flex-row gap-x-1 py-8 px-16', className)}>
+    <div className={tx('rounded-lg bg-white flex desktop:flex-row desktop:gap-x-1 mobile:gap-y-1 mobile:flex-col py-2 px-4', className)}>
       {leading && (
         <div className={tw('w-4 h-4 mt-[6px]')}>
           {leading}
@@ -54,7 +54,7 @@ export const DescriptionWithAction = ({
       </div>
       {trailing}
       {!trailing && trailingButtonText && (
-        <div className={tw('flex flex-row items-center justify-end grow')}>
+        <div className={tw('flex flex-row items-center desktop:justify-end mobile:justify-center grow')}>
           <Button color="accent" onClick={trailingButtonFunction} className={tw('whitespace-nowrap')}>
             {trailingButtonText}
           </Button>

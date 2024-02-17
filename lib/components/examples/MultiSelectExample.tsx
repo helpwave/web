@@ -1,0 +1,57 @@
+import { useEffect, useState } from 'react'
+import type { MultiSelectProps } from '../user-input/MultiSelect'
+import { MultiSelect } from '../user-input/MultiSelect'
+import { ChipList } from '../ChipList'
+import { Span } from '../Span'
+
+type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'onChange' | 'search' | 'selectedDisplay'> & {
+  enableSearch: boolean,
+  useChipDisplay: boolean
+}
+
+export const MultiSelectExample = ({
+  options,
+  hintText,
+  enableSearch,
+  useChipDisplay = false,
+  ...props
+}: MultiSelectExampleProps) => {
+  const [usedOptions, setUsedOptions] = useState(options)
+
+  useEffect(() => {
+    setUsedOptions(options)
+  }, [options])
+
+  useEffect(() => {
+    setUsedOptions(options)
+  }, [options])
+
+  useEffect(() => {
+    setUsedOptions(options.map(value => ({ ...value, selected: false })))
+  }, [hintText, options])
+
+  return (
+    <MultiSelect
+      options={usedOptions}
+      onChange={value => {
+        console.log(value)
+        setUsedOptions(value)
+      }}
+      hintText={hintText}
+      search={enableSearch ? { initialSearch: '', searchMapping: value => [value] } : undefined}
+      selectedDisplay={useChipDisplay ?
+          ({ items }) => {
+            const selected = items.filter(value => value.selected)
+            if (selected.length === 0) {
+              return <Span>Select</Span>
+            }
+            return (
+            <ChipList
+              list={selected.map(value => ({ label: value.label }))}
+            />
+            )
+          } : undefined}
+      {...props}
+    />
+  )
+}

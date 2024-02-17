@@ -38,14 +38,14 @@ const StorySection = () => {
       />
       <StoryBlock
         beforeHeader="Disrupting the market"
-        header="Providing healthcare solutions"
+        header="Access for everyone"
         mainText={'When did you last feel like the software you\'re using is worth billions? We didn\'t think so.'
           + ' Regulatory overhead and high entry barriers are making it hard for small companies to enter the market which leads to a lack of competition.'
           + ' helpwave is here to change that. We are providing a platform that invites everyone to the table, not just only the big players.'}
       />
       <StoryBlock
         beforeHeader="Join our mission"
-        header={'Passion is key for helpwave\'s vision!'}
+        header={'Passion for our vision'}
         mainText={'Our commitment to maintaining the highest level of agility, much like what helpwave embodies, is driving'
           + ' unprecedented innovation across medical branches. Experience a healthcare software development like never'
           + ' before and join us on this transformative journey'}

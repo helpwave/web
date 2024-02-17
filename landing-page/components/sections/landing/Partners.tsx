@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind'
+import { tw } from '@helpwave/common/twind'
 import Image from 'next/image'
 
 const images = {
@@ -8,12 +8,12 @@ const images = {
 }
 
 const PartnerSection = () => {
-  const size = 128
+  const size = 144
 
   return (
-    <div className={tw('flex gap-16 my-16 select-none overflow-x-auto justify-between items-center')}>
+    <div className={tw('flex gap-8 my-16 select-none overflow-x-auto justify-between items-center')}>
       {Object.entries(images).map(([title, src]) => (
-        <Image key={title} alt={title} src={src} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] grayscale`)} />
+        <Image key={title} alt={title} src={src} style={{ objectFit: 'contain' }} width={size} height={size} className={tw('grayscale')} />
       ))}
     </div>
   )

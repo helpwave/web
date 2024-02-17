@@ -36,7 +36,7 @@ const Home: NextPage = () => {
             title="Check out our first product..."
             description="...and how helpwave tasks increases productivity for our medical heroes"
             trailing={(
-              <div className={tw('flex flex-row items-center justify-end grow pl-2')}>
+              <div className={tw('flex flex-row items-center desktop:justify-end mobile:justify-center grow desktop:pl-2 mobile:pt-2')}>
                 <Link
                   href="product/tasks"
                   className={tw('flex flex-row gap-x-4 whitespace-nowrap px-4 py-2 text-white bg-hw-primary-800 rounded-md')}

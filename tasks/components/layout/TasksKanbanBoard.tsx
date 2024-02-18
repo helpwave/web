@@ -132,7 +132,7 @@ export const TasksKanbanBoard = ({
       return
     }
 
-    const newActiveColumn = sortedTasks[activeColumn].filter(item => item.id !== active.id);
+    const newActiveColumn = sortedTasks[activeColumn].filter(item => item.id !== active.id)
 
     // -1 means, that there was no task found, which you dragged your task over
     const insertAtIndex = overIndex === -1 ? 0 : overIndex

@@ -38,12 +38,7 @@ export const ASTNodeInterpreter = ({
     case 'italic':
       return <i>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</i>
     case 'underline':
-      return (
-        <span className={tw('underline')}>{node.children.map((value, index) => (
-          <ASTNodeInterpreter key={index}
-                              node={value}/>
-        ))}</span>
-      )
+      return (<u>{node.children.map((value, index) => (<ASTNodeInterpreter key={index} node={value}/>))}</u>)
     case 'font-space':
       return (
         <span className={tw('font-space')}>{node.children.map((value, index) => (

@@ -3,7 +3,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
-type ExpansionTranslation = {
+type ExpansionSectionTranslation = {
   germanyHealthcareSystem: string,
   hospitals: string,
   healthcareWorkers: string,

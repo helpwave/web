@@ -11,7 +11,7 @@ type EpisodeTranslation = {
   allEpisodes: string
 }
 
-const defaultEpisodeTranslation = {
+const defaultEpisodeTranslation: Record<Languages, EpisodeTranslation> = {
   en: {
     allEpisodes: 'All episodes...'
   },

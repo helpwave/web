@@ -16,7 +16,7 @@ type FooterTranslation = {
     development: string
 }
 
-const defaultFooterTranslation = {
+const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
   en: {
     socials: 'socials',
     general: 'general',

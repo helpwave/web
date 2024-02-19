@@ -3,12 +3,12 @@ import { tw } from '@helpwave/common/twind'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
-type landingPageTranslation = {
+type LandingPageTranslation = {
   tryTheDemo: string,
   discoverOurVision: string
 }
 
-const defaultLandingPageTranslation = {
+const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> = {
   en: {
     tryTheDemo: 'Try the demo!',
     discoverOurVision: 'Discover Our Vision'

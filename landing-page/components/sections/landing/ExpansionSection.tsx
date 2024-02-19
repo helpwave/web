@@ -9,7 +9,7 @@ type ExpansionTranslation = {
   gdp: string
 }
 
-const defaultExpansionTranslation = {
+const defaultExpansionTranslation: Record<Languages, ExpansionTranslation> = {
   en: {
     germanyHealthcareSystem: 'Germany\'s Healthcare System',
     hospitals: 'hospitals',

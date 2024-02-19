@@ -10,7 +10,7 @@ type ExpansionSectionTranslation = {
   gdp: string
 }
 
-const defaultExpansionTranslation: Record<Languages, ExpansionTranslation> = {
+const defaultExpansionTranslation: Record<Languages, ExpansionSectionTranslation> = {
   en: {
     germanyHealthcareSystem: 'Germany\'s Healthcare System',
     hospitals: 'hospitals',
@@ -25,7 +25,7 @@ const defaultExpansionTranslation: Record<Languages, ExpansionTranslation> = {
   }
 }
 
-const ExpansionSection = ({ language }: PropsWithLanguage<ExpansionTranslation>) => {
+const ExpansionSection = ({ language }: PropsWithLanguage<ExpansionSectionTranslation>) => {
   const translation = useTranslation(language, defaultExpansionTranslation)
   return (
     <div className={tw('pb-16')}>

@@ -12,7 +12,7 @@ type EpisodeSectionTranslation = {
   allEpisodes: string
 }
 
-const defaultEpisodeTranslation: Record<Languages, EpisodeTranslation> = {
+const defaultEpisodeTranslation: Record<Languages, EpisodeSectionTranslation> = {
   en: {
     allEpisodes: 'All episodes...'
   },
@@ -59,7 +59,7 @@ const getEpisodes = async (): Promise<{id: string, title: string, description: s
     })
 }
 
-const EpisodeSection = ({ language }: PropsWithLanguage<EpisodeTranslation>) => {
+const EpisodeSection = ({ language }: PropsWithLanguage<EpisodeSectionTranslation>) => {
   const translation = useTranslation(language, defaultEpisodeTranslation)
   const { isLoading, data } = useQuery({ queryKey: ['episodes'], queryFn: getEpisodes })
 

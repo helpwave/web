@@ -11,7 +11,7 @@ type TalksTranslation = {
 
 }
 
-const defaultTaskTranslation: Record<Languages, TaskTranslation> = {
+const defaultTaskTranslation: Record<Languages, TalksTranslation> = {
   en: {
     fusionOfHealthcareAndComputerScience: 'Fusion of healthcare and computer science. Interviews. Retrospectives. Foundation.',
   },
@@ -20,7 +20,7 @@ const defaultTaskTranslation: Record<Languages, TaskTranslation> = {
   }
 }
 
-const StartSection = ({ language }: PropsWithLanguage<TaskTranslation>) => {
+const StartSection = ({ language }: PropsWithLanguage<TalksTranslation>) => {
   const translation = useTranslation(language, defaultTaskTranslation)
   const podcastURL = 'https://podcasters.spotify.com/pod/show/helpwave/'
   const screenshotURL = 'https://cdn.helpwave.de/thumbnail/thumbnail_03.png'

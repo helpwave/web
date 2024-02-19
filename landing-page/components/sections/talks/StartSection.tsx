@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type TaskTranslation = {
   fusionOfHealthcareAndComputerScience: string
@@ -19,7 +20,7 @@ const defaultTaskTranslation: Record<Languages, TaskTranslation> = {
   }
 }
 
-const StartSection = ({ language }: PropsWithLanguage<taskTranslation>) => {
+const StartSection = ({ language }: PropsWithLanguage<TaskTranslation>) => {
   const translation = useTranslation(language, defaultTaskTranslation)
   const podcastURL = 'https://podcasters.spotify.com/pod/show/helpwave/'
   const screenshotURL = 'https://cdn.helpwave.de/thumbnail/thumbnail_03.png'

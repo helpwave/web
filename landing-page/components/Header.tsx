@@ -50,6 +50,14 @@ const items: SubLinkType[] = [
   },
 ]
 
+type HeaderTranslation = {
+  products: string,
+  story: string,
+  team: string,
+  talks: string,
+  contact: string
+}
+
 const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
   en: {
     products: 'products',

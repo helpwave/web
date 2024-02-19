@@ -5,6 +5,7 @@ import * as CookieConsent from 'vanilla-cookieconsent'
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import pluginConfig from '../utils/CookieConsentConfig'
 import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
@@ -92,6 +93,7 @@ const Footer = ({ language }: PropsWithLanguage<FooterTranslation>) => {
         {linkGroups.map((group, index) => (
           <div key={index} className={tw('mobile:w-full desktop:w-[192px] mobile:text-center')}>
             {Object.entries(group).map(([title, links]) => (
+              // todo: remove toLowerCase
               <FooterLinkGroup key={title} title={translation[title.toLowerCase() as keyof typeof translation] } links={links} />
             ))}
           </div>

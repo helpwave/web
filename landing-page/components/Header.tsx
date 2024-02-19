@@ -138,7 +138,7 @@ const Header = () => {
             onChange={(language: string) => setLanguage(language as Languages)}
             options={[
               { value: 'de', label: 'Deutsch' },
-              { value: 'en', label: 'Englisch' }
+              { value: 'en', label: 'English' }
             ]} >
           </Select>
         </nav>

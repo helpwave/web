@@ -6,7 +6,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
-type TaskTranslation = {
+type TalksTranslation = {
   fusionOfHealthcareAndComputerScience: string
 
 }

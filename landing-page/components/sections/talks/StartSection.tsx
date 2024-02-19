@@ -5,12 +5,12 @@ import Link from 'next/link'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
-type taskTranslation = {
+type TaskTranslation = {
   fusionOfHealthcareAndComputerScience: string
 
 }
 
-const defaultTaskTranslation = {
+const defaultTaskTranslation: Record<Languages, TaskTranslation> = {
   en: {
     fusionOfHealthcareAndComputerScience: 'Fusion of healthcare and computer science. Interviews. Retrospectives. Foundation.',
   },

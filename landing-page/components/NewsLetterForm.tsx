@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { Button } from '@helpwave/common/components/Button'
 
-const industryList = ['investment', 'hospital', 'patient_care', 'research', 'development'] as const
+const industryList = ['investment', 'hospital', 'patient_care', 'research', 'development', 'press'] as const
 export type Industry = typeof industryList[number]
 
 type NewsLetterFormTranslation = {
@@ -45,6 +45,8 @@ const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslat
           return 'Research'
         case 'development':
           return 'Development'
+        case 'press':
+          return 'Press'
       }
     },
     select: 'Select'
@@ -69,6 +71,8 @@ const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslat
           return 'Wissenschaft'
         case 'development':
           return 'Entwicklung'
+        case 'press':
+          return 'Presse'
       }
     },
     select: 'Auswählen'
@@ -123,7 +127,7 @@ export const NewsLetterForm = ({
               name: text
             }))}
             maxLength={255}
-            className={tw('!w-3/5')}
+            className={tw('!desktop:w-3/5 !max-w-[300px]')}
           />
           <Input
             id="email"
@@ -139,9 +143,9 @@ export const NewsLetterForm = ({
               email: text
             }))}
             maxLength={255}
-            className={tw('!w-3/5')}
+            className={tw('!desktop:w-3/5 !max-w-[300px]')}
           />
-          <div className={tw('flex flex-row gap-x-4')}>
+          <div className={tw('flex desktop:flex-row desktop:gap-x-4 mobile:flex-col mobile:gap-y-2')}>
             <Input
               id="company"
               value={formState.company}
@@ -156,6 +160,7 @@ export const NewsLetterForm = ({
                 company: text
               }))}
               maxLength={255}
+              className={tw('!max-w-[300px]')}
             />
             <Select
               label={translation.industry}
@@ -169,7 +174,7 @@ export const NewsLetterForm = ({
                 ...prevState,
                 industry
               }))}
-              className={tw('!w-full')}
+              className={tw('!w-full !max-w-[300px]')}
             />
           </div>
           <div className={tw('flex flex-row justify-end mt-4')}>

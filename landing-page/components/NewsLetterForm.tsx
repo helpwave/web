@@ -139,7 +139,7 @@ export const NewsLetterForm = ({
             required={true}
             className={tw('!desktop:w-3/5 !max-w-[300px]')}
           />
-          <div className={tw('flex desktop:flex-row desktop:flex-col gap-x-4')}>
+          <div className={tw('flex desktop:flex-row mobile:flex-col gap-x-4')}>
             <Input
               id="firstname"
               value={formState.firstname}
@@ -170,7 +170,7 @@ export const NewsLetterForm = ({
               required={true}
             />
           </div>
-          <div className={tw('flex flex-row gap-x-4')}>
+          <div className={tw('flex desktop:flex-row mobile:flex-col gap-x-4')}>
             <Input
               id="company"
               value={formState.company}

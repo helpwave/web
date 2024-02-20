@@ -15,8 +15,8 @@ export const MultiSelectVariations: Story = {
     options: [
       { value: '1', selected: false, label: 'Entry 1' },
       { value: '2', selected: false, label: 'Entry 2', disabled: true },
-      { value: '3', selected: false, label: 'Entry 3' },
-      { value: '4', selected: false, label: 'Entry 4', className: '!text-red-400' },
+      { value: '3', selected: false, label: 'Different Entry 3' },
+      { value: '4', selected: false, label: 'Custom styled Entry 4', className: '!text-red-400' },
       { value: '5', selected: false, label: 'Entry 5' },
       { value: '6', selected: false, label: 'Entry 6', disabled: true },
       { value: '7', selected: false, label: 'Long Entry 7' },

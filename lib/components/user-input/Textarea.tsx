@@ -9,15 +9,19 @@ type TextareaProps = {
   resizable?: boolean,
   onChange?: (text: string) => void,
   disclaimer?: string,
-  onEditCompleted?: (text: string) => void
+  onEditCompleted?: (text: string) => void,
+  defaultStyle?: boolean,
+  outerClassName?: string
 } & Omit<TextareaHTMLAttributes<Element>, 'id' | 'onChange'>
 
-const noop = () => { /* noop */ }
+const noop = () => { /* noop */
+}
 
 const globalStyles = css`
   /* onfocus textarea border color */
+
   .textarea-wrapper:focus-within {
-    @apply border-hw-primary-700;
+  @apply border-hw-primary-700;
   }
 `
 
@@ -34,6 +38,9 @@ export const Textarea = ({
   disclaimer,
   onBlur,
   onEditCompleted = noop,
+  defaultStyle = true,
+  className,
+  outerClassName = '',
   ...props
 }: TextareaProps) => {
   const [hasFocus, setHasFocus] = useState(false)
@@ -45,14 +52,16 @@ export const Textarea = ({
   }
 
   return (
-    <div className={tw(globalStyles)}>
-      <div className={`textarea-wrapper ${tw('relative shadow border-2 border-gray-300 rounded-lg')}`}>
-        <label className={tw('mx-3 mt-3 block text-gray-700 font-bold')} htmlFor={id}>
-          {headline}
-        </label>
+    <div className={tx({ [globalStyles]: defaultStyle }, outerClassName)}>
+      <div className={`textarea-wrapper ${tx('relative', { 'shadow border-2 border-gray-300 rounded-lg': defaultStyle })}`}>
+        {headline && (
+          <label className={tw('mx-3 mt-3 block text-gray-700 font-bold')} htmlFor={id}>
+            {headline}
+          </label>
+        )}
         <textarea
           id={id}
-          className={tx('pt-0 border-transparent focus:border-transparent focus:ring-0 h-32 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable })}
+          className={tx('pt-0 border-transparent focus:border-transparent focus:ring-0 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable, 'h-32': defaultStyle }, className)}
           onChange={(event) => {
             const value = event.target.value
             restartTimer(() => {

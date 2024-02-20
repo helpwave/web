@@ -24,7 +24,8 @@ export type InputProps = {
   onChange?: (text: string) => void,
   onChangeEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
   className?: string,
-  onEditCompleted?: (text: string) => void
+  onEditCompleted?: (text: string) => void,
+  expanded?: boolean
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 /**
@@ -41,6 +42,7 @@ const ControlledInput = ({
   onChangeEvent = noop,
   className = '',
   onEditCompleted,
+  expanded = true,
   onBlur,
   ...restProps
 }: InputProps) => {
@@ -56,7 +58,7 @@ const ControlledInput = ({
     }
   }, [restProps.autoFocus])
   return (
-    <div className={tw('w-full')}>
+    <div className={tx({ 'w-full': expanded })}>
       {label && <label htmlFor={id} className={tw('mb-1')}><Span type="labelSmall">{label}</Span></label>}
       <input
         ref={ref}

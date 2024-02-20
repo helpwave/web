@@ -30,8 +30,9 @@ const defaultMultiSelectTranslation: Record<Languages, MultiSelectTranslation> =
   }
 }
 
+// TODO maybe add custom item builder here
 export type MultiSelectOption<T> = {
-  label: ReactNode,
+  label: string,
   value: T,
   selected: boolean,
   disabled?: boolean,
@@ -40,7 +41,7 @@ export type MultiSelectOption<T> = {
 
 export type SearchProps<T> = {
   initialSearch?: string,
-  searchMapping: (value: T) => string[]
+  searchMapping: (value: MultiSelectOption<T>) => string[]
 }
 
 export type MultiSelectProps<T> = {
@@ -83,13 +84,7 @@ export const MultiSelect = <T, >({
     filteredOptions = MultiSearchWithMapping<MultiSelectOption<T>>(
       searchText,
       filteredOptions,
-      value => {
-        const list = search.searchMapping(value.value)
-        if (typeof value.label === 'string') {
-          list.push(value.label as string)
-        }
-        return list
-      })
+      value => search.searchMapping(value))
   }
   if (!showDisabledOptions) {
     filteredOptions = filteredOptions.filter(value => !value.disabled)
@@ -108,7 +103,7 @@ export const MultiSelect = <T, >({
         </label>
       )}
       <Menu<HTMLDivElement>
-        alignment="tl"
+        alignment="t_"
         trigger={(onClick, ref) => (
           <div ref={ref} onClick={disabled ? undefined : onClick}
                className={tx('inline-flex w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium cursor-pointer',

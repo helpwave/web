@@ -38,7 +38,7 @@ export const MultiSelectExample = ({
         setUsedOptions(value)
       }}
       hintText={hintText}
-      search={enableSearch ? { initialSearch: '', searchMapping: value => [value] } : undefined}
+      search={enableSearch ? { initialSearch: '', searchMapping: value => [value.label] } : undefined}
       selectedDisplay={useChipDisplay ?
           ({ items }) => {
             const selected = items.filter(value => value.selected)

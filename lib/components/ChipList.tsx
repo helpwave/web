@@ -14,7 +14,7 @@ export const Chip = ({
   className = ''
 }: ChipProps) => {
   return (
-    <div className={tx('rounded-md bg-hw-primary-800 text-white px-2 py-1', className)}>
+    <div className={tx('rounded-md bg-hw-primary-800 text-white px-2 py-1 w-fit', className)}>
       {label}
     </div>
   )
@@ -24,6 +24,10 @@ export type ChipListProps = {
   list: ChipProps[],
   className?: string
 }
+
+/**
+ * A component for displaying a list of chips
+ */
 export const ChipList = ({
   list,
   className = ''

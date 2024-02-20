@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Span } from '../Span'
 import { MultiSelectExample } from '../examples/MultiSelectExample'
 
 const meta = {
@@ -17,7 +16,7 @@ export const MultiSelectVariations: Story = {
       { value: '1', selected: false, label: 'Entry 1' },
       { value: '2', selected: false, label: 'Entry 2', disabled: true },
       { value: '3', selected: false, label: 'Entry 3' },
-      { value: '4', selected: false, label: <Span className="!text-red-400">Custom styled</Span> },
+      { value: '4', selected: false, label: 'Entry 4', className: '!text-red-400' },
       { value: '5', selected: false, label: 'Entry 5' },
       { value: '6', selected: false, label: 'Entry 6', disabled: true },
       { value: '7', selected: false, label: 'Long Entry 7' },

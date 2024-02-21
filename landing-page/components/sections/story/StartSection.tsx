@@ -5,43 +5,43 @@ const StartSection = () => {
   return (
     <div className={tw('pt-32')}>
       <div className={tw('ml-8 font-inter text-6xl font-light font-hw-error mobile:text-center')}>
-        <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full mobile:mt-2 mr-16')}/>
+        <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full mobile:mt-2 mr-16')} />
         Our Story
       </div>
 
       <div className={tw('m-8 parent')}>
         <h2 className={tw('font-space text-4xl font-light')}>
-          1. helpwave&#39;s Journey Unfolds
+          1. Identifying the Problem
         </h2>
         <p className={tw('mt-2')}>
-          helpwave emerged during the Münsterhack 2022, where it initially began as a first-aid app for citizens. Our team clinched the Viewers Choice award, and later, we received support through the Solution Enabler Program 2022. It was during this hackathon that the worlds of medicine and technology merged to form what we now know as helpwave.<br />
-          With a strong commitment to open-source software and active involvement from healthcare professionals, we introduced the first product, helpwave tasks, in February 2023. Around this time, helpwave also won the REACH Preincubator partnership, leading to the development of potential business cases and a thorough evaluation of helpwave tasks market viability.
+          {`
+            helpwave emerged from a simple problem: how can we use our knowledge on software and digital tools to make the lifes of healthcare workers easier? And what is software currently used in the healthcare system lacking? All of us who work at the frontline of healthcare have experienced the frustration of outdated, inefficient, and non-intuitive software. We have seen the consequences of this in our daily work, and we have seen the consequences of this in the lives of our patients and the consequences on our lifes, too!
+            The even more frustrating part: Hospitals spend millions of their budget on tools that are inefficient and make our lifes harder. The global healthcare software as a service market size was valued around 28 billion USD in 2022, with an expected growth to over 75 billion USD in the next ten years alone. Well, you guys work in the healthcare system, when did you last feel like the software you're using is worth billions? We didn't think so.
+            helpwave wants to do things differently: Delivering the software to healthcare heros that they deserve. Great tools that don't bleed out the hosptials budget. Giving control back to the hospitals over their infrastructure and their data. Enabling researchers to access data to improve patient care. And most importantly: Making the lifes of healthcare workers easier.
+          `}
         </p>
       </div>
 
       <div className={tw('m-8 parent')}>
         <h2 className={tw('font-space text-4xl font-light')}>
-          2. Development of tasks Takes Shape
+          2. helpwave tasks and the Open Innovation Concept
         </h2>
         <p className={tw('mt-2')}>
-          It became evident that helpwave&#39;s primary focus lay in data governance. This means that, before diving into advanced data science applications for healthcare, helpwave prioritized access, storage, and data management. This approach also extended to helpwave tasks, which initially assists in aggregating and processing event data from existing hospital processes.<br />
-
-          Even when used as a simple productivity tool (a to-do app), helpwave tasks offers significant benefits to hospitals and their staff. It can save up to 3 hours per shift on documentation and collaboration planning, resulting in remarkable efficiency gains.<br />
-
-          Thus, the idea of a to-do app for doctors and healthcare professionals evolved into an open-source product designed for both computers and mobile devices, specifically tailored for use in healthcare settings. Our development team maintains close collaboration with the Medical Team, acting as product owners. This approach ensures that the app consistently meets the high standards of its users throughout its development.
+          Enthusiastic as we were for the people that dedicate their lifes to patient care, we wanted to go directly to the frontlines: With helpwave tasks we developed a tool that is designed to make the lifes of healthcare workers easier. Bringing modern concepts of lean project management into healthcare teams and enabling healthcare workers to fill a gap that their current set of tools does not cover. We wanted to make sure that helpwave tasks is not just another tool that is used in the healthcare system, but a tool that is loved by the people that use it.
+          So we brought together designers, developers and visionaries with the people of the front line: doctors, nurses, students, researchers and administrators. We wanted to give them a tool that enables them to better organize their work, to communicate more efficiently and to have a better overview of their tasks. We wanted to give them a tool that is easy to use, that is intuitive and just plain fun!
+          At helpwave, software development does not happen in a top down approach. Healthcare workers are part of the discussion from the very beginning. Every step of the way is reviewed by real healthcare workers with years of experience from different fields. Feature requests and suggestions come directly from the wards, operating rooms and research labs of our community.
+          helpwave is an Open Innovation and Open Source company. What does that mean? Well, we believe that the best ideas come from the people that are directly affected by the problems we are trying to solve. And we believe that in a healthcare system that is built on the idea of sharing knowledge and experience, software should be no different. So we are committed to sharing not only our knowledge and experience with the community but also our entire source code for everything we build. That makes the development process in helpwave more efficient, secure, agile and inclusive.
+          We are proud to say that helpwave tasks is a tool that is designed by healthcare workers for healthcare workers.
         </p>
       </div>
 
       <div className={tw('m-8 parent')}>
         <h2 className={tw('font-space text-4xl font-light')}>
-          3. Market Entry Planning
+          3. The Future of helpwave
         </h2>
         <p className={tw('mt-2')}>
-          Thanks to the RWTH Innovation Ideation Program, helpwave has taken a significant step toward its first sale by September 2023. It is now clear that helpwave tasks is in demand at various clinics in Germany and will have a profound impact on the country&#39;s healthcare sector.<br />
-
-          Furthermore, the expansion of our product portfolio with helpwave cloud (private cloud infrastructure for each clinic on-site) and helpwave scaffold (digital twin of each clinic for gathering core information and real-time updates from stations) now presents a coherent digitalization strategy for all major hospitals.<br />
-
-          However, as such large-scale projects cannot be implemented in healthcare facilities overnight, helpwave is gearing up for the first productive deployment of the software in Q1 2024.
+          Due to our experience in developing helpwave tasks, we were able to identify an underlying problem in the healthcare software market: Deployment of software in the healthcare system is a nightmare. We have to face the reality: IT-infrastructure in hospitals is often unreliable, outdated and not secure. Missing interoperability takes its toll on workers and makes maintaining infrastructure harder than anywhere else. High regulatory requirements drive up the price and make it hard for small companies to enter the market. And the market is dominated by a few big players that are not interested in changing the status quo.
+          This is were helpwave comes in: We are developing a platform that is designed to make the deployment of software in the healthcare system easier. We want to give control back to the hospitals over their infrastructure and their data. By using cutting edge technology we not only want to build the foundation for digitlization in the healthcare market, but to open up a whole new entry point into the market for all kinds of new players. For us, this is the true meaning of Open Innovation. Inviting everyone to the table to make the healthcare system better.
         </p>
       </div>
 

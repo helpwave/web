@@ -26,6 +26,9 @@ const StartSection = () => {
       <div className={tw('mt-16 text-xl text-center animate-bounce')}>
         <Mouse className={tw('inline')} /> scroll
       </div>
+      <div className={tw('mt-16 text-xl text-center')}>
+        <p> <span className={tw('font-space font-bold')}>helpwave</span> <span className={tw('text-hw-primary-800')}>tasks</span> increases the productivity in your clinical team. Ditch your print-out ward list and coordinate your work and the work of your team in a modern kanban interface. <span className={tw('font-space font-bold')}>helpwave</span> <span className={tw('text-hw-primary-800')}>tasks</span> has been inspired by modern industry work flows and best practices from lean project management and applies them to the clinical environment.</p>
+      </div>
     </div>
   )
 }

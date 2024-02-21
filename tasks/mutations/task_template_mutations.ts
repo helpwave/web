@@ -8,8 +8,8 @@ import {
   GetAllTaskTemplatesByCreatorRequest,
   GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
-import { getAuthenticatedGrpcMetadata, taskTemplateService } from '../utils/grpc'
 import type { SubTaskDTO } from './task_mutations'
+import { getAuthenticatedGrpcMetadata, taskTemplateService } from '@/utils/grpc'
 import type { TaskTemplateFormType } from '@/pages/templates'
 import SubTask = CreateTaskTemplateRequest.SubTask // TODO: what even is this syntax???
 
@@ -58,11 +58,16 @@ export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: Task
   })
 }
 
-export const useAllTaskTemplatesByCreator = (
+type UseAllTaskTemplatesByCreatorProps = {
   createdBy?: string,
-  onSuccess: (data: TaskTemplateDTO[]) => void = noop,
-  onlyPrivate: boolean = false
-) => {
+  onSuccess: (data: TaskTemplateDTO[]) => void,
+  onlyPrivate: boolean
+}
+export const useAllTaskTemplatesByCreator = ({
+  createdBy,
+  onSuccess = noop,
+  onlyPrivate = false
+}: UseAllTaskTemplatesByCreatorProps) => {
   return useQuery({
     queryKey: ['taskTemplatesByCreator', createdBy, onlyPrivate],
     queryFn: async () => {
@@ -93,7 +98,7 @@ export const useAllTaskTemplatesByCreator = (
 }
 
 export const usePersonalTaskTemplateQuery = (createdBy?: string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
-  return useAllTaskTemplatesByCreator(createdBy, onSuccess, true)
+  return useAllTaskTemplatesByCreator({ createdBy, onSuccess, onlyPrivate: true })
 }
 
 export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate: TaskTemplateDTO | undefined) => void) => {

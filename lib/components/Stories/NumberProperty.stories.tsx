@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const NumberPropertyVariation: Story = {
   args: {
     name: 'Property',
-    required: false,
+    softRequired: false,
     value: undefined,
     suffix: 'kg',
     readOnly: false,

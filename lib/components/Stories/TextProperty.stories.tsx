@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const TextPropertyVariation: Story = {
   args: {
     name: 'Property',
-    required: false,
+    softRequired: false,
     value: undefined,
     readOnly: false,
     className: '',

@@ -13,11 +13,11 @@ type Story = StoryObj<typeof meta>;
 export const PropertyBaseVariation: Story = {
   args: {
     name: 'Property',
-    required: false,
+    softRequired: false,
     hasValue: true,
-    input: ({ required, hasValue }) => (
+    input: ({ softRequired, hasValue }) => (
       <div
-        className={tx('flex flex-row grow py-2 px-4', { 'text-hw-warn-600': required && !hasValue })}
+        className={tx('flex flex-row grow py-2 px-4', { 'text-hw-warn-600': softRequired && !hasValue })}
       >
         Value
       </div>

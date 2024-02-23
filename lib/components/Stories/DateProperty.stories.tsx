@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const DatePropertyVariation: Story = {
   args: {
     name: 'Property',
-    required: false,
+    softRequired: false,
     date: undefined,
     readOnly: false,
     className: '',

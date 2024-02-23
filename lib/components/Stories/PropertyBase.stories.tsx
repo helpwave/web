@@ -23,5 +23,7 @@ export const PropertyBaseVariation: Story = {
       </div>
     ),
     className: '',
+    readOnly: false,
+    language: 'de'
   },
 }

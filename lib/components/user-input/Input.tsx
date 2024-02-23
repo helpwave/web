@@ -128,5 +128,4 @@ const UncontrolledInput = ({
 export {
   UncontrolledInput,
   ControlledInput as Input,
-  noop
 }

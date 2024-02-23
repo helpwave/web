@@ -1,5 +1,6 @@
 import { Binary } from 'lucide-react'
 import { tx } from '../../twind'
+import { noop } from '../../util/noop'
 import { Input } from '../user-input/Input'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
@@ -24,8 +25,7 @@ const defaultNumberPropertyTranslation: Record<Languages, NumberPropertyTranslat
 export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
   value?: number,
   suffix: string,
-  onChange?: (value: number) => void,
-  onRemove?: () => void
+  onChange?: (value: number) => void
 }
 
 /**
@@ -34,8 +34,9 @@ export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'ha
 export const NumberProperty = ({
   language,
   value,
-  onChange,
+  onChange = noop,
   onRemove,
+  readOnly,
   suffix,
   ...baseProps
 }: PropsWithLanguage<NumberPropertyTranslation, NumberPropertyProps>) => {
@@ -45,8 +46,9 @@ export const NumberProperty = ({
   return (
     <PropertyBase
       {...baseProps}
+      onRemove={onRemove}
       hasValue={hasValue}
-      icon={<Binary size={16} />}
+      icon={<Binary size={16}/>}
       input={({ softRequired }) => (
         <div
           className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
@@ -56,30 +58,22 @@ export const NumberProperty = ({
             className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
             value={value?.toString() ?? ''}
             type="number"
-            readOnly={!onChange}
+            readOnly={readOnly}
             placeholder={`${translation.value}...`}
             onChange={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
-                if (onRemove) {
-                  onRemove()
-                }
+                onRemove()
               } else {
-                if (onChange) {
-                  onChange(numberValue)
-                }
+                onChange(numberValue)
               }
             }}
             onEditCompleted={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
-                if (onRemove) {
-                  onRemove()
-                }
+                onRemove()
               } else {
-                if (onChange) {
-                  onChange(numberValue)
-                }
+                onChange(numberValue)
               }
             }}
           />

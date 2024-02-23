@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { DatePropertyProps } from '../../properties/DateProperty'
 import { DateProperty } from '../../properties/DateProperty'
 
-export type DatePropertyExampleProps = Omit<DatePropertyProps, 'onChange'> & {
+export type DatePropertyExampleProps = Omit<DatePropertyProps, 'onChange'|'onRemove'> & {
   readOnly: boolean
 }
 
@@ -11,7 +11,6 @@ export type DatePropertyExampleProps = Omit<DatePropertyProps, 'onChange'> & {
  */
 export const DatePropertyExample = ({
   date,
-  readOnly,
   ...restProps
 }: DatePropertyExampleProps) => {
   const [usedDate, setUsedDate] = useState<Date | undefined>(date)
@@ -20,5 +19,5 @@ export const DatePropertyExample = ({
     setUsedDate(date)
   }, [date])
 
-  return (<DateProperty {...restProps} onChange={readOnly ? undefined : setUsedDate} date={usedDate}/>)
+  return (<DateProperty {...restProps} onChange={setUsedDate} onRemove={() => setUsedDate(undefined)} date={usedDate}/>)
 }

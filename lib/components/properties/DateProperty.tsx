@@ -16,7 +16,7 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
 export const DateProperty = ({
   date,
   onChange = noop,
-  readonly,
+  readOnly,
   ...baseProps
 }: DatePropertyProps) => {
   const hasValue = !!date
@@ -35,7 +35,7 @@ export const DateProperty = ({
             className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0', { 'bg-hw-warn-200': softRequired && !hasValue })}
             value={dateText}
             type="datetime-local"
-            readOnly={readonly}
+            readOnly={readOnly}
             onChange={(event) => {
               if (!event.target.value) {
                 event.preventDefault()

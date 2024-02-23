@@ -11,7 +11,6 @@ export type TextPropertyExampleProps = Omit<TextPropertyProps, 'onChange' | 'onR
  */
 export const TextPropertyExample = ({
   value,
-  readOnly,
   ...restProps
 }: TextPropertyExampleProps) => {
   const [usedValue, setUsedValue] = useState<string | undefined>(value)
@@ -23,8 +22,8 @@ export const TextPropertyExample = ({
   return (
     <TextProperty
       {...restProps}
-      onChange={readOnly ? undefined : setUsedValue}
-      onRemove={readOnly ? undefined : () => setUsedValue(undefined)}
+      onChange={setUsedValue}
+      onRemove={() => setUsedValue(undefined)}
       value={usedValue}
     />
   )

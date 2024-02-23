@@ -2,16 +2,13 @@ import { useEffect, useState } from 'react'
 import type { NumberPropertyProps } from '../../properties/NumberProperty'
 import { NumberProperty } from '../../properties/NumberProperty'
 
-export type NumberPropertyExampleProps = Omit<NumberPropertyProps, 'onChange' | 'onRemove'> & {
-  readOnly: boolean
-}
+export type NumberPropertyExampleProps = Omit<NumberPropertyProps, 'onChange' | 'onRemove'>
 
 /**
  * Example for using the NumberProperty
  */
 export const NumberPropertyExample = ({
   value,
-  readOnly,
   ...restProps
 }: NumberPropertyExampleProps) => {
   const [usedValue, setUsedValue] = useState<number | undefined>(value)
@@ -23,8 +20,8 @@ export const NumberPropertyExample = ({
   return (
     <NumberProperty
       {...restProps}
-      onChange={readOnly ? undefined : setUsedValue}
-      onRemove={readOnly ? undefined : () => setUsedValue(undefined)}
+      onChange={setUsedValue}
+      onRemove={() => setUsedValue(undefined)}
       value={usedValue}
     />
   )

@@ -23,8 +23,7 @@ const defaultTextPropertyTranslation: Record<Languages, TextPropertyTranslation>
 
 export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
   value?: string,
-  onChange?: (value: string) => void,
-  onRemove?: () => void
+  onChange?: (value: string) => void
 }
 
 /**
@@ -33,9 +32,9 @@ export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
 export const TextProperty = ({
   language,
   value,
-  readonly,
+  readOnly,
   onChange = noop,
-  onRemove = noop,
+  onRemove,
   ...baseProps
 }: PropsWithLanguage<TextPropertyTranslation, TextPropertyProps>) => {
   const translation = useTranslation(language, defaultTextPropertyTranslation)
@@ -44,6 +43,7 @@ export const TextProperty = ({
   return (
     <PropertyBase
       {...baseProps}
+      onRemove={onRemove}
       hasValue={hasValue}
       icon={<Text size={16} />}
       input={({ softRequired }) => (
@@ -51,12 +51,11 @@ export const TextProperty = ({
           className={tx('flex flex-row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <Textarea
-            // TODO consider the height and rows for dynamic sizing
             className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
             rows={5}
             defaultStyle={false}
             value={value?.toString() ?? ''}
-            readOnly={readonly}
+            readOnly={readOnly}
             placeholder={`${translation.value}...`}
             onChange={(value) => {
               if (!value) {

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { noop } from '@helpwave/common/components/user-input/Input'
+import { noop } from '@helpwave/common/util/noop'
 import {
   CreateTaskTemplateRequest,
   CreateTaskTemplateSubTaskRequest,

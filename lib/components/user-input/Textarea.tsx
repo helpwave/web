@@ -2,6 +2,7 @@ import type { TextareaHTMLAttributes } from 'react'
 import { useState } from 'react'
 import { tw, tx, css } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
+import { noop } from '../../util/noop'
 
 type TextareaProps = {
   headline?: string,
@@ -10,12 +11,8 @@ type TextareaProps = {
   onChange?: (text: string) => void,
   disclaimer?: string,
   onEditCompleted?: (text: string) => void,
-  defaultStyle?: boolean,
-  outerClassName?: string
+  defaultStyle?: boolean
 } & Omit<TextareaHTMLAttributes<Element>, 'id' | 'onChange'>
-
-const noop = () => { /* noop */
-}
 
 const globalStyles = css`
   /* onfocus textarea border color */
@@ -36,11 +33,10 @@ export const Textarea = ({
   resizable = false,
   onChange = noop,
   disclaimer,
-  onBlur,
+  onBlur = noop,
   onEditCompleted = noop,
   defaultStyle = true,
   className,
-  outerClassName = '',
   ...props
 }: TextareaProps) => {
   const [hasFocus, setHasFocus] = useState(false)
@@ -52,7 +48,7 @@ export const Textarea = ({
   }
 
   return (
-    <div className={tx({ [globalStyles]: defaultStyle }, outerClassName)}>
+    <div className={tx({ [globalStyles]: defaultStyle }, 'w-full')}>
       <div className={`textarea-wrapper ${tx('relative', { 'shadow border-2 border-gray-300 rounded-lg': defaultStyle })}`}>
         {headline && (
           <label className={tw('mx-3 mt-3 block text-gray-700 font-bold')} htmlFor={id}>
@@ -73,9 +69,7 @@ export const Textarea = ({
             setHasFocus(true)
           }}
           onBlur={(event) => {
-            if (onBlur) {
-              onBlur(event)
-            }
+            onBlur(event)
             onEditCompletedWrapper(event.target.value)
             setHasFocus(false)
           }}

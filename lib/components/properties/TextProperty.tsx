@@ -1,5 +1,5 @@
 import { Text } from 'lucide-react'
-import { tw, tx } from '../../twind'
+import { tx } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -51,7 +51,6 @@ export const TextProperty = ({
           className={tx('flex flex-row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <Textarea
-            outerClassName={tw('w-full')}
             // TODO consider the height and rows for dynamic sizing
             className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
             rows={5}

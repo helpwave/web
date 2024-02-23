@@ -61,15 +61,17 @@ export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: Task
 type UseAllTaskTemplatesByCreatorProps = {
   createdBy?: string,
   onSuccess: (data: TaskTemplateDTO[]) => void,
-  onlyPrivate: boolean
+  type: QueryKey
 }
 export const useAllTaskTemplatesByCreator = ({
   createdBy,
   onSuccess = noop,
-  onlyPrivate = false
+  type = 'wardTaskTemplates'
 }: UseAllTaskTemplatesByCreatorProps) => {
+  const queryKey = type
+  const onlyPrivate = type === 'personalTaskTemplates'
   return useQuery({
-    queryKey: ['taskTemplatesByCreator', createdBy, onlyPrivate],
+    queryKey: [queryKey, createdBy],
     queryFn: async () => {
       let personalTaskTemplates: TaskTemplateDTO[] = []
       if (createdBy !== undefined) {
@@ -98,7 +100,7 @@ export const useAllTaskTemplatesByCreator = ({
 }
 
 export const usePersonalTaskTemplateQuery = (createdBy?: string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
-  return useAllTaskTemplatesByCreator({ createdBy, onSuccess, onlyPrivate: true })
+  return useAllTaskTemplatesByCreator({ createdBy, onSuccess, type: 'personalTaskTemplates' })
 }
 
 export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate: TaskTemplateDTO | undefined) => void) => {

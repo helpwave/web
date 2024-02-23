@@ -47,13 +47,13 @@ export const NumberProperty = ({
       {...baseProps}
       hasValue={hasValue}
       icon={<Binary size={16} />}
-      input={({ required }) => (
+      input={({ softRequired }) => (
         <div
-          className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': required && !hasValue })}
+          className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <Input
             expanded={false}
-            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': required && !hasValue })}
+            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
             value={value?.toString() ?? ''}
             type="number"
             readOnly={!onChange}
@@ -83,7 +83,7 @@ export const NumberProperty = ({
               }
             }}
           />
-          <Span className={tx('ml-1', { 'bg-hw-warn-200': required && !hasValue })}>{suffix}</Span>
+          <Span className={tx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</Span>
         </div>
       )}
     />

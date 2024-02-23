@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { DatePropertyProps } from '../../Properties/DateProperty'
-import { DateProperty } from '../../Properties/DateProperty'
+import type { DatePropertyProps } from '../../properties/DateProperty'
+import { DateProperty } from '../../properties/DateProperty'
 
 export type DatePropertyExampleProps = Omit<DatePropertyProps, 'onChange'> & {
   readOnly: boolean

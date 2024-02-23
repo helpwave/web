@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { NumberPropertyProps } from '../../Properties/NumberProperty'
-import { NumberProperty } from '../../Properties/NumberProperty'
+import type { NumberPropertyProps } from '../../properties/NumberProperty'
+import { NumberProperty } from '../../properties/NumberProperty'
 
 export type NumberPropertyExampleProps = Omit<NumberPropertyProps, 'onChange' | 'onRemove'> & {
   readOnly: boolean

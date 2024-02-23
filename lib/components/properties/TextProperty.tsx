@@ -4,6 +4,7 @@ import type { Languages } from '../../hooks/useLanguage'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Textarea } from '../user-input/Textarea'
+import { noop } from '../../util/noop'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -32,8 +33,9 @@ export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
 export const TextProperty = ({
   language,
   value,
-  onChange,
-  onRemove,
+  readonly,
+  onChange = noop,
+  onRemove = noop,
   ...baseProps
 }: PropsWithLanguage<TextPropertyTranslation, TextPropertyProps>) => {
   const translation = useTranslation(language, defaultTextPropertyTranslation)
@@ -44,39 +46,31 @@ export const TextProperty = ({
       {...baseProps}
       hasValue={hasValue}
       icon={<Text size={16} />}
-      input={({ required }) => (
+      input={({ softRequired }) => (
         <div
-          className={tx('flex flex-row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-hw-warn-600': required && !hasValue })}
+          className={tx('flex flex-row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <Textarea
             outerClassName={tw('w-full')}
             // TODO consider the height and rows for dynamic sizing
-            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': required && !hasValue })}
+            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
             rows={5}
             defaultStyle={false}
             value={value?.toString() ?? ''}
-            readOnly={!onChange}
+            readOnly={readonly}
             placeholder={`${translation.value}...`}
             onChange={(value) => {
               if (!value) {
-                if (onRemove) {
-                  onRemove()
-                }
+                onRemove()
               } else {
-                if (onChange) {
-                  onChange(value)
-                }
+                onChange(value)
               }
             }}
             onEditCompleted={(value) => {
               if (!value) {
-                if (onRemove) {
-                  onRemove()
-                }
+                onRemove()
               } else {
-                if (onChange) {
-                  onChange(value)
-                }
+                onChange(value)
               }
             }}
           />

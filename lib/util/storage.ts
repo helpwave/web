@@ -1,5 +1,5 @@
 class StorageSerice {
-  // this seems to be a bug in eslint as 'paramter-Properties' is a special syntax of typescript
+  // this seems to be a bug in eslint as 'paramter-properties' is a special syntax of typescript
   // eslint-disable-next-line no-useless-constructor
   constructor(private storage: Storage) {}
 

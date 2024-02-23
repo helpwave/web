@@ -4,9 +4,10 @@ import { tw, tx } from '../../twind'
 
 export type PropertyBaseProps = {
   name: string,
-  input: (props: { required: boolean, hasValue: boolean }) => ReactNode,
+  input: (props: { softRequired: boolean, hasValue: boolean }) => ReactNode,
   hasValue: boolean,
-  required?: boolean,
+  softRequired?: boolean,
+  readonly?: boolean,
   icon?: ReactNode,
   className?: string
 }
@@ -17,12 +18,12 @@ export type PropertyBaseProps = {
 export const PropertyBase = ({
   name,
   input,
-  required = false,
+  softRequired = false,
   hasValue,
   icon,
   className = '',
 }: PropertyBaseProps) => {
-  const requiredAndNoValue = required && !hasValue
+  const requiredAndNoValue = softRequired && !hasValue
   return (
     <div
       className={tx('flex flex-row border border-2 rounded-xl overflow-hidden', {
@@ -46,8 +47,8 @@ export const PropertyBase = ({
           'bg-hw-warn-200': requiredAndNoValue,
         }, className)}
       >
-        {input({ required, hasValue })}
-        {required && !hasValue && (
+        {input({ softRequired, hasValue })}
+        {softRequired && !hasValue && (
           <div className={tw('text-hw-warn-600')}><AlertTriangle size={24}/></div>)
         }
       </div>

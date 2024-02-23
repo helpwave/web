@@ -1,6 +1,7 @@
 import { CalendarDays } from 'lucide-react'
 import { tx } from '../../twind'
 import { formatDate } from '../../util/date'
+import { noop } from '../../util/noop'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -14,7 +15,8 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  */
 export const DateProperty = ({
   date,
-  onChange,
+  onChange = noop,
+  readonly,
   ...baseProps
 }: DatePropertyProps) => {
   const hasValue = !!date
@@ -25,24 +27,22 @@ export const DateProperty = ({
       {...baseProps}
       hasValue={hasValue}
       icon={<CalendarDays size={16}/>}
-      input={({ required }) => (
+      input={({ softRequired }) => (
         <div
-          className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': required && !hasValue })}
+          className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <input
-            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0', { 'bg-hw-warn-200': required && !hasValue })}
+            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0', { 'bg-hw-warn-200': softRequired && !hasValue })}
             value={dateText}
             type="datetime-local"
-            readOnly={!onChange}
+            readOnly={readonly}
             onChange={(event) => {
               if (!event.target.value) {
                 event.preventDefault()
                 return
               }
               const dueDate = new Date(event.target.value)
-              if (onChange) {
-                onChange(dueDate)
-              }
+              onChange(dueDate)
             }}
           />
         </div>

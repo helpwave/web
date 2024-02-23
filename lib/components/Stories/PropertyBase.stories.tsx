@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { PropertyBase } from '../Properties/PropertyBase'
+import { PropertyBase } from '../properties/PropertyBase'
 import { tx } from '../../twind'
 
 const meta = {

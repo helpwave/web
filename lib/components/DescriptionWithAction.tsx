@@ -12,7 +12,9 @@ export type DescriptionWithActionProps = {
   trailing?: ReactNode,
   trailingButtonText?: string,
   trailingButtonFunction?: () => void,
-  className?: string
+  className?: string,
+  titleClassName?: string,
+  descriptionClassName?: string
 }
 
 /**
@@ -26,6 +28,8 @@ export const DescriptionWithAction = ({
   trailingButtonText = '',
   trailingButtonFunction = noop,
   className = '',
+  titleClassName = '',
+  descriptionClassName = ''
 }: DescriptionWithActionProps) => {
   let leading
   switch (leadingIcon) {
@@ -38,19 +42,19 @@ export const DescriptionWithAction = ({
   }
 
   return (
-    <div className={tx('rounded-lg bg-white flex flex-row gap-x-1 py-2 px-4', className)}>
+    <div className={tx('rounded-lg bg-white flex desktop:flex-row desktop:gap-x-1 mobile:gap-y-1 mobile:flex-col py-2 px-4', className)}>
       {leading && (
         <div className={tw('w-4 h-4 mt-[6px]')}>
           {leading}
         </div>
       )}
       <div className={tw('flex flex-col')}>
-        <Span type="title">{title}</Span>
-        <Span type="description">{description}</Span>
+        <Span type="title" className={tx(titleClassName)}>{title}</Span>
+        <Span type="description" className={tx(descriptionClassName)}>{description}</Span>
       </div>
       {trailing}
       {!trailing && trailingButtonText && (
-        <div className={tw('flex flex-row items-center justify-end grow')}>
+        <div className={tw('flex flex-row items-center desktop:justify-end mobile:justify-center grow')}>
           <Button color="accent" onClick={trailingButtonFunction} className={tw('whitespace-nowrap')}>
             {trailingButtonText}
           </Button>

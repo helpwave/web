@@ -2,8 +2,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { tw } from '@helpwave/common/twind'
 
 const StartSection = () => {
-  const exploreURL = '/story'
-  const demoURL = 'https://staging-tasks.helpwave.de'
+  const exploreURL = '/join'
 
   return (
     <div className={tw('pt-32 pb-16 flex gap-32 items-center justify-center')}>
@@ -19,13 +18,9 @@ const StartSection = () => {
           <span className={tw('text-green-600')}>{'technology'}</span>
         </div>
 
-        <div className={tw('flex my-8 gap-8 justify-end mobile:justify-evenly')}>
+        <div className={tw('flex my-8 gap-8 justify-end')}>
           <Button variant="tertiary" color="warn" onClick={() => { window.location.href = exploreURL }}>
-            Discover Our Vision
-          </Button>
-
-          <Button variant="textButton" color="neutral" onClick={() => { window.open(demoURL, '_blank') }}>
-            Try the demo!
+            Subscribe
           </Button>
         </div>
       </div>

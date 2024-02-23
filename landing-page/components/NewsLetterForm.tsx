@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { LoadingButton } from '@helpwave/common/components/LoadingButton'
 
-const industryList = ['investment', 'hospital', 'patient_care', 'research', 'development'] as const
+const industryList = ['investment', 'hospital', 'patient_care', 'research', 'development', 'press'] as const
 export type Industry = typeof industryList[number]
 
 type NewsLetterFormTranslation = {
@@ -47,6 +47,8 @@ const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslat
           return 'Research'
         case 'development':
           return 'Development'
+        case 'press':
+          return 'Press'
       }
     },
     select: 'Select',
@@ -73,6 +75,8 @@ const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslat
           return 'Wissenschaft'
         case 'development':
           return 'Entwicklung'
+        case 'press':
+          return 'Presse'
       }
     },
     select: 'Auswählen',
@@ -113,7 +117,7 @@ export const NewsLetterForm = ({
   })
 
   return (
-    <div className={tw('rounded-md py-2 px-4 w-full')}>
+    <div className={tw('rounded-lg py-2 px-4 w-full bg-[#FFFFFFEE] border border-2')}>
       <div className={tw('flex flex-col')}>
         <Span type="title">{translation.title}</Span>
         <Span type="formDescription">{translation.subtitle}</Span>
@@ -133,8 +137,9 @@ export const NewsLetterForm = ({
             }))}
             maxLength={255}
             required={true}
+            className={tw('!desktop:w-3/5 !max-w-[300px]')}
           />
-          <div className={tw('flex flex-row gap-x-4')}>
+          <div className={tw('flex desktop:flex-row mobile:flex-col gap-x-4')}>
             <Input
               id="firstname"
               value={formState.firstname}
@@ -165,7 +170,7 @@ export const NewsLetterForm = ({
               required={true}
             />
           </div>
-          <div className={tw('flex flex-row gap-x-4')}>
+          <div className={tw('flex desktop:flex-row mobile:flex-col gap-x-4')}>
             <Input
               id="company"
               value={formState.company}
@@ -179,6 +184,7 @@ export const NewsLetterForm = ({
                 company: text
               }))}
               maxLength={255}
+              className={tw('!max-w-[300px]')}
             />
             <Select
               label={translation.industry}
@@ -192,7 +198,7 @@ export const NewsLetterForm = ({
                 ...prevState,
                 industry
               }))}
-              className={tw('!w-full')}
+              className={tw('!w-full !max-w-[300px]')}
             />
           </div>
           <div className={tw('flex flex-row justify-end mt-4')}>

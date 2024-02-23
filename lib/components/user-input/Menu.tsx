@@ -8,7 +8,8 @@ type MenuProps<T> = PropsWithChildren<{
    * @default 'tl'
    */
   alignment?: 'tl' | 'tr' | 'bl' | 'br' | '_l' | '_r' | 't_' | 'b_',
-  showOnHover?: boolean
+  showOnHover?: boolean,
+  menuClassName?: string
 }>
 
 const MenuItem = ({
@@ -31,6 +32,7 @@ const Menu = <T extends HTMLElement>({
   children,
   alignment = 'tl',
   showOnHover = false,
+  menuClassName = '',
 }: MenuProps<T>) => {
   const [open, setOpen] = useState(false)
   const [timer, setTimer] = useState<NodeJS.Timeout>()
@@ -75,7 +77,7 @@ const Menu = <T extends HTMLElement>({
                ' bottom-[8px]': alignment[0] === 'b',
                '  left-[-8px]': alignment[1] === 'l',
                ' right-[-8px]': alignment[1] === 'r',
-             })}>
+             }, menuClassName)}>
           {children}
         </div>
       ) : null}

@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import { Select } from '@helpwave/common/components/user-input/Select'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 const homeURL: string = '/'
@@ -67,17 +66,17 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
     contact: 'contact',
   },
   de: {
-    products: 'produkte',
-    story: 'geschichte',
-    team: 'team',
+    products: 'Produkte',
+    story: 'Geschichte',
+    team: 'Team',
     talks: 'tasks',
-    contact: 'kontakt',
+    contact: 'Kontakt',
   }
 }
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false)
-  const { language, setLanguage } = useLanguage()
+  const { language } = useLanguage()
   const translation = useTranslation(language, defaultHeaderTranslation)
 
   return (
@@ -141,14 +140,6 @@ const Header = () => {
               <MenuIcon size={32}/>
             </button>
           </div>
-          <Select
-            value={language}
-            onChange={(language: string) => setLanguage(language as Languages)}
-            options={[
-              { value: 'de', label: 'Deutsch' },
-              { value: 'en', label: 'English' }
-            ]} >
-          </Select>
         </nav>
       </div>
 

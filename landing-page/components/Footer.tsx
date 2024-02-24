@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useLanguage } from '@helpwave/common/hooks/useLanguage'
+import { Select } from '@helpwave/common/components/user-input/Select'
 import pluginConfig from '../utils/CookieConsentConfig'
 import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
@@ -79,8 +80,9 @@ const linkGroups = [
   },
 ]
 
-const Footer = ({ language }: PropsWithLanguage<FooterTranslation>) => {
+const Footer = () => {
   const year = new Date().getFullYear()
+  const { language, setLanguage } = useLanguage()
   const translation = useTranslation(language, defaultFooterTranslation)
 
   useEffect(() => {
@@ -98,7 +100,16 @@ const Footer = ({ language }: PropsWithLanguage<FooterTranslation>) => {
             ))}
           </div>
         ))}
-
+        <Select
+          textColor={tw('text-white')}
+          hoverColor={tw('hover:text-white')}
+          value={language}
+          onChange={(language: string) => setLanguage(language as Languages)}
+          options={[
+            { value: 'de', label: 'Deutsch' },
+            { value: 'en', label: 'English' }
+          ]} >
+        </Select>
         <div className={tw('mobile:w-full items-center justify-center desktop:w-[192px] mx-auto h-[128px] font-space flex flex-wrap mobile:justify-center')}>
           <Helpwave color="white" size={128} />
           <Span type="subsectionTitle">&copy; {year} helpwave</Span>

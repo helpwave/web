@@ -22,6 +22,8 @@ export type SelectProps<T> = {
   className?: string,
   labelClassName?: string,
   isDisabled?: boolean,
+  textColor?: string,
+  hoverColor?: string,
   /**
    * The items will be at the start of the select and aren't selectable
    */
@@ -44,6 +46,8 @@ export const Select = <T, >({
   showDisabledOptions = true,
   isDisabled,
   className,
+  textColor = 'text-gray-700',
+  hoverColor = 'hover:bg-gray-100',
   labelClassName = 'text-lg font-semibold',
   additionalItems,
   selectedDisplayOverwrite,
@@ -65,9 +69,10 @@ export const Select = <T, >({
           <>
             <Menu.Button
               className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium',
+                textColor,
                 {
                   'rounded-b-lg': !open,
-                  'hover:bg-gray-100': !isDisabled,
+                  [hoverColor]: !isDisabled,
                   'bg-gray-100 cursor-not-allowed text-gray-500': isDisabled
                 }
               )}
@@ -92,7 +97,7 @@ export const Select = <T, >({
                 <Menu.Item key={`item${index}`}>
                   {
                     <div
-                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0',
+                      className={tx(' px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0',
                         option.className, {
                           'bg-gray-100': option.value === value,
                           'bg-gray-50': index % 2 === 1,

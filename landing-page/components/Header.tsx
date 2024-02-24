@@ -81,8 +81,8 @@ const Header = () => {
 
   return (
     <div>
-      <div className={tw('w-screen z-[50] shadow-sm top-0 border bg-white')}>
-        <nav className={tw('z-40 flex mobile:p-2 desktop:w-5/12 items-center justify-between mx-auto')}>
+      <div className={tw('w-screen z-[50] fixed shadow-sm top-0 border bg-white')}>
+        <nav className={tw('flex mobile:p-2 desktop:w-5/12 items-center justify-between mx-auto')}>
           <Link href={homeURL}>
             <Helpwave/>
           </Link>

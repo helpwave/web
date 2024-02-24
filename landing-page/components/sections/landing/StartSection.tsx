@@ -22,9 +22,8 @@ const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> =
 
 const StartSection = ({ language }: PropsWithLanguage<LandingPageTranslation>) => {
   const translation = useTranslation(language, defaultLandingPageTranslation)
-  const exploreURL = '/story'
+  const exploreURL = '/join'
   const demoURL = 'https://staging-tasks.helpwave.de'
-
   return (
     <div className={tw('pt-32 pb-16 flex gap-32 items-center justify-center')}>
       <div className={tw('desktop:w-3/4')}>
@@ -39,13 +38,14 @@ const StartSection = ({ language }: PropsWithLanguage<LandingPageTranslation>) =
           <span className={tw('text-green-600')}>{'technology'}</span>
         </div>
 
-        <div className={tw('flex my-8 gap-8 justify-end mobile:justify-evenly')}>
+        <div className={tw('flex my-8 gap-8 justify-end')}>
           <Button variant="tertiary" color="warn" onClick={() => { window.location.href = exploreURL }}>
             {translation.discoverOurVision}
           </Button>
 
           <Button variant="textButton" color="neutral" onClick={() => { window.open(demoURL, '_blank') }}>
             {translation.tryTheDemo}
+            Subscribe
           </Button>
         </div>
       </div>

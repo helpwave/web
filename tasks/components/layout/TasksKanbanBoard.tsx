@@ -122,26 +122,29 @@ export const TasksKanbanBoard = ({
     const activeItems = sortedTasks[activeColumn]
     const overItems = sortedTasks[overColumn]
 
-    // Find the indexes for the items
+    // Item index (order) of the column, which the user drags the task from
     const activeIndex = activeItems.findIndex(item => item.id === active.id)
+    // Item index (order) of the column, which the user drags the task to
     const overIndex = overItems.findIndex(item => item.id !== over?.id)
 
-    if (activeIndex === -1 || overIndex === -1) {
+    // If it can't identify the dragged item
+    if (activeIndex === -1) {
       return
     }
+
+    const newActiveColumn = sortedTasks[activeColumn].filter(item => item.id !== active.id)
+
+    // -1 means, that there was no task found, which you dragged your task over
+    const insertAtIndex = overIndex === -1 ? 0 : overIndex
+    // Insert task at insertAtIndex in the overColumn
+    const newOverColumn = [...sortedTasks[overColumn].slice(0, insertAtIndex), sortedTasks[activeColumn][activeIndex] as TaskDTO, ...sortedTasks[overColumn].slice(insertAtIndex)]
 
     // The last array access is safe as we checked the index before (> -1 and < length; findIndex will not return something >= length)
     sortedTasks[activeColumn][activeIndex]!.status = overColumn
     setSortedTasks({
       ...sortedTasks,
-      [activeColumn]: [
-        ...sortedTasks[activeColumn].filter(item => item.id !== active.id),
-      ],
-      [overColumn]: [
-        ...sortedTasks[overColumn].slice(0, overIndex),
-        sortedTasks[activeColumn][activeIndex],
-        ...sortedTasks[overColumn].slice(overIndex, sortedTasks[overColumn].length),
-      ],
+      [activeColumn]: newActiveColumn,
+      [overColumn]: newOverColumn,
     })
 
     setBoardObject({ ...boardObject, overColumn })

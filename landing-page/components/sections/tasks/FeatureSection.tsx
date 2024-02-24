@@ -21,7 +21,7 @@ const FeatureSection = () => {
           </span>
           <br />
           <Span type="description" className={tw('text-gray-600')}>
-            Save your most recent tasks as a template.
+            Save repetitive tasks as templates. Standardize your workflows, share them with your team.
           </Span>
         </div>
       </div>
@@ -53,7 +53,7 @@ const FeatureSection = () => {
           </span>
           <br />
           <Span type="description" className={tw('text-gray-600')}>
-            All the patients at a glance.
+            Modern dashboards for your patients. Keep track of their progress and tasks.
           </Span>
         </div>
       </div>

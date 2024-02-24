@@ -1,7 +1,7 @@
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
-import { X, Menu as MenuIcon } from 'lucide-react'
+import { Menu as MenuIcon, X } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'

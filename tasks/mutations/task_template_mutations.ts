@@ -211,7 +211,7 @@ export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplat
   })
 }
 
-export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task: TaskTemplateDTO | undefined) => void) => {
+export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskTemplateDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {

@@ -103,7 +103,7 @@ export const usePersonalTaskTemplateQuery = (createdBy?: string, onSuccess: (dat
   return useAllTaskTemplatesByCreator({ createdBy, onSuccess, type: 'personalTaskTemplates' })
 }
 
-export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate: TaskTemplateDTO | undefined) => void) => {
+export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate?: TaskTemplateDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (templateForm: TaskTemplateFormType) => {

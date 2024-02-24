@@ -6,6 +6,7 @@ import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import type { Languages } from '../../hooks/useLanguage'
 import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import { tx, tw } from '../../twind'
+import type { LabelType } from '../Span'
 import { Span } from '../Span'
 import { Menu, MenuItem } from './Menu'
 import { Input } from './Input'
@@ -56,8 +57,8 @@ export type MultiSelectProps<T> = {
   label?: string,
   hintText?: string,
   showDisabledOptions: boolean,
-  className: string,
-  labelClassName: string
+  className?: string,
+  labelType?: LabelType
 }
 
 /**
@@ -73,8 +74,8 @@ export const MultiSelect = <T, >({
   label,
   hintText,
   showDisabledOptions = true,
-  className,
-  labelClassName = 'text-lg font-semibold',
+  className = '',
+  labelType = 'labelBig',
 }: PropsWithLanguage<MultiSelectTranslation, MultiSelectProps<T>>) => {
   const translation = useTranslation(language, defaultMultiSelectTranslation)
   const [searchText, setSearchText] = useState<string>(search?.initialSearch ?? '')
@@ -98,8 +99,8 @@ export const MultiSelect = <T, >({
   return (
     <div className={tx(className)}>
       {label && (
-        <label htmlFor={label} className={tx(' mb-1', labelClassName)}>
-          {label}
+        <label htmlFor={label} className={tw(' mb-1')}>
+          <Span type={labelType}>{label}</Span>
         </label>
       )}
       <Menu<HTMLDivElement>

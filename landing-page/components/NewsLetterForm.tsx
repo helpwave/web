@@ -188,7 +188,7 @@ export const NewsLetterForm = ({
             />
             <Select
               label={translation.industry}
-              labelClassName="text-sm text-gray-700 font-semibold" // TODO use the relation to <SPAN> type labelSmall
+              labelType="labelSmall"
               value={formState.industry}
               options={industryList.map(value => ({
                 label: translation.industryNames(value),

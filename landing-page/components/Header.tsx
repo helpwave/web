@@ -6,7 +6,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 
-const homeURL: string = '/'
+const homeURL = '/'
 
 type LinkType = {
   name: string,

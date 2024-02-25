@@ -71,6 +71,7 @@ const negative = {
 } as const
 
 const warn = {
+  100: '#FCF1DE',
   200: '#FEEACB',
   300: '#FAB060',
   400: '#EA9E40',

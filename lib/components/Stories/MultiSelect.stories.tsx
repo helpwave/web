@@ -33,5 +33,6 @@ export const MultiSelectVariations: Story = {
     enableSearch: false,
     className: '',
     labelType: 'labelBig',
+    triggerClassName: ''
   },
 }

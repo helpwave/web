@@ -19,7 +19,7 @@ import {
   type GetTasksByPatientSortedByStatusResponse
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { noop } from '@helpwave/common/components/user-input/Input'
+import { noop } from '@helpwave/common/util/noop'
 import { getAuthenticatedGrpcMetadata, taskService } from '../utils/grpc'
 import { dateToTimestamp, timestampToDate } from '../utils/timeConversion'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'

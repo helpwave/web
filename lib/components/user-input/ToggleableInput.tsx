@@ -3,7 +3,7 @@ import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { Pencil } from 'lucide-react'
 import { tw, tx } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
-import { noop } from './Input'
+import { noop } from '../../util/noop'
 
 type InputProps = {
   /**

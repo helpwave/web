@@ -1,11 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  CreateBedRequest, DeleteBedRequest,
+  CreateBedRequest,
+  DeleteBedRequest,
   GetBedRequest,
   UpdateBedRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_pb'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
-import type { PatientDTO, PatientWithTasksNumberDTO, PatientMinimalDTO } from './patient_mutations'
+import type { PatientDTO, PatientMinimalDTO, PatientWithTasksNumberDTO } from './patient_mutations'
 import { wardsQueryKey } from './ward_mutations'
 import { bedService, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 
@@ -84,7 +85,7 @@ export const useBedCreateMutation = () => {
         console.log('error in BedCreate')
       }
 
-      return { id: res.getId(), name: res.getName() }
+      return { id: res.getId(), name: bed.name }
     },
     onSuccess: () => {
       queryClient.refetchQueries([bedService]).then()

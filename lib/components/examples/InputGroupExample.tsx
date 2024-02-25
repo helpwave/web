@@ -5,7 +5,7 @@ import { Select } from '../user-input/Select'
 import { Input } from '../user-input/Input'
 import { Textarea } from '../user-input/Textarea'
 
-export type InputGroupExampleProps = Omit<InputGroupProps, 'inputs'>
+export type InputGroupExampleProps = Omit<InputGroupProps, 'inputs' | 'onChange'>
 
 type InputType = {
   subject?: string,
@@ -54,6 +54,7 @@ export const InputGroupExample = ({
           onChange={description => setState({ ...state, description })}
         />,
       ]}
+      onChange={console.log}
     />
   )
 }

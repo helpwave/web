@@ -1,24 +1,23 @@
-import type { ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { tx, tw } from '../twind'
 import { noop } from '../util/noop'
 import { Span } from './Span'
 
-export type InputGroupProps = {
-  inputs: ReactNode[],
+export type InputGroupProps = PropsWithChildren<{
   title: string,
   expanded?: boolean,
   isExpandable?: boolean,
   onChange?: (value: boolean) => void,
   className?: string
-}
+}>
 
 /**
  * A Component for layouting inputs in an expandable group
  */
 export const InputGroup = ({
-  inputs,
+  children,
   title,
   expanded = true,
   isExpandable = false,
@@ -34,6 +33,7 @@ export const InputGroup = ({
     } else if (expanded !== isExpanded) {
       setIsExpanded(expanded)
     }
+    // eslint-disable-next-line
   }, [expanded, isExpandable])
 
   return (
@@ -60,7 +60,7 @@ export const InputGroup = ({
         )}
       </div>
       <div className={tx('flex flex-col gap-y-2', { 'h-full': isExpanded, 'h-0 overflow-hidden': !isExpanded })}>
-        {inputs}
+        {children}
       </div>
     </div>
   )

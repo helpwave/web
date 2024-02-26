@@ -27,34 +27,33 @@ export const InputGroupExample = ({
   return (
     <InputGroup
       {...props}
-      inputs={[
-        <Select
-          key="item1"
-          label="Subject Type"
-          value={state.subject}
-          options={[
-            { value: 'organization', label: 'Organization' },
-            { value: 'ward', label: 'Ward' },
-            { value: 'bed', label: 'Bed' },
-            { value: 'patient', label: 'Patient' },
-          ]}
-          onChange={subject => setState({ ...state, subject })}
-          labelType="labelSmall"
-        />,
-        <Input
-          key="item2"
-          label="Property Name"
-          value={state.propertyName}
-          onChange={propertyName => setState({ ...state, propertyName })}
-        />,
-        <Textarea
-          key="item3"
-          label="Description"
-          value={state.description}
-          onChange={description => setState({ ...state, description })}
-        />,
-      ]}
       onChange={console.log}
-    />
+    >
+      <Select
+        key="item1"
+        label="Subject Type"
+        value={state.subject}
+        options={[
+          { value: 'organization', label: 'Organization' },
+          { value: 'ward', label: 'Ward' },
+          { value: 'bed', label: 'Bed' },
+          { value: 'patient', label: 'Patient' },
+        ]}
+        onChange={subject => setState({ ...state, subject })}
+        labelType="labelSmall"
+      />
+      <Input
+        key="item2"
+        label="Property Name"
+        value={state.propertyName}
+        onChange={propertyName => setState({ ...state, propertyName })}
+      />
+      <Textarea
+        key="item3"
+        label="Description"
+        value={state.description}
+        onChange={description => setState({ ...state, description })}
+      />
+    </InputGroup>
   )
 }

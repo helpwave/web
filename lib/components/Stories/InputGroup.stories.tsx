@@ -13,7 +13,7 @@ export const InputGroupVariation: Story = {
   args: {
     title: 'Title',
     expanded: true,
-    isExpandable: false,
+    isExpandable: true,
     className: '',
   },
 }

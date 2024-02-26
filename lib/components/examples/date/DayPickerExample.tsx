@@ -19,6 +19,7 @@ export const DayPickerExample = ({
   return (
     <DayPicker
       value={date}
+      selected={date}
       onChange={date1 => {
         setDate(date1)
         onChange(date1)

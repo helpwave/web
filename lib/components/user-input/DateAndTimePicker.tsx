@@ -1,16 +1,14 @@
 import type { ReactNode } from 'react'
 import { useState } from 'react'
-import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
-import { tx, tw } from '../../twind'
+import { tw, tx } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
-import { addDuration, monthsList, subtractDuration } from '../../util/date'
+import { addDuration, subtractDuration } from '../../util/date'
 import { Button } from '../Button'
 import { TimePicker } from '../date/TimePicker'
-import { YearMonthPicker } from '../date/YearMonthPicker'
-import { DayPicker } from '../date/DayPicker'
+import { DatePicker } from '../date/DatePicker'
 
 type TimeTranslation = {
   clear: string,
@@ -73,8 +71,6 @@ const defaultTimeTranslation: Record<Languages, TimeTranslation> = {
   }
 }
 
-type DisplayMode = 'year' | 'month' | 'yearMonth' | 'day'
-
 export type DateTimePickerMode = 'date' | 'time' | 'dateTime'
 
 export type DateTimePickerProps = {
@@ -101,81 +97,50 @@ export const DateTimePicker = ({
   onRemove = noop
 }: PropsWithLanguage<TimeTranslation, DateTimePickerProps>) => {
   const translation = useTranslation(language, defaultTimeTranslation)
-  const [displayMode, setDisplayMode] = useState<DisplayMode>('yearMonth')
-  const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
+  const [date, setDate] = useState<Date>(value)
 
   const useDate = mode === 'dateTime' || mode === 'date'
   const useTime = mode === 'dateTime' || mode === 'time'
 
   let dateDisplay: ReactNode
   let timeDisplay: ReactNode
-  if (useDate && displayMode === 'yearMonth') {
+
+  if (useDate) {
     dateDisplay = (
-      <YearMonthPicker
-        value={value}
-        startYear={start}
-        endYear={end}
-        onChange={newDate => {
-          onChange(newDate)
-          setDisplayedMonth(newDate)
-          setDisplayMode('day')
+      <DatePicker
+        yearMonthPickerProps={{ maxHeight: 218 }}
+        value={date}
+        start={start}
+        end={end}
+        onChange={date1 => {
+          setDate(date1)
+          onChange(date1)
         }}
       />
     )
   }
-  if (useDate && displayMode === 'day') {
-    dateDisplay = (
-      <DayPicker value={displayedMonth} selected={value}/>
-    )
-  }
   if (useTime) {
-    timeDisplay = (<TimePicker time={value} onChange={console.log}/>)
+    timeDisplay = (
+      <TimePicker
+        className={tx({ 'justify-between w-full': mode === 'time' })}
+        maxHeight={250}
+        time={date}
+        onChange={date1 => {
+          setDate(date1)
+          onChange(date1)
+        }}
+      />
+    )
   }
 
   return (
-    <div className={tw('flex flex-col max-w-[500px]')}>
-      <div className={tw('flex flex-row gap-x-4 justify-between max-h-[250px]')}>
-        {dateDisplay && (
-          <div className={tw('flex flex-col gap-y-2 max-w-[300px]')}>
-            <div className={tw('flex flex-row justify-between')}>
-              <div
-                className={tx('flex flex-row gap-x-1 items-center', {
-                  'text-gray-500 cursor-not-allowed': displayMode !== 'day',
-                  'cursor-pointer': displayMode === 'day'
-                })}
-                onClick={displayMode === 'day' ? () => setDisplayMode('yearMonth') : undefined}
-              >
-                {`${translation[monthsList[value.getMonth()!]!]} ${value.getFullYear()}`}
-                <ChevronDown size={16}/>
-              </div>
-              {displayMode === 'day' && (
-                <div className={tx('flex flex-row gap-x-2')}>
-                  <ArrowUp
-                    className={tw('cursor-pointer')}
-                    size={20}
-                    onClick={() => {
-                      setDisplayedMonth(subtractDuration(displayedMonth, { months: 1 }))
-                    }}
-                  />
-                  <ArrowDown
-                    className={tw('cursor-pointer')}
-                    size={20}
-                    onClick={() => {
-                      setDisplayedMonth(addDuration(displayedMonth, { months: 1 }))
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-            <div className={tw('overflow-auto')}>
-              {dateDisplay}
-            </div>
-          </div>
-        )}
+    <div className={tw('flex flex-col w-fit')}>
+      <div className={tw('flex flex-row gap-x-4')}>
+        {dateDisplay}
         {timeDisplay}
       </div>
       <div className={tw('flex flex-row justify-end')}>
-        <div className={tw('flex flex-row gap-x-2 mt-4')}>
+        <div className={tw('flex flex-row gap-x-2 mt-1')}>
           <Button size="medium" color="negative" onClick={onRemove}>{translation.clear}</Button>
           <Button
             size="medium"

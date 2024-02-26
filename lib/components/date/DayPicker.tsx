@@ -79,7 +79,7 @@ export const DayPicker = ({
 
   const weeks = equalSizeGroups(dayList, 7)
   return (
-    <div className={tx('flex flex-col gap-1', className)}>
+    <div className={tx('flex flex-col gap-y-1', className)}>
       <div className={tw('flex flex-row text-center')}>
         {weekDayOrder.map(weekDay => (
           <div key={weekDay} className={tw('flex-1 font-semibold')}>
@@ -88,7 +88,7 @@ export const DayPicker = ({
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} className={tw('flex flex-row text-center')}>
+        <div key={index} className={tw('flex flex-row text-center gap-x-2')}>
           {week.map((date) => {
             const isSelected = !!selected && equalDate(selected, date)
             const isToday = equalDate(new Date(), date)

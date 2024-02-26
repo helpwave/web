@@ -18,6 +18,7 @@ export type Duration = {
   months?: number,
   days?: number,
   hours?: number,
+  minutes?: number,
   seconds?: number,
   milliseconds?: number
 }
@@ -28,33 +29,57 @@ export const changeDuration = (date: Date, duration: Duration, isAdding?: boolea
     months = 0,
     days = 0,
     hours = 0,
+    minutes = 0,
     seconds = 0,
     milliseconds = 0,
   } = duration
+
+  // Check ranges
+  if (years < 0) {
+    console.error(`Range error years must be greater than 0: received ${years}`)
+    return new Date(date)
+  }
+  if (months < 0 || months > 11) {
+    console.error(`Range error month must be 0 <= month <= 11: received ${months}`)
+    return new Date(date)
+  }
+  if (days < 0) {
+    console.error(`Range error days must be greater than 0: received ${days}`)
+    return new Date(date)
+  }
+  if (hours < 0 || hours > 23) {
+    console.error(`Range error hours must be 0 <= hours <= 23: received ${hours}`)
+    return new Date(date)
+  }
+  if (minutes < 0 || minutes > 59) {
+    console.error(`Range error minutes must be 0 <= minutes <= 59: received ${minutes}`)
+    return new Date(date)
+  }
+  if (seconds < 0 || seconds > 59) {
+    console.error(`Range error seconds must be 0 <= seconds <= 59: received ${seconds}`)
+    return new Date(date)
+  }
+  if (milliseconds < 0) {
+    console.error(`Range error seconds must be greater than 0: received ${milliseconds}`)
+    return new Date(date)
+  }
 
   const multiplier = isAdding ? 1 : -1
 
   const newDate = new Date(date)
 
-  // Add or subtract years and months
   newDate.setFullYear(newDate.getFullYear() + multiplier * years)
+
   newDate.setMonth(newDate.getMonth() + multiplier * months)
 
-  // Handle month overflow
-  while (newDate.getMonth() !== (date.getMonth() + multiplier * months) % 12) {
-    newDate.setDate(newDate.getDate() - 1)
-  }
-
-  // Add or subtract days
   newDate.setDate(newDate.getDate() + multiplier * days)
 
-  // Add or subtract hours
   newDate.setHours(newDate.getHours() + multiplier * hours)
 
-  // Add or subtract seconds
+  newDate.setMinutes(newDate.getMinutes() + multiplier * minutes)
+
   newDate.setSeconds(newDate.getSeconds() + multiplier * seconds)
 
-  // Add or subtract milliseconds
   newDate.setMilliseconds(newDate.getMilliseconds() + multiplier * milliseconds)
 
   return newDate

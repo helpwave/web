@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { DateTimePicker } from '../user-input/DateAndTimePicker'
 import { addDuration, subtractDuration } from '../../util/date'
+import { DateTimePickerExample } from '../examples/date/DateTimePickerExample'
 
 const meta = {
-  title: 'Input',
-  component: DateTimePicker,
-} satisfies Meta<typeof DateTimePicker>
+  title: 'Date',
+  component: DateTimePickerExample,
+} satisfies Meta<typeof DateTimePickerExample>
 
 export default meta
 type Story = StoryObj<typeof meta>;

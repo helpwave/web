@@ -1,8 +1,14 @@
+export const monthsList = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const
+export type Month = typeof monthsList[number]
+
+export const weekDayList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const
+export type WeekDay = typeof weekDayList[number]
+
 export const formatDate = (date: Date) => {
   return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }
 
-function getDaysInMonth(year: number, month: number): number {
+export const getDaysInMonth = (year: number, month: number): number => {
   const lastDayOfMonth = new Date(year, month + 1, 0)
   return lastDayOfMonth.getDate()
 }
@@ -86,4 +92,11 @@ export const getBetweenDuration = (startDate: Date, endDate: Date): Duration => 
     seconds,
     milliseconds,
   }
+}
+
+/** Compare two dates on the year, month, day */
+export const equalDate = (date1: Date, date2: Date) => {
+  return date1.getFullYear() === date2.getFullYear()
+    && date1.getMonth() === date2.getMonth()
+    && date1.getDate() === date2.getDate()
 }

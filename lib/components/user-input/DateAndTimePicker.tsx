@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { useState } from 'react'
 import { tw, tx } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
@@ -7,7 +6,9 @@ import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
 import { addDuration, subtractDuration } from '../../util/date'
 import { Button } from '../Button'
+import type { TimePickerProps } from '../date/TimePicker'
 import { TimePicker } from '../date/TimePicker'
+import type { DatePickerProps } from '../date/DatePicker'
 import { DatePicker } from '../date/DatePicker'
 
 type TimeTranslation = {
@@ -80,7 +81,9 @@ export type DateTimePickerProps = {
   end?: Date,
   onChange?: (date: Date) => void,
   onFinish?: (date: Date) => void,
-  onRemove?: () => void
+  onRemove?: () => void,
+  datePickerProps?: Omit<DatePickerProps, 'onChange' | 'value' | 'start' | 'end'>,
+  timePickerProps?: Omit<TimePickerProps, 'onChange' | 'time' | 'maxHeight'>
 }
 
 /**
@@ -94,10 +97,11 @@ export const DateTimePicker = ({
   mode = 'dateTime',
   onFinish = noop,
   onChange = noop,
-  onRemove = noop
+  onRemove = noop,
+  timePickerProps,
+  datePickerProps,
 }: PropsWithLanguage<TimeTranslation, DateTimePickerProps>) => {
   const translation = useTranslation(language, defaultTimeTranslation)
-  const [date, setDate] = useState<Date>(value)
 
   const useDate = mode === 'dateTime' || mode === 'date'
   const useTime = mode === 'dateTime' || mode === 'time'
@@ -108,27 +112,24 @@ export const DateTimePicker = ({
   if (useDate) {
     dateDisplay = (
       <DatePicker
+        {...datePickerProps}
+        className={tw('min-w-[220px]')}
         yearMonthPickerProps={{ maxHeight: 218 }}
-        value={date}
+        value={value}
         start={start}
         end={end}
-        onChange={date1 => {
-          setDate(date1)
-          onChange(date1)
-        }}
+        onChange={onChange}
       />
     )
   }
   if (useTime) {
     timeDisplay = (
       <TimePicker
-        className={tx({ 'justify-between w-full': mode === 'time' })}
+        {...timePickerProps}
+        className={tx('h-full', { 'justify-between w-full': mode === 'time' })}
         maxHeight={250}
-        time={date}
-        onChange={date1 => {
-          setDate(date1)
-          onChange(date1)
-        }}
+        time={value}
+        onChange={onChange}
       />
     )
   }

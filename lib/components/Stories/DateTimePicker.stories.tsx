@@ -16,5 +16,11 @@ export const DateTimePickerVariation: Story = {
     value: new Date(),
     start: subtractDuration(new Date(), { years: 50 }),
     end: addDuration(new Date(), { years: 50 }),
+    is24HourFormat: true,
+    minuteIncrement: '5min',
+    weekStart: 'monday',
+    initialDisplay: 'day',
+    markToday: false,
+    showValueOpen: false,
   },
 }

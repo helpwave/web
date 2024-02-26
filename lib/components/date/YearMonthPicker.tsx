@@ -82,7 +82,7 @@ export const YearMonthPicker = ({
     const scrollToItem = () => {
       if (ref.current) {
         ref.current.scrollIntoView({
-          behavior: 'smooth',
+          behavior: 'instant',
           block: 'center',
         })
       }
@@ -99,7 +99,7 @@ export const YearMonthPicker = ({
   const years = range(startYear.getFullYear(), endYear.getFullYear())
 
   return (
-    <div className={tx('flex flex-col', className)}>
+    <div className={tx('flex flex-col select-none', className)}>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
         <div className={tw('flex flex-col gap-y-1 mr-3')}>
           {years.map(year => {

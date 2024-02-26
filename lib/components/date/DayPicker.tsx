@@ -73,13 +73,15 @@ export const DayPicker = ({
   }
 
   while (currentDate.getMonth() !== (month + 1) % 12 || currentDate.getDay() !== weekStartIndex) {
-    dayList.push(new Date(currentDate))
+    const date = new Date(currentDate)
+    date.setHours(value.getHours(), value.getMinutes()) // To make sure we are not overwriting the time
+    dayList.push(date)
     currentDate = addDuration(currentDate, { days: 1 })
   }
 
   const weeks = equalSizeGroups(dayList, 7)
   return (
-    <div className={tx('flex flex-col gap-y-1 min-w-[220px]', className)}>
+    <div className={tx('flex flex-col gap-y-1 min-w-[220px] select-none', className)}>
       <div className={tw('flex flex-row text-center')}>
         {weekDayOrder.map(weekDay => (
           <div key={weekDay} className={tw('flex-1 font-semibold')}>

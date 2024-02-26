@@ -12,3 +12,13 @@ export const equalSizeGroups = <T, >(array: T[], groupSize: number): T[][] => {
 }
 
 export const range = (start: number, end: number) => Array.from({ length: end - start + 1 }, (_, index) => index + start)
+
+/** Finds the closest match
+ * @param list: The list of all possible matches
+ * @param firstCloser: Return whether a is closer than b
+ */
+export const closestMatch = <T, >(list: T[], firstCloser: (item1: T, item2: T) => boolean) => {
+  return list.reduce((item1, item2) => {
+    return firstCloser(item1, item2) ? item1 : item2
+  })
+}

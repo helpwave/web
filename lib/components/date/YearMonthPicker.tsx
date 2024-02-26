@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
-import { range } from '../../util/array'
+import { equalSizeGroups, range } from '../../util/array'
 import { tw, tx } from '../../twind'
 import { Expandable } from '../Expandable'
 import { Span } from '../Span'
@@ -60,7 +61,8 @@ export type YearMonthPickerProps = {
   startYear?: Date,
   endYear?: Date,
   onChange?: (date: Date) => void,
-  className?: string
+  className?: string,
+  maxHeight?: number
 }
 export const YearMonthPicker = ({
   language,
@@ -68,7 +70,8 @@ export const YearMonthPicker = ({
   startYear = subtractDuration(new Date(), { years: 50 }),
   endYear = addDuration(new Date(), { years: 50 }),
   onChange = noop,
-  className = ''
+  className = '',
+  maxHeight = 300
 }: PropsWithLanguage<YearMonthPickerTranslation, YearMonthPickerProps>) => {
   const translation = useTranslation(language, defaultYearMonthPickerTranslation)
   const ref = useRef<HTMLDivElement>(null)
@@ -95,7 +98,8 @@ export const YearMonthPicker = ({
 
   return (
     <div className={tx('flex flex-col', className)}>
-      <div className={tw('flex flex-col gap-y-1')}>
+      <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
+      <div className={tw('flex flex-col gap-y-1 mr-3')}>
         {years.map(year => {
           const selectedYear = value.getFullYear() === year
           return (
@@ -103,33 +107,42 @@ export const YearMonthPicker = ({
               key={year}
               ref={(value.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
               label={<Span className={tx({ '!text-hw-primary-400 font-bold': selectedYear })}>{year}</Span>}
+              className={tw('gap-y-2 rounded-lg hover:bg-gray-200 shadow-md')}
+              headerClassName={tw('px-2 py-1 rounded-lg hover:bg-hw-primary-200')}
             >
-              <div className={tw('flex flex-wrap')}>
-                {monthsList.map(month => {
-                  const monthIndex = monthsList.indexOf(month)
-                  const selectedMonth = selectedYear && monthIndex === value.getMonth()
-                  return (
-                    <div
-                      key={month}
-                      className={tx('px-2 py-1 rounded-md border border-1 hover:bg-hw-primary-200 w-1/4 text-center cursor-pointer',
-                        { 'bg-white': !selectedMonth, 'bg-hw-primary-100 hover:bg-hw-primary-200': selectedMonth })}
-                      onClick={() => {
-                        const newDate = new Date(value)
-                        newDate.setFullYear(year, monthIndex)
-                        onChange(newDate)
-                      }}
-                    >
-                      <Span className={tx({ '!text-hw-primary-400': selectedMonth })}>
-                        {translation[month].substring(0, 3)}
-                      </Span>
-                    </div>
-                  )
-                })}
+              <div className={tw('flex flex-col gap-y-1 px-2 pb-2')}>
+                {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
+                  <div key={index} className={tw('flex flex-row gap-x-2')}>
+                    {monthList.map(month => {
+                      const monthIndex = monthsList.indexOf(month)
+                      const selectedMonth = selectedYear && monthIndex === value.getMonth()
+                      return (
+                        <div
+                          key={month}
+                          className={tx('px-2 py-1 rounded-md border border-2 hover:bg-hw-primary-200 hover:border-hw-primary-400 flex-1 text-center cursor-pointer',
+                            {
+                              'bg-white border-transparent': !selectedMonth,
+                              'border-hw-primary-300 bg-hw-primary-100 hover:bg-hw-primary-200': selectedMonth
+                            }
+                          )}
+                          onClick={() => {
+                            const newDate = new Date(value)
+                            newDate.setFullYear(year, monthIndex)
+                            onChange(newDate)
+                          }}
+                        >
+                          {translation[month].substring(0, 3)}
+                        </div>
+                      )
+                    })}
+                  </div>
+                ))}
               </div>
             </Expandable>
           )
         })}
       </div>
+      </Scrollbars>
     </div>
   )
 }

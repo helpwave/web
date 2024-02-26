@@ -15,6 +15,7 @@ export const YearMonthPickerVariation: Story = {
     value: new Date(),
     startYear: subtractDuration(new Date(), { years: 50 }),
     endYear: addDuration(new Date(), { years: 50 }),
-    className: 'max-h-[300px] max-w-[200px]'
+    className: 'max-w-[200px]',
+    maxHeight: 300,
   },
 }

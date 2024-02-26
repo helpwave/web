@@ -54,7 +54,7 @@ export const TimePicker = ({
   }
 
   return (
-    <div className={tx('flex flex-row gap-x-2 w-fit', className)}>
+    <div className={tx('flex flex-row gap-x-2 w-fit min-w-[150px]', className)}>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
         <div className={tw('flex flex-col gap-y-1')}>
           {hours.map(hour => {

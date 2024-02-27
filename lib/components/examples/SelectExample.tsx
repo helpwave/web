@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Select, type SelectProps } from '../user-input/Select'
 
-type SelectExampleProps<T> = Omit<SelectProps<T>, 'onChange'>
+type SelectExampleProps<T> = Omit<SelectProps<T>, 'onChange' | 'additionalItems' | 'selectedDisplayOverwrite'>
 
 export const SelectExample = <T, >({ options, value, hintText, ...props }: SelectExampleProps<T>) => {
   const [selected, setSelected] = useState(value)

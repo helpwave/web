@@ -2,9 +2,13 @@ import type { TextareaHTMLAttributes } from 'react'
 import { useState } from 'react'
 import { tw, tx, css } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
+import { Span } from '../Span'
 import { noop } from '../../util/noop'
 
-type TextareaProps = {
+export type TextareaProps = {
+  /** Outside the area */
+  label?: string,
+  /** Inside the area */
   headline?: string,
   id?: string,
   resizable?: boolean,
@@ -16,9 +20,8 @@ type TextareaProps = {
 
 const globalStyles = css`
   /* onfocus textarea border color */
-
   .textarea-wrapper:focus-within {
-  @apply border-hw-primary-700;
+    @apply border-hw-primary-700;
   }
 `
 
@@ -28,6 +31,7 @@ const globalStyles = css`
  * The State is managed by the parent
  */
 export const Textarea = ({
+  label,
   headline,
   id,
   resizable = false,
@@ -49,6 +53,11 @@ export const Textarea = ({
 
   return (
     <div className={tx({ [globalStyles]: defaultStyle }, 'w-full')}>
+      {label && (
+        <label className={tw('mb-1')} htmlFor={id}>
+          <Span type="labelSmall">{label}</Span>
+        </label>
+      )}
       <div className={`textarea-wrapper ${tx('relative', { 'shadow border-2 border-gray-300 rounded-lg': defaultStyle })}`}>
         {headline && (
           <label className={tw('mx-3 mt-3 block text-gray-700 font-bold')} htmlFor={id}>
@@ -57,7 +66,7 @@ export const Textarea = ({
         )}
         <textarea
           id={id}
-          className={tx('pt-0 border-transparent focus:border-transparent focus:ring-0 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable, 'h-32': defaultStyle }, className)}
+          className={tx('pt-0 border-transparent focus:border-transparent focus:ring-0 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable, 'h-32': defaultStyle, 'mt-3': !headline }, className)}
           onChange={(event) => {
             const value = event.target.value
             restartTimer(() => {

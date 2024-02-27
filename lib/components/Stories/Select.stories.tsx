@@ -26,5 +26,7 @@ export const SelectVariations: Story = {
     hintText: 'Hinttext',
     isHidingCurrentValue: false,
     showDisabledOptions: true,
+    labelType: 'labelBig',
+    className: '',
   },
 }

@@ -1,8 +1,12 @@
 import { tx } from '../twind'
 import type { NativeProps } from '../util/types'
 
+export type LabelType = 'labelSmall' | 'labelMedium' | 'labelBig'
+
+export type SpanType = LabelType | 'normal' | 'heading' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError' | 'formDescription' | 'modalTitle'
+
 export type SpanProps = NativeProps<'span'> & {
-  type?: 'normal' | 'heading' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'labelSmall' | 'labelMedium' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError' | 'formDescription' | 'modalTitle'
+  type?: SpanType
 }
 
 /**
@@ -22,6 +26,7 @@ export const Span = ({ children, type = 'normal', className, ...restProps }: Spa
         'text-gray-400': type === 'description',
         'text-sm text-gray-700 font-semibold': type === 'labelSmall',
         'text-gray-700 font-semibold': type === 'labelMedium',
+        'text-lg font-semibold': type === 'labelBig',
         'text-lg font-space font-medium': type === 'tableName',
         'text-lg font-space font-normal': type === 'navigationItem',
         'text-gray-600 font-bold': type === 'tableHeader',

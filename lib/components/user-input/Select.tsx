@@ -97,7 +97,7 @@ export const Select = <T, >({
                 <Menu.Item key={`item${index}`}>
                   {
                     <div
-                      className={tx(' px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0',
+                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0',
                         option.className, {
                           'bg-gray-100': option.value === value,
                           'bg-gray-50': index % 2 === 1,

@@ -39,7 +39,7 @@ export const InputGroup = ({
   return (
     <div className={tx('p-4 flex flex-col gap-y-4', className)}>
       <div
-        className={tw('flex flex-row justify-between items-center text-hw-primary-400')}
+        className={tx('flex flex-row justify-between items-center text-hw-primary-400', { 'cursor-pointer': isExpandable })}
         onClick={() => {
           if (!isExpandable) {
             return
@@ -51,10 +51,10 @@ export const InputGroup = ({
       >
         <Span type="title">{title}</Span>
         {isExpandable && (
-          <div className={tw('bg-hw-primary-400 rounded-full text-white w-6 h-6 cursor-pointer')}>
-            {isExpanded ?
-                <ChevronUp className={tw('-translate-y-[1px]')} size={24} />
-              : <ChevronDown className={tw('translate-y-[1px]')} size={24} />
+          <div className={tw('bg-hw-primary-400 rounded-full text-white w-6 h-6')}>
+            {isExpanded
+              ? <ChevronUp className={tw('-translate-y-[1px]')} size={24}/>
+              : <ChevronDown className={tw('translate-y-[1px]')} size={24}/>
             }
           </div>
         )}

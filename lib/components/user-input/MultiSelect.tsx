@@ -55,13 +55,14 @@ export type MultiSelectProps<T> = {
   }) => ReactNode,
   label?: string,
   hintText?: string,
-  showDisabledOptions: boolean,
-  className: string,
-  labelClassName: string
+  showDisabledOptions?: boolean,
+  className?: string,
+  triggerClassName?: string,
+  labelClassName?: string
 }
 
 /**
- * A Component for multi selction
+ * A Component for multi selection
  */
 export const MultiSelect = <T, >({
   language,
@@ -73,7 +74,8 @@ export const MultiSelect = <T, >({
   label,
   hintText,
   showDisabledOptions = true,
-  className,
+  className = '',
+  triggerClassName = '',
   labelClassName = 'text-lg font-semibold',
 }: PropsWithLanguage<MultiSelectTranslation, MultiSelectProps<T>>) => {
   const translation = useTranslation(language, defaultMultiSelectTranslation)
@@ -110,14 +112,15 @@ export const MultiSelect = <T, >({
                  {
                    'hover:bg-gray-100': !disabled,
                    'bg-gray-100 cursor-not-allowed text-gray-500': disabled
-                 }
+                 },
+                 triggerClassName
                )}
           >
             {selectedDisplay ? selectedDisplay({ items: options, disabled }) : menuButtonText}
           </div>
         )}
         menuClassName={tx(
-          '!rounded-lg !shadow-lg !max-h-[500px] !min-w-[500px] !max-w-[70vh] !overflow-y-auto !border !border-2',
+          '!rounded-lg !shadow-lg !max-h-[500px] !min-w-[400px] !max-w-[70vh] !overflow-y-auto !border !border-2',
           { '!py-0': !enableSearch, '!pb-0': enableSearch }
         )}
       >

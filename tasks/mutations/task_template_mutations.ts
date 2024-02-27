@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { noop } from '@helpwave/common/components/user-input/Input'
+import { noop } from '@helpwave/common/util/noop'
 import {
   CreateTaskTemplateRequest,
   CreateTaskTemplateSubTaskRequest,
@@ -8,13 +8,13 @@ import {
   GetAllTaskTemplatesByCreatorRequest,
   GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
-import { getAuthenticatedGrpcMetadata, taskTemplateService } from '../utils/grpc'
 import type { SubTaskDTO } from './task_mutations'
+import { getAuthenticatedGrpcMetadata, taskTemplateService } from '@/utils/grpc'
 import type { TaskTemplateFormType } from '@/pages/templates'
 import SubTask = CreateTaskTemplateRequest.SubTask // TODO: what even is this syntax???
 
 export type TaskTemplateDTO = {
-  wardId? : string,
+  wardId?: string,
   id: string,
   name: string,
   notes: string,
@@ -28,11 +28,11 @@ export type TaskTemplateDTO = {
 
 type QueryKey = 'personalTaskTemplates' | 'wardTaskTemplates'
 
-export const useWardTaskTemplateQuery = (wardId? : string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
+export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
   return useQuery({
     queryKey: ['wardTaskTemplates', wardId],
     queryFn: async () => {
-      let wardTaskTemplates : TaskTemplateDTO[] = []
+      let wardTaskTemplates: TaskTemplateDTO[] = []
       if (wardId !== undefined) {
         const req = new GetAllTaskTemplatesByWardRequest()
         req.setWardId(wardId)
@@ -58,14 +58,26 @@ export const useWardTaskTemplateQuery = (wardId? : string, onSuccess: (data: Tas
   })
 }
 
-export const usePersonalTaskTemplateQuery = (createdBy? : string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
+type UseAllTaskTemplatesByCreatorProps = {
+  createdBy?: string,
+  onSuccess: (data: TaskTemplateDTO[]) => void,
+  type: QueryKey
+}
+export const useAllTaskTemplatesByCreator = ({
+  createdBy,
+  onSuccess = noop,
+  type = 'wardTaskTemplates'
+}: UseAllTaskTemplatesByCreatorProps) => {
+  const queryKey = type
+  const onlyPrivate = type === 'personalTaskTemplates'
   return useQuery({
-    queryKey: ['personalTaskTemplates', createdBy],
+    queryKey: [queryKey, createdBy],
     queryFn: async () => {
       let personalTaskTemplates: TaskTemplateDTO[] = []
       if (createdBy !== undefined) {
         const req = new GetAllTaskTemplatesByCreatorRequest()
         req.setCreatedBy(createdBy)
+        req.setPrivateOnly(onlyPrivate)
         const res = await taskTemplateService.getAllTaskTemplatesByCreator(req, getAuthenticatedGrpcMetadata())
 
         personalTaskTemplates = res.getTemplatesList().map((template) => ({
@@ -79,7 +91,6 @@ export const usePersonalTaskTemplateQuery = (createdBy? : string, onSuccess: (da
           })),
           isPublicVisible: template.getIsPublic()
         }))
-        // return only personal Task Templates
         return personalTaskTemplates
       }
       return personalTaskTemplates
@@ -88,7 +99,11 @@ export const usePersonalTaskTemplateQuery = (createdBy? : string, onSuccess: (da
   })
 }
 
-export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
+export const usePersonalTaskTemplateQuery = (createdBy?: string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
+  return useAllTaskTemplatesByCreator({ createdBy, onSuccess, type: 'personalTaskTemplates' })
+}
+
+export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate?: TaskTemplateDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (templateForm: TaskTemplateFormType) => {
@@ -157,7 +172,7 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
   })
 }
 
-export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplate: (taskTemplate:TaskTemplateDTO | undefined) => void) => {
+export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplate: (taskTemplate: TaskTemplateDTO | undefined) => void) => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -196,7 +211,7 @@ export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplat
   })
 }
 
-export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task:TaskTemplateDTO | undefined) => void) => {
+export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskTemplateDTO) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {
@@ -259,7 +274,7 @@ export const useSubTaskTemplateUpdateMutation = (callback: (subtask: SubTaskDTO)
   })
 }
 
-export const useSubTaskTemplateAddMutation = (taskTemplateId : string) => {
+export const useSubTaskTemplateAddMutation = (taskTemplateId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (subtask: SubTaskDTO) => {

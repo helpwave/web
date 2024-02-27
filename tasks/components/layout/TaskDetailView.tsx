@@ -15,6 +15,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { formatDate } from '@helpwave/common/util/date'
 import { AssigneeSelect } from '../AssigneeSelect'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { SubtaskView } from '../SubtaskView'
@@ -97,10 +98,6 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
     finish: 'Fertigstellen',
   }
-}
-
-const formatDate = (date: Date) => {
-  return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }
 
 type TaskDetailViewSidebarProps = {

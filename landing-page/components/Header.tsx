@@ -9,7 +9,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
-const homeURL: string = '/'
+const homeURL = '/'
 
 type LinkType = {
   name: string,

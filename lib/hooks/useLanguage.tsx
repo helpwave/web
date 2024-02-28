@@ -40,7 +40,7 @@ export const ProvideLanguage = ({ children }: PropsWithChildren) => {
 
     const firstMatch = matchingBrowserLanguages[0] as Languages
     setLanguage(firstMatch)
-  }, [])
+  }, []) // eslint-disable-line
 
   return (
     <LanguageContext.Provider value={{

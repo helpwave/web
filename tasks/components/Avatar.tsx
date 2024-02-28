@@ -1,4 +1,5 @@
 import { tw, tx } from '@helpwave/common/twind'
+import Image from 'next/image'
 
 export type AvatarProps = {
   avatarUrl: string,
@@ -13,7 +14,7 @@ const Avatar = ({ avatarUrl, alt, size = 'medium' }: AvatarProps) => {
   avatarUrl = `https://source.boringavatars.com/marble/80/${alt}`
   return (
     <div className={tw('rounded-full')}>
-      <img className={tx('rounded-full border border-slate-200 group-hover:border-indigo-200  flex justify-evenly items-center', {
+      <Image className={tx('rounded-full border border-slate-200 group-hover:border-indigo-200  flex justify-evenly items-center', {
         'h-6 w-6 min-h-[24px] min-w-[24px]': size === 'tiny',
         'h-8 w-8 min-h-[32px] min-w-[32px]': size === 'small',
         'h-12 w-12 min-h-[48px] min-w-[48px]': size === 'medium',

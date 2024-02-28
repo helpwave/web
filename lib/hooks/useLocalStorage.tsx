@@ -25,7 +25,7 @@ const useLocalStorage = <T, >(key: string, initValue: T): [T, SetValue<T>] => {
 
   useEffect(() => {
     setStoredValue(get())
-  }, [])
+  }, []) // eslint-disable-line
 
   return [storedValue, setValue]
 }

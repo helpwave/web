@@ -102,7 +102,7 @@ export const OrganizationDetail = ({
 
   useEffect(() => {
     setOrganizationId(contextState.organizationId)
-  }, [contextState.organizationId])
+  }, [contextState.organizationId]) // eslint-disable-line
 
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 

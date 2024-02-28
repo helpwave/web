@@ -67,7 +67,7 @@ export const AnimatedRing = ({
     if (currentWidth < width) {
       requestAnimationFrame((timestamp) => animate(timestamp, timestamp))
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   return (
     <div
@@ -132,7 +132,7 @@ export const RingWave = ({
     if (currentInnerSize < endInnerSize) {
       requestAnimationFrame((timestamp) => animate(timestamp, timestamp))
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   return (
     <div

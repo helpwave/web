@@ -126,7 +126,7 @@ export const NewsLetterForm = ({
           <Input
             id="email"
             value={formState.email}
-            label={`${translation.email}*`}
+            label={{ name: `${translation.email}*` }}
             onChange={text => setFormState(prevState => ({
               ...prevState,
               email: text
@@ -143,7 +143,7 @@ export const NewsLetterForm = ({
             <Input
               id="firstname"
               value={formState.firstname}
-              label={translation.firstname}
+              label={{ name: translation.firstname }}
               onChange={text => setFormState(prevState => ({
                 ...prevState,
                 firstname: text
@@ -157,7 +157,7 @@ export const NewsLetterForm = ({
             <Input
               id="lastname"
               value={formState.lastname}
-              label={`${translation.lastname}*`}
+              label={{ name: `${translation.lastname}*` }}
               onChange={text => setFormState(prevState => ({
                 ...prevState,
                 lastname: text
@@ -174,7 +174,7 @@ export const NewsLetterForm = ({
             <Input
               id="company"
               value={formState.company}
-              label={translation.company}
+              label={{ name: translation.company }}
               onChange={text => setFormState(prevState => ({
                 ...prevState,
                 company: text
@@ -187,8 +187,7 @@ export const NewsLetterForm = ({
               className={tw('!max-w-[300px]')}
             />
             <Select
-              label={translation.industry}
-              labelType="labelSmall"
+              label={{ name: translation.industry, labelType: 'labelSmall' }}
               value={formState.industry}
               options={industryList.map(value => ({
                 label: translation.industryNames(value),

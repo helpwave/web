@@ -161,7 +161,7 @@ export const OrganizationForm = ({
         <Input
           id="shortName"
           value={organizationForm.organization.shortName}
-          label={translation.shortName}
+          label={{ name: translation.shortName }}
           onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, shortName: true })}
           onChange={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, false, { ...organizationForm.touched })}
           onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, true, { ...organizationForm.touched, shortName: true })}
@@ -175,7 +175,7 @@ export const OrganizationForm = ({
         <Input
           id="longName"
           value={organizationForm.organization.longName}
-          label={translation.longName}
+          label={{ name: translation.longName }}
           onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, longName: true })}
           onChange={text => triggerOnChange({ ...organizationForm.organization, longName: text }, false, { ...organizationForm.touched })}
           onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, longName: text }, true, { ...organizationForm.touched, longName: true })}
@@ -191,7 +191,8 @@ export const OrganizationForm = ({
             <Input
               id="email"
               value={organizationForm.organization.email}
-              label={translation.contactEmail} type="email"
+              label={{ name: translation.contactEmail }}
+              type="email"
               onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, email: true })}
               onChange={text => triggerOnChange({ ...organizationForm.organization, email: text }, false, { ...organizationForm.touched })}
               onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, email: text }, true, { ...organizationForm.touched, email: true })}

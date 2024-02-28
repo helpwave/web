@@ -2,8 +2,9 @@ import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { tw, tx } from '../../twind'
-import type { LabelType } from '../Span'
 import { Span } from '../Span'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -14,14 +15,13 @@ export type SelectOption<T> = {
 
 export type SelectProps<T> = {
   value?: T,
-  label?: string,
+  label?: LabelProps,
   options: SelectOption<T>[],
   onChange: (value: T) => void,
   isHidingCurrentValue?: boolean,
   hintText?: string,
   showDisabledOptions?: boolean,
   className?: string,
-  labelType?: LabelType,
   isDisabled?: boolean,
   /**
    * The items will be at the start of the select and aren't selectable
@@ -45,7 +45,6 @@ export const Select = <T, >({
   showDisabledOptions = true,
   isDisabled,
   className,
-  labelType = 'labelBig',
   additionalItems,
   selectedDisplayOverwrite,
 }: SelectProps<T>) => {
@@ -57,9 +56,7 @@ export const Select = <T, >({
   return (
     <div className={tx(className)}>
       {label && (
-        <label htmlFor={label} className={tw(' mb-1')}>
-          <Span type={labelType}>{label}</Span>
-        </label>
+        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={tw(' mb-1')} />
       )}
       <Menu as="div" className={tw('relative w-full text-gray-700')}>
         {({ open }) => (

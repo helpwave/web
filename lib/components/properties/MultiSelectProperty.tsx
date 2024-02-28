@@ -25,9 +25,6 @@ const defaultMultiSelectPropertyTranslation: Record<Languages, MultiSelectProper
 
 export type MultiSelectPropertyProps<T> =
   Omit<PropertyBaseProps & MultiSelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'triggerClassName'>
-  & {
-  onRemove?: () => void
-}
 
 /**
  * An Input for MultiSelect properties
@@ -39,7 +36,6 @@ export const MultiSelectProperty = <T, >({
   readOnly = false,
   softRequired,
   onRemove,
-  // onRemove = noop,
   ...multiSelectProps
 }: PropsWithLanguage<MultiSelectPropertyTranslation, MultiSelectPropertyProps<T>>) => {
   const translation = useTranslation(language, defaultMultiSelectPropertyTranslation)
@@ -62,6 +58,7 @@ export const MultiSelectProperty = <T, >({
           className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <MultiSelect
+            {...multiSelectProps}
             className={tx('w-full', { 'bg-hw-warn-200': softRequired && !hasValue })}
             triggerClassName={triggerClassName}
             selectedDisplay={({ items }) => {
@@ -75,7 +72,6 @@ export const MultiSelectProperty = <T, >({
                 />
               )
             }}
-            {...multiSelectProps}
             options={options}
             disabled={readOnly}
             hintText={`${translation.select}...`}

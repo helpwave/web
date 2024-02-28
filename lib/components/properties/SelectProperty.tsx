@@ -23,9 +23,6 @@ const defaultSingleSelectPropertyTranslation: Record<Languages, SingleSelectProp
 
 export type SingleSelectPropertyProps<T> =
   Omit<PropertyBaseProps & SearchableSelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'labelClassName' | 'additionalItems'>
-  & {
-  onRemove?: () => void
-}
 
 /**
  * An Input for SingleSelect properties
@@ -38,7 +35,6 @@ export const SingleSelectProperty = <T, >({
   readOnly = false,
   softRequired,
   onRemove,
-  // onRemove = noop,
   ...multiSelectProps
 }: PropsWithLanguage<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
   const translation = useTranslation(language, defaultSingleSelectPropertyTranslation)

@@ -31,7 +31,7 @@ export const InputGroupExample = ({
     >
       <Select
         key="item1"
-        label="Subject Type"
+        label={{ name: 'Subject Type', labelType: 'labelSmall' }}
         value={state.subject}
         options={[
           { value: 'organization', label: 'Organization' },
@@ -40,17 +40,16 @@ export const InputGroupExample = ({
           { value: 'patient', label: 'Patient' },
         ]}
         onChange={subject => setState({ ...state, subject })}
-        labelType="labelSmall"
       />
       <Input
         key="item2"
-        label="Property Name"
+        label={{ name: 'Property Name' }}
         value={state.propertyName}
         onChange={propertyName => setState({ ...state, propertyName })}
       />
       <Textarea
         key="item3"
-        label="Description"
+        label={{ name: 'Description' }}
         value={state.description}
         onChange={description => setState({ ...state, description })}
       />

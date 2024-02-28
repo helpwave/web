@@ -55,7 +55,7 @@ export const KanbanHeader = ({
           {translation.label}
           <TriangleDown className={tw('stroke-black')}/>
         </div>
-        <Input id="search" value={searchValue} label="" placeholder={translation.search} onChange={onSearchChange}/>
+        <Input id="search" value={searchValue} placeholder={translation.search} onChange={onSearchChange}/>
       </div>
     </div>
   )

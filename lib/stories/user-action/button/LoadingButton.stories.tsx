@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { LoadingButton } from '../../../components/LoadingButton'
 
 const meta = {
-  title: 'User-Action/LoadingButton',
+  title: 'User-Action/Button',
   component: LoadingButton,
 } satisfies Meta<typeof LoadingButton>
 
@@ -17,5 +17,6 @@ export const LoadingButtonVariation: Story = {
     size: 'medium',
     disabled: false,
     className: 'rounded',
+    isLoading: false,
   },
 }

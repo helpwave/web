@@ -21,8 +21,11 @@ export type SelectProps<T> = {
   hintText?: string,
   showDisabledOptions?: boolean,
   className?: string,
+  labelClassName?: string,
   labelType?: LabelType,
   isDisabled?: boolean,
+  textColor?: string,
+  hoverColor?: string,
   /**
    * The items will be at the start of the select and aren't selectable
    */
@@ -45,6 +48,9 @@ export const Select = <T, >({
   showDisabledOptions = true,
   isDisabled,
   className,
+  textColor = 'text-gray-700',
+  hoverColor = 'hover:bg-gray-100',
+  labelClassName = 'text-lg font-semibold',
   labelType = 'labelBig',
   additionalItems,
   selectedDisplayOverwrite,
@@ -57,7 +63,7 @@ export const Select = <T, >({
   return (
     <div className={tx(className)}>
       {label && (
-        <label htmlFor={label} className={tw(' mb-1')}>
+        <label htmlFor={label} className={tx(' mb-1', labelClassName)}>
           <Span type={labelType}>{label}</Span>
         </label>
       )}
@@ -65,10 +71,11 @@ export const Select = <T, >({
         {({ open }) => (
           <>
             <Menu.Button
-              className={tx('inline-flex w-full justify-between items-center bg-white rounded-t-lg border-2 px-4 py-2 font-medium',
+              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium',
+                textColor,
                 {
                   'rounded-b-lg': !open,
-                  'hover:bg-gray-100': !isDisabled,
+                  [hoverColor]: !isDisabled,
                   'bg-gray-100 cursor-not-allowed text-gray-500': isDisabled
                 }
               )}

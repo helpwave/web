@@ -2,6 +2,7 @@ import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { tw, tx } from '../../twind'
+import type { LabelType } from '../Span'
 import { Span } from '../Span'
 
 export type SelectOption<T> = {
@@ -21,6 +22,7 @@ export type SelectProps<T> = {
   showDisabledOptions?: boolean,
   className?: string,
   labelClassName?: string,
+  labelType?: LabelType,
   isDisabled?: boolean,
   textColor?: string,
   hoverColor?: string,
@@ -49,6 +51,7 @@ export const Select = <T, >({
   textColor = 'text-gray-700',
   hoverColor = 'hover:bg-gray-100',
   labelClassName = 'text-lg font-semibold',
+  labelType = 'labelBig',
   additionalItems,
   selectedDisplayOverwrite,
 }: SelectProps<T>) => {
@@ -61,7 +64,7 @@ export const Select = <T, >({
     <div className={tx(className)}>
       {label && (
         <label htmlFor={label} className={tx(' mb-1', labelClassName)}>
-          {label}
+          <Span type={labelType}>{label}</Span>
         </label>
       )}
       <Menu as="div" className={tw('relative w-full text-gray-700')}>
@@ -103,7 +106,7 @@ export const Select = <T, >({
                           'bg-gray-50': index % 2 === 1,
                           'text-gray-300 cursor-not-allowed': !!option.disabled,
                           'hover:bg-gray-100 cursor-pointer': !option.disabled,
-                          'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
+                          'rounded-b-lg': index === filteredOptions.length - 1,
                         })}
                       onClick={() => {
                         if (!option.disabled) {

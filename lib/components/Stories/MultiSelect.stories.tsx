@@ -32,7 +32,7 @@ export const MultiSelectVariations: Story = {
     useChipDisplay: true,
     enableSearch: false,
     className: '',
-    labelClassName: '',
+    labelType: 'labelBig',
     triggerClassName: ''
   },
 }

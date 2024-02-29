@@ -27,7 +27,6 @@ export const TimePicker = ({
   const hourRef = useRef<HTMLDivElement>(null)
 
   const isPM = time.getHours() >= 11
-  console.log(time.getHours())
   const hours = is24HourFormat ? range(0, 23) : range(1, 12)
   let minutes = range(0, 59)
 
@@ -46,8 +45,7 @@ export const TimePicker = ({
       }
     }
     scrollToItem()
-    // eslint-disable-next-line
-  }, [minuteRef, minuteRef.current])
+  }, [minuteRef, minuteRef.current]) // eslint-disable-line
 
   useEffect(() => {
     const scrollToItem = () => {
@@ -59,7 +57,7 @@ export const TimePicker = ({
       }
     }
     scrollToItem()
-  }, [hourRef])
+  }, [hourRef, hourRef.current]) // eslint-disable-line
 
   switch (minuteIncrement) {
     case '5min':

@@ -12,8 +12,8 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import {
   useInvitationsByOrganizationQuery,
   useInviteMemberMutation, useInviteRevokeMutation
-} from '../mutations/organization_mutations'
-import { OrganizationContext } from '../pages/organizations'
+} from '@/mutations/organization_mutations'
+import { OrganizationContext } from '@/pages/organizations'
 
 type OrganizationInvitationListTranslation = {
   remove: string,
@@ -125,7 +125,7 @@ export const OrganizationInvitationList = ({
           setInviteMemberModalEmail('')
         }}
         inputs={[{
-          label: translation.email,
+          label: { name: translation.email },
           value: inviteMemberModalEmail ?? '',
           onChange: text => setInviteMemberModalEmail(text)
         }]}

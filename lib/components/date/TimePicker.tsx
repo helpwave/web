@@ -39,7 +39,7 @@ export const TimePicker = ({
         if (hasOverflow) {
           minuteRef.current.scrollIntoView({
             behavior: 'instant',
-            block: 'center',
+            block: 'nearest',
           })
         }
       }
@@ -50,10 +50,15 @@ export const TimePicker = ({
   useEffect(() => {
     const scrollToItem = () => {
       if (hourRef.current) {
-        hourRef.current.scrollIntoView({
-          behavior: 'instant',
-          block: 'center',
-        })
+        const container = hourRef.current.parentElement!
+
+        const hasOverflow = container.scrollHeight > maxHeight
+        if (hasOverflow) {
+          hourRef.current.scrollIntoView({
+            behavior: 'instant',
+            block: 'nearest',
+          })
+        }
       }
     }
     scrollToItem()

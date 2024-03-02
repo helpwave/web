@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { ScrollPicker } from '../user-input/ScrollPicker'
-import { range } from '../../util/array'
+import { ScrollPicker } from '../../../components/user-input/ScrollPicker'
+import { range } from '../../../util/array'
 
 const meta = {
-  title: 'ScrollPicker',
+  title: 'User-Action/Input/ScrollPicker',
   component: ScrollPicker<number>,
 } satisfies Meta<typeof ScrollPicker<number>>
 

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { YearMonthPickerExample } from '../examples/date/YearMonthPickerExample'
-import { addDuration, subtractDuration } from '../../util/date'
+import { YearMonthPickerExample } from '../../../../components/examples/date/YearMonthPickerExample'
+import { addDuration, subtractDuration } from '../../../../util/date'
 
 const meta = {
-  title: 'Date',
+  title: 'User-Action/Input/Date',
   component: YearMonthPickerExample,
 } satisfies Meta<typeof YearMonthPickerExample>
 

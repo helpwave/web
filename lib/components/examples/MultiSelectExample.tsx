@@ -4,7 +4,7 @@ import { MultiSelect } from '../user-input/MultiSelect'
 import { ChipList } from '../ChipList'
 import { Span } from '../Span'
 
-type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'onChange' | 'search' | 'selectedDisplay'> & {
+type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'search' | 'selectedDisplay'> & {
   enableSearch: boolean,
   useChipDisplay: boolean
 }
@@ -13,6 +13,7 @@ export const MultiSelectExample = ({
   options,
   hintText,
   enableSearch,
+  onChange,
   useChipDisplay = false,
   ...props
 }: MultiSelectExampleProps) => {
@@ -34,7 +35,7 @@ export const MultiSelectExample = ({
     <MultiSelect
       options={usedOptions}
       onChange={value => {
-        console.log(value)
+        onChange(value)
         setUsedOptions(value)
       }}
       hintText={hintText}

@@ -68,16 +68,30 @@ export const ConfirmDialog = ({
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
         {onCancel && (
-          <Button color={buttonOverwrites?.[0].color ?? 'neutral'} onClick={onCancel} disabled={buttonOverwrites?.[0].disabled ?? false}>
+          <Button
+            color={buttonOverwrites?.[0].color ?? 'neutral'}
+            onClick={onCancel}
+            disabled={buttonOverwrites?.[0].disabled ?? false}
+          >
             {buttonOverwrites?.[0].text ?? translation.cancel}
           </Button>
         )}
         {onDecline && (
-          <Button color={buttonOverwrites?.[1].color ?? 'negative'} onClick={onDecline} disabled={buttonOverwrites?.[1].disabled ?? false}>
+          <Button
+            color={buttonOverwrites?.[1].color ?? 'negative'}
+            onClick={onDecline}
+
+            disabled={buttonOverwrites?.[1].disabled ?? false}
+          >
             {buttonOverwrites?.[1].text ?? translation.decline}
           </Button>
         )}
-        <Button autoFocus color={buttonOverwrites?.[2].color ?? confirmType} onClick={onConfirm} disabled={buttonOverwrites?.[2].disabled ?? false}>
+        <Button
+          autoFocus
+          color={buttonOverwrites?.[2].color ?? confirmType}
+          onClick={onConfirm}
+          disabled={buttonOverwrites?.[2].disabled ?? false}
+        >
           {buttonOverwrites?.[2].text ?? translation.confirm}
         </Button>
       </div>

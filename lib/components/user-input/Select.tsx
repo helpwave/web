@@ -3,6 +3,8 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { tw, tx } from '../../twind'
 import { Span } from '../Span'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -13,15 +15,16 @@ export type SelectOption<T> = {
 
 export type SelectProps<T> = {
   value?: T,
-  label?: string,
+  label?: LabelProps,
   options: SelectOption<T>[],
   onChange: (value: T) => void,
   isHidingCurrentValue?: boolean,
   hintText?: string,
   showDisabledOptions?: boolean,
   className?: string,
-  labelClassName?: string,
   isDisabled?: boolean,
+  textColor?: string,
+  hoverColor?: string,
   /**
    * The items will be at the start of the select and aren't selectable
    */
@@ -44,7 +47,8 @@ export const Select = <T, >({
   showDisabledOptions = true,
   isDisabled,
   className,
-  labelClassName = 'text-lg font-semibold',
+  textColor = 'text-gray-700',
+  hoverColor = 'hover:bg-gray-100',
   additionalItems,
   selectedDisplayOverwrite,
 }: SelectProps<T>) => {
@@ -56,18 +60,17 @@ export const Select = <T, >({
   return (
     <div className={tx(className)}>
       {label && (
-        <label htmlFor={label} className={tx(' mb-1', labelClassName)}>
-          {label}
-        </label>
+        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={tx('mb-1', label.className)} />
       )}
       <Menu as="div" className={tw('relative w-full text-gray-700')}>
         {({ open }) => (
           <>
             <Menu.Button
-              className={tx('inline-flex w-full justify-between items-center bg-white rounded-t-lg border-2 px-4 py-2 font-medium',
+              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium',
+                textColor,
                 {
                   'rounded-b-lg': !open,
-                  'hover:bg-gray-100': !isDisabled,
+                  [hoverColor]: !isDisabled,
                   'bg-gray-100 cursor-not-allowed text-gray-500': isDisabled
                 }
               )}
@@ -98,7 +101,7 @@ export const Select = <T, >({
                           'bg-gray-50': index % 2 === 1,
                           'text-gray-300 cursor-not-allowed': !!option.disabled,
                           'hover:bg-gray-100 cursor-pointer': !option.disabled,
-                          'border-b-0 rounded-b-lg': index === filteredOptions.length - 1,
+                          'rounded-b-lg': index === filteredOptions.length - 1,
                         })}
                       onClick={() => {
                         if (!option.disabled) {

@@ -5,6 +5,9 @@ import { Menu as MenuIcon, X } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useLanguage } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 const homeURL = '/'
 
@@ -46,8 +49,35 @@ const items: SubLinkType[] = [
   },
 ]
 
+type HeaderTranslation = {
+  products: string,
+  story: string,
+  team: string,
+  talks: string,
+  contact: string
+}
+
+const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
+  en: {
+    products: 'products',
+    story: 'story',
+    team: 'team',
+    talks: 'talks',
+    contact: 'contact',
+  },
+  de: {
+    products: 'Produkte',
+    story: 'Geschichte',
+    team: 'Team',
+    talks: 'tasks',
+    contact: 'Kontakt',
+  }
+}
+
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false)
+  const { language } = useLanguage()
+  const translation = useTranslation(language, defaultHeaderTranslation)
 
   return (
     <div>
@@ -67,7 +97,7 @@ const Header = () => {
                   {subpage === undefined ? (
                     <Link href={url}>
                       <Span type="navigationItem">
-                        {name}
+                        {translation[name as keyof typeof translation]}
                       </Span>
                     </Link>
                   ) : (
@@ -76,7 +106,7 @@ const Header = () => {
                       trigger={(onClick, ref) => (
                         <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
                           <Span type="navigationItem">
-                            {name}
+                            {translation[name as keyof typeof translation]}
                           </Span>
                         </div>
                       )}

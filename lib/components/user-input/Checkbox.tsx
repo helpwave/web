@@ -3,13 +3,13 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { Check, Minus } from 'lucide-react'
 import { tw, tx } from '../../twind'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 type CheckboxProps = {
-  /**
-   * used for the label's `for` attribute
-   */
+  /** used for the label's `for` attribute */
   id?: string,
-  label?: string,
+  label?: Omit<LabelProps, 'id'>,
   /**
    * @default false
    */
@@ -50,7 +50,7 @@ const ControlledCheckbox = ({ id, label, checked, disabled, onChange, onChangeTr
           {checked === 'indeterminate' && <Minus width={14} height={14}/>}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
-      {label && <label className={tw('text-sm font-medium')} htmlFor={id}>{label}</label>}
+      {label && <Label {...label} htmlFor={id} />}
     </div>
   )
 }

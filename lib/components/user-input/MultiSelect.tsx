@@ -10,6 +10,8 @@ import { Span } from '../Span'
 import { Menu, MenuItem } from './Menu'
 import { Input } from './Input'
 import { Checkbox } from './Checkbox'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 type MultiSelectTranslation = {
   select: string,
@@ -53,12 +55,11 @@ export type MultiSelectProps<T> = {
     items: MultiSelectOption<T>[],
     disabled: boolean
   }) => ReactNode,
-  label?: string,
+  label?: LabelProps,
   hintText?: string,
   showDisabledOptions?: boolean,
   className?: string,
-  triggerClassName?: string,
-  labelClassName?: string
+  triggerClassName?: string
 }
 
 /**
@@ -76,7 +77,6 @@ export const MultiSelect = <T, >({
   showDisabledOptions = true,
   className = '',
   triggerClassName = '',
-  labelClassName = 'text-lg font-semibold',
 }: PropsWithLanguage<MultiSelectTranslation, MultiSelectProps<T>>) => {
   const translation = useTranslation(language, defaultMultiSelectTranslation)
   const [searchText, setSearchText] = useState<string>(search?.initialSearch ?? '')
@@ -100,9 +100,7 @@ export const MultiSelect = <T, >({
   return (
     <div className={tx(className)}>
       {label && (
-        <label htmlFor={label} className={tx(' mb-1', labelClassName)}>
-          {label}
-        </label>
+        <Label {...label} htmlFor={label.name} className={tx(' mb-1', label.className)} labelType={label.labelType ?? 'labelBig'}/>
       )}
       <Menu<HTMLDivElement>
         alignment="t_"

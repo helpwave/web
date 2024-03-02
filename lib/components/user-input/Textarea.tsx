@@ -2,12 +2,13 @@ import type { TextareaHTMLAttributes } from 'react'
 import { useState } from 'react'
 import { tw, tx, css } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
-import { Span } from '../Span'
 import { noop } from '../../util/noop'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 export type TextareaProps = {
   /** Outside the area */
-  label?: string,
+  label?: Omit<LabelProps, 'id'>,
   /** Inside the area */
   headline?: string,
   id?: string,
@@ -53,11 +54,7 @@ export const Textarea = ({
 
   return (
     <div className={tx({ [globalStyles]: defaultStyle }, 'w-full')}>
-      {label && (
-        <label className={tw('mb-1')} htmlFor={id}>
-          <Span type="labelSmall">{label}</Span>
-        </label>
-      )}
+      {label && (<Label {...label} htmlFor={id} className={tx('mb-1', label.className)} labelType={label.labelType ?? 'labelSmall'}/>)}
       <div className={`textarea-wrapper ${tx('relative', { 'shadow border-2 border-gray-300 rounded-lg': defaultStyle })}`}>
         {headline && (
           <label className={tw('mx-3 mt-3 block text-gray-700 font-bold')} htmlFor={id}>

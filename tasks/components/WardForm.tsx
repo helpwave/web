@@ -87,7 +87,7 @@ export const WardForm = ({
   return (
     <form>
       <div className={tw('mt-2 mb-1')}>
-        <Input id="name" value={ward.name} label={translation.name}
+        <Input id="name" value={ward.name} label={{ name: translation.name }}
                onBlur={() => setTouched({ ...touched, name: true })}
                onChange={text => triggerOnChange({ ...ward, name: text })}
                maxLength={maxWardNameLength}

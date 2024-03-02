@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type ChangeEvent, type HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react'
-import { tw, tx } from '../../twind'
-import { Span } from '../Span'
+import { tx } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 export type InputProps = {
   /**
@@ -10,7 +11,7 @@ export type InputProps = {
    */
   id?: string,
   value: string,
-  label?: string,
+  label?: Omit<LabelProps, 'id'>,
   /**
    * @default 'text'
    */
@@ -31,7 +32,7 @@ export type InputProps = {
 /**
  * A Component for inputting text or other information
  *
- * It's state is managed must be managed by the parent
+ * Its state is managed must be managed by the parent
  */
 const ControlledInput = ({
   id,
@@ -59,7 +60,7 @@ const ControlledInput = ({
   }, [restProps.autoFocus])
   return (
     <div className={tx({ 'w-full': expanded })}>
-      {label && <label htmlFor={id} className={tw('mb-1')}><Span type="labelSmall">{label}</Span></label>}
+      {label && <Label {...label} htmlFor={id} className={tx('mb-1', label.className)}/>}
       <input
         ref={ref}
         value={value}

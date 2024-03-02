@@ -127,7 +127,7 @@ export const TaskTemplateDetails = ({
           <Input
             id="name"
             value={context.state.template.name}
-            label={translation.name}
+            label={{ name: translation.name }}
             type="text"
             onBlur={() => setTouched({ name: true })}
             onChange={text => {

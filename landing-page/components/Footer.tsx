@@ -1,16 +1,41 @@
 import { useEffect } from 'react'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useLanguage } from '@helpwave/common/hooks/useLanguage'
+import { Select } from '@helpwave/common/components/user-input/Select'
 import pluginConfig from '../utils/CookieConsentConfig'
 import FooterLinkGroup from './FooterLinkGroup'
-
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
+
+type FooterTranslation = {
+    socials: string,
+    general: string,
+    products: string,
+    development: string
+}
+
+const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
+  en: {
+    socials: 'socials',
+    general: 'general',
+    products: 'products',
+    development: 'development',
+  },
+  de: {
+    socials: 'social',
+    general: 'allgemein',
+    products: 'produkte',
+    development: 'entwicklung',
+  }
+}
 
 const linkGroups = [
   {
-    Socials: [
+    socials: [
       { name: 'GitHub', link: 'https://github.com/helpwave/' },
       { name: 'LinkedIn', link: 'https://linkedin.com/company/helpwave/' },
       { name: 'Instagram', link: 'https://instagram.com/helpwave_de/' },
@@ -25,7 +50,7 @@ const linkGroups = [
   },
 
   {
-    General: [
+    general: [
       { name: 'Imprint', link: 'https://cdn.helpwave.de/imprint.html' },
       { name: 'Privacy', link: 'https://cdn.helpwave.de/privacy.html' },
       { name: 'Cookies', link: '', onClick: () => CookieConsent.showPreferences() },
@@ -35,7 +60,7 @@ const linkGroups = [
       { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' },
       { name: 'Tech-Radar', link: '/tech-radar', openInCurrentTab: true },
     ],
-    Products: [
+    products: [
       { name: 'tasks', link: '/product/tasks' },
       /* { name: 'scaffold', link: '/product/scaffold' },
       { name: 'cloud', link: '/product/cloud' },
@@ -45,7 +70,7 @@ const linkGroups = [
     ]
   },
   {
-    Development: [
+    development: [
       { name: 'Status', link: 'https://helpwave.betteruptime.com/' },
       { name: 'web', link: 'https://github.com/helpwave/web' },
       { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },
@@ -57,6 +82,8 @@ const linkGroups = [
 
 const Footer = () => {
   const year = new Date().getFullYear()
+  const { language, setLanguage } = useLanguage()
+  const translation = useTranslation(language, defaultFooterTranslation)
 
   useEffect(() => {
     CookieConsent.run(pluginConfig)
@@ -68,11 +95,20 @@ const Footer = () => {
         {linkGroups.map((group, index) => (
           <div key={index} className={tw('mobile:w-full desktop:w-[192px] mobile:text-center')}>
             {Object.entries(group).map(([title, links]) => (
-              <FooterLinkGroup key={title} title={title} links={links} />
+              <FooterLinkGroup key={title} title={translation[title as keyof typeof translation] } links={links} />
             ))}
           </div>
         ))}
-
+        <Select
+          textColor={tw('text-white')}
+          hoverColor={tw('hover:text-white')}
+          value={language}
+          onChange={(language: string) => setLanguage(language as Languages)}
+          options={[
+            { value: 'de', label: 'Deutsch' },
+            { value: 'en', label: 'English' }
+          ]} >
+        </Select>
         <div className={tw('mobile:w-full items-center justify-center desktop:w-[192px] mx-auto h-[128px] font-space flex flex-wrap mobile:justify-center')}>
           <Helpwave color="white" size={128} />
           <Span type="subsectionTitle">&copy; {year} helpwave</Span>

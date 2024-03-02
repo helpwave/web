@@ -23,6 +23,8 @@ export type SelectProps<T> = {
   showDisabledOptions?: boolean,
   className?: string,
   isDisabled?: boolean,
+  textColor?: string,
+  hoverColor?: string,
   /**
    * The items will be at the start of the select and aren't selectable
    */
@@ -45,6 +47,8 @@ export const Select = <T, >({
   showDisabledOptions = true,
   isDisabled,
   className,
+  textColor = 'text-gray-700',
+  hoverColor = 'hover:bg-gray-100',
   additionalItems,
   selectedDisplayOverwrite,
 }: SelectProps<T>) => {
@@ -56,16 +60,17 @@ export const Select = <T, >({
   return (
     <div className={tx(className)}>
       {label && (
-        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={tw(' mb-1')} />
+        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={tx('mb-1', label.className)} />
       )}
       <Menu as="div" className={tw('relative w-full text-gray-700')}>
         {({ open }) => (
           <>
             <Menu.Button
-              className={tx('inline-flex w-full justify-between items-center bg-white rounded-t-lg border-2 px-4 py-2 font-medium',
+              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium',
+                textColor,
                 {
                   'rounded-b-lg': !open,
-                  'hover:bg-gray-100': !isDisabled,
+                  [hoverColor]: !isDisabled,
                   'bg-gray-100 cursor-not-allowed text-gray-500': isDisabled
                 }
               )}

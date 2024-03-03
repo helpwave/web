@@ -4,14 +4,11 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { useState } from 'react'
-import type {
-  PropertyDetailsBasicInfoType
-} from '@/components/layout/propertyDetails/PropertyDetailsBasicInfo'
-import { PropertyDetailsBasicInfo } from '@/components/layout/propertyDetails/PropertyDetailsBasicInfo'
-import type { PropertyDetailsRulesType } from '@/components/layout/propertyDetails/PropertyDetailsRules'
-import { PropertyDetailsRules } from '@/components/layout/propertyDetails/PropertyDetailsRules'
-import type { PropertyDetailsFieldType } from '@/components/layout/propertyDetails/PropertyDetailsField'
-import { PropertyDetailsField } from '@/components/layout/propertyDetails/PropertyDetailsField'
+import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
+import { PropertyDetailsRules } from '@/components/layout/property/PropertyDetailsRules'
+import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
+import type { Property } from '@/components/layout/property/property'
+import { emptyProperty } from '@/components/layout/property/property'
 
 type PropertyDetailsTranslation = {
   propertyDetails: string
@@ -24,18 +21,6 @@ const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTransl
   de: {
     propertyDetails: 'Eigenschaftsdetails' // TODO better translation
   }
-}
-
-export type PropertyDetailsType = {
-  basicInfo: PropertyDetailsBasicInfoType,
-  field:PropertyDetailsFieldType,
-  rules: PropertyDetailsRulesType
-}
-
-const emptyPropertyDetails: PropertyDetailsType = {
-  basicInfo: { propertyName: 'Name', subjectType: 'patient', description: '' },
-  field: { fieldType: 'multiSelect', entryList: ['Test1', 'Test2', 'Test3'], isAllowingCustomValues: true },
-  rules: { importance: 'optional', isAlwaysVisible: true }
 }
 
 export type PropertyDetailsProps = NonNullable<unknown>
@@ -56,22 +41,31 @@ export const PropertyDetails = ({
   const isCreatingNewProperty = contextState.propertyId === undefined
   TODO query for data
   */
-  const [value, setValue] = useState<PropertyDetailsType>(emptyPropertyDetails)
+  const [value, setValue] = useState<Property>(emptyProperty)
 
   return (
     <div className={tw('py-4 px-6 flex flex-col gap-y-4 bg-gray-100 h-fit min-h-full')}>
       <Span type="title">{translation.propertyDetails}</Span>
       <PropertyDetailsBasicInfo
         value={value.basicInfo}
-        onChange={basicInfo => setValue({ ...value, basicInfo })}
+        onChange={basicInfo => setValue({
+          ...value,
+          basicInfo
+        })}
       />
       <PropertyDetailsField
         value={value.field}
-        onChange={field => setValue({ ...value, field })}
+        onChange={field => setValue({
+          ...value,
+          field
+        })}
       />
       <PropertyDetailsRules
         value={value.rules}
-        onChange={rules => setValue({ ...value, rules })}
+        onChange={rules => setValue({
+          ...value,
+          rules
+        })}
       />
     </div>
   )

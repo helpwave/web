@@ -6,6 +6,8 @@ import { Select } from '@helpwave/common/components/user-input/Select'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { tw } from '@helpwave/common/twind'
+import type { PropertyRules } from '@/components/layout/property/property'
+import { importanceList } from '@/components/layout/property/property'
 
 type PropertyDetailsRulesTranslation = {
   rules: string,
@@ -35,17 +37,9 @@ const defaultPropertyDetailsRulesTranslation: Record<Languages, PropertyDetailsR
   }
 }
 
-const importanceList = ['optional', 'softRequired'] as const
-type ImportanceType = typeof importanceList[number]
-
-export type PropertyDetailsRulesType = {
-  importance: ImportanceType,
-  isAlwaysVisible: boolean
-}
-
 export type PropertyDetailsRulesProps = {
-  value: PropertyDetailsRulesType,
-  onChange: (value: PropertyDetailsRulesType) => void
+  value: PropertyRules,
+  onChange: (value: PropertyRules) => void
 }
 
 /**

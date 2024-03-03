@@ -6,7 +6,8 @@ import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
-import { PropertyDetails } from '@/components/layout/propertyDetails/PropertyDetails'
+import { PropertyDetails } from '@/components/layout/property/PropertyDetails'
+import { PropertyDisplay } from '@/components/layout/property/PropertyDisplay'
 
 type OrganizationsPageTranslation = {
   properties: string
@@ -70,7 +71,7 @@ const PropertiesPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsP
         <TwoColumn
           disableResize={false}
           left={() => (
-            <div /> // TODO property list
+            <PropertyDisplay /> // TODO property list
           )}
           right={() => (
             <PropertyDetails

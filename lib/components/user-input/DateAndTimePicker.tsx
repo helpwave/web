@@ -113,7 +113,7 @@ export const DateTimePicker = ({
     dateDisplay = (
       <DatePicker
         {...datePickerProps}
-        className={tw('min-w-[220px]')}
+        className={tw('min-w-[220px] min-h-[250px]')}
         yearMonthPickerProps={{ maxHeight: 218 }}
         value={value}
         start={start}

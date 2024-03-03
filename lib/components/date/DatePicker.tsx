@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
@@ -6,6 +6,7 @@ import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
 import { tw, tx } from '../../twind'
+import { Button } from '../Button'
 import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import type { DayPickerProps } from './DayPicker'
@@ -26,7 +27,8 @@ type DatePickerTranslation = {
   september: string,
   october: string,
   november: string,
-  december: string
+  december: string,
+  today: string
 }
 
 const defaultDatePickerTranslation: Record<Languages, DatePickerTranslation> = {
@@ -46,6 +48,7 @@ const defaultDatePickerTranslation: Record<Languages, DatePickerTranslation> = {
     october: 'October',
     november: 'November',
     december: 'December',
+    today: 'Today',
   },
   de: {
     year: 'Jahr',
@@ -63,6 +66,7 @@ const defaultDatePickerTranslation: Record<Languages, DatePickerTranslation> = {
     october: 'October',
     november: 'November',
     december: 'December',
+    today: 'Heute',
   }
 }
 
@@ -74,8 +78,8 @@ export type DatePickerProps = {
   end?: Date,
   initialDisplay?: DisplayMode,
   onChange?: (date: Date) => void,
-  dayPickerProps?: Omit<DayPickerProps, 'value'|'onChange'|'selected'>,
-  yearMonthPickerProps?: Omit<YearMonthPickerProps, 'value'|'onChange'|'startYear'|'endYear'>,
+  dayPickerProps?: Omit<DayPickerProps, 'value' | 'onChange' | 'selected'>,
+  yearMonthPickerProps?: Omit<YearMonthPickerProps, 'value' | 'onChange' | 'startYear' | 'endYear'>,
   className?: string
 }
 
@@ -97,8 +101,11 @@ export const DatePicker = ({
   const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
 
-  return (
+  useEffect(() => {
+    setDisplayedMonth(value)
+  }, [value])
 
+  return (
     <div className={tx('flex flex-col gap-y-2', className)}>
       <div className={tw('flex flex-row justify-between')}>
         <div
@@ -142,14 +149,29 @@ export const DatePicker = ({
           }}
         />
       ) : (
-        <DayPicker
-          {...dayPickerProps}
-          value={displayedMonth}
-          selected={value}
-          onChange={date => {
-            onChange(date)
-          }}
-        />
+        <div>
+          <DayPicker
+            {...dayPickerProps}
+            value={displayedMonth}
+            selected={value}
+            onChange={date => {
+              onChange(date)
+            }}
+          />
+          <div className={tw('mt-1')}>
+            <Button
+              variant="textButton"
+              onClick={() => {
+                const newDate = new Date()
+                newDate.setHours(value.getHours(), value.getMinutes())
+                onChange(newDate)
+              }}
+              className={tw('!p-0')}
+            >
+              {translation.today}
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   )

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { DayPickerExample } from '../../../../components/examples/date/DayPickerExample'
 
 const meta = {
-  title: 'Date',
+  title: 'User-Action/Input/Date',
   component: DayPickerExample,
 } satisfies Meta<typeof DayPickerExample>
 

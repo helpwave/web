@@ -2,15 +2,14 @@ import { useEffect, useState } from 'react'
 import type { DateTimePickerProps } from '../../user-input/DateAndTimePicker'
 import { DateTimePicker } from '../../user-input/DateAndTimePicker'
 import { noop } from '../../../util/noop'
-import type { KeepProps } from '../../../util/keepProps'
 import type { DatePickerProps } from '../../date/DatePicker'
 import type { TimePickerProps } from '../../date/TimePicker'
 import type { YearMonthPickerProps } from '../../date/YearMonthPicker'
 import type { DayPickerProps } from '../../date/DayPicker'
 
 export type DateTimePickerExampleProps = Omit<DateTimePickerProps, 'datePickerProps' | 'timePickerProps'> &
-  KeepProps<DatePickerProps, 'initialDisplay'> & KeepProps<TimePickerProps, 'is24HourFormat' | 'minuteIncrement'> &
-  KeepProps<YearMonthPickerProps, 'showValueOpen'> & KeepProps<DayPickerProps, 'markToday' | 'weekStart'>
+  Pick<DatePickerProps, 'initialDisplay'> & Pick<TimePickerProps, 'is24HourFormat' | 'minuteIncrement'> &
+  Pick<YearMonthPickerProps, 'showValueOpen'> & Pick<DayPickerProps, 'markToday' | 'weekStart'>
 
 /**
  * Example for the DateTimePicker

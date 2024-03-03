@@ -99,7 +99,7 @@ export const DayPicker = ({
                 key={date.getDate()}
                 className={tx('flex-1 cursor-pointer rounded-md hover:bg-hw-primary-200 border border-2 hover:border-hw-primary-400',
                   {
-                    'text-gray-500': date.getMonth() !== month,
+                    'text-gray-400': date.getMonth() !== month,
                     'border-hw-primary-300 bg-hw-primary-100': isSelected,
                     'border-transparent': !isSelected && (!isToday || !markToday),
                     'border-gray-700': !selected && isToday && markToday

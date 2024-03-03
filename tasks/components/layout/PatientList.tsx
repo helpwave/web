@@ -9,7 +9,7 @@ import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/commo
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Label } from '../Label'
+import { Chip } from '@helpwave/common/components/ChipList'
 import { Draggable, Droppable } from '../dnd-kit-instances/patients'
 import { AddPatientModal } from '../AddPatientModal'
 import { PatientDischargeModal } from '../PatientDischargeModal'
@@ -216,7 +216,7 @@ export const PatientList = ({
                     >
                       <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                       <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                        <Label name={activeLabelText(patient)} color="blue"/>
+                        <Chip label={activeLabelText(patient)} color="blue" variant="fullyRounded"/>
                         <Button color="negative" variant="textButton" onClick={event => {
                           event.stopPropagation()
                           setDischargingPatient(patient)
@@ -258,7 +258,7 @@ export const PatientList = ({
                         >
                           <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                           <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                            <Label name={`${translation.unassigned}`} color="yellow"/>
+                            <Chip label={`${translation.unassigned}`} color="yellow" variant="fullyRounded"/>
                             <Button color="negative" variant="textButton" onClick={event => {
                               event.stopPropagation()
                               setDischargingPatient(patient)

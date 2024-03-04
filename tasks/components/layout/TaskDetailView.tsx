@@ -16,7 +16,6 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { formatDate } from '@helpwave/common/util/date'
-import { AssigneeSelect } from '../AssigneeSelect'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
@@ -38,6 +37,7 @@ import {
   type TaskDTO
 } from '@/mutations/task_mutations'
 import { type WardWithOrganizationIdDTO, useWardQuery } from '@/mutations/ward_mutations'
+import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
 
 type TaskDetailViewTranslation = {
   close: string,

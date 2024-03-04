@@ -5,6 +5,9 @@ const nextConfig = {
   swcMinify: true,
   transpilePackages: ['@helpwave/common'],
   output: 'standalone',
+  images: {
+    domains: ['helpwave.de'],
+  },
 }
 
 module.exports = nextConfig

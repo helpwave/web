@@ -11,8 +11,6 @@ import { HideableContentSection } from '@helpwave/common/components/HideableCont
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Chip } from '@helpwave/common/components/ChipList'
 import { Draggable, Droppable } from '../dnd-kit-instances/patients'
-import { AddPatientModal } from '../AddPatientModal'
-import { PatientDischargeModal } from '../PatientDischargeModal'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import {
   useDeletePatientMutation,
@@ -24,6 +22,8 @@ import {
   type PatientWithBedAndRoomDTO
 } from '@/mutations/patient_mutations'
 import { useWardQuery } from '@/mutations/ward_mutations'
+import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
+import { AddPatientModal } from '@/components/modals/AddPatientModal'
 
 type PatientListTranslation = {
   patients: string,

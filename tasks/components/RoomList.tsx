@@ -14,7 +14,7 @@ import {
   type TableState
 } from '@helpwave/common/components/Table'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { OrganizationOverviewContext } from '../pages/organizations/[organizationId]'
+import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 import {
   emptyRoomOverview,
   useRoomCreateMutation,
@@ -22,8 +22,8 @@ import {
   useRoomOverviewsQuery,
   useRoomUpdateMutation,
   type RoomOverviewDTO
-} from '../mutations/room_mutations'
-import { ManageBedsModal } from './ManageBedsModal'
+} from '@/mutations/room_mutations'
+import { ManageBedsModal } from '@/components/modals/ManageBedsModal'
 
 type RoomListTranslation = {
   edit: string,

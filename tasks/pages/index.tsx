@@ -57,7 +57,7 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServe
 
   useEffect(() => {
     const ONE_DAY = 1000 * 60 * 60 * 24
-    if (new Date().getTime() - lastTimeStagingDisclaimerDismissed > ONE_DAY && config.showStagingDisclaimerModal) {
+    if (config.showStagingDisclaimerModal && new Date().getTime() - lastTimeStagingDisclaimerDismissed > ONE_DAY) {
       setStagingDiclaimerOpen(true)
     }
   }, [lastTimeStagingDisclaimerDismissed])

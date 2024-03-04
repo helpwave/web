@@ -67,7 +67,7 @@ export const AnimatedRing = ({
     if (currentWidth < width) {
       requestAnimationFrame((timestamp) => animate(timestamp, timestamp))
     }
-  }, []) // eslint-disable-line
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div
@@ -132,7 +132,7 @@ export const RingWave = ({
     if (currentInnerSize < endInnerSize) {
       requestAnimationFrame((timestamp) => animate(timestamp, timestamp))
     }
-  }, []) // eslint-disable-line
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div
@@ -163,7 +163,6 @@ export type RadialRingsProps = {
   sizeCircle3?: number
 };
 
-// eslint-disable-next-line no-empty-pattern
 export const RadialRings = ({
   color1 = 'hw-primary-700',
   color2 = 'hw-primary-500',

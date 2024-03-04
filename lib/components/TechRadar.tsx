@@ -232,7 +232,7 @@ export const TechRadar = ({
       entries,
       ...config,
     })
-  }, [isD3Loaded, isRadarLoaded, config, entries]) // eslint-disable-line
+  }, [isD3Loaded, isRadarLoaded, config, entries]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

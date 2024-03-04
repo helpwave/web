@@ -38,7 +38,7 @@ function useSaveDelay(setNotificationStatus: (isShowing: boolean) => void, delay
       clearTimeout(updateTimer)
       clearTimeout(notificationTimer)
     }
-  }, []) // eslint-disable-line
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { restartTimer, clearUpdateTimer }
 }

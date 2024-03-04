@@ -73,8 +73,6 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServe
       <StagingDisclaimerModal
         id="main-staging-disclaimer-modal"
         onConfirm={dismissStagingDisclaimer}
-        onBackgroundClick={dismissStagingDisclaimer}
-        onCloseClick={dismissStagingDisclaimer}
         isOpen={isStagingDiclaimerOpen}
       />
 

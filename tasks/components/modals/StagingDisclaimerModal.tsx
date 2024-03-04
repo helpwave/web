@@ -56,7 +56,7 @@ export const StagingDisclaimerModal = ({
       description={(
         <>
           <p><MarkdownInterpreter text={translation.message}/></p>
-          <div className={tw('flex flex-row gap-x-2 mt-2')}>
+          <div className={tw('flex flex-row gap-x-8 mt-2')}>
             <Link className={tw('text-hw-primary-600 hover:text-hw-primary-800 font-bold')} href={config.imprintUrl}>
               {translation.imprint}
             </Link>

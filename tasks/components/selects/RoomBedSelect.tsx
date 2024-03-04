@@ -65,7 +65,7 @@ export type RoomBedSelectProps = {
 }
 
 /**
- * A Dropdown to move a patient to a new bed
+ * A Select to move a patient to a new bed
  */
 export const RoomBedSelect = ({
   language,

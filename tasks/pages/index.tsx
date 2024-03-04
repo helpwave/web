@@ -6,7 +6,6 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { StagingDisclaimerModal } from '@helpwave/common/components/modals/StagingDisclaimerModal'
 import { localizedNewsSchema, type LocalizedNews } from '@helpwave/common/util/news'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { TwoColumn } from '@/components/layout/TwoColumn'
@@ -17,6 +16,7 @@ import { useAuth } from '@/hooks/useAuth'
 import titleWrapper from '@/utils/titleWrapper'
 import { fetchLocalizedNews } from '@/utils/news'
 import { getConfig } from '@/utils/config'
+import { StagingDisclaimerModal } from '@/components/modals/StagingDisclaimerModal'
 
 const config = getConfig()
 
@@ -72,7 +72,7 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServe
 
       <StagingDisclaimerModal
         id="main-staging-disclaimer-modal"
-        onDone={dismissStagingDisclaimer}
+        onConfirm={dismissStagingDisclaimer}
         onBackgroundClick={dismissStagingDisclaimer}
         onCloseClick={dismissStagingDisclaimer}
         isOpen={isStagingDiclaimerOpen}

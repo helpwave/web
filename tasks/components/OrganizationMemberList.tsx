@@ -13,10 +13,10 @@ import {
   type TableState
 } from '@helpwave/common/components/Table'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Role, useMembersByOrganizationQuery, type OrgMember } from '../mutations/organization_member_mutations'
+import { Avatar } from '@helpwave/common/components/Avatar'
+import { Role, useMembersByOrganizationQuery, type OrgMember } from '@/mutations/organization_member_mutations'
 import { useRemoveMemberMutation } from '@/mutations/organization_mutations'
 import { OrganizationContext } from '@/pages/organizations'
-import { Avatar } from '@/components/Avatar'
 
 type OrganizationMemberListTranslation = {
   edit: string,

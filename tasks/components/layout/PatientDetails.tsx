@@ -8,10 +8,7 @@ import { ToggleableInput } from '@helpwave/common/components/user-input/Toggleab
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import { TaskDetailModal } from '../TaskDetailModal'
-import { RoomBedDropdown } from '../RoomBedDropdown'
 import { ColumnTitle } from '../ColumnTitle'
-import { PatientDischargeModal } from '../PatientDischargeModal'
 import { TasksKanbanBoard } from './TasksKanbanBoard'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import {
@@ -23,6 +20,9 @@ import {
   useUnassignMutation,
   type PatientDetailsDTO
 } from '@/mutations/patient_mutations'
+import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
+import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
+import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -157,7 +157,7 @@ export const PatientDetail = ({
                 onChange={name => changeSavedValue({ ...newPatient, name })}
               />
             </div>
-            <RoomBedDropdown
+            <RoomBedSelect
               initialRoomAndBed={{ roomId: context.state.roomId ?? '', bedId: context.state.bedId ?? '' }}
               wardId={context.state.wardId}
               onChange={(roomBedDropdownIds) => {

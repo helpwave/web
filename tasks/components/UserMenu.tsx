@@ -6,7 +6,7 @@ import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { Avatar } from './Avatar'
+import { Avatar } from '@helpwave/common/components/Avatar'
 import { getConfig } from '@/utils/config'
 import { useAuth } from '@/hooks/useAuth'
 

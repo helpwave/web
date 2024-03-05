@@ -37,7 +37,7 @@ export const MultiSelectProperty = <T, >({
   softRequired,
   onRemove,
   ...multiSelectProps
-}: PropsWithLanguage<MultiSelectPropertyTranslation, MultiSelectPropertyProps<T>>) => {
+}: PropsWithLanguage<MultiSelectPropertyProps<T>>) => {
   const translation = useTranslation(language, defaultMultiSelectPropertyTranslation)
   const hasValue = options.some(value => value.selected)
   let triggerClassName: string

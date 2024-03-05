@@ -100,7 +100,7 @@ export const DateTimePicker = ({
   onRemove = noop,
   timePickerProps,
   datePickerProps,
-}: PropsWithLanguage<TimeTranslation, DateTimePickerProps>) => {
+}: PropsWithLanguage<DateTimePickerProps>) => {
   const translation = useTranslation(language, defaultTimeTranslation)
 
   const useDate = mode === 'dateTime' || mode === 'date'

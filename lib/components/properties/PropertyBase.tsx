@@ -44,7 +44,7 @@ export const PropertyBase = ({
   readOnly,
   onRemove = noop,
   className = '',
-}: PropsWithLanguage<PropertyBaseTranslation, PropertyBaseProps>) => {
+}: PropsWithLanguage<PropertyBaseProps>) => {
   const translation = useTranslation(language, defaultPropertyBaseTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (

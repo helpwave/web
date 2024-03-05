@@ -39,7 +39,7 @@ export const NumberProperty = ({
   readOnly,
   suffix,
   ...baseProps
-}: PropsWithLanguage<NumberPropertyTranslation, NumberPropertyProps>) => {
+}: PropsWithLanguage<NumberPropertyProps>) => {
   const translation = useTranslation(language, defaultNumberPropertyTranslation)
   const hasValue = value !== undefined
 

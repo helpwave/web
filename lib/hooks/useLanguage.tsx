@@ -5,7 +5,7 @@ import useLocalStorage from './useLocalStorage'
 export const languages = ['en', 'de'] as const
 export type Languages = typeof languages[number]
 
-export const DEFAULT_LANGUAGE = 'en'
+export const DEFAULT_LANGUAGE: Languages = 'en'
 
 export type LanguageContextValue = {
   language: Languages,
@@ -15,6 +15,15 @@ export type LanguageContextValue = {
 export const LanguageContext = createContext<LanguageContextValue>({ language: DEFAULT_LANGUAGE, setLanguage: (v) => v })
 
 export const useLanguage = () => useContext(LanguageContext)
+
+export const useLocals = () => {
+  const { language } = useLanguage()
+  const mapping: Record<Languages, string> = {
+    en: 'en-US',
+    de: 'de-DE'
+  }
+  return mapping[language ?? DEFAULT_LANGUAGE]
+}
 
 export const ProvideLanguage = ({ children }: PropsWithChildren) => {
   const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)

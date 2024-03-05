@@ -3,6 +3,7 @@ import { tw } from '../../twind'
 import { Button } from '../Button'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
 import { Modal, type ModalProps } from './Modal'
 
 type DiscardChangesDialogTranslation = {
@@ -13,7 +14,7 @@ type DiscardChangesDialogTranslation = {
   description: string
 }
 
-const defaultDiscardChangesDialogTranslation = {
+const defaultDiscardChangesDialogTranslation: Record<Languages, DiscardChangesDialogTranslation> = {
   en: {
     save: 'Save',
     cancel: 'Cancel',
@@ -47,7 +48,7 @@ export const DiscardChangesDialog = ({
   onSave,
   onDontSave,
   ...modalProps
-}: PropsWithLanguage<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
+}: PropsWithLanguage<PropsWithChildren<DiscardChangesDialogProps>>) => {
   const translation = useTranslation(language, defaultDiscardChangesDialogTranslation)
   return (
     <Modal

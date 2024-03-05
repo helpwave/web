@@ -68,7 +68,7 @@ export const PatientDetail = ({
   language,
   wardId,
   patient = emptyPatientDetails
-}: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
+}: PropsWithLanguage<PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
   const translation = useTranslation(language, defaultPatientDetailTranslations)
 

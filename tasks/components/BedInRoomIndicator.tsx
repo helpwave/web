@@ -1,13 +1,14 @@
 import { tw } from '@helpwave/common/twind'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type BedInRoomIndicatorTranslation = {
   bed: string,
   in: string
 }
 
-const defaultBedInRoomIndicatorTranslation = {
+const defaultBedInRoomIndicatorTranslation: Record<Languages, BedInRoomIndicatorTranslation> = {
   de: {
     bed: 'Bett',
     in: 'in'
@@ -41,7 +42,7 @@ export const BedInRoomIndicator =
     bedsInRoom,
     roomName,
     bedPosition
-  }: PropsWithLanguage<BedInRoomIndicatorTranslation, BedInRoomIndicatorProps>) => {
+  }: PropsWithLanguage<BedInRoomIndicatorProps>) => {
     const translation = useTranslation(language, defaultBedInRoomIndicatorTranslation)
 
     return (

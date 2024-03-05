@@ -108,7 +108,7 @@ type TaskDetailViewSidebarProps = {
   isCreating: boolean
 }
 
-const TaskDetailViewSidebar = ({ language, task, setTask, ward, isCreating }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
+const TaskDetailViewSidebar = ({ language, task, setTask, ward, isCreating }: PropsWithLanguage<TaskDetailViewSidebarProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
@@ -289,7 +289,7 @@ export const TaskDetailView = ({
   wardId,
   initialStatus,
   onClose
-}: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
+}: PropsWithLanguage<TaskDetailViewProps>) => {
   const translation = useTranslation(language, defaultTaskDetailViewTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const router = useRouter()

@@ -38,7 +38,13 @@ const organizationsToOptions = (organizations?: OrganizationDTO[]): SelectOption
   }))
 }
 
-export const OrganizationSwitchModal = ({ language, onDone: onDoneToCaller, currentOrganization, organizations, ...modalProps }: PropsWithLanguage<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
+export const OrganizationSwitchModal = ({
+  language,
+  onDone: onDoneToCaller,
+  currentOrganization,
+  organizations,
+  ...modalProps
+}: PropsWithLanguage<OrganizationSwitchModalProps>) => {
   const translation = useTranslation(language, defaultOrganizationSwitchModalTranslation)
   const [organization, setOrganization] = useState(currentOrganization ?? '')
   const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])

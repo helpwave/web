@@ -4,8 +4,8 @@ import { tw, tx } from '@helpwave/common/twind'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { Edit } from 'lucide-react'
-import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
+import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
@@ -41,7 +41,7 @@ export const TaskTemplateListColumn = ({
   onTileClick,
   onColumnEditClick,
   language: maybeLanguage
-}: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
+}: PropsWithLanguage<TaskTemplateListColumnProps>) => {
   const translation = useTranslation(maybeLanguage, defaultTaskTemplateListColumnTranslation)
   const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)

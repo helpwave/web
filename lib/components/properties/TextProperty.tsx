@@ -36,7 +36,7 @@ export const TextProperty = ({
   onChange = noop,
   onRemove,
   ...baseProps
-}: PropsWithLanguage<TextPropertyTranslation, TextPropertyProps>) => {
+}: PropsWithLanguage<TextPropertyProps>) => {
   const translation = useTranslation(language, defaultTextPropertyTranslation)
   const hasValue = value !== undefined
 

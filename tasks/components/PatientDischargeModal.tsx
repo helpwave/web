@@ -34,7 +34,7 @@ export const PatientDischargeModal = ({
   titleText,
   buttonOverwrites,
   ...confirmDialogProps
-}: PropsWithLanguage<PatientDischargeModalTranslation, PatientDischargeModalProps>) => {
+}: PropsWithLanguage<PatientDischargeModalProps>) => {
   const translation = useTranslation(language, defaultPatientDischargeModalTranslation)
   return (
     <ConfirmDialog

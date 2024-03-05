@@ -5,16 +5,14 @@ import { ToggleableInput } from '@helpwave/common/components/user-input/Toggleab
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { Button } from '@helpwave/common/components/Button'
 import { noop } from '@helpwave/common/util/noop'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { SubTaskDTO } from '../mutations/task_mutations'
 
 type SubtaskTileTranslation = {
-  subtasks: string,
-  remove: string,
-  addSubtask: string,
-  newSubtask: string
+  remove: string
 }
 
-const defaultSubtaskTileTranslation = {
+const defaultSubtaskTileTranslation: Record<Languages, SubtaskTileTranslation> = {
   en: {
     remove: 'Remove'
   },
@@ -41,7 +39,7 @@ export const SubtaskTile = ({
   onNameChange,
   onNameEditCompleted = noop,
   onDoneChange
-}: PropsWithLanguage<SubtaskTileTranslation, SubtaskTileProps>) => {
+}: PropsWithLanguage<SubtaskTileProps>) => {
   const translation = useTranslation(language, defaultSubtaskTileTranslation)
 
   const minTaskNameLength = 2

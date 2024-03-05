@@ -34,7 +34,7 @@ export const BedCard = ({
   isSelected,
   className,
   ...restCardProps
-}: PropsWithLanguage<BedCardTranslation, BedCardProps>) => {
+}: PropsWithLanguage<BedCardProps>) => {
   const translation = useTranslation(language, defaultBedCardTranslation)
   return (
     (

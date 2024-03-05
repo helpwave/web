@@ -26,7 +26,7 @@ export type InvitationsPageProps = Record<string, never>
  */
 export const InvitationsPage = ({
   language,
-}: PropsWithLanguage<InvitationsPageTranslation, InvitationsPageProps>) => {
+}: PropsWithLanguage<InvitationsPageProps>) => {
   const translation = useTranslation(language, defaultInvitationsPageTranslation)
   return (
     <PageWithHeader

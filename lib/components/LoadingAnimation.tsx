@@ -29,7 +29,7 @@ export const LoadingAnimation = ({
   language,
   loadingText,
   classname
-}: PropsWithLanguage<LoadingAnimationTranslation, LoadingAnimationProps>) => {
+}: PropsWithLanguage<LoadingAnimationProps>) => {
   const translation = useTranslation(language, defaultLoadingAnimationTranslation)
   return (
     <div className={tx('flex flex-col items-center justify-center gap-y-2 w-full h-24', classname)}>

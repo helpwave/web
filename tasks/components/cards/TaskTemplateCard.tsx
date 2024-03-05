@@ -43,7 +43,7 @@ export const TaskTemplateCard = ({
   typeForLabel,
   className,
   ...editCardProps
-}: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
+}: PropsWithLanguage<TaskTemplateCardProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
   return (
     <EditCard

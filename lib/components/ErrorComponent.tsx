@@ -29,7 +29,7 @@ export const ErrorComponent = ({
   language,
   errorText,
   classname
-}: PropsWithLanguage<ErrorComponentTranslation, ErrorComponentProps>) => {
+}: PropsWithLanguage<ErrorComponentProps>) => {
   const translation = useTranslation(language, defaultErrorComponentTranslation)
   return (
     <div className={tx('flex flex-col items-center justify-center gap-y-4 w-full h-24', classname)}>

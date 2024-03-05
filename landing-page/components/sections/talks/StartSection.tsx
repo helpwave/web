@@ -20,7 +20,7 @@ const defaultTaskTranslation: Record<Languages, TalksTranslation> = {
   }
 }
 
-const StartSection = ({ language }: PropsWithLanguage<TalksTranslation>) => {
+const StartSection = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultTaskTranslation)
   const podcastURL = 'https://podcasters.spotify.com/pod/show/helpwave/'
   const screenshotURL = 'https://cdn.helpwave.de/thumbnail/thumbnail_03.png'

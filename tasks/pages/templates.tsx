@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { tw } from '@helpwave/common/twind'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { TaskTemplateDisplay } from '@/components/layout/TaskTemplateDisplay'
@@ -24,7 +25,7 @@ type PersonalTaskTemplateTranslation = {
   personalTaskTemplates: string
 }
 
-const defaultPersonalTaskTemplateTranslations = {
+const defaultPersonalTaskTemplateTranslations: Record<Languages, PersonalTaskTemplateTranslation> = {
   en: {
     taskTemplates: 'Task Templates',
     personalTaskTemplates: 'Personal Task Templates'
@@ -76,7 +77,7 @@ export const TaskTemplateContext = createContext<TaskTemplateContextType>({
   updateContext: () => undefined
 })
 
-const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<PersonalTaskTemplateTranslation>) => {
+const PersonalTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultPersonalTaskTemplateTranslations)
   const templateId = useRouteParameters<never, 'templateId'>().templateId
   const [usedQueryParam, setUsedQueryParam] = useState(false)

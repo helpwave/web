@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { WardDisplay } from '@/components/layout/WardDisplay'
 import { WardDetail } from '@/components/layout/WardDetails'
@@ -15,7 +16,7 @@ type WardsPageTranslation = {
   organizations: string
 }
 
-const defaultWardsPageTranslation = {
+const defaultWardsPageTranslation: Record<Languages, WardsPageTranslation> = {
   en: {
     wards: 'Wards',
     organizations: 'Organization'
@@ -52,7 +53,7 @@ export const OrganizationOverviewContext = createContext<OrganizationOverviewCon
 /**
  * The page for displaying and editing the wards within an organization
  */
-const WardsPage: NextPage = ({ language }: PropsWithLanguage<WardsPageTranslation>) => {
+const WardsPage: NextPage = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultWardsPageTranslation)
   const [contextState, setContextState] = useState<OrganizationOverviewContextState>(emptyOrganizationOverviewContextState)
   const [usedQueryParam, setUsedQueryParam] = useState(false)

@@ -104,7 +104,7 @@ export const NewsLetterForm = ({
   company = '',
   industry,
   onSubmit = () => Promise.resolve(),
-}: PropsWithLanguage<NewsLetterFormTranslation, NewsLetterFormProps>) => {
+}: PropsWithLanguage<NewsLetterFormProps>) => {
   const translation = useTranslation(language, defaultNewsLetterFormTranslation)
   const [isLoading, setLoading] = useState(false)
   const [showThankYouMessage, setShowThankYouMessage] = useState(false)

@@ -88,7 +88,7 @@ export type RoomListProps = {
 export const RoomList = ({
   language,
   rooms
-}: PropsWithLanguage<RoomListTranslation, RoomListProps>) => {
+}: PropsWithLanguage<RoomListProps>) => {
   const translation = useTranslation(language, defaultRoomListTranslations)
   const context = useContext(OrganizationOverviewContext)
   const [tableState, setTableState] = useState<TableState>({

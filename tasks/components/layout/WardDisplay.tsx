@@ -41,7 +41,7 @@ export const WardDisplay = ({
   organizationId,
   selectedWardId,
   width
-}: PropsWithLanguage<WardDisplayTranslation, WardDisplayProps>) => {
+}: PropsWithLanguage<WardDisplayProps>) => {
   const translation = useTranslation(language, defaultWardDisplayTranslations)
   const router = useRouter()
   const context = useContext(OrganizationOverviewContext)

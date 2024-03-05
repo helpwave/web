@@ -78,7 +78,7 @@ export const WardDetail = ({
   organizationId,
   ward,
   width
-}: PropsWithLanguage<WardDetailTranslation, WardDetailProps>) => {
+}: PropsWithLanguage<WardDetailProps>) => {
   const translation = useTranslation(language, defaultWardDetailTranslations)
 
   const context = useContext(OrganizationOverviewContext)

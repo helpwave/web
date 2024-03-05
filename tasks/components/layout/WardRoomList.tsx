@@ -37,7 +37,7 @@ export type WardRoomListProps = {
 export const WardRoomList = ({
   language,
   rooms
-}: PropsWithLanguage<WardRoomListTranslation, WardRoomListProps>) => {
+}: PropsWithLanguage<WardRoomListProps>) => {
   const translation = useTranslation(language, defaultWardRoomListTranslation)
   const context = useContext(WardOverviewContext)
   const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId)

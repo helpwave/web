@@ -42,7 +42,7 @@ export const OrganizationDisplay = ({
   selectedOrganizationId,
   organizations,
   width
-}: PropsWithLanguage<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
+}: PropsWithLanguage<OrganizationDisplayProps>) => {
   const translation = useTranslation(language, defaultOrganizationDisplayTranslations)
   const router = useRouter()
 

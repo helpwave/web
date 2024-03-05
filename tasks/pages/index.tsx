@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = 
   return { props: { jsonFeed: json } }
 }
 
-const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, language }) => {
+const Dashboard: NextPage<PropsWithLanguage<DashboardServerSideProps>> = ({ jsonFeed, language }) => {
   const translation = useTranslation(language, defaultDashboardTranslations)
   const { user } = useAuth()
   const { data: organizations, isLoading } = useOrganizationsForUserQuery()

@@ -48,7 +48,7 @@ export const TaskTemplateDisplay = ({
   taskTemplates,
   variant,
   width
-}: PropsWithLanguage<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
+}: PropsWithLanguage<TaskTemplateDisplayProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateDisplayTranslation)
 
   const router = useRouter()

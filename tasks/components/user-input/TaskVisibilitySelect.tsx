@@ -1,12 +1,13 @@
 import { Select, type SelectProps } from '@helpwave/common/components/user-input/Select'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type TaskVisibilitySelectTranslation = {
   private: string,
   public: string
 }
 
-const defaultTaskVisibilitySelectTranslation = {
+const defaultTaskVisibilitySelectTranslation: Record<Languages, TaskVisibilitySelectTranslation> = {
   en: {
     private: 'private',
     public: 'public',
@@ -28,7 +29,7 @@ export const TaskVisibilitySelect = ({
   language,
   value,
   ...selectProps
-}: PropsWithLanguage<TaskVisibilitySelectTranslation, TaskVisibilitySelectProps>) => {
+}: PropsWithLanguage<TaskVisibilitySelectProps>) => {
   const translation = useTranslation(language, defaultTaskVisibilitySelectTranslation)
   const options = [
     { value: true, label: translation.public },

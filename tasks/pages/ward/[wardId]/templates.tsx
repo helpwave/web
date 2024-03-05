@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState, type TaskTemplateContextState } from '@/pages/templates'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -26,7 +27,7 @@ type WardTaskTemplateTranslation = {
   wardTaskTemplates: string
 }
 
-const defaultWardTaskTemplateTranslations = {
+const defaultWardTaskTemplateTranslations: Record<Languages, WardTaskTemplateTranslation> = {
   en: {
     taskTemplates: 'Task Templates',
     organization: 'Organizations',
@@ -41,7 +42,7 @@ const defaultWardTaskTemplateTranslations = {
   }
 }
 
-const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
+const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
   const { wardId, templateId } = useRouteParameters<'wardId', 'templateId'>()
   const [usedQueryParam, setUsedQueryParam] = useState(false)

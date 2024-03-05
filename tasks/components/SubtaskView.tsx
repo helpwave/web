@@ -5,6 +5,7 @@ import { tw } from '@helpwave/common/twind'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { SubtaskTile } from './SubtaskTile'
 import { TaskTemplateContext } from '@/pages/templates'
 import {
@@ -23,7 +24,7 @@ type SubtaskViewTranslation = {
   newSubtask: string
 }
 
-const defaultSubtaskViewTranslation = {
+const defaultSubtaskViewTranslation: Record<Languages, SubtaskViewTranslation> = {
   en: {
     subtasks: 'Subtasks',
     remove: 'Remove',
@@ -56,7 +57,7 @@ export const SubtaskView = ({
   taskId,
   taskTemplateId,
   onChange,
-}: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
+}: PropsWithLanguage<SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
 
   const translation = useTranslation(language, defaultSubtaskViewTranslation)

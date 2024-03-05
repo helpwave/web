@@ -41,7 +41,7 @@ export const KanbanHeader = ({
   language,
   searchValue = '',
   onSearchChange
-}: PropsWithLanguage<KanbanHeaderTranslation, KanbanHeaderProps>) => {
+}: PropsWithLanguage<KanbanHeaderProps>) => {
   const translation = useTranslation(language, defaultKanbanHeaderTranslations)
   return (
     <div className={tw('flex flex-row justify-between items-center')}>

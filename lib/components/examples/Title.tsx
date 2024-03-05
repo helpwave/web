@@ -27,7 +27,7 @@ type TitleProps = {
 }
 
 // Simple Title component to demonstrate some translations
-const Title = ({ language, name }:PropsWithLanguage<TitleTranslation, TitleProps>) => {
+const Title = ({ language, name }:PropsWithLanguage<TitleProps>) => {
   const translation = useTranslation(language, defaultTitleTranslations)
   return (
     <p className={tw('rounded bg-gray-800 text-gray-200 p-1 px-2')}>

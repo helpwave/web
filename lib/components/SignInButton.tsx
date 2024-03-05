@@ -30,7 +30,7 @@ export const SignInButton = ({
   language,
   color = 'light',
   onClick = noop
-}: PropsWithLanguage<SignInButtonTranslation, SignInButtonProps>) => {
+}: PropsWithLanguage<SignInButtonProps>) => {
   const translation = useTranslation(language, defaultSignInButtonTranslations)
   return (
     <button

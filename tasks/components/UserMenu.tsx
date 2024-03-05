@@ -45,7 +45,7 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
  */
 export const UserMenu = ({
   language,
-}: PropsWithLanguage<UserMenuTranslation>) => {
+}: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultUserMenuTranslations)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const { user, signOut } = useAuth()

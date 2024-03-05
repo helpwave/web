@@ -18,7 +18,7 @@ type LanguageModalTranslation = {
   done: string
 }
 
-const defaultConfirmDialogTranslation = {
+const defaultConfirmDialogTranslation: Record<Languages, LanguageModalTranslation> = {
   en: {
     message: 'Choose your language',
     done: 'Done',
@@ -42,7 +42,7 @@ export const LanguageModal = ({
   onDone,
   onBackgroundClick,
   ...modalProps
-}: PropsWithLanguage<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
+}: PropsWithLanguage<PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
 

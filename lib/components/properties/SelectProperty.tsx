@@ -36,7 +36,7 @@ export const SingleSelectProperty = <T, >({
   softRequired,
   onRemove,
   ...multiSelectProps
-}: PropsWithLanguage<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
+}: PropsWithLanguage<SingleSelectPropertyProps<T>>) => {
   const translation = useTranslation(language, defaultSingleSelectPropertyTranslation)
   const hasValue = value !== undefined
 

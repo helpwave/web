@@ -54,7 +54,7 @@ const PillLabel = ({
   language,
   count,
   state = TaskState[TaskStatus.TASK_STATUS_TODO]
-}: PropsWithLanguage<PillLabelTranslation, PillLabelProps>) => {
+}: PropsWithLanguage<PillLabelProps>) => {
   const translation = useTranslation(language, state.translation)
   return (
     <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center

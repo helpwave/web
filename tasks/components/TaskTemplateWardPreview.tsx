@@ -38,7 +38,7 @@ export const TaskTemplateWardPreview = ({
   language,
   wardId,
   columns = 3
-}: PropsWithLanguage<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
+}: PropsWithLanguage<TaskTemplateWardPreviewProps>) => {
   const translation = useTranslation(language, defaultTaskTemplateWardPreviewTranslation)
   const router = useRouter()
 

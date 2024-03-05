@@ -4,6 +4,7 @@ import type { ButtonColorType } from '../Button'
 import { Button } from '../Button'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
 import { Modal, type ModalProps } from './Modal'
 
 type ConfirmDialogTranslation = {
@@ -14,7 +15,7 @@ type ConfirmDialogTranslation = {
 
 export type ConfirmDialogType = 'positive' | 'negative' | 'neutral'
 
-const defaultConfirmDialogTranslation = {
+const defaultConfirmDialogTranslation: Record<Languages, ConfirmDialogTranslation> = {
   en: {
     confirm: 'Confirm',
     cancel: 'Cancel',
@@ -60,7 +61,7 @@ export const ConfirmDialog = ({
   confirmType = 'positive',
   buttonOverwrites,
   ...restProps
-}: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
+}: PropsWithLanguage<PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(language, defaultConfirmDialogTranslation)
 
   return (

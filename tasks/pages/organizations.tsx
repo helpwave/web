@@ -2,6 +2,7 @@ import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { OrganizationDisplay } from '@/components/layout/OrganizationDisplay'
 import { OrganizationDetail } from '@/components/layout/OrganizationDetails'
@@ -13,7 +14,7 @@ type OrganizationsPageTranslation = {
   organizations: string
 }
 
-const defaultOrganizationsPageTranslation = {
+const defaultOrganizationsPageTranslation: Record<Languages, OrganizationsPageTranslation> = {
   de: {
     organizations: 'Organisationen'
   },
@@ -43,7 +44,7 @@ export const OrganizationContext = createContext<OrganizationContextType>({
 /**
  * The page for showing all organizations a user is part of
  */
-const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsPageTranslation>) => {
+const OrganizationsPage: NextPage = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultOrganizationsPageTranslation)
   const organizationId = useRouteParameters<never, 'organizationId'>().organizationId
   const [usedQueryParam, setUsedQueryParam] = useState(false)

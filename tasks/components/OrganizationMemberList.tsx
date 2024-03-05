@@ -79,7 +79,7 @@ export const OrganizationMemberList = ({
   language,
   organizationId,
   members
-}: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
+}: PropsWithLanguage<OrganizationMemberListProps>) => {
   const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
   const [tableState, setTableState] = useState<TableState>({ pagination: defaultTableStatePagination, selection: defaultTableStateSelection })
 

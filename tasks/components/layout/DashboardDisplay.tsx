@@ -45,7 +45,7 @@ export type DashboardDisplayProps = {
 export const DashboardDisplay = ({
   language,
   width
-}: PropsWithLanguage<DashboardDisplayTranslation, DashboardDisplayProps>) => {
+}: PropsWithLanguage<DashboardDisplayProps>) => {
   const translation = useTranslation(language, defaultDashboardDisplayTranslations)
   const router = useRouter()
   const minimumWidthOfCards = 220 // the value of much space a card and the surrounding gap requires, given in px

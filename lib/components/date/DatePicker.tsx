@@ -4,68 +4,24 @@ import type { Languages } from '../../hooks/useLanguage'
 import type { PropsWithLanguage } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
-import { addDuration, monthsList, subtractDuration } from '../../util/date'
+import { addDuration, subtractDuration } from '../../util/date'
 import { tw, tx } from '../../twind'
 import { Button } from '../Button'
+import { useLocals } from '../../hooks/useLanguage'
 import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import type { DayPickerProps } from './DayPicker'
 import { DayPicker } from './DayPicker'
 
 type DatePickerTranslation = {
-  year: string,
-  month: string,
-  day: string,
-  january: string,
-  february: string,
-  march: string,
-  april: string,
-  may: string,
-  june: string,
-  july: string,
-  august: string,
-  september: string,
-  october: string,
-  november: string,
-  december: string,
   today: string
 }
 
 const defaultDatePickerTranslation: Record<Languages, DatePickerTranslation> = {
   en: {
-    year: 'Year',
-    month: 'Month',
-    day: 'Day',
-    january: 'January',
-    february: 'Febuary',
-    march: 'March',
-    april: 'April',
-    may: 'May',
-    june: 'June',
-    july: 'July',
-    august: 'August',
-    september: 'September',
-    october: 'October',
-    november: 'November',
-    december: 'December',
     today: 'Today',
   },
   de: {
-    year: 'Jahr',
-    month: 'Monat',
-    day: 'Tag',
-    january: 'Januar',
-    february: 'Febuar',
-    march: 'März',
-    april: 'April',
-    may: 'Mai',
-    june: 'Juni',
-    july: 'Juli',
-    august: 'August',
-    september: 'September',
-    october: 'October',
-    november: 'November',
-    december: 'December',
     today: 'Heute',
   }
 }
@@ -96,7 +52,8 @@ export const DatePicker = ({
   yearMonthPickerProps,
   dayPickerProps,
   className = ''
-}: PropsWithLanguage<DatePickerTranslation, DatePickerProps>) => {
+}: PropsWithLanguage<DatePickerProps>) => {
+  const local = useLocals()
   const translation = useTranslation(language, defaultDatePickerTranslation)
   const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
@@ -114,7 +71,7 @@ export const DatePicker = ({
           })}
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
         >
-          {`${translation[monthsList[displayedMonth.getMonth()!]!]} ${displayedMonth.getFullYear()}`}
+          {`${new Intl.DateTimeFormat(local, { month: 'long' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
           <ChevronDown size={16}/>
         </div>
         {displayMode === 'day' && (

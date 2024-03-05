@@ -60,7 +60,7 @@ export const ManageBedsModal = ({
   modalClassName,
   titleText,
   ...modalProps
-}: PropsWithLanguage<ManageBedsModalTranslation, ManageBedsModalProps>) => {
+}: PropsWithLanguage<ManageBedsModalProps>) => {
   const translation = useTranslation(language, defaultManageBedsModalTranslation)
   const { data, isLoading, isError } = useRoomOverviewsQuery(wardId) // Todo use more optimized query later
   const [tableState, setTableState] = useState<TableState>({

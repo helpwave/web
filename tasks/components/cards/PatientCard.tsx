@@ -39,7 +39,7 @@ export const PatientCard = ({
   isSelected,
   onTileClick,
   ...restCardProps
-}: PropsWithLanguage<PatientCardTranslation, PatientCardProps>) => {
+}: PropsWithLanguage<PatientCardProps>) => {
   const translation = useTranslation(language, defaultPatientCardTranslations)
   return (
     <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>

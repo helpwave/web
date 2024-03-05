@@ -20,7 +20,7 @@ const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> =
   }
 }
 
-const StartSection = ({ language }: PropsWithLanguage<LandingPageTranslation>) => {
+const StartSection = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultLandingPageTranslation)
   const exploreURL = '/join'
   const demoURL = 'https://staging-tasks.helpwave.de'

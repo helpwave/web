@@ -28,7 +28,7 @@ export type InvitationBannerProps = {
 export const InvitationBanner = ({
   language,
   invitationCount
-}: PropsWithLanguage<InvitationBannerTranslation, InvitationBannerProps>) => {
+}: PropsWithLanguage<InvitationBannerProps>) => {
   const translation = useTranslation(language, defaultInvitationBannerTranslation)
   const { data, isError, isLoading } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   let openInvites = invitationCount

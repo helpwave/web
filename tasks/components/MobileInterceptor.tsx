@@ -4,6 +4,7 @@ import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { getConfig } from '@/utils/config'
 
 type MobileInterceptorTranslation = {
@@ -12,7 +13,7 @@ type MobileInterceptorTranslation = {
   appStore: string
 }
 
-const defaultMobileInterceptorTranslation = {
+const defaultMobileInterceptorTranslation: Record<Languages, MobileInterceptorTranslation> = {
   en: {
     pleaseDownloadApp: 'Please download the app',
     playStore: 'Google Play Store',
@@ -31,7 +32,7 @@ const defaultMobileInterceptorTranslation = {
  * Currently, the user is prevented from using the application from mobile and the link to
  * the helpwave app will be shown
  */
-const MobileInterceptor: NextPage = ({ language }: PropsWithLanguage<MobileInterceptorTranslation>) => {
+const MobileInterceptor: NextPage = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultMobileInterceptorTranslation)
   const config = getConfig()
   const playStoreLink = config.appstoreLinks.playStore

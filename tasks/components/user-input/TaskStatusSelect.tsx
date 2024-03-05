@@ -1,6 +1,7 @@
 import { Select, type SelectProps } from '@helpwave/common/components/user-input/Select'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
 type TaskStatusSelectTranslation = {
   unscheduled: string,
@@ -9,7 +10,7 @@ type TaskStatusSelectTranslation = {
   status: string
 }
 
-const defaultTaskStatusSelectTranslation = {
+const defaultTaskStatusSelectTranslation: Record<Languages, TaskStatusSelectTranslation> = {
   en: {
     unscheduled: 'unscheduled',
     inProgress: 'in progress',
@@ -41,7 +42,7 @@ export const TaskStatusSelect = ({
   removeOptions = [],
   value,
   ...selectProps
-}: PropsWithLanguage<TaskStatusSelectTranslation, TaskStatusSelectProps>) => {
+}: PropsWithLanguage<TaskStatusSelectProps>) => {
   const translation = useTranslation(language, defaultTaskStatusSelectTranslation)
   const defaultOptions = [
     { value: TaskStatus.TASK_STATUS_TODO, label: translation.unscheduled },

@@ -5,6 +5,7 @@ import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/u
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit-instances/patients'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PatientDetail } from '@/components/layout/PatientDetails'
@@ -36,7 +37,7 @@ type WardOverviewTranslation = {
   addPatientDialogTitle: string
 }
 
-const defaultWardOverviewTranslation = {
+const defaultWardOverviewTranslation: Record<Languages, WardOverviewTranslation> = {
   en: {
     beds: 'Betten',
     roomOverview: 'Ward Overview',
@@ -83,7 +84,7 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
   updateContext: () => undefined
 })
 
-const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
+const WardOverview: NextPage = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultWardOverviewTranslation)
   // TODO: could we differentiate between the two using two different states?
   const [draggedPatient, setDraggedPatient] = useState<{

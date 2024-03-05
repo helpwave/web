@@ -27,7 +27,7 @@ const defaultReSignInModalTranslation: Record<Languages, ReSignInModalTranslatio
     no: 'Nein, später.'
   }
 }
-export const ReSignInModal = ({ language, titleText, ...modalProps }: PropsWithLanguage<ReSignInModalTranslation, ReSignInModalProps>) => {
+export const ReSignInModal = ({ language, titleText, ...modalProps }: PropsWithLanguage<ReSignInModalProps>) => {
   const translation = useTranslation(language, defaultReSignInModalTranslation)
 
   return (

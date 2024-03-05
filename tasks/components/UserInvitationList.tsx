@@ -43,7 +43,7 @@ export type UserInvitationListProps = Record<string, never>
  */
 export const UserInvitationList = ({
   language,
-}: PropsWithLanguage<UserInvitationListTranslation, UserInvitationListProps>) => {
+}: PropsWithLanguage<UserInvitationListProps>) => {
   const translation = useTranslation(language, defaultUserInvitationListTranslation)
   const [tableState, setTableState] = useState<TableState>({ pagination: { ...defaultTableStatePagination, entriesPerPage: 10 } })
   const { data, isLoading, isError } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)

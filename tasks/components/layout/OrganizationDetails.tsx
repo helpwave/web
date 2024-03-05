@@ -62,7 +62,7 @@ export type OrganizationDetailProps = {
  */
 export const OrganizationDetail = ({
   language
-}: PropsWithLanguage<OrganizationDetailTranslation, OrganizationDetailProps>) => {
+}: PropsWithLanguage<OrganizationDetailProps>) => {
   const translation = useTranslation(language, defaultOrganizationDetailTranslations)
 
   const {

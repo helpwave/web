@@ -25,7 +25,7 @@ const defaultExpansionTranslation: Record<Languages, ExpansionSectionTranslation
   }
 }
 
-const ExpansionSection = ({ language }: PropsWithLanguage<ExpansionSectionTranslation>) => {
+const ExpansionSection = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultExpansionTranslation)
   return (
     <div className={tw('pb-16')}>

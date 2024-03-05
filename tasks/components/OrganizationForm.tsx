@@ -94,7 +94,7 @@ export const OrganizationForm = ({
   language,
   organizationForm = emptyOrganizationForm,
   onChange = () => undefined,
-}: PropsWithLanguage<OrganizationFormTranslation, OrganizationFormProps>) => {
+}: PropsWithLanguage<OrganizationFormProps>) => {
   const translation = useTranslation(language, defaultOrganizationFormTranslations)
 
   const minShortNameLength = 2

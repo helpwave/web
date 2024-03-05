@@ -77,7 +77,7 @@ export const TimeDisplay = ({
   language,
   date,
   mode = 'daysFromToday'
-}: PropsWithLanguage<TimeDisplayTranslation, TimeDisplayProps>) => {
+}: PropsWithLanguage<TimeDisplayProps>) => {
   const translation = useTranslation(language, defaultTimeDisplayTranslations)
   const difference = new Date().setHours(0, 0, 0, 0).valueOf() - new Date(date).setHours(0, 0, 0, 0).valueOf()
   const isBefore = difference > 0

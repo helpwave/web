@@ -39,7 +39,7 @@ export const ModalHeader = ({
   titleText = '',
   description,
   descriptionText = ''
-}: PropsWithLanguage<ModalHeaderTranslation, ModalHeaderProps>) => {
+}: PropsWithLanguage<ModalHeaderProps>) => {
   const translation = useTranslation(language, defaultModalHeaderTranslation)
   return (
     <div className={tw('flex flex-col')}>

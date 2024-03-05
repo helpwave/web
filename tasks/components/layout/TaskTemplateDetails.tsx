@@ -73,7 +73,7 @@ export const TaskTemplateDetails = ({
   onCreate,
   onUpdate,
   onDelete,
-}: PropsWithLanguage<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
+}: PropsWithLanguage<TaskTemplateDetailsProps>) => {
   const context = useContext(TaskTemplateContext)
 
   const translation = useTranslation(language, defaultTaskTemplateDetailsTranslations)

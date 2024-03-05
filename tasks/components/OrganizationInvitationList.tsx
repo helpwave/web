@@ -62,7 +62,7 @@ export const OrganizationInvitationList = ({
   organizationId,
   invitations,
   onChange
-}: PropsWithLanguage<OrganizationInvitationListTranslation, OrganizationInvitationListProps>) => {
+}: PropsWithLanguage<OrganizationInvitationListProps>) => {
   const translation = useTranslation(language, defaultOrganizationInvitationListTranslation)
 
   const context = useContext(OrganizationContext)

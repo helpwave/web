@@ -59,7 +59,7 @@ const getEpisodes = async (): Promise<{id: string, title: string, description: s
     })
 }
 
-const EpisodeSection = ({ language }: PropsWithLanguage<EpisodeSectionTranslation>) => {
+const EpisodeSection = ({ language }: PropsWithLanguage) => {
   const translation = useTranslation(language, defaultEpisodeTranslation)
   const { isLoading, data } = useQuery({ queryKey: ['episodes'], queryFn: getEpisodes })
 

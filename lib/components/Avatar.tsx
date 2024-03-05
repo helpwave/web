@@ -26,10 +26,17 @@ const Avatar = ({ avatarUrl, alt, size = 'medium', className = '' }: AvatarProps
   const usedSize = avtarSizeMapping[size]
   return (
     // TODO transparent or white background later
-    <div className={tx(`rounded-full bg-hw-primary-400 h-[${usedSize}px] w-[${usedSize}px] min-h-[${usedSize}px] min-w-[${usedSize}px]`, className)}>
-      <Image className={tx('rounded-full border border-slate-200 group-hover:border-indigo-200 flex justify-evenly items-center',
-        `h-[${usedSize}px] w-[${usedSize}px] min-h-[${usedSize}px] min-w-[${usedSize}px]`
-      )} src={avatarUrl} alt={alt} width={usedSize} height={usedSize}/>
+    <div
+      className={tx(`rounded-full bg-hw-primary-400 h-[${usedSize}px] w-[${usedSize}px] min-h-[${usedSize}px] min-w-[${usedSize}px]`, className)}>
+      <Image
+        className={tx('rounded-full border border-slate-200 group-hover:border-indigo-200 flex justify-evenly items-center',
+          `h-[${usedSize}px] w-[${usedSize}px] min-h-[${usedSize}px] min-w-[${usedSize}px]`
+        )}
+        src={avatarUrl}
+        alt={alt}
+        width={usedSize}
+        height={usedSize}
+      />
     </div>
   )
 }

@@ -6,7 +6,8 @@ const nextConfig = {
   transpilePackages: ['@helpwave/common'],
   output: 'standalone',
   images: {
-    domains: ['helpwave.de'],
+    dangerouslyAllowSVG: true,
+    domains: ['helpwave.de', 'source.boringavatars.com'],
   },
 }
 

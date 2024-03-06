@@ -3,6 +3,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
+import Link from 'next/link'
 import { useInvitationsByUserQuery } from '@/mutations/organization_mutations'
 
 type InvitationBannerTranslation = {
@@ -47,11 +48,11 @@ export const InvitationBanner = ({
   }
 
   return (
-  <a
+  <Link
     className={tw('w-full bg-hw-primary-400 text-white py-2 px-4 rounded-xl cursor-pointer select-none flex flex-row gap-x-2 items-center')}
     href="/invitations"
   >
     <Mail />{`${translation.openInvites}: ${openInvites}`}
-  </a>
+  </Link>
   )
 }

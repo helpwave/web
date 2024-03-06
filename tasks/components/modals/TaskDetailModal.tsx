@@ -1,6 +1,7 @@
 import { tx } from '@helpwave/common/twind'
 import { Modal, type ModalProps, type ModalHeaderProps } from '@helpwave/common/components/modals/Modal'
-import { TaskDetailView, type TaskDetailViewProps } from './layout/TaskDetailView'
+import type { TaskDetailViewProps } from '@/components/layout/TaskDetailView'
+import { TaskDetailView } from '@/components/layout/TaskDetailView'
 
 export type TaskDetailModalProps =
   Omit<ModalProps, keyof ModalHeaderProps>

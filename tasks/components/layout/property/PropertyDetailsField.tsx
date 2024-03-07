@@ -10,22 +10,17 @@ import { Span } from '@helpwave/common/components/Span'
 import { Plus, X } from 'lucide-react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import type { PropertyFieldType } from '@/components/layout/property/property'
+import type { FieldType, PropertyFieldType } from '@/components/layout/property/property'
 import { fieldTypeList } from '@/components/layout/property/property'
 
 type PropertyDetailsFieldTranslation = {
   field: string,
   fieldType: string,
   values: string,
-  multiSelect: string,
-  singleSelect: string,
-  number: string,
-  text: string,
-  date: string,
   allowCustomValues: string,
   allowCustomValuesDescription: string,
   newEntry: string
-}
+} & {[key in FieldType]: string}
 
 const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsFieldTranslation> = {
   en: {

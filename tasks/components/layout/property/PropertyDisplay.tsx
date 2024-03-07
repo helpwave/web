@@ -231,7 +231,7 @@ export const PropertyDisplay = ({
             <SubjectTypeIcon subjectType={property.basicInfo.subjectType}/>
             <Span>{translation[property.basicInfo.subjectType]}</Span>
           </div>),
-          (<div key="cell-3" className={tw('flex flex-row justify-end')}>
+          (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
               <Button variant="textButton">
                 <Span>{translation.edit}</Span>
               </Button>

@@ -26,7 +26,9 @@ type TitleProps = {
   name: string
 }
 
-// Simple Title component to demonstrate some translations
+/**
+ * Simple Title component to demonstrate some translations
+ */
 const Title = ({ overwriteTranslation, name }:PropsForTranslation<TitleTranslation, TitleProps>) => {
   const translation = useTranslation(overwriteTranslation, defaultTitleTranslations)
   return (

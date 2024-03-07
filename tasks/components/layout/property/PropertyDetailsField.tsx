@@ -20,7 +20,7 @@ type PropertyDetailsFieldTranslation = {
   allowCustomValues: string,
   allowCustomValuesDescription: string,
   newEntry: string
-} & {[key in FieldType]: string}
+} & { [key in FieldType]: string }
 
 const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsFieldTranslation> = {
   en: {
@@ -65,6 +65,7 @@ export const PropertyDetailsField = ({
   onChange
 }: PropsWithLanguage<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
   const translation = useTranslation(language, defaultPropertyDetailsFieldTranslation)
+  const isSelectType = value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect'
   return (
     <InputGroup title={translation.field}>
       <Select
@@ -74,7 +75,7 @@ export const PropertyDetailsField = ({
         options={fieldTypeList.map(fieldType => ({ value: fieldType, label: translation[fieldType] }))}
         onChange={fieldType => onChange({ ...value, fieldType })}
       />
-      {(value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect') && (
+      {isSelectType && (
         <div className={tw('flex flex-col mt-2 gap-y-1')}>
           <div className={tw('flex flex-row justify-between items-center')}>
             <Span type="labelMedium">{translation.values}</Span>
@@ -119,18 +120,20 @@ export const PropertyDetailsField = ({
           </Scrollbars>
         </div>
       )}
-      <Tile
-        title={{ value: translation.allowCustomValues, type: 'labelMedium' }}
-        description={{ value: translation.allowCustomValuesDescription }}
-        suffix={(
-          <Checkbox
-            checked={value.isAllowingCustomValues}
-            onChange={isAllowingCustomValues => onChange({ ...value, isAllowingCustomValues })}
-            size={20}
-          />
-        )}
-        className={tw('mt-4')}
-      />
+      {isSelectType && (
+        <Tile
+          title={{ value: translation.allowCustomValues, type: 'labelMedium' }}
+          description={{ value: translation.allowCustomValuesDescription }}
+          suffix={(
+            <Checkbox
+              checked={value.isAllowingCustomValues}
+              onChange={isAllowingCustomValues => onChange({ ...value, isAllowingCustomValues })}
+              size={20}
+            />
+          )}
+          className={tw('mt-4')}
+        />
+      )}
     </InputGroup>
   )
 }

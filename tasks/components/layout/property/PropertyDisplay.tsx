@@ -10,7 +10,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { MultiSubjectSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { Table } from '@helpwave/common/components/Table'
 import { Tile } from '@helpwave/common/components/layout/Tile'
-import type { SubjectType, IdentifiedProperty } from '@/components/layout/property/property'
+import type { SubjectType, IdentifiedProperty, FieldType } from '@/components/layout/property/property'
 import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
 import { PropertyContext } from '@/pages/properties'
 import { SubjectTypeIcon } from '@/components/layout/property/SubjectTypeIcon'
@@ -22,18 +22,8 @@ type PropertyDisplayTranslation = {
   removeFilter: string,
   search: string,
   edit: string,
-  name: string,
-  multiSelect: string,
-  singleSelect: string,
-  number: string,
-  text: string,
-  date: string,
-  organization: string,
-  ward: string,
-  room: string,
-  bed: string,
-  patient: string
-}
+  name: string
+} & {[key in SubjectType|FieldType]: string}
 
 const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTranslation> = {
   en: {
@@ -227,7 +217,7 @@ export const PropertyDisplay = ({
             title={{ value: property.basicInfo.propertyName }}
             description={{ value: translation[property.field.fieldType] }}
           />),
-          (<div key={`subject-type-cell`} className={tw('flex flex-row gap-x-2')}>
+          (<div key="subject-type-cell" className={tw('flex flex-row gap-x-2')}>
             <SubjectTypeIcon subjectType={property.basicInfo.subjectType}/>
             <Span>{translation[property.basicInfo.subjectType]}</Span>
           </div>),

@@ -6,7 +6,7 @@ import { LockIcon } from 'lucide-react'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { Avatar } from '../Avatar'
+import { Avatar } from '@helpwave/common/components/Avatar'
 import type { TaskDTO } from '@/mutations/task_mutations'
 import { useUserQuery } from '@/mutations/user_mutations'
 

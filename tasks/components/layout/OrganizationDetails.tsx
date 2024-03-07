@@ -8,7 +8,6 @@ import { Span } from '@helpwave/common/components/Span'
 import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
-import { ReSignInModal } from '../ReSignInModal'
 import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
 import { OrganizationContext } from '@/pages/organizations'
 import {
@@ -21,6 +20,7 @@ import {
 } from '@/mutations/organization_mutations'
 import { useAuth } from '@/hooks/useAuth'
 import { useOrganization } from '@/hooks/useOrganization'
+import { ReSignInModal } from '@/components/modals/ReSignInModal'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -102,7 +102,7 @@ export const OrganizationDetail = ({
 
   useEffect(() => {
     setOrganizationId(contextState.organizationId)
-  }, [contextState.organizationId])
+  }, [contextState.organizationId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 

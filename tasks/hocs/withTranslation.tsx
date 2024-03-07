@@ -5,7 +5,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 /**
  * This is a higher order component, which might have some problems with ref passing.
- * Therefore it is recommended to use the `useTranslatino` hook instead.
+ * Therefore, it is recommended to use the `useTranslation` hook instead.
  * `useTranslation` is also used in the `withTranslation` hoc internally.
  */
 export const withTranslation = <Props, OwnTranslation extends Record<string, unknown>>(

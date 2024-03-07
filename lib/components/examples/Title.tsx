@@ -26,7 +26,9 @@ type TitleProps = {
   name: string
 }
 
-// Simple Title component to demonstrate some translations
+/**
+ * Simple Title component to demonstrate some translations
+ */
 const Title = ({ language, name }:PropsWithLanguage<TitleTranslation, TitleProps>) => {
   const translation = useTranslation(language, defaultTitleTranslations)
   return (

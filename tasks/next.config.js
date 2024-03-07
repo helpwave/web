@@ -5,6 +5,10 @@ const nextConfig = {
   swcMinify: true,
   transpilePackages: ['@helpwave/common'],
   output: 'standalone',
+  images: {
+    dangerouslyAllowSVG: true,
+    domains: ['cdn.helpwave.de', 'helpwave.de', 'source.boringavatars.com'],
+  },
 }
 
 module.exports = nextConfig

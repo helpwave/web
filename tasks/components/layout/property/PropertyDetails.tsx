@@ -5,6 +5,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsRules } from '@/components/layout/property/PropertyDetailsRules'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
@@ -13,17 +14,23 @@ import { emptyProperty } from '@/components/layout/property/property'
 
 type PropertyDetailsTranslation = {
   propertyDetails: string,
-  archiveProperty: string
+  archiveProperty: string,
+  archivePropertyDialogTitle: string,
+  archivePropertyDialogDescription: string
 }
 
 const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTranslation> = {
   en: {
     propertyDetails: 'Property Details',
-    archiveProperty: 'Archive Property'
+    archiveProperty: 'Archive Property',
+    archivePropertyDialogTitle: 'Archive Property?',
+    archivePropertyDialogDescription: 'This will archive the property and it won\'t be shown anymore.' // TODO improve text
   },
   de: {
     propertyDetails: 'Eigenschaftsdetails', // TODO better translation
-    archiveProperty: 'Eigenschaft archivieren'
+    archiveProperty: 'Eigenschaft archivieren',
+    archivePropertyDialogTitle: 'Eigenschaft archivieren?',
+    archivePropertyDialogDescription: 'Die Eigenschaft wird archiviert und ist danach nicht mehr sichtbar.' // TODO improve text
   }
 }
 
@@ -46,17 +53,30 @@ export const PropertyDetails = ({
   TODO query for data
   */
   const [value, setValue] = useState<Property>(emptyProperty)
+  const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
 
   return (
     <div className={tw('py-4 px-6 flex flex-col gap-y-4 bg-gray-100 h-fit min-h-full')}>
+      <ConfirmDialog
+        id="confirmArchiveModal"
+        isOpen={showArchiveConfirm}
+        titleText={translation.archivePropertyDialogTitle}
+        descriptionText={translation.archivePropertyDialogDescription}
+        onCancel={() => setArchiveConfirm(false)}
+        onConfirm={() => {
+          // TODO do archive here
+          setArchiveConfirm(false)
+        }}
+        onCloseClick={() => setArchiveConfirm(false)}
+        onBackgroundClick={() => setArchiveConfirm(false)}
+        confirmType="negative"
+      />
       <div className={tw('flex flex-row justify-between items-center')}>
         <Span type="title">{translation.propertyDetails}</Span>
         <Button
           variant="textButton"
           color="negative"
-          onClick={() => {
-            // TODO do archive here
-          }}
+          onClick={() => setArchiveConfirm(true)}
         >
           {translation.archiveProperty}
         </Button>

@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsWithLanguage, useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { ModalProps } from '@helpwave/common/components/modals/Modal'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import type { SelectOption } from '@helpwave/common/components/user-input/Select'
@@ -38,8 +38,8 @@ const organizationsToOptions = (organizations?: OrganizationDTO[]): SelectOption
   }))
 }
 
-export const OrganizationSwitchModal = ({ language, onDone: onDoneToCaller, currentOrganization, organizations, ...modalProps }: PropsWithLanguage<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
-  const translation = useTranslation(language, defaultOrganizationSwitchModalTranslation)
+export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneToCaller, currentOrganization, organizations, ...modalProps }: PropsForTranslation<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultOrganizationSwitchModalTranslation)
   const [organization, setOrganization] = useState(currentOrganization ?? '')
   const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])
 

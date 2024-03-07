@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
@@ -38,12 +38,12 @@ export type OrganizationDisplayProps = {
  * The right side of the organizations page showing the list of organizations
  */
 export const OrganizationDisplay = ({
-  language,
+  overwriteTranslation,
   selectedOrganizationId,
   organizations,
   width
-}: PropsWithLanguage<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
-  const translation = useTranslation(language, defaultOrganizationDisplayTranslations)
+}: PropsForTranslation<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultOrganizationDisplayTranslations)
   const router = useRouter()
 
   const context = useContext(OrganizationContext)

@@ -1,4 +1,4 @@
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw, tx } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -108,8 +108,8 @@ type TaskDetailViewSidebarProps = {
   isCreating: boolean
 }
 
-const TaskDetailViewSidebar = ({ language, task, setTask, ward, isCreating }: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
-  const translation = useTranslation(language, defaultTaskDetailViewTranslation)
+const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCreating }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultTaskDetailViewTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
 
@@ -283,14 +283,14 @@ export type TaskDetailViewProps = {
  * The view for changing or creating a task and it's information
  */
 export const TaskDetailView = ({
-  language,
+  overwriteTranslation,
   patientId,
   taskId = '',
   wardId,
   initialStatus,
   onClose
-}: PropsWithLanguage<TaskDetailViewTranslation, TaskDetailViewProps>) => {
-  const translation = useTranslation(language, defaultTaskDetailViewTranslation)
+}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultTaskDetailViewTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const router = useRouter()
   const { user } = useAuth()

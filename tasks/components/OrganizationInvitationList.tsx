@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
@@ -58,12 +58,12 @@ export type OrganizationInvitationListProps = {
  * A List showing all members invited to an organization
  */
 export const OrganizationInvitationList = ({
-  language,
+  overwriteTranslation,
   organizationId,
   invitations,
   onChange
-}: PropsWithLanguage<OrganizationInvitationListTranslation, OrganizationInvitationListProps>) => {
-  const translation = useTranslation(language, defaultOrganizationInvitationListTranslation)
+}: PropsForTranslation<OrganizationInvitationListTranslation, OrganizationInvitationListProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultOrganizationInvitationListTranslation)
 
   const context = useContext(OrganizationContext)
   const usedOrganizationId = organizationId ?? context.state.organizationId

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState, type TaskTemplateContextState } from '@/pages/templates'
 import { TwoColumn } from '@/components/layout/TwoColumn'
@@ -41,8 +41,8 @@ const defaultWardTaskTemplateTranslations = {
   }
 }
 
-const WardTaskTemplatesPage: NextPage = ({ language }: PropsWithLanguage<WardTaskTemplateTranslation>) => {
-  const translation = useTranslation(language, defaultWardTaskTemplateTranslations)
+const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardTaskTemplateTranslation>) => {
+  const translation = useTranslation(overwriteTranslation, defaultWardTaskTemplateTranslations)
   const { wardId, templateId } = useRouteParameters<'wardId', 'templateId'>()
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId)

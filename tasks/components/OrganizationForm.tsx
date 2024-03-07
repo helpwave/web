@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
@@ -91,11 +91,11 @@ export type OrganizationFormProps = {
  * The state is manged by the parent
  */
 export const OrganizationForm = ({
-  language,
+  overwriteTranslation,
   organizationForm = emptyOrganizationForm,
   onChange = () => undefined,
-}: PropsWithLanguage<OrganizationFormTranslation, OrganizationFormProps>) => {
-  const translation = useTranslation(language, defaultOrganizationFormTranslations)
+}: PropsForTranslation<OrganizationFormTranslation, OrganizationFormProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultOrganizationFormTranslations)
 
   const minShortNameLength = 2
   const minLongNameLength = 4

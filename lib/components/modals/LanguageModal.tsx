@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from 'react'
 import { tw } from '../../twind'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user-input/Select'
 import type { Languages } from '../../hooks/useLanguage'
@@ -39,12 +39,13 @@ type LanguageModalProps = ModalProps & {
  * The State of open needs to be managed by the parent
  */
 export const LanguageModal = ({
+  overwriteTranslation,
   onDone,
   onBackgroundClick,
   ...modalProps
-}: PropsWithLanguage<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
+}: PropsForTranslation<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
-  const translation = useTranslation(language, defaultConfirmDialogTranslation)
+  const translation = useTranslation(overwriteTranslation, defaultConfirmDialogTranslation)
 
   return (
     <Modal

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { tw } from '../../twind'
 import { Button } from '../Button'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Modal, type ModalProps } from './Modal'
 
@@ -39,7 +39,7 @@ type DiscardChangesDialogProps = ModalProps & {
 }
 
 export const DiscardChangesDialog = ({
-  language,
+  overwriteTranslation,
   children,
   title,
   description,
@@ -47,8 +47,8 @@ export const DiscardChangesDialog = ({
   onSave,
   onDontSave,
   ...modalProps
-}: PropsWithLanguage<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
-  const translation = useTranslation(language, defaultDiscardChangesDialogTranslation)
+}: PropsForTranslation<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
+  const translation = useTranslation(overwriteTranslation, defaultDiscardChangesDialogTranslation)
   return (
     <Modal
       title={title ?? translation.title}

@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
 import { Span } from '@helpwave/common/components/Span'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -43,10 +43,10 @@ export type DashboardDisplayProps = {
  * The left side of the DashboardPage
  */
 export const DashboardDisplay = ({
-  language,
+  overwriteTranslation,
   width
-}: PropsWithLanguage<DashboardDisplayTranslation, DashboardDisplayProps>) => {
-  const translation = useTranslation(language, defaultDashboardDisplayTranslations)
+}: PropsForTranslation<DashboardDisplayTranslation, DashboardDisplayProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultDashboardDisplayTranslations)
   const router = useRouter()
   const minimumWidthOfCards = 220 // the value of much space a card and the surrounding gap requires, given in px
   const columns = !width ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)

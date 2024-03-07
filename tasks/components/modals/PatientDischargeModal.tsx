@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { PatientMinimalDTO } from '@/mutations/patient_mutations'
@@ -29,13 +29,13 @@ export type PatientDischargeModalProps = Omit<ConfirmDialogProps, 'title' | 'des
  * A Modal to show when discharging Patients
  */
 export const PatientDischargeModal = ({
-  language,
+  overwriteTranslation,
   patient,
   titleText,
   buttonOverwrites,
   ...confirmDialogProps
-}: PropsWithLanguage<PatientDischargeModalTranslation, PatientDischargeModalProps>) => {
-  const translation = useTranslation(language, defaultPatientDischargeModalTranslation)
+}: PropsForTranslation<PatientDischargeModalTranslation, PatientDischargeModalProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultPatientDischargeModalTranslation)
   return (
     <ConfirmDialog
       titleText={titleText ?? translation.dischargePatient}

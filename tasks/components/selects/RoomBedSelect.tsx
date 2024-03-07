@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Undo2, X } from 'lucide-react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { Span } from '@helpwave/common/components/Span'
 import { noop } from '@helpwave/common/util/noop'
@@ -68,14 +68,14 @@ export type RoomBedSelectProps = {
  * A Select to move a patient to a new bed
  */
 export const RoomBedSelect = ({
-  language,
+  overwriteTranslation,
   initialRoomAndBed,
   wardId,
   isSubmitting = false,
   isClearable = false,
   onChange = noop
-}: PropsWithLanguage<RoomBedSelectTranslation, RoomBedSelectProps>) => {
-  const translation = useTranslation(language, defaultRoomBedSelectTranslation)
+}: PropsForTranslation<RoomBedSelectTranslation, RoomBedSelectProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultRoomBedSelectTranslation)
   const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardId)
   const [currentSelection, setCurrentSelection] = useState<RoomBedSelectIds>({ ...initialRoomAndBed })
   const ref = useRef<HTMLDivElement>(null)

@@ -5,7 +5,7 @@ import { Span } from '@helpwave/common/components/Span'
 import { LockIcon } from 'lucide-react'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import type { TaskDTO } from '@/mutations/task_mutations'
 import { useUserQuery } from '@/mutations/user_mutations'
@@ -31,12 +31,12 @@ export type TaskCardProps = CardProps & {
  * A Card displaying the information about
  */
 export const TaskCard = ({
-  language,
+  overwriteTranslation,
   task,
   isSelected = false,
   onTileClick = () => undefined
-}: PropsWithLanguage<TaskCardTranslation, TaskCardProps>) => {
-  const translation = useTranslation(language, defaultTaskCardTranslations)
+}: PropsForTranslation<TaskCardTranslation, TaskCardProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultTaskCardTranslations)
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== TaskStatus.TASK_STATUS_DONE
 

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { tw } from '@helpwave/common/twind'
 import { LucideArrowLeftRight } from 'lucide-react'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -41,15 +41,15 @@ export type TaskTemplateDisplayProps = {
  * A column for showing TaskTemplates either for Ward or Private templates
  */
 export const TaskTemplateDisplay = ({
-  language,
+  overwriteTranslation,
   wardId,
   selectedId,
   onSelectChange,
   taskTemplates,
   variant,
   width
-}: PropsWithLanguage<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
-  const translation = useTranslation(language, defaultTaskTemplateDisplayTranslation)
+}: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultTaskTemplateDisplayTranslation)
 
   const router = useRouter()
   const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))

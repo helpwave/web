@@ -1,7 +1,7 @@
 import { tw } from '@helpwave/common/twind'
 import { Mail } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { AvatarGroup } from '@helpwave/common/components/AvatarGroup'
 import { EditCard, type EditCardProps } from './EditCard'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
@@ -31,11 +31,11 @@ export type OrganizationCardProps = EditCardProps & {
  * A Card displaying a Organization
  */
 export const OrganizationCard = ({
-  language,
+  overwriteTranslation,
   organization,
   ...editCardProps
-}: PropsWithLanguage<Languages, OrganizationCardProps>) => {
-  const translation = useTranslation(language, defaultOrganizationCardTranslation)
+}: PropsForTranslation<OrganizationCardTranslation, OrganizationCardProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultOrganizationCardTranslation)
   const organizationMemberCount = organization.members.length
 
   return (

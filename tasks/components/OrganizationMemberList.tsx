@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
@@ -76,11 +76,11 @@ export type OrganizationMemberListProps = {
  * A table for showing and editing the members of an organization
  */
 export const OrganizationMemberList = ({
-  language,
+  overwriteTranslation,
   organizationId,
   members
-}: PropsWithLanguage<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
-  const translation = useTranslation(language, defaultOrganizationMemberListTranslations)
+}: PropsForTranslation<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultOrganizationMemberListTranslations)
   const [tableState, setTableState] = useState<TableState>({ pagination: defaultTableStatePagination, selection: defaultTableStateSelection })
 
   const context = useContext(OrganizationContext)

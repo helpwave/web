@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { Button } from '@helpwave/common/components/Button'
 import { noop } from '@helpwave/common/util/noop'
-import type { SubTaskDTO } from '../mutations/task_mutations'
+import type { SubTaskDTO } from '@/mutations/task_mutations'
 
 type SubtaskTileTranslation = {
   subtasks: string,
@@ -35,14 +35,14 @@ type SubtaskTileProps = {
  * A tile for showing and editing a subtask used in the SubtaskView
  */
 export const SubtaskTile = ({
-  language,
+  overwriteTranslation,
   subtask,
   onRemoveClick,
   onNameChange,
   onNameEditCompleted = noop,
   onDoneChange
-}: PropsWithLanguage<SubtaskTileTranslation, SubtaskTileProps>) => {
-  const translation = useTranslation(language, defaultSubtaskTileTranslation)
+}: PropsForTranslation<SubtaskTileTranslation, SubtaskTileProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultSubtaskTileTranslation)
 
   const minTaskNameLength = 2
   const maxTaskNameLength = 64

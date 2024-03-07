@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Button } from '@helpwave/common/components/Button'
@@ -86,10 +86,10 @@ export type RoomListProps = {
  * A table for showing and editing the rooms within a ward
  */
 export const RoomList = ({
-  language,
+  overwriteTranslation,
   rooms
-}: PropsWithLanguage<RoomListTranslation, RoomListProps>) => {
-  const translation = useTranslation(language, defaultRoomListTranslations)
+}: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultRoomListTranslations)
   const context = useContext(OrganizationOverviewContext)
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination,

@@ -1,7 +1,7 @@
 import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import { DragCard, type DragCardProps } from './DragCard'
 
@@ -30,7 +30,7 @@ export type PatientCardProps = DragCardProps & {
  * A Card for displaying a Patient and the tasks
  */
 export const PatientCard = ({
-  language,
+  overwriteTranslation,
   bedName,
   patientName,
   unscheduledTasks,
@@ -39,8 +39,8 @@ export const PatientCard = ({
   isSelected,
   onTileClick,
   ...restCardProps
-}: PropsWithLanguage<PatientCardTranslation, PatientCardProps>) => {
-  const translation = useTranslation(language, defaultPatientCardTranslations)
+}: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultPatientCardTranslations)
   return (
     <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
       <div className={tw('flex flex-row justify-between')}>

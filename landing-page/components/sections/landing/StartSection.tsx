@@ -1,6 +1,6 @@
 import { Button } from '@helpwave/common/components/Button'
 import { tw } from '@helpwave/common/twind'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
@@ -20,8 +20,8 @@ const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> =
   }
 }
 
-const StartSection = ({ language }: PropsWithLanguage<LandingPageTranslation>) => {
-  const translation = useTranslation(language, defaultLandingPageTranslation)
+const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageTranslation>) => {
+  const translation = useTranslation(overwriteTranslation, defaultLandingPageTranslation)
   const exploreURL = '/join'
   const demoURL = 'https://staging-tasks.helpwave.de'
   return (

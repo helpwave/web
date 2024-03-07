@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { tw } from '@helpwave/common/twind'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import { getConfig } from '@/utils/config'
@@ -44,9 +44,9 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
  * A component showing a menu for user actions. For example editing the profile, language and logout.
  */
 export const UserMenu = ({
-  language,
-}: PropsWithLanguage<UserMenuTranslation>) => {
-  const translation = useTranslation(language, defaultUserMenuTranslations)
+  overwriteTranslation,
+}: PropsForTranslation<UserMenuTranslation>) => {
+  const translation = useTranslation(overwriteTranslation, defaultUserMenuTranslations)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const { user, signOut } = useAuth()
   const router = useRouter()

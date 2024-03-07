@@ -1,5 +1,5 @@
 import { Select, type SelectProps } from '@helpwave/common/components/user-input/Select'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 
 type TaskVisibilitySelectTranslation = {
   private: string,
@@ -25,11 +25,11 @@ type TaskVisibilitySelectProps = Omit<SelectProps<boolean>, 'options'>
  * The state is managed by the parent
  */
 export const TaskVisibilitySelect = ({
-  language,
+  overwriteTranslation,
   value,
   ...selectProps
-}: PropsWithLanguage<TaskVisibilitySelectTranslation, TaskVisibilitySelectProps>) => {
-  const translation = useTranslation(language, defaultTaskVisibilitySelectTranslation)
+}: PropsForTranslation<TaskVisibilitySelectTranslation, TaskVisibilitySelectProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultTaskVisibilitySelectTranslation)
   const options = [
     { value: true, label: translation.public },
     { value: false, label: translation.private },

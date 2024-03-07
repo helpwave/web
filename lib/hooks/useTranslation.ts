@@ -1,5 +1,10 @@
-import type { Languages } from '../hooks/useLanguage'
-import { useLanguage, DEFAULT_LANGUAGE } from '../hooks/useLanguage'
+import type { Languages } from './useLanguage'
+import { useLanguage } from './useLanguage'
+
+type OverwriteTranslationType<Translation extends Record<string, unknown>> = {
+  language?: Languages,
+  translation?: Partial<Record<Languages, Partial<Translation>>>
+}
 
 /**
  * Adds the `language` prop to the component props.
@@ -14,26 +19,22 @@ import { useLanguage, DEFAULT_LANGUAGE } from '../hooks/useLanguage'
  *              is `SomeType` which means that adding back props (like `ref` etc.)
  *              works properly
  */
-export type PropsWithLanguage<
-  Translation,
+export type PropsForTranslation<
+  Translation extends Record<string, unknown>,
   Props = Record<string, never>
 > = Props & {
-  language?: Partial<Translation> | Languages
+  overwriteTranslation?: OverwriteTranslationType<Translation>
 };
 
-export const useTranslation = <Language extends Record<string, unknown>>(
-  languageProp: PropsWithLanguage<Language>['language'],
-  defaults: Record<Languages, Language>
+export const useTranslation = <Translation extends Record<string, unknown>>(
+  translationOverwrite: OverwriteTranslationType<Translation> = {},
+  defaults: Record<Languages, Translation>
 ) => {
+  const { language: languageProp, translation: overwrite } = translationOverwrite
   const { language: inferredLanguage } = useLanguage()
-  if (languageProp === undefined) {
-    return defaults[inferredLanguage]
-  } else if (typeof languageProp !== 'object') {
-    return defaults[languageProp as Languages]
-  } else {
-    return Object.assign(
-      defaults[DEFAULT_LANGUAGE],
-      languageProp as Partial<Language>
-    )
-  }
+  const usedLanguage = languageProp ?? inferredLanguage
+  return Object.assign(
+    defaults[usedLanguage],
+    overwrite
+  )
 }

@@ -1,5 +1,5 @@
 import { tw } from '@helpwave/common/twind'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 
 type BedInRoomIndicatorTranslation = {
@@ -37,12 +37,12 @@ export type BedInRoomIndicatorProps = {
  */
 export const BedInRoomIndicator =
   ({
-    language,
+    overwriteTranslation,
     bedsInRoom,
     roomName,
     bedPosition
-  }: PropsWithLanguage<BedInRoomIndicatorTranslation, BedInRoomIndicatorProps>) => {
-    const translation = useTranslation(language, defaultBedInRoomIndicatorTranslation)
+  }: PropsForTranslation<BedInRoomIndicatorTranslation, BedInRoomIndicatorProps>) => {
+    const translation = useTranslation(overwriteTranslation, defaultBedInRoomIndicatorTranslation)
 
     return (
       <div>

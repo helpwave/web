@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { Chip } from '@helpwave/common/components/ChipList'
 import { EditCard, type EditCardProps } from './EditCard'
@@ -37,14 +37,14 @@ export type TaskTemplateCardProps = EditCardProps & {
  * A Card showing a TaskTemplate
  */
 export const TaskTemplateCard = ({
-  language,
+  overwriteTranslation,
   name,
   subtaskCount,
   typeForLabel,
   className,
   ...editCardProps
-}: PropsWithLanguage<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
-  const translation = useTranslation(language, defaultTaskTemplateCardTranslations)
+}: PropsForTranslation<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultTaskTemplateCardTranslations)
   return (
     <EditCard
       className={tx('group flex flex-col bg-white', className)}

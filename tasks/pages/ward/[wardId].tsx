@@ -1,7 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
@@ -83,8 +83,8 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
   updateContext: () => undefined
 })
 
-const WardOverview: NextPage = ({ language }: PropsWithLanguage<WardOverviewTranslation>) => {
-  const translation = useTranslation(language, defaultWardOverviewTranslation)
+const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardOverviewTranslation>) => {
+  const translation = useTranslation(overwriteTranslation, defaultWardOverviewTranslation)
   // TODO: could we differentiate between the two using two different states?
   const [draggedPatient, setDraggedPatient] = useState<{
     patient?: PatientMinimalDTO,

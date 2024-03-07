@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
@@ -74,12 +74,12 @@ export type WardDetailProps = {
  * the Ward
  */
 export const WardDetail = ({
-  language,
+  overwriteTranslation,
   organizationId,
   ward,
   width
-}: PropsWithLanguage<WardDetailTranslation, WardDetailProps>) => {
-  const translation = useTranslation(language, defaultWardDetailTranslations)
+}: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultWardDetailTranslations)
 
   const context = useContext(OrganizationOverviewContext)
   const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organizationId)

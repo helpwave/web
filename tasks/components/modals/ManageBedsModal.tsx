@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Modal, type ModalProps } from '@helpwave/common/components/modals/Modal'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
@@ -54,14 +54,14 @@ export type ManageBedsModalProps = ModalProps & {
  * A Modal for managing beds
  */
 export const ManageBedsModal = ({
-  language,
+  overwriteTranslation,
   wardId,
   roomId,
   modalClassName,
   titleText,
   ...modalProps
-}: PropsWithLanguage<ManageBedsModalTranslation, ManageBedsModalProps>) => {
-  const translation = useTranslation(language, defaultManageBedsModalTranslation)
+}: PropsForTranslation<ManageBedsModalTranslation, ManageBedsModalProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultManageBedsModalTranslation)
   const { data, isLoading, isError } = useRoomOverviewsQuery(wardId) // Todo use more optimized query later
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination

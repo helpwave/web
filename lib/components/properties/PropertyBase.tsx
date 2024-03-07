@@ -4,7 +4,7 @@ import { tw, tx } from '../../twind'
 import { noop } from '../../util/noop'
 import type { Languages } from '../../hooks/useLanguage'
 import { Button } from '../Button'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 
 type PropertyBaseTranslation = {
@@ -35,7 +35,7 @@ export type PropertyBaseProps = {
  * A component for showing a property with uniform styling
  */
 export const PropertyBase = ({
-  language,
+  overwriteTranslation,
   name,
   input,
   softRequired = false,
@@ -44,8 +44,8 @@ export const PropertyBase = ({
   readOnly,
   onRemove = noop,
   className = '',
-}: PropsWithLanguage<PropertyBaseTranslation, PropertyBaseProps>) => {
-  const translation = useTranslation(language, defaultPropertyBaseTranslation)
+}: PropsForTranslation<PropertyBaseTranslation, PropertyBaseProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultPropertyBaseTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (
     <div

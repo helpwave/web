@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { useRouter } from 'next/router'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
@@ -37,12 +37,12 @@ export type WardDisplayProps = {
  * The left side of the organizations/[organizationId].tsx page showing the wards within the organizations
  */
 export const WardDisplay = ({
-  language,
+  overwriteTranslation,
   organizationId,
   selectedWardId,
   width
-}: PropsWithLanguage<WardDisplayTranslation, WardDisplayProps>) => {
-  const translation = useTranslation(language, defaultWardDisplayTranslations)
+}: PropsForTranslation<WardDisplayTranslation, WardDisplayProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultWardDisplayTranslations)
   const router = useRouter()
   const context = useContext(OrganizationOverviewContext)
   const { data, isLoading, isError } = useWardOverviewsQuery(organizationId)

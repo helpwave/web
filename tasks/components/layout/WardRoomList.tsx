@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { tw } from '@helpwave/common/twind'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { RoomOverview } from '../RoomOverview'
@@ -35,10 +35,10 @@ export type WardRoomListProps = {
  * The left side component of the page showing all Rooms of a Ward
  */
 export const WardRoomList = ({
-  language,
+  overwriteTranslation,
   rooms
-}: PropsWithLanguage<WardRoomListTranslation, WardRoomListProps>) => {
-  const translation = useTranslation(language, defaultWardRoomListTranslation)
+}: PropsForTranslation<WardRoomListTranslation, WardRoomListProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultWardRoomListTranslation)
   const context = useContext(WardOverviewContext)
   const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId)
 

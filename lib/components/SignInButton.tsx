@@ -1,6 +1,6 @@
 import { noop } from '@twind/core'
 import type { Languages } from '../hooks/useLanguage'
-import type { PropsWithLanguage } from '../hooks/useTranslation'
+import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import { Helpwave } from '../icons/Helpwave'
 import { tw, tx } from '../twind'
@@ -27,11 +27,11 @@ export type SignInButtonProps = {
  * The helpwave SSO sign in button coming in a light and dark mode coloring
  */
 export const SignInButton = ({
-  language,
+  overwriteTranslation,
   color = 'light',
   onClick = noop
-}: PropsWithLanguage<SignInButtonTranslation, SignInButtonProps>) => {
-  const translation = useTranslation(language, defaultSignInButtonTranslations)
+}: PropsForTranslation<SignInButtonTranslation, SignInButtonProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultSignInButtonTranslations)
   return (
     <button
       onClick={onClick}

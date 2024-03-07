@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import type { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
@@ -35,14 +35,14 @@ type KanbanColumnProps = {
  * The Column of the KanbanBoard showing tasks and affording a reorder of these
  */
 export const KanbanColumn = ({
-  language,
+  overwriteTranslation,
   tasks,
   type,
   isDraggedOver,
   draggedTileId,
   onEditTask
-}: PropsWithLanguage<KanbanColumnsTranslation, KanbanColumnProps>) => {
-  const translation = useTranslation(language, defaultKanbanColumnsTranslations)
+}: PropsForTranslation<KanbanColumnsTranslation, KanbanColumnProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultKanbanColumnsTranslations)
 
   const { setNodeRef } = useDroppable({
     id: type,

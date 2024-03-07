@@ -3,7 +3,7 @@ import { tx } from '../../twind'
 import { noop } from '../../util/noop'
 import { Input } from '../user-input/Input'
 import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Span } from '../Span'
 import type { PropertyBaseProps } from './PropertyBase'
@@ -32,15 +32,15 @@ export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'ha
  * An Input for number properties
  */
 export const NumberProperty = ({
-  language,
+  overwriteTranslation,
   value,
   onChange = noop,
   onRemove,
   readOnly,
   suffix,
   ...baseProps
-}: PropsWithLanguage<NumberPropertyTranslation, NumberPropertyProps>) => {
-  const translation = useTranslation(language, defaultNumberPropertyTranslation)
+}: PropsForTranslation<NumberPropertyTranslation, NumberPropertyProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultNumberPropertyTranslation)
   const hasValue = value !== undefined
 
   return (

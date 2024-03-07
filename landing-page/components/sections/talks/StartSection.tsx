@@ -2,7 +2,7 @@ import { tw, tx } from '@helpwave/common/twind'
 import { Link as LinkIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
@@ -20,8 +20,8 @@ const defaultTaskTranslation: Record<Languages, TalksTranslation> = {
   }
 }
 
-const StartSection = ({ language }: PropsWithLanguage<TalksTranslation>) => {
-  const translation = useTranslation(language, defaultTaskTranslation)
+const StartSection = ({ overwriteTranslation }: PropsForTranslation<TalksTranslation>) => {
+  const translation = useTranslation(overwriteTranslation, defaultTaskTranslation)
   const podcastURL = 'https://podcasters.spotify.com/pod/show/helpwave/'
   const screenshotURL = 'https://cdn.helpwave.de/thumbnail/thumbnail_03.png'
   const size = 1024

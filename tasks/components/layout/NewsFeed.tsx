@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import { filterNews, type LocalizedNews } from '@helpwave/common/util/news'
 import { NewsDisplay } from '../NewsDisplay'
@@ -31,15 +31,16 @@ export type NewsFeedProps = {
  * The right side of the dashboard page
  */
 export const NewsFeed = ({
-  language,
+  overwriteTranslation,
   localizedNews,
   width
-}: PropsWithLanguage<NewsFeedTranslation, NewsFeedProps>) => {
-  const translation = useTranslation(language, defaultNewsFeedTranslations)
+}: PropsForTranslation<NewsFeedTranslation, NewsFeedProps>) => {
+  const translation = useTranslation(overwriteTranslation, defaultNewsFeedTranslations)
   // The value of how much space a FeatureDisplay needs before the title can be displayed on its left
   // Given in px
   const widthForAppearanceChange = 600
-  const usedLanguage = useLanguage().language
+  let usedLanguage = useLanguage().language
+  usedLanguage = overwriteTranslation?.language ?? usedLanguage
   const newsFilter = 'tasks'
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>

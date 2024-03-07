@@ -4,6 +4,7 @@ import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { useState } from 'react'
+import { Button } from '@helpwave/common/components/Button'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsRules } from '@/components/layout/property/PropertyDetailsRules'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
@@ -11,15 +12,18 @@ import type { Property } from '@/components/layout/property/property'
 import { emptyProperty } from '@/components/layout/property/property'
 
 type PropertyDetailsTranslation = {
-  propertyDetails: string
+  propertyDetails: string,
+  archiveProperty: string
 }
 
 const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTranslation> = {
   en: {
-    propertyDetails: 'Property Details'
+    propertyDetails: 'Property Details',
+    archiveProperty: 'Archive Property'
   },
   de: {
-    propertyDetails: 'Eigenschaftsdetails' // TODO better translation
+    propertyDetails: 'Eigenschaftsdetails', // TODO better translation
+    archiveProperty: 'Eigenschaft archivieren'
   }
 }
 
@@ -45,7 +49,18 @@ export const PropertyDetails = ({
 
   return (
     <div className={tw('py-4 px-6 flex flex-col gap-y-4 bg-gray-100 h-fit min-h-full')}>
-      <Span type="title">{translation.propertyDetails}</Span>
+      <div className={tw('flex flex-row justify-between items-center')}>
+        <Span type="title">{translation.propertyDetails}</Span>
+        <Button
+          variant="textButton"
+          color="negative"
+          onClick={() => {
+            // TODO do archive here
+          }}
+        >
+          {translation.archiveProperty}
+        </Button>
+      </div>
       <PropertyDetailsBasicInfo
         value={value.basicInfo}
         onChange={basicInfo => setValue({

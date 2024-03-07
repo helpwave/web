@@ -6,7 +6,7 @@ import { tw, tx } from '../../twind'
 import { Expandable } from '../Expandable'
 import { Span } from '../Span'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
-import { useLocals } from '../../hooks/useLanguage'
+import { useLocale } from '../../hooks/useLanguage'
 
 export type YearMonthPickerProps = {
   value?: Date,
@@ -26,7 +26,7 @@ export const YearMonthPicker = ({
   maxHeight = 300,
   showValueOpen = true
 }: YearMonthPickerProps) => {
-  const local = useLocals()
+  const locale = useLocale()
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export const YearMonthPicker = ({
                             )}
                             onClick={() => { onChange(newDate) }}
                           >
-                            {new Intl.DateTimeFormat(local, { month: 'short' }).format(newDate)}
+                            {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
                           </div>
                         )
                       })}

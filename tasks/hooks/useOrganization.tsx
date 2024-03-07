@@ -4,8 +4,8 @@ import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
 import { useQueryClient } from '@tanstack/react-query'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
 import { useOrganizationsForUserQuery } from '@/mutations/organization_mutations'
-import { OrganizationSwitchModal } from '@/components/OrganizationSwitchModal'
 import { useAuth } from '@/hooks/useAuth'
+import { OrganizationSwitchModal } from '@/components/modals/OrganizationSwitchModal'
 
 export const LOCALSTORAGE_ORGANIZATION_KEY = 'organization'
 

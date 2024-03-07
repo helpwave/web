@@ -3,7 +3,7 @@ import { addDuration, equalDate, subtractDuration, weekDayList } from '../../uti
 import { noop } from '../../util/noop'
 import { equalSizeGroups } from '../../util/array'
 import { tw, tx } from '../../twind'
-import { useLocals } from '../../hooks/useLanguage'
+import { useLocale } from '../../hooks/useLanguage'
 
 export type DayPickerProps = {
   value: Date,
@@ -25,7 +25,7 @@ export const DayPicker = ({
   markToday = true,
   className = ''
 }: DayPickerProps) => {
-  const local = useLocals()
+  const locale = useLocale()
   const month = value.getMonth()
   const year = value.getFullYear()
 
@@ -49,7 +49,7 @@ export const DayPicker = ({
       <div className={tw('flex flex-row text-center')}>
         {weeks[0]!.map((weekDay, index) => (
           <div key={index} className={tw('flex-1 font-semibold')}>
-            {new Intl.DateTimeFormat(local, { weekday: 'long' }).format(weekDay).substring(0, 2)}
+            {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>

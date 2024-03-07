@@ -71,7 +71,7 @@ const WardsPage: NextPage = ({ language }: PropsWithLanguage) => {
   }
 
   useEffect(() => {
-    setContextState({ ...contextState, organizationId })
+    setContextState(contextState => ({ ...contextState, organizationId }))
   }, [organizationId])
 
   return (

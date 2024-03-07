@@ -41,6 +41,7 @@ const preview: Preview = {
           <ProvideLanguage>
             <ModalRegister>
               <div id={modalRootName}>
+                {/* TODO try to integrate this header/language select directly into the storybook interface */}
                 <LanguageHeader>
                   <App/>
                 </LanguageHeader>

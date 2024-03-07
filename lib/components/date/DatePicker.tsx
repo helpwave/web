@@ -7,7 +7,7 @@ import { noop } from '../../util/noop'
 import { addDuration, subtractDuration } from '../../util/date'
 import { tw, tx } from '../../twind'
 import { Button } from '../Button'
-import { useLocals } from '../../hooks/useLanguage'
+import { useLocale } from '../../hooks/useLanguage'
 import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import type { DayPickerProps } from './DayPicker'
@@ -53,7 +53,7 @@ export const DatePicker = ({
   dayPickerProps,
   className = ''
 }: PropsWithLanguage<DatePickerProps>) => {
-  const local = useLocals()
+  const locale = useLocale()
   const translation = useTranslation(language, defaultDatePickerTranslation)
   const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
@@ -71,7 +71,7 @@ export const DatePicker = ({
           })}
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
         >
-          {`${new Intl.DateTimeFormat(local, { month: 'long' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
+          {`${new Intl.DateTimeFormat(locale, { month: 'long' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
           <ChevronDown size={16}/>
         </div>
         {displayMode === 'day' && (

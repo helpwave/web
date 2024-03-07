@@ -6,9 +6,10 @@ import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/compone
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { noop } from '@helpwave/common/util/noop'
-import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '../mutations/patient_mutations'
-import { useWardQuery } from '../mutations/ward_mutations'
-import { RoomBedDropdown, type RoomBedDropdownIds } from './RoomBedDropdown'
+import { useWardQuery } from '@/mutations/ward_mutations'
+import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '@/mutations/patient_mutations'
+import type { RoomBedSelectIds } from '@/components/selects/RoomBedSelect'
+import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 
 type AddPatientModalTranslation = {
   addPatient: string,
@@ -47,7 +48,7 @@ export const AddPatientModal = ({
   ...modalProps
 }: PropsWithLanguage<AddPatientModalProps>) => {
   const translation = useTranslation(language, defaultAddPatientModalTranslation)
-  const [dropdownId, setDropdownId] = useState<RoomBedDropdownIds>({})
+  const [dropdownId, setDropdownId] = useState<RoomBedSelectIds>({})
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)
   const assignBedMutation = useAssignBedMutation()
@@ -90,7 +91,7 @@ export const AddPatientModal = ({
           />
           {isShowingError && <Span type="formError">{translation.minimumLength(minimumNameLength)}</Span>}
         </div>
-        <RoomBedDropdown
+        <RoomBedSelect
           initialRoomAndBed={dropdownId}
           wardId={wardId}
           onChange={(roomBedDropdownIds) => setDropdownId(roomBedDropdownIds)}

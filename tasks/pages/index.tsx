@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react'
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { tw } from '@helpwave/common/twind'
 import { localizedNewsSchema, type LocalizedNews } from '@helpwave/common/util/news'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { TwoColumn } from '@/components/layout/TwoColumn'
@@ -13,6 +15,10 @@ import { useOrganizationsForUserQuery } from '@/mutations/organization_mutations
 import { useAuth } from '@/hooks/useAuth'
 import titleWrapper from '@/utils/titleWrapper'
 import { fetchLocalizedNews } from '@/utils/news'
+import { getConfig } from '@/utils/config'
+import { StagingDisclaimerModal } from '@/components/modals/StagingDisclaimerModal'
+
+const config = getConfig()
 
 type DashboardTranslation = {
   dashboard: string
@@ -41,6 +47,21 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardServerSideProps>> = ({ json
   const { user } = useAuth()
   const { data: organizations, isLoading } = useOrganizationsForUserQuery()
 
+  const [isStagingDiclaimerOpen, setStagingDiclaimerOpen] = useState(false)
+  const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
+
+  const dismissStagingDisclaimer = () => {
+    setLastTimeStagingDisclaimerDismissed(new Date().getTime())
+    setStagingDiclaimerOpen(false)
+  }
+
+  useEffect(() => {
+    const ONE_DAY = 1000 * 60 * 60 * 24
+    if (config.showStagingDisclaimerModal && new Date().getTime() - lastTimeStagingDisclaimerDismissed > ONE_DAY) {
+      setStagingDiclaimerOpen(true)
+    }
+  }, [lastTimeStagingDisclaimerDismissed])
+
   return (
     <PageWithHeader
       crumbs={[{ display: translation.dashboard, link: '/' }]}
@@ -48,6 +69,13 @@ const Dashboard: NextPage<PropsWithLanguage<DashboardServerSideProps>> = ({ json
       <Head>
         <title>{titleWrapper()}</title>
       </Head>
+
+      <StagingDisclaimerModal
+        id="main-staging-disclaimer-modal"
+        onConfirm={dismissStagingDisclaimer}
+        isOpen={isStagingDiclaimerOpen}
+      />
+
       <LoadingAndErrorComponent
         isLoading={isLoading || !user || !organizations}
         loadingProps={{ classname: tw('!h-full') }}

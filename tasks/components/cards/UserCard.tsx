@@ -1,5 +1,5 @@
 import { tw } from '@helpwave/common/twind'
-import { Avatar } from '@/components/Avatar'
+import { Avatar } from '@helpwave/common/components/Avatar'
 import type { User } from '@/hooks/useAuth'
 
 export type UserCardProps = {

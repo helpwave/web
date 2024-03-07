@@ -16,7 +16,7 @@ export const LanguageContext = createContext<LanguageContextValue>({ language: D
 
 export const useLanguage = () => useContext(LanguageContext)
 
-export const useLocals = () => {
+export const useLocale = () => {
   const { language } = useLanguage()
   const mapping: Record<Languages, string> = {
     en: 'en-US',
@@ -49,7 +49,7 @@ export const ProvideLanguage = ({ children }: PropsWithChildren) => {
 
     const firstMatch = matchingBrowserLanguages[0] as Languages
     setLanguage(firstMatch)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <LanguageContext.Provider value={{

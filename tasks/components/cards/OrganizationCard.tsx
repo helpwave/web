@@ -2,7 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import { Mail } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
-import { AvatarGroup } from '../AvatarGroup'
+import { AvatarGroup } from '@helpwave/common/components/AvatarGroup'
 import { EditCard, type EditCardProps } from './EditCard'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
 
@@ -55,7 +55,7 @@ export const OrganizationCard = ({
           <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm truncate')}>
             {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation.members : translation.member}`}
           </div>
-          <AvatarGroup users={organization.members}/>
+          <AvatarGroup avatars={organization.members.map(user => ({ avatarUrl: user.avatarURL, alt: user.name }))}/>
         </div>
       </div>
     </EditCard>

@@ -223,7 +223,7 @@ export const PropertyDisplay = ({
         identifierMapping={dataObject => dataObject.id}
         rowMappingToCells={property => [
           (<Tile
-            key="cell-1"
+            key="field-type-cell"
             title={{ value: property.basicInfo.propertyName }}
             description={{ value: translation[property.field.fieldType] }}
           />),

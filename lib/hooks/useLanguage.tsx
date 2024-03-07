@@ -16,6 +16,15 @@ export const LanguageContext = createContext<LanguageContextValue>({ language: D
 
 export const useLanguage = () => useContext(LanguageContext)
 
+export const useLocale = (overWriteLanguage?: Languages) => {
+  const { language } = useLanguage()
+  const mapping: Record<Languages, string> = {
+    en: 'en-US',
+    de: 'de-DE'
+  }
+  return mapping[overWriteLanguage ?? language]
+}
+
 export const ProvideLanguage = ({ children }: PropsWithChildren) => {
   const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)
   const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', DEFAULT_LANGUAGE)

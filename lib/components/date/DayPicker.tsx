@@ -3,40 +3,7 @@ import { addDuration, equalDate, subtractDuration, weekDayList } from '../../uti
 import { noop } from '../../util/noop'
 import { equalSizeGroups } from '../../util/array'
 import { tw, tx } from '../../twind'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-
-type DayPickerTranslation = {
-  monday: string,
-  tuesday: string,
-  wednesday: string,
-  thursday: string,
-  friday: string,
-  saturday: string,
-  sunday: string
-}
-
-const defaultDayPickerTranslation: Record<Languages, DayPickerTranslation> = {
-  en: {
-    monday: 'Monday',
-    tuesday: 'Tuesday',
-    wednesday: 'Wednesday',
-    thursday: 'Thursday',
-    friday: 'Friday',
-    saturday: 'Saturday',
-    sunday: 'Sunday'
-  },
-  de: {
-    monday: 'Montag',
-    tuesday: 'Dienstag',
-    wednesday: 'Mittwoch',
-    thursday: 'Donnerstag',
-    friday: 'Freitag',
-    saturday: 'Samstag',
-    sunday: 'Sonntag'
-  }
-}
+import { useLocale } from '../../hooks/useLanguage'
 
 export type DayPickerProps = {
   value: Date,
@@ -51,17 +18,14 @@ export type DayPickerProps = {
  * A component for selecting a day of a month
  */
 export const DayPicker = ({
-  language,
   value = new Date(),
   selected,
   onChange = noop,
   weekStart = 'monday',
   markToday = true,
   className = ''
-}: PropsWithLanguage<DayPickerTranslation, DayPickerProps>) => {
-  const translation = useTranslation(language, defaultDayPickerTranslation)
-  const weekDayOrder = [...weekDayList.slice(weekDayList.indexOf(weekStart), weekDayList.length), ...weekDayList.slice(0, weekDayList.indexOf(weekStart))]
-
+}: DayPickerProps) => {
+  const locale = useLocale()
   const month = value.getMonth()
   const year = value.getFullYear()
 
@@ -83,9 +47,9 @@ export const DayPicker = ({
   return (
     <div className={tx('flex flex-col gap-y-1 min-w-[220px] select-none', className)}>
       <div className={tw('flex flex-row text-center')}>
-        {weekDayOrder.map(weekDay => (
-          <div key={weekDay} className={tw('flex-1 font-semibold')}>
-            {translation[weekDay].substring(0, 2)}
+        {weeks[0]!.map((weekDay, index) => (
+          <div key={index} className={tw('flex-1 font-semibold')}>
+            {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>

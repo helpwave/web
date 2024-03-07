@@ -1,60 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
 import { equalSizeGroups, range } from '../../util/array'
 import { tw, tx } from '../../twind'
 import { Expandable } from '../Expandable'
 import { Span } from '../Span'
-import type { Languages } from '../../hooks/useLanguage'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
-
-type YearMonthPickerTranslation = {
-  january: string,
-  february: string,
-  march: string,
-  april: string,
-  may: string,
-  june: string,
-  july: string,
-  august: string,
-  september: string,
-  october: string,
-  november: string,
-  december: string
-}
-
-const defaultYearMonthPickerTranslation: Record<Languages, YearMonthPickerTranslation> = {
-  en: {
-    january: 'January',
-    february: 'Febuary',
-    march: 'March',
-    april: 'April',
-    may: 'May',
-    june: 'June',
-    july: 'July',
-    august: 'August',
-    september: 'September',
-    october: 'October',
-    november: 'November',
-    december: 'December',
-  },
-  de: {
-    january: 'Januar',
-    february: 'Febuar',
-    march: 'März',
-    april: 'April',
-    may: 'Mai',
-    june: 'Juni',
-    july: 'Juli',
-    august: 'August',
-    september: 'September',
-    october: 'October',
-    november: 'November',
-    december: 'December',
-  }
-}
+import { useLocale } from '../../hooks/useLanguage'
 
 export type YearMonthPickerProps = {
   value?: Date,
@@ -66,7 +18,6 @@ export type YearMonthPickerProps = {
   showValueOpen?: boolean
 }
 export const YearMonthPicker = ({
-  language,
   value = new Date(),
   startYear = subtractDuration(new Date(), { years: 50 }),
   endYear = addDuration(new Date(), { years: 50 }),
@@ -74,8 +25,8 @@ export const YearMonthPicker = ({
   className = '',
   maxHeight = 300,
   showValueOpen = true
-}: PropsWithLanguage<YearMonthPickerTranslation, YearMonthPickerProps>) => {
-  const translation = useTranslation(language, defaultYearMonthPickerTranslation)
+}: YearMonthPickerProps) => {
+  const locale = useLocale()
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -117,7 +68,9 @@ export const YearMonthPicker = ({
                   {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
                     <div key={index} className={tw('flex flex-row gap-x-2')}>
                       {monthList.map(month => {
+                        const newDate = new Date(value)
                         const monthIndex = monthsList.indexOf(month)
+                        newDate.setFullYear(year, monthIndex)
                         const selectedMonth = selectedYear && monthIndex === value.getMonth()
                         return (
                           <div
@@ -128,13 +81,9 @@ export const YearMonthPicker = ({
                                 'border-hw-primary-300 bg-hw-primary-100 hover:bg-hw-primary-200': selectedMonth
                               }
                             )}
-                            onClick={() => {
-                              const newDate = new Date(value)
-                              newDate.setFullYear(year, monthIndex)
-                              onChange(newDate)
-                            }}
+                            onClick={() => { onChange(newDate) }}
                           >
-                            {translation[month].substring(0, 3)}
+                            {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
                           </div>
                         )
                       })}

@@ -83,7 +83,7 @@ const linkGroups = [
 const Footer = () => {
   const year = new Date().getFullYear()
   const { language, setLanguage } = useLanguage()
-  const translation = useTranslation(language, defaultFooterTranslation)
+  const translation = useTranslation({ }, defaultFooterTranslation)
 
   useEffect(() => {
     CookieConsent.run(pluginConfig)

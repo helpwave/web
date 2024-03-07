@@ -13,7 +13,7 @@ export const withTranslation = <Props, OwnTranslation extends Record<string, unk
   translations: Record<Languages, OwnTranslation>
 ) => {
   const ComponentWithTranslation = (props: Omit<Props, 'language'>) => {
-    const translation = useTranslation<OwnTranslation>(useLanguage().language, translations)
+    const translation = useTranslation<OwnTranslation>({ language: useLanguage().language }, translations)
     const mergedProps = { ...props, language: translation } as Props & { language: OwnTranslation }
     return <WrappedComponent {...mergedProps} />
   }

@@ -4,7 +4,7 @@ import { LanguageModal } from '../modals/LanguageModal'
 import { tw } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
 import { Button } from '../Button'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 
 type LanguageHeaderTranslation = {
@@ -20,11 +20,11 @@ const defaultLanguageHeaderTranslation: Record<Languages, LanguageHeaderTranslat
   }
 }
 export const LanguageHeader = ({
-  language,
+  overwriteTranslation,
   children
-}: PropsWithLanguage<LanguageHeaderTranslation, PropsWithChildren>) => {
+}: PropsForTranslation<LanguageHeaderTranslation, PropsWithChildren>) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const translation = useTranslation(language, defaultLanguageHeaderTranslation)
+  const translation = useTranslation(overwriteTranslation, defaultLanguageHeaderTranslation)
   return (
     <>
       <LanguageModal

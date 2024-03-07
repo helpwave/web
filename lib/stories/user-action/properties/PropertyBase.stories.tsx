@@ -24,6 +24,5 @@ export const PropertyBaseVariation: Story = {
     ),
     className: '',
     readOnly: false,
-    language: 'de'
   },
 }

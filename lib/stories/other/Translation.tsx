@@ -12,6 +12,5 @@ type Story = StoryObj<typeof meta>;
 export const Translation: Story = {
   args: {
     name: 'Max Mustermann',
-    language: 'en'
   }
 }

@@ -227,7 +227,7 @@ export const PropertyDisplay = ({
             title={{ value: property.basicInfo.propertyName }}
             description={{ value: translation[property.field.fieldType] }}
           />),
-          (<div key="cell-2" className={tw('flex flex-row gap-x-2')}>
+          (<div key={`subject-type-cell`} className={tw('flex flex-row gap-x-2')}>
             <SubjectTypeIcon subjectType={property.basicInfo.subjectType}/>
             <Span>{translation[property.basicInfo.subjectType]}</Span>
           </div>),

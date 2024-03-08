@@ -20,7 +20,7 @@ const defaultExpansionTranslation: Record<Languages, ExpansionSectionTranslation
   de: {
     germanyHealthcareSystem: 'Deutsches Gesundheitssystem',
     hospitals: 'Krankenhäuser',
-    healthcareWorkers: 'healthcare workers',
+    healthcareWorkers: 'healthcare Arbeiter',
     gdp: 'des BIP'
   }
 }
@@ -47,7 +47,7 @@ const ExpansionSection = ({ language }: PropsWithLanguage<ExpansionSectionTransl
           <div className={tw('text-center')}>
             <span className={tw('text-4xl')}>12,1%</span>
             <br />
-            <h4>of GDP</h4>
+            <h4>{translation.gdp}</h4>
           </div>
         </div>
     </div>

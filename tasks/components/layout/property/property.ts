@@ -12,7 +12,7 @@ export type FieldType = typeof fieldTypeList[number]
 
 export type PropertyFieldType = {
   fieldType: FieldType,
-  entryList: string[], // TODO allow different values later on
+  entryList: (string | undefined)[], // TODO allow different values later on
   isAllowingCustomValues: boolean
 }
 
@@ -42,7 +42,7 @@ export const emptyProperty: Property = {
   },
   field: {
     fieldType: 'multiSelect',
-    entryList: ['Test1', 'Test2', 'Test3'],
+    entryList: [undefined, undefined, undefined],
     isAllowingCustomValues: true
   },
   rules: {

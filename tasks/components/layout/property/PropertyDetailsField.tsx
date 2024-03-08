@@ -84,7 +84,7 @@ export const PropertyDetailsField = ({
               size={20}
               onClick={() => {
                 const newList = [...value.entryList]
-                newList.push(translation.newEntry)
+                newList.push(undefined)
                 onChange({ ...value, entryList: newList })
               }}
             />
@@ -94,7 +94,8 @@ export const PropertyDetailsField = ({
               {value.entryList.map((entry, index) => (
                 <div key={index} className={tw('flex flex-row items-center justify-between gap-x-4')}>
                   <Input
-                    value={entry}
+                    value={entry ?? ''}
+                    placeholder={`${translation.newEntry} ${index + 1}`}
                     onChange={text => {
                       const newList = [...value.entryList]
                       newList[index] = text

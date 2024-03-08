@@ -32,7 +32,7 @@ const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {
 }
 
 const NotFound: NextPage = ({ overwriteTranslation }: PropsForTranslation<NotFoundTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultNotFoundTranslation)
+  const translation = useTranslation(defaultNotFoundTranslation, overwriteTranslation)
   return (
     <PageWithHeader>
       <Head>

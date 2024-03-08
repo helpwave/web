@@ -76,7 +76,7 @@ export const TaskTemplateDetails = ({
 }: PropsForTranslation<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
   const context = useContext(TaskTemplateContext)
 
-  const translation = useTranslation(overwriteTranslation, defaultTaskTemplateDetailsTranslations)
+  const translation = useTranslation(defaultTaskTemplateDetailsTranslations, overwriteTranslation)
   const isCreatingNewTemplate = context.state.template.id === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [touched, setTouched] = useState({

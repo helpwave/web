@@ -75,7 +75,7 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false)
-  const translation = useTranslation({}, defaultHeaderTranslation)
+  const translation = useTranslation(defaultHeaderTranslation, {})
 
   return (
     <div>

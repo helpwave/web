@@ -30,7 +30,7 @@ type TitleProps = {
  * Simple Title component to demonstrate some translations
  */
 const Title = ({ overwriteTranslation, name }:PropsForTranslation<TitleTranslation, TitleProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTitleTranslations)
+  const translation = useTranslation(defaultTitleTranslations, overwriteTranslation)
   return (
     <p className={tw('rounded bg-gray-800 text-gray-200 p-1 px-2')}>
       {translation.welcome}{'! '}

@@ -42,7 +42,7 @@ export const BedInRoomIndicator =
     roomName,
     bedPosition
   }: PropsForTranslation<BedInRoomIndicatorTranslation, BedInRoomIndicatorProps>) => {
-    const translation = useTranslation(overwriteTranslation, defaultBedInRoomIndicatorTranslation)
+    const translation = useTranslation(defaultBedInRoomIndicatorTranslation, overwriteTranslation)
 
     return (
       <div>

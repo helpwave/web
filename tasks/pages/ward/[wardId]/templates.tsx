@@ -42,7 +42,7 @@ const defaultWardTaskTemplateTranslations = {
 }
 
 const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardTaskTemplateTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultWardTaskTemplateTranslations)
+  const translation = useTranslation(defaultWardTaskTemplateTranslations, overwriteTranslation)
   const { wardId, templateId } = useRouteParameters<'wardId', 'templateId'>()
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId)

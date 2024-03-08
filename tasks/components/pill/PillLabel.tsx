@@ -55,7 +55,7 @@ const PillLabel = ({
   count,
   state = TaskState[TaskStatus.TASK_STATUS_TODO]
 }: PropsForTranslation<PillLabelTranslation, PillLabelProps>) => {
-  const translation = useTranslation(overwriteTranslation, state.translation)
+  const translation = useTranslation(state.translation, overwriteTranslation)
   return (
     <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center
        bg-${state.colorLabel}-background text-${state.colorLabel}-text text-sm`)}>

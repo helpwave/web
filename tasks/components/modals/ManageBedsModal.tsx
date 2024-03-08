@@ -61,7 +61,7 @@ export const ManageBedsModal = ({
   titleText,
   ...modalProps
 }: PropsForTranslation<ManageBedsModalTranslation, ManageBedsModalProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultManageBedsModalTranslation)
+  const translation = useTranslation(defaultManageBedsModalTranslation, overwriteTranslation)
   const { data, isLoading, isError } = useRoomOverviewsQuery(wardId) // Todo use more optimized query later
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination

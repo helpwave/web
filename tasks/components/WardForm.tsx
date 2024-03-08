@@ -55,7 +55,7 @@ export const WardForm = ({
   onChange = () => undefined,
   isShowingErrorsDirectly = false
 }: PropsForTranslation<WardFormTranslation, WardFormProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultWardFormTranslations)
+  const translation = useTranslation(defaultWardFormTranslations, overwriteTranslation)
   const [touched, setTouched] = useState({ name: isShowingErrorsDirectly })
 
   const minWardNameLength = 2

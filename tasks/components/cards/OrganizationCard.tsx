@@ -35,7 +35,7 @@ export const OrganizationCard = ({
   organization,
   ...editCardProps
 }: PropsForTranslation<OrganizationCardTranslation, OrganizationCardProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultOrganizationCardTranslation)
+  const translation = useTranslation(defaultOrganizationCardTranslation, overwriteTranslation)
   const organizationMemberCount = organization.members.length
 
   return (

@@ -42,7 +42,7 @@ export const TaskTemplateListColumn = ({
   onColumnEditClick,
   overwriteTranslation: maybeLanguage
 }: PropsForTranslation<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
-  const translation = useTranslation(maybeLanguage, defaultTaskTemplateListColumnTranslation)
+  const translation = useTranslation(defaultTaskTemplateListColumnTranslation, maybeLanguage)
   const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
 

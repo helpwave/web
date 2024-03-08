@@ -36,7 +36,7 @@ export const TaskCard = ({
   isSelected = false,
   onTileClick = () => undefined
 }: PropsForTranslation<TaskCardTranslation, TaskCardProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTaskCardTranslations)
+  const translation = useTranslation(defaultTaskCardTranslations, overwriteTranslation)
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== TaskStatus.TASK_STATUS_DONE
 

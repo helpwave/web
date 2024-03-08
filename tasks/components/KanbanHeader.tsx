@@ -42,7 +42,7 @@ export const KanbanHeader = ({
   searchValue = '',
   onSearchChange
 }: PropsForTranslation<KanbanHeaderTranslation, KanbanHeaderProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultKanbanHeaderTranslations)
+  const translation = useTranslation(defaultKanbanHeaderTranslations, overwriteTranslation)
   return (
     <div className={tw('flex flex-row justify-between items-center')}>
       <Span type="tableName">{translation.tasks}</Span>

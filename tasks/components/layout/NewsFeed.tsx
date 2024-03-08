@@ -35,7 +35,7 @@ export const NewsFeed = ({
   localizedNews,
   width
 }: PropsForTranslation<NewsFeedTranslation, NewsFeedProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultNewsFeedTranslations)
+  const translation = useTranslation(defaultNewsFeedTranslations, overwriteTranslation)
   // The value of how much space a FeatureDisplay needs before the title can be displayed on its left
   // Given in px
   const widthForAppearanceChange = 600

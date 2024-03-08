@@ -47,7 +47,7 @@ export const StagingDisclaimerModal = ({
   overwriteTranslation,
   ...modalProps
 }: PropsForTranslation<StagingDisclaimerModalTranslation, PropsWithChildren<StagingDisclaimerModalProps>>) => {
-  const translation = useTranslation(overwriteTranslation, defaultStagingDisclaimerTranslation)
+  const translation = useTranslation(defaultStagingDisclaimerTranslation, overwriteTranslation)
 
   return (
     <ConfirmDialog

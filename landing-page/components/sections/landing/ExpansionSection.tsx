@@ -26,7 +26,7 @@ const defaultExpansionTranslation: Record<Languages, ExpansionSectionTranslation
 }
 
 const ExpansionSection = ({ overwriteTranslation }: PropsForTranslation<ExpansionSectionTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultExpansionTranslation)
+  const translation = useTranslation(defaultExpansionTranslation, overwriteTranslation)
   return (
     <div className={tw('pb-16')}>
         <h1 className={tw('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>

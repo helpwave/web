@@ -42,7 +42,7 @@ export const WardDisplay = ({
   selectedWardId,
   width
 }: PropsForTranslation<WardDisplayTranslation, WardDisplayProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultWardDisplayTranslations)
+  const translation = useTranslation(defaultWardDisplayTranslations, overwriteTranslation)
   const router = useRouter()
   const context = useContext(OrganizationOverviewContext)
   const { data, isLoading, isError } = useWardOverviewsQuery(organizationId)

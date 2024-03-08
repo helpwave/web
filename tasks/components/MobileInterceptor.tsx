@@ -32,7 +32,7 @@ const defaultMobileInterceptorTranslation = {
  * the helpwave app will be shown
  */
 const MobileInterceptor: NextPage = ({ overwriteTranslation }: PropsForTranslation<MobileInterceptorTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultMobileInterceptorTranslation)
+  const translation = useTranslation(defaultMobileInterceptorTranslation, overwriteTranslation)
   const config = getConfig()
   const playStoreLink = config.appstoreLinks.playStore
   const appstoreLink = config.appstoreLinks.appStore

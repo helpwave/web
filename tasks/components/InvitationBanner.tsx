@@ -30,7 +30,7 @@ export const InvitationBanner = ({
   overwriteTranslation,
   invitationCount
 }: PropsForTranslation<InvitationBannerTranslation, InvitationBannerProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultInvitationBannerTranslation)
+  const translation = useTranslation(defaultInvitationBannerTranslation, overwriteTranslation)
   const { data, isError, isLoading } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   let openInvites = invitationCount
 

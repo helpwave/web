@@ -18,7 +18,7 @@ const defaultFeedbackButtonTranslation: Record<Languages, FeedbackButtonTranslat
 
 export const FeedbackButton = ({ overwriteTranslation }: PropsForTranslation<FeedbackButtonTranslation>) => {
   const config = getConfig()
-  const translation = useTranslation(overwriteTranslation, defaultFeedbackButtonTranslation)
+  const translation = useTranslation(defaultFeedbackButtonTranslation, overwriteTranslation)
 
   const onClick = () => window.open(config.feedbackFormUrl, '_blank')
 

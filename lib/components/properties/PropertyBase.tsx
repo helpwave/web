@@ -45,7 +45,7 @@ export const PropertyBase = ({
   onRemove = noop,
   className = '',
 }: PropsForTranslation<PropertyBaseTranslation, PropertyBaseProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultPropertyBaseTranslation)
+  const translation = useTranslation(defaultPropertyBaseTranslation, overwriteTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (
     <div

@@ -1,5 +1,6 @@
 import type { Languages } from './useLanguage'
 import { useLanguage } from './useLanguage'
+import { Translation } from '../stories/other/Translation';
 
 type OverwriteTranslationType<Translation extends Record<string, unknown>> = {
   language?: Languages,
@@ -27,8 +28,8 @@ export type PropsForTranslation<
 };
 
 export const useTranslation = <Translation extends Record<string, unknown>>(
-  translationOverwrite: OverwriteTranslationType<Translation> = {},
-  defaults: Record<Languages, Translation>
+  defaults: Record<Languages, Translation>,
+  translationOverwrite: OverwriteTranslationType<Translation> = {}
 ) : Translation => {
   const { language: languageProp, translation: overwrite } = translationOverwrite
   const { language: inferredLanguage } = useLanguage()

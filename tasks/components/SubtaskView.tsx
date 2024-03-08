@@ -59,7 +59,7 @@ export const SubtaskView = ({
 }: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
 
-  const translation = useTranslation(overwriteTranslation, defaultSubtaskViewTranslation)
+  const translation = useTranslation(defaultSubtaskViewTranslation, overwriteTranslation)
   const isCreatingTask = taskId === ''
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
   const deleteSubtaskMutation = useSubTaskDeleteMutation()

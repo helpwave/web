@@ -63,7 +63,7 @@ export type OrganizationDetailProps = {
 export const OrganizationDetail = ({
   overwriteTranslation
 }: PropsForTranslation<OrganizationDetailTranslation, OrganizationDetailProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultOrganizationDetailTranslations)
+  const translation = useTranslation(defaultOrganizationDetailTranslations, overwriteTranslation)
 
   const {
     state: contextState,

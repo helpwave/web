@@ -59,7 +59,7 @@ const getEpisodes = async (): Promise<{id: string, title: string, description: s
 }
 
 const EpisodeSection = ({ overwriteTranslation }: PropsForTranslation<EpisodeSectionTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultEpisodeTranslation)
+  const translation = useTranslation(defaultEpisodeTranslation, overwriteTranslation)
   const { isLoading, data } = useQuery({ queryKey: ['episodes'], queryFn: getEpisodes })
 
   const size = 1024

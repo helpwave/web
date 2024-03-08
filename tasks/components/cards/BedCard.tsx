@@ -35,7 +35,7 @@ export const BedCard = ({
   className,
   ...restCardProps
 }: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultBedCardTranslation)
+  const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
   return (
     (
       <DragCard onTileClick={onTileClick} isSelected={isSelected} className={tx('min-h-[148px] flex flex-col', className)} {...restCardProps}>

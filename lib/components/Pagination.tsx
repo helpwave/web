@@ -31,7 +31,7 @@ export const Pagination = ({
   numberOfPages,
   onPageChanged
 }: PropsForTranslation<PaginationTranslation, PaginationProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultPaginationTranslations)
+  const translation = useTranslation(defaultPaginationTranslations, overwriteTranslation)
 
   const changePage = (page:number) => {
     onPageChanged(page)

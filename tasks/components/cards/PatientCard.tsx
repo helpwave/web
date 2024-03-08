@@ -40,7 +40,7 @@ export const PatientCard = ({
   onTileClick,
   ...restCardProps
 }: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultPatientCardTranslations)
+  const translation = useTranslation(defaultPatientCardTranslations, overwriteTranslation)
   return (
     <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
       <div className={tw('flex flex-row justify-between')}>

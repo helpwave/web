@@ -42,7 +42,7 @@ export const KanbanColumn = ({
   draggedTileId,
   onEditTask
 }: PropsForTranslation<KanbanColumnsTranslation, KanbanColumnProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultKanbanColumnsTranslations)
+  const translation = useTranslation(defaultKanbanColumnsTranslations, overwriteTranslation)
 
   const { setNodeRef } = useDroppable({
     id: type,

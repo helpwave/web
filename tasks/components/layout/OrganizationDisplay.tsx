@@ -43,7 +43,7 @@ export const OrganizationDisplay = ({
   organizations,
   width
 }: PropsForTranslation<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultOrganizationDisplayTranslations)
+  const translation = useTranslation(defaultOrganizationDisplayTranslations, overwriteTranslation)
   const router = useRouter()
 
   const context = useContext(OrganizationContext)

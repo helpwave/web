@@ -48,7 +48,7 @@ export const DiscardChangesDialog = ({
   onDontSave,
   ...modalProps
 }: PropsForTranslation<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
-  const translation = useTranslation(overwriteTranslation, defaultDiscardChangesDialogTranslation)
+  const translation = useTranslation(defaultDiscardChangesDialogTranslation, overwriteTranslation)
   return (
     <Modal
       title={title ?? translation.title}

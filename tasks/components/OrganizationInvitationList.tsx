@@ -63,7 +63,7 @@ export const OrganizationInvitationList = ({
   invitations,
   onChange
 }: PropsForTranslation<OrganizationInvitationListTranslation, OrganizationInvitationListProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultOrganizationInvitationListTranslation)
+  const translation = useTranslation(defaultOrganizationInvitationListTranslation, overwriteTranslation)
 
   const context = useContext(OrganizationContext)
   const usedOrganizationId = organizationId ?? context.state.organizationId

@@ -46,7 +46,7 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
 export const UserMenu = ({
   overwriteTranslation,
 }: PropsForTranslation<UserMenuTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultUserMenuTranslations)
+  const translation = useTranslation(defaultUserMenuTranslations, overwriteTranslation)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const { user, signOut } = useAuth()
   const router = useRouter()

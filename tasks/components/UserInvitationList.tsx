@@ -44,7 +44,7 @@ export type UserInvitationListProps = Record<string, never>
 export const UserInvitationList = ({
   overwriteTranslation,
 }: PropsForTranslation<UserInvitationListTranslation, UserInvitationListProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultUserInvitationListTranslation)
+  const translation = useTranslation(defaultUserInvitationListTranslation, overwriteTranslation)
   const [tableState, setTableState] = useState<TableState>({ pagination: { ...defaultTableStatePagination, entriesPerPage: 10 } })
   const { data, isLoading, isError } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState(false)

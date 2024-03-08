@@ -24,7 +24,7 @@ export const LanguageHeader = ({
   children
 }: PropsForTranslation<LanguageHeaderTranslation, PropsWithChildren>) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const translation = useTranslation(overwriteTranslation, defaultLanguageHeaderTranslation)
+  const translation = useTranslation(defaultLanguageHeaderTranslation, overwriteTranslation)
   return (
     <>
       <LanguageModal

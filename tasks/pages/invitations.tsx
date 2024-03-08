@@ -27,7 +27,7 @@ export type InvitationsPageProps = Record<string, never>
 export const InvitationsPage = ({
   overwriteTranslation,
 }: PropsForTranslation<InvitationsPageTranslation, InvitationsPageProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultInvitationsPageTranslation)
+  const translation = useTranslation(defaultInvitationsPageTranslation, overwriteTranslation)
   return (
     <PageWithHeader
       crumbs={[{ display: translation.invitations, link: '/invitations' }]}

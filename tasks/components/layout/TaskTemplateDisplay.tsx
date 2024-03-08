@@ -49,7 +49,7 @@ export const TaskTemplateDisplay = ({
   variant,
   width
 }: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTaskTemplateDisplayTranslation)
+  const translation = useTranslation(defaultTaskTemplateDisplayTranslation, overwriteTranslation)
 
   const router = useRouter()
   const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))

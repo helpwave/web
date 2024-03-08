@@ -79,7 +79,7 @@ export const WardDetail = ({
   ward,
   width
 }: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultWardDetailTranslations)
+  const translation = useTranslation(defaultWardDetailTranslations, overwriteTranslation)
 
   const context = useContext(OrganizationOverviewContext)
   const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organizationId)

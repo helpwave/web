@@ -78,7 +78,7 @@ export const TimeDisplay = ({
   date,
   mode = 'daysFromToday'
 }: PropsForTranslation<TimeDisplayTranslation, TimeDisplayProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTimeDisplayTranslations)
+  const translation = useTranslation(defaultTimeDisplayTranslations, overwriteTranslation)
   const difference = new Date().setHours(0, 0, 0, 0).valueOf() - new Date(date).setHours(0, 0, 0, 0).valueOf()
   const isBefore = difference > 0
   const differenceInDays = Math.floor(Math.abs(difference) / (1000 * 3600 * 24))

@@ -77,7 +77,7 @@ export const TaskTemplateContext = createContext<TaskTemplateContextType>({
 })
 
 const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<PersonalTaskTemplateTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultPersonalTaskTemplateTranslations)
+  const translation = useTranslation(defaultPersonalTaskTemplateTranslations, overwriteTranslation)
   const templateId = useRouteParameters<never, 'templateId'>().templateId
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { user } = useAuth()

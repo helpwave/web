@@ -40,7 +40,7 @@ export const ModalHeader = ({
   description,
   descriptionText = ''
 }: PropsForTranslation<ModalHeaderTranslation, ModalHeaderProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultModalHeaderTranslation)
+  const translation = useTranslation(defaultModalHeaderTranslation, overwriteTranslation)
   return (
     <div className={tw('flex flex-col')}>
       <div className={tw('flex flex-row justify-between items-start gap-x-8')}>

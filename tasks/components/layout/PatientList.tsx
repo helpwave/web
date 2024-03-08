@@ -101,7 +101,7 @@ export const PatientList = ({
   wardId,
   initialOpenedSections = defaultPatientListOpenedSections
 }: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultPatientListTranslations)
+  const translation = useTranslation(defaultPatientListTranslations, overwriteTranslation)
   const [search, setSearch] = useState('')
   const ward = useWardQuery(wardId).data
   const {

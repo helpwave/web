@@ -21,7 +21,7 @@ const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> =
 }
 
 const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultLandingPageTranslation)
+  const translation = useTranslation(defaultLandingPageTranslation, overwriteTranslation)
   const exploreURL = '/join'
   const demoURL = 'https://staging-tasks.helpwave.de'
   return (

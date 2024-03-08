@@ -30,7 +30,7 @@ export const LoadingAnimation = ({
   loadingText,
   classname
 }: PropsForTranslation<LoadingAnimationTranslation, LoadingAnimationProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultLoadingAnimationTranslation)
+  const translation = useTranslation(defaultLoadingAnimationTranslation, overwriteTranslation)
   return (
     <div className={tx('flex flex-col items-center justify-center gap-y-2 w-full h-24', classname)}>
       <Helpwave animate="loading" />

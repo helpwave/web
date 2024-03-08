@@ -37,7 +37,7 @@ export const SingleSelectProperty = <T, >({
   onRemove,
   ...multiSelectProps
 }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
-  const translation = useTranslation(overwriteTranslation, defaultSingleSelectPropertyTranslation)
+  const translation = useTranslation(defaultSingleSelectPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 
   return (

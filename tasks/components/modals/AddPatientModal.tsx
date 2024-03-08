@@ -47,7 +47,7 @@ export const AddPatientModal = ({
   onConfirm = noop,
   ...modalProps
 }: PropsForTranslation<AddPatientModalTranslation, AddPatientModalProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultAddPatientModalTranslation)
+  const translation = useTranslation(defaultAddPatientModalTranslation, overwriteTranslation)
   const [dropdownId, setDropdownId] = useState<RoomBedSelectIds>({})
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)

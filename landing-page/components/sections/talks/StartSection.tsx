@@ -21,7 +21,7 @@ const defaultTaskTranslation: Record<Languages, TalksTranslation> = {
 }
 
 const StartSection = ({ overwriteTranslation }: PropsForTranslation<TalksTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTaskTranslation)
+  const translation = useTranslation(defaultTaskTranslation, overwriteTranslation)
   const podcastURL = 'https://podcasters.spotify.com/pod/show/helpwave/'
   const screenshotURL = 'https://cdn.helpwave.de/thumbnail/thumbnail_03.png'
   const size = 1024

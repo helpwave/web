@@ -30,7 +30,7 @@ export const ErrorComponent = ({
   errorText,
   classname
 }: PropsForTranslation<ErrorComponentTranslation, ErrorComponentProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultErrorComponentTranslation)
+  const translation = useTranslation(defaultErrorComponentTranslation, overwriteTranslation)
   return (
     <div className={tx('flex flex-col items-center justify-center gap-y-4 w-full h-24', classname)}>
       <AlertOctagon size={64} className={tw('text-hw-warn-400')}/>

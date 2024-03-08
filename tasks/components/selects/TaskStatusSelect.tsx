@@ -42,7 +42,7 @@ export const TaskStatusSelect = ({
   value,
   ...selectProps
 }: PropsForTranslation<TaskStatusSelectTranslation, TaskStatusSelectProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTaskStatusSelectTranslation)
+  const translation = useTranslation(defaultTaskStatusSelectTranslation, overwriteTranslation)
   const defaultOptions = [
     { value: TaskStatus.TASK_STATUS_TODO, label: translation.unscheduled },
     { value: TaskStatus.TASK_STATUS_IN_PROGRESS, label: translation.inProgress },

@@ -38,7 +38,7 @@ export const WardRoomList = ({
   overwriteTranslation,
   rooms
 }: PropsForTranslation<WardRoomListTranslation, WardRoomListProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultWardRoomListTranslation)
+  const translation = useTranslation(defaultWardRoomListTranslation, overwriteTranslation)
   const context = useContext(WardOverviewContext)
   const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId)
 

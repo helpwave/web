@@ -40,7 +40,7 @@ export const NumberProperty = ({
   suffix,
   ...baseProps
 }: PropsForTranslation<NumberPropertyTranslation, NumberPropertyProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultNumberPropertyTranslation)
+  const translation = useTranslation(defaultNumberPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 
   return (

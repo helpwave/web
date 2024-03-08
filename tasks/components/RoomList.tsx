@@ -89,7 +89,7 @@ export const RoomList = ({
   overwriteTranslation,
   rooms
 }: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultRoomListTranslations)
+  const translation = useTranslation(defaultRoomListTranslations, overwriteTranslation)
   const context = useContext(OrganizationOverviewContext)
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination,

@@ -84,7 +84,7 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
 })
 
 const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardOverviewTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultWardOverviewTranslation)
+  const translation = useTranslation(defaultWardOverviewTranslation, overwriteTranslation)
   // TODO: could we differentiate between the two using two different states?
   const [draggedPatient, setDraggedPatient] = useState<{
     patient?: PatientMinimalDTO,

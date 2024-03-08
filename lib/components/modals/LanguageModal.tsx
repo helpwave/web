@@ -45,7 +45,7 @@ export const LanguageModal = ({
   ...modalProps
 }: PropsForTranslation<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
-  const translation = useTranslation(overwriteTranslation, defaultConfirmDialogTranslation)
+  const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
 
   return (
     <Modal

@@ -31,7 +31,7 @@ export const SignInButton = ({
   color = 'light',
   onClick = noop
 }: PropsForTranslation<SignInButtonTranslation, SignInButtonProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultSignInButtonTranslations)
+  const translation = useTranslation(defaultSignInButtonTranslations, overwriteTranslation)
   return (
     <button
       onClick={onClick}

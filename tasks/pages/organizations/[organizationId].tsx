@@ -53,7 +53,7 @@ export const OrganizationOverviewContext = createContext<OrganizationOverviewCon
  * The page for displaying and editing the wards within an organization
  */
 const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardsPageTranslation>) => {
-  const translation = useTranslation(overwriteTranslation, defaultWardsPageTranslation)
+  const translation = useTranslation(defaultWardsPageTranslation, overwriteTranslation)
   const [contextState, setContextState] = useState<OrganizationOverviewContextState>(emptyOrganizationOverviewContextState)
   const [usedQueryParam, setUsedQueryParam] = useState(false)
 

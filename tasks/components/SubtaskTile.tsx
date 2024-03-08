@@ -42,7 +42,7 @@ export const SubtaskTile = ({
   onNameEditCompleted = noop,
   onDoneChange
 }: PropsForTranslation<SubtaskTileTranslation, SubtaskTileProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultSubtaskTileTranslation)
+  const translation = useTranslation(defaultSubtaskTileTranslation, overwriteTranslation)
 
   const minTaskNameLength = 2
   const maxTaskNameLength = 64

@@ -44,7 +44,7 @@ export const TaskTemplateCard = ({
   className,
   ...editCardProps
 }: PropsForTranslation<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTaskTemplateCardTranslations)
+  const translation = useTranslation(defaultTaskTemplateCardTranslations, overwriteTranslation)
   return (
     <EditCard
       className={tx('group flex flex-col bg-white', className)}

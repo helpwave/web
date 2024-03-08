@@ -28,7 +28,7 @@ const defaultReSignInModalTranslation: Record<Languages, ReSignInModalTranslatio
   }
 }
 export const ReSignInModal = ({ overwriteTranslation, titleText, ...modalProps }: PropsForTranslation<ReSignInModalTranslation, ReSignInModalProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultReSignInModalTranslation)
+  const translation = useTranslation(defaultReSignInModalTranslation, overwriteTranslation)
 
   return (
     <ConfirmDialog

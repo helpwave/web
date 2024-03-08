@@ -29,7 +29,7 @@ export const TaskVisibilitySelect = ({
   value,
   ...selectProps
 }: PropsForTranslation<TaskVisibilitySelectTranslation, TaskVisibilitySelectProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTaskVisibilitySelectTranslation)
+  const translation = useTranslation(defaultTaskVisibilitySelectTranslation, overwriteTranslation)
   const options = [
     { value: true, label: translation.public },
     { value: false, label: translation.private },

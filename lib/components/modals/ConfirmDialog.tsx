@@ -61,7 +61,7 @@ export const ConfirmDialog = ({
   buttonOverwrites,
   ...restProps
 }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
-  const translation = useTranslation(overwriteTranslation, defaultConfirmDialogTranslation)
+  const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
 
   return (
     <Modal {...restProps}>

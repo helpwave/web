@@ -39,7 +39,7 @@ const organizationsToOptions = (organizations?: OrganizationDTO[]): SelectOption
 }
 
 export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneToCaller, currentOrganization, organizations, ...modalProps }: PropsForTranslation<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultOrganizationSwitchModalTranslation)
+  const translation = useTranslation(defaultOrganizationSwitchModalTranslation, overwriteTranslation)
   const [organization, setOrganization] = useState(currentOrganization ?? '')
   const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])
 

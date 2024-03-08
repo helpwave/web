@@ -39,7 +39,7 @@ export const TaskTemplateWardPreview = ({
   wardId,
   columns = 3
 }: PropsForTranslation<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultTaskTemplateWardPreviewTranslation)
+  const translation = useTranslation(defaultTaskTemplateWardPreviewTranslation, overwriteTranslation)
   const router = useRouter()
 
   const context = useContext(OrganizationOverviewContext)

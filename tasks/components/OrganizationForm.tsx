@@ -95,7 +95,7 @@ export const OrganizationForm = ({
   organizationForm = emptyOrganizationForm,
   onChange = () => undefined,
 }: PropsForTranslation<OrganizationFormTranslation, OrganizationFormProps>) => {
-  const translation = useTranslation(overwriteTranslation, defaultOrganizationFormTranslations)
+  const translation = useTranslation(defaultOrganizationFormTranslations, overwriteTranslation)
 
   const minShortNameLength = 2
   const minLongNameLength = 4

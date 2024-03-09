@@ -1,6 +1,5 @@
 import type { Languages } from './useLanguage'
 import { useLanguage } from './useLanguage'
-import { Translation } from '../stories/other/Translation';
 
 type OverwriteTranslationType<Translation extends Record<string, unknown>> = {
   language?: Languages,

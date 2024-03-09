@@ -11,12 +11,9 @@ import pluginConfig from '../utils/CookieConsentConfig'
 import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
 
-type FooterTranslation = {
-    socials: string,
-    general: string,
-    products: string,
-    development: string
-}
+const categories = ['socials', 'general', 'products', 'development'] as const
+type Categories = typeof categories[number]
+type FooterTranslation = { [key in Categories]: string }
 
 const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
   en: {
@@ -33,51 +30,51 @@ const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
   }
 }
 
-const linkGroups = [
-  {
-    socials: [
-      { name: 'GitHub', link: 'https://github.com/helpwave/' },
-      { name: 'LinkedIn', link: 'https://linkedin.com/company/helpwave/' },
-      { name: 'Instagram', link: 'https://instagram.com/helpwave_de/' },
-      { name: 'Twitter', link: 'https://twitter.com/helpwave_org' },
-      { name: 'YouTube', link: 'https://www.youtube.com/@helpwave' },
-      { name: 'Twitch', link: 'https://www.twitch.tv/helpwave' },
-      { name: 'Spotify', link: 'https://open.spotify.com/show/6hL5UMytp81gmURnfn3dS9' },
-      { name: 'Apple Podcasts', link: 'https://podcasts.apple.com/us/podcast/helpwave-talks/id1695217116' },
-      { name: 'Google Podcasts', link: 'https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy9lNTE1NWZhMC9wb2RjYXN0L3Jzcw' },
-      { name: 'Slack', link: 'https://helpwave.slack.com' },
-    ]
-  },
-
-  {
-    general: [
-      { name: 'Imprint', link: 'https://cdn.helpwave.de/imprint.html' },
-      { name: 'Privacy', link: 'https://cdn.helpwave.de/privacy.html' },
-      { name: 'Cookies', link: '', onClick: () => CookieConsent.showPreferences() },
-      { name: 'Contact', link: 'mailto:contact@helpwave.de' },
-      { name: 'Pitchdeck', link: 'https://cdn.helpwave.de/helpwave_pitchdeck.pdf' },
-      { name: 'Onepager', link: 'https://cdn.helpwave.de/helpwave_onepager.pdf' },
-      { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' },
-      { name: 'Tech-Radar', link: '/tech-radar', openInCurrentTab: true },
-    ],
-    products: [
-      { name: 'tasks', link: '/product/tasks' },
-      /* { name: 'scaffold', link: '/product/scaffold' },
+type LinkType = {name: string, link: string, openInCurrentTab?: boolean, onClick?: () => void}
+const linkGroups: Record<Categories, LinkType[]> = {
+  socials: [
+    { name: 'GitHub', link: 'https://github.com/helpwave/' },
+    { name: 'LinkedIn', link: 'https://linkedin.com/company/helpwave/' },
+    { name: 'Instagram', link: 'https://instagram.com/helpwave_de/' },
+    { name: 'Twitter', link: 'https://twitter.com/helpwave_org' },
+    { name: 'YouTube', link: 'https://www.youtube.com/@helpwave' },
+    { name: 'Twitch', link: 'https://www.twitch.tv/helpwave' },
+    { name: 'Spotify', link: 'https://open.spotify.com/show/6hL5UMytp81gmURnfn3dS9' },
+    { name: 'Apple Podcasts', link: 'https://podcasts.apple.com/us/podcast/helpwave-talks/id1695217116' },
+    { name: 'Google Podcasts', link: 'https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy9lNTE1NWZhMC9wb2RjYXN0L3Jzcw' },
+    { name: 'Slack', link: 'https://helpwave.slack.com' },
+  ],
+  development: [
+    { name: 'Status', link: 'https://helpwave.betteruptime.com/' },
+    { name: 'web', link: 'https://github.com/helpwave/web' },
+    { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },
+    { name: 'services', link: 'https://github.com/helpwave/services' },
+    { name: 'Staging  ~ tasks', link: 'https://staging-tasks.helpwave.de' },
+  ],
+  general: [
+    { name: 'Imprint', link: 'https://cdn.helpwave.de/imprint.html' },
+    { name: 'Privacy', link: 'https://cdn.helpwave.de/privacy.html' },
+    { name: 'Cookies', link: '', onClick: () => CookieConsent.showPreferences() },
+    { name: 'Contact', link: 'mailto:contact@helpwave.de' },
+    { name: 'Pitchdeck', link: 'https://cdn.helpwave.de/helpwave_pitchdeck.pdf' },
+    { name: 'Onepager', link: 'https://cdn.helpwave.de/helpwave_onepager.pdf' },
+    { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' },
+    { name: 'Tech-Radar', link: '/tech-radar', openInCurrentTab: true },
+  ],
+  products: [
+    { name: 'tasks', link: '/product/tasks' },
+    /* { name: 'scaffold', link: '/product/scaffold' },
       { name: 'cloud', link: '/product/cloud' },
       { name: 'impulse', link: '/product/impulse' },
       { name: 'analytics', link: '/product/analytics' },
       { name: 'core', link: '/product/core' }, */
-    ]
-  },
-  {
-    development: [
-      { name: 'Status', link: 'https://helpwave.betteruptime.com/' },
-      { name: 'web', link: 'https://github.com/helpwave/web' },
-      { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },
-      { name: 'services', link: 'https://github.com/helpwave/services' },
-      { name: 'Staging  ~ tasks', link: 'https://staging-tasks.helpwave.de' },
-    ]
-  },
+  ]
+}
+
+const grouping: (Categories[])[] = [
+  ['socials'],
+  ['general', 'products'],
+  ['development']
 ]
 
 const Footer = () => {
@@ -92,25 +89,26 @@ const Footer = () => {
   return (
     <div className={tw('w-screen bg-black text-white py-[32px] flex items-center justify-center')}>
       <div className={tw('mobile:w-full mobile:p-16 desktop:w-5/12 flex flex-wrap mx-auto justify-between')}>
-        {linkGroups.map((group, index) => (
+        {grouping.map((groups, index) => (
           <div key={index} className={tw('mobile:w-full desktop:w-[192px] mobile:text-center')}>
-            {Object.entries(group).map(([title, links]) => (
-              <FooterLinkGroup key={title} title={translation[title as keyof typeof translation] } links={links} />
+            {groups.map((category) => (
+              <FooterLinkGroup key={category} title={translation[category] } links={linkGroups[category]} />
             ))}
           </div>
         ))}
-        <Select
+        <Select<Languages>
           textColor={tw('text-white')}
           hoverColor={tw('hover:text-white')}
           value={language}
-          onChange={(language: string) => setLanguage(language as Languages)}
+          onChange={(language) => setLanguage(language)}
           options={[
             { value: 'de', label: 'Deutsch' },
             { value: 'en', label: 'English' }
-          ]} >
+          ]}>
         </Select>
-        <div className={tw('mobile:w-full items-center justify-center desktop:w-[192px] mx-auto h-[128px] font-space flex flex-wrap mobile:justify-center')}>
-          <Helpwave color="white" size={128} />
+        <div
+          className={tw('mobile:w-full items-center justify-center desktop:w-[192px] mx-auto h-[128px] font-space flex flex-wrap mobile:justify-center')}>
+          <Helpwave color="white" size={128}/>
           <Span type="subsectionTitle">&copy; {year} helpwave</Span>
         </div>
       </div>

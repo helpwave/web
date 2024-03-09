@@ -10,8 +10,11 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 const homeURL = '/'
 
+const linkNames = ['products', 'story', 'team', 'talks', 'contact', 'tasks'] as const
+type LinkNames = typeof linkNames[number]
+
 type LinkType = {
-  name: string,
+  name: LinkNames,
   url: string
 }
 
@@ -48,13 +51,7 @@ const items: SubLinkType[] = [
   },
 ]
 
-type HeaderTranslation = {
-  products: string,
-  story: string,
-  team: string,
-  talks: string,
-  contact: string
-}
+type HeaderTranslation = {[key in LinkNames]: string}
 
 const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
   en: {
@@ -63,13 +60,15 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
     team: 'team',
     talks: 'talks',
     contact: 'contact',
+    tasks: 'tasks'
   },
   de: {
     products: 'Produkte',
     story: 'Geschichte',
     team: 'Team',
-    talks: 'tasks',
+    talks: 'Talks',
     contact: 'Kontakt',
+    tasks: 'tasks'
   }
 }
 
@@ -95,7 +94,7 @@ const Header = () => {
                   {subpage === undefined ? (
                     <Link href={url}>
                       <Span type="navigationItem">
-                        {translation[name as keyof typeof translation]}
+                        {translation[name]}
                       </Span>
                     </Link>
                   ) : (
@@ -104,7 +103,7 @@ const Header = () => {
                       trigger={(onClick, ref) => (
                         <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
                           <Span type="navigationItem">
-                            {translation[name as keyof typeof translation]}
+                            {translation[name]}
                           </Span>
                         </div>
                       )}

@@ -45,7 +45,6 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
 
           <Button variant="textButton" color="neutral" onClick={() => { window.open(demoURL, '_blank') }}>
             {translation.tryTheDemo}
-            Subscribe
           </Button>
         </div>
       </div>

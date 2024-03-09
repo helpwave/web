@@ -1,0 +1,10 @@
+{
+  "name": "@helpwave/scripts",
+  "version": "1.0.0",
+  "description": "A collection of scripts used for programming with helpwave",
+  "main": "index.js",
+  "license": "MIT",
+  "peerDependencies": {
+    "commander": "12.0.0"
+  }
+}

@@ -6,36 +6,36 @@ The official helpwave web frontends.
 
 ---
 
-## Projects 
+## [Projects](./documentation/structure.md) 
 This repository is split up into multiple subprojects using [pnpm](https://pnpm.io) workspaces.
 - helpwave tasks (see [tasks](/tasks))
-- Landing Page of helpwave (see [landing-page](/landing-page))
+- landing page of helpwave (see [landing-page](/landing-page))
+- library of helpwave (see [lib](/lib))
 
-## Getting Started
-1. `pnpm install`
-2. `cd <project>`
-3. `pnpm run dev`
-4. open [`http://localhost:3000`](http://localhost:3000)
+## [Getting Started](documentation/gettingStarted.md)
+The short version can be found below and a more detailed instruction [here](documentation/gettingStarted.md). 
+```shell
+pnpm install
+cd <project> # e.g. tasks, landing-page
+pnpm run dev
+```
 
-## Storybook
-`pnpm run storybook` in the lib folder
+## [Storybook](documentation/storybook.md)
 
-We are about to adopting Storybook to develop, preview, testing and showcasing our components. Below you will find a listing of our deployed Storybook. You can also run these locally to develop new stories via the above command (open the displayed port in your browser of choice) in the supported projects.
+To preview our component library head to [https://storybook-lib.helpwave.de](https://storybook-lib.helpwave.de).
 
-- [`lib` https://storybook-lib.helpwave.de](https://storybook-lib.helpwave.de)
+Or run in locally from the [lib folder](./lib)
+```
+pnpm run storybook
+```
 
 ## Testing
 This project is tested with [BrowserStack](https://www.browserstack.com).
 
-## Linter
-1. `cd <project>`
-2. `pnpm run lint` or `pnpm run lint --fix`
+## [Linter](./documentation/linter.md)
+```shell
+pnpm run --filter "@helpwave/*" lint
+```
 
-## Boilerplate generation
-The script lies in [scripts](/scripts)
-
-Execution with 
-- `node generate_boilerplate <relative filepath>`
-- `pnpm run generate <relative filepath>` (within the projects)
-
-All options can be seen with the `--help` flag
+## [Scripts](documentation/scripts.md)
+The list of all our scripts can be found [here](documentation/scripts.md).

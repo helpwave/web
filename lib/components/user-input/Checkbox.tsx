@@ -16,7 +16,8 @@ type CheckboxProps = {
   checked: CheckedState,
   disabled?: boolean,
   onChange?: (checked: boolean) => void,
-  onChangeTristate?: (checked: CheckedState) => void
+  onChangeTristate?: (checked: CheckedState) => void,
+  className?: string
 }
 
 /**
@@ -24,7 +25,7 @@ type CheckboxProps = {
  *
  * The state is managed by the parent
  */
-const ControlledCheckbox = ({ id, label, checked, disabled, onChange, onChangeTristate }: CheckboxProps) => {
+const ControlledCheckbox = ({ id, label, checked, disabled, onChange, onChangeTristate, className }: CheckboxProps) => {
   return (
     <div className={tw('flex justify-center items-center space-x-2')}>
       <CheckboxPrimitive.Root
@@ -43,7 +44,7 @@ const ControlledCheckbox = ({ id, label, checked, disabled, onChange, onChangeTr
           'text-gray-400': disabled,
           'bg-hw-primary-300 border-hw-primary-500 hover:border-hw-primary-700 text-hw-primary-500': checked === true || checked === 'indeterminate',
           'bg-white hover:border-gray-400 focus:hover:border-hw-primary-700': !checked
-        })}
+        }, className)}
       >
         <CheckboxPrimitive.Indicator>
           {checked === true && <Check width={14} height={14}/>}

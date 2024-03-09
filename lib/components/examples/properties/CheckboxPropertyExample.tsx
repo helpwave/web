@@ -1,0 +1,30 @@
+import { useEffect, useState } from 'react'
+import type { CheckboxPropertyProps } from '../../properties/CheckboxProperty'
+import { CheckboxProperty } from '../../properties/CheckboxProperty'
+
+export type CheckboxPropertyExampleProps = Omit<CheckboxPropertyProps, 'onChange' | 'onRemove'> & {
+  readOnly: boolean
+}
+
+/**
+ * Example for using the CheckboxProperty
+ */
+export const CheckboxPropertyExample = ({
+  value,
+  ...restProps
+}: CheckboxPropertyExampleProps) => {
+  const [usedValue, setUsedValue] = useState<boolean | undefined>(value)
+
+  useEffect(() => {
+    setUsedValue(value)
+  }, [value])
+
+  return (
+    <CheckboxProperty
+      {...restProps}
+      onChange={setUsedValue}
+      onRemove={() => setUsedValue(undefined)}
+      value={usedValue}
+    />
+  )
+}

@@ -74,11 +74,15 @@ export const PropertyBase = ({
         {requiredAndNoValue && (
           <div className={tw('text-hw-warn-600 pr-4')}><AlertTriangle size={24}/></div>
         )}
-        {hasValue && !readOnly && (
-          <Button onClick={onRemove} color="negative" variant="textButton" className={tw('pr-4')}>
-            {translation.remove}
-          </Button>
-        )}
+        <Button
+          onClick={onRemove}
+          color="negative"
+          variant="textButton"
+          className={tx('pr-4', { '!text-transparent': !hasValue || readOnly })}
+          disabled={!hasValue || readOnly}
+        >
+          {translation.remove}
+        </Button>
       </div>
     </div>
   )

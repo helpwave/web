@@ -20,7 +20,7 @@ const defaultExpansionTranslation: Record<Languages, ExpansionSectionTranslation
   de: {
     germanyHealthcareSystem: 'Deutsches Gesundheitssystem',
     hospitals: 'Krankenhäuser',
-    healthcareWorkers: 'healthcare Arbeiter',
+    healthcareWorkers: 'healthcare worker',
     gdp: 'des BIP'
   }
 }

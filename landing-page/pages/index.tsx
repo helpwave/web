@@ -27,7 +27,7 @@ const defaultHomePageTranslation : Record<Languages, HomePageTranslation> = {
     helpwaveTasks: 'helpwave tasks'
   },
   de: {
-    checkOutFirstProduct: 'Sieh unser erstes Produkt an',
+    checkOutFirstProduct: 'Sieh dir unser erstes Produkt an',
     checkOutFirstProductDescription: 'und wie helpwave tasks die Producktivität unserer medical heroes verbessert',
     helpwaveTasks: 'helpwave tasks'
   }

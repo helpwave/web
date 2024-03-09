@@ -20,7 +20,7 @@ export const InputGroup = ({
   children,
   title,
   expanded = true,
-  isExpandable = false,
+  isExpandable = true,
   onChange = noop,
   className = '',
 }: InputGroupProps) => {
@@ -37,7 +37,7 @@ export const InputGroup = ({
   }, [expanded, isExpandable])
 
   return (
-    <div className={tx('p-4 flex flex-col gap-y-4', className)}>
+    <div className={tx('p-4 flex flex-col gap-y-4 bg-white rounded-xl', className)}>
       <div
         className={tx('flex flex-row justify-between items-center text-hw-primary-400', { 'cursor-pointer': isExpandable })}
         onClick={() => {
@@ -59,9 +59,11 @@ export const InputGroup = ({
           </div>
         )}
       </div>
-      <div className={tx('flex flex-col gap-y-2', { 'h-full': isExpanded, 'h-0 overflow-hidden': !isExpanded })}>
-        {children}
-      </div>
+      {isExpanded && (
+        <div className={tx('flex flex-col gap-y-2 h-full')}>
+          {children}
+        </div>
+      )}
     </div>
   )
 }

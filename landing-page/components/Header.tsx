@@ -6,7 +6,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 const homeURL = '/'
@@ -75,8 +74,7 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false)
-  const { language } = useLanguage()
-  const translation = useTranslation(language, defaultHeaderTranslation)
+  const translation = useTranslation(defaultHeaderTranslation, {})
 
   return (
     <div>

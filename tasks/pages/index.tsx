@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { localizedNewsSchema, type LocalizedNews } from '@helpwave/common/util/news'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -42,8 +42,8 @@ export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = 
   return { props: { jsonFeed: json } }
 }
 
-const Dashboard: NextPage<PropsWithLanguage<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, language }) => {
-  const translation = useTranslation(language, defaultDashboardTranslations)
+const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, overwriteTranslation }) => {
+  const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
   const { user } = useAuth()
   const { data: organizations, isLoading } = useOrganizationsForUserQuery()
 

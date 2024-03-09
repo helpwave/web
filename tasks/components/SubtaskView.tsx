@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Plus } from 'lucide-react'
 import { tw } from '@helpwave/common/twind'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { SubtaskTile } from './SubtaskTile'
@@ -51,15 +51,15 @@ type SubtaskViewProps = {
  * A view for editing and showing all subtasks of a task
  */
 export const SubtaskView = ({
-  language,
+  overwriteTranslation,
   subtasks,
   taskId,
   taskTemplateId,
   onChange,
-}: PropsWithLanguage<SubtaskViewTranslation, SubtaskViewProps>) => {
+}: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
 
-  const translation = useTranslation(language, defaultSubtaskViewTranslation)
+  const translation = useTranslation(defaultSubtaskViewTranslation, overwriteTranslation)
   const isCreatingTask = taskId === ''
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
   const deleteSubtaskMutation = useSubTaskDeleteMutation()

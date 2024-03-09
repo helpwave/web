@@ -4,7 +4,7 @@ import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWi
 import Link from 'next/link'
 import { MousePointerClick } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Divider from '../components/Divider'
 import Footer from '../components/Footer'
@@ -33,8 +33,8 @@ const defaultHomePageTranslation : Record<Languages, HomePageTranslation> = {
   }
 }
 
-const Home: NextPage = ({ language }: PropsWithLanguage<HomePageTranslation>) => {
-  const translation = useTranslation(language, defaultHomePageTranslation)
+const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTranslation>) => {
+  const translation = useTranslation(defaultHomePageTranslation, overwriteTranslation)
   return (
     <div className={tw('w-screen h-screen bg-white parent relative z-0 overflow-x-hidden')}>
       <Header/>

@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 
@@ -27,8 +27,8 @@ const defaultReSignInModalTranslation: Record<Languages, ReSignInModalTranslatio
     no: 'Nein, später.'
   }
 }
-export const ReSignInModal = ({ language, titleText, ...modalProps }: PropsWithLanguage<ReSignInModalTranslation, ReSignInModalProps>) => {
-  const translation = useTranslation(language, defaultReSignInModalTranslation)
+export const ReSignInModal = ({ overwriteTranslation, titleText, ...modalProps }: PropsForTranslation<ReSignInModalTranslation, ReSignInModalProps>) => {
+  const translation = useTranslation(defaultReSignInModalTranslation, overwriteTranslation)
 
   return (
     <ConfirmDialog

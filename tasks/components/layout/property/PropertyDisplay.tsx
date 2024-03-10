@@ -167,7 +167,7 @@ export const PropertyDisplay = ({
     <div className={tw('py-4 px-6 flex flex-col gap-y-4')}>
       <div className={tw('flex flex-row gap-x-1 items-center')}>
         <Tag className={tw('text-hw-primary-400')} size={20}/>
-        <Span type="title">{translation.properties}</Span>
+        <Span type="heading">{translation.properties}</Span>
       </div>
       <div className={tw('flex flex-col gap-y-2')}>
         <div className={tw('flex flex-row justify-between')}>

@@ -1,6 +1,7 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
@@ -38,7 +39,8 @@ const defaultPropertyDetailsRulesTranslation: Record<Languages, PropertyDetailsR
 
 export type PropertyDetailsRulesProps = {
   value: PropertyRules,
-  onChange: (value: PropertyRules) => void
+  onChange: (value: PropertyRules) => void,
+  inputGroupProps?: Omit<InputGroupProps, 'title'>
 }
 
 /**
@@ -47,11 +49,12 @@ export type PropertyDetailsRulesProps = {
 export const PropertyDetailsRules = ({
   language,
   value,
-  onChange
+  onChange,
+  inputGroupProps
 }: PropsWithLanguage<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
   const translation = useTranslation(language, defaultPropertyDetailsRulesTranslation)
   return (
-    <InputGroup title={translation.rules}>
+    <InputGroup {...inputGroupProps} title={translation.rules}>
       <Tile
         title={{ value: translation.softRequired, type: 'labelMedium' }}
         description={{ value: translation.importanceDescription }}

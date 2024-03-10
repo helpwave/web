@@ -13,7 +13,7 @@ export const CheckboxPropertyVariation: Story = {
   args: {
     name: 'Property',
     softRequired: false,
-    value: undefined,
+    value: false,
     readOnly: false,
     className: '',
   },

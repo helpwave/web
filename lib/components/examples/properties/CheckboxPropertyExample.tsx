@@ -13,7 +13,7 @@ export const CheckboxPropertyExample = ({
   value,
   ...restProps
 }: CheckboxPropertyExampleProps) => {
-  const [usedValue, setUsedValue] = useState<boolean | undefined>(value)
+  const [usedValue, setUsedValue] = useState<boolean>(value)
 
   useEffect(() => {
     setUsedValue(value)
@@ -23,7 +23,6 @@ export const CheckboxPropertyExample = ({
     <CheckboxProperty
       {...restProps}
       onChange={setUsedValue}
-      onRemove={() => setUsedValue(undefined)}
       value={usedValue}
     />
   )

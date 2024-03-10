@@ -6,7 +6,8 @@ import { Span } from '@helpwave/common/components/Span'
 import { useContext, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import type { StepperInformation } from '@helpwave/common/components/StepperBar'
+import { StepperBar } from '@helpwave/common/components/StepperBar'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsRules } from '@/components/layout/property/PropertyDetailsRules'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
@@ -19,10 +20,7 @@ type PropertyDetailsTranslation = {
   archiveProperty: string,
   archivePropertyDialogTitle: string,
   archivePropertyDialogDescription: string,
-  createProperty: string,
-  back: string,
-  next: string,
-  confirm: string
+  createProperty: string
 }
 
 const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTranslation> = {
@@ -32,9 +30,6 @@ const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTransl
     archivePropertyDialogTitle: 'Archive Property?',
     archivePropertyDialogDescription: 'This will archive the property and it won\'t be shown anymore.', // TODO improve text
     createProperty: 'Create Property',
-    back: 'Back',
-    next: 'Next Step',
-    confirm: 'Create'
   },
   de: {
     propertyDetails: 'Eigenschaftsdetails', // TODO better translation
@@ -42,9 +37,6 @@ const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTransl
     archivePropertyDialogTitle: 'Eigenschaft archivieren?',
     archivePropertyDialogDescription: 'Die Eigenschaft wird archiviert und ist danach nicht mehr sichtbar.', // TODO improve text
     createProperty: 'Eigenschaft Erstellen',
-    back: 'Zurück',
-    next: 'Nächster Schritt',
-    confirm: 'Erstellen'
   }
 }
 
@@ -65,7 +57,13 @@ export const PropertyDetails = ({
   // TODO query for data
   const [value, setValue] = useState<Property>(emptyProperty)
   const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
-  const [step, setStep] = useState(0)
+  const [stepper, setStepper] = useState<StepperInformation>({
+    step: 0,
+    lastStep: 3,
+    seenSteps: [0]
+  })
+
+  const { step } = stepper
 
   return (
     <div className={tw('py-4 px-6 flex flex-col gap-y-4 bg-gray-100 min-h-full')}>
@@ -105,7 +103,7 @@ export const PropertyDetails = ({
           expanded: !isCreatingNewProperty || step === 0 || step === 3,
           onChange: expanded => {
             if (expanded && isCreatingNewProperty && step !== 3) {
-              setStep(0)
+              setStepper({ ...stepper, step: 0 })
             }
           },
           className: tx({ 'opacity-60': isCreatingNewProperty && step !== 0 && step !== 3 })
@@ -121,7 +119,7 @@ export const PropertyDetails = ({
           expanded: !isCreatingNewProperty || step === 1 || step === 3,
           onChange: expanded => {
             if (expanded && isCreatingNewProperty && step !== 3) {
-              setStep(1)
+              setStepper({ ...stepper, step: 1 })
             }
           },
           className: tx({ 'opacity-60': isCreatingNewProperty && step !== 1 && step !== 3 })
@@ -137,7 +135,7 @@ export const PropertyDetails = ({
           expanded: !isCreatingNewProperty || step === 2 || step === 3,
           onChange: expanded => {
             if (expanded && isCreatingNewProperty && step !== 3) {
-              setStep(2)
+              setStepper({ ...stepper, step: 2 })
             }
           },
           className: tx({ 'opacity-60': isCreatingNewProperty && step !== 2 && step !== 3 })
@@ -145,40 +143,15 @@ export const PropertyDetails = ({
       />
       <div className={tw('flex grow')}></div>
       {isCreatingNewProperty && (
-        <>
-          <div
-            className={tw('sticky bottom-4 right-6 left-6 p-2 flex border-2 flex-row justify-between bg-white rounded-lg shadow-lg')}>
-            <Button disabled={step === 0} onClick={() => setStep(step => step - 1)} variant="tertiary">
-              <div className={tw('flex flex-row gap-x-1 items-center')}>
-                <ChevronLeft size={14}/>
-                {translation.back}
-              </div>
-            </Button>
-            {step !== 3 && (
-              <Button onClick={() => setStep(step => step + 1)}>
-                <div className={tw('flex flex-row gap-x-1 items-center')}>
-                  {translation.next}
-                  <ChevronRight size={14}/>
-                </div>
-              </Button>
-            )}
-            {step === 3 && (
-              <Button
-                // TODO check form validity
-                disabled={false}
-                onClick={() => {
-                  // TODO API call for create
-                  console.log(value)
-                }}
-              >
-                <div className={tw('flex flex-row gap-x-1 items-center')}>
-                  <Check size={14}/>
-                  {translation.confirm}
-                </div>
-              </Button>
-            )}
-          </div>
-        </>
+        <StepperBar
+          stepper={stepper}
+          onChange={setStepper}
+          onFinish={() => {
+            // TODO API call for create
+            console.log(value)
+          }}
+          className={tw('sticky bottom-4 right-6 left-6 bg-white')}
+        />
       )}
     </div>
   )

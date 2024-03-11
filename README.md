@@ -12,29 +12,42 @@ This repository is split up into multiple subprojects using [pnpm](https://pnpm.
 - landing page of helpwave (see [landing-page](/landing-page))
 - library of helpwave (see [lib](/lib))
 
-## [Getting Started](documentation/gettingStarted.md)
-The short version can be found below and a more detailed instruction [here](documentation/gettingStarted.md). 
+## Getting Started
+To get started you will have to in install [pnpm](https://pnpm.io). After that you
+can use the following commands to start one of our projects.
 ```shell
 pnpm install
 cd <project> # e.g. tasks, landing-page
 pnpm run dev
 ```
 
-## [Storybook](documentation/storybook.md)
+After that you should be able to open the project in the browser [`http://localhost:3000`](http://localhost:3000).
 
-To preview our component library head to [https://storybook-lib.helpwave.de](https://storybook-lib.helpwave.de).
+## Storybook
 
-Or run in locally from the [lib folder](./lib)
-```
+The components of our [library](lib) can be looked at in the storybook, where the different
+parameters of the component can be set individually.
+
+This allows you to see which components already exist and how to use them.
+The current version can be seen here https://storybook-lib.helpwave.de.
+
+```shell
+cd lib
 pnpm run storybook
 ```
 
 ## Testing
 This project is tested with [BrowserStack](https://www.browserstack.com).
 
-## [Linter](./documentation/linter.md)
+## Linter
+Our projects use linting with `eslint` to create a uniform code style. The linter can used with:
+
 ```shell
 pnpm run --filter "@helpwave/*" lint
+```
+
+```shell
+pnpm run --filter "@helpwave/*" lint --fix
 ```
 
 ## [Scripts](documentation/scripts.md)

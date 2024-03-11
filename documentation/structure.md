@@ -9,4 +9,4 @@ All packages and apps we develop are within the main folder.
 
 ### Packages
 - [lib](../lib): The library containing all default components and additional utility functions for helpwave.
-For looking at the components refer to the [storybook](./storybook.md).
+For looking at the components refer to the [storybook](../README.md#storybook).

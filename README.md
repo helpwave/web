@@ -50,5 +50,7 @@ pnpm run --filter "@helpwave/*" lint
 pnpm run --filter "@helpwave/*" lint --fix
 ```
 
+It is configured in the [eslint-config](eslint-config/index.js).
+
 ## [Scripts](documentation/scripts.md)
 The list of all our scripts can be found [here](documentation/scripts.md).

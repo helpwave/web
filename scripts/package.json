@@ -1,7 +1,7 @@
 {
   "name": "@helpwave/scripts",
   "version": "1.0.0",
-  "description": "A collection of scripts used for programming with helpwave",
+  "description": "A collection of custom tooling for helpwave/web.",
   "main": "index.js",
   "license": "MIT",
   "peerDependencies": {

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { UserInvitationList } from '@/components/UserInvitationList'
 import titleWrapper from '@/utils/titleWrapper'
@@ -25,9 +25,9 @@ export type InvitationsPageProps = Record<string, never>
  * Page for Invitations
  */
 export const InvitationsPage = ({
-  language,
-}: PropsWithLanguage<InvitationsPageTranslation, InvitationsPageProps>) => {
-  const translation = useTranslation(language, defaultInvitationsPageTranslation)
+  overwriteTranslation,
+}: PropsForTranslation<InvitationsPageTranslation, InvitationsPageProps>) => {
+  const translation = useTranslation(defaultInvitationsPageTranslation, overwriteTranslation)
   return (
     <PageWithHeader
       crumbs={[{ display: translation.invitations, link: '/invitations' }]}

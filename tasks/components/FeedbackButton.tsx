@@ -1,7 +1,7 @@
 import { Button } from '@helpwave/common/components/Button'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { getConfig } from '../utils/config'
+import { getConfig } from '@/utils/config'
 
 type FeedbackButtonTranslation = {
   text: string
@@ -16,9 +16,9 @@ const defaultFeedbackButtonTranslation: Record<Languages, FeedbackButtonTranslat
   }
 }
 
-export const FeedbackButton = ({ language }: PropsWithLanguage<FeedbackButtonTranslation>) => {
+export const FeedbackButton = ({ overwriteTranslation }: PropsForTranslation<FeedbackButtonTranslation>) => {
   const config = getConfig()
-  const translation = useTranslation(language, defaultFeedbackButtonTranslation)
+  const translation = useTranslation(defaultFeedbackButtonTranslation, overwriteTranslation)
 
   const onClick = () => window.open(config.feedbackFormUrl, '_blank')
 

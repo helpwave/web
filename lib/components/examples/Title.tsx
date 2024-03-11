@@ -1,6 +1,6 @@
 import { tw } from '../../twind'
 import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import type { Languages } from '../../hooks/useLanguage'
 
 type TitleTranslation = {
@@ -29,8 +29,8 @@ type TitleProps = {
 /**
  * Simple Title component to demonstrate some translations
  */
-const Title = ({ language, name }:PropsWithLanguage<TitleTranslation, TitleProps>) => {
-  const translation = useTranslation(language, defaultTitleTranslations)
+const Title = ({ overwriteTranslation, name }:PropsForTranslation<TitleTranslation, TitleProps>) => {
+  const translation = useTranslation(defaultTitleTranslations, overwriteTranslation)
   return (
     <p className={tw('rounded bg-gray-800 text-gray-200 p-1 px-2')}>
       {translation.welcome}{'! '}

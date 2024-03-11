@@ -1,5 +1,5 @@
 import type { Languages } from '../hooks/useLanguage'
-import type { PropsWithLanguage } from '../hooks/useTranslation'
+import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import { Helpwave } from '../icons/Helpwave'
 import { tx } from '../twind'
@@ -26,11 +26,11 @@ export type LoadingAnimationProps = {
  * A Component to show when loading data
  */
 export const LoadingAnimation = ({
-  language,
+  overwriteTranslation,
   loadingText,
   classname
-}: PropsWithLanguage<LoadingAnimationTranslation, LoadingAnimationProps>) => {
-  const translation = useTranslation(language, defaultLoadingAnimationTranslation)
+}: PropsForTranslation<LoadingAnimationTranslation, LoadingAnimationProps>) => {
+  const translation = useTranslation(defaultLoadingAnimationTranslation, overwriteTranslation)
   return (
     <div className={tx('flex flex-col items-center justify-center gap-y-2 w-full h-24', classname)}>
       <Helpwave animate="loading" />

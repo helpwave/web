@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { getConfig } from '@/utils/config'
 
@@ -31,8 +31,8 @@ const defaultMobileInterceptorTranslation = {
  * Currently, the user is prevented from using the application from mobile and the link to
  * the helpwave app will be shown
  */
-const MobileInterceptor: NextPage = ({ language }: PropsWithLanguage<MobileInterceptorTranslation>) => {
-  const translation = useTranslation(language, defaultMobileInterceptorTranslation)
+const MobileInterceptor: NextPage = ({ overwriteTranslation }: PropsForTranslation<MobileInterceptorTranslation>) => {
+  const translation = useTranslation(defaultMobileInterceptorTranslation, overwriteTranslation)
   const config = getConfig()
   const playStoreLink = config.appstoreLinks.playStore
   const appstoreLink = config.appstoreLinks.appStore

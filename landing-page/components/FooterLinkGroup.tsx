@@ -6,8 +6,8 @@ export type FooterLinkGroupProps = {
   links: {
     name: string,
     link: string,
-    onClick: () => void,
-    openInCurrentTab: boolean
+    onClick?: () => void,
+    openInCurrentTab?: boolean
   }[]
 }
 

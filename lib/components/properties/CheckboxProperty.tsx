@@ -3,7 +3,7 @@ import { tw, tx } from '../../twind'
 import { noop } from '../../util/noop'
 import { Checkbox } from '../user-input/Checkbox'
 import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Span } from '../Span'
 import type { PropertyBaseProps } from './PropertyBase'
@@ -34,13 +34,13 @@ export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | '
  * An Input for a boolen properties
  */
 export const CheckboxProperty = ({
-  language,
+  overwriteTranslation,
   value,
   onChange = noop,
   readOnly,
   ...baseProps
-}: PropsWithLanguage<CheckboxPropertyTranslation, CheckboxPropertyProps>) => {
-  const translation = useTranslation(language, defaultCheckboxPropertyTranslation)
+}: PropsForTranslation<CheckboxPropertyTranslation, CheckboxPropertyProps>) => {
+  const translation = useTranslation(defaultCheckboxPropertyTranslation, overwriteTranslation)
 
   return (
     <PropertyBase

@@ -35,7 +35,7 @@ export const NumberProperty = ({
   overwriteTranslation,
   value,
   onChange = noop,
-  onRemove,
+  onRemove = noop,
   readOnly,
   suffix,
   ...baseProps

@@ -39,3 +39,7 @@ Execution with
 - `pnpm run generate <relative filepath>` (within the projects)
 
 All options can be seen with the `--help` flag
+
+Example: `node scripts/generate_boilerplate lib/components/test`
+
+

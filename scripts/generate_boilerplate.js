@@ -41,7 +41,8 @@ if(options.debug){
 
 
 const filePathInput = args[0] + (args[0].endsWith('.tsx') || args[0].endsWith('.ts') ? '' : '.tsx');
-let filePath = path.resolve(process.env.INIT_CWD, filePathInput);
+let cwd = process.env.INIT_CWD ?? process.cwd()
+let filePath = path.resolve(cwd, filePathInput);
 const dir = path.dirname(filePath)
 const componentName = capitalize(removeNonAlphanumeric(path.parse(filePathInput).name))
 const fileName = `${componentName}.${options.fileType}`

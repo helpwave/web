@@ -10,8 +10,8 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
 type CheckboxPropertyTranslation = {
-  no: string,
-  yes: string
+  yes: string,
+  no: string
 }
 
 const defaultCheckboxPropertyTranslation: Record<Languages, CheckboxPropertyTranslation> = {

@@ -4,7 +4,7 @@ import { X } from 'lucide-react'
 import { Span } from '../Span'
 import { tx, tw } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { ModalContext } from './ModalRegister'
 
@@ -37,14 +37,14 @@ export type ModalHeaderProps = {
  * A default Header to be used by modals to have a uniform design
  */
 export const ModalHeader = ({
-  language,
+  overwriteTranslation,
   onCloseClick,
   title,
   titleText = '',
   description,
   descriptionText = ''
-}: PropsWithLanguage<ModalHeaderTranslation, ModalHeaderProps>) => {
-  const translation = useTranslation(language, defaultModalHeaderTranslation)
+}: PropsForTranslation<ModalHeaderTranslation, ModalHeaderProps>) => {
+  const translation = useTranslation(defaultModalHeaderTranslation, overwriteTranslation)
   return (
     <div className={tw('flex flex-col')}>
       <div className={tw('flex flex-row justify-between items-start gap-x-8')}>

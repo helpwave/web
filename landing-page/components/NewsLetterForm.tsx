@@ -1,5 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
@@ -97,15 +97,15 @@ export type NewsLetterFormProps = Partial<NewsLetterFormType> & {
 }
 
 export const NewsLetterForm = ({
-  language,
+  overwriteTranslation,
   firstname = '',
   lastname = '',
   email = '',
   company = '',
   industry,
   onSubmit = () => Promise.resolve(),
-}: PropsWithLanguage<NewsLetterFormTranslation, NewsLetterFormProps>) => {
-  const translation = useTranslation(language, defaultNewsLetterFormTranslation)
+}: PropsForTranslation<NewsLetterFormTranslation, NewsLetterFormProps>) => {
+  const translation = useTranslation(defaultNewsLetterFormTranslation, overwriteTranslation)
   const [isLoading, setLoading] = useState(false)
   const [showThankYouMessage, setShowThankYouMessage] = useState(false)
   const [formState, setFormState] = useState<NewsLetterFormType>({

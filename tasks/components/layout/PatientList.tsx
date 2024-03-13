@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -97,11 +97,11 @@ export type PatientListProps = {
  * The right side of the ward/[wardId].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
-  language,
+  overwriteTranslation,
   wardId,
   initialOpenedSections = defaultPatientListOpenedSections
-}: PropsWithLanguage<PatientListTranslation, PatientListProps>) => {
-  const translation = useTranslation(language, defaultPatientListTranslations)
+}: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
+  const translation = useTranslation(defaultPatientListTranslations, overwriteTranslation)
   const [search, setSearch] = useState('')
   const ward = useWardQuery(wardId).data
   const {

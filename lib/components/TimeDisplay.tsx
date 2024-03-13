@@ -1,5 +1,5 @@
 import type { Languages } from '../hooks/useLanguage'
-import type { PropsWithLanguage } from '../hooks/useTranslation'
+import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 
 type TimeDisplayTranslation = {
@@ -74,11 +74,11 @@ type TimeDisplayProps = {
  * A Component for displaying time and dates in a unified fashion
  */
 export const TimeDisplay = ({
-  language,
+  overwriteTranslation,
   date,
   mode = 'daysFromToday'
-}: PropsWithLanguage<TimeDisplayTranslation, TimeDisplayProps>) => {
-  const translation = useTranslation(language, defaultTimeDisplayTranslations)
+}: PropsForTranslation<TimeDisplayTranslation, TimeDisplayProps>) => {
+  const translation = useTranslation(defaultTimeDisplayTranslations, overwriteTranslation)
   const difference = new Date().setHours(0, 0, 0, 0).valueOf() - new Date(date).setHours(0, 0, 0, 0).valueOf()
   const isBefore = difference > 0
   const differenceInDays = Math.floor(Math.abs(difference) / (1000 * 3600 * 24))

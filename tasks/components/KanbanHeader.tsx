@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { ChevronDown } from 'lucide-react'
@@ -38,11 +38,11 @@ type KanbanHeaderProps = {
  * The header of the KanbanBoard affording a search
  */
 export const KanbanHeader = ({
-  language,
+  overwriteTranslation,
   searchValue = '',
   onSearchChange
-}: PropsWithLanguage<KanbanHeaderTranslation, KanbanHeaderProps>) => {
-  const translation = useTranslation(language, defaultKanbanHeaderTranslations)
+}: PropsForTranslation<KanbanHeaderTranslation, KanbanHeaderProps>) => {
+  const translation = useTranslation(defaultKanbanHeaderTranslations, overwriteTranslation)
   return (
     <div className={tw('flex flex-row justify-between items-center')}>
       <Span type="tableName">{translation.tasks}</Span>

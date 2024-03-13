@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
@@ -65,12 +65,12 @@ export type PatientDetailProps = {
  * The right side of the ward/[wardId].tsx page showing the detailed information about the patient
  */
 export const PatientDetail = ({
-  language,
+  overwriteTranslation,
   wardId,
   patient = emptyPatientDetails
-}: PropsWithLanguage<PatientDetailTranslation, PatientDetailProps>) => {
+}: PropsForTranslation<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
-  const translation = useTranslation(language, defaultPatientDetailTranslations)
+  const translation = useTranslation(defaultPatientDetailTranslations, overwriteTranslation)
 
   const context = useContext(WardOverviewContext)
 

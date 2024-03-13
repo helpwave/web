@@ -6,35 +6,58 @@ The official helpwave web frontends.
 
 ---
 
-## Projects 
+## [Projects](./documentation/structure.md) 
 This repository is split up into multiple subprojects using [pnpm](https://pnpm.io) workspaces.
 - helpwave tasks (see [tasks](/tasks))
-- Landing Page of helpwave (see [landing-page](/landing-page))
+- landing page of helpwave (see [landing-page](/landing-page))
+- library of helpwave (see [lib](/lib))
 
 ## Getting Started
-1. `pnpm install`
-2. `cd <project>`
-3. `pnpm run dev`
-4. open [`http://localhost:3000`](http://localhost:3000)
+To get started you will have to in install [pnpm](https://pnpm.io). After that you
+can use the following commands to start one of our projects.
+```shell
+pnpm install
+cd <project> # e.g. tasks, landing-page
+pnpm run dev
+```
+
+After that you should be able to open the project in the browser [`http://localhost:3000`](http://localhost:3000).
 
 ## Storybook
-`pnpm run storybook` in the lib folder
 
-We are about to adopting Storybook to develop, preview, testing and showcasing our components. Below you will find a listing of our deployed Storybook. You can also run these locally to develop new stories via the above command (open the displayed port in your browser of choice) in the supported projects.
+The components of our [library](lib) can be looked at in the storybook, where the different
+parameters of the component can be set individually.
 
-- [`lib` https://storybook-lib.helpwave.de](https://storybook-lib.helpwave.de)
+This allows you to see which components already exist and how to use them.
+The current version can be seen here https://components.helpwave.de.
+
+```shell
+cd lib
+pnpm run storybook
+```
 
 ## Testing
 This project is tested with [BrowserStack](https://www.browserstack.com).
 
 ## Linter
-1. `cd <project>`
-2. `pnpm run lint` or `pnpm run lint --fix`
+Our projects use linting with `eslint` to create a uniform code style. The linter can used with:
 
-## Boilerplate generation
-The script lies in [scripts](/scripts)
+```shell
+pnpm run --filter "@helpwave/*" lint
+```
 
-Execution with 
+```shell
+pnpm run --filter "@helpwave/*" lint --fix
+```
+
+It is configured in the [eslint-config](eslint-config/index.js).
+
+## [Scripts](documentation/scripts.md)
+The list of all our scripts can be found [here](documentation/scripts.md).
+
+### Boilerplate generation
+
+Execution with
 - `node generate_boilerplate <relative filepath>`
 - `pnpm run generate <relative filepath>` (within the projects)
 

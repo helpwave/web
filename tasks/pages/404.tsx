@@ -4,7 +4,7 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import Head from 'next/head'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import titleWrapper from '@/utils/titleWrapper'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -31,8 +31,8 @@ const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {
   }
 }
 
-const NotFound: NextPage = ({ language }: PropsWithLanguage<NotFoundTranslation>) => {
-  const translation = useTranslation(language, defaultNotFoundTranslation)
+const NotFound: NextPage = ({ overwriteTranslation }: PropsForTranslation<NotFoundTranslation>) => {
+  const translation = useTranslation(defaultNotFoundTranslation, overwriteTranslation)
   return (
     <PageWithHeader>
       <Head>

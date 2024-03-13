@@ -1,7 +1,7 @@
 import { List } from 'lucide-react'
 import { tx } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import type { SearchableSelectProps } from '../user-input/SearchableSelect'
 import { SearchableSelect } from '../user-input/SearchableSelect'
@@ -28,7 +28,7 @@ export type SingleSelectPropertyProps<T> =
  * An Input for SingleSelect properties
  */
 export const SingleSelectProperty = <T, >({
-  language,
+  overwriteTranslation,
   value,
   options,
   name,
@@ -36,8 +36,8 @@ export const SingleSelectProperty = <T, >({
   softRequired,
   onRemove,
   ...multiSelectProps
-}: PropsWithLanguage<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
-  const translation = useTranslation(language, defaultSingleSelectPropertyTranslation)
+}: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
+  const translation = useTranslation(defaultSingleSelectPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 
   return (

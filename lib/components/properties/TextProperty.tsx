@@ -1,7 +1,7 @@
 import { Text } from 'lucide-react'
 import { tx } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Textarea } from '../user-input/Textarea'
 import { noop } from '../../util/noop'
@@ -30,14 +30,14 @@ export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  * An Input for Text properties
  */
 export const TextProperty = ({
-  language,
+  overwriteTranslation,
   value,
   readOnly,
   onChange = noop,
   onRemove,
   ...baseProps
-}: PropsWithLanguage<TextPropertyTranslation, TextPropertyProps>) => {
-  const translation = useTranslation(language, defaultTextPropertyTranslation)
+}: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
+  const translation = useTranslation(defaultTextPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 
   return (

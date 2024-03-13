@@ -1,3 +1,5 @@
+import { equalSizeGroups } from './array'
+
 export const monthsList = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const
 export type Month = typeof monthsList[number]
 
@@ -124,4 +126,26 @@ export const equalDate = (date1: Date, date2: Date) => {
   return date1.getFullYear() === date2.getFullYear()
     && date1.getMonth() === date2.getMonth()
     && date1.getDate() === date2.getDate()
+}
+
+export const getWeeksForCalenderMonth = (date: Date, weekStart: WeekDay) => {
+  const month = date.getMonth()
+  const year = date.getFullYear()
+
+  const dayList: Date[] = []
+  let currentDate = new Date(year, month, 1) // Start of month
+  const weekStartIndex = weekDayList.indexOf(weekStart)
+  while (currentDate.getDay() !== weekStartIndex) {
+    currentDate = subtractDuration(currentDate, { days: 1 })
+  }
+
+  while (currentDate.getMonth() !== (month + 1) % 12 || currentDate.getDay() !== weekStartIndex) {
+    const date = new Date(currentDate)
+    date.setHours(date.getHours(), date.getMinutes()) // To make sure we are not overwriting the time
+    dayList.push(date)
+    currentDate = addDuration(currentDate, { days: 1 })
+  }
+
+  // weeks
+  return equalSizeGroups(dayList, 7)
 }

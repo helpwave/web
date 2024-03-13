@@ -1,7 +1,6 @@
 import type { WeekDay } from '../../util/date'
-import { addDuration, equalDate, subtractDuration, weekDayList } from '../../util/date'
+import { equalDate, getWeeksForCalenderMonth } from '../../util/date'
 import { noop } from '../../util/noop'
-import { equalSizeGroups } from '../../util/array'
 import { tw, tx } from '../../twind'
 import { useLocale } from '../../hooks/useLanguage'
 
@@ -27,23 +26,8 @@ export const DayPicker = ({
 }: DayPickerProps) => {
   const locale = useLocale()
   const month = value.getMonth()
-  const year = value.getFullYear()
+  const weeks = getWeeksForCalenderMonth(value, weekStart)
 
-  const dayList: Date[] = []
-  let currentDate = new Date(year, month, 1) // Start of month
-  const weekStartIndex = weekDayList.indexOf(weekStart)
-  while (currentDate.getDay() !== weekStartIndex) {
-    currentDate = subtractDuration(currentDate, { days: 1 })
-  }
-
-  while (currentDate.getMonth() !== (month + 1) % 12 || currentDate.getDay() !== weekStartIndex) {
-    const date = new Date(currentDate)
-    date.setHours(value.getHours(), value.getMinutes()) // To make sure we are not overwriting the time
-    dayList.push(date)
-    currentDate = addDuration(currentDate, { days: 1 })
-  }
-
-  const weeks = equalSizeGroups(dayList, 7)
   return (
     <div className={tx('flex flex-col gap-y-1 min-w-[220px] select-none', className)}>
       <div className={tw('flex flex-row text-center')}>

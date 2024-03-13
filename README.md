@@ -52,7 +52,7 @@ pnpm run --filter "@helpwave/*" lint --fix
 
 It is configured in the [eslint-config](eslint-config/index.js).
 
-## [Scripts](documentation/scripts.md)
+## Scripts
 The list of all our scripts can be found [here](documentation/scripts.md).
 
 ### Boilerplate generation
@@ -63,6 +63,6 @@ Execution with
 
 All options can be seen with the `--help` flag
 
-Example: `node scripts/generate_boilerplate lib/components/test`
+Example: `node scripts/generate_boilerplate tasks/components/test`
 
 

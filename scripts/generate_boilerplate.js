@@ -51,7 +51,7 @@ filePath = path.resolve(dir, fileName)
 const imports = {
   standard: `import { tw } from '@helpwave/common/twind'`,
   translation: `import type { Languages } from '@helpwave/common/hooks/useLanguage'\n` +
-    `import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'`
+    `import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'`
 }
 const usedImports = imports["standard"] + (options.translate ? `\n${imports["translation"]}` : '')
 
@@ -63,13 +63,13 @@ const translation = options.translate ?
 const props = `export type ${componentName}Props = ${options.props ? `{\n}` : `Record<string, never>`}`
 
 const propsType = options.translate ?
-  `{\n  language,\n}: PropsWithLanguage<${componentName}Translation, ${componentName}Props>`
+  `{\n  overwriteTranslation,\n}: PropsForTranslation<${componentName}Translation, ${componentName}Props>`
   : `{\n} : ${componentName}Props`
 
 const body =
   `/**\n * Description\n */\n` +
   `export const ${componentName} = (${propsType}) => {\n` +
-  `${options.translate ? `  const translation = useTranslation(language, default${componentName}Translation)\n` : ''}` +
+  `${options.translate ? `  const translation = useTranslation(default${componentName}Translation, overwriteTranslation)\n` : ''}` +
   `  return (\n    <div>\n      { /* Your Code */ }\n    </div>\n  )\n}`
 
 const file = [usedImports, translation, props, body].filter(value => !!value).join('\n\n') + `\n`

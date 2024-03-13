@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
 import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
 import { addDuration, subtractDuration } from '../../util/date'
@@ -43,7 +43,7 @@ export type DatePickerProps = {
  * A Component for picking a date
  */
 export const DatePicker = ({
-  language,
+  overwriteTranslation,
   value = new Date(),
   start = subtractDuration(new Date(), { years: 50 }),
   end = addDuration(new Date(), { years: 50 }),
@@ -52,9 +52,9 @@ export const DatePicker = ({
   yearMonthPickerProps,
   dayPickerProps,
   className = ''
-}: PropsWithLanguage<DatePickerTranslation, DatePickerProps>) => {
+}: PropsForTranslation<DatePickerTranslation, DatePickerProps>) => {
   const locale = useLocale()
-  const translation = useTranslation(language, defaultDatePickerTranslation)
+  const translation = useTranslation(defaultDatePickerTranslation, overwriteTranslation)
   const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
 

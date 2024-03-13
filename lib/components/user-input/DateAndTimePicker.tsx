@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { tw, tx } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
 import { addDuration, subtractDuration } from '../../util/date'
@@ -90,7 +90,7 @@ export type DateTimePickerProps = {
  * A Component for picking a Date and Time
  */
 export const DateTimePicker = ({
-  language,
+  overwriteTranslation,
   value = new Date(),
   start = subtractDuration(new Date(), { years: 50 }),
   end = addDuration(new Date(), { years: 50 }),
@@ -100,8 +100,8 @@ export const DateTimePicker = ({
   onRemove = noop,
   timePickerProps,
   datePickerProps,
-}: PropsWithLanguage<TimeTranslation, DateTimePickerProps>) => {
-  const translation = useTranslation(language, defaultTimeTranslation)
+}: PropsForTranslation<TimeTranslation, DateTimePickerProps>) => {
+  const translation = useTranslation(defaultTimeTranslation, overwriteTranslation)
 
   const useDate = mode === 'dateTime' || mode === 'date'
   const useTime = mode === 'dateTime' || mode === 'time'

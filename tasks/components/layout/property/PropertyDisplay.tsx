@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { useContext, useState } from 'react'
@@ -23,7 +23,7 @@ type PropertyDisplayTranslation = {
   search: string,
   edit: string,
   name: string
-} & {[key in SubjectType|FieldType]: string}
+} & { [key in SubjectType | FieldType]: string }
 
 const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTranslation> = {
   en: {
@@ -75,11 +75,11 @@ export type PropertyDisplayProps = {
  * A component for showing and changing property Details
  */
 export const PropertyDisplay = ({
-  language,
+  overwriteTranslation,
   searchValue: initialSearchValue = '',
   subjectType: initialSubjectType
-}: PropsWithLanguage<PropertyDisplayTranslation, PropertyDisplayProps>) => {
-  const translation = useTranslation(language, defaultPropertyDisplayTranslation)
+}: PropsForTranslation<PropertyDisplayTranslation, PropertyDisplayProps>) => {
+  const translation = useTranslation(defaultPropertyDisplayTranslation, overwriteTranslation)
 
   const {
     state: contextState,
@@ -222,9 +222,9 @@ export const PropertyDisplay = ({
             <Span>{translation[property.basicInfo.subjectType]}</Span>
           </div>),
           (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
-              <Button variant="textButton">
-                <Span>{translation.edit}</Span>
-              </Button>
+            <Button variant="textButton">
+              <Span>{translation.edit}</Span>
+            </Button>
           </div>)
         ]}
         header={[

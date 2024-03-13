@@ -1,5 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
@@ -14,7 +14,7 @@ type PropertyDetailsRulesTranslation = {
   importanceDescription: string,
   alwaysVisible: string,
   alwaysVisibleDescription: string
-} & {[key in ImportanceType]: string}
+} & { [key in ImportanceType]: string }
 
 const defaultPropertyDetailsRulesTranslation: Record<Languages, PropertyDetailsRulesTranslation> = {
   en: {
@@ -47,12 +47,12 @@ export type PropertyDetailsRulesProps = {
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsRules = ({
-  language,
+  overwriteTranslation,
   value,
   onChange,
   inputGroupProps
-}: PropsWithLanguage<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
-  const translation = useTranslation(language, defaultPropertyDetailsRulesTranslation)
+}: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
+  const translation = useTranslation(defaultPropertyDetailsRulesTranslation, overwriteTranslation)
   return (
     <InputGroup {...inputGroupProps} title={translation.rules}>
       <Tile
@@ -61,7 +61,10 @@ export const PropertyDetailsRules = ({
         suffix={(
           <Checkbox
             checked={value.importance === 'softRequired'}
-            onChange={isAlwaysVisible => onChange({ ...value, importance: isAlwaysVisible ? 'softRequired' : 'optional' })}
+            onChange={isAlwaysVisible => onChange({
+              ...value,
+              importance: isAlwaysVisible ? 'softRequired' : 'optional'
+            })}
             size={20}
           />
         )}

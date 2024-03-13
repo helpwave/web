@@ -1,7 +1,7 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { tw, tx } from '../twind'
 import type { Languages } from '../hooks/useLanguage'
-import type { PropsWithLanguage } from '../hooks/useTranslation'
+import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import { range } from '../util/array'
 import { Button } from './Button'
@@ -43,14 +43,14 @@ export type StepperBarProps = {
  * A Component for stepping
  */
 export const StepperBar = ({
-  language,
+  overwriteTranslation,
   stepper,
   onChange,
   onFinish,
   showDots = true,
   className = '',
-}: PropsWithLanguage<StepperBarTranslation, StepperBarProps>) => {
-  const translation = useTranslation(language, defaultStepperBarTranslation)
+}: PropsForTranslation<StepperBarTranslation, StepperBarProps>) => {
+  const translation = useTranslation(defaultStepperBarTranslation, overwriteTranslation)
   const dots = range(0, stepper.lastStep)
   const { step, seenSteps, lastStep } = stepper
 

@@ -1,5 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
@@ -62,12 +62,12 @@ export type PropertyDetailsFieldProps = {
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsField = ({
-  language,
+  overwriteTranslation,
   value,
   onChange,
   inputGroupProps
-}: PropsWithLanguage<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
-  const translation = useTranslation(language, defaultPropertyDetailsFieldTranslation)
+}: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
+  const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
   const isSelectType = value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect'
   return (
     <InputGroup {...inputGroupProps} title={translation.field}>

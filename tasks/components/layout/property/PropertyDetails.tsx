@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind'
+import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -60,7 +60,7 @@ export const PropertyDetails = ({
   const [stepper, setStepper] = useState<StepperInformation>({
     step: 0,
     lastStep: 3,
-    seenSteps: [0]
+    seenSteps: new Set([0])
   })
 
   const { step } = stepper
@@ -101,12 +101,8 @@ export const PropertyDetails = ({
         })}
         inputGroupProps={{
           expanded: !isCreatingNewProperty || step === 0 || step === 3,
-          onChange: expanded => {
-            if (expanded && isCreatingNewProperty && step !== 3) {
-              setStepper({ ...stepper, step: 0 })
-            }
-          },
-          className: tx({ 'opacity-60': isCreatingNewProperty && step !== 0 && step !== 3 })
+          isExpandable: !isCreatingNewProperty,
+          disabled: isCreatingNewProperty && step !== 0 && step !== 3
         }}
       />
       <PropertyDetailsField
@@ -117,12 +113,8 @@ export const PropertyDetails = ({
         })}
         inputGroupProps={{
           expanded: !isCreatingNewProperty || step === 1 || step === 3,
-          onChange: expanded => {
-            if (expanded && isCreatingNewProperty && step !== 3) {
-              setStepper({ ...stepper, step: 1 })
-            }
-          },
-          className: tx({ 'opacity-60': isCreatingNewProperty && step !== 1 && step !== 3 })
+          isExpandable: !isCreatingNewProperty,
+          disabled: isCreatingNewProperty && step !== 1 && step !== 3
         }}
       />
       <PropertyDetailsRules
@@ -133,12 +125,8 @@ export const PropertyDetails = ({
         })}
         inputGroupProps={{
           expanded: !isCreatingNewProperty || step === 2 || step === 3,
-          onChange: expanded => {
-            if (expanded && isCreatingNewProperty && step !== 3) {
-              setStepper({ ...stepper, step: 2 })
-            }
-          },
-          className: tx({ 'opacity-60': isCreatingNewProperty && step !== 2 && step !== 3 })
+          isExpandable: !isCreatingNewProperty,
+          disabled: isCreatingNewProperty && step !== 2 && step !== 3
         }}
       />
       <div className={tw('flex grow')}></div>

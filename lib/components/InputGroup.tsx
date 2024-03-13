@@ -9,6 +9,7 @@ export type InputGroupProps = PropsWithChildren<{
   title: string,
   expanded?: boolean,
   isExpandable?: boolean,
+  disabled?: boolean,
   onChange?: (value: boolean) => void,
   className?: string
 }>
@@ -21,25 +22,27 @@ export const InputGroup = ({
   title,
   expanded = true,
   isExpandable = true,
+  disabled = false,
   onChange = noop,
   className = '',
 }: InputGroupProps) => {
-  // if not expandable always be expanded, else use expanded value
-  const [isExpanded, setIsExpanded] = useState<boolean>(!isExpandable || expanded)
+  const [isExpanded, setIsExpanded] = useState<boolean>(expanded)
 
   useEffect(() => {
-    if (!isExpandable) {
-      setIsExpanded(true)
-    } else if (expanded !== isExpanded) {
-      setIsExpanded(expanded)
-    }
-    // eslint-disable-next-line
-  }, [expanded, isExpandable])
+    setIsExpanded(expanded)
+  }, [expanded])
 
   return (
     <div className={tx('p-4 flex flex-col gap-y-4 bg-white rounded-xl', className)}>
       <div
-        className={tx('flex flex-row justify-between items-center text-hw-primary-400', { 'cursor-pointer': isExpandable })}
+        className={tx('flex flex-row justify-between items-center', {
+          'cursor-pointer': isExpandable && !disabled,
+          'cursor-not-allowed': disabled,
+        },
+        {
+          'text-hw-primary-400': !disabled,
+          'text-hw-primary-200': disabled
+        })}
         onClick={() => {
           if (!isExpandable) {
             return
@@ -50,14 +53,15 @@ export const InputGroup = ({
         }}
       >
         <Span type="title">{title}</Span>
-        {isExpandable && (
-          <div className={tw('bg-hw-primary-400 rounded-full text-white w-6 h-6')}>
-            {isExpanded
-              ? <ChevronUp className={tw('-translate-y-[1px]')} size={24}/>
-              : <ChevronDown className={tw('translate-y-[1px]')} size={24}/>
-            }
-          </div>
-        )}
+        <div className={tx('rounded-full text-white w-6 h-6', {
+          'bg-hw-primary-400': (isExpandable && !disabled) || expanded,
+          'bg-hw-primary-200': disabled,
+        })}>
+          {isExpanded
+            ? <ChevronUp className={tw('-translate-y-[1px]')} size={24}/>
+            : <ChevronDown className={tw('translate-y-[1px]')} size={24}/>
+          }
+        </div>
       </div>
       {isExpanded && (
         <div className={tx('flex flex-col gap-y-2 h-full')}>

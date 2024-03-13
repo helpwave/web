@@ -28,7 +28,7 @@ const defaultStepperBarTranslation: Record<Languages, StepperBarTranslation> = {
 export type StepperInformation = {
   step: number,
   lastStep: number,
-  seenSteps: number[]
+  seenSteps: Set<number>
 }
 
 export type StepperBarProps = {
@@ -55,14 +55,9 @@ export const StepperBar = ({
   const { step, seenSteps, lastStep } = stepper
 
   const update = (newStep: number) => {
-    const updatedSeen = [...seenSteps]
-    if (!updatedSeen.find(value => value === newStep)) {
-      updatedSeen.push(newStep)
-    }
-    onChange({ step: newStep, seenSteps: updatedSeen, lastStep })
+    seenSteps.add(newStep)
+    onChange({ step: newStep, seenSteps, lastStep })
   }
-
-  console.log(stepper)
 
   return (
     <div
@@ -83,7 +78,7 @@ export const StepperBar = ({
       </div>
       <div className={tw('flex flex-row flex-[5] gap-x-2 justify-center items-center')}>
         {showDots && dots.map((value, index) => {
-          const seen = seenSteps.find(value => value === index) !== undefined
+          const seen = seenSteps.has(index)
           return (
             <div
               key={index}

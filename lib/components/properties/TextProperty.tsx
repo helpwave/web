@@ -34,7 +34,7 @@ export const TextProperty = ({
   value,
   readOnly,
   onChange = noop,
-  onRemove,
+  onRemove = noop,
   ...baseProps
 }: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
   const translation = useTranslation(defaultTextPropertyTranslation, overwriteTranslation)

@@ -9,8 +9,8 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const Translation: Story = {
+export const TranslationStory: Story = {
   args: {
-    name: 'Max Mustermann',
+    name: 'Name'
   }
 }

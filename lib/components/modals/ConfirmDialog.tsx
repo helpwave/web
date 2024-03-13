@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react'
 import { tw } from '../../twind'
 import type { ButtonColorType } from '../Button'
 import { Button } from '../Button'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Modal, type ModalProps } from './Modal'
 
@@ -52,7 +52,7 @@ export type ConfirmDialogProps = ModalProps & {
  * To require an answer omit the onBackgroundClick
  */
 export const ConfirmDialog = ({
-  language,
+  overwriteTranslation,
   children,
   onCancel,
   onConfirm,
@@ -60,8 +60,8 @@ export const ConfirmDialog = ({
   confirmType = 'positive',
   buttonOverwrites,
   ...restProps
-}: PropsWithLanguage<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
-  const translation = useTranslation(language, defaultConfirmDialogTranslation)
+}: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
+  const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
 
   return (
     <Modal {...restProps}>

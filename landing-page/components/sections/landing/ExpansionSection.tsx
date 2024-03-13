@@ -1,5 +1,5 @@
 import { tw } from '@helpwave/common/twind'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
@@ -20,13 +20,13 @@ const defaultExpansionTranslation: Record<Languages, ExpansionSectionTranslation
   de: {
     germanyHealthcareSystem: 'Deutsches Gesundheitssystem',
     hospitals: 'Krankenhäuser',
-    healthcareWorkers: 'healthcare workers',
+    healthcareWorkers: 'healthcare worker',
     gdp: 'des BIP'
   }
 }
 
-const ExpansionSection = ({ language }: PropsWithLanguage<ExpansionSectionTranslation>) => {
-  const translation = useTranslation(language, defaultExpansionTranslation)
+const ExpansionSection = ({ overwriteTranslation }: PropsForTranslation<ExpansionSectionTranslation>) => {
+  const translation = useTranslation(defaultExpansionTranslation, overwriteTranslation)
   return (
     <div className={tw('pb-16')}>
         <h1 className={tw('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>
@@ -47,7 +47,7 @@ const ExpansionSection = ({ language }: PropsWithLanguage<ExpansionSectionTransl
           <div className={tw('text-center')}>
             <span className={tw('text-4xl')}>12,1%</span>
             <br />
-            <h4>of GDP</h4>
+            <h4>{translation.gdp}</h4>
           </div>
         </div>
     </div>

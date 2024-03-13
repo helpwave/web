@@ -2,13 +2,13 @@ import { useContext } from 'react'
 import { useRouter } from 'next/router'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { OrganizationOverviewContext } from '../pages/organizations/[organizationId]'
-import { useWardTaskTemplateQuery } from '../mutations/task_template_mutations'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
+import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
+import { useWardTaskTemplateQuery } from '@/mutations/task_template_mutations'
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
@@ -35,11 +35,11 @@ export type TaskTemplateWardPreviewProps = {
  * A TaskTemplateWardPreview for showing all TaskTemplate within a ward
  */
 export const TaskTemplateWardPreview = ({
-  language,
+  overwriteTranslation,
   wardId,
   columns = 3
-}: PropsWithLanguage<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
-  const translation = useTranslation(language, defaultTaskTemplateWardPreviewTranslation)
+}: PropsForTranslation<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
+  const translation = useTranslation(defaultTaskTemplateWardPreviewTranslation, overwriteTranslation)
   const router = useRouter()
 
   const context = useContext(OrganizationOverviewContext)

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -69,14 +69,14 @@ export type TaskTemplateDetailsProps = {
  * The right side of the task templates page
  */
 export const TaskTemplateDetails = ({
-  language,
+  overwriteTranslation,
   onCreate,
   onUpdate,
   onDelete,
-}: PropsWithLanguage<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
+}: PropsForTranslation<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
   const context = useContext(TaskTemplateContext)
 
-  const translation = useTranslation(language, defaultTaskTemplateDetailsTranslations)
+  const translation = useTranslation(defaultTaskTemplateDetailsTranslations, overwriteTranslation)
   const isCreatingNewTemplate = context.state.template.id === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [touched, setTouched] = useState({

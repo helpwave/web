@@ -7,7 +7,7 @@ const nextConfig = {
   output: 'standalone',
   images: {
     dangerouslyAllowSVG: true,
-    domains: ['helpwave.de', 'source.boringavatars.com'],
+    domains: ['cdn.helpwave.de', 'helpwave.de', 'source.boringavatars.com'],
   },
 }
 

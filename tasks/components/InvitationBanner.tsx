@@ -1,7 +1,7 @@
 import { Mail } from 'lucide-react'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
 import Link from 'next/link'
 import { useInvitationsByUserQuery } from '@/mutations/organization_mutations'
@@ -27,10 +27,10 @@ export type InvitationBannerProps = {
  * A Banner that only appears when the user has pending invitations
  */
 export const InvitationBanner = ({
-  language,
+  overwriteTranslation,
   invitationCount
-}: PropsWithLanguage<InvitationBannerTranslation, InvitationBannerProps>) => {
-  const translation = useTranslation(language, defaultInvitationBannerTranslation)
+}: PropsForTranslation<InvitationBannerTranslation, InvitationBannerProps>) => {
+  const translation = useTranslation(defaultInvitationBannerTranslation, overwriteTranslation)
   const { data, isError, isLoading } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   let openInvites = invitationCount
 

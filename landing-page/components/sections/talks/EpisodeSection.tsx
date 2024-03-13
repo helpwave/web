@@ -1,10 +1,9 @@
 import { tw } from '@helpwave/common/twind'
 import Image from 'next/image'
 import Link from 'next/link'
-
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { useQuery } from '@tanstack/react-query'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
@@ -59,8 +58,8 @@ const getEpisodes = async (): Promise<{id: string, title: string, description: s
     })
 }
 
-const EpisodeSection = ({ language }: PropsWithLanguage<EpisodeSectionTranslation>) => {
-  const translation = useTranslation(language, defaultEpisodeTranslation)
+const EpisodeSection = ({ overwriteTranslation }: PropsForTranslation<EpisodeSectionTranslation>) => {
+  const translation = useTranslation(defaultEpisodeTranslation, overwriteTranslation)
   const { isLoading, data } = useQuery({ queryKey: ['episodes'], queryFn: getEpisodes })
 
   const size = 1024

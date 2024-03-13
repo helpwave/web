@@ -1,5 +1,5 @@
 import { tw, tx } from '@helpwave/common/twind'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -28,14 +28,14 @@ export type BedCardProps = DragCardProps & {
  * Shown instead of a PatientCard, if there is no patient assigned to the bed
  */
 export const BedCard = ({
-  language,
+  overwriteTranslation,
   bedName,
   onTileClick,
   isSelected,
   className,
   ...restCardProps
-}: PropsWithLanguage<BedCardTranslation, BedCardProps>) => {
-  const translation = useTranslation(language, defaultBedCardTranslation)
+}: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
+  const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
   return (
     (
       <DragCard onTileClick={onTileClick} isSelected={isSelected} className={tx('min-h-[148px] flex flex-col', className)} {...restCardProps}>

@@ -15,7 +15,7 @@ program
   .name('boilerplate_generator')
   .description('CLI to automatically create helpwave components')
   .version('0.1.0')
-  .option('-nop, --no-props', 'Sets the component props to Record<string, never>', true)
+  .option('-nop, --no-props', 'Whether the props should be omitted', true)
   .option('-notl, --no-translate', 'Generates the component without a translation', true)
   .option('-h, --help', 'Display help for command', false)
   .option('-f, --force', "Overwrite the file if it exists", false)
@@ -60,11 +60,11 @@ const translation = options.translate ?
   + `  en: {\n  },\n  de: {\n  }\n}`
   : ''
 
-const props = `export type ${componentName}Props = ${options.props ? `{\n}` : `Record<string, never>`}`
+const props = options.props ? `export type ${componentName}Props = {\n}` : ""
 
 const propsType = options.translate ?
-  `{\n  overwriteTranslation,\n}: PropsForTranslation<${componentName}Translation, ${componentName}Props>`
-  : `{\n} : ${componentName}Props`
+  `{\n  overwriteTranslation,\n}: PropsForTranslation<${componentName}Translation${options.props ? `, ${componentName}Props`: ""}>`
+  : (options.props ? `{\n} : ${componentName}Props`: "")
 
 const body =
   `/**\n * Description\n */\n` +

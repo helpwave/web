@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { Span } from '@helpwave/common/components/Span'
 
@@ -51,11 +51,11 @@ export type PillLabelProps = {
  * A Label for showing a TaskState's information like the state name and the count of Tasks in this state
  */
 const PillLabel = ({
-  language,
+  overwriteTranslation,
   count,
   state = TaskState[TaskStatus.TASK_STATUS_TODO]
-}: PropsWithLanguage<PillLabelTranslation, PillLabelProps>) => {
-  const translation = useTranslation(language, state.translation)
+}: PropsForTranslation<PillLabelTranslation, PillLabelProps>) => {
+  const translation = useTranslation(state.translation, overwriteTranslation)
   return (
     <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center
        bg-${state.colorLabel}-background text-${state.colorLabel}-text text-sm`)}>

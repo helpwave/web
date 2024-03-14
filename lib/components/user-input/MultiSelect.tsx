@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { Search } from 'lucide-react'
 import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import type { Languages } from '../../hooks/useLanguage'
 import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import { tx, tw } from '../../twind'
@@ -66,7 +66,7 @@ export type MultiSelectProps<T> = {
  * A Component for multi selection
  */
 export const MultiSelect = <T, >({
-  language,
+  overwriteTranslation,
   options,
   onChange,
   search,
@@ -77,8 +77,8 @@ export const MultiSelect = <T, >({
   showDisabledOptions = true,
   className = '',
   triggerClassName = '',
-}: PropsWithLanguage<MultiSelectTranslation, MultiSelectProps<T>>) => {
-  const translation = useTranslation(language, defaultMultiSelectTranslation)
+}: PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>) => {
+  const translation = useTranslation(defaultMultiSelectTranslation, overwriteTranslation)
   const [searchText, setSearchText] = useState<string>(search?.initialSearch ?? '')
   let filteredOptions: MultiSelectOption<T>[] = options
   const enableSearch = !!search

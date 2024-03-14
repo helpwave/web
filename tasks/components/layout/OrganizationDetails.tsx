@@ -1,6 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsWithLanguage, useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -61,9 +61,9 @@ export type OrganizationDetailProps = {
  * The left side of the organizations page
  */
 export const OrganizationDetail = ({
-  language
-}: PropsWithLanguage<OrganizationDetailTranslation, OrganizationDetailProps>) => {
-  const translation = useTranslation(language, defaultOrganizationDetailTranslations)
+  overwriteTranslation
+}: PropsForTranslation<OrganizationDetailTranslation, OrganizationDetailProps>) => {
+  const translation = useTranslation(defaultOrganizationDetailTranslations, overwriteTranslation)
 
   const {
     state: contextState,

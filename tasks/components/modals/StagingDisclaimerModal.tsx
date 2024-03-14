@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react'
 import type { ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { tw } from '@helpwave/common/twind'
@@ -44,10 +44,10 @@ type StagingDisclaimerModalProps = Pick<ConfirmDialogProps, 'id' | 'isOpen' | 'o
  * The State of open needs to be managed by the parent
  */
 export const StagingDisclaimerModal = ({
-  language,
+  overwriteTranslation,
   ...modalProps
-}: PropsWithLanguage<StagingDisclaimerModalTranslation, PropsWithChildren<StagingDisclaimerModalProps>>) => {
-  const translation = useTranslation(language, defaultStagingDisclaimerTranslation)
+}: PropsForTranslation<StagingDisclaimerModalTranslation, PropsWithChildren<StagingDisclaimerModalProps>>) => {
+  const translation = useTranslation(defaultStagingDisclaimerTranslation, overwriteTranslation)
 
   return (
     <ConfirmDialog

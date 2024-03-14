@@ -1,5 +1,5 @@
 import { tw } from '@helpwave/common/twind'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 
@@ -25,8 +25,8 @@ const defaultExpansionTranslation: Record<Languages, ExpansionSectionTranslation
   }
 }
 
-const ExpansionSection = ({ language }: PropsWithLanguage<ExpansionSectionTranslation>) => {
-  const translation = useTranslation(language, defaultExpansionTranslation)
+const ExpansionSection = ({ overwriteTranslation }: PropsForTranslation<ExpansionSectionTranslation>) => {
+  const translation = useTranslation(defaultExpansionTranslation, overwriteTranslation)
   return (
     <div className={tw('pb-16')}>
         <h1 className={tw('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>

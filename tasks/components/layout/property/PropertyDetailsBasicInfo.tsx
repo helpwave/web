@@ -1,5 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -41,11 +41,11 @@ export type PropertyDetailsBasicInfoProps = {
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsBasicInfo = ({
-  language,
+  overwriteTranslation,
   value,
   onChange
-}: PropsWithLanguage<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
-  const translation = useTranslation(language, defaultPropertyDetailsBasicInfoTranslation)
+}: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
+  const translation = useTranslation(defaultPropertyDetailsBasicInfoTranslation, overwriteTranslation)
   return (
     <InputGroup title={translation.basicInfo}>
       <PropertySubjectTypeSelect

@@ -1,5 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Select } from '@helpwave/common/components/user-input/Select'
@@ -32,6 +32,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     number: 'Number',
     text: 'Text',
     date: 'Date',
+    checkbox: 'Checkbox',
     allowCustomValues: 'Allow custom values',
     allowCustomValuesDescription: 'Let users enter a free text when the predefined values are not enough.',
     newEntry: 'New Entry'
@@ -45,6 +46,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     number: 'Zahl',
     text: 'Text',
     date: 'Datum',
+    checkbox: 'Checkbox',
     allowCustomValues: 'Hinzufügen neuer Werte',
     allowCustomValuesDescription: 'Werte können neu hinzugefügt werden,wenn sie nicht vorhanden sind.',
     newEntry: 'Neuer Eintrag'
@@ -60,11 +62,11 @@ export type PropertyDetailsFieldProps = {
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsField = ({
-  language,
+  overwriteTranslation,
   value,
   onChange
-}: PropsWithLanguage<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
-  const translation = useTranslation(language, defaultPropertyDetailsFieldTranslation)
+}: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
+  const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
   const isSelectType = value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect'
   return (
     <InputGroup title={translation.field}>

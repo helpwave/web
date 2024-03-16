@@ -15,6 +15,5 @@ export const CheckboxVariation: Story = {
     disabled: false,
     id: 'checkbox1',
     label: { name: 'Click me ^^', labelType: 'labelMedium', className: '' },
-    size: 18
   },
 }

@@ -3,3 +3,4 @@ packages:
   - tasks
   - landing-page
   - eslint-config
+  - scripts

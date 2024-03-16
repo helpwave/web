@@ -65,7 +65,6 @@ export const PropertyDetailsRules = ({
               ...value,
               importance: isAlwaysVisible ? 'softRequired' : 'optional'
             })}
-            size={20}
           />
         )}
       />
@@ -76,7 +75,6 @@ export const PropertyDetailsRules = ({
           <Checkbox
             checked={value.isAlwaysVisible}
             onChange={isAlwaysVisible => onChange({ ...value, isAlwaysVisible })}
-            size={20}
           />
         )}
         className={tw('mt-4')}

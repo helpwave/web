@@ -132,7 +132,6 @@ export const PropertyDetailsField = ({
             <Checkbox
               checked={value.isAllowingCustomValues}
               onChange={isAllowingCustomValues => onChange({ ...value, isAllowingCustomValues })}
-              size={20}
             />
           )}
           className={tw('mt-4')}

@@ -55,7 +55,10 @@ export const PropertyDetails = ({
   } = useContext(PropertyContext)
   const isCreatingNewProperty = contextState.propertyId === undefined
   // TODO query for data
-  const [value, setValue] = useState<Property>(emptyProperty)
+  const [value, setValue] = useState<Property>({
+    ...emptyProperty,
+    basicInfo: { ...emptyProperty.basicInfo, subjectType: contextState.subjectType ?? emptyProperty.basicInfo.subjectType }
+  })
   const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
   const [stepper, setStepper] = useState<StepperInformation>({
     step: 0,

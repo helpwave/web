@@ -67,7 +67,6 @@ const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTransl
 }
 
 export type PropertyDisplayProps = {
-  subjectType?: SubjectType,
   searchValue?: string
 }
 
@@ -77,7 +76,6 @@ export type PropertyDisplayProps = {
 export const PropertyDisplay = ({
   overwriteTranslation,
   searchValue: initialSearchValue = '',
-  subjectType: initialSubjectType
 }: PropsForTranslation<PropertyDisplayTranslation, PropertyDisplayProps>) => {
   const translation = useTranslation(defaultPropertyDisplayTranslation, overwriteTranslation)
 
@@ -156,11 +154,10 @@ export const PropertyDisplay = ({
       }
     }
   ]
-  const [subjectType, setSubjectType] = useState<SubjectType | undefined>(initialSubjectType)
   const [search, setSearch] = useState<string>(initialSearchValue)
 
   // TODO could be computationally intensive consider forwarding to the backend later on
-  const filteredProperties = MultiSubjectSearchWithMapping([subjectType ?? '', search], propertyList,
+  const filteredProperties = MultiSubjectSearchWithMapping([contextState.subjectType ?? '', search], propertyList,
     property => [property.basicInfo.propertyName, property.basicInfo.description, property.basicInfo.subjectType])
 
   return (
@@ -181,8 +178,8 @@ export const PropertyDisplay = ({
             />
             <PropertySubjectTypeSelect
               className={tw('w-full')}
-              value={subjectType}
-              onChange={setSubjectType}
+              value={contextState.subjectType}
+              onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation.subjectType}
             />
             <Button
@@ -190,7 +187,7 @@ export const PropertyDisplay = ({
               variant="textButton"
               color="negative"
               onClick={() => {
-                setSubjectType(undefined)
+                updateContext({ ...contextState, subjectType: undefined })
                 setSearch('')
               }}
             >
@@ -222,7 +219,7 @@ export const PropertyDisplay = ({
             <Span>{translation[property.basicInfo.subjectType]}</Span>
           </div>),
           (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
-            <Button variant="textButton">
+            <Button variant="textButton" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
               <Span>{translation.edit}</Span>
             </Button>
           </div>)

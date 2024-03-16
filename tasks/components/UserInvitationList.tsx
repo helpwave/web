@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
@@ -42,9 +42,9 @@ export type UserInvitationListProps = Record<string, never>
  * A table that shows all organizations a user hast been invited to
  */
 export const UserInvitationList = ({
-  language,
-}: PropsWithLanguage<UserInvitationListTranslation, UserInvitationListProps>) => {
-  const translation = useTranslation(language, defaultUserInvitationListTranslation)
+  overwriteTranslation,
+}: PropsForTranslation<UserInvitationListTranslation, UserInvitationListProps>) => {
+  const translation = useTranslation(defaultUserInvitationListTranslation, overwriteTranslation)
   const [tableState, setTableState] = useState<TableState>({ pagination: { ...defaultTableStatePagination, entriesPerPage: 10 } })
   const { data, isLoading, isError } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState(false)

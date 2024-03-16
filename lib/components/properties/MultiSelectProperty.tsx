@@ -1,7 +1,7 @@
 import { List } from 'lucide-react'
 import { tx } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import type { MultiSelectProps } from '../user-input/MultiSelect'
 import { MultiSelect } from '../user-input/MultiSelect'
@@ -30,15 +30,15 @@ export type MultiSelectPropertyProps<T> =
  * An Input for MultiSelect properties
  */
 export const MultiSelectProperty = <T, >({
-  language,
+  overwriteTranslation,
   options,
   name,
   readOnly = false,
   softRequired,
   onRemove,
   ...multiSelectProps
-}: PropsWithLanguage<MultiSelectPropertyTranslation, MultiSelectPropertyProps<T>>) => {
-  const translation = useTranslation(language, defaultMultiSelectPropertyTranslation)
+}: PropsForTranslation<MultiSelectPropertyTranslation, MultiSelectPropertyProps<T>>) => {
+  const translation = useTranslation(defaultMultiSelectPropertyTranslation, overwriteTranslation)
   const hasValue = options.some(value => value.selected)
   let triggerClassName: string
   if (softRequired && !hasValue) {

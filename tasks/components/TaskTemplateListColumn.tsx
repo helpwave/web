@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { tw, tx } from '@helpwave/common/twind'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { Edit } from 'lucide-react'
-import type { TaskTemplateDTO } from '../mutations/task_template_mutations'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
+import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
@@ -40,9 +40,9 @@ export const TaskTemplateListColumn = ({
   activeId,
   onTileClick,
   onColumnEditClick,
-  language: maybeLanguage
-}: PropsWithLanguage<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
-  const translation = useTranslation(maybeLanguage, defaultTaskTemplateListColumnTranslation)
+  overwriteTranslation: maybeLanguage
+}: PropsForTranslation<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
+  const translation = useTranslation(defaultTaskTemplateListColumnTranslation, maybeLanguage)
   const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
 

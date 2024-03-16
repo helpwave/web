@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 type StoryBlockProps = {
@@ -81,8 +81,8 @@ const defaultStoryTranslation: Record<Languages, StoryTranslation> = {
   }
 }
 
-const StorySection = ({ language }: PropsWithLanguage<StoryTranslation>) => {
-  const translation = useTranslation(language, defaultStoryTranslation)
+const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTranslation>) => {
+  const translation = useTranslation(defaultStoryTranslation, overwriteTranslation)
   return (
     <div className={tw('m-auto pb-16 pt-8 relative flex mobile:flex-wrap gap-16')}>
       <StoryBlock

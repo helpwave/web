@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import { tw, tx } from '../../twind'
-import { noop } from '../../util/noop'
 import type { Languages } from '../../hooks/useLanguage'
 import { Button } from '../Button'
-import type { PropsWithLanguage } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 
 type PropertyBaseTranslation = {
@@ -23,7 +22,7 @@ const defaultPropertyBaseTranslation: Record<Languages, PropertyBaseTranslation>
 export type PropertyBaseProps = {
   name: string,
   input: (props: { softRequired: boolean, hasValue: boolean }) => ReactNode,
-  onRemove: () => void,
+  onRemove?: () => void,
   hasValue: boolean,
   softRequired?: boolean,
   readOnly?: boolean,
@@ -35,17 +34,17 @@ export type PropertyBaseProps = {
  * A component for showing a property with uniform styling
  */
 export const PropertyBase = ({
-  language,
+  overwriteTranslation,
   name,
   input,
   softRequired = false,
   hasValue,
   icon,
   readOnly,
-  onRemove = noop,
+  onRemove,
   className = '',
-}: PropsWithLanguage<PropertyBaseTranslation, PropertyBaseProps>) => {
-  const translation = useTranslation(language, defaultPropertyBaseTranslation)
+}: PropsForTranslation<PropertyBaseTranslation, PropertyBaseProps>) => {
+  const translation = useTranslation(defaultPropertyBaseTranslation, overwriteTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (
     <div
@@ -74,8 +73,14 @@ export const PropertyBase = ({
         {requiredAndNoValue && (
           <div className={tw('text-hw-warn-600 pr-4')}><AlertTriangle size={24}/></div>
         )}
-        {hasValue && !readOnly && (
-          <Button onClick={onRemove} color="negative" variant="textButton" className={tw('pr-4')}>
+        {onRemove && (
+          <Button
+            onClick={onRemove}
+            color="negative"
+            variant="textButton"
+            className={tx('pr-4', { '!text-transparent': !hasValue || readOnly })}
+            disabled={!hasValue || readOnly}
+          >
             {translation.remove}
           </Button>
         )}

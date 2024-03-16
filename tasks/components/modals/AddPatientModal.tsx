@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -41,13 +41,13 @@ export type AddPatientModalProps = ConfirmDialogProps & {
  * A Modal for adding a Patient
  */
 export const AddPatientModal = ({
-  language,
+  overwriteTranslation,
   wardId,
   titleText,
   onConfirm = noop,
   ...modalProps
-}: PropsWithLanguage<AddPatientModalTranslation, AddPatientModalProps>) => {
-  const translation = useTranslation(language, defaultAddPatientModalTranslation)
+}: PropsForTranslation<AddPatientModalTranslation, AddPatientModalProps>) => {
+  const translation = useTranslation(defaultAddPatientModalTranslation, overwriteTranslation)
   const [dropdownId, setDropdownId] = useState<RoomBedSelectIds>({})
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)

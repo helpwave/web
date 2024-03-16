@@ -1,4 +1,12 @@
-import { tw } from '../../twind'
+# Translation
+Translations are handled with three steps and per component.
+
+1. The type for the translation
+2. The default values for the translation
+3. The `useTranslation` hook
+
+Example:
+```tsx
 import { useTranslation } from '../../hooks/useTranslation'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import type { Languages } from '../../hooks/useLanguage'
@@ -22,13 +30,6 @@ const defaultTitleTranslations: Record<Languages, TitleTranslation> = {
   }
 }
 
-type TitleProps = {
-  name: string
-}
-
-/**
- * Simple Title component to demonstrate some translations
- */
 const Title = ({ overwriteTranslation, name }:PropsForTranslation<TitleTranslation, TitleProps>) => {
   const translation = useTranslation(defaultTitleTranslations, overwriteTranslation)
   return (
@@ -40,5 +41,15 @@ const Title = ({ overwriteTranslation, name }:PropsForTranslation<TitleTranslati
     </p>
   )
 }
+```
 
-export default Title
+## Automatic Generation
+These components can be automatically generated with the following commands:
+
+```
+node generate_boilerplate <relative filepath>
+```
+or
+```
+pnpm run generate <relative filepath>
+```

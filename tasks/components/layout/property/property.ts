@@ -34,6 +34,18 @@ export type IdentifiedProperty = Property & {
   id: string
 }
 
+export type PropertyWithValue = IdentifiedProperty & {
+  value: {
+    // We potentially could not differentiate an empty value from a set value
+    singleSelect?: string | undefined,
+    multiSelect?: string[],
+    numberInput?: number,
+    checkbox?: boolean,
+    text?: string,
+    date?: Date
+  }
+}
+
 export const emptyProperty: Property = {
   basicInfo: {
     propertyName: 'Name',

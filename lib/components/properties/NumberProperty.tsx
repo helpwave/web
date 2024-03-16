@@ -24,7 +24,7 @@ const defaultNumberPropertyTranslation: Record<Languages, NumberPropertyTranslat
 
 export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
   value?: number,
-  suffix: string,
+  suffix?: string,
   onChange?: (value: number) => void
 }
 
@@ -77,7 +77,7 @@ export const NumberProperty = ({
               }
             }}
           />
-          <Span className={tx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</Span>
+          {suffix && <Span className={tx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</Span>}
         </div>
       )}
     />

@@ -27,16 +27,16 @@ type CheckboxProps = {
  * The state is managed by the parent
  */
 const ControlledCheckbox = ({
-                              id,
-                              label,
-                              checked,
-                              disabled,
-                              onChange,
-                              onChangeTristate,
+  id,
+  label,
+  checked,
+  disabled,
+  onChange,
+  onChangeTristate,
   size = 18,
-  className = ""
+  className = ''
 }: CheckboxProps) => {
-  // Make sure there is a appropriate minimum
+  // Make sure there is an appropriate minimum
   const usedSize = Math.max(size, 14)
   const innerIconSize = usedSize - 4
 
@@ -65,7 +65,7 @@ const ControlledCheckbox = ({
           {checked === 'indeterminate' && <Minus width={innerIconSize} height={innerIconSize}/>}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
-      {label && <Label {...label} htmlFor={id} />}
+      {label && <Label {...label} htmlFor={id}/>}
     </div>
   )
 }

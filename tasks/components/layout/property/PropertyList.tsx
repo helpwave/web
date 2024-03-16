@@ -9,6 +9,7 @@ import { NumberProperty } from '@helpwave/common/components/properties/NumberPro
 import { DateProperty } from '@helpwave/common/components/properties/DateProperty'
 import { SingleSelectProperty } from '@helpwave/common/components/properties/SelectProperty'
 import { MultiSelectProperty } from '@helpwave/common/components/properties/MultiSelectProperty'
+import { CheckboxProperty } from '@helpwave/common/components/properties/CheckboxProperty'
 import type { PropertyWithValue } from '@/components/layout/property/property'
 
 type PropertyListTranslation = {
@@ -78,6 +79,14 @@ export const PropertyList = ({
                 name={value.basicInfo.propertyName}
                 onRemove={() => removeMutation(value.id)}
                 onChange={date => onChangeHandle({ ...value, value: { date } })}
+              />
+            )
+          case 'checkbox':
+            return (
+              <CheckboxProperty
+                name={value.basicInfo.propertyName}
+                value={value.value.checkbox ?? false} // potentially inconsistent
+                onChange={checkbox => onChangeHandle({ ...value, value: { checkbox } })}
               />
             )
           case 'singleSelect':

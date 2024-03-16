@@ -1,6 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { useState } from 'react'
@@ -40,9 +40,9 @@ export type PropertyDetailsProps = NonNullable<unknown>
  * A component for showing and changing property Details
  */
 export const PropertyDetails = ({
-  language,
-}: PropsWithLanguage<PropertyDetailsTranslation, PropertyDetailsProps>) => {
-  const translation = useTranslation(language, defaultPropertyDetailsTranslation)
+  overwriteTranslation,
+}: PropsForTranslation<PropertyDetailsTranslation, PropertyDetailsProps>) => {
+  const translation = useTranslation(defaultPropertyDetailsTranslation, overwriteTranslation)
 
   /*
   const {

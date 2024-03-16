@@ -1,5 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Tile } from '@helpwave/common/components/layout/Tile'
@@ -45,11 +45,11 @@ export type PropertyDetailsRulesProps = {
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsRules = ({
-  language,
+  overwriteTranslation,
   value,
   onChange
-}: PropsWithLanguage<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
-  const translation = useTranslation(language, defaultPropertyDetailsRulesTranslation)
+}: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
+  const translation = useTranslation(defaultPropertyDetailsRulesTranslation, overwriteTranslation)
   return (
     <InputGroup title={translation.rules}>
       <Tile
@@ -59,7 +59,6 @@ export const PropertyDetailsRules = ({
           <Checkbox
             checked={value.importance === 'softRequired'}
             onChange={isAlwaysVisible => onChange({ ...value, importance: isAlwaysVisible ? 'softRequired' : 'optional' })}
-            size={20}
           />
         )}
       />
@@ -70,7 +69,6 @@ export const PropertyDetailsRules = ({
           <Checkbox
             checked={value.isAlwaysVisible}
             onChange={isAlwaysVisible => onChange({ ...value, isAlwaysVisible })}
-            size={20}
           />
         )}
         className={tw('mt-4')}

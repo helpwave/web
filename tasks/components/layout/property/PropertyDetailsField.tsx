@@ -1,5 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Select } from '@helpwave/common/components/user-input/Select'
@@ -60,11 +60,11 @@ export type PropertyDetailsFieldProps = {
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsField = ({
-  language,
+  overwriteTranslation,
   value,
   onChange
-}: PropsWithLanguage<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
-  const translation = useTranslation(language, defaultPropertyDetailsFieldTranslation)
+}: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
+  const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
   const isSelectType = value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect'
   return (
     <InputGroup title={translation.field}>
@@ -129,7 +129,6 @@ export const PropertyDetailsField = ({
             <Checkbox
               checked={value.isAllowingCustomValues}
               onChange={isAllowingCustomValues => onChange({ ...value, isAllowingCustomValues })}
-              size={20}
             />
           )}
           className={tw('mt-4')}

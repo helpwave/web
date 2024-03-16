@@ -1,5 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { SelectProps } from '@helpwave/common/components/user-input/Select'
 import { Select } from '@helpwave/common/components/user-input/Select'
@@ -29,10 +29,10 @@ const defaultPropertySubjectTypeSelectTranslation: Record<Languages, PropertySub
  * A Select for the Property SubjectType
  */
 export const PropertySubjectTypeSelect = ({
-  language,
+  overwriteTranslation,
   ...props
-}: PropsWithLanguage<PropertySubjectTypeSelectTranslation, Omit<SelectProps<SubjectType>, 'options'>>) => {
-  const translation = useTranslation(language, defaultPropertySubjectTypeSelectTranslation)
+}: PropsForTranslation<PropertySubjectTypeSelectTranslation, Omit<SelectProps<SubjectType>, 'options'>>) => {
+  const translation = useTranslation(defaultPropertySubjectTypeSelectTranslation, overwriteTranslation)
   return (
     <Select
       {...props}

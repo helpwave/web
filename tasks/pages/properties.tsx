@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsWithLanguage } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
@@ -43,8 +43,8 @@ export const PropertyContext = createContext<PropertiesContextType>({
 /**
  * The page for showing all properties and to create new ones
  */
-const PropertiesPage: NextPage = ({ language }: PropsWithLanguage<OrganizationsPageTranslation>) => {
-  const translation = useTranslation(language, defaultOrganizationsPageTranslation)
+const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<OrganizationsPageTranslation>) => {
+  const translation = useTranslation(defaultOrganizationsPageTranslation, overwriteTranslation)
   const propertyId = useRouteParameters<never, 'id'>().id
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const [context, setContext] = useState<PropertiesContextState>(emptyPropertiesContextState)

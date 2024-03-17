@@ -1,0 +1,14 @@
+{
+  "build": {
+    dockerfile: "Dockerfile"
+  },
+  onCreateCommand: "pnpm install && pnpm run --filter '@helpwave/*' build",
+  features: {
+    "ghcr.io/devcontainers/features/sshd:1" : {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint"]
+    }
+  }
+}

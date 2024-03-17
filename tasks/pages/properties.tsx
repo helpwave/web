@@ -1,13 +1,16 @@
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 import { PropertyDetails } from '@/components/layout/property/PropertyDetails'
 import { PropertyDisplay } from '@/components/layout/property/PropertyDisplay'
+import type { SubjectType } from '@/components/layout/property/property'
+import { subjectTypeList } from '@/components/layout/property/property'
 
 type OrganizationsPageTranslation = {
   properties: string
@@ -23,7 +26,8 @@ const defaultOrganizationsPageTranslation = {
 }
 
 export type PropertiesContextState = {
-  propertyId?: string
+  propertyId?: string,
+  subjectType?: SubjectType
 }
 
 export const emptyPropertiesContextState: PropertiesContextState = {
@@ -45,13 +49,14 @@ export const PropertyContext = createContext<PropertiesContextType>({
  */
 const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<OrganizationsPageTranslation>) => {
   const translation = useTranslation(defaultOrganizationsPageTranslation, overwriteTranslation)
-  const propertyId = useRouteParameters<never, 'id'>().id
+  const { id: propertyId, subject: subjectType } = useRouteParameters<never, 'id' | 'subject'>()
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const [context, setContext] = useState<PropertiesContextState>(emptyPropertiesContextState)
 
-  if (propertyId && !usedQueryParam) {
+  if ((propertyId || subjectType) && !usedQueryParam) {
     setContext({
       ...context,
+      subjectType: subjectTypeList.find(value => value === subjectType) ? subjectType as SubjectType : undefined,
       propertyId: propertyId as string
     })
     setUsedQueryParam(true)
@@ -71,7 +76,7 @@ const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<
         <TwoColumn
           disableResize={false}
           left={() => (
-            <PropertyDisplay /> // TODO property list
+            <PropertyDisplay/> // TODO property list
           )}
           right={() => (
             <PropertyDetails

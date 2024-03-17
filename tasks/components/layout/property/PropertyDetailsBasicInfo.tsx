@@ -1,6 +1,7 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -34,7 +35,8 @@ const defaultPropertyDetailsBasicInfoTranslation: Record<Languages, PropertyDeta
 
 export type PropertyDetailsBasicInfoProps = {
   value: PropertyBasicInfo,
-  onChange: (value: PropertyBasicInfo) => void
+  onChange: (value: PropertyBasicInfo) => void,
+  inputGroupProps?: Omit<InputGroupProps, 'title'>
 }
 
 /**
@@ -43,11 +45,12 @@ export type PropertyDetailsBasicInfoProps = {
 export const PropertyDetailsBasicInfo = ({
   overwriteTranslation,
   value,
-  onChange
+  onChange,
+  inputGroupProps = {},
 }: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
   const translation = useTranslation(defaultPropertyDetailsBasicInfoTranslation, overwriteTranslation)
   return (
-    <InputGroup title={translation.basicInfo}>
+    <InputGroup {...inputGroupProps} title={translation.basicInfo}>
       <PropertySubjectTypeSelect
         // TODO add icons
         value={value.subjectType}

@@ -2,6 +2,8 @@
 
 The official helpwave web frontends.
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/helpwave/web)
+
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/helpwave/web/badge)](https://securityscorecards.dev/viewer/?uri=github.com/helpwave/web)
 
 ---

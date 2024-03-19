@@ -23,6 +23,7 @@ import {
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
+import { PropertyList } from '@/components/layout/property/PropertyList'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -188,7 +189,13 @@ export const PatientDetail = ({
             }}
           />
         )}
-        <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
+        {!!newPatient.id && (
+          <div className={tw('mt-4')}>
+            <PropertyList subjectID={newPatient.id}/>
+          </div>
+        )}
+        <div className={tw('sticky flex flex-row  bottom-6 right-4 justify-end')}>
+        <div className={tw('sticky flex flex-row p-2 mt-6 gap-x-4 bg-white border-2 rounded-xl')}>
           <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
           <Button color="negative"
                   onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
@@ -196,6 +203,7 @@ export const PatientDetail = ({
             clearUpdateTimer(true)
             updateMutation.mutate(newPatient)
           }}>{translation.saveChanges}</Button>
+        </div>
         </div>
       </LoadingAndErrorComponent>
     </div>

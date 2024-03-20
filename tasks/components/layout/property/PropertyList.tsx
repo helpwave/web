@@ -8,6 +8,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { Span } from '@helpwave/common/components/Span'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { useEffect, useState } from 'react'
+import { SearchableList } from '@helpwave/common/components/SearchableList'
 import type { PropertyWithValue, SubjectType } from '@/components/layout/property/property'
 import {
   usePropertyListQuery, usePropertyWithValueCreateMutation,
@@ -85,34 +86,43 @@ export const PropertyList = ({
             />
         )
         )}
-        <Menu<HTMLDivElement> trigger={(onClick, ref) => (
-          <div
-            ref={ref}
-            className={tw('flex flex-row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-hw-primary-400 rounded-2xl cursor-pointer')}
-            onClick={onClick}
-          >
-            <Plus size={20}/>
-            <Span>{translation.addProperty}</Span>
-          </div>
-        )}>
+        <Menu<HTMLDivElement>
+          trigger={(onClick, ref) => (
+            <div
+              ref={ref}
+              className={tw('flex flex-row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-hw-primary-400 rounded-2xl cursor-pointer')}
+              onClick={onClick}
+            >
+              <Plus size={20}/>
+              <Span>{translation.addProperty}</Span>
+            </div>
+          )}
+          menuClassName={tw('min-w-[200px] p-2 ')}
+          alignment="t_"
+        >
           <LoadingAndErrorComponent
             isLoading={isLoadingPropertyList}
             hasError={isErrorPropertyList}
           >
             {/* TODO searchbar here, possibly in a new component for list search */}
-            {propertyList && properties && propertyList
-              .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))
-              .map(property => {
-                return (
+            {propertyList && properties && (
+              <SearchableList
+                list={propertyList
+                  .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))}
+                searchMapping={value => [value.basicInfo.propertyName]}
+                itemMapper={property => (
                   <MenuItem
                     key={property.id}
                     onClick={() => {
                       createPropertyValue.mutate({ ...property, propertyId: property.id, value: {}, id: subjectID })
-                    }}>
+                    }}
+                    className={tw('rounded-md')}
+                  >
                     {property.basicInfo.propertyName}
                   </MenuItem>
-                )
-              })}
+                )}
+              />
+            )}
           </LoadingAndErrorComponent>
         </Menu>
       </div>

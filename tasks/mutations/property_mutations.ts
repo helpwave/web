@@ -272,7 +272,7 @@ export let propertiesWithValuesExample: PropertyWithValue[] = [
   },
   {
     id: '3',
-    propertyId: '2',
+    propertyId: '3',
     value: {},
     basicInfo: {
       propertyName: 'Gender',

@@ -191,19 +191,19 @@ export const PatientDetail = ({
         )}
         {!!newPatient.id && (
           <div className={tw('mt-4')}>
-            <PropertyList subjectID={newPatient.id}/>
+            <PropertyList subjectID={newPatient.id} subjectType="patient"/>
           </div>
         )}
         <div className={tw('sticky flex flex-row  bottom-6 right-4 justify-end')}>
-        <div className={tw('sticky flex flex-row p-2 mt-6 gap-x-4 bg-white border-2 rounded-xl')}>
-          <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
-          <Button color="negative"
-                  onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
-          <Button color="accent" onClick={() => {
-            clearUpdateTimer(true)
-            updateMutation.mutate(newPatient)
-          }}>{translation.saveChanges}</Button>
-        </div>
+          <div className={tw('sticky flex flex-row p-2 mt-6 gap-x-4 bg-white border-2 rounded-xl')}>
+            <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
+            <Button color="negative"
+                    onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
+            <Button color="accent" onClick={() => {
+              clearUpdateTimer(true)
+              updateMutation.mutate(newPatient)
+            }}>{translation.saveChanges}</Button>
+          </div>
         </div>
       </LoadingAndErrorComponent>
     </div>

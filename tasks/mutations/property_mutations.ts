@@ -450,7 +450,7 @@ export const usePropertyWithValueListQuery = (propertyId: string | undefined, su
   })
 }
 
-export const usePropertyWithValueCreateMutation = (property: PropertyWithValue, callback: (property: PropertyWithValue) => void = noop) => {
+export const usePropertyWithValueCreateMutation = (callback: (property: PropertyWithValue) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (property: PropertyWithValue) => {

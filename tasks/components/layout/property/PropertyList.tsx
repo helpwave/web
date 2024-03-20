@@ -12,9 +12,13 @@ import { MultiSelectProperty } from '@helpwave/common/components/properties/Mult
 import { CheckboxProperty } from '@helpwave/common/components/properties/CheckboxProperty'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Span } from '@helpwave/common/components/Span'
-import { Menu } from '@helpwave/common/components/user-input/Menu'
-import type { PropertyWithValue } from '@/components/layout/property/property'
-import { usePropertyWithValueListQuery, usePropertyWithValueUpdateMutation } from '@/mutations/property_mutations'
+import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
+import type { PropertyWithValue, SubjectType } from '@/components/layout/property/property'
+import {
+  usePropertyListQuery, usePropertyWithValueCreateMutation,
+  usePropertyWithValueListQuery,
+  usePropertyWithValueUpdateMutation
+} from '@/mutations/property_mutations'
 
 type PropertyListTranslation = {
   properties: string,
@@ -33,7 +37,8 @@ const defaultPropertyListTranslation: Record<Languages, PropertyListTranslation>
 }
 
 export type PropertyListProps = {
-  subjectID: string // TODO modify if more information are needed
+  subjectID: string,
+  subjectType: SubjectType
 }
 
 /**
@@ -42,15 +47,17 @@ export type PropertyListProps = {
 export const PropertyList = ({
   overwriteTranslation,
   subjectID,
+  subjectType
 }: PropsForTranslation<PropertyListTranslation, PropertyListProps>) => {
   const translation = useTranslation(defaultPropertyListTranslation, overwriteTranslation)
-  const { data: properties, isLoading, isError } = usePropertyWithValueListQuery(subjectID, 'patient')
+  const {
+    data: propertyList,
+    isLoading: isLoadingPropertyList,
+    isError: isErrorPropertyList
+  } = usePropertyListQuery(subjectType)
+  const { data: properties, isLoading, isError } = usePropertyWithValueListQuery(subjectID, subjectType)
   const updatePropertyMutation = usePropertyWithValueUpdateMutation()
-
-  // TODO update later
-  const removeMutation = (propertyID: string) => {
-    return propertyID
-  }
+  const createPropertyValue = usePropertyWithValueCreateMutation()
 
   // TODO update later
   const onChangeHandle = (updatedProperty: PropertyWithValue) => {
@@ -69,53 +76,53 @@ export const PropertyList = ({
           prefix={<Tag className={tw('text-hw-primary-400')} size={20}/>}
           className={tw('!gap-x-2')}
         />
-        {properties && properties.map((value, index) => {
-          switch (value.field.fieldType) {
+        {properties && properties.map((property, index) => {
+          switch (property.field.fieldType) {
             case 'text':
               return (
                 <TextProperty
                   key={index}
-                  name={value.basicInfo.propertyName}
-                  onRemove={() => removeMutation(value.id)}
-                  onChange={text => onChangeHandle({ ...value, value: { text } })}
+                  name={property.basicInfo.propertyName}
+                  onRemove={() => updatePropertyMutation.mutate({ ...property, value: {} })}
+                  onChange={text => onChangeHandle({ ...property, value: { text } })}
                 />
               )
             case 'number':
               return (
                 <NumberProperty
                   key={index}
-                  name={value.basicInfo.propertyName}
-                  onRemove={() => removeMutation(value.id)}
-                  onChange={numberInput => onChangeHandle({ ...value, value: { numberInput } })}
+                  name={property.basicInfo.propertyName}
+                  onRemove={() => updatePropertyMutation.mutate({ ...property, value: {} })}
+                  onChange={numberInput => onChangeHandle({ ...property, value: { numberInput } })}
                 />
               )
             case 'date':
               return (
                 <DateProperty
                   key={index}
-                  name={value.basicInfo.propertyName}
-                  onRemove={() => removeMutation(value.id)}
-                  onChange={date => onChangeHandle({ ...value, value: { date } })}
+                  name={property.basicInfo.propertyName}
+                  onRemove={() => updatePropertyMutation.mutate({ ...property, value: {} })}
+                  onChange={date => onChangeHandle({ ...property, value: { date } })}
                 />
               )
             case 'checkbox':
               return (
                 <CheckboxProperty
                   key={index}
-                  name={value.basicInfo.propertyName}
-                  value={value.value.checkbox ?? false} // potentially inconsistent
-                  onChange={checkbox => onChangeHandle({ ...value, value: { checkbox } })}
+                  name={property.basicInfo.propertyName}
+                  value={property.value.checkbox ?? false} // potentially inconsistent
+                  onChange={checkbox => onChangeHandle({ ...property, value: { checkbox } })}
                 />
               )
             case 'singleSelect':
               return (
                 <SingleSelectProperty<string>
                   key={index}
-                  name={value.basicInfo.propertyName}
-                  onRemove={() => removeMutation(value.id)}
-                  onChange={singleSelect => onChangeHandle({ ...value, value: { singleSelect } })}
-                  value={value.value.singleSelect}
-                  options={value.field.entryList
+                  name={property.basicInfo.propertyName}
+                  onRemove={() => updatePropertyMutation.mutate({ ...property, value: {} })}
+                  onChange={singleSelect => onChangeHandle({ ...property, value: { singleSelect } })}
+                  value={property.value.singleSelect}
+                  options={property.field.entryList
                     .filter(option => option !== undefined)
                     .map(option => ({ value: option!, label: option! }))}
                   searchMapping={option => [option.value]}
@@ -125,28 +132,28 @@ export const PropertyList = ({
               return (
                 <MultiSelectProperty<string>
                   key={index}
-                  name={value.basicInfo.propertyName}
-                  onRemove={() => removeMutation(value.id)}
+                  name={property.basicInfo.propertyName}
+                  onRemove={() => updatePropertyMutation.mutate({ ...property, value: {} })}
                   onChange={multiSelect => onChangeHandle({
-                    ...value,
+                    ...property,
                     value: {
                       multiSelect: multiSelect
                         .filter(value => value.selected && value.value !== undefined)
                         .map(value => value.value as string)
                     }
                   })}
-                  options={value.field.entryList
+                  options={property.field.entryList
                     .filter(option => option !== undefined)
                     .map(option => ({
                       value: option!,
                       label: option!,
-                      selected: !!value.value.multiSelect?.find(value => value === option)
+                      selected: !!property.value.multiSelect?.find(value => value === option)
                     }))}
                   search={{ searchMapping: value => [value.value] }}
                 />
               )
             default:
-              console.error(`incorrect property type: ${value.field.fieldType}`)
+              console.error(`incorrect property type: ${property.field.fieldType}`)
               return <></>
           }
         })}
@@ -160,7 +167,25 @@ export const PropertyList = ({
             <Span>{translation.addProperty}</Span>
           </div>
         )}>
-          {/* TODO add property text */}
+          <LoadingAndErrorComponent
+            isLoading={isLoadingPropertyList}
+            hasError={isErrorPropertyList}
+          >
+            {/* TODO searchbar here, possibly in a new component for list search */}
+            {propertyList && properties && propertyList
+              .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))
+              .map(property => {
+                return (
+                  <MenuItem
+                    key={property.id}
+                    onClick={() => {
+                      createPropertyValue.mutate({ ...property, propertyId: property.id, value: {}, id: subjectID })
+                    }}>
+                    {property.basicInfo.propertyName}
+                  </MenuItem>
+                )
+              })}
+          </LoadingAndErrorComponent>
         </Menu>
       </div>
     </LoadingAndErrorComponent>

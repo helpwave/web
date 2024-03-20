@@ -18,7 +18,7 @@ import { PropertyContext } from '@/pages/properties'
 import {
   usePropertyArchiveMutation,
   usePropertyCreateMutation,
-  usePropertyQuery
+  usePropertyQuery, usePropertyUpdateMutation
 } from '@/mutations/property_mutations'
 
 type PropertyDetailsTranslation = {
@@ -69,6 +69,7 @@ export const PropertyDetails = ({
   const isCreatingNewProperty = !contextState.propertyId
 
   const { data, isError, isLoading } = usePropertyQuery(contextState.propertyId, 'patient')
+  const updatePropertyMutation = usePropertyUpdateMutation()
   const [value, setValue] = useState<IdentifiedProperty>({
     id: '',
     ...emptyProperty,
@@ -131,6 +132,12 @@ export const PropertyDetails = ({
             ...value,
             basicInfo
           })}
+          onEditComplete={
+            basicInfo => updatePropertyMutation.mutate({
+              ...value,
+              basicInfo
+            })
+          }
           inputGroupProps={{
             expanded: !isCreatingNewProperty || step === 0 || step === 3,
             isExpandable: !isCreatingNewProperty,
@@ -143,6 +150,12 @@ export const PropertyDetails = ({
             ...value,
             field
           })}
+          onEditComplete={
+            field => updatePropertyMutation.mutate({
+              ...value,
+              field
+            })
+          }
           inputGroupProps={{
             expanded: !isCreatingNewProperty || step === 1 || step === 3,
             isExpandable: !isCreatingNewProperty,
@@ -155,6 +168,12 @@ export const PropertyDetails = ({
             ...value,
             rules
           })}
+          onEditComplete={
+            rules => updatePropertyMutation.mutate({
+              ...value,
+              rules
+            })
+          }
           inputGroupProps={{
             expanded: !isCreatingNewProperty || step === 2 || step === 3,
             isExpandable: !isCreatingNewProperty,

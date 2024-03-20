@@ -407,17 +407,24 @@ export const usePropertyCreateMutation = (callback: (property: IdentifiedPropert
   })
 }
 
-export const usePropertyUpdateMutation = (property: IdentifiedProperty, callback: (property: IdentifiedProperty) => void = noop) => {
+export const usePropertyUpdateMutation = (callback: (property: IdentifiedProperty) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (property: IdentifiedProperty) => {
       // TODO backend request here
       propertiesExample = propertiesExample.map(value => value.id === property.id ? { ...property } : value)
+      propertiesWithValuesExample = propertiesWithValuesExample.map(value => value.propertyId === property.id ? {
+        // Overwrite property props
+        ...value,
+        ...property,
+        id: value.id
+      } : value)
       callback(property)
       return property
     },
     onSuccess: () => {
       queryClient.invalidateQueries([propertyQueryKey]).then()
+      queryClient.invalidateQueries([propertyWithValueQueryKey]).then()
     }
   })
 }

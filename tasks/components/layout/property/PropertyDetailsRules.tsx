@@ -40,6 +40,7 @@ const defaultPropertyDetailsRulesTranslation: Record<Languages, PropertyDetailsR
 export type PropertyDetailsRulesProps = {
   value: PropertyRules,
   onChange: (value: PropertyRules) => void,
+  onEditComplete: (value: PropertyRules) => void,
   inputGroupProps?: Omit<InputGroupProps, 'title'>
 }
 
@@ -50,6 +51,7 @@ export const PropertyDetailsRules = ({
   overwriteTranslation,
   value,
   onChange,
+  onEditComplete,
   inputGroupProps
 }: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
   const translation = useTranslation(defaultPropertyDetailsRulesTranslation, overwriteTranslation)
@@ -61,10 +63,14 @@ export const PropertyDetailsRules = ({
         suffix={(
           <Checkbox
             checked={value.importance === 'softRequired'}
-            onChange={isAlwaysVisible => onChange({
-              ...value,
-              importance: isAlwaysVisible ? 'softRequired' : 'optional'
-            })}
+            onChange={isAlwaysVisible => {
+              const newValue: PropertyRules = {
+                ...value,
+                importance: isAlwaysVisible ? 'softRequired' : 'optional'
+              }
+              onChange(newValue)
+              onEditComplete(newValue)
+            }}
           />
         )}
       />
@@ -74,7 +80,11 @@ export const PropertyDetailsRules = ({
         suffix={(
           <Checkbox
             checked={value.isAlwaysVisible}
-            onChange={isAlwaysVisible => onChange({ ...value, isAlwaysVisible })}
+            onChange={isAlwaysVisible => {
+              const newValue: PropertyRules = { ...value, isAlwaysVisible }
+              onChange(newValue)
+              onEditComplete(newValue)
+            }}
             size={20}
           />
         )}

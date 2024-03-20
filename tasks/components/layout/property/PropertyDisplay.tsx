@@ -95,8 +95,6 @@ export const PropertyDisplay = ({
   const filteredProperties = propertyList ? MultiSubjectSearchWithMapping([contextState.subjectType ?? '', search], propertyList,
     property => [property.basicInfo.propertyName, property.basicInfo.description, property.basicInfo.subjectType]) : []
 
-  console.log(filteredProperties)
-
   return (
     <div className={tw('py-4 px-6 flex flex-col gap-y-4')}>
       <div className={tw('flex flex-row gap-x-1 items-center')}>

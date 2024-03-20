@@ -14,7 +14,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { Span } from '@helpwave/common/components/Span'
 import { Menu } from '@helpwave/common/components/user-input/Menu'
 import type { PropertyWithValue } from '@/components/layout/property/property'
-import { usePropertyListQuery, usePropertyUpdateMutation } from '@/mutations/property_mutations'
+import { usePropertyWithValueListQuery, usePropertyWithValueUpdateMutation } from '@/mutations/property_mutations'
 
 type PropertyListTranslation = {
   properties: string,
@@ -44,8 +44,8 @@ export const PropertyList = ({
   subjectID,
 }: PropsForTranslation<PropertyListTranslation, PropertyListProps>) => {
   const translation = useTranslation(defaultPropertyListTranslation, overwriteTranslation)
-  const { data: properties, isLoading, isError } = usePropertyListQuery(subjectID)
-  const updatePropertyMutation = usePropertyUpdateMutation()
+  const { data: properties, isLoading, isError } = usePropertyWithValueListQuery(subjectID, 'patient')
+  const updatePropertyMutation = usePropertyWithValueUpdateMutation()
 
   // TODO update later
   const removeMutation = (propertyID: string) => {

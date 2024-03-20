@@ -35,6 +35,7 @@ export type IdentifiedProperty = Property & {
 }
 
 export type PropertyWithValue = IdentifiedProperty & {
+  propertyId: string,
   value: {
     // We potentially could not differentiate an empty value from a set value
     singleSelect?: string | undefined,

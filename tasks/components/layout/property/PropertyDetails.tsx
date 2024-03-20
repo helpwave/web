@@ -3,17 +3,23 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { StepperInformation } from '@helpwave/common/components/StepperBar'
 import { StepperBar } from '@helpwave/common/components/StepperBar'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsRules } from '@/components/layout/property/PropertyDetailsRules'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
-import type { Property } from '@/components/layout/property/property'
+import type { IdentifiedProperty } from '@/components/layout/property/property'
 import { emptyProperty } from '@/components/layout/property/property'
 import { PropertyContext } from '@/pages/properties'
+import {
+  usePropertyArchiveMutation,
+  usePropertyCreateMutation,
+  usePropertyQuery
+} from '@/mutations/property_mutations'
 
 type PropertyDetailsTranslation = {
   propertyDetails: string,
@@ -50,21 +56,40 @@ export const PropertyDetails = ({
 }: PropsForTranslation<PropertyDetailsTranslation, PropertyDetailsProps>) => {
   const translation = useTranslation(defaultPropertyDetailsTranslation, overwriteTranslation)
 
-  const {
-    state: contextState,
-  } = useContext(PropertyContext)
-  const isCreatingNewProperty = contextState.propertyId === undefined
-  // TODO query for data
-  const [value, setValue] = useState<Property>({
-    ...emptyProperty,
-    basicInfo: { ...emptyProperty.basicInfo, subjectType: contextState.subjectType ?? emptyProperty.basicInfo.subjectType }
-  })
   const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
   const [stepper, setStepper] = useState<StepperInformation>({
     step: 0,
     lastStep: 3,
     seenSteps: new Set([0])
   })
+  const {
+    state: contextState,
+    updateContext
+  } = useContext(PropertyContext)
+  const isCreatingNewProperty = !contextState.propertyId
+
+  const { data, isError, isLoading } = usePropertyQuery(contextState.propertyId, 'patient')
+  const [value, setValue] = useState<IdentifiedProperty>({
+    id: '',
+    ...emptyProperty,
+    basicInfo: {
+      ...emptyProperty.basicInfo,
+      subjectType: contextState.subjectType ?? emptyProperty.basicInfo.subjectType
+    }
+  })
+  const propertyCreateMutation = usePropertyCreateMutation(property => {
+    updateContext({ ...contextState, propertyId: property.id })
+  })
+  const archivePropertyMutation = usePropertyArchiveMutation(() => {
+    setArchiveConfirm(false)
+    updateContext({ ...contextState, propertyId: undefined })
+  })
+
+  useEffect(() => {
+    if (data && !isCreatingNewProperty) {
+      setValue(data)
+    }
+  }, [data, isCreatingNewProperty])
 
   const { step } = stepper
 
@@ -77,8 +102,7 @@ export const PropertyDetails = ({
         descriptionText={translation.archivePropertyDialogDescription}
         onCancel={() => setArchiveConfirm(false)}
         onConfirm={() => {
-          // TODO do archive here
-          setArchiveConfirm(false)
+          archivePropertyMutation.mutate(value)
         }}
         onCloseClick={() => setArchiveConfirm(false)}
         onBackgroundClick={() => setArchiveConfirm(false)}
@@ -96,54 +120,59 @@ export const PropertyDetails = ({
           </Button>
         )}
       </div>
-      <PropertyDetailsBasicInfo
-        value={value.basicInfo}
-        onChange={basicInfo => setValue({
-          ...value,
-          basicInfo
-        })}
-        inputGroupProps={{
-          expanded: !isCreatingNewProperty || step === 0 || step === 3,
-          isExpandable: !isCreatingNewProperty,
-          disabled: isCreatingNewProperty && step !== 0 && step !== 3
-        }}
-      />
-      <PropertyDetailsField
-        value={value.field}
-        onChange={field => setValue({
-          ...value,
-          field
-        })}
-        inputGroupProps={{
-          expanded: !isCreatingNewProperty || step === 1 || step === 3,
-          isExpandable: !isCreatingNewProperty,
-          disabled: isCreatingNewProperty && step !== 1 && step !== 3
-        }}
-      />
-      <PropertyDetailsRules
-        value={value.rules}
-        onChange={rules => setValue({
-          ...value,
-          rules
-        })}
-        inputGroupProps={{
-          expanded: !isCreatingNewProperty || step === 2 || step === 3,
-          isExpandable: !isCreatingNewProperty,
-          disabled: isCreatingNewProperty && step !== 2 && step !== 3
-        }}
-      />
-      <div className={tw('flex grow')}></div>
-      {isCreatingNewProperty && (
-        <StepperBar
-          stepper={stepper}
-          onChange={setStepper}
-          onFinish={() => {
-            // TODO API call for create
-            console.log(value)
+      <LoadingAndErrorComponent
+        isLoading={!isCreatingNewProperty && isLoading}
+        hasError={!isCreatingNewProperty && isError}
+        loadingProps={{ classname: 'min-h-[400px] border-2 border-black rounded-xl' }}
+      >
+        <PropertyDetailsBasicInfo
+          value={value.basicInfo}
+          onChange={basicInfo => setValue({
+            ...value,
+            basicInfo
+          })}
+          inputGroupProps={{
+            expanded: !isCreatingNewProperty || step === 0 || step === 3,
+            isExpandable: !isCreatingNewProperty,
+            disabled: isCreatingNewProperty && step !== 0 && step !== 3
           }}
-          className={tw('sticky bottom-4 right-6 left-6 bg-white')}
         />
-      )}
+        <PropertyDetailsField
+          value={value.field}
+          onChange={field => setValue({
+            ...value,
+            field
+          })}
+          inputGroupProps={{
+            expanded: !isCreatingNewProperty || step === 1 || step === 3,
+            isExpandable: !isCreatingNewProperty,
+            disabled: isCreatingNewProperty && step !== 1 && step !== 3
+          }}
+        />
+        <PropertyDetailsRules
+          value={value.rules}
+          onChange={rules => setValue({
+            ...value,
+            rules
+          })}
+          inputGroupProps={{
+            expanded: !isCreatingNewProperty || step === 2 || step === 3,
+            isExpandable: !isCreatingNewProperty,
+            disabled: isCreatingNewProperty && step !== 2 && step !== 3
+          }}
+        />
+        <div className={tw('flex grow')}></div>
+        {isCreatingNewProperty && (
+          <StepperBar
+            stepper={stepper}
+            onChange={setStepper}
+            onFinish={() => {
+              propertyCreateMutation.mutate(value)
+            }}
+            className={tw('sticky bottom-4 right-6 left-6 bg-white')}
+          />
+        )}
+      </LoadingAndErrorComponent>
     </div>
   )
 }

@@ -9,7 +9,8 @@ import type { PropertyWithValue } from '@/components/layout/property/property'
 export type PropertyEntryProps = {
   property: PropertyWithValue,
   onChange: (property: PropertyWithValue) => void,
-  onEditComplete: (property: PropertyWithValue) => void
+  onEditComplete: (property: PropertyWithValue) => void,
+  readOnly?: boolean
 }
 
 /**
@@ -19,14 +20,20 @@ export const PropertyEntry = ({
   property,
   onChange,
   onEditComplete,
+  readOnly = false
 }: PropertyEntryProps) => {
+  const commonProps = {
+    name: property.basicInfo.propertyName,
+    readOnly,
+    softRequired: property.rules.importance === 'softRequired',
+    onRemove: () => onChange({ ...property, value: {} }),
+  }
   switch (property.field.fieldType) {
     case 'text':
       return (
         <TextProperty
+          {...commonProps}
           value={property.value.text}
-          name={property.basicInfo.propertyName}
-          onRemove={() => onChange({ ...property, value: {} })}
           onChange={text => onChange({ ...property, value: { text } })}
           onEditComplete={text => onEditComplete({ ...property, value: { text } })}
         />
@@ -34,9 +41,8 @@ export const PropertyEntry = ({
     case 'number':
       return (
         <NumberProperty
+          {...commonProps}
           value={property.value.numberInput}
-          name={property.basicInfo.propertyName}
-          onRemove={() => onChange({ ...property, value: {} })}
           onChange={numberInput => onChange({ ...property, value: { numberInput } })}
           onEditComplete={numberInput => onEditComplete({ ...property, value: { numberInput } })}
         />
@@ -44,9 +50,8 @@ export const PropertyEntry = ({
     case 'date':
       return (
         <DateProperty
+          {...commonProps}
           value={property.value.date}
-          name={property.basicInfo.propertyName}
-          onRemove={() => onChange({ ...property, value: {} })}
           onChange={date => {
             const newProperty = { ...property, value: { date } }
             onChange(newProperty)
@@ -57,8 +62,9 @@ export const PropertyEntry = ({
     case 'checkbox':
       return (
         <CheckboxProperty
+          // CheckboxProperty cannot have a onRemove because it is omitted
+          {...{ ...commonProps, onRemove: undefined }}
           value={property.value.checkbox ?? false} // potentially inconsistent
-          name={property.basicInfo.propertyName}
           onChange={checkbox => {
             const newProperty: PropertyWithValue = { ...property, value: { checkbox } }
             onChange(newProperty)
@@ -69,9 +75,8 @@ export const PropertyEntry = ({
     case 'singleSelect':
       return (
         <SingleSelectProperty<string>
+          {...commonProps}
           value={property.value.singleSelect}
-          name={property.basicInfo.propertyName}
-          onRemove={() => onChange({ ...property, value: {} })}
           onChange={singleSelect => {
             const newProperty: PropertyWithValue = { ...property, value: { singleSelect } }
             onChange(newProperty)
@@ -86,8 +91,7 @@ export const PropertyEntry = ({
     case 'multiSelect':
       return (
         <MultiSelectProperty<string>
-          name={property.basicInfo.propertyName}
-          onRemove={() => onChange({ ...property, value: {} })}
+          {...commonProps}
           onChange={multiSelect => {
             const newProperty: PropertyWithValue = {
               ...property,

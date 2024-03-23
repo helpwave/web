@@ -87,30 +87,33 @@ const Footer = () => {
   }, [])
 
   return (
-    <div className={tw('w-screen bg-black text-white py-[32px] flex items-center justify-center')}>
-      <div className={tw('mobile:w-full mobile:p-16 desktop:w-5/12 flex flex-wrap mx-auto justify-between')}>
+    <div className={tw('w-screen bg-black text-white py-8 flex flex-col items-center justify-center')}>
+      <div className={tw('flex flex-wrap mobile:w-full mobile:px-16 mx-auto justify-between')}>
         {grouping.map((groups, index) => (
-          <div key={index} className={tw('mobile:w-full desktop:w-[192px] mobile:text-center')}>
+          <div key={index} className={tw('flex flex-col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
             {groups.map((category) => (
               <FooterLinkGroup key={category} title={translation[category] } links={linkGroups[category]} />
             ))}
+            {index === 2 && (
+                <Select<Languages>
+                  className={tw('w-fit')}
+                  textColor={tw('text-white')}
+                  hoverColor={tw('hover:text-white')}
+                  value={language}
+                  onChange={(language) => setLanguage(language)}
+                  options={[
+                    { value: 'de', label: 'Deutsch' },
+                    { value: 'en', label: 'English' }
+                  ]}>
+                </Select>
+            )}
           </div>
         ))}
-        <Select<Languages>
-          textColor={tw('text-white')}
-          hoverColor={tw('hover:text-white')}
-          value={language}
-          onChange={(language) => setLanguage(language)}
-          options={[
-            { value: 'de', label: 'Deutsch' },
-            { value: 'en', label: 'English' }
-          ]}>
-        </Select>
-        <div
-          className={tw('mobile:w-full items-center justify-center desktop:w-[192px] mx-auto h-[128px] font-space flex flex-wrap mobile:justify-center')}>
-          <Helpwave color="white" size={128}/>
-          <Span type="subsectionTitle">&copy; {year} helpwave</Span>
-        </div>
+      </div>
+      <div
+        className={tw('flex flex-row justify-center w-full h-[128px] items-center justify-center mx-auto font-space')}>
+        <Helpwave color="white" size={128}/>
+        <Span type="subsectionTitle">&copy; {year} helpwave</Span>
       </div>
     </div>
   )

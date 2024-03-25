@@ -74,7 +74,7 @@ export const PropertyDetailsBasicInfo = ({
         value={value.description}
         placeholder={translation.writeYourDescription}
         onChange={description => onChange({ ...value, description })}
-        onEditCompleted={description => onChange({ ...value, description })}
+        onEditCompleted={description => onEditComplete({ ...value, description })}
       />
     </InputGroup>
   )

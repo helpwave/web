@@ -413,12 +413,14 @@ export const usePropertyUpdateMutation = (callback: (property: IdentifiedPropert
     mutationFn: async (property: IdentifiedProperty) => {
       // TODO backend request here
       propertiesExample = propertiesExample.map(value => value.id === property.id ? { ...property } : value)
-      propertiesWithValuesExample = propertiesWithValuesExample.map(value => value.propertyId === property.id ? {
+      propertiesWithValuesExample = propertiesWithValuesExample.map(oldValue => oldValue.propertyId === property.id ? {
         // Overwrite property props
-        ...value,
+        ...oldValue,
+        // Delete entries not in the updated list
+        value: { ...oldValue.value, multiSelect: oldValue.value.multiSelect ? oldValue.value.multiSelect.filter(value => property.field.entryList.find(value1 => value1 === value)) : undefined },
         ...property,
-        id: value.id
-      } : value)
+        id: oldValue.id
+      } : oldValue)
       callback(property)
       return property
     },

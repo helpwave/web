@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import { tw, tx } from '../twind'
 import type { Languages } from '../hooks/useLanguage'
@@ -48,7 +48,8 @@ export const SearchableList = <T, >({
 
   useEffect(() => setSearch(initialSearch), [initialSearch])
 
-  const filteredEntries = MultiSearchWithMapping(search, list, searchMapping)
+  const filteredEntries = useMemo(() => MultiSearchWithMapping(search, list, searchMapping), [search, list, searchMapping])
+
   return (
     <div className={tx('flex flex-col gap-y-2', className)}>
       <div className={tw('flex flex-row justify-between gap-x-2 items-center')}>

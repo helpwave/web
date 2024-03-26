@@ -71,7 +71,7 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
             descriptionClassName={tw('!text-gray-600')}
           />
         </div>
-        <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-primary-900 z-[-1]')}></div>
+        <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-primary-900 z-[-1] translate-y-[2px]')}></div>
       </div>
       <div className={tw('w-screen parent bg-hw-primary-900 text-white')}>
         <ExpansionSection/>

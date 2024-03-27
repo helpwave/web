@@ -15,6 +15,7 @@ export const DatePropertyVariation: Story = {
     softRequired: false,
     date: undefined,
     readOnly: false,
+    type: 'dateTime',
     className: '',
   },
 }

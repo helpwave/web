@@ -33,6 +33,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     number: 'Number',
     text: 'Text',
     date: 'Date',
+    dateTime: 'Date and Time',
     allowCustomValues: 'Allow custom values',
     allowCustomValuesDescription: 'Let users enter a free text when the predefined values are not enough.',
     newEntry: 'New Entry'
@@ -46,6 +47,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     number: 'Zahl',
     text: 'Text',
     date: 'Datum',
+    dateTime: 'Datum und Zeit',
     allowCustomValues: 'Hinzufügen neuer Werte',
     allowCustomValuesDescription: 'Werte können neu hinzugefügt werden,wenn sie nicht vorhanden sind.',
     newEntry: 'Neuer Eintrag'

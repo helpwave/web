@@ -7,7 +7,7 @@ export type PropertyBasicInfo = {
   description: string
 }
 
-export const fieldTypeList = ['multiSelect', 'singleSelect', 'number', 'text', 'date'] as const
+export const fieldTypeList = ['multiSelect', 'singleSelect', 'number', 'text', 'date', 'dateTime'] as const
 export type FieldType = typeof fieldTypeList[number]
 
 export type PropertyFieldType = {

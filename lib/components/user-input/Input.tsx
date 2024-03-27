@@ -26,6 +26,7 @@ export type InputProps = {
   onChangeEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
   className?: string,
   onEditCompleted?: (text: string) => void,
+  onEditCompletedEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
   expanded?: boolean
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
@@ -43,6 +44,7 @@ const ControlledInput = ({
   onChangeEvent = noop,
   className = '',
   onEditCompleted,
+  onEditCompletedEvent,
   expanded = true,
   onBlur,
   ...restProps
@@ -71,16 +73,26 @@ const ControlledInput = ({
           if (onBlur) {
             onBlur(event)
           }
-          if (onEditCompleted) {
-            onEditCompleted(event.target.value)
+          if (onEditCompleted || onEditCompletedEvent) {
+            if (onEditCompleted) {
+              onEditCompleted(event.target.value)
+            }
+            if (onEditCompletedEvent) {
+              onEditCompletedEvent(event)
+            }
             clearUpdateTimer()
           }
         }}
         onChange={e => {
           const value = e.target.value
-          if (onEditCompleted) {
+          if (onEditCompleted || onEditCompletedEvent) {
             restartTimer(() => {
-              onEditCompleted(value)
+              if (onEditCompleted) {
+                onEditCompleted(value)
+              }
+              if (onEditCompletedEvent) {
+                onEditCompletedEvent(e)
+              }
               clearUpdateTimer()
             })
           }

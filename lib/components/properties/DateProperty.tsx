@@ -1,13 +1,16 @@
 import { CalendarDays } from 'lucide-react'
 import { tx } from '../../twind'
-import { formatDate } from '../../util/date'
+import { formatDate, formatDateTime } from '../../util/date'
 import { noop } from '../../util/noop'
+import { Input } from '../user-input/Input'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
 export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
   date?: Date,
-  onChange?: (date: Date) => void
+  onChange?: (date: Date) => void,
+  onEditComplete?: (value: Date) => void,
+  type?: 'dateTime' | 'date'
 }
 
 /**
@@ -16,12 +19,14 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
 export const DateProperty = ({
   date,
   onChange = noop,
+  onEditComplete = noop,
   readOnly,
+  type = 'dateTime',
   ...baseProps
 }: DatePropertyProps) => {
   const hasValue = !!date
 
-  const dateText = date ? formatDate(date) : ''
+  const dateText = date ? (type === 'dateTime' ? formatDateTime(date) : formatDate(date)) : ''
   return (
     <PropertyBase
       {...baseProps}
@@ -31,12 +36,12 @@ export const DateProperty = ({
         <div
           className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
-          <input
-            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0', { 'bg-hw-warn-200': softRequired && !hasValue })}
+          <Input
+            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !w-fit !rounded-none', { 'bg-hw-warn-200': softRequired && !hasValue })}
             value={dateText}
-            type="datetime-local"
+            type={type === 'dateTime' ? 'datetime-local' : 'date'}
             readOnly={readOnly}
-            onChange={(event) => {
+            onChangeEvent={(event) => {
               if (!event.target.value) {
                 event.preventDefault()
                 return
@@ -44,6 +49,7 @@ export const DateProperty = ({
               const dueDate = new Date(event.target.value)
               onChange(dueDate)
             }}
+            onEditCompletedEvent={event => onEditComplete(new Date(event.target.value))}
           />
         </div>
       )}

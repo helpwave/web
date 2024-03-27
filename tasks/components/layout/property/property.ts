@@ -7,7 +7,7 @@ export type PropertyBasicInfo = {
   description: string
 }
 
-export const fieldTypeList = ['multiSelect', 'singleSelect', 'number', 'text', 'date'] as const
+export const fieldTypeList = ['multiSelect', 'singleSelect', 'number', 'text', 'date', 'checkbox'] as const
 export type FieldType = typeof fieldTypeList[number]
 
 export type PropertyFieldType = {
@@ -32,6 +32,19 @@ export type Property = {
 
 export type IdentifiedProperty = Property & {
   id: string
+}
+
+export type PropertyWithValue = IdentifiedProperty & {
+  propertyId: string,
+  value: {
+    // We potentially could not differentiate an empty value from a set value
+    singleSelect?: string | undefined,
+    multiSelect?: string[],
+    numberInput?: number,
+    checkbox?: boolean,
+    text?: string,
+    date?: Date
+  }
 }
 
 export const emptyProperty: Property = {

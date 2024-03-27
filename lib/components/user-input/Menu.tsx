@@ -12,15 +12,26 @@ type MenuProps<T> = PropsWithChildren<{
   menuClassName?: string
 }>
 
+export type MenuItemProps = {
+  onClick?: () => void,
+  alignment?: 'left' | 'right',
+  className?: string
+}
 const MenuItem = ({
   children,
   onClick,
-  alignment = 'left'
-}: PropsWithChildren<{ onClick?: () => void, alignment?: 'left' | 'right' }>) => (
-  <div className={tx('block px-3 py-1 hover:bg-slate-100', {
-    'text-right': alignment === 'right',
-    'text-left': alignment === 'left',
-  })} onClick={onClick}>{children}</div>
+  alignment = 'left',
+  className
+}: PropsWithChildren<MenuItemProps>) => (
+  <div
+    className={tx('block px-3 py-1 hover:bg-slate-100', {
+      'text-right': alignment === 'right',
+      'text-left': alignment === 'left',
+    }, className)}
+    onClick={onClick}
+  >
+    {children}
+  </div>
 )
 
 // TODO: it is quite annoying that the type for the ref has to be specified manually, is there some solution around this?

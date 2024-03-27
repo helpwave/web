@@ -13,7 +13,7 @@ export const DatePropertyVariation: Story = {
   args: {
     name: 'Property',
     softRequired: false,
-    date: undefined,
+    value: undefined,
     readOnly: false,
     className: '',
   },

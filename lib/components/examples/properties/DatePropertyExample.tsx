@@ -10,14 +10,14 @@ export type DatePropertyExampleProps = Omit<DatePropertyProps, 'onChange'|'onRem
  * Example for using the DateProperty
  */
 export const DatePropertyExample = ({
-  date,
+  value,
   ...restProps
 }: DatePropertyExampleProps) => {
-  const [usedDate, setUsedDate] = useState<Date | undefined>(date)
+  const [usedDate, setUsedDate] = useState<Date | undefined>(value)
 
   useEffect(() => {
-    setUsedDate(date)
-  }, [date])
+    setUsedDate(value)
+  }, [value])
 
-  return (<DateProperty {...restProps} onChange={setUsedDate} onRemove={() => setUsedDate(undefined)} date={usedDate}/>)
+  return (<DateProperty {...restProps} onChange={setUsedDate} onRemove={() => setUsedDate(undefined)} value={usedDate}/>)
 }

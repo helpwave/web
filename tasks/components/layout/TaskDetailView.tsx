@@ -366,9 +366,6 @@ export const TaskDetailView = ({
                   {translation.finish}
                 </Button>
               )}
-              <Button color="accent" onClick={() => updateTaskMutation.mutate(task)} disabled={!isValid}>
-                {translation.update}
-              </Button>
             </>
           )
         :

@@ -44,10 +44,6 @@ export const WardRoomList = ({
 
   rooms ??= data
 
-  if (rooms) {
-    rooms = rooms.sort((a, b) => a.name.localeCompare(b.name))
-  }
-
   return (
     <div className={tw('flex flex-col px-6 py-4')}
       onClick={() => context.updateContext({ wardId: context.state.wardId })}

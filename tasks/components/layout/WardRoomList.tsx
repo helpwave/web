@@ -5,24 +5,32 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
+import Link from 'next/link'
 import { RoomOverview } from '../RoomOverview'
 import { useRoomOverviewsQuery, type RoomOverviewDTO } from '@/mutations/room_mutations'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
+import { useWardQuery } from '@/mutations/ward_mutations'
 
 type WardRoomListTranslation = {
   roomOverview: string,
-  showPatientList: string
+  showPatientList: string,
+  editWard: string,
+  noRooms: string
 }
 
 const defaultWardRoomListTranslation: Record<Languages, WardRoomListTranslation> = {
   en: {
     roomOverview: 'Ward Overview',
-    showPatientList: 'Show Patient List'
+    showPatientList: 'Show Patient List',
+    editWard: 'Edit Ward',
+    noRooms: 'This Ward has no rooms with beds.'
   },
   de: {
     roomOverview: 'Stationsübersicht',
-    showPatientList: 'Patientenliste'
+    showPatientList: 'Patientenliste',
+    editWard: 'Station bearbeiten',
+    noRooms: 'Diese Station hat keine Räume mit Betten.'
   }
 }
 
@@ -39,20 +47,28 @@ export const WardRoomList = ({
   rooms
 }: PropsForTranslation<WardRoomListTranslation, WardRoomListProps>) => {
   const translation = useTranslation(defaultWardRoomListTranslation, overwriteTranslation)
-  const context = useContext(WardOverviewContext)
-  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId)
+  const {
+    state: contextState,
+    updateContext
+  } = useContext(WardOverviewContext)
+  const {
+    data,
+    isError,
+    isLoading
+  } = useRoomOverviewsQuery(contextState.wardId)
+  const { data: ward } = useWardQuery(contextState.wardId)
 
-  rooms ??= data
+  const usedRooms = (rooms ?? data ?? []).filter(room => room.beds.length > 0)
 
   return (
     <div className={tw('flex flex-col px-6 py-4')}
-      onClick={() => context.updateContext({ wardId: context.state.wardId })}
+         onClick={() => updateContext({ wardId: contextState.wardId })}
     >
       <div className={tw('flex flex-row justify-between items-center pb-4')}>
         <Span type="title">{translation.roomOverview}</Span>
         <Button onClick={event => {
           event.stopPropagation()
-          context.updateContext({ wardId: context.state.wardId })
+          updateContext({ wardId: contextState.wardId })
         }}>
           {translation.showPatientList}
         </Button>
@@ -61,13 +77,20 @@ export const WardRoomList = ({
         isLoading={isLoading}
         hasError={isError}
       >
-        {rooms && rooms.filter(room => room.beds.length > 0).map(room => (
+        {usedRooms.length > 0 ?
+          usedRooms.map(room => (
             <RoomOverview
               key={room.id}
               room={room}
             />
-        )
-        )}
+          )) : (
+            <div className={tw('flex flex-col gap-y-2 items-center')}>
+              <Span>{translation.noRooms}</Span>
+              <Link href={`/organizations/${(ward ?? contextState).organizationId}?wardId=${contextState.wardId}`}>
+                <Button>{translation.editWard}</Button>
+              </Link>
+            </div>
+          )}
       </LoadingAndErrorComponent>
     </div>
   )

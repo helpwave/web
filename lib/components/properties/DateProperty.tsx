@@ -7,7 +7,7 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
 export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
-  date?: Date,
+  value?: Date,
   onChange?: (date: Date) => void,
   onEditComplete?: (value: Date) => void,
   type?: 'dateTime' | 'date'
@@ -17,16 +17,16 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  * An Input for date properties
  */
 export const DateProperty = ({
-  date,
+  value,
   onChange = noop,
   onEditComplete = noop,
   readOnly,
   type = 'dateTime',
   ...baseProps
 }: DatePropertyProps) => {
-  const hasValue = !!date
+  const hasValue = !!value
 
-  const dateText = date ? (type === 'dateTime' ? formatDateTime(date) : formatDate(date)) : ''
+  const dateText = value ? (type === 'dateTime' ? formatDateTime(value) : formatDate(value)) : ''
   return (
     <PropertyBase
       {...baseProps}

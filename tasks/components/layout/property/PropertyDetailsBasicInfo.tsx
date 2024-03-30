@@ -36,6 +36,7 @@ const defaultPropertyDetailsBasicInfoTranslation: Record<Languages, PropertyDeta
 export type PropertyDetailsBasicInfoProps = {
   value: PropertyBasicInfo,
   onChange: (value: PropertyBasicInfo) => void,
+  onEditComplete: (value: PropertyBasicInfo) => void,
   inputGroupProps?: Omit<InputGroupProps, 'title'>
 }
 
@@ -46,6 +47,7 @@ export const PropertyDetailsBasicInfo = ({
   overwriteTranslation,
   value,
   onChange,
+  onEditComplete,
   inputGroupProps = {},
 }: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
   const translation = useTranslation(defaultPropertyDetailsBasicInfoTranslation, overwriteTranslation)
@@ -55,18 +57,24 @@ export const PropertyDetailsBasicInfo = ({
         // TODO add icons
         value={value.subjectType}
         label={{ name: translation.subjectType, labelType: 'labelMedium' }}
-        onChange={subjectType => onChange({ ...value, subjectType })}
+        onChange={subjectType => {
+          const newValue = { ...value, subjectType }
+          onChange(newValue)
+          onEditComplete(newValue)
+        }}
       />
       <Input
         label={{ name: translation.propertyName, labelType: 'labelMedium' }}
         value={value.propertyName}
         onChange={propertyName => onChange({ ...value, propertyName })}
+        onEditCompleted={propertyName => onEditComplete({ ...value, propertyName })}
       />
       <Textarea
         label={{ name: translation.description, labelType: 'labelMedium' }}
         value={value.description}
         placeholder={translation.writeYourDescription}
         onChange={description => onChange({ ...value, description })}
+        onEditCompleted={description => onEditComplete({ ...value, description })}
       />
     </InputGroup>
   )

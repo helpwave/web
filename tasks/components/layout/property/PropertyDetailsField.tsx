@@ -34,6 +34,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     text: 'Text',
     date: 'Date',
     dateTime: 'Date and Time',
+    checkbox: 'Checkbox',
     allowCustomValues: 'Allow custom values',
     allowCustomValuesDescription: 'Let users enter a free text when the predefined values are not enough.',
     newEntry: 'New Entry'
@@ -48,6 +49,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     text: 'Text',
     date: 'Datum',
     dateTime: 'Datum und Zeit',
+    checkbox: 'Checkbox',
     allowCustomValues: 'Hinzufügen neuer Werte',
     allowCustomValuesDescription: 'Werte können neu hinzugefügt werden,wenn sie nicht vorhanden sind.',
     newEntry: 'Neuer Eintrag'
@@ -57,6 +59,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
 export type PropertyDetailsFieldProps = {
   value: PropertyFieldType,
   onChange: (value: PropertyFieldType) => void,
+  onEditComplete: (value: PropertyFieldType) => void,
   inputGroupProps?: Omit<InputGroupProps, 'title'>
 }
 
@@ -67,6 +70,7 @@ export const PropertyDetailsField = ({
   overwriteTranslation,
   value,
   onChange,
+  onEditComplete,
   inputGroupProps
 }: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
   const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
@@ -78,7 +82,11 @@ export const PropertyDetailsField = ({
         value={value.fieldType}
         label={{ name: translation.fieldType, labelType: 'labelMedium' }}
         options={fieldTypeList.map(fieldType => ({ value: fieldType, label: translation[fieldType] }))}
-        onChange={fieldType => onChange({ ...value, fieldType })}
+        onChange={fieldType => {
+          const newValue = { ...value, fieldType }
+          onChange(newValue)
+          onEditComplete(newValue)
+        }}
       />
       {isSelectType && (
         <div className={tw('flex flex-col mt-2 gap-y-1')}>
@@ -109,7 +117,7 @@ export const PropertyDetailsField = ({
                     onEditCompleted={text => {
                       const newList = [...value.entryList]
                       newList[index] = text
-                      onChange({ ...value, entryList: newList })
+                      onEditComplete({ ...value, entryList: newList })
                     }}
                   />
                   <X
@@ -117,7 +125,9 @@ export const PropertyDetailsField = ({
                     size={20}
                     onClick={() => {
                       const newList = value.entryList.filter((_, index1) => index1 !== index)
-                      onChange({ ...value, entryList: newList })
+                      const newValue = { ...value, entryList: newList }
+                      onChange(newValue)
+                      onEditComplete(newValue)
                     }}
                   />
                 </div>
@@ -133,7 +143,12 @@ export const PropertyDetailsField = ({
           suffix={(
             <Checkbox
               checked={value.isAllowingCustomValues}
-              onChange={isAllowingCustomValues => onChange({ ...value, isAllowingCustomValues })}
+              onChange={isAllowingCustomValues => {
+                const newValue = { ...value, isAllowingCustomValues }
+                onChange(newValue)
+                onEditComplete(newValue)
+              }}
+              size={20}
             />
           )}
           className={tw('mt-4')}

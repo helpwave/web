@@ -179,7 +179,7 @@ export const PatientDetail = ({
               wardId={context.state.wardId}
               onChange={(roomBedDropdownIds) => {
                 if (roomBedDropdownIds.bedId && context.state.patientId) {
-                  reactivateMutation.mutate(newPatient.id)
+                  readmitMutation.mutate(newPatient.id)
                   context.updateContext({ ...context.state, ...roomBedDropdownIds })
                   assignBedMutation.mutate({
                     id: roomBedDropdownIds.bedId,
@@ -224,7 +224,7 @@ export const PatientDetail = ({
                 </Button>
               </>
               ) : (
-              <Button color="positive" onClick={() => reactivateMutation.mutate(newPatient.id)} >
+              <Button color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
                 {translation.readmit}
               </Button>
               )}

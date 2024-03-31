@@ -58,7 +58,7 @@ export const WardRoomList = ({
   } = useRoomOverviewsQuery(contextState.wardId)
   const { data: ward } = useWardQuery(contextState.wardId)
 
-  const usedRooms = (rooms ?? data ?? []).filter(room => room.beds.length > 0)
+  const displayableRooms = (rooms ?? data ?? []).filter(room => room.beds.length > 0)
 
   return (
     <div className={tw('flex flex-col px-6 py-4')}
@@ -77,8 +77,8 @@ export const WardRoomList = ({
         isLoading={isLoading}
         hasError={isError}
       >
-        {usedRooms.length > 0 ?
-          usedRooms.map(room => (
+        {displayableRooms.length > 0 ?
+          displayableRooms.map(room => (
             <RoomOverview
               key={room.id}
               room={room}

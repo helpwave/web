@@ -2,11 +2,11 @@ import {
   closestCorners,
   defaultDropAnimation,
   DragOverlay,
+  type DropAnimation,
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors,
-  type DropAnimation
+  useSensors
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
@@ -16,15 +16,18 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent } from '@/components/dnd-kit-instances/tasks'
+import {
+  DndContext,
+  type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent
+} from '@/components/dnd-kit-instances/tasks'
 import {
   emptySortedTasks,
-  useTasksByPatientSortedByStatusQuery,
-  useTaskToDoneMutation,
-  useTaskToInProgressMutation,
-  useTaskToToDoMutation,
   type SortedTasks,
-  type TaskDTO
+  type Task,
+  useTasksByPatientSortedByStatusQuery,
+  useTaskUpdateMutation
 } from '@/mutations/task_mutations'
 
 export type KanbanBoardObject = {
@@ -35,7 +38,7 @@ export type KanbanBoardObject = {
 
 type KanbanBoardProps = {
   patientId: string,
-  onEditTask: (task: TaskDTO) => void,
+  onEditTask: (task: Task) => void,
   editedTaskId?: string
 }
 
@@ -49,7 +52,11 @@ export const TasksKanbanBoard = ({
   onEditTask,
   editedTaskId
 }: KanbanBoardProps) => {
-  const { data, isLoading, isError } = useTasksByPatientSortedByStatusQuery(patientId)
+  const {
+    data,
+    isLoading,
+    isError
+  } = useTasksByPatientSortedByStatusQuery(patientId)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [sortedTasks, setSortedTasks] = useState<SortedTasks>(emptySortedTasks)
 
@@ -66,27 +73,15 @@ export const TasksKanbanBoard = ({
     })
   )
 
-  const taskToToDoMutation = useTaskToToDoMutation()
-  const taskToInProgressMutation = useTaskToInProgressMutation()
-  const taskToDoneMutation = useTaskToDoneMutation()
+  const taskUpdateMutation = useTaskUpdateMutation()
 
   const onEndChanging = () => {
-    if (!boardObject.draggedId) {
+    if (!boardObject.draggedId || !boardObject.overColumn) {
       return
     }
-    switch (boardObject.overColumn) {
-      case TaskStatus.TASK_STATUS_TODO:
-        taskToToDoMutation.mutate(boardObject.draggedId)
-        break
-      case TaskStatus.TASK_STATUS_IN_PROGRESS:
-        taskToInProgressMutation.mutate(boardObject.draggedId)
-        break
-      case TaskStatus.TASK_STATUS_DONE:
-        taskToDoneMutation.mutate(boardObject.draggedId)
-        break
-      default:
-        break
-    }
+    const task: Task = [...sortedTasks[TaskStatus.TASK_STATUS_DONE], ...sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS], ...sortedTasks[TaskStatus.TASK_STATUS_TODO]]
+      .find(task => task.id === boardObject.draggedId)!
+    taskUpdateMutation.mutate({ ...task, status: boardObject.overColumn })
   }
 
   function findColumn(id: string | TaskStatus): TaskStatus | undefined {
@@ -108,10 +103,16 @@ export const TasksKanbanBoard = ({
   }
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    setBoardObject({ ...boardObject, draggedId: active.id as string })
+    setBoardObject({
+      ...boardObject,
+      draggedId: active.id as string
+    })
   }
 
-  const handleDragOver = ({ active, over }: DragOverEvent) => {
+  const handleDragOver = ({
+    active,
+    over
+  }: DragOverEvent) => {
     const activeColumn = findColumn(active.id as string)
     const overColumn = findColumn(over?.id as string)
 
@@ -137,7 +138,7 @@ export const TasksKanbanBoard = ({
     // -1 means, that there was no task found, which you dragged your task over
     const insertAtIndex = overIndex === -1 ? 0 : overIndex
     // Insert task at insertAtIndex in the overColumn
-    const newOverColumn = [...sortedTasks[overColumn].slice(0, insertAtIndex), sortedTasks[activeColumn][activeIndex] as TaskDTO, ...sortedTasks[overColumn].slice(insertAtIndex)]
+    const newOverColumn = [...sortedTasks[overColumn].slice(0, insertAtIndex), sortedTasks[activeColumn][activeIndex] as Task, ...sortedTasks[overColumn].slice(insertAtIndex)]
 
     // The last array access is safe as we checked the index before (> -1 and < length; findIndex will not return something >= length)
     sortedTasks[activeColumn][activeIndex]!.status = overColumn
@@ -147,10 +148,16 @@ export const TasksKanbanBoard = ({
       [overColumn]: newOverColumn,
     })
 
-    setBoardObject({ ...boardObject, overColumn })
+    setBoardObject({
+      ...boardObject,
+      overColumn
+    })
   }
 
-  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+  const handleDragEnd = ({
+    active,
+    over
+  }: DragEndEvent) => {
     const activeColumn = findColumn(active.id as string)
     const overColumn = findColumn(over?.id as string)
 
@@ -161,7 +168,11 @@ export const TasksKanbanBoard = ({
     const activeIndex = sortedTasks[activeColumn].findIndex(task => task.id === active.id)
     const overIndex = sortedTasks[overColumn].findIndex(task => task.id === over?.id)
 
-    setBoardObject({ ...boardObject, draggedId: undefined, overColumn: undefined })
+    setBoardObject({
+      ...boardObject,
+      draggedId: undefined,
+      overColumn: undefined
+    })
     if (activeIndex !== overIndex) {
       const newSortedTasks = {
         ...sortedTasks,
@@ -182,7 +193,7 @@ export const TasksKanbanBoard = ({
       [...sortedTasks[TaskStatus.TASK_STATUS_TODO], ...sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS], ...sortedTasks[TaskStatus.TASK_STATUS_DONE]].find(value => value && value.id === boardObject.draggedId)
     : null
 
-  function filterBySearch(tasks: TaskDTO[]): TaskDTO[] {
+  function filterBySearch(tasks: Task[]): Task[] {
     return tasks.filter(value => value.name.replaceAll(' ', '').toLowerCase().indexOf(boardObject.searchValue.replaceAll(' ', '').toLowerCase()) !== -1)
   }
 
@@ -196,7 +207,10 @@ export const TasksKanbanBoard = ({
     >
       <KanbanHeader
         searchValue={boardObject.searchValue}
-        onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}
+        onSearchChange={text => setBoardObject({
+          ...boardObject,
+          searchValue: text
+        })}
       />
       <DndContext
         sensors={sensors}

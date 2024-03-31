@@ -7,7 +7,7 @@ import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_s
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Avatar } from '@helpwave/common/components/Avatar'
-import type { TaskDTO } from '@/mutations/task_mutations'
+import type { Task } from '@/mutations/task_mutations'
 import { useUserQuery } from '@/mutations/user_mutations'
 
 type TaskCardTranslation = {
@@ -24,7 +24,7 @@ const defaultTaskCardTranslations: Record<Languages, TaskCardTranslation> = {
 }
 
 export type TaskCardProps = CardProps & {
-  task: TaskDTO
+  task: Task
 }
 
 /**

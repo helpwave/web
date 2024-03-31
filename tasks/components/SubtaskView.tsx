@@ -7,14 +7,9 @@ import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { SubtaskTile } from './SubtaskTile'
 import { TaskTemplateContext } from '@/pages/templates'
-import {
-  useSubTaskAddMutation,
-  useSubTaskDeleteMutation,
-  useSubTaskToDoneMutation,
-  useSubTaskToToDoMutation,
-  useSubTaskUpdateMutation,
-  type SubTaskDTO
-} from '@/mutations/task_mutations'
+import type { TaskAsSubtaskMinimal } from '@/mutations/task_mutations'
+import { useUpdateMutation } from '@/mutations/task_template_mutations'
+import { useTaskCreateMutation, useTaskDeleteMutation, useTaskUpdateMutation } from '@/mutations/task_mutations'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -40,11 +35,11 @@ const defaultSubtaskViewTranslation = {
 
 type SubtaskViewProps = {
   // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
-  subtasks: SubTaskDTO[],
+  subtasks: TaskAsSubtaskMinimal[],
   taskId?: string,
   createdBy?: string,
   taskTemplateId?: string,
-  onChange: (subtasks: SubTaskDTO[]) => void
+  onChange: (subtasks: TaskAsSubtaskMinimal[]) => void
 }
 
 /**
@@ -61,11 +56,9 @@ export const SubtaskView = ({
 
   const translation = useTranslation(defaultSubtaskViewTranslation, overwriteTranslation)
   const isCreatingTask = taskId === ''
-  const addSubtaskMutation = useSubTaskAddMutation(taskId)
-  const deleteSubtaskMutation = useSubTaskDeleteMutation()
-  const updateSubtaskMutation = useSubTaskUpdateMutation()
-  const setSubtaskToToDoMutation = useSubTaskToToDoMutation()
-  const setSubtaskToDoneMutation = useSubTaskToDoneMutation()
+  const addSubtaskMutation = useTaskCreateMutation(taskId)
+  const deleteSubtaskMutation = useTaskDeleteMutation()
+  const updateSubtaskMutation = useTaskUpdateMutation()
 
   const scrollableRef = useRef<Scrollbars>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)

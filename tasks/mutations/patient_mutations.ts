@@ -1,23 +1,23 @@
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  CreatePatientRequest,
-  DischargePatientRequest,
-  GetPatientDetailsRequest,
-  UpdatePatientRequest,
-  GetPatientsByWardRequest,
   AssignBedRequest,
-  UnassignBedRequest,
-  GetPatientDetailsResponse,
-  GetPatientAssignmentByWardRequest,
-  GetPatientListRequest,
+  CreatePatientRequest,
   DeletePatientRequest,
+  DischargePatientRequest,
+  GetPatientAssignmentByWardRequest,
+  GetPatientDetailsRequest,
+  GetPatientDetailsResponse,
+  GetPatientListRequest,
+  GetPatientsByWardRequest,
+  GetRecentPatientsRequest,
   ReadmitPatientRequest,
-  GetRecentPatientsRequest
+  UnassignBedRequest,
+  UpdatePatientRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
-import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
-import type { TaskDTO, TaskMinimalDTO } from './task_mutations'
+import { getAuthenticatedGrpcMetadata, patientService } from '../utils/grpc'
+import type { Task, TaskMinimal } from './task_mutations'
 import type { BedWithPatientId } from './bed_mutations'
 import { roomOverviewsQueryKey, roomsQueryKey, type RoomWithMinimalBedAndPatient } from '@/mutations/room_mutations'
 
@@ -28,7 +28,7 @@ export type PatientMinimalDTO = {
 
 export type PatientDTO = PatientMinimalDTO & {
   note: string,
-  tasks: TaskMinimalDTO[]
+  tasks: TaskMinimal[]
 }
 
 export const emptyPatient: PatientDTO = {
@@ -46,7 +46,7 @@ export type PatientWithTasksNumberDTO = PatientMinimalDTO & {
 
 export type PatientCompleteDTO = PatientMinimalDTO & {
   note: string,
-  tasks: TaskDTO[]
+  tasks: Task[]
 }
 
 export const emptyPatientMinimal: PatientMinimalDTO = {
@@ -78,7 +78,7 @@ export type PatientWithBedIdDTO = PatientMinimalDTO & {
 
 export type PatientDetailsDTO = PatientMinimalDTO & {
   note: string,
-  tasks: TaskDTO[]
+  tasks: Task[]
 }
 
 export const emptyPatientDetails: PatientDetailsDTO = {
@@ -127,9 +127,12 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
           assignee: task.getAssignedUserId(),
           dueDate: new Date(), // TODO replace later
           subtasks: task.getSubtasksList().map(subtask => ({
+            // TODO change later
             id: subtask.getId(),
             name: subtask.getName(),
-            isDone: subtask.getDone()
+            status: subtask.getDone() ? TaskStatus.TASK_STATUS_DONE : TaskStatus.TASK_STATUS_TODO,
+            subtaskCount: 0,
+            notes: ''
           }))
         }))
       }
@@ -271,8 +274,14 @@ export const useRecentPatientsQuery = () => {
           id: patient.getId(),
           name: patient.getHumanReadableIdentifier(),
           wardId,
-          bed: bed ? { id: bed.getId(), name: bed.getName() } : undefined,
-          room: room ? { id: room.getId(), name: room.getId() } : undefined
+          bed: bed ? {
+            id: bed.getId(),
+            name: bed.getName()
+          } : undefined,
+          room: room ? {
+            id: room.getId(),
+            name: room.getId()
+          } : undefined
         })
       }
 
@@ -296,7 +305,10 @@ export const usePatientCreateMutation = (organisationId: string) => {
         throw new Error('create room failed')
       }
 
-      return { ...patient, id }
+      return {
+        ...patient,
+        id
+      }
     },
     onSuccess: () => {
       queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.error(reason))

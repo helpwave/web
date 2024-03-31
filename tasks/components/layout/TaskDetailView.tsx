@@ -29,16 +29,12 @@ import { useAuth } from '@/hooks/useAuth'
 import {
   emptyTask,
   useAssignTaskToUserMutation,
-  useSubTaskAddMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
   useTaskQuery,
-  useTaskToDoneMutation,
-  useTaskToInProgressMutation,
-  useTaskToToDoMutation,
   useTaskUpdateMutation,
-  useUnassignTaskToUserMutation,
-  type TaskDTO
+  useUnassignTaskMutation,
+  type Task
 } from '@/mutations/task_mutations'
 import { type WardWithOrganizationIdDTO, useWardQuery } from '@/mutations/ward_mutations'
 import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
@@ -111,8 +107,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
 }
 
 type TaskDetailViewSidebarProps = {
-  task: TaskDTO,
-  setTask: (task: TaskDTO) => void,
+  task: Task,
+  setTask: (task: Task) => void,
   // TODO: get rid of the undefined; rather extract all error and loading states and have the confidence that things aren't undefined anymore
   ward: WardWithOrganizationIdDTO | undefined,
   isCreating: boolean
@@ -132,13 +128,9 @@ const TaskDetailViewSidebar = ({
   const updateTaskMutation = useTaskUpdateMutation()
 
   const assignTaskToUserMutation = useAssignTaskToUserMutation()
-  const unassignTaskToUserMutation = useUnassignTaskToUserMutation()
+  const unassignTaskToUserMutation = useUnassignTaskMutation()
 
-  const toToDoMutation = useTaskToToDoMutation()
-  const toInProgressMutation = useTaskToInProgressMutation()
-  const toDoneMutation = useTaskToDoneMutation()
-
-  const updateTaskLocallyAndExternally = (task: TaskDTO) => {
+  const updateTaskLocallyAndExternally = (task: Task) => {
     setTask(task)
     if (!isCreating) {
       updateTaskMutation.mutate(task)
@@ -230,19 +222,7 @@ const TaskDetailViewSidebar = ({
           removeOptions={isCreating ? [TaskStatus.TASK_STATUS_DONE] : []}
           onChange={(status) => {
             if (!isCreating) {
-              switch (status) {
-                case TaskStatus.TASK_STATUS_TODO:
-                  toToDoMutation.mutate(task.id)
-                  break
-                case TaskStatus.TASK_STATUS_IN_PROGRESS:
-                  toInProgressMutation.mutate(task.id)
-                  break
-                case TaskStatus.TASK_STATUS_DONE:
-                  toDoneMutation.mutate(task.id)
-                  break
-                default:
-                  break
-              }
+              updateTaskMutation.mutate({ ...task, status })
             }
             setTask({ ...task, status })
           }}
@@ -323,25 +303,21 @@ export const TaskDetailView = ({
     isError
   } = useTaskQuery(taskId)
 
-  const [task, setTask] = useState<TaskDTO>({
+  const [task, setTask] = useState<Task>({
     ...emptyTask,
     status: initialStatus ?? TaskStatus.TASK_STATUS_TODO
   })
 
-  const addSubtaskMutation = useSubTaskAddMutation(taskId)
-
   const assignTaskToUserMutation = useAssignTaskToUserMutation()
   const updateTaskMutation = useTaskUpdateMutation()
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
-  const toDoneMutation = useTaskToDoneMutation()
 
-  const createTaskMutation = useTaskCreateMutation(newTask => {
-    newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
+  const createTaskMutation = useTaskCreateMutation(patientId, newTask => {
     if (newTask.assignee) {
       assignTaskToUserMutation.mutate({ taskId: newTask.id, userId: newTask.assignee })
     }
     onClose()
-  }, patientId)
+  })
 
   useEffect(() => {
     if (data && taskId) {
@@ -363,7 +339,7 @@ export const TaskDetailView = ({
   const taskNameMinimumLength = 1
   const isValid = task.name.length >= taskNameMinimumLength
 
-  const updateTaskLocallyAndExternally = (task: TaskDTO) => {
+  const updateTaskLocallyAndExternally = (task: Task) => {
     setTask(task)
     if (!isCreating) {
       updateTaskMutation.mutate(task)
@@ -380,7 +356,7 @@ export const TaskDetailView = ({
             </Button>
             {task.status !== TaskStatus.TASK_STATUS_DONE && (
               <Button color="positive" onClick={() => {
-                toDoneMutation.mutate(task.id)
+                updateTaskMutation.mutate({ ...task, status: TaskStatus.TASK_STATUS_DONE })
                 onClose()
               }}>
                 {translation.finish}
@@ -465,7 +441,7 @@ export const TaskDetailView = ({
           activeId={selectedTemplateId}
           onTileClick={({ id, name, notes, subtasks }) => {
             setSelectedTemplateId(id)
-            setTask({ ...task, name, notes, subtasks })
+            setTask({ ...task, name, notes, subtasks: subtasks.map(value => ({ ...value, subtaskCount: 0 })) })
           }}
           onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
         />

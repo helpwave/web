@@ -78,7 +78,7 @@ export const PatientDetail = ({
   const context = useContext(WardOverviewContext)
 
   const updateMutation = usePatientUpdateMutation()
-  const reactivateMutation = useReadmitPatientMutation()
+  const readmitMutation = useReadmitPatientMutation()
   const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardId: context.state.wardId }))
   const unassignMutation = useUnassignMutation(() => context.updateContext({ wardId: context.state.wardId }))
   const {

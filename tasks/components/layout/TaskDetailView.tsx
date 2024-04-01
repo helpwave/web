@@ -20,7 +20,11 @@ import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
 import { TaskStatusSelect } from '@/components/selects/TaskStatusSelect'
-import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery, type TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import {
+  usePersonalTaskTemplateQuery,
+  useWardTaskTemplateQuery,
+  type TaskTemplateDTO
+} from '@/mutations/task_template_mutations'
 import { useAuth } from '@/hooks/useAuth'
 import {
   emptyTask,
@@ -52,6 +56,8 @@ type TaskDetailViewTranslation = {
   public: string,
   create: string,
   delete: string,
+  deleteTask: string,
+  deleteTaskDescription: string,
   publish: string,
   publishTask: string,
   publishTaskDescription: string,
@@ -72,6 +78,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     public: 'public',
     create: 'Create',
     delete: 'Delete',
+    deleteTask: 'Delete Task',
+    deleteTaskDescription: 'The Tasks will be irrevocably removed',
     publish: 'Publish',
     publishTask: 'Publish task',
     publishTaskDescription: 'This cannot be undone',
@@ -90,6 +98,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     public: 'öffentlich',
     create: 'Hinzufügen',
     delete: 'Löschen',
+    deleteTask: 'Task löschen',
+    deleteTaskDescription: 'Der Tasks wird unwiederruflich gelöscht',
     publish: 'Veröffentlichen',
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
@@ -105,7 +115,13 @@ type TaskDetailViewSidebarProps = {
   isCreating: boolean
 }
 
-const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCreating }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
+const TaskDetailViewSidebar = ({
+  overwriteTranslation,
+  task,
+  setTask,
+  ward,
+  isCreating
+}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
@@ -170,7 +186,7 @@ const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCr
             color="negative"
             disabled={!task.assignee}
           >
-            <X size={24} />
+            <X size={24}/>
           </Button>
         </div>
       </div>
@@ -258,7 +274,7 @@ const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCr
       {task.creationDate && (
         <div className={tw('flex flex-col gap-y-1')}>
           <Span type="labelMedium">{translation.creationTime}</Span>
-          <TimeDisplay date={new Date(task.creationDate)} />
+          <TimeDisplay date={new Date(task.creationDate)}/>
         </div>
       )}
     </div>
@@ -289,6 +305,7 @@ export const TaskDetailView = ({
 }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
+  const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
   const router = useRouter()
   const { user } = useAuth()
   const ward = useWardQuery(wardId).data
@@ -354,24 +371,27 @@ export const TaskDetailView = ({
     <div className={tw('flex flex-row justify-end gap-x-8')}>
       {!isCreating ?
           (
-            <>
-              <Button color="negative" onClick={() => deleteTaskMutation.mutate(task.id)}>
-                {translation.delete}
+          <>
+            <Button color="negative" onClick={() => setIsShowingDeleteDialog(true)}>
+              {translation.delete}
+            </Button>
+            {task.status !== TaskStatus.TASK_STATUS_DONE && (
+              <Button color="positive" onClick={() => {
+                toDoneMutation.mutate(task.id)
+                onClose()
+              }}>
+                {translation.finish}
               </Button>
-              {task.status !== TaskStatus.TASK_STATUS_DONE && (
-                <Button color="positive" onClick={() => { toDoneMutation.mutate(task.id); onClose() }}>
-                  {translation.finish}
-                </Button>
-              )}
-            </>
+            )}
+          </>
           )
         :
           (
-            <Button color="accent" onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
-              {translation.create}
-            </Button>
+          <Button color="accent" onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
+            {translation.create}
+          </Button>
           )
-        }
+      }
     </div>
   )
 
@@ -407,9 +427,9 @@ export const TaskDetailView = ({
               onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
             />
           </div>
-          <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })} />
+          <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
         </div>
-        <TaskDetailViewSidebar task={task} setTask={setTask} ward={ward} isCreating={isCreating} />
+        <TaskDetailViewSidebar task={task} setTask={setTask} ward={ward} isCreating={isCreating}/>
       </div>
       {buttons}
     </div>
@@ -444,21 +464,38 @@ export const TaskDetailView = ({
           onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
         />
       )}
-      {(personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading || personalTaskTemplatesError || wardTaskTemplatesError) ? <LoadingAnimation /> : null}
+      {(personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading || personalTaskTemplatesError || wardTaskTemplatesError) ?
+        <LoadingAnimation/> : null}
     </div>
   )
 
   return (
-    <LoadingAndErrorComponent
-      isLoading={(isLoading || !data) && !isCreating}
-      hasError={isError}
-      loadingProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
-      errorProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
-    >
-      <div className={tx('relative flex flex-row')}>
-        {isCreating && templateSidebar}
-        {tasksDetails}
-      </div>
-    </LoadingAndErrorComponent>
+    <>
+      <ConfirmDialog
+        id="deleteTaskDialog"
+        isOpen={isShowingDeleteDialog}
+        titleText={`${translation.deleteTask}?`}
+        descriptionText={`${translation.deleteTaskDescription}`}
+        onConfirm={() => {
+          deleteTaskMutation.mutate(task.id)
+          setIsShowingDeleteDialog(false)
+        }}
+        onCancel={() => setIsShowingDeleteDialog(false)}
+        onCloseClick={() => setIsShowingDeleteDialog(false)}
+        onBackgroundClick={() => setIsShowingDeleteDialog(false)}
+        buttonOverwrites={[{}, {}, { color: 'negative' }]}
+      />
+      <LoadingAndErrorComponent
+        isLoading={(isLoading || !data) && !isCreating}
+        hasError={isError}
+        loadingProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
+        errorProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
+      >
+        <div className={tx('relative flex flex-row')}>
+          {isCreating && templateSidebar}
+          {tasksDetails}
+        </div>
+      </LoadingAndErrorComponent>
+    </>
   )
 }

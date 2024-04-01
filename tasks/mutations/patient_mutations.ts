@@ -16,9 +16,9 @@ import {
   GetRecentPatientsRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
-import { patientService, getAuthenticatedGrpcMetadata } from '../utils/grpc'
 import type { TaskDTO, TaskMinimalDTO } from './task_mutations'
 import type { BedWithPatientId } from './bed_mutations'
+import { patientService, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 import { roomOverviewsQueryKey, roomsQueryKey, type RoomWithMinimalBedAndPatient } from '@/mutations/room_mutations'
 
 export type PatientMinimalDTO = {
@@ -78,14 +78,16 @@ export type PatientWithBedIdDTO = PatientMinimalDTO & {
 
 export type PatientDetailsDTO = PatientMinimalDTO & {
   note: string,
-  tasks: TaskDTO[]
+  tasks: TaskDTO[],
+  discharged: boolean
 }
 
 export const emptyPatientDetails: PatientDetailsDTO = {
   id: '',
   name: '',
   note: '',
-  tasks: []
+  tasks: [],
+  discharged: false
 }
 
 const patientsQueryKey = 'patients'
@@ -118,6 +120,7 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
         id: res.getId(),
         note: res.getNotes(),
         name: res.getName(),
+        discharged: res.getIsDischarged(),
         tasks: res.getTasksList().map(task => ({
           id: task.getId(),
           name: task.getName(),

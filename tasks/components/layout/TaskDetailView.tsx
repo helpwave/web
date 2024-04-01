@@ -55,7 +55,6 @@ type TaskDetailViewTranslation = {
   private: string,
   public: string,
   create: string,
-  update: string,
   delete: string,
   deleteTask: string,
   deleteTaskDescription: string,
@@ -78,7 +77,6 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     private: 'private',
     public: 'public',
     create: 'Create',
-    update: 'Update',
     delete: 'Delete',
     deleteTask: 'Delete Task',
     deleteTaskDescription: 'The Tasks will be irrevocably removed',
@@ -99,7 +97,6 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     private: 'privat',
     public: 'öffentlich',
     create: 'Hinzufügen',
-    update: 'Ändern',
     delete: 'Löschen',
     deleteTask: 'Task löschen',
     deleteTaskDescription: 'Der Tasks wird unwiederruflich gelöscht',
@@ -386,9 +383,6 @@ export const TaskDetailView = ({
                 {translation.finish}
               </Button>
             )}
-            <Button color="accent" onClick={() => updateTaskMutation.mutate(task)} disabled={!isValid}>
-              {translation.update}
-            </Button>
           </>
           )
         :

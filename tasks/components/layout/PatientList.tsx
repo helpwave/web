@@ -140,7 +140,9 @@ export const PatientList = ({
           setDeletePatient(undefined)
         }}
         confirmType="negative"
-        onBackgroundClick={() => { setDeletePatient(undefined) }}
+        onBackgroundClick={() => {
+          setDeletePatient(undefined)
+        }}
         onCancel={() => setDeletePatient(undefined)}
         onCloseClick={() => setDeletePatient(undefined)}
       >
@@ -216,7 +218,9 @@ export const PatientList = ({
                     >
                       <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                       <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                        <Chip label={activeLabelText(patient)} color="blue" variant="fullyRounded"/>
+                        <Chip color="blue" variant="fullyRounded">
+                          {activeLabelText(patient)}
+                        </Chip>
                         <Button color="negative" variant="textButton" onClick={event => {
                           event.stopPropagation()
                           setDischargingPatient(patient)
@@ -258,7 +262,9 @@ export const PatientList = ({
                         >
                           <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                           <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                            <Chip label={`${translation.unassigned}`} color="yellow" variant="fullyRounded"/>
+                            <Chip color="yellow" variant="fullyRounded">
+                              {`${translation.unassigned}`}
+                            </Chip>
                             <Button color="negative" variant="textButton" onClick={event => {
                               event.stopPropagation()
                               setDischargingPatient(patient)

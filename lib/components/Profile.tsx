@@ -53,7 +53,7 @@ type Size = {
 
 export type ProfileProps = {
   name: string,
-  url: string,
+  imageUrl: string,
   badge?: ReactNode,
   role?: string,
   subtitle?: string,
@@ -74,7 +74,7 @@ export type ProfileProps = {
  */
 export const Profile = ({
   name,
-  url,
+  imageUrl,
   badge,
   role,
   subtitle,
@@ -91,7 +91,7 @@ export const Profile = ({
       <div className={tw('relative')} style={{ ...usedImageSize }}>
         <div className={tw('absolute rounded-xl flex flex-row items-center justify-center overflow-hidden')} style={{ ...usedImageSize }}>
           <Helpwave size={minSize} className={tw('z-[1]')}/>
-          <Image src={url} alt="" className={tw('z-[2]')} {...usedImageSize}/>
+          <Image src={imageUrl} alt="" className={tw('z-[2]')} {...usedImageSize}/>
         </div>
         <div className={tw('absolute top-[6px] left-[6px] z-[3]')}>{badge}</div>
         {role && (

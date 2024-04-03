@@ -21,7 +21,7 @@ export const ProfileVariation: Story = {
     name: 'Helpwave Member',
     subtitle: 'Chief Executive Officer',
     role: 'CEO',
-    url: 'https://source.boringavatars.com/marble/512/Maria?square=true',
+    imageUrl: 'https://source.boringavatars.com/marble/512/Maria?square=true',
     badge: (
       <Chip className={tw('flex flex-row gap-x-2 items-center justify-center')} color="black">
         <Helpwave size={24}/>

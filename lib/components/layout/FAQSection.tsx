@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { tw } from '@twind/core'
 import { ChevronDown, ChevronUp } from 'lucide-react'
+import type { ExpandableProps } from '../Expandable'
 import { Expandable } from '../Expandable'
 import { MarkdownInterpreter } from '../MarkdownInterpreter'
 import { Span } from '../Span'
@@ -13,12 +14,10 @@ type ContentType = {
   value: ReactNode
 }
 
-export type FAQItem = {
+export type FAQItem = Pick<ExpandableProps, 'initialExpansion'| 'className'> & {
   id: string,
   title: string,
-  content: ContentType,
-  initialExpansion?: boolean,
-  className?: string
+  content: ContentType
 }
 
 export type FAQSectionProps = {

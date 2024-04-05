@@ -41,15 +41,15 @@ export const DateProperty = ({
             value={dateText}
             type={type === 'dateTime' ? 'datetime-local' : 'date'}
             readOnly={readOnly}
-            onChangeEvent={(event) => {
+            onChange={(value, event) => {
               if (!event.target.value) {
                 event.preventDefault()
                 return
               }
-              const dueDate = new Date(event.target.value)
+              const dueDate = new Date(value)
               onChange(dueDate)
             }}
-            onEditCompletedEvent={event => onEditComplete(new Date(event.target.value))}
+            onEditCompleted={(value) => onEditComplete(new Date(value))}
           />
         </div>
       )}

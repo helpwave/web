@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, type ChangeEvent, type HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type HTMLInputTypeAttribute,
+  type InputHTMLAttributes
+} from 'react'
 import { tx } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
@@ -22,11 +29,9 @@ export type InputProps = {
    * That could be enforced through a union type but that seems a bit overkill
    * @default noop
    */
-  onChange?: (text: string) => void,
-  onChangeEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
+  onChange?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
   className?: string,
-  onEditCompleted?: (text: string) => void,
-  onEditCompletedEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
+  onEditCompleted?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
   expanded?: boolean
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
@@ -41,10 +46,8 @@ const ControlledInput = ({
   value,
   label,
   onChange = noop,
-  onChangeEvent = noop,
   className = '',
   onEditCompleted,
-  onEditCompletedEvent,
   expanded = true,
   onBlur,
   ...restProps
@@ -73,31 +76,20 @@ const ControlledInput = ({
           if (onBlur) {
             onBlur(event)
           }
-          if (onEditCompleted || onEditCompletedEvent) {
-            if (onEditCompleted) {
-              onEditCompleted(event.target.value)
-            }
-            if (onEditCompletedEvent) {
-              onEditCompletedEvent(event)
-            }
+          if (onEditCompleted) {
+            onEditCompleted(event.target.value, event)
             clearUpdateTimer()
           }
         }}
         onChange={e => {
           const value = e.target.value
-          if (onEditCompleted || onEditCompletedEvent) {
+          if (onEditCompleted) {
             restartTimer(() => {
-              if (onEditCompleted) {
-                onEditCompleted(value)
-              }
-              if (onEditCompletedEvent) {
-                onEditCompletedEvent(e)
-              }
+              onEditCompleted(value, e)
               clearUpdateTimer()
             })
           }
-          onChange(value)
-          onChangeEvent(e)
+          onChange(value, e)
         }}
         {...restProps}
       />
@@ -124,9 +116,9 @@ const UncontrolledInput = ({
 }: UncontrolledInputProps) => {
   const [value, setValue] = useState(defaultValue)
 
-  const handleChange = (text: string) => {
+  const handleChange = (text: string, event: ChangeEvent<HTMLInputElement>) => {
     setValue(text)
-    onChange(text)
+    onChange(text, event)
   }
 
   return (

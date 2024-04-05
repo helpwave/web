@@ -183,12 +183,12 @@ const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCr
           <Input
             value={task.dueDate ? formatDateTime(task.dueDate) : ''}
             type="datetime-local"
-            onChangeEvent={(event) => {
+            onChange={(value, event) => {
               if (!event.target.value) {
                 event.preventDefault()
                 return
               }
-              const dueDate = new Date(event.target.value)
+              const dueDate = new Date(value)
               updateTaskLocallyAndExternally({
                 ...task,
                 dueDate

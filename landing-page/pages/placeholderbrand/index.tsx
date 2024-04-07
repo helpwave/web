@@ -6,6 +6,9 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Tile, TileWithImage } from '@helpwave/common/components/layout/Tile'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { FAQSection } from '@helpwave/common/components/layout/FAQSection'
+import type { ProfileProps } from '@helpwave/common/components/Profile'
+import { Profile } from '@helpwave/common/components/Profile'
+import { tx } from '@twind/core'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
@@ -163,14 +166,66 @@ const defaultPlaceholderbrandContactTranslation: Record<Languages, Placeholderbr
   }
 }
 
+const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
+
+const contacts: ProfileProps[] = [
+  {
+    name: 'Christian Porschen',
+    title: 'Dr. med.',
+    role: 'Chief Medical Officer',
+    roleBadge: 'CMO',
+    imageUrl: imageUrl('christian_porschen'),
+    tags: ['ai', 'science', 'doctor'],
+    socials: [
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/cpors/' },
+      { type: 'mail', url: 'mailto:christian.porschen@helpwave.de' },
+      { type: 'github', url: 'https://github.com/aegis301' },
+    ],
+    imageSize: { width: 230 }
+  },
+  {
+    name: 'Felix Evers',
+    roleBadge: 'CEO',
+    role: 'Chief Executive Officer',
+    imageUrl: imageUrl('felix_evers'),
+    tags: ['strategic', 'management', 'innovation'],
+    socials: [
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/f-evers/' },
+      { type: 'mail', url: 'mailto:felix.evers@helpwave.de' },
+      { type: 'website', url: 'https://felixevers.de' },
+      { type: 'github', url: 'https://github.com/use-to' },
+    ],
+    imageSize: { width: 230 }
+  },
+  {
+    name: 'Max Schäfer',
+    roleBadge: 'CTO',
+    role: 'Chief Technology Officer',
+    imageUrl: imageUrl('max_schaefer'),
+    tags: ['development', 'cloud', 'scale'],
+    socials: [
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/maxrobinschaefer/' },
+      { type: 'mail', url: 'mailto:max.schaefer@helpwave.de' },
+      { type: 'github', url: 'https://github.com/MaxSchaefer' },
+    ],
+    imageSize: { width: 230 }
+  },
+]
+
 const PlaceholderbrandContactSection = () => {
   const translation = useTranslation(defaultPlaceholderbrandContactTranslation)
   return (
     <div className={tw('flex flex-col w-full max-w-[1000px]')}>
       <Span type="title" className={tw('text-hw-secondary-400 !text-3xl')}>{translation.title}</Span>
       <Span>{translation.subTitle}</Span>
-      <div className={tw('flex flex-wrap justify-between')}>
-        {/* TODO add new Profiles */}
+      <div className={tw('flex flex-wrap desktop:justify-around mobile:justify-around gap-x-8 gap-y-6')}>
+        {contacts.map(value => (
+          <Profile
+            key={value.name}
+            {...value}
+            className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
+          />
+        ))}
       </div>
     </div>
   )

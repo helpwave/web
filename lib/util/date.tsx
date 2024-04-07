@@ -7,7 +7,17 @@ export const weekDayList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursda
 export type WeekDay = typeof weekDayList[number]
 
 export const formatDate = (date: Date) => {
-  return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+  const year = date.getFullYear().toString().padStart(4, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = (date.getDate()).toString().padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+export const formatDateTime = (date: Date) => {
+  const dateString = formatDate(date)
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  return `${dateString}T${hours}:${minutes}`
 }
 
 export const getDaysInMonth = (year: number, month: number): number => {

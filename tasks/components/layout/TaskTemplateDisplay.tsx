@@ -7,7 +7,7 @@ import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import type { TaskTemplate } from '@/mutations/task_template_mutations'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,
@@ -31,8 +31,8 @@ const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDispl
 export type TaskTemplateDisplayProps = {
   wardId: string,
   selectedId: string,
-  onSelectChange: (taskTemplate: TaskTemplateDTO | undefined) => void,
-  taskTemplates: TaskTemplateDTO[],
+  onSelectChange: (taskTemplate: TaskTemplate | undefined) => void,
+  taskTemplates: TaskTemplate[],
   variant: 'wardTemplates' | 'personalTemplates',
   width?: number
 }

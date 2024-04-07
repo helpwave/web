@@ -13,25 +13,24 @@ import {
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb' // TODO: what even is this syntax???
 import { getAuthenticatedGrpcMetadata, taskTemplateService } from '@/utils/grpc'
 import type { TaskTemplateFormType } from '@/pages/templates'
-import type { TaskAsSubtaskMinimal } from '@/mutations/task_mutations'
 import SubTask = CreateTaskTemplateRequest.SubTask
 
-export type TaskTemplateDTO = {
+export type TaskTemplate = {
   wardId?: string,
   id: string,
   name: string,
   notes: string,
-  subtasks: TaskAsSubtaskMinimal[],
+  subtasks: TaskTemplate[],
   isPublicVisible: boolean
 }
 
 type QueryKey = 'personalTaskTemplates' | 'wardTaskTemplates'
 
-export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
+export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: TaskTemplate[]) => void = noop) => {
   return useQuery({
     queryKey: ['wardTaskTemplates', wardId],
     queryFn: async () => {
-      let wardTaskTemplates: TaskTemplateDTO[] = []
+      let wardTaskTemplates: TaskTemplate[] = []
       if (wardId !== undefined) {
         const req = new GetAllTaskTemplatesByWardRequest()
         req.setWardId(wardId)
@@ -46,6 +45,9 @@ export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: Task
             name: subtask.getName(),
             notes: '',
             status: TaskStatus.TASK_STATUS_TODO,
+            subtasks: [],
+            wardId,
+            isPublicVisible: template.getIsPublic()
           })),
           isPublicVisible: template.getIsPublic()
         }))
@@ -60,7 +62,7 @@ export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: Task
 
 type UseAllTaskTemplatesByCreatorProps = {
   createdBy?: string,
-  onSuccess: (data: TaskTemplateDTO[]) => void,
+  onSuccess: (data: TaskTemplate[]) => void,
   type: QueryKey
 }
 export const useAllTaskTemplatesByCreator = ({
@@ -73,7 +75,7 @@ export const useAllTaskTemplatesByCreator = ({
   return useQuery({
     queryKey: [queryKey, createdBy],
     queryFn: async () => {
-      let personalTaskTemplates: TaskTemplateDTO[] = []
+      let personalTaskTemplates: TaskTemplate[] = []
       if (createdBy !== undefined) {
         const req = new GetAllTaskTemplatesByCreatorRequest()
         req.setCreatedBy(createdBy)
@@ -89,6 +91,8 @@ export const useAllTaskTemplatesByCreator = ({
             name: subtask.getName(),
             notes: '',
             status: TaskStatus.TASK_STATUS_TODO,
+            subtasks: [],
+            isPublicVisible: template.getIsPublic()
           })),
           isPublicVisible: template.getIsPublic()
         }))
@@ -100,11 +104,11 @@ export const useAllTaskTemplatesByCreator = ({
   })
 }
 
-export const usePersonalTaskTemplateQuery = (createdBy?: string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
+export const usePersonalTaskTemplateQuery = (createdBy?: string, onSuccess: (data: TaskTemplate[]) => void = noop) => {
   return useAllTaskTemplatesByCreator({ createdBy, onSuccess, type: 'personalTaskTemplates' })
 }
 
-export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate?: TaskTemplateDTO) => void) => {
+export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate?: TaskTemplate) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (templateForm: TaskTemplateFormType) => {
@@ -151,15 +155,15 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
 
       // update task template
       const res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
-      const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
+      const newTaskTemplate: TaskTemplate = { ...taskTemplate, ...res }
 
       templateForm.deletedSubtaskIds = []
       setTemplate(newTaskTemplate)
     },
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousTaskTemplates = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
-      queryClient.setQueryData<TaskTemplateDTO[]>(
+      const previousTaskTemplates = queryClient.getQueryData<TaskTemplate[]>([queryKey])
+      queryClient.setQueryData<TaskTemplate[]>(
         [queryKey],
         (old) => old)
       return { previousTaskTemplates }
@@ -173,11 +177,11 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
   })
 }
 
-export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplate: (taskTemplate: TaskTemplateDTO | undefined) => void) => {
+export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplate: (taskTemplate: TaskTemplate | undefined) => void) => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (taskTemplate: TaskTemplateDTO) => {
+    mutationFn: async (taskTemplate: TaskTemplate) => {
       const createTaskTemplate = new CreateTaskTemplateRequest()
 
       createTaskTemplate.setName(taskTemplate.name)
@@ -193,7 +197,7 @@ export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplat
       }
 
       const res = await taskTemplateService.createTaskTemplate(createTaskTemplate, getAuthenticatedGrpcMetadata())
-      const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
+      const newTaskTemplate: TaskTemplate = { ...taskTemplate, ...res }
 
       setTemplate(newTaskTemplate)
     },
@@ -202,8 +206,8 @@ export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplat
     },
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
-      queryClient.setQueryData<TaskTemplateDTO[]>([queryKey], (old) => old)
+      const previousTaskTemplate = queryClient.getQueryData<TaskTemplate[]>([queryKey])
+      queryClient.setQueryData<TaskTemplate[]>([queryKey], (old) => old)
       return { previousTaskTemplate }
     },
     onSettled: () => {
@@ -212,10 +216,10 @@ export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplat
   })
 }
 
-export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskTemplateDTO) => void) => {
+export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskTemplate) => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (taskTemplate: TaskTemplateDTO) => {
+    mutationFn: async (taskTemplate: TaskTemplate) => {
       const deleteTaskTemplate = new DeleteTaskTemplateRequest()
       deleteTaskTemplate.setId(taskTemplate.id)
       await taskTemplateService.deleteTaskTemplate(deleteTaskTemplate, getAuthenticatedGrpcMetadata())
@@ -224,8 +228,8 @@ export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskT
     },
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: [queryKey] })
-      const previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
-      queryClient.setQueryData<TaskTemplateDTO[]>(
+      const previousTaskTemplate = queryClient.getQueryData<TaskTemplate[]>([queryKey])
+      queryClient.setQueryData<TaskTemplate[]>(
         [queryKey],
         (old) => old)
       return { previousTaskTemplate }
@@ -256,15 +260,15 @@ export const useSubTaskTemplateDeleteMutation = (callback: () => void = noop) =>
   })
 }
 
-export const useSubTaskTemplateUpdateMutation = (callback: (subtask: TaskAsSubtaskMinimal) => void = noop) => {
+export const useSubTaskTemplateUpdateMutation = (callback: (subtask: TaskTemplate) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (subtask: TaskAsSubtaskMinimal) => {
+    mutationFn: async (subtask: TaskTemplate) => {
       const updateSubtaskTemplate = new UpdateTaskTemplateSubTaskRequest()
       updateSubtaskTemplate.setName(subtask.name)
       updateSubtaskTemplate.setSubtaskId(subtask.id)
       await taskTemplateService.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
-      const newSubtask: TaskAsSubtaskMinimal = { ...subtask }
+      const newSubtask: TaskTemplate = { ...subtask }
       queryClient.refetchQueries(['wardTaskTemplates']).then()
       callback(newSubtask)
       return updateSubtaskTemplate.toObject()
@@ -278,7 +282,7 @@ export const useSubTaskTemplateUpdateMutation = (callback: (subtask: TaskAsSubta
 export const useSubTaskTemplateAddMutation = (taskTemplateId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (subtask: TaskAsSubtaskMinimal) => {
+    mutationFn: async (subtask: TaskTemplate) => {
       const createSubTaskTemplate = new CreateTaskTemplateSubTaskRequest()
       createSubTaskTemplate.setName(subtask.name)
       createSubTaskTemplate.setTaskTemplateId(taskTemplateId)

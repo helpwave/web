@@ -5,7 +5,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Span } from '@helpwave/common/components/Span'
 import { Edit } from 'lucide-react'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import type { TaskTemplate } from '@/mutations/task_template_mutations'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
@@ -23,12 +23,12 @@ const defaultTaskTemplateListColumnTranslation = {
   }
 }
 
-export type TaskTemplateDTOExtension = {taskTemplate: TaskTemplateDTO, type: 'personal' | 'ward'}
+export type TaskTemplateDTOExtension = {taskTemplate: TaskTemplate, type: 'personal' | 'ward'}
 
 export type TaskTemplateListColumnProps = {
   templates: TaskTemplateDTOExtension[],
   activeId: string | undefined,
-  onTileClick: (taskTemplate: TaskTemplateDTO) => void,
+  onTileClick: (taskTemplate: TaskTemplate) => void,
   onColumnEditClick?: () => void
 }
 

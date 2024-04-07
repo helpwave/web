@@ -9,7 +9,7 @@ import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { TaskTemplateDisplay } from '@/components/layout/TaskTemplateDisplay'
 import { TaskTemplateDetails } from '@/components/layout/TaskTemplateDetails'
 import titleWrapper from '@/utils/titleWrapper'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import type { TaskTemplate } from '@/mutations/task_template_mutations'
 import {
   useCreateMutation,
   useDeleteMutation,
@@ -38,20 +38,20 @@ const defaultPersonalTaskTemplateTranslations = {
 export type TaskTemplateFormType = {
   isValid: boolean,
   hasChanges: boolean,
-  template: TaskTemplateDTO,
+  template: TaskTemplate,
   wardId?: string,
   deletedSubtaskIds?: string[]
 }
 
 export type TaskTemplateContextState = {
   isValid: boolean,
-  template: TaskTemplateDTO,
+  template: TaskTemplate,
   hasChanges: boolean,
   wardId?: string,
   deletedSubtaskIds?: string[]
 }
 
-export const emptyTaskTemplate: TaskTemplateDTO = {
+export const emptyTaskTemplate: TaskTemplate = {
   id: '',
   isPublicVisible: false,
   name: '',

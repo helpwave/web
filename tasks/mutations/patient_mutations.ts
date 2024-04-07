@@ -1,4 +1,3 @@
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AssignBedRequest,
@@ -7,7 +6,6 @@ import {
   DischargePatientRequest,
   GetPatientAssignmentByWardRequest,
   GetPatientDetailsRequest,
-  GetPatientDetailsResponse,
   GetPatientListRequest,
   GetPatientsByWardRequest,
   GetRecentPatientsRequest,
@@ -16,10 +14,11 @@ import {
   UpdatePatientRequest
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
-import { getAuthenticatedGrpcMetadata, patientService } from '../utils/grpc'
 import type { Task, TaskMinimal } from './task_mutations'
 import type { BedWithPatientId } from './bed_mutations'
+import { localTasks } from './task_mutations'
 import { roomOverviewsQueryKey, roomsQueryKey, type RoomWithMinimalBedAndPatient } from '@/mutations/room_mutations'
+import { getAuthenticatedGrpcMetadata, patientService } from '@/utils/grpc'
 
 export type PatientMinimalDTO = {
   id: string,
@@ -108,17 +107,21 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
         throw new Error('create room failed')
       }
 
+      /*
       const statusMap = {
         [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_UNSPECIFIED]: TaskStatus.TASK_STATUS_UNSPECIFIED,
         [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_TODO]: TaskStatus.TASK_STATUS_TODO,
         [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_IN_PROGRESS]: TaskStatus.TASK_STATUS_IN_PROGRESS,
         [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_DONE]: TaskStatus.TASK_STATUS_DONE,
       }
+      */
       const patient: PatientDetailsDTO = {
         id: res.getId(),
         note: res.getNotes(),
         name: res.getName(),
-        tasks: res.getTasksList().map(task => ({
+        tasks: localTasks
+        /* TODO update later
+          res.getTasksList().map(task => ({
           id: task.getId(),
           name: task.getName(),
           status: statusMap[task.getStatus()],
@@ -135,6 +138,7 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
             notes: ''
           }))
         }))
+        */
       }
 
       return patient

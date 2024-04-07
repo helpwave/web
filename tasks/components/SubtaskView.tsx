@@ -2,14 +2,20 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Plus } from 'lucide-react'
 import { tw } from '@helpwave/common/twind'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { noop } from '@helpwave/common/util/noop'
 import { SubtaskTile } from './SubtaskTile'
 import { TaskTemplateContext } from '@/pages/templates'
-import type { TaskAsSubtaskMinimal } from '@/mutations/task_mutations'
-import { useUpdateMutation } from '@/mutations/task_template_mutations'
-import { useTaskCreateMutation, useTaskDeleteMutation, useTaskUpdateMutation } from '@/mutations/task_mutations'
+import type { Task } from '@/mutations/task_mutations'
+import {
+  emptyTask,
+  useTaskCreateMutation,
+  useTaskDeleteMutation,
+  useTaskUpdateMutation
+} from '@/mutations/task_mutations'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -33,14 +39,13 @@ const defaultSubtaskViewTranslation = {
   }
 }
 
-type SubtaskViewProps = {
-  // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
-  subtasks: TaskAsSubtaskMinimal[],
-  taskId?: string,
-  createdBy?: string,
-  taskTemplateId?: string,
-  onChange: (subtasks: TaskAsSubtaskMinimal[]) => void
-}
+type SubtaskViewProps = PropsForTranslation<SubtaskViewTranslation, {
+  subtasks: Task[],
+  onChange?: (subtasks: Task[]) => void,
+  onUpdate?: (subTask: Task) => void,
+  onAdd?: (subTask: Task) => void,
+  onRemove?: (subTask: Task, index: number) => void
+}>
 
 /**
  * A view for editing and showing all subtasks of a task
@@ -48,18 +53,12 @@ type SubtaskViewProps = {
 export const SubtaskView = ({
   overwriteTranslation,
   subtasks,
-  taskId,
-  taskTemplateId,
-  onChange,
-}: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
-  const context = useContext(TaskTemplateContext)
-
+  onChange = noop,
+  onUpdate = noop,
+  onRemove = noop,
+  onAdd = noop,
+}: SubtaskViewProps) => {
   const translation = useTranslation(defaultSubtaskViewTranslation, overwriteTranslation)
-  const isCreatingTask = taskId === ''
-  const addSubtaskMutation = useTaskCreateMutation(taskId)
-  const deleteSubtaskMutation = useTaskDeleteMutation()
-  const updateSubtaskMutation = useTaskUpdateMutation()
-
   const scrollableRef = useRef<Scrollbars>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
 
@@ -71,35 +70,17 @@ export const SubtaskView = ({
     setScrollToBottom(false)
   }, [scrollToBottomFlag, subtasks])
 
-  const removeSubtask = (subtask: SubTaskDTO, index: number) => {
+  const removeSubtask = (subtask: Task, index: number) => {
     const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
-    // undefined because taskId === "" would mean task creation // TODO: this seems like a terrible way of differentiating things..
-    if (taskId === undefined) {
-      context.updateContext({
-        ...context.state,
-        template: { ...context.state.template, subtasks: filteredSubtasks },
-        // index access is safe as the index comes from mapping over the subtasks
-        deletedSubtaskIds: [...context.state.deletedSubtaskIds ?? [], subtasks[index]!.id]
-      })
-    } else {
-      onChange(filteredSubtasks)
-      deleteSubtaskMutation.mutate(subtask.id)
-    }
+    onChange(filteredSubtasks)
+    onRemove(subtask, index)
   }
 
-  const changeSubtaskState = (subtask: SubTaskDTO, done: boolean) => {
-    // taskTemplateId === "" for the creation of a template // TODO: this seems like a terrible way of differentiating things..
-    if (taskTemplateId !== undefined) {
-      return
-    }
-    if (!isCreatingTask) {
-      if (done) {
-        setSubtaskToDoneMutation.mutate(subtask.id)
-      } else {
-        setSubtaskToToDoMutation.mutate(subtask.id)
-      }
-    }
-    subtask.isDone = done
+  const changeSubtaskState = (subtask: Task, done: boolean, previousState: TaskStatus) => {
+    subtask.status = done ? TaskStatus.TASK_STATUS_DONE :
+        (previousState === TaskStatus.TASK_STATUS_DONE ? TaskStatus.TASK_STATUS_IN_PROGRESS : TaskStatus.TASK_STATUS_TODO)
+    onChange(subtasks)
+    onUpdate(subtask)
   }
 
   return (
@@ -108,11 +89,9 @@ export const SubtaskView = ({
         <Span type="subsectionTitle">{translation.subtasks}</Span>
         <Button
           onClick={() => {
-            const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
+            const newSubtask: Task = { ...emptyTask, name: `${translation.newSubtask} ${subtasks.length + 1}` }
             onChange([...subtasks, newSubtask])
-            if (!isCreatingTask) {
-              addSubtaskMutation.mutate(newSubtask)
-            }
+            onAdd(newSubtask)
             setScrollToBottom(true)
           }}
         >
@@ -133,19 +112,99 @@ export const SubtaskView = ({
                   const newSubtasks = [...subtasks]
                   newSubtasks[index] = newSubtask
                   onChange(newSubtasks)
+                  onUpdate(newSubtask)
                 }}
                 onNameEditCompleted={newSubtask => {
-                  if (!isCreatingTask) {
-                    updateSubtaskMutation.mutate(newSubtask)
-                  }
+                  onChange(subtasks)
+                  onUpdate(newSubtask)
                 }}
                 onRemoveClick={() => removeSubtask(subtask, index)}
-                onDoneChange={(done) => changeSubtaskState(subtask, done)}
+                onDoneChange={(done) => changeSubtaskState(subtask, done, subtask.status)}
               />
             ))}
           </div>
         </Scrollbars>
       </div>
     </div>
+  )
+}
+
+export type SubtaskViewTasksProps = SubtaskViewProps & {
+  taskId?: string,
+  patientId: string
+}
+export const SubtaskViewTasks = ({
+  subtasks,
+  taskId,
+  patientId,
+  onChange = noop,
+  onAdd = noop,
+  onRemove = noop,
+  onUpdate = noop,
+  overwriteTranslation
+}: SubtaskViewTasksProps) => {
+  const isCreating = taskId === undefined
+
+  const addSubtaskMutation = useTaskCreateMutation(patientId)
+  const deleteSubtaskMutation = useTaskDeleteMutation()
+  const updateSubtaskMutation = useTaskUpdateMutation()
+  return (
+    <SubtaskView
+      subtasks={subtasks}
+      onChange={onChange}
+      onAdd={subTask => {
+        subTask.parentId = taskId
+        if (!isCreating) {
+          addSubtaskMutation.mutate(subTask)
+        }
+        onAdd(subTask)
+      }}
+      onRemove={(subTask, index) => {
+        if (!isCreating) {
+          deleteSubtaskMutation.mutate(subTask.id)
+        }
+        onRemove(subTask, index)
+      }}
+      onUpdate={subTask => {
+        if (!isCreating) {
+          updateSubtaskMutation.mutate(subTask)
+        }
+        onUpdate(subTask)
+      }}
+      overwriteTranslation={overwriteTranslation}
+    />
+  )
+}
+
+export type SubtaskViewTemplatesProps = SubtaskViewProps & {
+  templateId?: string
+}
+export const SubtaskViewTemplates = ({
+  subtasks,
+  onChange,
+  onAdd,
+  onUpdate,
+  onRemove = noop,
+  overwriteTranslation
+}: SubtaskViewTemplatesProps) => {
+  const context = useContext(TaskTemplateContext)
+  return (
+    <SubtaskView
+      subtasks={subtasks}
+      onChange={onChange}
+      onAdd={onAdd}
+      onUpdate={onUpdate}
+      onRemove={(subTask, index) => {
+        const filteredSubtasks = subtasks.filter((value, index1) => index1 !== index)
+        context.updateContext({
+          ...context.state,
+          template: { ...context.state.template, subtasks: filteredSubtasks },
+          // index access is safe as the index comes from mapping over the subtasks
+          deletedSubtaskIds: [...context.state.deletedSubtaskIds ?? [], subtasks[index]!.id]
+        })
+        onRemove(subTask, index)
+      }}
+      overwriteTranslation={overwriteTranslation}
+    />
   )
 }

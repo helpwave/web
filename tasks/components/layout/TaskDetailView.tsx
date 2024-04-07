@@ -1,4 +1,4 @@
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw, tx } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -17,26 +17,26 @@ import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { formatDate } from '@helpwave/common/util/date'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import { SubtaskView } from '../SubtaskView'
+import { SubtaskViewTasks } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
 import { TaskStatusSelect } from '@/components/selects/TaskStatusSelect'
 import {
+  type TaskTemplate,
   usePersonalTaskTemplateQuery,
-  useWardTaskTemplateQuery,
-  type TaskTemplateDTO
+  useWardTaskTemplateQuery
 } from '@/mutations/task_template_mutations'
 import { useAuth } from '@/hooks/useAuth'
 import {
   emptyTask,
+  type Task,
   useAssignTaskToUserMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
   useTaskQuery,
   useTaskUpdateMutation,
-  useUnassignTaskMutation,
-  type Task
+  useUnassignTaskMutation
 } from '@/mutations/task_mutations'
-import { type WardWithOrganizationIdDTO, useWardQuery } from '@/mutations/ward_mutations'
+import { useWardQuery, type WardWithOrganizationIdDTO } from '@/mutations/ward_mutations'
 import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
 
 type TaskDetailViewTranslation = {
@@ -287,7 +287,7 @@ export const TaskDetailView = ({
   onClose
 }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
-  const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
+  const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplate['id'] | undefined>(undefined)
   const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
   const router = useRouter()
   const { user } = useAuth()
@@ -409,7 +409,12 @@ export const TaskDetailView = ({
               onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
             />
           </div>
-          <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
+          <SubtaskViewTasks
+            subtasks={task.subtasks}
+            taskId={taskId}
+            patientId={patientId}
+            onChange={(subtasks) => setTask({ ...task, subtasks })}
+          />
         </div>
         <TaskDetailViewSidebar task={task} setTask={setTask} ward={ward} isCreating={isCreating}/>
       </div>
@@ -441,7 +446,24 @@ export const TaskDetailView = ({
           activeId={selectedTemplateId}
           onTileClick={({ id, name, notes, subtasks }) => {
             setSelectedTemplateId(id)
-            setTask({ ...task, name, notes, subtasks: subtasks.map(value => ({ ...value, subtaskCount: 0 })) })
+            setTask({
+              ...task,
+              name,
+              notes,
+              subtasks: subtasks.map(template => {
+                // TODO update later
+                const task: Task = {
+                  id: '',
+                  notes: template.notes,
+                  isPublicVisible: !!template.wardId,
+                  name: template.name,
+                  status: TaskStatus.TASK_STATUS_TODO,
+                  assignee: '',
+                  subtasks: []
+                }
+                return task
+              })
+            })
           }}
           onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
         />

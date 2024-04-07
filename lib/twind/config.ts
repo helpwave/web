@@ -48,7 +48,10 @@ const primary = {
   1000: '#4F3879',
 } as const
 
-const secondary = {} as const
+const secondary = {
+  400: '#3272DF',
+  800: '#11243E',
+} as const
 
 const positive = {
   200: '#CEFDDB',

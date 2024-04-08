@@ -125,7 +125,7 @@ export const RoomBedSelect = ({
   const isShowingClear = isClearable && !isSubmitting && touched
   const isShowingRevert = touched && hasChanges && !isSubmitting && !isCreating && !isClearable
   const changesAndSaveRow = (
-    <div className={tw('flex flex-row justify-between items-center')}>
+    <div className={tw('flex flex-row justify-between items-center gap-x-4')}>
       <div>
         {isShowingRevert && (
           <Button

@@ -1,20 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { Button } from '@helpwave/common/components/Button'
 import { noop } from '@helpwave/common/util/noop'
-import type { SubTaskDTO } from '@/mutations/task_mutations'
+import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { Task } from '@/mutations/task_mutations'
 
 type SubtaskTileTranslation = {
-  subtasks: string,
-  remove: string,
-  addSubtask: string,
-  newSubtask: string
+  remove: string
 }
 
-const defaultSubtaskTileTranslation = {
+const defaultSubtaskTileTranslation: Record<Languages, SubtaskTileTranslation> = {
   en: {
     remove: 'Remove'
   },
@@ -24,10 +22,10 @@ const defaultSubtaskTileTranslation = {
 }
 
 type SubtaskTileProps = {
-  subtask: SubTaskDTO,
+  subtask: Task,
   onRemoveClick: () => void,
-  onNameChange: (subtask: SubTaskDTO) => void,
-  onNameEditCompleted?: (subtask: SubTaskDTO) => void,
+  onNameChange: (subtask: Task) => void,
+  onNameEditCompleted?: (subtask: Task) => void,
   onDoneChange: (done: boolean) => void
 }
 
@@ -46,11 +44,6 @@ export const SubtaskTile = ({
 
   const minTaskNameLength = 2
   const maxTaskNameLength = 64
-  const [checked, setChecked] = useState(false)
-
-  useEffect(() => {
-    setChecked(subtask.isDone)
-  }, [subtask.isDone])
 
   return (
     <div className={tw('flex flex-row gap-x-2 items-center overflow-x-hidden')}>
@@ -58,9 +51,8 @@ export const SubtaskTile = ({
         <Checkbox
           onChange={done => {
             onDoneChange(done)
-            setChecked(subtask.isDone)
           }}
-          checked={checked}
+          checked={subtask.status === TaskStatus.TASK_STATUS_DONE}
         />
       </div>
       <ToggleableInput

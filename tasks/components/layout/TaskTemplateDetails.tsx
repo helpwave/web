@@ -7,9 +7,9 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
-import { SubtaskView } from '../SubtaskView'
+import { SubtaskViewTemplates } from '../SubtaskView'
 import { ColumnTitle } from '../ColumnTitle'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import type { TaskTemplate } from '@/mutations/task_template_mutations'
 import { TaskTemplateContext, type TaskTemplateFormType } from '@/pages/templates'
 
 type TaskTemplateDetailsTranslation = {
@@ -59,9 +59,9 @@ const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDeta
 }
 
 export type TaskTemplateDetailsProps = {
-  onCreate: (taskTemplate: TaskTemplateDTO) => void,
+  onCreate: (taskTemplate: TaskTemplate) => void,
   onUpdate: (taskTemplate: TaskTemplateFormType) => void,
-  onDelete: (taskTemplate: TaskTemplateDTO) => void,
+  onDelete: (taskTemplate: TaskTemplate) => void,
   width?: number
 }
 
@@ -157,8 +157,8 @@ export const TaskTemplateDetails = ({
           }}
         />
       </div>
-      <SubtaskView
-        taskTemplateId={context.state.template.id}
+      <SubtaskViewTemplates
+        templateId={context.state.template.id}
         subtasks={context.state.template.subtasks}
         onChange={subtasks => context.updateContext({
           hasChanges: true,

@@ -8,7 +8,7 @@ import { Plus } from 'lucide-react'
 import { Sortable } from './dnd-kit/Sortable'
 import { TaskCard } from './cards/TaskCard'
 import { PillLabel, TaskState } from './pill/PillLabel'
-import { emptyTask, type TaskDTO } from '@/mutations/task_mutations'
+import { emptyTask, type Task } from '@/mutations/task_mutations'
 
 type KanbanColumnsTranslation = {
   addTask: string
@@ -24,11 +24,11 @@ const defaultKanbanColumnsTranslations: Record<Languages, KanbanColumnsTranslati
 }
 
 type KanbanColumnProps = {
-  tasks: TaskDTO[],
+  tasks: Task[],
   type: TaskStatus,
   isDraggedOver: boolean,
   draggedTileId?: string,
-  onEditTask: (task: TaskDTO) => void
+  onEditTask: (task: Task) => void
 }
 
 /**

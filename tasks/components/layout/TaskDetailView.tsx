@@ -1,4 +1,4 @@
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw, tx } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -17,26 +17,26 @@ import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { formatDate } from '@helpwave/common/util/date'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import { SubtaskView } from '../SubtaskView'
+import { SubtaskViewTasks } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
 import { TaskStatusSelect } from '@/components/selects/TaskStatusSelect'
-import { usePersonalTaskTemplateQuery, useWardTaskTemplateQuery, type TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import {
+  type TaskTemplate,
+  usePersonalTaskTemplateQuery,
+  useWardTaskTemplateQuery
+} from '@/mutations/task_template_mutations'
 import { useAuth } from '@/hooks/useAuth'
 import {
   emptyTask,
+  type Task,
   useAssignTaskToUserMutation,
-  useSubTaskAddMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
   useTaskQuery,
-  useTaskToDoneMutation,
-  useTaskToInProgressMutation,
-  useTaskToToDoMutation,
   useTaskUpdateMutation,
-  useUnassignTaskToUserMutation,
-  type TaskDTO
+  useUnassignTaskMutation
 } from '@/mutations/task_mutations'
-import { type WardWithOrganizationIdDTO, useWardQuery } from '@/mutations/ward_mutations'
+import { useWardQuery, type WardWithOrganizationIdDTO } from '@/mutations/ward_mutations'
 import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
 
 type TaskDetailViewTranslation = {
@@ -53,6 +53,8 @@ type TaskDetailViewTranslation = {
   create: string,
   update: string,
   delete: string,
+  deleteTask: string,
+  deleteTaskDescription: string,
   publish: string,
   publishTask: string,
   publishTaskDescription: string,
@@ -74,6 +76,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     create: 'Create',
     update: 'Update',
     delete: 'Delete',
+    deleteTask: 'Delete Task',
+    deleteTaskDescription: 'The Tasks will be irrevocably removed',
     publish: 'Publish',
     publishTask: 'Publish task',
     publishTaskDescription: 'This cannot be undone',
@@ -93,6 +97,8 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     create: 'Hinzufügen',
     update: 'Ändern',
     delete: 'Löschen',
+    deleteTask: 'Task löschen',
+    deleteTaskDescription: 'Der Tasks wird unwiederruflich gelöscht',
     publish: 'Veröffentlichen',
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
@@ -101,14 +107,20 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
 }
 
 type TaskDetailViewSidebarProps = {
-  task: TaskDTO,
-  setTask: (task: TaskDTO) => void,
+  task: Task,
+  setTask: (task: Task) => void,
   // TODO: get rid of the undefined; rather extract all error and loading states and have the confidence that things aren't undefined anymore
   ward: WardWithOrganizationIdDTO | undefined,
   isCreating: boolean
 }
 
-const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCreating }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
+const TaskDetailViewSidebar = ({
+  overwriteTranslation,
+  task,
+  setTask,
+  ward,
+  isCreating
+}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
@@ -116,13 +128,9 @@ const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCr
   const updateTaskMutation = useTaskUpdateMutation()
 
   const assignTaskToUserMutation = useAssignTaskToUserMutation()
-  const unassignTaskToUserMutation = useUnassignTaskToUserMutation()
+  const unassignTaskToUserMutation = useUnassignTaskMutation()
 
-  const toToDoMutation = useTaskToToDoMutation()
-  const toInProgressMutation = useTaskToInProgressMutation()
-  const toDoneMutation = useTaskToDoneMutation()
-
-  const updateTaskLocallyAndExternally = (task: TaskDTO) => {
+  const updateTaskLocallyAndExternally = (task: Task) => {
     setTask(task)
     if (!isCreating) {
       updateTaskMutation.mutate(task)
@@ -173,7 +181,7 @@ const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCr
             color="negative"
             disabled={!task.assignee}
           >
-            <X size={24} />
+            <X size={24}/>
           </Button>
         </div>
       </div>
@@ -214,19 +222,7 @@ const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCr
           removeOptions={isCreating ? [TaskStatus.TASK_STATUS_DONE] : []}
           onChange={(status) => {
             if (!isCreating) {
-              switch (status) {
-                case TaskStatus.TASK_STATUS_TODO:
-                  toToDoMutation.mutate(task.id)
-                  break
-                case TaskStatus.TASK_STATUS_IN_PROGRESS:
-                  toInProgressMutation.mutate(task.id)
-                  break
-                case TaskStatus.TASK_STATUS_DONE:
-                  toDoneMutation.mutate(task.id)
-                  break
-                default:
-                  break
-              }
+              updateTaskMutation.mutate({ ...task, status })
             }
             setTask({ ...task, status })
           }}
@@ -261,7 +257,7 @@ const TaskDetailViewSidebar = ({ overwriteTranslation, task, setTask, ward, isCr
       {task.creationDate && (
         <div className={tw('flex flex-col gap-y-1')}>
           <Span type="labelMedium">{translation.creationTime}</Span>
-          <TimeDisplay date={new Date(task.creationDate)} />
+          <TimeDisplay date={new Date(task.creationDate)}/>
         </div>
       )}
     </div>
@@ -291,7 +287,8 @@ export const TaskDetailView = ({
   onClose
 }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
-  const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
+  const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplate['id'] | undefined>(undefined)
+  const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
   const router = useRouter()
   const { user } = useAuth()
   const ward = useWardQuery(wardId).data
@@ -306,25 +303,21 @@ export const TaskDetailView = ({
     isError
   } = useTaskQuery(taskId)
 
-  const [task, setTask] = useState<TaskDTO>({
+  const [task, setTask] = useState<Task>({
     ...emptyTask,
     status: initialStatus ?? TaskStatus.TASK_STATUS_TODO
   })
 
-  const addSubtaskMutation = useSubTaskAddMutation(taskId)
-
   const assignTaskToUserMutation = useAssignTaskToUserMutation()
   const updateTaskMutation = useTaskUpdateMutation()
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
-  const toDoneMutation = useTaskToDoneMutation()
 
-  const createTaskMutation = useTaskCreateMutation(newTask => {
-    newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
+  const createTaskMutation = useTaskCreateMutation(patientId, newTask => {
     if (newTask.assignee) {
       assignTaskToUserMutation.mutate({ taskId: newTask.id, userId: newTask.assignee })
     }
     onClose()
-  }, patientId)
+  })
 
   useEffect(() => {
     if (data && taskId) {
@@ -346,7 +339,7 @@ export const TaskDetailView = ({
   const taskNameMinimumLength = 1
   const isValid = task.name.length >= taskNameMinimumLength
 
-  const updateTaskLocallyAndExternally = (task: TaskDTO) => {
+  const updateTaskLocallyAndExternally = (task: Task) => {
     setTask(task)
     if (!isCreating) {
       updateTaskMutation.mutate(task)
@@ -357,27 +350,30 @@ export const TaskDetailView = ({
     <div className={tw('flex flex-row justify-end gap-x-8')}>
       {!isCreating ?
           (
-            <>
-              <Button color="negative" onClick={() => deleteTaskMutation.mutate(task.id)}>
-                {translation.delete}
+          <>
+            <Button color="negative" onClick={() => setIsShowingDeleteDialog(true)}>
+              {translation.delete}
+            </Button>
+            {task.status !== TaskStatus.TASK_STATUS_DONE && (
+              <Button color="positive" onClick={() => {
+                updateTaskMutation.mutate({ ...task, status: TaskStatus.TASK_STATUS_DONE })
+                onClose()
+              }}>
+                {translation.finish}
               </Button>
-              {task.status !== TaskStatus.TASK_STATUS_DONE && (
-                <Button color="positive" onClick={() => { toDoneMutation.mutate(task.id); onClose() }}>
-                  {translation.finish}
-                </Button>
-              )}
-              <Button color="accent" onClick={() => updateTaskMutation.mutate(task)} disabled={!isValid}>
-                {translation.update}
-              </Button>
-            </>
+            )}
+            <Button color="accent" onClick={() => updateTaskMutation.mutate(task)} disabled={!isValid}>
+              {translation.update}
+            </Button>
+          </>
           )
         :
           (
-            <Button color="accent" onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
-              {translation.create}
-            </Button>
+          <Button color="accent" onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
+            {translation.create}
+          </Button>
           )
-        }
+      }
     </div>
   )
 
@@ -413,9 +409,14 @@ export const TaskDetailView = ({
               onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
             />
           </div>
-          <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })} />
+          <SubtaskViewTasks
+            subtasks={task.subtasks}
+            taskId={taskId}
+            patientId={patientId}
+            onChange={(subtasks) => setTask({ ...task, subtasks })}
+          />
         </div>
-        <TaskDetailViewSidebar task={task} setTask={setTask} ward={ward} isCreating={isCreating} />
+        <TaskDetailViewSidebar task={task} setTask={setTask} ward={ward} isCreating={isCreating}/>
       </div>
       {buttons}
     </div>
@@ -445,26 +446,60 @@ export const TaskDetailView = ({
           activeId={selectedTemplateId}
           onTileClick={({ id, name, notes, subtasks }) => {
             setSelectedTemplateId(id)
-            setTask({ ...task, name, notes, subtasks })
+            setTask({
+              ...task,
+              name,
+              notes,
+              subtasks: subtasks.map(template => {
+                // TODO update later
+                const task: Task = {
+                  id: '',
+                  notes: template.notes,
+                  isPublicVisible: !!template.wardId,
+                  name: template.name,
+                  status: TaskStatus.TASK_STATUS_TODO,
+                  assignee: '',
+                  subtasks: []
+                }
+                return task
+              })
+            })
           }}
           onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
         />
       )}
-      {(personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading || personalTaskTemplatesError || wardTaskTemplatesError) ? <LoadingAnimation /> : null}
+      {(personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading || personalTaskTemplatesError || wardTaskTemplatesError) ?
+        <LoadingAnimation/> : null}
     </div>
   )
 
   return (
-    <LoadingAndErrorComponent
-      isLoading={(isLoading || !data) && !isCreating}
-      hasError={isError}
-      loadingProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
-      errorProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
-    >
-      <div className={tx('relative flex flex-row')}>
-        {isCreating && templateSidebar}
-        {tasksDetails}
-      </div>
-    </LoadingAndErrorComponent>
+    <>
+      <ConfirmDialog
+        id="deleteTaskDialog"
+        isOpen={isShowingDeleteDialog}
+        titleText={`${translation.deleteTask}?`}
+        descriptionText={`${translation.deleteTaskDescription}`}
+        onConfirm={() => {
+          deleteTaskMutation.mutate(task.id)
+          setIsShowingDeleteDialog(false)
+        }}
+        onCancel={() => setIsShowingDeleteDialog(false)}
+        onCloseClick={() => setIsShowingDeleteDialog(false)}
+        onBackgroundClick={() => setIsShowingDeleteDialog(false)}
+        buttonOverwrites={[{}, {}, { color: 'negative' }]}
+      />
+      <LoadingAndErrorComponent
+        isLoading={(isLoading || !data) && !isCreating}
+        hasError={isError}
+        loadingProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
+        errorProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
+      >
+        <div className={tx('relative flex flex-row')}>
+          {isCreating && templateSidebar}
+          {tasksDetails}
+        </div>
+      </LoadingAndErrorComponent>
+    </>
   )
 }

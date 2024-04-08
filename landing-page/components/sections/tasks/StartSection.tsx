@@ -19,7 +19,7 @@ const defaultStartSectionTranslation: Record<Languages, StartSectionTranslation>
   },
   de: {
     title: 'Die erste Open-Source-Team-Management-Plattform für Mitarbeitende im Gesundheitswesen',
-    text: '\\helpwave \\primary{tasks} erhöht die Produktivität in deinem klinischen Team. Lass die ausgedruckten Stationslisten hinter dir und koordiniere deine Arbeit und die deines Teams mit einer modernen Kanban-Schnittstelle. \\helpwave \\primary{tasks} wurde von modernen Arbeitsabläufen und Best.Practices aus dem Lean-Projektmanagement inspiriert und wendet diese Methodiken auf die klinische Umgebung an.'
+    text: '\\helpwave \\primary{tasks} erhöht die Produktivität in deinem klinischen Team. Lass die ausgedruckten Stationslisten hinter dir und koordiniere deine Arbeit und die deines Teams mit einem modernen Kanban-Interface. \\helpwave \\primary{tasks} wurde von modernen Arbeitsabläufen und Best Practices aus dem Lean-Projektmanagement inspiriert und wendet diese Methodiken auf die klinische Umgebung an.'
   }
 }
 

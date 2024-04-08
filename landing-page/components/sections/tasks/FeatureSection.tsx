@@ -27,7 +27,7 @@ const defaultFeatureSectionTranslation: Record<Languages, FeatureSectionTranslat
     taskTemplatesTitle: 'Aufgabenvorlagen',
     taskTemplatesText: 'Speichere sich wiederholende Aufgaben als Vorlagen. Standardisiere deine Arbeitsabläufe und teile sie mit deinem Team.',
     collaborateTitle: 'Zusammenarbeiten',
-    collaborateText: 'Du und dein Team arbeiten auf den Herzschlag um Herzschlag synchronisiert zusammen.',
+    collaborateText: 'Du und dein Team arbeiten auf den Herzschlag synchronisiert zusammen.',
     patientsTitle: 'Patienten',
     patientsText: 'Moderne Dashboards für deine Patienten. Behalte den Überblick über den Fortschritt und deine Aufgaben.'
   }

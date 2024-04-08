@@ -33,16 +33,16 @@ const defaultReachoutSectionTranslation: Record<Languages, ReachoutSectionTransl
     medicalHeroTitle: 'Du bist ein medical hero?\n',
     medicalHeroSubtitle: '\\helpwave \\primary{tasks} zielt darauf ab, dich bei deiner täglichen Arbeit zu unterstützen!',
     medicalHeroText: `
-      \\helpwave \\primary{tasks} ist eine moderne Kanban-Schnittstelle, die dabei hilft, deine Arbeit die deines Teams zu koordinieren. Notiere dir deine Aufgaben für deinen Patienten für dich selbst und für dein Team.
-      Standardisiere deine Workflows, indem du sie als Vorlage speicherst und mit deinen neuen Kollegen für ein einfaches Onboarding teilst. Erhalte Benachrichtigungen über bevorstehende Aufgaben und nutzen unsere verschiedenen Dashboards,
+      \\helpwave \\primary{tasks} ist ein modernes Kanban-Interface, das dabei hilft, deine Arbeit und die Arbeit deines Teams zu koordinieren. Notiere dir deine Aufgaben für deine Patienten, für dich selbst und für dein Team.
+      Standardisiere deine Workflows, indem du sie als Vorlage speicherst und mit neuen Kollegen für ein einfaches Onboarding teilst. Erhalte Benachrichtigungen über bevorstehende Aufgaben und nutzen unsere verschiedenen Dashboards,
       um Patienten und deren Behandlungsverlauf zu verfolgen. \\helpwave \\primary{tasks} ist die erste Open-Source-Team-Management-Plattform für Mitarbeiter im Gesundheitswesen.
     `,
     hospitalManagerTitle: 'Du arbeitest in der Krankenhausverwaltung?',
     hospitalManagerSubtitle: 'Wie \\helpwave \\primary{tasks} deine Probleme auch hier lösen kann!',
     hospitalManagerText: `
-      \\helpwave \\primary{tasks} wurde von modernen Arbeitsabläufen und Best.Practices aus dem Lean-Projektmanagement inspiriert und wendet diese Methodiken auf die klinische Umgebung an.
+      \\helpwave \\primary{tasks} wurde von modernen Arbeitsabläufen und Best Practices aus dem Lean-Projektmanagement inspiriert und wendet diese Methodiken auf die klinische Umgebung an.
       Die Verfolgung von Aufgaben und Arbeitsabläufen in einem klinischen Umfeld führt zu einer besseren Patientenversorgung und einer effizienteren Nutzung von Ressourcen.
-      \\helpwave \\primary{tasks} kann die Zufriedenheit der Mitarbeiter und die Patientensicherheit erhöhen. Du kannst \\helpwave \\primary{tasks} ausch als sichere Grundlage für deine Abrechnungsprozesse verwenden.
+      \\helpwave \\primary{tasks} kann die Zufriedenheit der Mitarbeiter und die Patientensicherheit erhöhen. Du kannst \\helpwave \\primary{tasks} auch als sichere Grundlage für deine Abrechnungsprozesse verwenden.
     `
   }
 }

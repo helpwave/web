@@ -5,7 +5,7 @@ import { Span } from '@helpwave/common/components/Span'
 import { LockIcon } from 'lucide-react'
 import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import type { Task } from '@/mutations/task_mutations'
 import { useUserQuery } from '@/mutations/user_mutations'
@@ -37,7 +37,7 @@ export const TaskCard = ({
   onTileClick = () => undefined
 }: PropsForTranslation<TaskCardTranslation, TaskCardProps>) => {
   const translation = useTranslation(defaultTaskCardTranslations, overwriteTranslation)
-  const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
+  const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.status === TaskStatus.TASK_STATUS_DONE).length / task.subtasks.length
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== TaskStatus.TASK_STATUS_DONE
 
   const { data: assignee } = useUserQuery(task.assignee)

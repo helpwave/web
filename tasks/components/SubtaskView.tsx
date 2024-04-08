@@ -16,6 +16,7 @@ import {
   useTaskDeleteMutation,
   useTaskUpdateMutation
 } from '@/mutations/task_mutations'
+import type { TaskTemplate } from '@/mutations/task_template_mutations'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -50,6 +51,7 @@ type SubtaskViewProps = PropsForTranslation<SubtaskViewTranslation, {
 /**
  * A view for editing and showing all subtasks of a task
  */
+// TODO differentiate Templates and Tasks
 export const SubtaskView = ({
   overwriteTranslation,
   subtasks,
@@ -176,8 +178,9 @@ export const SubtaskViewTasks = ({
   )
 }
 
-export type SubtaskViewTemplatesProps = SubtaskViewProps & {
-  templateId?: string
+export type SubtaskViewTemplatesProps = Omit<SubtaskViewProps, 'subtasks'> & {
+  templateId?: string,
+  subtasks: TaskTemplate[]
 }
 export const SubtaskViewTemplates = ({
   subtasks,
@@ -188,9 +191,10 @@ export const SubtaskViewTemplates = ({
   overwriteTranslation
 }: SubtaskViewTemplatesProps) => {
   const context = useContext(TaskTemplateContext)
+
   return (
     <SubtaskView
-      subtasks={subtasks}
+      subtasks={subtasks} // TODO cast this or use a different component
       onChange={onChange}
       onAdd={onAdd}
       onUpdate={onUpdate}

@@ -12,15 +12,15 @@ type Story = StoryObj<typeof meta>;
 export const ChipListVariation: Story = {
   args: {
     list: [
-      { label: 'Chip 1' },
-      { label: 'Chip 2' },
-      { label: 'Chip 3 with longer text' },
-      { label: 'Chip 4 different label', variant: 'fullyRounded' },
-      { label: 'Chip 5 with text' },
-      { label: 'Chip 6 custom style', className: '!bg-red-400' },
-      { label: 'Chip 7 in yellow', color: 'yellow' },
-      { label: 'Chip 8 with very very long text' },
-      { label: 'Chip 9' },
+      { children: 'Chip 1' },
+      { children: 'Chip 2' },
+      { children: 'Chip 3 with longer text' },
+      { children: 'Chip 4 different children', variant: 'fullyRounded' },
+      { children: 'Chip 5 with text' },
+      { children: 'Chip 6 custom style', className: '!bg-red-400' },
+      { children: 'Chip 7 in yellow', color: 'yellow' },
+      { children: 'Chip 8 with very very long text' },
+      { children: 'Chip 9' },
     ],
     className: ''
   },

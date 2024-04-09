@@ -1,22 +1,21 @@
-import type { ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 import { tx } from '../twind'
 
-type ChipColorTypes = 'label-1' | 'label-2' | 'label-3' | 'blue' | 'pink' | 'yellow'| 'darkPrimary'; // extended these colors for more variations
+type ChipColorTypes = 'label-1' | 'label-2' | 'label-3' | 'blue' | 'pink' | 'yellow' | 'darkPrimary' | 'black'; // extended these colors for more variations
 
 type ChipVariant = 'normal' | 'fullyRounded'
 
-export type ChipProps = {
-  label: ReactNode,
+export type ChipProps = PropsWithChildren<{
   color?: ChipColorTypes,
   variant?: ChipVariant,
   className?: string
-}
+}>
 
 /**
  * A component for displaying a single chip
  */
 export const Chip = ({
-  label,
+  children,
   color,
   variant = 'normal',
   className = ''
@@ -30,6 +29,7 @@ export const Chip = ({
           'bg-hw-label-pink-background text-hw-label-pink-text': color === 'pink',
           'bg-hw-label-blue-background text-hw-label-blue-text': color === 'blue',
           'bg-hw-label-yellow-background text-hw-label-yellow-text': color === 'yellow',
+          'bg-black text-white': color === 'black',
           'bg-hw-label-1-background text-hw-label-1-text': color === 'label-1',
           'bg-hw-label-2-background text-hw-label-2-text': color === 'label-2',
           'bg-hw-label-3-background text-hw-label-3-text': color === 'label-3',
@@ -41,7 +41,7 @@ export const Chip = ({
         className
       )}
     >
-      {label}
+      {children}
     </div>
   )
 }
@@ -60,7 +60,15 @@ export const ChipList = ({
 }: ChipListProps) => {
   return (
     <div className={tx('flex flex-wrap gap-x-4 gap-y-2', className)}>
-      {list.map((value, index) => <Chip key={index} label={value.label} color={value.color ?? 'darkPrimary'} variant={value.variant ?? 'normal'} className={value.className}/>)}
+      {list.map((value, index) => (
+        <Chip
+          key={index} color={value.color ?? 'darkPrimary'}
+          variant={value.variant ?? 'normal'}
+          className={value.className}
+        >
+          {value.children}
+        </Chip>
+      ))}
     </div>
   )
 }

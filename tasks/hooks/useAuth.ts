@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import Cookies from 'js-cookie'
-import { getConfig } from '../utils/config'
-import { getAuthorizationUrl } from '../utils/oauth'
+import { getConfig } from '@/utils/config'
+import { getAuthorizationUrl } from '@/utils/oauth'
+import { LOCALSTORAGE_ORGANIZATION_KEY } from '@/hooks/useOrganization'
 
 const config = getConfig()
 
@@ -73,6 +74,7 @@ export const useAuth = () => {
   const signOut = () => {
     Cookies.remove(COOKIE_ID_TOKEN_KEY)
     Cookies.remove(COOKIE_REFRESH_TOKEN_KEY)
+    window.localStorage.removeItem(LOCALSTORAGE_ORGANIZATION_KEY)
     window.location.reload()
   }
 

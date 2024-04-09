@@ -20,9 +20,9 @@ import {
 } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/util/noop'
-import { getAuthenticatedGrpcMetadata, taskService } from '../utils/grpc'
-import { dateToTimestamp, timestampToDate } from '../utils/timeConversion'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
+import { getAuthenticatedGrpcMetadata, taskService } from '@/utils/grpc'
+import { dateToTimestamp, timestampToDate } from '@/utils/timeConversion'
 
 export type SubTaskDTO = {
   id: string,
@@ -53,7 +53,7 @@ export const emptyTask: TaskDTO = {
   notes: '',
   status: TaskStatus.TASK_STATUS_TODO,
   subtasks: [],
-  dueDate: new Date(new Date().valueOf() + 8 * 60 * 60 * 1000),
+  dueDate: undefined,
   isPublicVisible: false
 }
 

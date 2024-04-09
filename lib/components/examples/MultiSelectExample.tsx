@@ -48,7 +48,7 @@ export const MultiSelectExample = ({
             }
             return (
             <ChipList
-              list={selected.map(value => ({ label: value.label }))}
+              list={selected.map(value => ({ children: value.label }))}
             />
             )
           } : undefined}

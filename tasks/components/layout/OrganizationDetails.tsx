@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
+import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWithAction'
+import Link from 'next/link'
 import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
@@ -21,6 +23,7 @@ import {
 import { useAuth } from '@/hooks/useAuth'
 import { useOrganization } from '@/hooks/useOrganization'
 import { ReSignInModal } from '@/components/modals/ReSignInModal'
+import { usePropertyListQuery } from '@/mutations/property_mutations'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -29,7 +32,10 @@ type OrganizationDetailTranslation = {
   deleteConfirmText: string,
   deleteOrganization: string,
   create: string,
-  update: string
+  update: string,
+  properties: string,
+  propertiesDescription: string,
+  manageProperties: string
 }
 
 const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetailTranslation> = {
@@ -40,7 +46,10 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
     deleteConfirmText: 'Do you really want to delete this organization?',
     deleteOrganization: 'Delete Organization',
     create: 'Create',
-    update: 'Update'
+    update: 'Update',
+    properties: 'Properties',
+    propertiesDescription: 'With properties you can add custom fields to different entities you patients or beds.',
+    manageProperties: 'Manage Properties'
   },
   de: {
     organizationDetail: 'Organisations Details',
@@ -49,7 +58,10 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
     deleteConfirmText: 'Wollen Sie wirklich diese Organisation löschen?',
     deleteOrganization: 'Organisation löschen',
     create: 'Erstellen',
-    update: 'Ändern'
+    update: 'Ändern',
+    properties: 'Eigenschaften',
+    propertiesDescription: 'Mit Eigenschaften können Sie verschiedenen Entitäten wie Patienten oder Betten benutzerdefinierte Felder hinzufügen.',
+    manageProperties: 'Eigenschaften Verwalten'
   }
 }
 
@@ -73,6 +85,7 @@ export const OrganizationDetail = ({
   const { signOut } = useAuth()
   const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
+  const { data: propertyData } = usePropertyListQuery()
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
@@ -199,6 +212,20 @@ export const OrganizationDetail = ({
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
           organizationId={contextState.organizationId}
         />
+        {propertyData && !isCreatingNewOrganization && (
+          <DescriptionWithAction
+            title={`${translation.properties} (${propertyData.length})`}
+            description={translation.propertiesDescription}
+            trailing={(
+              <div className={tw('flex flex-row justify-end items-center')}>
+                <Link href="/properties">
+                  <Button className="h-fit">{translation.manageProperties}</Button>
+                </Link>
+              </div>
+              )}
+            leadingIcon="label"
+          />
+        )}
         <div className={tw('flex flex-row justify-end')}>
           <Button
             className={tw('w-auto')}

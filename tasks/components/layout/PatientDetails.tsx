@@ -221,20 +221,20 @@ export const PatientDetail = ({
         <div className={tw('sticky flex flex-row  bottom-6 right-4 justify-end')}>
           <div className={tw('sticky flex flex-row p-2 mt-6 gap-x-4 bg-white border-2 rounded-xl')}>
             {!newPatient.discharged ?
-              (
+                (
                 <>
                   <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
                     {translation.unassign}
                   </Button>
-                  <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
+                  <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)}>
                     {translation.dischargePatient}
                   </Button>
                 </>
-              ) : (
-                <Button color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
+                ) : (
+                <Button color="positive" onClick={() => readmitMutation.mutate(newPatient.id)}>
                   {translation.readmit}
                 </Button>
-              )}
+                )}
             <Button color="accent" onClick={() => {
               clearUpdateTimer(true)
               updateMutation.mutate(newPatient)

@@ -256,7 +256,6 @@ const PlaceholderbrandFAQSection = () => {
       <div className={tw('flex flex-col gap-y-4 mt-4')}>
         <FAQSection
           entries={[
-            /* TODO fectch entries */
             {
               id: 'Q1',
               title: 'Question 1',

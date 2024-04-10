@@ -216,9 +216,9 @@ const PlaceholderbrandContactSection = () => {
   const translation = useTranslation(defaultPlaceholderbrandContactTranslation)
   return (
     <div className={tw('flex flex-col w-full max-w-[1000px]')}>
-      <Span type="title" className={tw('text-hw-secondary-400 !text-3xl')}>{translation.title}</Span>
+      <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
       <Span>{translation.subTitle}</Span>
-      <div className={tw('flex flex-wrap desktop:justify-around mobile:justify-around gap-x-8 gap-y-6')}>
+      <div className={tw('flex flex-wrap desktop:justify-around mobile:justify-around gap-x-8 gap-y-6 mt-8')}>
         {contacts.map(value => (
           <Profile
             key={value.name}
@@ -251,9 +251,9 @@ const PlaceholderbrandFAQSection = () => {
   const translation = useTranslation(defaultPlaceholderbrandFAQTranslation)
   return (
     <div className={tw('flex flex-col w-full max-w-[1000px]')}>
-      <Span type="title" className={tw('text-hw-secondary-400 !text-3xl')}>{translation.title}</Span>
+      <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
       <Span>{translation.subTitle}</Span>
-      <div className={tw('flex flex-col gap-y-4 mt-4')}>
+      <div className={tw('flex flex-col gap-y-4 mt-8')}>
         <FAQSection
           entries={[
             /* TODO fectch entries */

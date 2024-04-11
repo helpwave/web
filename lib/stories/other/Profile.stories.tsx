@@ -19,8 +19,8 @@ export const ProfileVariation: Story = {
   },
   args: {
     name: 'Helpwave Member',
-    subtitle: 'Chief Executive Officer',
-    role: 'CEO',
+    role: 'Chief Executive Officer',
+    roleBadge: 'CEO',
     imageUrl: 'https://source.boringavatars.com/marble/512/Maria?square=true',
     badge: (
       <Chip className={tw('flex flex-row gap-x-2 items-center justify-center')} color="black">
@@ -40,11 +40,11 @@ export const ProfileVariation: Story = {
       url: 'mailto:mail@helpwave.de',
     },
     {
-      type: 'linkedIn',
+      type: 'linkedin',
       url: 'https://www.linkedin.com/',
     },
     {
-      type: 'web',
+      type: 'website',
       url: 'https://helpwave.de',
     },
     ]

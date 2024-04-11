@@ -31,7 +31,7 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
     aboutMediQuuTitle: 'Über mediQuu',
     aboutHelpwaveTitle: 'Über helpwave',
     aboutMediQuuDescription: `
-      Seit 2015 sorgen wir für eine komfortable und übergreifende Vernetzung von Versorg​ern und Leistungserbringern im Gesundheitswesen.
+      Seit 2015 sorgen wir für eine komfortable und übergreifende Vernetzung von Versorgern und Leistungserbringern im Gesundheitswesen.
       Unser Ziel ist stets eine bedarfsgerechte Entwicklung von digitalen Diensten, um die Vernetzung aller Aktuere zu vereinfachen
       und neue Möglichkeiten zu schaffen. Zukünftig werden wir diesen Weg mit dem starken Team der helpwave GmbH beschreiten.
     `,

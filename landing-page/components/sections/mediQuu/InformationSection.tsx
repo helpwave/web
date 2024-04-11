@@ -2,6 +2,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@twind/core'
 import { Span } from '@helpwave/common/components/Span'
+import Image from 'next/image'
 
 type MediQuuInformationTranslation = {
   title: string,
@@ -42,8 +43,7 @@ export const MediQuuInformationSection = () => {
     <div
       className={tw('flex desktop:flex-row mobile:flex-wrap gap-8 desktop:justify-between mobile:justify-center w-full max-w-[1000px]')}>
       <div className={tw('max-w-[300px]')}>
-        {/* TODO insert a graphic here */}
-        <div className={tw('h-[150px] w-[300px] bg-gray-200 rounded-lg')}/>
+        <Image src="https://cdn.helpwave.de/icons/agreement.png" alt="" width={600} height={150}/>
       </div>
       <div className={tw('flex flex-col')}>
         <Span type="heading" className={tw('text-hw-secondary-400')}>{translation.title}</Span>

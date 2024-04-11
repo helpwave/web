@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { tw } from '@twind/core'
+import { tw, tx } from '@twind/core'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ExpandableProps } from '../Expandable'
 import { Expandable } from '../Expandable'
@@ -21,7 +21,8 @@ export type FAQItem = Pick<ExpandableProps, 'initialExpansion'| 'className'> & {
 }
 
 export type FAQSectionProps = {
-  entries: FAQItem[]
+  entries: FAQItem[],
+  expandableClassName?: string
 }
 
 /**
@@ -29,6 +30,7 @@ export type FAQSectionProps = {
  */
 export const FAQSection = ({
   entries,
+  expandableClassName
 }: FAQSectionProps) => {
   const chevronSize = 28
   return (
@@ -43,7 +45,7 @@ export const FAQSection = ({
               (<ChevronUp size={chevronSize} className={tw('text-blue-600')}/>) :
               (<ChevronDown size={chevronSize} className={tw('text-blue-600')}/>)
           }
-          className={tw('bg-white rounded-xl px-4 py-2')}
+          className={tx('bg-white rounded-xl px-4 py-2', expandableClassName)}
         >
           <div className={tw('mt-2')}>
             {content.type === 'markdown' ? (<MarkdownInterpreter text={content.value}/>) : content.value}

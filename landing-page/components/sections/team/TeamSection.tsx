@@ -17,7 +17,7 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'mail', url: 'mailto:max.schaefer@helpwave.de' },
         { type: 'github', url: 'https://github.com/MaxSchaefer' },
       ],
-      imageSize: { width: 230 }
+      imageClassName: 'w-[230px] h-[200px]'
     },
     {
       name: 'Felix Evers',
@@ -31,7 +31,7 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'website', url: 'https://felixevers.de' },
         { type: 'github', url: 'https://github.com/use-to' },
       ],
-      imageSize: { width: 230 }
+      imageClassName: 'w-[230px] h-[200px]'
     },
     {
       name: 'Christian Porschen',
@@ -45,7 +45,7 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'mail', url: 'mailto:christian.porschen@helpwave.de' },
         { type: 'github', url: 'https://github.com/aegis301' },
       ],
-      imageSize: { width: 230 }
+      imageClassName: 'w-[230px] h-[200px]'
     },
   ],
   development: [
@@ -57,7 +57,8 @@ const teamData: Record<string, ProfileProps[]> = {
       socials: [
         { type: 'mail', url: 'mailto:felix.thape@helpwave.de' },
         { type: 'github', url: 'https://github.com/DasProffi' },
-      ]
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Max Baumann',
@@ -69,7 +70,8 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'website', url: 'https://bmn.dev' },
         { type: 'github', url: 'https://github.com/fosefx' },
         { type: 'linkedin', url: 'https://www.linkedin.com/in/max-bmn/' },
-      ]
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Florian Sabonchi',
@@ -81,7 +83,8 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'mail', url: 'mailto:florian.sabonchi@helpwave.de' },
         { type: 'medium', url: 'https://medium.com/@sabonchi' },
         { type: 'github', url: 'https://github.com/florian-sabonchi' },
-      ]
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Paul Kalhorn',
@@ -93,7 +96,8 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'website', url: 'https://kalhorn.io/' },
         { type: 'github', url: 'https://github.com/PaulKalho' },
         { type: 'linkedin', url: 'https://www.linkedin.com/in/paul-kalhorn-7b2343228/' },
-      ]
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Jonas Ester',
@@ -104,7 +108,8 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'mail', url: 'mailto:jonas.ester@helpwave.de' },
         { type: 'website', url: 'https://www.jonasester.de/' },
         { type: 'linkedin', url: 'https://www.linkedin.com/in/jonas-ester-b063a8188/' },
-      ]
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     }
   ],
   medical: [
@@ -116,7 +121,8 @@ const teamData: Record<string, ProfileProps[]> = {
       socials: [
         { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
         { type: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
-      ]
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Sophia Ehlers',
@@ -126,7 +132,8 @@ const teamData: Record<string, ProfileProps[]> = {
       socials: [
         { type: 'linkedin', url: 'https://www.linkedin.com/in/sophia-ehlers/' },
         { type: 'mail', url: 'mailto:sophia.ehlers@helpwave.de' },
-      ]
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Pierre Dürgen',
@@ -136,7 +143,8 @@ const teamData: Record<string, ProfileProps[]> = {
       socials: [
         { type: 'linkedin', url: 'https://www.linkedin.com/in/pierre-d-02239011a/' },
         { type: 'mail', url: 'mailto:pierre.duergen@helpwave.de' },
-      ]
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
   ],
 }

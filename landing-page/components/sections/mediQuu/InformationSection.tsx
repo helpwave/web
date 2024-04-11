@@ -4,12 +4,13 @@ import { tw } from '@twind/core'
 import { Span } from '@helpwave/common/components/Span'
 import Image from 'next/image'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import type { ReactNode } from 'react'
 
 type MediQuuInformationTranslation = {
   title: string,
   subTitle1: string,
   subTitle2: string,
-  subTitle3: string
+  subTitle3: ReactNode
 }
 
 const defaultMediQuuInformationTranslation: Record<Languages, MediQuuInformationTranslation> = {
@@ -21,7 +22,7 @@ const defaultMediQuuInformationTranslation: Record<Languages, MediQuuInformation
     subTitle2: '\\b{Nothing will change for mediQuu customers; products and services will continue as usual.} The transfer ' +
       'of contracts to helpwave will ensure the seamless continuation and further development of existing solutions. ' +
       'The partnership is committed to focusing on the needs of users and shaping the future of digital healthcare together.',
-    subTitle3: 'We would be delighted to meet you in person, simply send your suggested dates to contact@helpwave.de'
+    subTitle3: <>We would be delighted to meet you in person, simply send your suggested dates to <a className={tw('underline')} href="mailto:contact@helpwave.de">contact@helpwave.de</a></>
   },
   de: {
     title: 'Informationen zur Übernahme',
@@ -33,8 +34,7 @@ const defaultMediQuuInformationTranslation: Record<Languages, MediQuuInformation
       'nahtlose Fortführung und Weiterentwicklung der bestehenden Lösungen sichergestellt. Die Partnerschaft setzt' +
       'sich dafür ein, die Bedürfnisse der Nutzer in den Mittelpunkt zu stellen und gemeinsam die Zukunft der ' +
       'digitalen Gesundheitsversorgung zu gestalten.',
-    subTitle3: 'Wir würden uns über ein persönliches Kennenlernen sehr freuen, senden Sie Ihre Terminvorschläge' +
-      '  ganz einfach an contact@helpwave.de'
+    subTitle3: <>Wir würden uns über ein persönliches Kennenlernen sehr freuen, senden Sie Ihre Terminvorschläge ganz einfach an <a className={tw('underline')} href="mailto:contact@helpwave.de">contact@helpwave.de</a></>
   }
 }
 

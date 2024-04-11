@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useLanguage, type Languages } from '@helpwave/common/hooks/useLanguage'
 import type { ProfileProps } from '@helpwave/common/components/Profile'
 import { Profile } from '@helpwave/common/components/Profile'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
@@ -8,26 +8,9 @@ import { Span } from '@helpwave/common/components/Span'
 import { tx } from '@twind/core'
 import { MediQuuBadge } from '@/components/sections/mediQuu/MediQuuBadge'
 
-type MediQuuContactTranslation = {
-  title: string,
-  subTitle: string
-}
-
-const defaultMediQuuContactTranslation: Record<Languages, MediQuuContactTranslation> = {
-  en: {
-    title: 'Contacts',
-    subTitle: 'We are available to answer any questions you may have at short notice.',
-  },
-  de: {
-    title: 'Ansprechepartner',
-    subTitle: 'Wir stehen Ihnen bei jeglichen Fragen kurzfristig zur Verfügung.',
-  }
-}
-
 const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 
-const contacts: ProfileProps[] = [
-  // TODO add badges
+const contacts: (ProfileProps & { translatedInfo?: Record<Languages, string> })[] = [
   {
     name: 'Christian Porschen',
     title: 'Dr. med.',
@@ -94,7 +77,12 @@ const contacts: ProfileProps[] = [
       { type: 'linkedin', url: 'https://www.linkedin.com/' },
       { type: 'mail', url: 'mailto:mail@helpwave.de' },
     ],
-    imageClassName: '!w-[230px] !h-[200px]'
+    imageClassName: '!w-[230px] !h-[200px]',
+    translatedInfo: {
+      de: 'Zuständig für die konzeptionelle und technische Umsetzung der mediQuu-Plattform, zukünftig beratend tätig.',
+      en: 'Responsible for the conceptual and technical implementation of the mediQuu platform, providing advisory services in the future.'
+    },
+    className: 'w-500px'
   },
   {
     name: 'Peter Körner',
@@ -106,12 +94,33 @@ const contacts: ProfileProps[] = [
       { type: 'linkedin', url: 'https://www.linkedin.com/' },
       { type: 'mail', url: 'mailto:mail@helpwave.de' },
     ],
-    imageClassName: '!w-[230px] !h-[200px]'
+    imageClassName: '!w-[230px] !h-[200px]',
+    translatedInfo: {
+      de: 'Zuständig für die konzeptionelle und visuelle Umsetzung der mediQuu-Plattform, zukünftig beratend tätig.',
+      en: 'Responsible for the conceptual and visual implementation of the mediQuu platform, providing advisory services in the future.'
+    }
   },
 ]
 
+type MediQuuContactTranslation = {
+  title: string,
+  subTitle: string
+}
+
+const defaultMediQuuContactTranslation: Record<Languages, MediQuuContactTranslation> = {
+  en: {
+    title: 'Contacts',
+    subTitle: 'We are available to answer any questions you may have at short notice.',
+  },
+  de: {
+    title: 'Ansprechepartner',
+    subTitle: 'Wir stehen Ihnen bei jeglichen Fragen kurzfristig zur Verfügung.',
+  }
+}
+
 export const ContactSection = () => {
   const translation = useTranslation(defaultMediQuuContactTranslation)
+  const usedLanguage = useLanguage().language
   return (
     <div className={tw('flex flex-col w-full max-w-[1000px]')}>
       <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
@@ -120,6 +129,7 @@ export const ContactSection = () => {
         {contacts.map(value => (
           <Profile
             key={value.name}
+            info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
             {...value}
             className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
           />

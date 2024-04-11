@@ -85,7 +85,7 @@ export const Profile = ({
   return (
     <div
       {...divProps}
-      className={tx(`flex flex-col items-center text-center rounded-3xl p-3 pb-4 bg-white w-min-content`, className)}
+      className={tx(`flex flex-col items-center text-center rounded-3xl p-3 pb-4 bg-white w-min`, className)}
     >
       <div className={tw('relative mb-6')}>
         <div className={tx('relative rounded-xl flex flex-row items-center justify-center overflow-hidden', imageClassName)}>

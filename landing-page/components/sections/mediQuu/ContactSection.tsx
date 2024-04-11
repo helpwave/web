@@ -73,9 +73,8 @@ const contacts: (ProfileProps & { translatedInfo?: Record<Languages, string> })[
     badge: <MediQuuBadge/>,
     imageUrl: 'https://cdn.helpwave.de/mediquu/christian_remfert.jpg',
     socials: [
-      // TODO update socials
-      { type: 'linkedin', url: 'https://www.linkedin.com/' },
-      { type: 'mail', url: 'mailto:mail@helpwave.de' },
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/christian-remfert/' },
+      { type: 'mail', url: 'mailto:remfert@mediquu.de' },
     ],
     imageClassName: '!w-[230px] !h-[200px]',
     translatedInfo: {
@@ -90,9 +89,7 @@ const contacts: (ProfileProps & { translatedInfo?: Record<Languages, string> })[
     badge: <MediQuuBadge/>,
     imageUrl: 'https://cdn.helpwave.de/mediquu/peter_koerner.jpg',
     socials: [
-      // TODO update socials
-      { type: 'linkedin', url: 'https://www.linkedin.com/' },
-      { type: 'mail', url: 'mailto:mail@helpwave.de' },
+      { type: 'mail', url: 'mailto:koerner@mediquu.de' },
     ],
     imageClassName: '!w-[230px] !h-[200px]',
     translatedInfo: {

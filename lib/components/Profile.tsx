@@ -41,7 +41,7 @@ const SocialIcon = ({ type, url, size = 24 }: SocialIconProps) => {
       icon = <Helpwave size={24}/>
   }
   return (
-    <Link href={url}>
+    <Link href={url} target="_blank">
       <Chip color="black" className="!p-2">
         {icon}
       </Chip>

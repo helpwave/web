@@ -73,7 +73,7 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
       {
         question: 'Ändern sich jetzt die Preise für meine Produkte?',
         answer: `
-          Klare Antwort: Nein. Für Bestandskunden werden sich keine Preise für bereits abgeschlossene Verträge ändern.
+          Klare Antwort: \\b{Nein}. Für Bestandskunden werden sich keine Preise für bereits abgeschlossene Verträge ändern.
           Möglich sind neue Entwicklungen die dann in neuen Preismodellen angeboten werden können, dann aber klar erkennbar,
           mit zusätzlichen Funktionalitäten und ohne Einschränkung der bestehenden Funktionen. Transparenz ist eine
           der Kernideologien des Open Source Unternehmens helpwave.

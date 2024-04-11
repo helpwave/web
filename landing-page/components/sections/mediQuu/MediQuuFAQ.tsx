@@ -17,15 +17,32 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
     faqs: [
       {
         question: 'I just want to continue using mediQuu products, what do I need to do?',
-        answer: "We're glad to hear that! We'll make the transition as easy as possible for you. There will be no changes to your contract or data protection terms. In the coming weeks, we will personally provide you with further information on the administrative details. Protecting your data and ensuring your convenience are our top priorities."
+        answer: `
+          We're glad to hear that! We'll make the transition as easy as possible for you. 
+          There will be no changes to your contract or data protection terms. In the coming weeks,
+          we will personally provide you with further information on the administrative details.
+          Protecting your data and ensuring your convenience are our top priorities.
+        `
       },
       {
-        question: "Why is helpwave taking over mediQuu's products?",
-        answer: 'The existing products of mediQuu will continue to be supported seamlessly. However, to expand and complement the development of this product range according to your requirements, a large and innovative development team is necessary. Software products in the healthcare sector and their users have the highest demands for quality. Our goal is to meet these demands. helpwave has already successfully developed software in the field of inpatient care and now aims to enter the outpatient sector through the merger with mediQuu.'
+        question: `Why is helpwave taking over mediQuu's products?`,
+        answer: `
+          The existing products of mediQuu will continue to be supported seamlessly.
+          However, to expand and complement the development of this product range according to your requirements,
+          a large and innovative development team is necessary. Software products in the healthcare sector
+          and their users have the highest demands for quality. Our goal is to meet these demands.
+          helpwave has already successfully developed software in the field of inpatient care and now aims to enter
+          the outpatient sector through the merger with mediQuu.
+        `
       },
       {
         question: 'Will the prices for my products change now?',
-        answer: 'Clear answer: \\b{No}. Prices for existing contracts will not change for existing customers. New developments may result in new pricing models, which will be clearly identifiable, with additional functionalities and without restricting existing functions. Transparency is one of the core ideologies of the open-source company helpwave.'
+        answer: `
+          Clear answer: \\b{No}. Prices for existing contracts will not change for existing customers.
+          New developments may result in new pricing models, which will be clearly identifiable,
+          with additional functionalities and without restricting existing functions.
+          Transparency is one of the core ideologies of the open-source company helpwave.
+        `
       }
     ]
   },

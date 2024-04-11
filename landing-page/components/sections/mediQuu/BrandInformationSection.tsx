@@ -16,20 +16,30 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
   en: {
     aboutMediQuuTitle: 'About mediQuu',
     aboutHelpwaveTitle: 'About helpwave',
-    aboutMediQuuDescription: 'The mediQuu platform ensures a fast and, above all, smooth exchange between doctors, clinics, ' +
-      'pharmacies, care facilities and other healthcare providers.',
-    aboutHelpwaveDescription: 'Regulatory burdens and high barriers to entry make it difficult for small companies to enter ' +
-      'the market, leading to a lack of competition. helpwave is here to change that. We offer a platform that ' +
-      'brings everyone to the table, not just the big companies.'
+    aboutMediQuuDescription: `
+      Since 2015, we have been ensuring a comfortable and comprehensive networking of providers in the healthcare sector.
+      Our goal is always a demand-oriented development of digital services to simplify the networking of all actors
+      and create new possibilities. In the future, we will pursue this path with the strong team of helpwave GmbH.
+    `,
+    aboutHelpwaveDescription: `
+      Regulatory burdens and high barriers to entry make it difficult for small companies to enter
+      the market, leading to a lack of competition. helpwave is here to change that. We offer a platform that
+      brings everyone to the table, not just the big companies.
+    `,
   },
   de: {
     aboutMediQuuTitle: 'Über mediQuu',
     aboutHelpwaveTitle: 'Über helpwave',
-    aboutMediQuuDescription: 'Die mediQuu-Plattform sorgt für einen schnellen und vor allem reibungslosen Austausch unter ' +
-      'Ärzten, Kliniken, Apotheken, Pflegeeinrichtungen und weiteren Leistungserbringern im Gesundheitswesen.',
-    aboutHelpwaveDescription: 'Regulatorischer Aufwand und hohe Eintrittsbarrieren machen es kleinen Unternehmen schwer, ' +
-      'in den Markt einzutreten, was zu einem Mangel an Wettbewerb führt. helpwave ist hier, um das zu ändern. ' +
-      'Wir bieten eine Plattform, die alle an einen Tisch bringt, nicht nur die großen Unternehmen.',
+    aboutMediQuuDescription: `
+      Seit 2015 sorgen wir für eine komfortable und übergreifende Vernetzung von Versorg​ern und Leistungserbringern im Gesundheitswesen.
+      Unser Ziel ist stets eine bedarfsgerechte Entwicklung von digitalen Diensten, um die Vernetzung aller Aktuere zu vereinfachen
+      und neue Möglichkeiten zu schaffen. Zukünftig werden wir diesen Weg mit dem starken Team der helpwave GmbH beschreiten.
+    `,
+    aboutHelpwaveDescription: `
+      Regulatorischer Aufwand und hohe Eintrittsbarrieren machen es kleinen Unternehmen schwer,
+      in den Markt einzutreten, was zu einem Mangel an Wettbewerb führt. helpwave ist hier, um das zu ändern.
+      Wir bieten eine Plattform, die alle an einen Tisch bringt, nicht nur die großen Unternehmen.
+    `,
   }
 }
 export const BrandDescriptionsSection = () => {

@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import Head from 'next/head'
+import { usePathname } from 'next/navigation'
 import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -17,6 +18,10 @@ const spaceGrotesk = SpaceGrotesk({
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
+  const pathname = usePathname()
+
+  // All mediQuu customers are from germany, therefore /mediquu overrides the defaultLanguage
+  const defaultLanguage = pathname === '/mediquu' ? 'de' : undefined
 
   return (
     <>
@@ -31,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         `}</style>
       </Head>
       <QueryClientProvider client={queryClient}>
-        <ProvideLanguage>
+        <ProvideLanguage defaultLanguage={defaultLanguage}>
           <div className={tw('font-sans')}>
             <Component {...pageProps} />
             <Toaster />

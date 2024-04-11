@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 import { tw, tx } from '@twind/core'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -35,13 +35,13 @@ const SocialIcon = ({ type, url, size = 24 }: SocialIconProps) => {
       icon = <Globe size={size}/>
       break
     case 'medium':
-      icon = <Globe size={size} /> // TODO find an appropriate medium svg
+      icon = <Globe size={size}/> // TODO find an appropriate medium svg
       break
     default:
       icon = <Helpwave size={24}/>
   }
   return (
-    <Link href={url}>
+    <Link href={url} target="_blank">
       <Chip color="black" className="!p-2">
         {icon}
       </Chip>
@@ -49,12 +49,7 @@ const SocialIcon = ({ type, url, size = 24 }: SocialIconProps) => {
   )
 }
 
-type Size = {
-  width: number,
-  height: number
-}
-
-export type ProfileProps = {
+export type ProfileProps = HTMLAttributes<HTMLDivElement> & {
   name: string,
   imageUrl: string,
   badge?: ReactNode,
@@ -67,11 +62,7 @@ export type ProfileProps = {
   tags?: string[],
   info?: string,
   socials?: SocialIconProps[],
-  /**
-   * Defaults to 200px X 200px
-   */
-  imageSize?: Partial<Size>,
-  className?: string
+  imageClassName?: string
 }
 
 /**
@@ -87,18 +78,18 @@ export const Profile = ({
   tags,
   info,
   socials,
-  imageSize,
-  className = ''
+  className,
+  imageClassName,
+  ...divProps
 }: ProfileProps) => {
-  const usedImageSize: Size = { width: imageSize?.width ?? 200, height: imageSize?.height ?? 200 }
-
   return (
     <div
-      className={tx(`flex flex-col items-center text-center rounded-3xl p-3 pb-4 bg-white w-[${usedImageSize?.width + 24}px]`, className)}>
-      <div className={tw('relative mb-6')} style={{ ...usedImageSize }}>
-        <div className={tw('absolute rounded-xl flex flex-row items-center justify-center overflow-hidden')}
-             style={{ ...usedImageSize }}>
-          <Image src={imageUrl} alt="" className={tw('z-[2]')} {...usedImageSize}/>
+      {...divProps}
+      className={tx(`flex flex-col items-center text-center rounded-3xl p-3 pb-4 bg-white w-min`, className)}
+    >
+      <div className={tw('relative mb-6')}>
+        <div className={tx('relative rounded-xl flex flex-row items-center justify-center overflow-hidden', imageClassName)}>
+          <Image src={imageUrl} alt="" className={tx('z-[2] object-cover', imageClassName)} width={0} height={0} style={{ width: 'auto', height: 'auto' }}/>
         </div>
         <div className={tw('absolute top-[6px] left-[6px] z-[3]')}>{badge}</div>
         {roleBadge && (
@@ -119,7 +110,7 @@ export const Profile = ({
       {socials && (
         <div className={tw('flex flex-wrap flex-grow items-end justify-center gap-x-4 gap-y-2 mt-4')}>
           {socials.map((socialIconProps, index) => (
-            <SocialIcon key={index} {...socialIconProps} size={socialIconProps.size ?? 20} />
+            <SocialIcon key={index} {...socialIconProps} size={socialIconProps.size ?? 20}/>
           ))}
         </div>
       )}

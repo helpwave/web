@@ -28,25 +28,26 @@ export const ProfileVariation: Story = {
         <MarkdownInterpreter text={'\\helpwave'}/>
       </Chip>
     ),
-    imageSize: { width: 200, height: 200 },
     tags: ['development', 'frontend', 'cloud', 'backend'],
     info: 'This is an additional Information Text.',
-    socials: [{
-      type: 'github',
-      url: 'https://github.com',
-    },
-    {
-      type: 'mail',
-      url: 'mailto:mail@helpwave.de',
-    },
-    {
-      type: 'linkedin',
-      url: 'https://www.linkedin.com/',
-    },
-    {
-      type: 'website',
-      url: 'https://helpwave.de',
-    },
-    ]
+    socials: [
+      {
+        type: 'github',
+        url: 'https://github.com',
+      },
+      {
+        type: 'mail',
+        url: 'mailto:mail@helpwave.de',
+      },
+      {
+        type: 'linkedin',
+        url: 'https://www.linkedin.com/',
+      },
+      {
+        type: 'website',
+        url: 'https://helpwave.de',
+      },
+    ],
+    imageClassName: 'w-[200px] h-[200px]'
   },
 }

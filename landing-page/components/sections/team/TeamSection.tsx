@@ -1,104 +1,115 @@
 import { tw } from '@helpwave/common/twind'
+import type { ProfileProps } from '@helpwave/common/components/Profile'
 import TeamGroup from '@/components/TeamGroup'
-import type { TeamMemberProps } from '@/components/TeamMember'
 
-const pictureURL = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
+const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 
-const teamData = {
+const teamData: Record<string, ProfileProps[]> = {
   founders: [
     {
       name: 'Max Schäfer',
+      roleBadge: 'CTO',
       role: 'Chief Technology Officer',
-      pictureURL: pictureURL('max_schaefer'),
+      imageUrl: imageUrl('max_schaefer'),
       tags: ['development', 'cloud', 'scale'],
       socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/maxrobinschaefer/' },
-        { name: 'mail', url: 'mailto:max.schaefer@helpwave.de' },
-        { name: 'github', url: 'https://github.com/MaxSchaefer' },
-      ]
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/maxrobinschaefer/' },
+        { type: 'mail', url: 'mailto:max.schaefer@helpwave.de' },
+        { type: 'github', url: 'https://github.com/MaxSchaefer' },
+      ],
+      imageClassName: 'w-[230px] h-[200px]'
     },
     {
       name: 'Felix Evers',
+      roleBadge: 'CEO',
       role: 'Chief Executive Officer',
-      pictureURL: pictureURL('felix_evers'),
+      imageUrl: imageUrl('felix_evers'),
       tags: ['strategic', 'management', 'innovation'],
       socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/f-evers/' },
-        { name: 'mail', url: 'mailto:felix.evers@helpwave.de' },
-        { name: 'website', url: 'https://felixevers.de' },
-        { name: 'github', url: 'https://github.com/use-to' },
-      ]
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/f-evers/' },
+        { type: 'mail', url: 'mailto:felix.evers@helpwave.de' },
+        { type: 'website', url: 'https://felixevers.de' },
+        { type: 'github', url: 'https://github.com/use-to' },
+      ],
+      imageClassName: 'w-[230px] h-[200px]'
     },
     {
       name: 'Christian Porschen',
       title: 'Dr. med.',
       role: 'Chief Medical Officer',
-      pictureURL: pictureURL('christian_porschen'),
+      roleBadge: 'CMO',
+      imageUrl: imageUrl('christian_porschen'),
       tags: ['ai', 'science', 'doctor'],
       socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/cpors/' },
-        { name: 'mail', url: 'mailto:christian.porschen@helpwave.de' },
-        { name: 'github', url: 'https://github.com/aegis301' },
-      ]
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/cpors/' },
+        { type: 'mail', url: 'mailto:christian.porschen@helpwave.de' },
+        { type: 'github', url: 'https://github.com/aegis301' },
+      ],
+      imageClassName: 'w-[230px] h-[200px]'
     },
   ],
   development: [
     {
       name: 'Felix Thape',
       role: 'fullstack wizard',
-      pictureURL: pictureURL('felix_thape'),
+      imageUrl: imageUrl('felix_thape'),
       tags: ['maintainer', 'web', 'mobile'],
       socials: [
-        { name: 'mail', url: 'mailto:felix.thape@helpwave.de' },
-        { name: 'github', url: 'https://github.com/DasProffi' },
-      ]
+        { type: 'mail', url: 'mailto:felix.thape@helpwave.de' },
+        { type: 'github', url: 'https://github.com/DasProffi' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Max Baumann',
       role: 'backend magician',
-      pictureURL: pictureURL('max_baumann'),
+      imageUrl: imageUrl('max_baumann'),
       tags: ['microservices', 'deployment', 'database'],
       socials: [
-        { name: 'mail', url: 'mailto:max.baumann@helpwave.de' },
-        { name: 'website', url: 'https://bmn.dev' },
-        { name: 'github', url: 'https://github.com/fosefx' },
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/max-bmn/' },
-      ]
+        { type: 'mail', url: 'mailto:max.baumann@helpwave.de' },
+        { type: 'website', url: 'https://bmn.dev' },
+        { type: 'github', url: 'https://github.com/fosefx' },
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/max-bmn/' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Florian Sabonchi',
       role: 'fullstack sorcerer',
-      pictureURL: pictureURL('florian_sabonchi'),
+      imageUrl: imageUrl('florian_sabonchi'),
       tags: ['flutter', 'react', 'go'],
       socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/florian-s-599819211/' },
-        { name: 'mail', url: 'mailto:florian.sabonchi@helpwave.de' },
-        { name: 'medium', url: 'https://medium.com/@sabonchi' },
-        { name: 'github', url: 'https://github.com/florian-sabonchi' },
-      ]
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/florian-s-599819211/' },
+        { type: 'mail', url: 'mailto:florian.sabonchi@helpwave.de' },
+        { type: 'medium', url: 'https://medium.com/@sabonchi' },
+        { type: 'github', url: 'https://github.com/florian-sabonchi' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Paul Kalhorn',
       role: 'fullstack jedi',
       tags: ['microservices', 'web', 'grpc'],
-      pictureURL: pictureURL('paul_kalhorn'),
+      imageUrl: imageUrl('paul_kalhorn'),
       socials: [
-        { name: 'mail', url: 'mailto:paul.kalhorn@helpwave.de' },
-        { name: 'website', url: 'https://kalhorn.io/' },
-        { name: 'github', url: 'https://github.com/PaulKalho' },
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/paul-kalhorn-7b2343228/' },
-      ]
+        { type: 'mail', url: 'mailto:paul.kalhorn@helpwave.de' },
+        { type: 'website', url: 'https://kalhorn.io/' },
+        { type: 'github', url: 'https://github.com/PaulKalho' },
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/paul-kalhorn-7b2343228/' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Jonas Ester',
       role: 'ui/ux prodigy',
       tags: ['uiux', 'web', 'mobile'],
-      pictureURL: pictureURL('jonas_ester'),
+      imageUrl: imageUrl('jonas_ester'),
       socials: [
-        { name: 'mail', url: 'mailto:jonas.ester@helpwave.de' },
-        { name: 'website', url: 'https://www.jonasester.de/' },
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/jonas-ester-b063a8188/' },
-      ]
+        { type: 'mail', url: 'mailto:jonas.ester@helpwave.de' },
+        { type: 'website', url: 'https://www.jonasester.de/' },
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/jonas-ester-b063a8188/' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     }
   ],
   medical: [
@@ -106,31 +117,34 @@ const teamData = {
       name: 'Ludwig Maidowski',
       role: 'medical professional & legal',
       tags: ['law', 'doctor', 'product'],
-      pictureURL: pictureURL('ludwig_maidowski'),
+      imageUrl: imageUrl('ludwig_maidowski'),
       socials: [
-        { name: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
-      ]
+        { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Sophia Ehlers',
       role: 'medical professional',
-      pictureURL: pictureURL('sophia_ehlers'),
+      imageUrl: imageUrl('sophia_ehlers'),
       tags: ['doctor', 'medicine', 'product'],
       socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/sophia-ehlers/' },
-        { name: 'mail', url: 'mailto:sophia.ehlers@helpwave.de' },
-      ]
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/sophia-ehlers/' },
+        { type: 'mail', url: 'mailto:sophia.ehlers@helpwave.de' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
     {
       name: 'Pierre Dürgen',
       role: 'medical professional',
-      pictureURL: pictureURL('pierre_duergen'),
+      imageUrl: imageUrl('pierre_duergen'),
       tags: ['doctor', 'medicine', 'product'],
       socials: [
-        { name: 'linkedin', url: 'https://www.linkedin.com/in/pierre-d-02239011a/' },
-        { name: 'mail', url: 'mailto:pierre.duergen@helpwave.de' },
-      ]
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/pierre-d-02239011a/' },
+        { type: 'mail', url: 'mailto:pierre.duergen@helpwave.de' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
     },
   ],
 }
@@ -139,7 +153,7 @@ const TeamSection = () => {
   return (
     <div className={tw('pt-32 pb-16')}>
       {Object.entries(teamData).map(([name, members]) => (
-        <TeamGroup key={name} name={name} members={members as TeamMemberProps[]} />
+        <TeamGroup key={name} name={name} members={members} />
       ))}
     </div>
   )

@@ -1,136 +1,127 @@
-import { useLanguage, type Languages } from '@helpwave/common/hooks/useLanguage'
-import type { ProfileProps } from '@helpwave/common/components/Profile'
-import { Profile } from '@helpwave/common/components/Profile'
-import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
-import { tx } from '@twind/core'
-import { MediQuuBadge } from '@/components/sections/mediQuu/MediQuuBadge'
+import { useState } from 'react'
+import { validateEmail } from '@helpwave/common/util/emailValidation'
+import { Input } from '@helpwave/common/components/user-input/Input'
+import { Textarea } from '@helpwave/common/components/user-input/Textarea'
+import { Button } from '@helpwave/common/components/Button'
 
-const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
-
-const contacts: (ProfileProps & { translatedInfo?: Record<Languages, string> })[] = [
-  {
-    name: 'Christian Porschen',
-    title: 'Dr. med.',
-    role: 'Chief Medical Officer',
-    roleBadge: 'CMO',
-    imageUrl: imageUrl('christian_porschen'),
-    badge: (
-      <HelpwaveBadge
-        size="small"
-        className="bg-black !gap-x-1 !w-fit"
-      />
-    ),
-    socials: [
-      { type: 'linkedin', url: 'https://www.linkedin.com/in/cpors/' },
-      { type: 'mail', url: 'mailto:christian.porschen@helpwave.de' },
-      { type: 'github', url: 'https://github.com/aegis301' },
-    ],
-    imageClassName: '!w-[230px] !h-[200px]'
-  },
-  {
-    name: 'Felix Evers',
-    roleBadge: 'CEO',
-    role: 'Chief Executive Officer',
-    imageUrl: imageUrl('felix_evers'),
-    badge: (
-      <HelpwaveBadge
-        size="small"
-        className="bg-black !gap-x-1 !w-fit"
-      />
-    ),
-    socials: [
-      { type: 'linkedin', url: 'https://www.linkedin.com/in/f-evers/' },
-      { type: 'mail', url: 'mailto:felix.evers@helpwave.de' },
-      { type: 'website', url: 'https://felixevers.de' },
-      { type: 'github', url: 'https://github.com/use-to' },
-    ],
-    imageClassName: '!w-[230px] !h-[200px]'
-  },
-  {
-    name: 'Max Schäfer',
-    roleBadge: 'CTO',
-    role: 'Chief Technology Officer',
-    imageUrl: imageUrl('max_schaefer'),
-    badge: (
-      <HelpwaveBadge
-        size="small"
-        className="bg-black !gap-x-1 !w-fit"
-      />
-    ),
-    socials: [
-      { type: 'linkedin', url: 'https://www.linkedin.com/in/maxrobinschaefer/' },
-      { type: 'mail', url: 'mailto:max.schaefer@helpwave.de' },
-      { type: 'github', url: 'https://github.com/MaxSchaefer' },
-    ],
-    imageClassName: '!w-[230px] !h-[200px]'
-  },
-  {
-    name: 'Christian Remfert',
-    roleBadge: 'Advisor',
-    badge: <MediQuuBadge/>,
-    imageUrl: 'https://cdn.helpwave.de/mediquu/christian_remfert.jpg',
-    socials: [
-      { type: 'linkedin', url: 'https://www.linkedin.com/in/christian-remfert/' },
-      { type: 'mail', url: 'mailto:remfert@mediquu.de' },
-    ],
-    imageClassName: '!w-[230px] !h-[200px]',
-    translatedInfo: {
-      de: 'Zuständig für die konzeptionelle und technische Umsetzung der mediQuu-Plattform, zukünftig beratend tätig.',
-      en: 'Responsible for the conceptual and technical implementation of the mediQuu platform, providing advisory services in the future.'
-    },
-    className: 'w-500px'
-  },
-  {
-    name: 'Peter Körner',
-    roleBadge: 'Advisor',
-    badge: <MediQuuBadge/>,
-    imageUrl: 'https://cdn.helpwave.de/mediquu/peter_koerner.jpg',
-    socials: [
-      { type: 'mail', url: 'mailto:koerner@mediquu.de' },
-    ],
-    imageClassName: '!w-[230px] !h-[200px]',
-    translatedInfo: {
-      de: 'Zuständig für die konzeptionelle und visuelle Umsetzung der mediQuu-Plattform, zukünftig beratend tätig.',
-      en: 'Responsible for the conceptual and visual implementation of the mediQuu platform, providing advisory services in the future.'
-    }
-  },
-]
-
-type MediQuuContactTranslation = {
-  title: string,
-  subTitle: string
+type ContactSectionTranslation = {
+  contact: string,
+  contactDescription: string,
+  firstname: string,
+  lastname: string,
+  email: string,
+  message: string,
+  send: string
 }
 
-const defaultMediQuuContactTranslation: Record<Languages, MediQuuContactTranslation> = {
+const defaultContactSectionTranslation: Record<Languages, ContactSectionTranslation> = {
   en: {
-    title: 'Contacts',
-    subTitle: 'We are available to answer any questions you may have at short notice.',
+    contact: 'Contact',
+    contactDescription: 'We are available to answer any questions you may have at short notice.',
+    firstname: 'First Name',
+    lastname: 'Last Name',
+    email: 'E-Mail',
+    message: 'Your Message',
+    send: 'Send Message'
   },
   de: {
-    title: 'Ansprechepartner',
-    subTitle: 'Wir stehen Ihnen bei jeglichen Fragen kurzfristig zur Verfügung.',
+    contact: 'Kontakt',
+    contactDescription: 'Wir stehen Ihnen bei jeglichen Fragen kurzfristig zur Verfügung.',
+    firstname: 'Vorname',
+    lastname: 'Nachname',
+    email: 'E-Mail',
+    message: 'Ihre Nachricht',
+    send: 'Nachricht senden'
   }
 }
 
-export const ContactSection = () => {
-  const translation = useTranslation(defaultMediQuuContactTranslation)
-  const usedLanguage = useLanguage().language
+type Contact = {
+  name: string,
+  email: string
+}
+
+type ContactForm = {
+  firstname: string,
+  lastname: string,
+  email: string,
+  message: string
+}
+
+const contacts: Contact[] = [
+  {
+    name: 'Dr. med. Christian Porschen',
+    email: 'contact@helpwave.de'
+  }
+]
+/**
+ * The section on the mediquu page for contacting helpwave
+ */
+export const ContactSection = ({
+  overwriteTranslation,
+}: PropsForTranslation<ContactSectionTranslation>) => {
+  const translation = useTranslation(defaultContactSectionTranslation, overwriteTranslation)
+  const [contactForm, updateContactForm] = useState<ContactForm>({
+    firstname: '',
+    lastname: '',
+    email: '',
+    message: '',
+  })
+
+  const isValid = !!contactForm.firstname && !!contactForm.lastname && validateEmail(contactForm.email) && !!contactForm.message
+
   return (
-    <div className={tw('flex flex-col w-full max-w-[1000px]')}>
-      <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
-      <Span>{translation.subTitle}</Span>
-      <div className={tw('flex flex-wrap desktop:justify-around mobile:justify-around gap-x-8 gap-y-6 mt-8')}>
-        {contacts.map(value => (
-          <Profile
-            key={value.name}
-            info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
-            {...value}
-            className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
-          />
-        ))}
+    // TODO optimize layout for mobile when ready
+    <div className={tw('flex desktop:flex-row desktop:justify-between w-full max-w-[1000px] mobile:flex-col gap-8')}>
+      <div className={tw('flex flex-col gap-y-1 desktop:w-1/2')}>
+        <Span type="title" className={tw('text-hw-secondary-400 !text-3xl')}>{translation.contact}</Span>
+        <Span>{translation.contactDescription}</Span>
+        {contacts.length > 0 && (
+          <div className={tw('flex flex-col gap-y-6 mt-6')}>
+            {contacts.map((contact, index) => (
+              <div key={index} className={tw('flex flex-col gap-y-1')}>
+                <Span className={tw('font-bold')}>{contact.name}</Span>
+                <Span>{contact.email}</Span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className={tw('flex flex-col gap-y-2 desktop:w-1/2')}>
+        <Input
+          value={contactForm.firstname}
+          placeholder={translation.firstname}
+          onChange={firstname => updateContactForm(prevState => ({ ...prevState, firstname }))}
+        />
+        <Input
+          value={contactForm.lastname}
+          placeholder={translation.lastname}
+          onChange={lastname => updateContactForm(prevState => ({ ...prevState, lastname }))}
+        />
+        <Input
+          value={contactForm.email}
+          placeholder={translation.email}
+          onChange={email => updateContactForm(prevState => ({ ...prevState, email }))}
+        />
+        <Textarea
+          value={contactForm.message}
+          placeholder={translation.message}
+          onChange={message => updateContactForm(prevState => ({ ...prevState, message }))}
+        />
+        <Button
+          color="accent-secondary"
+          onClick={() => {
+            // TODO send form information here
+          }}
+          disabled={!isValid}
+          className={tw('py-4')}
+        >
+          {translation.send}
+        </Button>
       </div>
     </div>
   )

@@ -5,8 +5,9 @@ import Footer from '@/components/Footer'
 import { MediQuuHeaderSection } from '@/components/sections/mediQuu/Header'
 import { MediQuuInformationSection } from '@/components/sections/mediQuu/InformationSection'
 import { BrandDescriptionsSection } from '@/components/sections/mediQuu/BrandInformationSection'
-import { ContactSection } from '@/components/sections/mediQuu/ContactSection'
+import { TeamSection } from '@/components/sections/mediQuu/TeamSection'
 import { MediQuuFAQSection } from '@/components/sections/mediQuu/MediQuuFAQ'
+import { ContactSection } from '@/components/sections/mediQuu/ContactSection'
 
 const MediQuuPage: NextPage = () => {
   return (
@@ -23,10 +24,13 @@ const MediQuuPage: NextPage = () => {
           <BrandDescriptionsSection/>
         </div>
         <div className={tw('flex flex-col w-full py-16 items-center desktop:px-16 mobile:px-8')}>
-          <ContactSection/>
+          <TeamSection/>
         </div>
         <div className={tw('flex flex-col w-full py-16 bg-gray-100 items-center desktop:px-16 mobile:px-8')}>
           <MediQuuFAQSection/>
+        </div>
+        <div className={tw('flex flex-col w-full py-16 bg-gray-100 items-center desktop:px-16 mobile:px-8')}>
+          <ContactSection/>
         </div>
       </div>
       <Footer/>

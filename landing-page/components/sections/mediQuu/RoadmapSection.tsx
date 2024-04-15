@@ -74,7 +74,7 @@ const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {
       {
         name: 'helpwave cloud',
         description: 'Sichern Sie Ihre Daten in einer sicheren Serverumgebung vor Ort und verbessern Sie den Zugriff darauf für sich selbst und Ihre Patienten.',
-        start: 'Adaption ab Q5.2025',
+        start: 'Adaption ab Q1.2025',
       },
     ],
   }

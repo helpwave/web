@@ -27,7 +27,7 @@ const defaultMediQuuInformationTranslation: Record<Languages, MediQuuInformation
     subTitle3: <>We would be delighted to meet you in person, simply send your suggested dates to <a className={tw('underline')} href="mailto:mediquu@helpwave.de">mediquu@helpwave.de</a></>
   },
   de: {
-    title: 'Informationen zur Übernahme',
+    title: 'Informationen zur Transformation',
     subTitle1: 'helpwave, ein junges und innovatives Team, hat prozessorientierte Lösungen für die stationäre Versorgung ' +
       'entwickelt und arbeitet an Vernetzungs- und Cloud-Infrastrukturlösungen im Gesundheitswesen. Der Zusammenschluss mit ' +
       'mediQuu wird die Verknüpfung von ambulanter und stationärer Versorgung vorantreiben und innovative Impulse für das ' +

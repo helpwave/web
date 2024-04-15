@@ -18,7 +18,7 @@ type RoadmapTranslation = {
 const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {
   en: {
     title: 'What\'s next?',
-    description: 'Dive into how helpwave pursue the mediQuu vision.',
+    description: 'Dive into how helpwave pursues the mediQuu vision.',
     roadmap: [
       {
         name: 'helpwave tasks',
@@ -73,7 +73,7 @@ const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {
       },
       {
         name: 'helpwave cloud',
-        description: 'Sichern Sie Ihre Daten in einer sicheren Serverumgebung vor Ort und verbessern Sie den Zugriff darauf für sich selbst und Ihre Patienten.',
+        description: 'Speichern Sie Ihre Daten in einer sicheren Serverumgebung vor Ort und verbessern Sie den Zugriff darauf für sich selbst und Ihre Patienten.',
         start: 'Adaption ab Q1.2025',
       },
     ],

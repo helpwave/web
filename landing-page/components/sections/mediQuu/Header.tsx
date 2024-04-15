@@ -14,15 +14,13 @@ type MediQuuHeaderTranslation = {
 const defaultMediQuuPageTranslation: Record<Languages, MediQuuHeaderTranslation> = {
   en: {
     title: 'mediQuu becomes helpwave',
-    subTitle: 'helpwave becomes the new operator of the mediQuu platform and will continue to develop the digital ' +
-      'applications with a strong team in the future. \\b{There will be no changes for mediQuu customers}, ' +
-      'a smooth transition is anticipated.',
+    subTitle: 'helpwave is taking over mediQuu in order to further develop its digitally networked healthcare solutions ' +
+      '\\b{without any changes for existing mediQuu customers}.'
   },
   de: {
     title: 'Aus mediQuu wird helpwave',
-    subTitle: 'helpwave wird neuer Betreiber der mediQuu-Plattform und zukünftig mit einem starken Team die digitalen ' +
-      'Anwendungen weiterentwickeln. \\b{Für mediQuu-Kunden wird es keine Veränderungen geben}, ' +
-      'ein reibungsloser Übergang ist avisiert.',
+    subTitle: 'helpwave übernimmt mediQuu, um deren digital vernetzte Gesundheitslösungen weiterzuentwickeln,' +
+      ' \\b{ohne dass sich für bestehende mediQuu-Kunden Veränderungen ergeben}.'
   }
 }
 

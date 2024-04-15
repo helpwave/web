@@ -22,11 +22,9 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
       and create new possibilities. In the future, we will pursue this path with the strong team of helpwave GmbH.
     `,
     aboutHelpwaveDescription: `
-      As a dynamic technology company, helpwave is committed to the Open Innovation approach in healthcare, fostering new
-      innovators to facilitate the easy and effective creation of high-quality health products with strong interoperability.
-      With recent regulatory changes such as the introduction of the ePA and other directives impacting the outpatient sector,
-      helpwave positions itself with a process-oriented development strategy as the leading alternative in the healthcare market,
-      ensuring optimal digital healthcare delivery.
+      Regulatory burdens and high barriers to entry make it difficult for small companies to enter
+      the market, leading to a lack of competition. helpwave is here to change that. We offer a platform that
+      brings everyone to the table, not just the big companies.
     `,
   },
   de: {
@@ -38,11 +36,9 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
       und neue Möglichkeiten zu schaffen. Zukünftig werden wir diesen Weg mit dem starken Team der helpwave GmbH beschreiten.
     `,
     aboutHelpwaveDescription: `
-      Als dynamisches Technologieunternehmen haben wir uns dem Open Innovation-Ansatz im Gesundheitswesen verschrieben.
-      Durch die Förderung neuer Innovatoren ermöglichen wir die einfache und effektive Schöpfung hochwertiger Gesundheitsprodukte
-      mit hoher Interoperabilität. Angesichts der jüngsten regulatorischen Veränderungen wie der Einführung der ePA und anderer Vorschriften
-      mit Auswirkungen im ambulanten Bereich positioniert sich helpwave mit einer prozessorientierten Entwicklungsstrategie als
-      führende Alternative im Gesundheitsmarkt, um eine optimale digitale Versorgung zu gewährleisten.
+      Regulatorischer Aufwand und hohe Eintrittsbarrieren machen es kleinen Unternehmen schwer,
+      in den Markt einzutreten, was zu einem Mangel an Wettbewerb führt. helpwave ist hier, um das zu ändern.
+      Wir bieten eine Plattform, die alle an einen Tisch bringt, nicht nur die großen Unternehmen.
     `,
   }
 }

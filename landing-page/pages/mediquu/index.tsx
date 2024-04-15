@@ -6,7 +6,6 @@ import { MediQuuHeaderSection } from '@/components/sections/mediQuu/Header'
 import { MediQuuInformationSection } from '@/components/sections/mediQuu/InformationSection'
 import { BrandDescriptionsSection } from '@/components/sections/mediQuu/BrandInformationSection'
 import { ContactSection } from '@/components/sections/mediQuu/ContactSection'
-import { RoadmapSection } from '@/components/sections/mediQuu/RoadmapSection'
 import { MediQuuFAQSection } from '@/components/sections/mediQuu/MediQuuFAQ'
 
 const MediQuuPage: NextPage = () => {
@@ -25,9 +24,6 @@ const MediQuuPage: NextPage = () => {
         </div>
         <div className={tw('flex flex-col w-full py-16 items-center desktop:px-16 mobile:px-8')}>
           <ContactSection/>
-        </div>
-        <div className={tw('flex flex-col w-full pt-16 bg-gray-100 items-center desktop:px-16 mobile:px-8')}>
-          <RoadmapSection />
         </div>
         <div className={tw('flex flex-col w-full py-16 bg-gray-100 items-center desktop:px-16 mobile:px-8')}>
           <MediQuuFAQSection/>

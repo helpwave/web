@@ -18,8 +18,8 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
       {
         question: 'I just want to continue using mediQuu products, what do I need to do?',
         answer: `
-          We're glad to hear that! We'll make the transition as easy as possible for you.
-          \\b{There will be no changes to your contract or data protection terms.} In the coming weeks,
+          We're glad to hear that! We'll make the transition as easy as possible for you. 
+          There will be no changes to your contract or data protection terms. In the coming weeks,
           we will personally provide you with further information on the administrative details.
           Protecting your data and ensuring your convenience are our top priorities.
         `
@@ -29,7 +29,7 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
         answer: `
           The existing products of mediQuu will continue to be supported seamlessly.
           However, to expand and complement the development of this product range according to your requirements,
-          \\b{a large and innovative development team is necessary}. Software products in the healthcare sector
+          a large and innovative development team is necessary. Software products in the healthcare sector
           and their users have the highest demands for quality. Our goal is to meet these demands.
           helpwave has already successfully developed software in the field of inpatient care and now aims to enter
           the outpatient sector through the merger with mediQuu.
@@ -38,7 +38,7 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
       {
         question: 'Will the prices for my products change now?',
         answer: `
-          \\b{No}. Prices for existing contracts will not change for existing customers.
+          Clear answer: \\b{No}. Prices for existing contracts will not change for existing customers.
           New developments may result in new pricing models, which will be clearly identifiable,
           with additional functionalities and without restricting existing functions.
           Transparency is one of the core ideologies of the open-source company helpwave.
@@ -54,7 +54,7 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
         question: 'Ich will einfach nur die mediQuu Produkte weiter nutzen, was muss ich tun?',
         answer: `
           Das freut uns! Wir machen Ihnen den Übergang so einfach wie möglich.
-          \\b{An Ihrem Vertrag und Ihren Datenschutzbedingungen ändert sich überhaupt nichts.}
+          An Ihrem Vertrag und Ihren Datenschutzbedingungen ändert sich überhaupt nichts.
           In den kommenden Wochen werden wir Ihnen persönlich weitere Informationen zu den administrativen
           Details zukommen lassen. Der Schutz Ihrer Daten und Ihr Komfort stehen dabei an erster Stelle.
         `
@@ -64,7 +64,7 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
         answer: `
           Die bestehenden Produkte der mediQuu werden nahtlos weiter unterstützt.
           Um die Entwicklung dieser Produktpalette jedoch nach Ihren Vorstellungen zu erweitern und zu ergänzen,
-          ist \\b{ein großes und innovatives Entwicklungsteam notwendig}. Softwareprodukte im Gesundheitssektor
+          ist ein großes und innovatives Entwicklungsteam notwendig. Softwareprodukte im Gesundheitssektor
           und Ihre Anwender haben höchste Ansprüche an Qualität. Diesen Ansprüchen gerecht zu werden ist unser Ziel.
           helpwave hat bereits erfolgreich Software im Bereich der stationären Versorgung entwickelt und will
           nun mit der Vereinigung mit der mediQuu den Sprung in den ambulanten Sektor wagen.
@@ -73,7 +73,7 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
       {
         question: 'Ändern sich jetzt die Preise für meine Produkte?',
         answer: `
-          \\b{Nein}. Für Bestandskunden werden sich keine Preise für bereits abgeschlossene Verträge ändern.
+          Klare Antwort: \\b{Nein}. Für Bestandskunden werden sich keine Preise für bereits abgeschlossene Verträge ändern.
           Möglich sind neue Entwicklungen die dann in neuen Preismodellen angeboten werden können, dann aber klar erkennbar,
           mit zusätzlichen Funktionalitäten und ohne Einschränkung der bestehenden Funktionen. Transparenz ist eine
           der Kernideologien des Open Source Unternehmens helpwave.

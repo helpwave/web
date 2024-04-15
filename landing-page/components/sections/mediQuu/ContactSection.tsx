@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
-import { Button } from '@helpwave/common/components/Button'
+import { LoadingButton } from '@helpwave/common/components/LoadingButton'
 import { submitHubSpotForm } from '@/utils/hubspot'
 
 type ContactSectionTranslation = {
@@ -99,6 +99,7 @@ export const ContactSection = ({
     email: '',
     message: '',
   })
+  const [isSending, setIsSending] = useState<boolean>(false)
 
   const isValid = !!contactForm.firstname && !!contactForm.lastname && validateEmail(contactForm.email) && !!contactForm.message
 
@@ -140,14 +141,20 @@ export const ContactSection = ({
           placeholder={translation.message}
           onChange={message => updateContactForm(prevState => ({ ...prevState, message }))}
         />
-        <Button
+        <LoadingButton
           color="accent-secondary"
-          onClick={() => sendContactFormToHubSpot(contactForm)}
+          onClick={() => {
+            if (!isSending) {
+              setIsSending(true)
+              sendContactFormToHubSpot(contactForm).finally(() => setIsSending(false))
+            }
+          }}
           disabled={!isValid}
-          className={tw('py-4')}
+          className={tw('py-4 w-full')}
+          isLoading={isSending}
         >
           {translation.send}
-        </Button>
+        </LoadingButton>
       </div>
     </div>
   )

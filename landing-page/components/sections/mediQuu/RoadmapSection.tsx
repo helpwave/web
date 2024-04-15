@@ -58,12 +58,12 @@ const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {
       },
       {
         name: 'mediQuu Viva',
-        description: 'Eine prozessorientierte Software für Patienten und Ärzte und Versorger, die eine nahtlose und sichere Kommunikation ermöglicht, inklusive verschlüsselter Anfragen, Chatfunktion und automatischer Terminerinnerungen.',
+        description: 'Weiterentwicklung einer arzt-geführten Fallakte für eine chronologische Dokumentation von Behandlungen und Versorgungsleistungen mit einer Integration für bestimmte Praxisverwaltungssysteme.',
         start: 'Entwicklung ab Q3.2024',
       },
       {
         name: 'App zum Doc',
-        description: 'Die App zum Doc entlastet Mitarbeiterinnen in Arztpraxen durch strukturierte und digitale Anfragen für Rezepte und Überweisungen.',
+        description: 'Die App zum Doc entlastet Mitarbeiterinnen in Arztpraxen durch strukturierte und digitale Anfragen für Rezepte und Überweisungen. Die Option Videosprechstunden via App durchzuführen ist in Planung.',
         start: 'Ausbau ab Q3.2024',
       },
       {
@@ -74,7 +74,7 @@ const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {
       {
         name: 'helpwave cloud',
         description: 'Sichern Sie Ihre Daten in einer sicheren Serverumgebung vor Ort und verbessern Sie den Zugriff darauf für sich selbst und Ihre Patienten.',
-        start: 'Adaption ab Q5.2025',
+        start: 'Adaption ab Q1.2025',
       },
     ],
   }

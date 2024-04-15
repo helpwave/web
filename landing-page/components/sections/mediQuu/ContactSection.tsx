@@ -8,6 +8,7 @@ import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { Button } from '@helpwave/common/components/Button'
+import { submitHubSpotForm } from '@/utils/hubspot'
 
 type ContactSectionTranslation = {
   contact: string,
@@ -52,10 +53,37 @@ type ContactForm = {
   message: string
 }
 
+const sendContactFormToHubSpot = (form: ContactForm) => submitHubSpotForm(
+  '26536657',
+  '4709e867-8b69-4e3a-a29f-59a7d5dd7c80',
+  [
+    {
+      objectTypeId: '0-1',
+      name: 'email',
+      value: form.email
+    },
+    {
+      objectTypeId: '0-1',
+      name: 'firstname',
+      value: form.firstname
+    },
+    {
+      objectTypeId: '0-1',
+      name: 'lastname',
+      value: form.lastname
+    },
+    {
+      objectTypeId: '0-1',
+      name: 'message',
+      value: form.message
+    }
+  ]
+)
+
 const contacts: Contact[] = [
   {
     name: 'Dr. med. Christian Porschen',
-    email: 'contact@helpwave.de'
+    email: 'mediquu@helpwave.de'
   }
 ]
 /**
@@ -114,9 +142,7 @@ export const ContactSection = ({
         />
         <Button
           color="accent-secondary"
-          onClick={() => {
-            // TODO send form information here
-          }}
+          onClick={() => sendContactFormToHubSpot(contactForm)}
           disabled={!isValid}
           className={tw('py-4')}
         >

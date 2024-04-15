@@ -1,6 +1,6 @@
 import { tw } from '../twind'
 
-const astNodeModifierTypes = ['none', 'italic', 'bold', 'underline', 'font-space', 'primary', 'warn', 'positive', 'negative'] as const
+const astNodeModifierTypes = ['none', 'italic', 'bold', 'underline', 'font-space', 'primary', 'warn', 'positive', 'negative', 'newline'] as const
 type ASTNodeModifierType = typeof astNodeModifierTypes[number]
 
 const astNodeInserterType = ['helpwave'] as const
@@ -26,6 +26,8 @@ export const ASTNodeInterpreter = ({
   isRoot = false
 }: ASTNodeInterpreterProps) => {
   switch (node.type) {
+    case 'newline':
+      return <br />
     case 'text':
       return isRoot ? <span>{node.text}</span> : node.text
     case 'helpwave':
@@ -80,6 +82,7 @@ export const ASTNodeInterpreter = ({
 }
 
 const modifierIdentifierMapping = [
+  { id: 'n', name: 'newline' },
   { id: 'i', name: 'italic' },
   { id: 'b', name: 'bold' },
   { id: 'u', name: 'underline' },

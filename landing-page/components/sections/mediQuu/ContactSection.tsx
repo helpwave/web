@@ -123,14 +123,18 @@ export const ContactSection = () => {
       <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
       <Span>{translation.subTitle}</Span>
       <div className={tw('flex flex-wrap desktop:justify-around mobile:justify-around gap-x-8 gap-y-6 mt-8')}>
-        {contacts.map(value => (
-          <Profile
-            key={value.name}
-            info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
-            {...value}
-            className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
-          />
-        ))}
+        {contacts.map(value => {
+          const profileProps = { ...value }
+          delete profileProps.translatedInfo
+          return (
+            <Profile
+              key={value.name}
+              info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
+              {...profileProps}
+              className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
+            />
+          )
+        })}
       </div>
     </div>
   )

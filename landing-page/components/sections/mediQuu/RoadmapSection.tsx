@@ -58,7 +58,7 @@ const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {
       },
       {
         name: 'mediQuu Viva',
-        description: 'Weiterentwicklung einer arztgeführte Fallakte für eine chronologische Dokumentation von Behandlungen und Versorgungsleistungen mit einer Integration für bestimmte Praxisverwaltungssysteme.',
+        description: 'Weiterentwicklung einer arzt-geführten Fallakte für eine chronologische Dokumentation von Behandlungen und Versorgungsleistungen mit einer Integration für bestimmte Praxisverwaltungssysteme.',
         start: 'Entwicklung ab Q3.2024',
       },
       {

@@ -35,64 +35,66 @@ export const fontFamily = {
   ]
 }
 
-const primary = {
-  100: '#F5E2FD',
-  200: '#EFD5FB',
-  300: '#CDAFEF',
-  400: '#AA96DF',
-  500: '#B275CE',
-  600: '#8E75CE',
-  700: '#694BB4',
-  800: '#8070A9',
-  900: '#5D4D80',
-  1000: '#4F3879',
-} as const
+export const colors = {
+  primary: {
+    100: '#F5E2FD',
+    200: '#EFD5FB',
+    300: '#CDAFEF',
+    400: '#AA96DF',
+    500: '#B275CE',
+    600: '#8E75CE',
+    700: '#694BB4',
+    800: '#8070A9',
+    900: '#5D4D80',
+    1000: '#4F3879',
+  },
 
-const secondary = {
-  400: '#3272DF',
-  800: '#11243E',
-} as const
+  secondary: {
+    400: '#3272DF',
+    800: '#11243E',
+  },
 
-const positive = {
-  200: '#CEFDDB',
-  300: '#BCF5CB',
-  400: '#7DED99',
-  500: '#69D384',
-  600: '#52BC6D',
-  700: '#479E66',
-  800: '#4D8466',
-} as const
+  positive: {
+    200: '#CEFDDB',
+    300: '#BCF5CB',
+    400: '#7DED99',
+    500: '#69D384',
+    600: '#52BC6D',
+    700: '#479E66',
+    800: '#4D8466',
+  },
 
-const negative = {
-  200: '#FCD4D9',
-  300: '#F8B0BF',
-  400: '#E890A0',
-  500: '#D77585',
-  600: '#A97070',
-  700: '#A54F5C',
-  800: '#804D4D',
-} as const
+  negative: {
+    200: '#FCD4D9',
+    300: '#F8B0BF',
+    400: '#E890A0',
+    500: '#D77585',
+    600: '#A97070',
+    700: '#A54F5C',
+    800: '#804D4D',
+  },
 
-const warn = {
-  100: '#FCF1DE',
-  200: '#FEEACB',
-  300: '#FAB060',
-  400: '#EA9E40',
-  500: '#D77E30',
-  600: '#C48435',
-  700: '#AD6915',
-  800: '#996628',
+  warn: {
+    100: '#FCF1DE',
+    200: '#FEEACB',
+    300: '#FAB060',
+    400: '#EA9E40',
+    500: '#D77E30',
+    600: '#C48435',
+    700: '#AD6915',
+    800: '#996628',
+  }
 } as const
 
 export const config = defineConfig({
   theme: {
     extend: {
       colors: {
-        'hw-primary': primary,
-        'hw-secondary': secondary,
-        'hw-positive': positive,
-        'hw-negative': negative,
-        'hw-warn': warn,
+        'hw-primary': colors.primary,
+        'hw-secondary': colors.secondary,
+        'hw-positive': colors.positive,
+        'hw-negative': colors.negative,
+        'hw-warn': colors.warn,
         'hw-neutral': {
           // TODO: 300 is still missing, see figma
           400: '#FF9933'

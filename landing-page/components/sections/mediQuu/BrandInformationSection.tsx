@@ -18,7 +18,7 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
     aboutHelpwaveTitle: 'About helpwave',
     aboutMediQuuDescription: `
       Since 2015, we have been ensuring a comfortable and comprehensive networking of providers in the healthcare sector.
-      Our goal is always a demand-oriented development of digital services to simplify the networking of all actors
+      Our goal is a demand-oriented development of digital services to simplify the networking of all actors
       and create new possibilities. In the future, we will pursue this path with the strong team of helpwave GmbH.
     `,
     aboutHelpwaveDescription: `
@@ -54,7 +54,7 @@ export const BrandDescriptionsSection = () => {
         title={{ value: translation.aboutMediQuuTitle, type: 'title' }}
         description={{ value: translation.aboutMediQuuDescription, type: 'normal' }}
         prefix={(
-          <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64}/>
+          <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64} />
         )}
         className={tw('bg-white rounded-3xl px-6 mobile:py-6 desktop:py-16 !gap-6 !w-fit shadow-md !mobile:flex-col')}
       />

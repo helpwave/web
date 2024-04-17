@@ -2,6 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import Image from 'next/image'
 
 const images = {
+  'mediQuu': 'https://cdn.helpwave.de/mediquu/logo_2021.png',
   'REACH': 'https://cdn.helpwave.de/partners/reach.svg',
   'Digital Hub münsterland': 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png',
   'Münsterhack': 'https://cdn.helpwave.de/partners/mshack_2023.png',

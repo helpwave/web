@@ -150,10 +150,9 @@ export const config = defineConfig({
         space: ['var(--font-space)', ...fontFamily.sans]
       },
       screens: {
-        desktop: { min: '1280px' },
-        mobile: { max: '1280px' },
-        tablet: { min: '512px', max: '1280px' },
-        phone: { max: '512px' },
+        mobile: { max: '768px' },
+        tablet: { min: '768px', max: '1024px' },
+        desktop: { min: '1024px' },
       },
       animation: {
         'fade': 'fadeOut 3s ease-in-out',

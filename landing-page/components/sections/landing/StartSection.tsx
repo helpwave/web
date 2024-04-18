@@ -37,29 +37,31 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
   const exploreURL = '/join'
   const demoURL = 'https://staging-tasks.helpwave.de'
   return (
-    <div className={tw('pt-32 pb-16')}>
-      <div className={tw('flex gap-32 items-center justify-center mb-8')}>
-        <div className={tw('desktop:w-3/4')}>
-          <div className={tw('font-space text-6xl font-bold')}>helpwave</div>
+    <div className={tw('pt-32 pb-16 flex flex-col gap-0 items-center justify-center mb-8')}>
+      <div className={tw('w-full max-w-[600px] mobile:max-w-[400px]')}>
+        <div className={tw('font-space text-6xl mobile:text-5xl font-bold')}>helpwave</div>
 
-          <div className={tw('font-sans text-2xl font-medium mt-2 text-end')}>
-            {'empowering '}
-            <span className={tw('text-hw-primary-800')}>{'medical heroes'}</span>
-            {', '}
-            <br className={tw('mobile:hidden')}/>
-            {'united in '}
-            <span className={tw('text-green-600')}>{'technology'}</span>
-          </div>
+        <div className={tw('font-sans text-2xl mobile:text-lg font-medium mt-2 text-end')}>
+          {'empowering '}
+          <span className={tw('text-hw-primary-800')}>{'medical heroes'}</span>
+          {', '}
+          <br/>
+          {'united in '}
+          <span className={tw('text-green-600')}>{'technology'}</span>
+        </div>
 
-          <div className={tw('flex my-8 gap-8 justify-end')}>
-            <Button variant="tertiary" color="warn" onClick={() => { window.location.href = exploreURL }}>
-              {translation.discoverOurVision}
-            </Button>
+        <div className={tw('flex my-8 gap-8 justify-end')}>
+          <Button variant="tertiary" color="warn" onClick={() => {
+            window.location.href = exploreURL
+          }}>
+            {translation.discoverOurVision}
+          </Button>
 
-            <Button variant="textButton" color="neutral" onClick={() => { window.open(demoURL, '_blank') }}>
-              {translation.tryTheDemo}
-            </Button>
-          </div>
+          <Button variant="textButton" color="neutral" onClick={() => {
+            window.open(demoURL, '_blank')
+          }}>
+            {translation.tryTheDemo}
+          </Button>
         </div>
       </div>
 
@@ -70,7 +72,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
           <div
             className={tw('flex flex-row items-center desktop:justify-end mobile:justify-center grow desktop:pl-2 mobile:pt-2')}>
             <Link
-              href="mediquu"
+              href="/mediquu"
               className={tw('flex flex-row gap-x-4 whitespace-nowrap px-4 py-2 text-white bg-hw-primary-800 rounded-md')}
             >
               {translation.readLater}...
@@ -78,12 +80,9 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
             </Link>
           </div>
         )}
-        className={tw('!bg-gray-200 !py-4 !px-8 shadow')}
+        className={tw('max-w-[600px] !bg-gray-200 !py-4 !px-8 shadow')}
         descriptionClassName={tw('!text-gray-600')}
       />
-
-      <div className={tw('mobile:hidden w-2/7')}>
-      </div>
     </div>
   )
 }

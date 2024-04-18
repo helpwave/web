@@ -16,7 +16,7 @@ const StoryBlock = ({
 }: StoryBlockProps) => {
   return (
     <div className={tw('desktop:w-2/3')}>
-      <div className={tw('flex flex-column h-[48px] items-end')}>
+      <div className={tw('flex flex-col h-[48px] items-end')}>
         {pill && <h4 className={tw('text-sm text-green-600 bg-green-100 px-3 py-0.5 font-semibold tracking-widest rounded-lg')}>{pill}</h4>}
       </div>
       <h2 className={tw('pt-4 text-4xl font-space font-bold')}>{header}</h2>
@@ -84,7 +84,7 @@ const defaultStoryTranslation: Record<Languages, StoryTranslation> = {
 const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTranslation>) => {
   const translation = useTranslation(defaultStoryTranslation, overwriteTranslation)
   return (
-    <div className={tw('m-auto pb-16 pt-8 relative flex mobile:flex-wrap gap-16')}>
+    <div className={tw('w-full pb-16 pt-8 relative flex tablet:flex-wrap mobile:flex-wrap gap-16')}>
       <StoryBlock
         pill={translation.innovation}
         header={translation.innovationHeader}

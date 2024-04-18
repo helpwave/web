@@ -3,6 +3,7 @@ import { Popcorn } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Span } from '@helpwave/common/components/Span'
 
 type StartSectionTranslation = {
   ourStory: string,
@@ -75,36 +76,36 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
   const translation = useTranslation(defaultStartSectionTranslation, overwriteTranslation)
 
   return (
-    <div className={tw('pt-32')}>
-      <div className={tw('ml-8 font-inter text-6xl font-light font-hw-error mobile:text-center')}>
-        <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full mobile:mt-2 mr-16')} />
+    <div className={tw('flex flex-col gap-y-8 pt-32 pb-16')}>
+      <div className={tw('flex flex-row mobile:flex-col mobile:text-center gap-8 text-6xl text-hw-negative-700 items-center')}>
+        <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full')} />
         {translation.ourStory}
       </div>
 
-      <div className={tw('m-8 parent')}>
+      <div>
         <h2 className={tw('font-space text-4xl font-light')}>
           1. {translation.identifyingTheProblemTitle}
         </h2>
-        <p className={tw('mt-2')}>
-          {translation.identifyingTheProblemText}
+        <p className={tw('mt-2 text-justify')}>
+          <Span type="block">{translation.identifyingTheProblemText}</Span>
         </p>
       </div>
 
-      <div className={tw('m-8 parent')}>
+      <div>
         <h2 className={tw('font-space text-4xl font-light')}>
           2. {translation.tasksAndOpenInnovationTitle}
         </h2>
-        <p className={tw('mt-2')}>
-          {translation.tasksAndOpenInnovationText}
+        <p className={tw('mt-2 text-justify')}>
+          <Span type="block">{translation.tasksAndOpenInnovationText}</Span>
         </p>
       </div>
 
-      <div className={tw('m-8 parent')}>
+      <div>
         <h2 className={tw('font-space text-4xl font-light')}>
           3. {translation.futureTitle}
         </h2>
-        <p className={tw('mt-2')}>
-          {translation.futureText}
+        <p className={tw('mt-2 text-justify')}>
+          <Span type="block">{translation.futureText}</Span>
         </p>
       </div>
 

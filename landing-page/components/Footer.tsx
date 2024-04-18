@@ -88,7 +88,7 @@ const Footer = () => {
 
   return (
     <div className={tw('w-screen bg-black text-white py-8 flex flex-col items-center justify-center')}>
-      <div className={tw('flex flex-wrap mobile:w-full mobile:px-16 mx-auto justify-between')}>
+      <div className={tw('flex flex-wrap w-full max-w-[900px] mobile:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
         {grouping.map((groups, index) => (
           <div key={index} className={tw('flex flex-col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
             {groups.map((category) => (

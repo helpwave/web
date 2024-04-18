@@ -31,7 +31,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
   const size = 1024
 
   return (
-    <div className={tw('pt-32 pb-16')}>
+    <div>
       <Link href={demoURL} target="_blank">
         <h1 className={tw('font-space text-6xl font-bold')}>
           helpwave <span className={tw('text-hw-primary-800')}>tasks</span>
@@ -48,7 +48,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
       <div className={tw('mt-16 text-xl text-center animate-bounce')}>
         <Mouse className={tw('inline')} /> scroll
       </div>
-      <div className={tw('mt-16 text-xl text-center')}>
+      <div className={tw('mt-16 text-xl desktop:text-center')}>
         <p><MarkdownInterpreter text={translation.text}/></p>
       </div>
     </div>

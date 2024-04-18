@@ -7,7 +7,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 type FeatureItemProps = {
   imageUrl: string,
-  size: string,
+  size: number,
   title: string,
   description: string,
   reverse?: boolean

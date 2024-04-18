@@ -49,7 +49,10 @@ const primary = {
 } as const
 
 const secondary = {
+  200: '#93a4bf',
+  300: '#7290c2',
   400: '#3272DF',
+  500: '#2758ab',
   800: '#11243E',
 } as const
 

@@ -17,7 +17,9 @@ type ContactSectionTranslation = {
   lastname: string,
   email: string,
   message: string,
-  send: string
+  send: string,
+  thankYou: string,
+  error: string
 }
 
 const defaultContactSectionTranslation: Record<Languages, ContactSectionTranslation> = {
@@ -28,7 +30,9 @@ const defaultContactSectionTranslation: Record<Languages, ContactSectionTranslat
     lastname: 'Last Name',
     email: 'E-Mail',
     message: 'Your Message',
-    send: 'Send Message'
+    send: 'Send Message',
+    thankYou: 'Thanks for your message!',
+    error: 'There was an error sending the message, try again'
   },
   de: {
     contact: 'Kontakt',
@@ -37,7 +41,9 @@ const defaultContactSectionTranslation: Record<Languages, ContactSectionTranslat
     lastname: 'Nachname',
     email: 'E-Mail',
     message: 'Ihre Nachricht',
-    send: 'Nachricht senden'
+    send: 'Nachricht senden',
+    thankYou: 'Danke für deine Nachricht!',
+    error: 'Ein Fehler ist aufgetreten, versuchen sie es erneut die nachricht zu senden'
   }
 }
 
@@ -50,7 +56,9 @@ type ContactForm = {
   firstname: string,
   lastname: string,
   email: string,
-  message: string
+  message: string,
+  hasSend: boolean,
+  hasError: boolean
 }
 
 const sendContactFormToHubSpot = (form: ContactForm) => submitHubSpotForm(
@@ -93,11 +101,13 @@ export const ContactSection = ({
   overwriteTranslation,
 }: PropsForTranslation<ContactSectionTranslation>) => {
   const translation = useTranslation(defaultContactSectionTranslation, overwriteTranslation)
-  const [contactForm, updateContactForm] = useState<ContactForm>({
+  const [contactForm, setContactForm] = useState<ContactForm>({
     firstname: '',
     lastname: '',
     email: '',
     message: '',
+    hasSend: false,
+    hasError: false,
   })
   const [isSending, setIsSending] = useState<boolean>(false)
 
@@ -124,29 +134,47 @@ export const ContactSection = ({
         <Input
           value={contactForm.firstname}
           placeholder={translation.firstname}
-          onChange={firstname => updateContactForm(prevState => ({ ...prevState, firstname }))}
+          onChange={firstname => setContactForm(prevState => ({ ...prevState, firstname, hasSend: false, hasError: false }))}
         />
         <Input
           value={contactForm.lastname}
           placeholder={translation.lastname}
-          onChange={lastname => updateContactForm(prevState => ({ ...prevState, lastname }))}
+          onChange={lastname => setContactForm(prevState => ({ ...prevState, lastname, hasSend: false, hasError: false }))}
         />
         <Input
           value={contactForm.email}
           placeholder={translation.email}
-          onChange={email => updateContactForm(prevState => ({ ...prevState, email }))}
+          onChange={email => setContactForm(prevState => ({ ...prevState, email, hasSend: false, hasError: false }))}
         />
         <Textarea
           value={contactForm.message}
           placeholder={translation.message}
-          onChange={message => updateContactForm(prevState => ({ ...prevState, message }))}
+          onChange={message => setContactForm(prevState => ({ ...prevState, message, hasSend: false, hasError: false }))}
         />
+        {contactForm.hasError && (<Span className={tw('text-hw-negative-400 font-semibold my-1')}>{translation.error}</Span>)}
         <LoadingButton
           color="accent-secondary"
           onClick={() => {
             if (!isSending) {
               setIsSending(true)
-              sendContactFormToHubSpot(contactForm).finally(() => setIsSending(false))
+              sendContactFormToHubSpot(contactForm)
+                .then(() => setContactForm({
+                  firstname: '',
+                  lastname: '',
+                  email: '',
+                  message: '',
+                  hasSend: true,
+                  hasError: false
+                }))
+                .catch((reason) => {
+                  setContactForm({
+                    ...contactForm,
+                    hasSend: false,
+                    hasError: true
+                  })
+                  console.error(reason)
+                })
+                .finally(() => setIsSending(false))
             }
           }}
           disabled={!isValid}
@@ -155,6 +183,7 @@ export const ContactSection = ({
         >
           {translation.send}
         </LoadingButton>
+        {contactForm.hasSend && (<Span className={tw('text-hw-secondary-400 font-bold text-xl text-center')}>{translation.thankYou}</Span>)}
       </div>
     </div>
   )

@@ -15,8 +15,8 @@ const StoryBlock = ({
   content,
 }: StoryBlockProps) => {
   return (
-    <div className={tw('desktop:w-2/3')}>
-      <div className={tw('flex flex-col h-[48px] items-end')}>
+    <div className={tw('w-2/3 mobile:w-full tablet:w-full')}>
+      <div className={tw('flex flex-col items-start')}>
         {pill && <h4 className={tw('text-sm text-green-600 bg-green-100 px-3 py-0.5 font-semibold tracking-widest rounded-lg')}>{pill}</h4>}
       </div>
       <h2 className={tw('pt-4 text-4xl font-space font-bold')}>{header}</h2>

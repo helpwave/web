@@ -60,7 +60,7 @@ const Button = ({
 
       // primary & {accent, accent-secondary, positive, negative, neutral}
       'text-white bg-hw-primary-400 hover:bg-hw-primary-600 focus:ring-hw-primary-600': variant === 'primary' && color === 'accent' && !disabled,
-      'text-white bg-AAA-500    hover:bg-AAA-600    focus:ring-AAA-500': variant === 'primary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
+      'text-white bg-hw-secondary-400    hover:bg-hw-secondary-500    focus:ring-hw-secondary-400': variant === 'primary' && color === 'accent-secondary' && !disabled,
       'text-white bg-hw-positive-400    hover:bg-hw-positive-500    focus:ring-hw-positive-400': variant === 'primary' && color === 'positive' && !disabled,
       'text-white bg-hw-negative-400    hover:bg-hw-negative-500    focus:ring-hw-negative-400': variant === 'primary' && color === 'negative' && !disabled,
       'text-white bg-gray-400    hover:bg-gray-500    focus:ring-gray-400': variant === 'primary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
@@ -68,7 +68,7 @@ const Button = ({
 
       // secondary & {accent, accent-secondary, positive, negative, neutral}
       'text-hw-primary-400 bg-hw-primary-100 hover:bg-hw-primary-200 focus:ring-hw-primary-100': variant === 'secondary' && color === 'accent' && !disabled,
-      'text-AAA-500 bg-AAA-200       hover:bg-AAA-300    focus:ring-AAA-200': variant === 'secondary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
+      'text-hw-secondary-500 bg-hw-secondary-200       hover:bg-hw-secondary-300    focus:ring-hw-secondary-200': variant === 'secondary' && color === 'accent-secondary' && !disabled,
       'text-hw-positive-400 bg-hw-positive-100   hover:bg-hw-positive-200  focus:ring-hw-positive-100': variant === 'secondary' && color === 'positive' && !disabled,
       'text-hw-negative-400 bg-hw-negative-100   hover:bg-hw-negative-200  focus:ring-hw-negative-100': variant === 'secondary' && color === 'negative' && !disabled,
       'text-gray-500 bg-gray-200       hover:bg-gray-300    focus:ring-gray-200': variant === 'secondary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
@@ -78,7 +78,7 @@ const Button = ({
       'border-2': variant === 'tertiary',
 
       'text-hw-primary-400  border-hw-primary-400 hover:border-hw-primary-600 hover:text-hw-primary-600 focus:ring-hw-primary-100': variant === 'tertiary' && color === 'accent' && !disabled,
-      'text-AAA-400    border-AAA-400 hover:borderAAA-600 hover:text-AAA-600 focus:ring-AAA-200': variant === 'tertiary' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
+      'text-hw-secondary-400    border-hw-secondary-400 hover:borderhw-secondary-500 hover:text-hw-secondary-500 focus:ring-hw-secondary-200': variant === 'tertiary' && color === 'accent-secondary' && !disabled,
       'text-hw-positive-400  border-hw-positive-400 hover:border-hw-positive-600 hover:text-hw-positive-600 focus:ring-hw-positive-200': variant === 'tertiary' && color === 'positive' && !disabled,
       'text-hw-negative-400   border-hw-negative-400 hover:border-hw-negative-600 hover:text-hw-negative-600 focus:ring-hw-negative-200': variant === 'tertiary' && color === 'negative' && !disabled,
       'text-gray-500    border-gray-500 hover:border-gray-700 hover:text-gray-700 focus:ring-gray-300': variant === 'tertiary' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?
@@ -86,7 +86,7 @@ const Button = ({
 
       // text button & {accent, accent-secondary, positive, negative, neutral}
       'text-hw-primary-400 hover:text-hw-primary-500 focus:ring-0': variant === 'textButton' && color === 'accent' && !disabled,
-      'text-AAA-500 hover:text-AAA-500 focus:ring-0': variant === 'textButton' && color === 'accent-secondary' && !disabled, // TODO: what could this be?
+      'text-hw-secondary-400 hover:text-hw-secondary-400 focus:ring-0': variant === 'textButton' && color === 'accent-secondary' && !disabled,
       'text-hw-positive-400 hover:text-hw-positive-500 focus:ring-0': variant === 'textButton' && color === 'positive' && !disabled,
       'text-hw-negative-500 hover:text-hw-negative-600 focus:ring-0': variant === 'textButton' && color === 'negative' && !disabled,
       'text-gray-500 hover:text-gray-500 focus:ring-0 underline': variant === 'textButton' && color === 'neutral' && !disabled, // TODO: maybe blue or yellow?

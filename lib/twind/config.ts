@@ -48,12 +48,13 @@ export const colors = {
     900: '#5D4D80',
     1000: '#4F3879',
   },
-
   secondary: {
+    200: '#93a4bf',
+    300: '#7290c2',
     400: '#3272DF',
+    500: '#2758ab',
     800: '#11243E',
   },
-
   positive: {
     200: '#CEFDDB',
     300: '#BCF5CB',
@@ -63,7 +64,6 @@ export const colors = {
     700: '#479E66',
     800: '#4D8466',
   },
-
   negative: {
     200: '#FCD4D9',
     300: '#F8B0BF',
@@ -73,7 +73,6 @@ export const colors = {
     700: '#A54F5C',
     800: '#804D4D',
   },
-
   warn: {
     100: '#FCF1DE',
     200: '#FEEACB',

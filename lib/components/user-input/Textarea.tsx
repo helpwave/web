@@ -1,6 +1,6 @@
 import type { TextareaHTMLAttributes } from 'react'
 import { useState } from 'react'
-import { tw, tx, css } from '../../twind'
+import { tw, tx } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
@@ -18,13 +18,6 @@ export type TextareaProps = {
   onEditCompleted?: (text: string) => void,
   defaultStyle?: boolean
 } & Omit<TextareaHTMLAttributes<Element>, 'id' | 'onChange'>
-
-const globalStyles = css`
-  /* onfocus textarea border color */
-  .textarea-wrapper:focus-within {
-    @apply border-hw-primary-700;
-  }
-`
 
 /**
  * A Textarea component for inputting longer texts
@@ -53,9 +46,9 @@ export const Textarea = ({
   }
 
   return (
-    <div className={tx({ [globalStyles]: defaultStyle }, 'w-full')}>
+    <div className={tx({ 'focus-within:border-hw-primary-700': defaultStyle }, 'w-full')}>
       {label && (<Label {...label} htmlFor={id} className={tx('mb-1', label.className)} labelType={label.labelType ?? 'labelSmall'}/>)}
-      <div className={`textarea-wrapper ${tx('relative', { 'shadow border-2 border-gray-300 rounded-lg': defaultStyle })}`}>
+      <div className={`${tx('relative', { 'bg-white shadow border-2 border-gray-300 rounded-lg': defaultStyle })}`}>
         {headline && (
           <label className={tw('mx-3 mt-3 block text-gray-700 font-bold')} htmlFor={id}>
             {headline}

@@ -20,7 +20,7 @@ const defaultMediQuuInformationTranslation: Record<Languages, MediQuuInformation
       'and is working on networking and cloud infrastructure solutions in healthcare. The merger with ' +
       'mediQuu will advance the connection between outpatient and inpatient care and provide innovative impulses for the ' +
       'product portfolio of mediQuu.',
-    subTitle2: '\\b{So what does this mean for you specifically? Nothing.} \\n{}' +
+    subTitle2: '\\b{So what does this mean for you specifically? Nothing.} \\newline' +
       'By transferring the contracts to helpwave, seamless continuation and further development of the existing ' +
       'solutions are ensured. The immediate involvement of healthcare system employees is paramount. We develop solutions ' +
       'in collaboration with doctors, rather than just working for them.',
@@ -32,7 +32,7 @@ const defaultMediQuuInformationTranslation: Record<Languages, MediQuuInformation
       'entwickelt und arbeitet an Vernetzungs- und Cloud-Infrastrukturlösungen im Gesundheitswesen. Der Zusammenschluss mit ' +
       'mediQuu wird die Verknüpfung von ambulanter und stationärer Versorgung vorantreiben und innovative Impulse für das ' +
       'Produktportfolio von mediQuu liefern.',
-    subTitle2: '\\b{Was bedeutet dies nun konkret für Sie? Nichts.} \\n{}' +
+    subTitle2: '\\b{Was bedeutet dies nun konkret für Sie? Nichts.} \\newline' +
       'Durch die Übertragung der Verträge an helpwave wird eine nahtlose Fortführung und Weiterentwicklung der bestehenden ' +
       'Lösungen gewährleistet. Die unmittelbare Einbindung der Mitarbeiterinnen und Mitarbeiter des Gesundheitssystems steht ' +
       'dabei an erster Stelle. Wir entwickeln Lösungen gemeinsam mit Ärztinnen und Ärzten, statt nur für sie zu arbeiten.',

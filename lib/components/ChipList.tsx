@@ -1,14 +1,13 @@
-import type { PropsWithChildren } from 'react'
+import type { HTMLProps, PropsWithChildren } from 'react'
 import { tx } from '../twind'
 
 type ChipColorTypes = 'label-1' | 'label-2' | 'label-3' | 'blue' | 'pink' | 'yellow' | 'darkPrimary' | 'black'; // extended these colors for more variations
 
 type ChipVariant = 'normal' | 'fullyRounded'
 
-export type ChipProps = PropsWithChildren<{
+export type ChipProps = HTMLProps<HTMLDivElement> & PropsWithChildren< {
   color?: ChipColorTypes,
-  variant?: ChipVariant,
-  className?: string
+  variant?: ChipVariant
 }>
 
 /**
@@ -18,10 +17,12 @@ export const Chip = ({
   children,
   color,
   variant = 'normal',
-  className = ''
+  className = '',
+  ...restProps
 }: ChipProps) => {
   return (
     <div
+      {...restProps}
       className={tx(
         'w-fit',
         {
@@ -62,9 +63,10 @@ export const ChipList = ({
     <div className={tx('flex flex-wrap gap-x-4 gap-y-2', className)}>
       {list.map((value, index) => (
         <Chip
-          key={index} color={value.color ?? 'darkPrimary'}
+          key={index}
+          {...value}
+          color={value.color ?? 'darkPrimary'}
           variant={value.variant ?? 'normal'}
-          className={value.className}
         >
           {value.children}
         </Chip>

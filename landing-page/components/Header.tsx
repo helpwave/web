@@ -12,7 +12,7 @@ import { Chip } from '@helpwave/common/components/ChipList'
 
 const homeURL = '/'
 
-const linkNames = ['vision', 'products', 'story', 'team', 'tasks'] as const
+const linkNames = ['products', 'story', 'team', 'tasks'] as const
 type LinkNames = typeof linkNames[number]
 
 type LinkType = {
@@ -25,10 +25,6 @@ type SubLinkType = LinkType & {
 }
 
 const items: SubLinkType[] = [
-  {
-    name: 'vision',
-    url: '/vision'
-  },
   {
     name: 'products',
     url: '/product',
@@ -51,7 +47,7 @@ const items: SubLinkType[] = [
 
 type HeaderTranslation = {
   contact: string
-} & {[key in LinkNames]: string}
+} & { [key in LinkNames]: string }
 
 const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
   en: {
@@ -60,7 +56,6 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
     team: 'Team',
     contact: 'Contact us',
     tasks: 'tasks',
-    vision: 'Vision'
   },
   de: {
     products: 'Produkte',
@@ -68,7 +63,6 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
     team: 'Team',
     contact: 'Kontakt',
     tasks: 'tasks',
-    vision: 'Vision'
   }
 }
 
@@ -82,11 +76,11 @@ const Header = () => {
     <div>
       <div className={tw('w-screen z-[50] fixed shadow-sm top-0 border bg-white')}>
         <nav className={tw('flex mobile:p-2 desktop:px-16 items-center justify-between mobile:mx-auto w-full')}>
-          <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-xl')}>
+          <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
             <Helpwave/>
             <MarkdownInterpreter text={'\\helpwave'}/>
           </Link>
-          <div className={tw('phone:hidden w-full')}>
+          <div className={tw('mobile:hidden w-full')}>
             <div className={tw('flex flex-wrap items-center justify-end gap-x-6')}>
               {items.map(({
                 name,
@@ -129,17 +123,21 @@ const Header = () => {
                   )}
                 </div>
               ))}
-              <Chip variant="fullyRounded" color="black" className={tw('!py-2 !px-4 shadow-sm')}>{translation.contact}</Chip>
+              <Link href="mailto:contact@helpwave.de">
+                <Chip
+                  variant="fullyRounded"
+                  color="black"
+                  className={tw('!py-2 !px-4 shadow-sm cursor-pointer')}
+                >
+                  {translation.contact}
+                </Chip>
+              </Link>
             </div>
           </div>
-          <div className={tw('w-full tablet:hidden desktop:hidden flex justify-between mx-2')}>
-            <Link href={homeURL}>
-              <span className={tw('text-center text-2xl font-bold font-space')}>helpwave</span></Link>
-            <button onClick={() => setNavbarOpen(true)} className={tw('tablet:hidden desktop:hidden content-end')}
-                    aria-controls="navbar" aria-expanded="false">
-              <MenuIcon size={32}/>
-            </button>
-          </div>
+          <button onClick={() => setNavbarOpen(true)} className={tw('desktop:hidden content-end')}
+                  aria-controls="navbar" aria-expanded="false">
+            <MenuIcon size={32}/>
+          </button>
         </nav>
       </div>
 

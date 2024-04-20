@@ -111,7 +111,7 @@ const defaultTeamSectionTranslation: Record<Languages, TeamSectionTranslation> =
     subTitle: 'We are available to answer any questions you may have at short notice.',
   },
   de: {
-    title: 'Ansprechepartner',
+    title: 'Ansprechpartner',
     subTitle: 'Wir stehen Ihnen bei jeglichen Fragen kurzfristig zur Verfügung.',
   }
 }

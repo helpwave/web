@@ -2,6 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type StoryBlockProps = {
   pill?: string,
@@ -84,7 +85,7 @@ const defaultStoryTranslation: Record<Languages, StoryTranslation> = {
 const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTranslation>) => {
   const translation = useTranslation(defaultStoryTranslation, overwriteTranslation)
   return (
-    <div className={tw('w-full pb-16 pt-8 relative flex tablet:flex-wrap mobile:flex-wrap gap-16')}>
+    <SectionBase className={tw('flex tablet:flex-wrap mobile:flex-wrap w-full relative gap-16')}>
       <StoryBlock
         pill={translation.innovation}
         header={translation.innovationHeader}
@@ -100,7 +101,7 @@ const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTransla
         header={translation.missionHeader}
         content={translation.missionDescription}
       />
-    </div>
+    </SectionBase>
   )
 }
 

@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type EpisodeSectionTranslation = {
   allEpisodes: string
@@ -65,7 +66,7 @@ const EpisodeSection = ({ overwriteTranslation }: PropsForTranslation<EpisodeSec
   const size = 1024
 
   return (
-    <div className={tw('pt-16 pb-16')}>
+    <SectionBase>
       <div className={tw('flex-wrap gap-16 w-full justify-center')}>
         <h1 className={tw('font-space text-5xl overline')}>{translation.allEpisodes}</h1>
         {isLoading ? (<LoadingAnimation />) : data?.map(episode => (
@@ -81,7 +82,7 @@ const EpisodeSection = ({ overwriteTranslation }: PropsForTranslation<EpisodeSec
           </Link>
         ))}
       </div>
-    </div>
+    </SectionBase>
   )
 }
 

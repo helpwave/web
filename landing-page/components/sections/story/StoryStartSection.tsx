@@ -4,8 +4,9 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
+import { SectionBase } from '@/components/sections/SectionBase'
 
-type StartSectionTranslation = {
+type StoryStartSectionTranslation = {
   ourStory: string,
   identifyingTheProblemTitle: string,
   identifyingTheProblemText: string,
@@ -15,7 +16,7 @@ type StartSectionTranslation = {
   futureText: string
 }
 
-const defaultStartSectionTranslation: Record<Languages, StartSectionTranslation> = {
+const defaultStoryStartSectionTranslation: Record<Languages, StoryStartSectionTranslation> = {
   en: {
     ourStory: 'Our Story',
     identifyingTheProblemTitle: 'Identifying the Problem',
@@ -72,45 +73,44 @@ const defaultStartSectionTranslation: Record<Languages, StartSectionTranslation>
   }
 }
 
-const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSectionTranslation>) => {
-  const translation = useTranslation(defaultStartSectionTranslation, overwriteTranslation)
+const StoryStartSection = ({ overwriteTranslation }: PropsForTranslation<StoryStartSectionTranslation>) => {
+  const translation = useTranslation(defaultStoryStartSectionTranslation, overwriteTranslation)
 
   return (
-    <div className={tw('flex flex-col gap-y-8 pt-32 pb-16')}>
-      <div className={tw('flex flex-row mobile:flex-col mobile:text-center gap-8 text-6xl text-hw-negative-700 items-center')}>
-        <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full')} />
-        {translation.ourStory}
-      </div>
+    <SectionBase className={tw('flex flex-col gap-y-8')} isFirstSection={true}>
+        <div className={tw('flex flex-row mobile:flex-col mobile:text-center gap-8 text-6xl text-hw-negative-700 items-center')}>
+          <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full')} />
+          {translation.ourStory}
+        </div>
 
-      <div>
-        <h2 className={tw('font-space text-4xl font-light')}>
-          1. {translation.identifyingTheProblemTitle}
-        </h2>
-        <p className={tw('mt-2 text-justify')}>
-          <Span type="block">{translation.identifyingTheProblemText}</Span>
-        </p>
-      </div>
+        <div>
+          <h2 className={tw('font-space text-4xl font-light')}>
+            1. {translation.identifyingTheProblemTitle}
+          </h2>
+          <p className={tw('mt-2 text-justify')}>
+            <Span type="block">{translation.identifyingTheProblemText}</Span>
+          </p>
+        </div>
 
-      <div>
-        <h2 className={tw('font-space text-4xl font-light')}>
-          2. {translation.tasksAndOpenInnovationTitle}
-        </h2>
-        <p className={tw('mt-2 text-justify')}>
-          <Span type="block">{translation.tasksAndOpenInnovationText}</Span>
-        </p>
-      </div>
+        <div>
+          <h2 className={tw('font-space text-4xl font-light')}>
+            2. {translation.tasksAndOpenInnovationTitle}
+          </h2>
+          <p className={tw('mt-2 text-justify')}>
+            <Span type="block">{translation.tasksAndOpenInnovationText}</Span>
+          </p>
+        </div>
 
-      <div>
-        <h2 className={tw('font-space text-4xl font-light')}>
-          3. {translation.futureTitle}
-        </h2>
-        <p className={tw('mt-2 text-justify')}>
-          <Span type="block">{translation.futureText}</Span>
-        </p>
-      </div>
-
-    </div>
+        <div>
+          <h2 className={tw('font-space text-4xl font-light')}>
+            3. {translation.futureTitle}
+          </h2>
+          <p className={tw('mt-2 text-justify')}>
+            <Span type="block">{translation.futureText}</Span>
+          </p>
+        </div>
+    </SectionBase>
   )
 }
 
-export default StartSection
+export default StoryStartSection

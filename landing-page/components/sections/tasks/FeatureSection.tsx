@@ -4,6 +4,7 @@ import Image from 'next/image'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type FeatureItemProps = {
   imageUrl: string,
@@ -78,7 +79,7 @@ const FeatureSection = ({ overwriteTranslation }: PropsForTranslation<FeatureSec
   const size = 1024
 
   return (
-    <div className={tw('flex flex-col gap-y-12')}>
+    <SectionBase className={tw('flex flex-col gap-y-12')}>
       <FeatureItem
         imageUrl={screenshotTemplates}
         size={size}
@@ -100,7 +101,7 @@ const FeatureSection = ({ overwriteTranslation }: PropsForTranslation<FeatureSec
         title={translation.patientsTitle}
         description={translation.patientsText}
       />
-    </div>
+    </SectionBase>
   )
 }
 

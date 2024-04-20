@@ -36,22 +36,14 @@ const defaultHomePageTranslation: Record<Languages, HomePageTranslation> = {
 const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTranslation>) => {
   const translation = useTranslation(defaultHomePageTranslation, overwriteTranslation)
 
-  const sectionClassName = tw('desktop:max-w-[1200px] mx-auto desktop:px-24 tablet:px-12 mobile:px-6 relative z-[1]')
-
   return (
     <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
       <Header/>
-      <div className={tw(sectionClassName)}>
-        <StartSection/>
-      </div>
+      <StartSection/>
       <Divider rotate={1}/>
-      <div className={tw(sectionClassName)}>
-        <PartnerSection/>
-      </div>
+      <PartnerSection/>
       <Divider rotate={1}/>
-      <div className={tw(sectionClassName)}>
-        <StorySection/>
-      </div>
+      <StorySection/>
       <div className={tw('relative flex flex-col items-center')}>
         <div className={tw('desktop:w-[620px] mx-20')}>
           <DescriptionWithAction
@@ -76,11 +68,7 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
         </div>
         <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-primary-900 z-[-1] translate-y-[2px]')}></div>
       </div>
-      <div className={tw('!bg-hw-primary-900 text-white')}>
-        <div className={tw(sectionClassName)}>
-          <ExpansionSection/>
-        </div>
-      </div>
+      <ExpansionSection/>
       <Footer/>
     </div>
   )

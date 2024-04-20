@@ -6,6 +6,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWithAction'
 import Link from 'next/link'
 import { MessageSquare } from 'lucide-react'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type LandingPageTranslation = {
   tryTheDemo: string,
@@ -37,7 +38,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
   const exploreURL = '/join'
   const demoURL = 'https://staging-tasks.helpwave.de'
   return (
-    <div className={tw('pt-32 pb-16 flex flex-col gap-0 items-center justify-center mb-8')}>
+    <SectionBase className={tw('flex flex-col gap-y-8 items-center justify-center w-full')} isFirstSection={true}>
       <div className={tw('w-full max-w-[600px] mobile:max-w-[400px]')}>
         <div className={tw('font-space text-6xl mobile:text-5xl font-bold')}>helpwave</div>
 
@@ -83,7 +84,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
         className={tw('max-w-[600px] !bg-gray-200 !py-4 !px-8 shadow')}
         descriptionClassName={tw('!text-gray-600')}
       />
-    </div>
+    </SectionBase>
   )
 }
 

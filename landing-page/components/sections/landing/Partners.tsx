@@ -1,5 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import Image from 'next/image'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type Entry = {
   name: string,
@@ -29,11 +30,11 @@ const PartnerSection = () => {
   const size = 144
 
   return (
-    <div className={tw('flex gap-16 my-16 select-none overflow-x-auto justify-between items-center')}>
+    <SectionBase className={tw('flex gap-16 select-none overflow-x-auto justify-between items-center')}>
       {Object.entries(images).map(([_, { name, url }]) => (
         <Image key={name} alt={name} src={url} style={{ objectFit: 'contain' }} width={size} height={size} className={tw('grayscale')} />
       ))}
-    </div>
+    </SectionBase>
   )
 }
 

@@ -1,11 +1,13 @@
 import { tw, tx } from '@helpwave/common/twind'
-import { Link as LinkIcon, Mouse } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import { Chip } from '@helpwave/common/components/ChipList'
+import { Span } from '@helpwave/common/components/Span'
+import { Helpwave } from '@helpwave/common/icons/Helpwave'
 
 type StartSectionTranslation = {
   title: string,
@@ -14,12 +16,13 @@ type StartSectionTranslation = {
 
 const defaultStartSectionTranslation: Record<Languages, StartSectionTranslation> = {
   en: {
-    title: 'The first open-source team management platform for healthcare workers',
-    text: '\\helpwave \\primary{tasks} increases the productivity in your clinical team. Ditch your print-out ward list and coordinate your work and the work of your team in a modern kanban interface. \\helpwave \\primary{tasks} has been inspired by modern industry work flows and best practices from lean project management and applies them to the clinical environment.'
+    title: 'Workflow management for the healthcare industry',
+    text: 'At \\helpwave, we don’t see information technology as an old marriage that has fallen asleep, but as \\primary{newly} & \\negative{rekindled} hot affair.'
   },
   de: {
-    title: 'Die erste Open-Source-Team-Management-Plattform für Mitarbeitende im Gesundheitswesen',
-    text: '\\helpwave \\primary{tasks} erhöht die Produktivität in deinem klinischen Team. Lass die ausgedruckten Stationslisten hinter dir und koordiniere deine Arbeit und die deines Teams mit einem modernen Kanban-Interface. \\helpwave \\primary{tasks} wurde von modernen Arbeitsabläufen und Best Practices aus dem Lean-Projektmanagement inspiriert und wendet diese Methodiken auf die klinische Umgebung an.'
+    // TODO update translation
+    title: 'Workflow management für das Gesundheitswesen',
+    text: 'At \\helpwave, we don’t see information technology as an old marriage that has fallen asleep, but as \\primary{newly} & \\negative{rekindled} hot affair.'
   }
 }
 
@@ -27,29 +30,31 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
   const translation = useTranslation(defaultStartSectionTranslation, overwriteTranslation)
 
   const demoURL = 'https://staging-tasks.helpwave.de'
-  const screenshotURL = 'https://cdn.helpwave.de/screenshots/tasks_1.png'
-  const size = 1024
+  const screenshotURL = 'https://cdn.helpwave.de/products/helpwave_tasks_ui_elements.png'
 
   return (
-    <div className={tw('pt-32 pb-16')}>
-      <Link href={demoURL} target="_blank">
-        <h1 className={tw('font-space text-6xl font-bold')}>
-          helpwave <span className={tw('text-hw-primary-800')}>tasks</span>
-          <LinkIcon className={tw('ml-4 inline text-gray-400')} />
-        </h1>
-      </Link>
+    <div className={tw('flex flex-col desktop:flex-row gap-x-32 gap-y-8 justify-center items-center pt-32 pb-16')}>
+      <Image
+        alt="Screenshots"
+        src={screenshotURL}
+        width={0}
+        height={0}
+        className={tx(`object-contain w-full desktop:w-1/2 -rotate-12 z-[-1]`)}
+      />
 
-      <h4 className={tw('font-sans text-2xl font-medium mt-2 text-gray-600')}>
-        {translation.title}
-      </h4>
-
-      <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)} />
-
-      <div className={tw('mt-16 text-xl text-center animate-bounce')}>
-        <Mouse className={tw('inline')} /> scroll
-      </div>
-      <div className={tw('mt-16 text-xl text-center')}>
-        <p><MarkdownInterpreter text={translation.text}/></p>
+      <div className={tw('flex flex-col gap-y-4')}>
+        <Link href={demoURL} target="_blank">
+          <Chip className={tw('flex flex-row gap-x-2 w-fit items-center')} color="lightPrimary">
+            <Helpwave size={24} className={tw('min-w-[24px] min-h-[24px]')}/>
+            <Span className={tw('font-bold')}>helpwave tasks</Span>
+          </Chip>
+        </Link>
+        <h4>
+          <Span type="title" className={tw('!text-4xl font-bold')}>{translation.title}</Span>
+        </h4>
+        <p className={tw('text-xl font-medium')}>
+          <MarkdownInterpreter text={translation.text}/>
+        </p>
       </div>
     </div>
   )

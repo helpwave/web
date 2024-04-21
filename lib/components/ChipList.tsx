@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { tx } from '../twind'
 
-type ChipColorTypes = 'label-1' | 'label-2' | 'label-3' | 'blue' | 'pink' | 'yellow' | 'darkPrimary' | 'black'; // extended these colors for more variations
+type ChipColorTypes = 'label-1' | 'label-2' | 'label-3' | 'blue' | 'pink' | 'yellow' | 'darkPrimary' | 'lightPrimary' | 'black'; // extended these colors for more variations
 
 type ChipVariant = 'normal' | 'fullyRounded'
 
@@ -26,6 +26,7 @@ export const Chip = ({
         'w-fit',
         {
           'bg-hw-primary-800 text-white': color === 'darkPrimary',
+          'bg-hw-primary-200 text-hw-primary-800': color === 'lightPrimary',
           'bg-hw-label-pink-background text-hw-label-pink-text': color === 'pink',
           'bg-hw-label-blue-background text-hw-label-blue-text': color === 'blue',
           'bg-hw-label-yellow-background text-hw-label-yellow-text': color === 'yellow',

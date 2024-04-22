@@ -1,6 +1,6 @@
-import { tw } from '@helpwave/common/twind'
+import {tw} from '@helpwave/common/twind'
 import Image from 'next/image'
-import { SectionBase } from '@/components/sections/SectionBase'
+import {SectionBase} from '@/components/sections/SectionBase'
 
 type Entry = {
   name: string,
@@ -8,6 +8,18 @@ type Entry = {
 }
 
 const images: Record<string, Entry> = {
+  gruendungsstipendium: {
+    name: 'Gründungsstipendium.NRW',
+    url: 'https://cdn.helpwave.de/partners/gruendungsstipendium.jpg'
+  },
+  ministryNrw: {
+    name: 'Ministerium für Wirtschaft, Industrie, Klimaschutz, und Energie des Landes NRW',
+    url: 'https://cdn.helpwave.de/partners/mfw.svg'
+  },
+  medLife: {
+    name: 'MedLife',
+    url: 'https://cdn.helpwave.de/partners/medlife.png'
+  },
   mediQuu: {
     name: 'mediQuu',
     url: 'https://cdn.helpwave.de/mediquu/logo_2021.png'

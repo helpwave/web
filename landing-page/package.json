@@ -24,7 +24,8 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "2.4.1",
     "react-intersection-observer": "9.8.1",
-    "vanilla-cookieconsent": "3.0.1"
+    "vanilla-cookieconsent": "3.0.1",
+    "react-custom-scrollbars-2": "4.5.0"
   },
   "devDependencies": {
     "@types/node": "20.12.4",

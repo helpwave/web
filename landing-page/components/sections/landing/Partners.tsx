@@ -1,5 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import Image from 'next/image'
+import Scrollbars from 'react-custom-scrollbars-2'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type Entry = {
@@ -42,11 +43,15 @@ const PartnerSection = () => {
   const size = 144
 
   return (
-    <SectionBase className={tw('flex gap-16 select-none overflow-x-auto justify-between items-center')}>
-      {Object.entries(images).map(([_, { name, url }]) => (
-        <Image key={name} alt={name} src={url} style={{ objectFit: 'contain' }} width={size} height={size}
-               className={tw('grayscale')}/>
-      ))}
+    <SectionBase>
+      <Scrollbars autoHeight>
+        <div className={tw('flex gap-16 select-none justify-between items-center')}>
+          {Object.entries(images).map(([_, { name, url }]) => (
+            <Image key={name} alt={name} src={url} style={{ objectFit: 'contain' }} width={size} height={size}
+                   className={tw('grayscale')}/>
+          ))}
+        </div>
+      </Scrollbars>
     </SectionBase>
   )
 }

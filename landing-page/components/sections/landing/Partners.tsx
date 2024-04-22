@@ -42,7 +42,7 @@ const PartnerSection = () => {
   const size = 144
 
   return (
-    <SectionBase className={tw('flex gap-16 select-none overflow-x-auto justify-between items-center')}>
+    <SectionBase className={tw('flex gap-16 select-none overflow-x-auto justify-between items-center max-w-[1600px]')}>
       {Object.entries(images).map(([_, { name, url }]) => (
         <Image key={name} alt={name} src={url} style={{ objectFit: 'contain' }} width={size} height={size}
                className={tw('grayscale')}/>

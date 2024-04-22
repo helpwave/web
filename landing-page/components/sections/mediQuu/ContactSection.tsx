@@ -115,7 +115,6 @@ export const ContactSection = ({
   const isValid = !!contactForm.firstname && !!contactForm.lastname && validateEmail(contactForm.email) && !!contactForm.message
 
   return (
-    // TODO optimize layout for mobile when ready
     <SectionBase className={tw('flex desktop:flex-row desktop:justify-between mobile:flex-col w-full gap-8')} backgroundColor="gray">
       <div className={tw('flex flex-col gap-y-1 desktop:w-1/2')}>
         <Span type="title" className={tw('text-hw-secondary-400 !text-3xl')}>{translation.contact}</Span>

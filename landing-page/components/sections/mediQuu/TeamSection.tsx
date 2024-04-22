@@ -7,6 +7,7 @@ import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import { tx } from '@twind/core'
 import { MediQuuBadge } from '@/components/sections/mediQuu/MediQuuBadge'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 
@@ -119,7 +120,7 @@ export const TeamSection = () => {
   const translation = useTranslation(defaultTeamSectionTranslation)
   const usedLanguage = useLanguage().language
   return (
-    <div className={tw('flex flex-col w-full max-w-[1000px]')}>
+    <SectionBase className={tw('flex flex-col')}>
       <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
       <Span>{translation.subTitle}</Span>
       <div className={tw('flex flex-wrap desktop:justify-around mobile:justify-around gap-x-8 gap-y-6 mt-8')}>
@@ -136,6 +137,6 @@ export const TeamSection = () => {
           )
         })}
       </div>
-    </div>
+    </SectionBase>
   )
 }

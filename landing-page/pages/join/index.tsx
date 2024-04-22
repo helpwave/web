@@ -65,7 +65,7 @@ const NewsLetter: NextPage = () => {
   const waveWidth = (sizeCircle2 - sizeCircle1) / 20
 
   return (
-    <div className={tw('w-screen h-screen bg-white parent relative z-0 overflow-x-hidden')}>
+    <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
       <Header/>
       <div className={tw('h-screen z-[1]')}>
         <div className={tw('relative h-full overflow-hidden')}>
@@ -83,7 +83,7 @@ const NewsLetter: NextPage = () => {
               </>
             )}
           </div>
-          <div className={tw('absolute desktop:right-1/4 mobile:right-1/2 top-1/2 -translate-y-1/2 translate-x-1/2 desktop:w-[500px] mobile:w-4/5 mobile:max-w-[340px]')}>
+          <div className={tw('absolute top-1/2 -translate-y-1/2 desktop:right-[15%] tablet:right-[15%]  mobile:right-1/2 mobile:translate-x-1/2 desktop:w-[500px] mobile:w-4/5 mobile:max-w-[340px]')}>
             <NewsLetterForm
               onSubmit={async (form) => {
                 await submitNewsLetterForm(form)

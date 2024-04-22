@@ -5,6 +5,7 @@ import { Span } from '@helpwave/common/components/Span'
 import Image from 'next/image'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type MediQuuHeaderTranslation = {
   title: string,
@@ -29,22 +30,26 @@ const defaultMediQuuPageTranslation: Record<Languages, MediQuuHeaderTranslation>
 export const MediQuuHeaderSection = () => {
   const translation = useTranslation(defaultMediQuuPageTranslation)
   return (
-    <div className={tw('flex desktop:flex-row mobile:flex-col-reverse gap-8 mobile:items-center justify-center max-w-[1000px]')}>
-      <div className={tw('flex flex-col gap-y-2 max-w-')}>
-        <Span type="title" className={tw('!text-5xl')}>{translation.title}</Span>
-        <Span className={tw('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></Span>
-      </div>
-      <div className={tw('flex flex-col gap-y-4 min-w-[350px] max-w-[350px]')}>
-        <div className={tw('bg-white rounded-md px-6 py-4 !gap-x-2 !w-fit shadow-md')}>
-          <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={140} height={64}/>
+    <SectionBase backgroundColor="gray" isFirstSection={true}>
+      <div className={tw('flex flex-row w-full gap-x-4 gap-y-8 mobile:!flex-col-reverse mobile:items-center')}>
+        <div className={tw('flex flex-col gap-y-2 desktop:max-w-[50%]')}>
+          <Span type="title" className={tw('!text-5xl')}>{translation.title}</Span>
+          <Span className={tw('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></Span>
         </div>
-        <div className={tw('flex flex-row grow justify-end')}>
-          <HelpwaveBadge
-            size="large"
-            className="bg-hw-secondary-800 !gap-x-2 !w-fit shadow-md"
-          />
+        <div className={tw('flex flex-row justify-center items-center grow')}>
+          <div className={tw('flex flex-col gap-y-4 min-w-[350px] max-w-[350px]')}>
+            <div className={tw('bg-white rounded-md px-6 py-4 !gap-x-2 !w-fit shadow-md')}>
+              <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={140} height={64}/>
+            </div>
+            <div className={tw('flex flex-row justify-end')}>
+              <HelpwaveBadge
+                size="large"
+                className="bg-hw-secondary-800 !gap-x-2 !w-fit shadow-md py-4 px-6"
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </SectionBase>
   )
 }

@@ -6,6 +6,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type StartSectionTranslation = {
   title: string,
@@ -31,11 +32,11 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
   const size = 1024
 
   return (
-    <div className={tw('pt-32 pb-16')}>
+    <SectionBase isFirstSection={true}>
       <Link href={demoURL} target="_blank">
         <h1 className={tw('font-space text-6xl font-bold')}>
           helpwave <span className={tw('text-hw-primary-800')}>tasks</span>
-          <LinkIcon className={tw('ml-4 inline text-gray-400')} />
+          <LinkIcon className={tw('ml-4 inline text-gray-400')}/>
         </h1>
       </Link>
 
@@ -43,15 +44,16 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
         {translation.title}
       </h4>
 
-      <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)} />
+      <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain' }} width={size} height={size}
+             className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)}/>
 
       <div className={tw('mt-16 text-xl text-center animate-bounce')}>
-        <Mouse className={tw('inline')} /> scroll
+        <Mouse className={tw('inline')}/> scroll
       </div>
-      <div className={tw('mt-16 text-xl text-center')}>
+      <div className={tw('mt-16 text-xl desktop:text-center')}>
         <p><MarkdownInterpreter text={translation.text}/></p>
       </div>
-    </div>
+    </SectionBase>
   )
 }
 

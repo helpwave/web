@@ -2,6 +2,9 @@ import { tw } from '@helpwave/common/twind'
 import Image from 'next/image'
 
 const images = {
+  'Gründungsstipendium.NRW': 'https://cdn.helpwave.de/partners/gruendungsstipendium.jpg',
+  'Ministerium für Wirtschaft, Industrie, Klimaschutz, und Energie des Landes NRW': 'https://cdn.helpwave.de/partners/mfw.svg',
+  'MedLife': 'https://cdn.helpwave.de/partners/medlife.png',
   'mediQuu': 'https://cdn.helpwave.de/mediquu/logo_2021.png',
   'REACH': 'https://cdn.helpwave.de/partners/reach.svg',
   'Digital Hub münsterland': 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png',

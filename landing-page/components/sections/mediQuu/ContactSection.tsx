@@ -9,6 +9,7 @@ import { Input } from '@helpwave/common/components/user-input/Input'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { LoadingButton } from '@helpwave/common/components/LoadingButton'
 import { submitHubSpotForm } from '@/utils/hubspot'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type ContactSectionTranslation = {
   contact: string,
@@ -114,8 +115,7 @@ export const ContactSection = ({
   const isValid = !!contactForm.firstname && !!contactForm.lastname && validateEmail(contactForm.email) && !!contactForm.message
 
   return (
-    // TODO optimize layout for mobile when ready
-    <div className={tw('flex desktop:flex-row desktop:justify-between w-full max-w-[1000px] mobile:flex-col gap-8')}>
+    <SectionBase className={tw('flex desktop:flex-row desktop:justify-between mobile:flex-col w-full gap-8')} backgroundColor="gray">
       <div className={tw('flex flex-col gap-y-1 desktop:w-1/2')}>
         <Span type="title" className={tw('text-hw-secondary-400 !text-3xl')}>{translation.contact}</Span>
         <Span>{translation.contactDescription}</Span>
@@ -185,6 +185,6 @@ export const ContactSection = ({
         </LoadingButton>
         {contactForm.hasSend && (<Span className={tw('text-hw-secondary-400 font-bold text-xl text-center')}>{translation.thankYou}</Span>)}
       </div>
-    </div>
+    </SectionBase>
   )
 }

@@ -3,6 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type ReachoutSectionTranslation = {
   medicalHeroTitle: string,
@@ -51,22 +52,22 @@ const ReachoutSection = ({ overwriteTranslation }: PropsForTranslation<ReachoutS
   const translation = useTranslation(defaultReachoutSectionTranslation, overwriteTranslation)
 
   return (
-        <div className={tw('pt-32 pb-16 text-xl text-center')}>
-            <h2 className={tw('font-space text-4xl font-bold')}>{translation.medicalHeroTitle}</h2>
-            <h3 className={tw('font-sans text-1xl font-medium mt-2 mb-2 text-gray-600')}>
-              <MarkdownInterpreter text={translation.medicalHeroSubtitle}/>
-            </h3>
-            <p className={tw('mb-5')}>
-              <MarkdownInterpreter text={translation.medicalHeroText}/>
-            </p>
-            <h2 className={tw('font-space text-4xl font-bold')}>{translation.hospitalManagerTitle}</h2>
-            <h3 className={tw('font-sans text-1xl font-medium mt-2 mb-2 text-gray-600')}>
-              <MarkdownInterpreter text={translation.hospitalManagerSubtitle}/>
-            </h3>
-            <p>
-              <MarkdownInterpreter text={translation.hospitalManagerText}/>
-            </p>
-        </div>
+    <SectionBase className={tw('text-xl desktop:text-center')}>
+      <h2 className={tw('font-space text-4xl font-bold')}>{translation.medicalHeroTitle}</h2>
+      <h3 className={tw('font-sans text-xl font-medium mt-2 mb-2 text-gray-600')}>
+        <MarkdownInterpreter text={translation.medicalHeroSubtitle}/>
+      </h3>
+      <p className={tw('mb-5')}>
+        <MarkdownInterpreter text={translation.medicalHeroText}/>
+      </p>
+      <h2 className={tw('font-space text-4xl font-bold')}>{translation.hospitalManagerTitle}</h2>
+      <h3 className={tw('font-sans text-xl font-medium mt-2 mb-2 text-gray-600')}>
+        <MarkdownInterpreter text={translation.hospitalManagerSubtitle}/>
+      </h3>
+      <p>
+        <MarkdownInterpreter text={translation.hospitalManagerText}/>
+      </p>
+    </SectionBase>
   )
 }
 

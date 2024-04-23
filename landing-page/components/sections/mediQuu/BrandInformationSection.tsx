@@ -4,6 +4,7 @@ import { tw } from '@helpwave/common/twind'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import Image from 'next/image'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type MediQuuBrandDescriptionTranslation = {
   aboutMediQuuTitle: string,
@@ -49,14 +50,14 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
 export const BrandDescriptionsSection = () => {
   const translation = useTranslation(defaultMediQuuBrandDescriptionTranslation)
   return (
-    <div className={tw('flex flex-col gap-8 justify-center w-full max-w-[1000px]')}>
+    <SectionBase className={tw('flex flex-col gap-8 justify-center')} backgroundColor="gray">
       <Tile
         title={{ value: translation.aboutMediQuuTitle, type: 'title' }}
         description={{ value: translation.aboutMediQuuDescription, type: 'normal' }}
         prefix={(
           <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64} />
         )}
-        className={tw('bg-white rounded-3xl px-6 mobile:py-6 desktop:py-16 !gap-6 !w-fit shadow-md !mobile:flex-col')}
+        className={tw('bg-white rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:flex-col tablet:flex-col')}
       />
       <Tile
         title={{ value: translation.aboutHelpwaveTitle, type: 'title' }}
@@ -69,8 +70,8 @@ export const BrandDescriptionsSection = () => {
             />
           </div>
         )}
-        className={tw('text-white bg-hw-secondary-800 rounded-3xl px-6 mobile:py-6 desktop:py-16 !gap-6 !w-fit shadow-md !mobile:flex-col')}
+        className={tw('text-white bg-hw-secondary-800 rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:flex-col tablet:flex-col')}
       />
-    </div>
+    </SectionBase>
   )
 }

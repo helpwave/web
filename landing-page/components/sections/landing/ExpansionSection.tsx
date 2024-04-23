@@ -2,6 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type ExpansionSectionTranslation = {
   germanyHealthcareSystem: string,
@@ -28,7 +29,7 @@ const defaultExpansionTranslation: Record<Languages, ExpansionSectionTranslation
 const ExpansionSection = ({ overwriteTranslation }: PropsForTranslation<ExpansionSectionTranslation>) => {
   const translation = useTranslation(defaultExpansionTranslation, overwriteTranslation)
   return (
-    <div className={tw('py-16')}>
+    <SectionBase backgroundColor="darkPrimary" className={tw('text-white pb-24')}>
         <h1 className={tw('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>
 
         <div className={tw('mt-8 w-full flex flex-wrap gap-16 justify-evenly items-center')}>
@@ -50,7 +51,7 @@ const ExpansionSection = ({ overwriteTranslation }: PropsForTranslation<Expansio
             <h4>{translation.gdp}</h4>
           </div>
         </div>
-    </div>
+    </SectionBase>
   )
 }
 

@@ -6,7 +6,7 @@ import Header from '@/components/Header'
 
 const TechRadar: NextPage = () => {
   return (
-    <div className={tw('w-screen h-screen bg-white parent relative z-0 overflow-x-hidden')}>
+    <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
       <Header />
       <div className={tw('mt-16 flex items-center justify-center')}>
         <TechRadarComponent/>

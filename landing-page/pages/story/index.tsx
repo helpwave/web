@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import StoryStartSection from '@/components/sections/story/StoryStartSection'
+import StoryHeader from '@/components/sections/story/StoryHeader'
 
 const Story: NextPage = () => {
   return (

@@ -44,11 +44,22 @@ const PartnerSection = () => {
 
   return (
     <SectionBase>
-      <Scrollbars autoHeight>
-        <div className={tw('flex gap-16 select-none justify-between items-center')}>
+      <Scrollbars
+        autoHeight={true}
+        autoHeightMax={144}
+        universal={true}
+      >
+        <div className={tw('flex gap-16 select-none justify-between items-center w-full')}>
           {Object.entries(images).map(([_, { name, url }]) => (
-            <Image key={name} alt={name} src={url} style={{ objectFit: 'contain' }} width={size} height={size}
-                   className={tw('grayscale')}/>
+            <Image
+              key={name}
+              alt={name}
+              src={url}
+              style={{ objectFit: 'contain' }}
+              width={size}
+              height={size}
+              className={tw(`grayscale max-h-[${size}px]`)}
+            />
           ))}
         </div>
       </Scrollbars>

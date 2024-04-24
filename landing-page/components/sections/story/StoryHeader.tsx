@@ -4,6 +4,7 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import Image from 'next/image'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type StoryHeaderTranslation = {
   foundingStory: string,
@@ -25,7 +26,7 @@ const StoryHeader = ({ overwriteTranslation }: PropsForTranslation<StoryHeaderTr
   const translation = useTranslation(defaultStoryHeaderTranslation, overwriteTranslation)
 
   return (
-    <div className={tw('max-w-[1000px] mx-auto text-white')}>
+    <SectionBase className={tw('text-white')} backgroundColor="black" isFirstSection={true}>
       <div className={tw('flex flex-col items-center desktop:!flex-row gap-x-16 gap-y-8 justify-between')}>
         <div className={tw('flex flex-col gap-y-2')}>
           <Span type="title" className={tw('!text-3xl')}>{translation.foundingStory}</Span>
@@ -33,7 +34,7 @@ const StoryHeader = ({ overwriteTranslation }: PropsForTranslation<StoryHeaderTr
         </div>
         <Image src="https://cdn.helpwave.de/story/audience_award_mshack.png" alt="" width={0} height={0} className={tw('w-full desktop:max-w-[60%]')}/>
       </div>
-    </div>
+    </SectionBase>
   )
 }
 

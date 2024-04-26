@@ -6,7 +6,6 @@ import { MousePointerClick } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Divider from '../components/Divider'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import ExpansionSection from '../components/sections/landing/ExpansionSection'
@@ -40,9 +39,7 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
     <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
       <Header/>
       <StartSection/>
-      <Divider rotate={1}/>
       <PartnerSection/>
-      <Divider rotate={1}/>
       <StorySection/>
       <div className={tw('relative flex flex-col items-center')}>
         <div className={tw('desktop:w-[620px] mx-20')}>

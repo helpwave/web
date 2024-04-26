@@ -38,7 +38,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
   const exploreURL = '/join'
   const demoURL = 'https://staging-tasks.helpwave.de'
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 items-center justify-center w-full')} isFirstSection={true}>
+    <SectionBase className={tw('flex flex-col gap-y-8 items-center justify-center w-full')}>
       <div className={tw('w-full max-w-[600px] mobile:max-w-[400px]')}>
         <div className={tw('font-space text-6xl mobile:text-5xl font-bold')}>helpwave</div>
 

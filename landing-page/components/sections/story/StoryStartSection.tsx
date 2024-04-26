@@ -77,7 +77,7 @@ const StoryStartSection = ({ overwriteTranslation }: PropsForTranslation<StorySt
   const translation = useTranslation(defaultStoryStartSectionTranslation, overwriteTranslation)
 
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8')} isFirstSection={true}>
+    <SectionBase className={tw('flex flex-col gap-y-8')}>
         <div className={tw('flex flex-row mobile:flex-col mobile:text-center gap-8 text-6xl text-hw-negative-700 items-center')}>
           <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full')} />
           {translation.ourStory}

@@ -32,7 +32,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
   const size = 1024
 
   return (
-    <SectionBase isFirstSection={true}>
+    <SectionBase>
       <Link href={demoURL} target="_blank">
         <h1 className={tw('font-space text-6xl font-bold')}>
           helpwave <span className={tw('text-hw-primary-800')}>tasks</span>

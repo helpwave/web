@@ -73,8 +73,8 @@ const Header = () => {
   const navigationItemStyle = tw('!font-bold font-space')
 
   return (
-    <div>
-      <div className={tw('w-screen z-[50] fixed top-0 bg-white')}>
+    <>
+      <div className={tw('absolute top-0 w-screen z-[50] bg-white')}>
         <nav className={tw('flex mobile:px-4 tablet:px-8 desktop:px-16 items-center justify-between mobile:mx-auto w-full')}>
           <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
             <Helpwave/>
@@ -142,7 +142,7 @@ const Header = () => {
       </div>
 
       {navbarOpen && (
-        <div className={tw('fixed w-screen h-screen z-[100] bg-white')}>
+        <div className={tw('absolute w-screen h-screen z-[100] bg-white')}>
           <div className={tw('text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
             <button onClick={() => setNavbarOpen(false)} className={tw('mb-5')}>
               <X size={64}/>
@@ -197,7 +197,7 @@ const Header = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }
 

@@ -75,7 +75,7 @@ const Header = () => {
   return (
     <div>
       <div className={tw('w-screen z-[50] fixed top-0 bg-white')}>
-        <nav className={tw('flex mobile:p-2 desktop:px-16 items-center justify-between mobile:mx-auto w-full')}>
+        <nav className={tw('flex mobile:px-4 tablet:px-8 desktop:px-16 items-center justify-between mobile:mx-auto w-full')}>
           <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
             <Helpwave/>
             <MarkdownInterpreter text={'\\helpwave'}/>
@@ -134,7 +134,7 @@ const Header = () => {
               </Link>
             </div>
           </div>
-          <button onClick={() => setNavbarOpen(true)} className={tw('desktop:hidden content-end')}
+          <button onClick={() => setNavbarOpen(true)} className={tw('desktop:hidden tablet:hidden content-end')}
                   aria-controls="navbar" aria-expanded="false">
             <MenuIcon size={32}/>
           </button>

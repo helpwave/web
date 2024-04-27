@@ -4,7 +4,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { Span } from '@helpwave/common/components/Span'
 import type { PropsWithChildren } from 'react'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import { Hospital, PieChart, UsersRound } from 'lucide-react'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type MarketStatsItemProps = PropsWithChildren<{
@@ -16,7 +16,7 @@ const MarketStatsItem = ({ children, stat, title }: MarketStatsItemProps) => {
   return (
     <div className={tw('flex flex-col items-center')}>
       {children}
-      <span className={tw('text-3xl')}>{stat}</span>
+      <span className={tw('text-3xl mt-2')}>{stat}</span>
       <h4><Span type="description" className={tw('text-xl')}>{title}</Span></h4>
     </div>
   )
@@ -55,15 +55,15 @@ const MarketStatsSection = ({ overwriteTranslation }: PropsForTranslation<Market
       <Span type="description" className={tw('text-center')}>{translation.marketPotential}</Span>
       <div className={tw('mt-8 w-full flex flex-wrap gap-y-16 gap-x-32 justify-evenly items-center')}>
         <MarketStatsItem stat="1.800" title={translation.hospitals}>
-          <Helpwave size={96} /* TODO Replace */ />
+          <Hospital size={72} />
         </MarketStatsItem>
 
         <MarketStatsItem stat="1.000.000" title={translation.healthcareWorkers}>
-          <Helpwave size={96} /* TODO Replace */ />
+          <UsersRound size={72} />
         </MarketStatsItem>
 
         <MarketStatsItem stat="12,1%" title={translation.gdp}>
-          <Helpwave size={96} /* TODO Replace */ />
+          <PieChart size={72} />
         </MarketStatsItem>
       </div>
     </SectionBase>

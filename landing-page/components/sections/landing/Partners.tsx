@@ -1,9 +1,9 @@
-import {tw} from '@helpwave/common/twind'
-import type {Languages} from '@helpwave/common/hooks/useLanguage'
-import {useTranslation} from '@helpwave/common/hooks/useTranslation'
-import {SectionBase} from '@/components/sections/SectionBase'
-import type {Partner} from '@/components/PartnerList'
-import {PartnerList} from '@/components/PartnerList'
+import { tw } from '@helpwave/common/twind'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { SectionBase } from '@/components/sections/SectionBase'
+import type { Partner } from '@/components/PartnerList'
+import { PartnerList } from '@/components/PartnerList'
 
 type PartnerSectionTranslation = {
   title: string

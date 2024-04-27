@@ -48,7 +48,7 @@ export const PropertyBase = ({
   const requiredAndNoValue = softRequired && !hasValue
   return (
     <div
-      className={tx('flex flex-row border border-2 rounded-[16px] group overflow-hidden', {
+      className={tx('flex flex-row border border-2 rounded-[16px] group', {
         'hover:border-hw-primary-800 border-gray-200 ': !requiredAndNoValue,
         'hover:border-hw-warn-800 border-hw-warn-700': requiredAndNoValue,
       }, className)}

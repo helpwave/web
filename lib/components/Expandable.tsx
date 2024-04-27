@@ -7,9 +7,12 @@ export type ExpandableProps = PropsWithChildren<{
   label: ReactNode,
   icon?: (expanded: boolean) => ReactNode,
   initialExpansion?: boolean,
+  /**
+   * Whether the expansion should only happen when the header is clicked or on the entire component
+   */
+  clickOnlyOnHeader?: boolean,
   className?: string,
-  headerClassName?: string,
-  ref?: React.Ref<HTMLDivElement>
+  headerClassName?: string
 }>
 
 /**
@@ -20,6 +23,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
   label,
   icon,
   initialExpansion = false,
+  clickOnlyOnHeader = true,
   className = '',
   headerClassName = ''
 }, ref) => {
@@ -27,10 +31,14 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
   icon ??= expanded1 => expanded1 ? <ChevronUp size={16}/> : <ChevronDown size={16}/>
 
   return (
-    <div ref={ref} className={tx('flex flex-col', className)}>
+    <div
+      ref={ref}
+      className={tx('flex flex-col', { 'cursor-pointer': !clickOnlyOnHeader }, className)}
+      onClick={() => !clickOnlyOnHeader && setExpanded(!expanded)}
+    >
       <div
         className={tx('flex flex-row justify-between items-center cursor-pointer', headerClassName)}
-        onClick={() => setExpanded(!expanded)}
+        onClick={() => clickOnlyOnHeader && setExpanded(!expanded)}
       >
         {label}
         {icon(expanded)}

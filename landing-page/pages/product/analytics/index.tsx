@@ -5,7 +5,7 @@ import Header from '@/components/Header'
 
 const Analytics: NextPage = () => {
   return (
-    <div className={tw('w-screen h-screen bg-white parent relative z-0 overflow-x-hidden')}>
+    <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
       <Header />
       <div className={tw('pt-32 pb-16')}>
         <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>

@@ -25,9 +25,13 @@ export const useLocale = (overWriteLanguage?: Languages) => {
   return mapping[overWriteLanguage ?? language]
 }
 
-export const ProvideLanguage = ({ children }: PropsWithChildren) => {
-  const [language, setLanguage] = useState<Languages>(DEFAULT_LANGUAGE)
-  const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', DEFAULT_LANGUAGE)
+type ProvideLanguageProps = {
+  defaultLanguage?: Languages
+}
+
+export const ProvideLanguage = ({ defaultLanguage, children }: PropsWithChildren<ProvideLanguageProps>) => {
+  const [language, setLanguage] = useState<Languages>(defaultLanguage ?? DEFAULT_LANGUAGE)
+  const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', defaultLanguage ?? DEFAULT_LANGUAGE)
 
   useEffect(() => {
     setStoredLanguage(language)

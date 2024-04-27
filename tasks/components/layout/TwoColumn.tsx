@@ -102,6 +102,7 @@ export const TwoColumn = ({
 
   const handleWindowResize = () => {
     setScrollbarsBarMaxHeight(window.innerHeight - headerHeight)
+    setFullWidth(window.innerWidth)
   }
 
   useEffect(() => {

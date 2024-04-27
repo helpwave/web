@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import Image from 'next/image'
 import { VerticalDivider } from '@helpwave/common/components/VerticalDivider'
 import { Span } from '@helpwave/common/components/Span'
-import Scrollbars from "react-custom-scrollbars-2";
+import Scrollbars from 'react-custom-scrollbars-2'
 
 export type Partner = {
   name: string,

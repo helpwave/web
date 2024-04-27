@@ -74,7 +74,7 @@ const Header = () => {
 
   return (
     <div>
-      <div className={tw('w-screen z-[50] fixed shadow-sm top-0 border bg-white')}>
+      <div className={tw('w-screen z-[50] fixed top-0 bg-white')}>
         <nav className={tw('flex mobile:px-4 tablet:px-8 desktop:px-16 items-center justify-between mobile:mx-auto w-full')}>
           <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
             <Helpwave/>

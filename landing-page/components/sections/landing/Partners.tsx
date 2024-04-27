@@ -9,6 +9,10 @@ type Entry = {
 }
 
 const images: Record<string, Entry> = {
+  collectiveIncubator: {
+    name: 'Collective Incubator',
+    url: 'https://cdn.helpwave.de/partners/collective_incubator_black.svg'
+  },
   gruendungsstipendium: {
     name: 'Gründungsstipendium.NRW',
     url: 'https://cdn.helpwave.de/partners/gruendungsstipendium.jpg'

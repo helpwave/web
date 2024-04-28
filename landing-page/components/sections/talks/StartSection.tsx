@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type TalksTranslation = {
   fusionOfHealthcareAndComputerScience: string
@@ -27,7 +28,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<TalksTransla
   const size = 1024
 
   return (
-    <div className={tw('pt-32')}>
+    <SectionBase>
       <Link href={podcastURL} target="_blank">
         <h1 className={tw('font-space text-6xl font-bold')}>
           helpwave <span className={tw('text-hw-pool-orange')}>talks</span>
@@ -40,7 +41,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<TalksTransla
       </h4>
 
       <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)}/>
-    </div>
+    </SectionBase>
   )
 }
 

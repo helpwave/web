@@ -7,12 +7,11 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Divider from '../components/Divider'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
 import ExpansionSection from '../components/sections/landing/ExpansionSection'
 import PartnerSection from '../components/sections/landing/Partners'
 import StartSection from '../components/sections/landing/StartSection'
 import StorySection from '../components/sections/landing/Story'
+import { Page } from '@/components/Page'
 
 type HomePageTranslation = {
   checkOutFirstProduct: string,
@@ -35,20 +34,14 @@ const defaultHomePageTranslation: Record<Languages, HomePageTranslation> = {
 
 const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTranslation>) => {
   const translation = useTranslation(defaultHomePageTranslation, overwriteTranslation)
+
   return (
-    <div className={tw('w-screen h-screen bg-white parent relative z-0 overflow-x-hidden')}>
-      <Header/>
-      <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
-        <StartSection/>
-      </div>
+    <Page outerClassName={tw('z-0')} className={tw('z-0')}>
+      <StartSection/>
       <Divider rotate={1}/>
-      <div className={tw('desktop:w-5/12 desktop:mx-auto tablet:mx-16 phone:mx-8 relative z-[1]')}>
-        <PartnerSection/>
-      </div>
+      <PartnerSection/>
       <Divider rotate={1}/>
-      <div className={tw('desktop:w-7/12 desktop:mx-auto mobile:mx-8')}>
-        <StorySection/>
-      </div>
+      <StorySection/>
       <div className={tw('relative flex flex-col items-center')}>
         <div className={tw('desktop:w-[620px] mx-20')}>
           <DescriptionWithAction
@@ -73,11 +66,8 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
         </div>
         <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-primary-900 z-[-1] translate-y-[2px]')}></div>
       </div>
-      <div className={tw('w-screen parent bg-hw-primary-900 text-white')}>
-        <ExpansionSection/>
-      </div>
-      <Footer/>
-    </div>
+      <ExpansionSection/>
+    </Page>
   )
 }
 

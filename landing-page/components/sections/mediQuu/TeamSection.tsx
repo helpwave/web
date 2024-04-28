@@ -7,6 +7,7 @@ import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import { tx } from '@twind/core'
 import { MediQuuBadge } from '@/components/sections/mediQuu/MediQuuBadge'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 
@@ -110,7 +111,7 @@ const defaultTeamSectionTranslation: Record<Languages, TeamSectionTranslation> =
     subTitle: 'We are available to answer any questions you may have at short notice.',
   },
   de: {
-    title: 'Ansprechepartner',
+    title: 'Ansprechpartner',
     subTitle: 'Wir stehen Ihnen bei jeglichen Fragen kurzfristig zur Verfügung.',
   }
 }
@@ -119,19 +120,23 @@ export const TeamSection = () => {
   const translation = useTranslation(defaultTeamSectionTranslation)
   const usedLanguage = useLanguage().language
   return (
-    <div className={tw('flex flex-col w-full max-w-[1000px]')}>
+    <SectionBase className={tw('flex flex-col')}>
       <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
       <Span>{translation.subTitle}</Span>
       <div className={tw('flex flex-wrap desktop:justify-around mobile:justify-around gap-x-8 gap-y-6 mt-8')}>
-        {contacts.map(value => (
-          <Profile
-            key={value.name}
-            info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
-            {...value}
-            className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
-          />
-        ))}
+        {contacts.map(value => {
+          const profileProps = { ...value }
+          delete profileProps.translatedInfo
+          return (
+            <Profile
+              key={value.name}
+              info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
+              {...profileProps}
+              className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
+            />
+          )
+        })}
       </div>
-    </div>
+    </SectionBase>
   )
 }

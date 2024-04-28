@@ -3,7 +3,9 @@ import type { NativeProps } from '../util/types'
 
 export type LabelType = 'labelSmall' | 'labelMedium' | 'labelBig'
 
-export type SpanType = LabelType | 'normal' | 'heading' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent' | 'description' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError' | 'formDescription' | 'modalTitle'
+export type SpanType = LabelType | 'normal' | 'heading' | 'title' | 'subsectionTitle' | 'subsubsectionTitle' | 'accent'
+  | 'description' | 'tableName' | 'navigationItem' | 'tableHeader' | 'formError'
+  | 'formDescription' | 'modalTitle' | 'block'
 
 export type SpanProps = NativeProps<'span'> & {
   type?: SpanType
@@ -32,6 +34,7 @@ export const Span = ({ children, type = 'normal', className, ...restProps }: Spa
         'text-gray-600 font-bold': type === 'tableHeader',
         'text-hw-negative-500 text-sm': type === 'formError',
         'text-gray-500 text-sm': type === 'formDescription',
+        'text-justify': type === 'block'
       },
       className)}
       {...restProps}

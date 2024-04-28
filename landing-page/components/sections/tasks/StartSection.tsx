@@ -5,6 +5,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import { SectionBase } from '@/components/sections/SectionBase'
 import { Chip } from '@helpwave/common/components/ChipList'
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
@@ -33,7 +34,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
   const screenshotURL = 'https://cdn.helpwave.de/products/helpwave_tasks_ui_elements.png'
 
   return (
-    <div className={tw('flex flex-col desktop:flex-row gap-x-32 gap-y-8 justify-center items-center pt-32 pb-16')}>
+    <SectionBase className={tw('flex flex-col desktop:flex-row gap-x-32 gap-y-8 justify-center items-center')}>
       <Image
         alt="Screenshots"
         src={screenshotURL}
@@ -56,7 +57,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
           <MarkdownInterpreter text={translation.text}/>
         </p>
       </div>
-    </div>
+    </SectionBase>
   )
 }
 

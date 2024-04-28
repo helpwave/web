@@ -1,6 +1,6 @@
-import { tw } from '@helpwave/common/twind'
 import type { ProfileProps } from '@helpwave/common/components/Profile'
 import TeamGroup from '@/components/TeamGroup'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 
@@ -151,11 +151,11 @@ const teamData: Record<string, ProfileProps[]> = {
 
 const TeamSection = () => {
   return (
-    <div className={tw('pt-32 pb-16')}>
+    <SectionBase>
       {Object.entries(teamData).map(([name, members]) => (
         <TeamGroup key={name} name={name} members={members} />
       ))}
-    </div>
+    </SectionBase>
   )
 }
 

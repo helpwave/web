@@ -4,6 +4,44 @@ import Image from 'next/image'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { SectionBase } from '@/components/sections/SectionBase'
+
+type FeatureItemProps = {
+  imageUrl: string,
+  size: number,
+  title: string,
+  description: string,
+  reverse?: boolean
+}
+
+const FeatureItem = ({
+  imageUrl,
+  size,
+  title,
+  description,
+  reverse = false
+}: FeatureItemProps) => {
+  return (
+    <div className={tx('flex mobile:flex-col-reverse items-center gap-x-4 gap-y-6 desktop:!gap-x-8 justify-between', {
+      'flex-row-reverse': reverse,
+      'flex-row': !reverse
+    })}>
+      <div className={tw('w-1/2 mobile:!w-full')}>
+        <Image alt="Screenshots" src={imageUrl} style={{ objectFit: 'contain' }} width={size} height={size}
+               className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md`)}/>
+      </div>
+
+      <div className={tw('flex flex-col w-1/3 mobile:!w-full')}>
+        <Span type="title" className={tw('!text-4xl')}>
+          {title}
+        </Span>
+        <Span type="description" className={tw('text-gray-600')}>
+          {description}
+        </Span>
+      </div>
+    </div>
+  )
+}
 
 type FeatureSectionTranslation = {
   taskTemplatesTitle: string,
@@ -41,55 +79,29 @@ const FeatureSection = ({ overwriteTranslation }: PropsForTranslation<FeatureSec
   const size = 1024
 
   return (
-    <>
-      <div className={tw('mt-8 pb-8 items-center desktop:gap-8 tablet:px-8 desktop:px-0 flex flex-wrap justify-between')}>
-        <div className={tw('w-1/2')}>
-          <Image alt="Screenshots" src={screenshotTemplates} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)} />
-        </div>
+    <SectionBase className={tw('flex flex-col gap-y-12')}>
+      <FeatureItem
+        imageUrl={screenshotTemplates}
+        size={size}
+        title={translation.taskTemplatesTitle}
+        description={translation.taskTemplatesText}
+      />
 
-        <div className={tw('w-1/3')}>
-          <span className={tw('text-4xl font-space')}>
-            {translation.taskTemplatesTitle}
-          </span>
-          <br />
-          <Span type="description" className={tw('text-gray-600')}>
-            {translation.taskTemplatesText}
-          </Span>
-        </div>
-      </div>
+      <FeatureItem
+        imageUrl={screenshotCollab}
+        size={size}
+        title={translation.collaborateTitle}
+        description={translation.collaborateText}
+        reverse={true}
+      />
 
-      <div className={tw('pb-8 items-center desktop:gap-16 tablet:px-8 desktop:px-0 flex flex-wrap justify-between')}>
-        <div className={tw('w-1/3 text-end')}>
-          <span className={tw('text-4xl font-space')}>
-            {translation.collaborateTitle}
-          </span>
-          <br />
-          <Span type="description" className={tw('text-gray-600')}>
-            {translation.collaborateText}
-          </Span>
-        </div>
-
-        <div className={tw('w-1/2')}>
-          <Image alt="Screenshots" src={screenshotCollab} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)} />
-        </div>
-      </div>
-
-      <div className={tw('pb-8 items-center desktop:gap-16 tablet:px-8 desktop:px-0 flex flex-wrap justify-between')}>
-        <div className={tw('w-1/2')}>
-          <Image alt="Screenshots" src={screenshotPatients} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)} />
-        </div>
-
-        <div className={tw('w-1/3')}>
-          <span className={tw('text-4xl font-space')}>
-            {translation.patientsTitle}
-          </span>
-          <br />
-          <Span type="description" className={tw('text-gray-600')}>
-            {translation.patientsText}
-          </Span>
-        </div>
-      </div>
-    </>
+      <FeatureItem
+        imageUrl={screenshotPatients}
+        size={size}
+        title={translation.patientsTitle}
+        description={translation.patientsText}
+      />
+    </SectionBase>
   )
 }
 

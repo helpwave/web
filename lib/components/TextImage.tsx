@@ -1,5 +1,4 @@
 import { tw, tx } from '@twind/core'
-import Image from 'next/image'
 import { colors } from '../twind/config'
 import { Chip } from './ChipList'
 import { Span } from './Span'
@@ -11,7 +10,6 @@ export type TextImageProps = {
   title: string,
   description: string,
   imageUrl: string,
-  imageClassName?: string,
   color?: TextImageColor,
   badge?: string,
   contentClassName?: string,
@@ -25,7 +23,6 @@ export const TextImage = ({
   title,
   description,
   imageUrl,
-  imageClassName = '',
   color = 'primary',
   badge,
   contentClassName = '',
@@ -43,19 +40,16 @@ export const TextImage = ({
   }
 
   return (
-    <div className={tx('relative rounded-2xl overflow-hidden', className)}>
-      <Image
-        src={imageUrl}
-        alt=""
-        className={tx('absolute z-[-1] top-0 left-0 object-cover', imageClassName)} style={{ height: 'auto', width: 'auto' }}
-        width={0}
-        height={0}
-        priority={true}
-      />
+    <div
+      className={tx('relative rounded-2xl', className)}
+      style={{
+        backgroundImage: `url(${imageUrl})`,
+        backgroundSize: 'cover',
+      }}>
       <div
-        className={tx(`flex flex-col px-6 py-12`, contentClassName)}
+        className={tx(`flex flex-col px-6 py-12 rounded-2xl`, contentClassName)}
         style={{
-          backgroundImage: `linear-gradient(to right, ${colorMapping[color]} 20%, ${withTransparency(colorMapping[color], '55')})`
+          backgroundImage: `linear-gradient(to right, ${colorMapping[color]} 30%, ${withTransparency(colorMapping[color], '55')})`
         }}
       >
         {badge && (

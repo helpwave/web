@@ -12,6 +12,7 @@ import PartnerSection from '../components/sections/landing/Partners'
 import StartSection from '../components/sections/landing/StartSection'
 import StorySection from '../components/sections/landing/Story'
 import { Page } from '@/components/Page'
+import { TasksDemoSection } from '@/components/sections/landing/TasksDemoSection'
 
 type HomePageTranslation = {
   checkOutFirstProduct: string,
@@ -41,6 +42,7 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
       <Divider rotate={1}/>
       <PartnerSection/>
       <Divider rotate={1}/>
+      <TasksDemoSection/>
       <StorySection/>
       <div className={tw('relative flex flex-col items-center')}>
         <div className={tw('desktop:w-[620px] mx-20')}>

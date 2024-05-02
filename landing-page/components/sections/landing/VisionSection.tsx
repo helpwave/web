@@ -19,12 +19,12 @@ const defaultVisionSectionTranslation: Record<Languages, VisionSectionTranslatio
   en: {
     ourVision: 'Our Vision',
     title: 'Support health care workers with data',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text',
+    description: 'We are developing innovative software that enables healthcare professionals to provide the best possible medical care to their patients.',
   },
   de: {
     ourVision: 'Unsere Vision',
-    title: 'Entdecken unsere Vision',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text',
+    title: 'Datenbasierte Unterstützung im Gesundheitswesen',
+    description: 'Unser innovativer Ansatz in der Softwareentwicklung erleichtert es dem Personal im Gesundheitswesen, den Fokus auf die Betreuung ihrer Patienten zu legen.',
   }
 }
 

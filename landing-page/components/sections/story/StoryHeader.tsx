@@ -26,7 +26,7 @@ const StoryHeader = ({ overwriteTranslation }: PropsForTranslation<StoryHeaderTr
   const translation = useTranslation(defaultStoryHeaderTranslation, overwriteTranslation)
 
   return (
-    <SectionBase className={tw('text-white')} backgroundColor="black" isFirstSection={true}>
+    <SectionBase className={tw('text-white')} backgroundColor="black">
       <div className={tw('flex flex-col items-center desktop:!flex-row gap-x-16 gap-y-8 justify-between')}>
         <div className={tw('flex flex-col gap-y-2')}>
           <Span type="title" className={tw('!text-3xl')}>{translation.foundingStory}</Span>

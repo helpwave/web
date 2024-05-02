@@ -28,7 +28,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<TalksTransla
   const size = 1024
 
   return (
-    <SectionBase isFirstSection={true}>
+    <SectionBase>
       <Link href={podcastURL} target="_blank">
         <h1 className={tw('font-space text-6xl font-bold')}>
           helpwave <span className={tw('text-hw-pool-orange')}>talks</span>

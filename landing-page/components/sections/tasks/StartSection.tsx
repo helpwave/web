@@ -5,10 +5,10 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { SectionBase } from '@/components/sections/SectionBase'
 import { Chip } from '@helpwave/common/components/ChipList'
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type StartSectionTranslation = {
   title: string,

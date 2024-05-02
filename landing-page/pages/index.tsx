@@ -6,7 +6,7 @@ import { MousePointerClick } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import ExpansionSection from '../components/sections/landing/ExpansionSection'
+import MarketStatsSection from '../components/sections/landing/MarketStatsSection'
 import PartnerSection from '../components/sections/landing/Partners'
 import StartSection from '../components/sections/landing/StartSection'
 import StorySection from '../components/sections/landing/Story'
@@ -61,9 +61,9 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
             descriptionClassName={tw('!text-gray-600')}
           />
         </div>
-        <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-primary-900 z-[-1] translate-y-[2px]')}></div>
+        <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-secondary-800 z-[-1] translate-y-[2px]')}></div>
       </div>
-      <ExpansionSection/>
+      <MarketStatsSection/>
     </Page>
   )
 }

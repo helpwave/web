@@ -30,7 +30,7 @@ const defaultMediQuuPageTranslation: Record<Languages, MediQuuHeaderTranslation>
 export const MediQuuHeaderSection = () => {
   const translation = useTranslation(defaultMediQuuPageTranslation)
   return (
-    <SectionBase backgroundColor="gray" isFirstSection={true}>
+    <SectionBase backgroundColor="gray">
       <div className={tw('flex flex-row w-full gap-x-4 gap-y-8 mobile:!flex-col-reverse mobile:items-center')}>
         <div className={tw('flex flex-col gap-y-2 desktop:max-w-[50%]')}>
           <Span type="title" className={tw('!text-5xl')}>{translation.title}</Span>

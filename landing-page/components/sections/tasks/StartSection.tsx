@@ -17,8 +17,8 @@ type StartSectionTranslation = {
 
 const defaultStartSectionTranslation: Record<Languages, StartSectionTranslation> = {
   en: {
-    title: 'Workflow management for the healthcare industry',
-    text: 'At \\helpwave, we don’t see information technology as an old marriage that has fallen asleep, but as \\primary{newly} & \\negative{rekindled} hot affair.'
+    title: 'The first open source team management platform for healthcare professionals',
+    text: 'Patient care is teamwork. helpwave tasks increases the productivity in your clinical team. Ditch the printed ward list and coordinate the teamwork in a modern Kanban interface that has been inspired by industry best practices from lean project management.'
   },
   de: {
     // TODO update translation

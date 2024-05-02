@@ -79,11 +79,11 @@ const Header = () => {
   return (
     <div>
       <div className={tw('w-screen z-[50] fixed shadow-sm top-0 border bg-white')}>
-        <nav className={tw('flex mobile:p-2 desktop:w-5/12 items-center justify-between mx-auto')}>
+        <nav className={tw('flex mobile:p-2 desktop:max-w-[1000px] items-center justify-between mx-auto')}>
           <Link href={homeURL}>
             <Helpwave/>
           </Link>
-          <div className={tw('phone:hidden w-full')}>
+          <div className={tw('mobile:hidden w-full')}>
             <div className={tw('flex flex-wrap items-center justify-evenly')}>
               {items.map(({
                 name,

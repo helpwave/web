@@ -18,7 +18,7 @@ export const LoadingButton = ({ isLoading = false, ...rest }: LoadingButtonProps
           </div>
         )
       }
-      <Button {...rest} disabled={isLoading}/>
+      <Button {...rest} disabled={rest.disabled || isLoading}/>
     </div>
   )
 }

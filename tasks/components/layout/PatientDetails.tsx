@@ -18,7 +18,7 @@ import {
   usePatientDischargeMutation,
   usePatientUpdateMutation,
   useUnassignMutation,
-  type PatientDetailsDTO
+  type PatientDetailsDTO, useReadmitPatientMutation
 } from '@/mutations/patient_mutations'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
@@ -32,7 +32,8 @@ type PatientDetailTranslation = {
   dischargeConfirmText: string,
   dischargePatient: string,
   saved: string,
-  unassign: string
+  unassign: string,
+  readmit: string
 }
 
 const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
@@ -43,7 +44,8 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     dischargeConfirmText: 'Do you really want to discharge the patient?',
     dischargePatient: 'Discharge Patient',
     saved: 'Saved',
-    unassign: 'Unassign'
+    unassign: 'Unassign',
+    readmit: 'Readmit'
   },
   de: {
     patientDetails: 'Details',
@@ -52,7 +54,8 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
     dischargePatient: 'Patienten entlassen',
     saved: 'Gespeichert',
-    unassign: 'Zuweisung aufheben'
+    unassign: 'Zuweisung aufheben',
+    readmit: 'Wiederzuweisen'
   }
 }
 
@@ -76,9 +79,14 @@ export const PatientDetail = ({
   const context = useContext(WardOverviewContext)
 
   const updateMutation = usePatientUpdateMutation()
+  const readmitMutation = useReadmitPatientMutation()
   const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardId: context.state.wardId }))
   const unassignMutation = useUnassignMutation(() => context.updateContext({ wardId: context.state.wardId }))
-  const { data, isError, isLoading } = usePatientDetailsQuery(context.state.patientId)
+  const {
+    data,
+    isError,
+    isLoading
+  } = usePatientDetailsQuery(context.state.patientId)
 
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [taskId, setTaskId] = useState<string>()
@@ -98,7 +106,10 @@ export const PatientDetail = ({
     setIsSubmitting(false)
   })
 
-  const { restartTimer, clearUpdateTimer } = useSaveDelay(setIsShowingSavedNotification, 3000)
+  const {
+    restartTimer,
+    clearUpdateTimer
+  } = useSaveDelay(setIsShowingSavedNotification, 3000)
 
   const changeSavedValue = (patient: PatientDetailsDTO) => {
     setNewPatient(patient)
@@ -155,16 +166,26 @@ export const PatientDetail = ({
                 className={tw('text-lg font-semibold')}
                 id="humanReadableIdentifier"
                 value={newPatient.name}
-                onChange={name => changeSavedValue({ ...newPatient, name })}
+                onChange={name => changeSavedValue({
+                  ...newPatient,
+                  name
+                })}
               />
             </div>
             <RoomBedSelect
-              initialRoomAndBed={{ roomId: context.state.roomId ?? '', bedId: context.state.bedId ?? '' }}
+              initialRoomAndBed={{
+                roomId: context.state.roomId ?? '',
+                bedId: context.state.bedId ?? ''
+              }}
               wardId={context.state.wardId}
               onChange={(roomBedDropdownIds) => {
                 if (roomBedDropdownIds.bedId && context.state.patientId) {
+                  readmitMutation.mutate(newPatient.id)
                   context.updateContext({ ...context.state, ...roomBedDropdownIds })
-                  assignBedMutation.mutate({ id: roomBedDropdownIds.bedId, patientId: context.state.patientId })
+                  assignBedMutation.mutate({
+                    id: roomBedDropdownIds.bedId,
+                    patientId: context.state.patientId
+                  })
                 }
               }}
               isSubmitting={isSubmitting}
@@ -174,7 +195,10 @@ export const PatientDetail = ({
             <Textarea
               headline={translation.notes}
               value={newPatient.note}
-              onChange={text => changeSavedValue({ ...newPatient, note: text })}
+              onChange={text => changeSavedValue({
+                ...newPatient,
+                note: text
+              })}
             />
           </div>
         </div>
@@ -194,16 +218,26 @@ export const PatientDetail = ({
             <PropertyList subjectID={newPatient.id} subjectType="patient"/>
           </div>
         )}
-        <div className={tw('sticky flex flex-row  bottom-6 right-4 justify-end')}>
-          <div className={tw('sticky flex flex-row p-2 mt-6 gap-x-4 bg-white border-2 rounded-xl')}>
-            <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>{translation.unassign}</Button>
-            <Button color="negative"
-                    onClick={() => setIsShowingDischargeDialog(true)}>{translation.dischargePatient}</Button>
-            <Button color="accent" onClick={() => {
-              clearUpdateTimer(true)
-              updateMutation.mutate(newPatient)
-            }}>{translation.saveChanges}</Button>
-          </div>
+        <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
+          {!newPatient.discharged ?
+              (
+              <>
+                <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
+                  {translation.unassign}
+                </Button>
+                <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
+                  {translation.dischargePatient}
+                </Button>
+              </>
+              ) : (
+              <Button color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
+                {translation.readmit}
+              </Button>
+              )}
+          <Button color="accent" onClick={() => {
+            clearUpdateTimer(true)
+            updateMutation.mutate(newPatient)
+          }}>{translation.saveChanges}</Button>
         </div>
       </LoadingAndErrorComponent>
     </div>

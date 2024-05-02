@@ -14,7 +14,6 @@ type VisionSectionTranslation = {
   description: string
 }
 
-// TODO update translation
 const defaultVisionSectionTranslation: Record<Languages, VisionSectionTranslation> = {
   en: {
     ourVision: 'Our Vision',

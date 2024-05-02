@@ -83,12 +83,9 @@ export const TasksDemoSection = () => {
         src={imageURL}
         alt=""
         className={tw('w-full rounded-t-2xl')}
-        style={{
-          // TODO fix this or apply shadow in the image
-          boxShadow: '0 -10px 10px -10px rgba(0, 0, 0, 0.3), 10px 0 10px -10px rgba(0, 0, 0, 0.3), -10px 0 10px -10px rgba(0, 0, 0, 0.3)'
-        }}
-        width={0}
-        height={0}
+        style={{ transform: 'scale(101.28051%, 102.6862%) translate(-0.640255%, -1.3431%)' }}
+        width={2351}
+        height={1246}
         priority={true}
       />
     </SectionBase>

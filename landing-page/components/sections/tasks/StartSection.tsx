@@ -18,12 +18,11 @@ type StartSectionTranslation = {
 const defaultStartSectionTranslation: Record<Languages, StartSectionTranslation> = {
   en: {
     title: 'The first open source team management platform for healthcare professionals',
-    text: 'Patient care is teamwork. helpwave tasks increases the productivity in your clinical team. Ditch the printed ward list and coordinate the teamwork in a modern Kanban interface that has been inspired by industry best practices from lean project management.'
+    text: 'Patient care is teamwork. \\b{helpwave tasks} increases the \\primary{productivity} in your clinical team. Ditch the printed ward list and coordinate the teamwork in a modern Kanban interface that has been inspired by industry \\primary{best practices} from lean project management.'
   },
   de: {
-    // TODO update translation
-    title: 'Workflow management für das Gesundheitswesen',
-    text: 'At \\helpwave, we don’t see information technology as an old marriage that has fallen asleep, but as \\primary{newly} & \\negative{rekindled} hot affair.'
+    title: 'Die erste Open Source Teammanagement-Plattform für das Gesundheitswesen',
+    text: 'Patientenversorgung ist Teamarbeit. \\b{helpwave tasks} erhöht die Produktivität in Ihrem klinischen Team. Schmeißen Sie die gedruckte Stationsliste weg und koordinieren Sie die Teamarbeit in einer modernen Kanban-Oberfläche, die von den \\primary{best practices} des lean Projektmanagements inspiriert wurde.'
   }
 }
 
@@ -34,15 +33,14 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
   const screenshotURL = 'https://cdn.helpwave.de/products/helpwave_tasks_ui_elements.png'
 
   return (
-    <SectionBase className={tw('flex flex-col desktop:flex-row gap-x-32 gap-y-8 justify-center items-center')}>
+    <SectionBase className={tw('flex flex-col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center')}>
       <Image
         alt="Screenshots"
         src={screenshotURL}
         width={0}
         height={0}
-        className={tx(`object-contain w-full desktop:w-1/2 -rotate-12 z-[-1]`)}
+        className={tx(`object-contain w-full desktop:w-1/2 desktop:scale-125 -rotate-12`)}
       />
-
       <div className={tw('flex flex-col gap-y-4')}>
         <Link href={demoURL} target="_blank">
           <Chip className={tw('flex flex-row gap-x-2 w-fit items-center')} color="lightPrimary">
@@ -53,9 +51,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
         <h4>
           <Span type="title" className={tw('!text-4xl font-bold')}>{translation.title}</Span>
         </h4>
-        <p className={tw('text-xl font-medium')}>
-          <MarkdownInterpreter text={translation.text}/>
-        </p>
+        <MarkdownInterpreter text={translation.text} className={tw('text-xl font-medium')}/>
       </div>
     </SectionBase>
   )

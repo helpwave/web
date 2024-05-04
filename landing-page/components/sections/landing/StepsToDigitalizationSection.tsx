@@ -25,24 +25,24 @@ const defaultStepsToDigitalizationSectionTranslation: Record<Languages, StepsToD
     title: '\\secondary{Digital exelence} in\\newline 3 simple steps',
     description: 'Our approach is to implement more efficient and fun\\newline processes in a simple yet powerful way.',
     step: 'Step',
-    step1Title: 'Digitalization of organization and coordination',
-    step1Description: 'At helpwave, we don\'t just develop software for the healthcare sector',
-    step2Title: 'Feeding and preparation of data',
-    step2Description: 'At helpwave, we don\'t just develop software for the healthcare sector',
-    step3Title: 'Qualitätskontrolle, Business Insights und Process Mining',
-    step3Description: 'At helpwave, we don\'t just develop software for the healthcare sector'
+    step1Title: 'Identifying the problem',
+    step1Description: 'helpwave was born out of a simple question: How can we leverage our software expertise to support healthcare professionals? We have all encountered outdated, clunky software in our daily work, and have observed its impact on patient care and our own lives. Despite significant investments, current solutions often fall short. This is where helpwave steps in. We are committed to providing healthcare heroes with efficient, affordable tools, empowering hospitals to regain control over their infrastructure and data. By providing seamless access to vital information, we aim to enhance patient care and ease the burden on healthcare workers.',
+    step2Title: 'helpwave tasks and the Open Innovation Concept',
+    step2Description: 'helpwave is passionate about supporting those who dedicate their lives to patient care. We have developed helpwave tasks, a tool designed to simplify the lives of healthcare workers, integrating lean project management principles into healthcare teams. We collaborate closely with doctors, nurses, students, and administrators to enhance team organization, communication, and task management. At helpwave, we champion Open Innovation and Open Source principles, ensuring that our software is not only user-friendly but also community-driven and transparent. Join us in revolutionizing healthcare software, designed by healthcare workers, for healthcare workers.',
+    step3Title: 'The Future of helpwave',
+    step3Description: 'Drawing from our experience developing helpwave tasks, we have identified a critical issue in the healthcare software landscape: Deployment is a nightmare. Hospital IT infrastructure is often unreliable, outdated, and insecure, burdened by interoperability gaps and regulatory hurdles that favor large players. Enter helpwave: We are developing a platform to streamline software deployment in healthcare, empowering hospitals with control over their infrastructure and data. Our innovative technology is not just laying the groundwork for healthcare digitization, it is also democratizing market entry for new players, embodying the essence of Open Innovation. Join us at the table to revolutionize healthcare together.'
   },
   de: {
     // TODO update
     title: '\\secondary{Digitale Exelenz} in\\newline 3 Schritten',
     description: 'Unser Ansatz ist es, effizientere Prozesse zu implementieren, die Spaß machen\\newline - und das auf einfache, aber wirkungsvolle Weise.',
     step: 'Step',
-    step1Title: 'Digitalisierung der Organisation und Koordination',
-    step1Description: 'Bei helpwave entwickeln wir nicht einfach nur Software für das Gesundheitswesen',
-    step2Title: 'Einspeisung und Aufbereitung von Daten',
-    step2Description: 'Bei helpwave entwickeln wir nicht einfach nur Software für das Gesundheitswesen',
-    step3Title: 'Qualitätskontrolle, Business Insights und Process Mining',
-    step3Description: 'Bei helpwave entwickeln wir nicht einfach nur Software für das Gesundheitswesen'
+    step1Title: 'Lorem ipsum dolor sit ame',
+    step1Description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur',
+    step2Title: 'Lorem ipsum dolor sit ame',
+    step2Description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur',
+    step3Title: 'Lorem ipsum dolor sit ame',
+    step3Description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur'
   }
 }
 

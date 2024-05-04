@@ -1,5 +1,4 @@
-import { tx } from '@twind/core'
-import { tw } from '../twind'
+import { tw, tx } from '../twind'
 
 const astNodeModifierTypes = ['none', 'italic', 'bold', 'underline', 'font-space', 'primary', 'warn', 'positive', 'negative'] as const
 type ASTNodeModifierType = typeof astNodeModifierTypes[number]

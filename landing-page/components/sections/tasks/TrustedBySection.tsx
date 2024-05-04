@@ -17,24 +17,14 @@ const defaultTrustedBySectionTranslation: Record<Languages, TrustedBySectionTran
     title: 'Trusted by'
   },
   de: {
-    // TODO update translation
     title: 'Unterstüzt von'
   }
 }
 
 const images: Partner[] = [
-  // TODO update images
   {
     name: 'UKM',
-    url: 'https://cdn.helpwave.de/logo/logo.png'
-  },
-  {
-    name: 'UMG',
-    url: 'https://cdn.helpwave.de/logo/logo.png'
-  },
-  {
-    name: 'Universtätsklinikum Hamburg Eppendorf',
-    url: 'https://cdn.helpwave.de/logo/logo.png',
+    url: 'https://cdn.helpwave.de/partners/ukm.png'
   },
 ]
 

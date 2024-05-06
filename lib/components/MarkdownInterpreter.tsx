@@ -1,4 +1,4 @@
-import { tw } from '../twind'
+import { tw, tx } from '../twind'
 
 const astNodeModifierTypes = ['none', 'italic', 'bold', 'underline', 'font-space', 'primary', 'warn', 'positive', 'negative'] as const
 type ASTNodeModifierType = typeof astNodeModifierTypes[number]
@@ -19,21 +19,23 @@ type ASTNode = {
 
 export type ASTNodeInterpreterProps = {
   node: ASTNode,
-  isRoot?: boolean
+  isRoot?: boolean,
+  className?: string
 }
 export const ASTNodeInterpreter = ({
   node,
-  isRoot = false
+  isRoot = false,
+  className = '',
 }: ASTNodeInterpreterProps) => {
   switch (node.type) {
     case 'newline':
       return <br />
     case 'text':
-      return isRoot ? <span>{node.text}</span> : node.text
+      return isRoot ? <span className={tx(className)}>{node.text}</span> : node.text
     case 'helpwave':
       return (<span className={tw('font-bold font-space no-underline')}>helpwave</span>)
     case 'none':
-      return isRoot ? <span>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</span> :
+      return isRoot ? <span className={tx(className)}>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</span> :
         <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
     case 'bold':
       return <b>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</b>
@@ -245,11 +247,12 @@ const optimizeTree = (node: ASTNode) => {
 }
 
 export type MarkdownInterpreterProps = {
-  text: string
+  text: string,
+  className?: string
 }
 
-export const MarkdownInterpreter = ({ text }: MarkdownInterpreterProps) => {
+export const MarkdownInterpreter = ({ text, className }: MarkdownInterpreterProps) => {
   const tree = parseMarkdown(text)
   const optimizedTree = optimizeTree(tree)!
-  return <ASTNodeInterpreter node={optimizedTree} isRoot={true}/>
+  return <ASTNodeInterpreter node={optimizedTree} isRoot={true} className={className} />
 }

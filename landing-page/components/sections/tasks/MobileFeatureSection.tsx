@@ -59,14 +59,14 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
       </div>
       <div
         // TODO fix image size
-        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full w-2/5 z-10')}
+        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full w-2/5 z-10 desktop:min-h-[400px]')}
       >
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={tw('w-fit max-h-[40vh]')}
+          className={tw('w-fit max-h-[70vh]')}
         />
       </div>
     </SectionBase>

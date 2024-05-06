@@ -3,9 +3,10 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import Scrollbars from 'react-custom-scrollbars-2'
 import { TextImage } from '@helpwave/common/components/TextImage'
+import Carousel from 'react-gallery-carousel'
 import { SectionBase } from '@/components/sections/SectionBase'
+import 'react-gallery-carousel/dist/index.css'
 
 type StepsToDigitalizationSectionTranslation = {
   title: string,
@@ -52,9 +53,6 @@ const defaultStepsToDigitalizationSectionTranslation: Record<Languages, StepsToD
 export const StepsToDigitalizationSection = () => {
   const translation = useTranslation(defaultStepsToDigitalizationSectionTranslation)
 
-  const maxHeight = 300
-  const className = tw(`!w-[500px] !h-[${maxHeight}px]`)
-
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 !max-w-full')}>
       <div className={tw('flex flex-col items-center text-center gap-y-2')}>
@@ -62,37 +60,41 @@ export const StepsToDigitalizationSection = () => {
         <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
       </div>
       <div className={tw('w-full')}>
-        <Scrollbars autoHeight={true} autoHeightMax={maxHeight} universal={true}>
-          <div className={tw('flex flex-row gap-x-16 items-center')}>
-            <TextImage
-              badge={`${translation.step} #1`}
-              title={translation.step1Title}
-              description={translation.step1Description}
-              imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
-              color="primary"
-              contentClassName={className}
-              className={className}
-            />
-            <TextImage
-              badge={`${translation.step} #2`}
-              title={translation.step2Title}
-              description={translation.step2Description}
-              imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
-              color="secondary"
-              contentClassName={className}
-              className={className}
-            />
-            <TextImage
-              badge={`${translation.step} #3`}
-              title={translation.step3Title}
-              description={translation.step3Description}
-              imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
-              color="secondaryDark"
-              contentClassName={className}
-              className={className}
-            />
-          </div>
-        </Scrollbars>
+        <Carousel
+          isLoop={true}
+          isAutoPlaying={true}
+          hasIndexBoard={false}
+          hasMediaButton={false}
+          hasMediaButtonAtMax="bottomLeft"
+          hasSizeButton={false}
+          hasDotButtons="bottom"
+          hasThumbnails={false}
+          shouldSwipeOnMouse={false} // for selecting text
+          shouldMinimizeOnSwipeDown={false} // for vertical overflow scrolling
+          style={{ userSelect: 'text' }}
+        >
+          <TextImage
+            badge={`${translation.step} #1`}
+            title={translation.step1Title}
+            description={translation.step1Description}
+            imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+            color="primary"
+          />
+          <TextImage
+            badge={`${translation.step} #2`}
+            title={translation.step2Title}
+            description={translation.step2Description}
+            imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+            color="secondary"
+          />
+          <TextImage
+            badge={`${translation.step} #3`}
+            title={translation.step3Title}
+            description={translation.step3Description}
+            imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+            color="secondaryDark"
+          />
+        </Carousel>
       </div>
     </SectionBase>
   )

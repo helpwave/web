@@ -41,7 +41,7 @@ export const TextImage = ({
 
   return (
     <div
-      className={tx('relative rounded-2xl mx-4 h-full', className)}
+      className={tx('relative rounded-2xl mx-4 w-full h-full', className)}
       style={{
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: 'cover',

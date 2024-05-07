@@ -56,3 +56,19 @@ export const getNeighbours = <T, >(list: T[], item: T, neighbourDistance: number
   }
   return result
 }
+
+export const createLoopingList = <T, >(list: T[], startIndex: number = 0, length: number = 0) => {
+  if (length < 0) {
+    console.warn(`createLoopingList: length must be >= 0, given ${length}`)
+  } else if (length === 0) {
+    length = list.length
+  }
+
+  const returnList = []
+
+  for (let i = startIndex; returnList.length < length; i = (i + 1) % length) {
+    returnList.push(list[i])
+  }
+
+  return returnList
+}

@@ -4,9 +4,8 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { TextImage } from '@helpwave/common/components/TextImage'
-import Carousel from 'react-gallery-carousel'
+import { Carousel } from '@helpwave/common/components/layout/Carousel'
 import { SectionBase } from '@/components/sections/SectionBase'
-import 'react-gallery-carousel/dist/index.css'
 
 type StepsToDigitalizationSectionTranslation = {
   title: string,
@@ -54,48 +53,34 @@ export const StepsToDigitalizationSection = () => {
   const translation = useTranslation(defaultStepsToDigitalizationSectionTranslation)
 
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 !max-w-full')}>
+    <SectionBase className={tw('flex flex-col gap-y-8 w-full')}>
       <div className={tw('flex flex-col items-center text-center gap-y-2')}>
         <h2><Span type="title" className={tw('!text-3xl')}><MarkdownInterpreter text={translation.title}/></Span></h2>
         <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
       </div>
-      <div className={tw('w-full')}>
-        <Carousel
-          isLoop={true}
-          isAutoPlaying={true}
-          hasIndexBoard={false}
-          hasMediaButton={false}
-          hasMediaButtonAtMax="bottomLeft"
-          hasSizeButton={false}
-          hasDotButtons="bottom"
-          hasThumbnails={false}
-          shouldSwipeOnMouse={false} // for selecting text
-          shouldMinimizeOnSwipeDown={false} // for vertical overflow scrolling
-          style={{ userSelect: 'text' }}
-        >
-          <TextImage
-            badge={`${translation.step} #1`}
-            title={translation.step1Title}
-            description={translation.step1Description}
-            imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
-            color="primary"
-          />
-          <TextImage
-            badge={`${translation.step} #2`}
-            title={translation.step2Title}
-            description={translation.step2Description}
-            imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
-            color="secondary"
-          />
-          <TextImage
-            badge={`${translation.step} #3`}
-            title={translation.step3Title}
-            description={translation.step3Description}
-            imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
-            color="secondaryDark"
-          />
-        </Carousel>
-      </div>
+      <Carousel>
+        <TextImage
+          badge={`${translation.step} #1`}
+          title={translation.step1Title}
+          description={translation.step1Description}
+          imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+          color="primary"
+        />
+        <TextImage
+          badge={`${translation.step} #2`}
+          title={translation.step2Title}
+          description={translation.step2Description}
+          imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+          color="secondary"
+        />
+        <TextImage
+          badge={`${translation.step} #3`}
+          title={translation.step3Title}
+          description={translation.step3Description}
+          imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+          color="secondaryDark"
+        />
+      </Carousel>
     </SectionBase>
   )
 }

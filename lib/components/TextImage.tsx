@@ -41,7 +41,7 @@ export const TextImage = ({
 
   return (
     <div
-      className={tx('relative rounded-2xl mx-4 w-full h-full', className)}
+      className={tx('rounded-2xl w-full', className)}
       style={{
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: 'cover',
@@ -59,7 +59,7 @@ export const TextImage = ({
         )}
         <div className={tw('flex flex-col gap-y-1 text-white')}>
           <Span type="title" className={tw('!text-3xl')}>{title}</Span>
-          <Span>{description}</Span>
+          <Span className={tw('text-ellipses')}>{description}</Span>
         </div>
       </div>
     </div>

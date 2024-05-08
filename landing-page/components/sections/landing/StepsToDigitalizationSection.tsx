@@ -58,7 +58,7 @@ export const StepsToDigitalizationSection = () => {
         <h2><Span type="title" className={tw('!text-3xl')}><MarkdownInterpreter text={translation.title}/></Span></h2>
         <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
       </div>
-      <Carousel>
+      <Carousel hintNext={true}>
         <TextImage
           badge={`${translation.step} #1`}
           title={translation.step1Title}

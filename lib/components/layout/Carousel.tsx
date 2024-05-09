@@ -44,6 +44,7 @@ export const Carousel = ({
   const [{ currentIndex, transitionInformation }, setCarouselInformation] = useState<CarouselInformation>({
     currentIndex: 0
   })
+  const animationTime: number = 250 // in ms
 
   const length = children.length
   const getOffset = (index: number) => {
@@ -66,7 +67,7 @@ export const Carousel = ({
       if (transitionInformation === undefined) {
         return state
       }
-      const progress = (time - transitionInformation.start) / 1000 * 2
+      const progress = (time - transitionInformation.start) / 1000
       let change = transitionInformation.change + progress * transitionInformation.direction * transitionInformation.speed
       let newIndex = currentIndex
       if (transitionInformation.direction === 1) {
@@ -111,25 +112,23 @@ export const Carousel = ({
     }
     const distanceBackward = length - distanceForward
     const distance = Math.min(distanceForward, distanceBackward)
+    const paddingPercentage = 1.1
 
     const newTransitionInformation = {
       oldIndex: currentIndex,
       newIndex,
       direction: distanceForward < distanceBackward ? 1 : -1,
-      speed: distance / 500 * 110,
+      speed: distance * paddingPercentage / (animationTime / 1000),
       change: 0
     }
-    setCarouselInformation(prevState => ({
-      ...prevState,
-      newTransitionInformation
-    }))
 
     requestAnimationFrame(time => {
       setCarouselInformation(prevState => ({
         ...prevState,
         transitionInformation: {
           ...newTransitionInformation,
-          start: time
+          start: time,
+          change: prevState.transitionInformation?.change ?? newTransitionInformation.change
         }
       }))
       requestAnimationFrame(updateCycle)
@@ -144,28 +143,31 @@ export const Carousel = ({
     updateIndex((currentIndex + 1) % length)
   }
 
-  const items: ItemType[] = []
-  items.push(...createLoopingListWithIndex(children, currentIndex, 4, false).slice(0, 2).reverse().map(([index, item]) => ({
+  const before = createLoopingListWithIndex(children, 0, 3, false).slice(1).reverse().map(([index, item]) => ({
     index,
     item
-  })))
-  items.push(...children.map((item, index) => ({ index, item })))
-  items.push(...createLoopingListWithIndex(children, currentIndex, 4).slice(2).map(([index, item]) => ({ index, item })))
+  }))
+  const list = children.map((item, index) => ({ index, item }))
+  const after = createLoopingListWithIndex(children, length - 1, 3).slice(1).map(([index, item]) => ({ index, item }))
 
-  console.log(items, currentIndex, createLoopingListWithIndex(children, currentIndex, 4, false), createLoopingListWithIndex(children, currentIndex, 4))
+  const items: ItemType[] = [
+    ...before,
+    ...list,
+    ...after
+  ]
 
   return (
     <div className={tx('relative w-full overflow-hidden h-[400px]', className)}>
       {arrows && (
         <>
           <div
-            className={tw('absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg')}
+            className={tw('absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg cursor-pointer')}
             onClick={() => left()}
           >
             <ChevronLeft size={32}/>
           </div>
           <div
-            className={tw('absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg')}
+            className={tw('absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg cursor-pointer')}
             onClick={() => right()}
           >
             <ChevronRight size={32}/>
@@ -179,17 +181,17 @@ export const Carousel = ({
             <Circle
               key={index}
               radius={6}
-              className={tx('hover:!bg-hw-primary-300', {
+              className={tx('hover:!bg-hw-primary-300 cursor-pointer', {
                 '!bg-gray-200': currentIndex !== index,
                 '!bg-hw-primary-200': currentIndex === index
               })}
-              onClick={() => setCarouselInformation({ currentIndex: index, transitionInformation: undefined })}
+              onClick={() => updateIndex(index)}
             />
           ))}
         </div>
       )}
       {hintNext ? (
-        <div className={tw('relative flex flex-row')}>
+        <div className={tw('relative flex flex-row h-[400px] max-h-[400px]')}>
           {items.map(({ index, item }, listIndex) => (
             <div
               key={listIndex}
@@ -200,6 +202,14 @@ export const Carousel = ({
               {item}
             </div>
           ))}
+          <div
+            className={tw('absolute z-[1] left-0 h-full w-2/12')}
+            style={{ background: 'linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))' }}
+          />
+          <div
+            className={tw('absolute z-[1] right-0 h-full w-2/12')}
+            style={{ background: 'linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))' }}
+          />
         </div>
       ) : (
         <div className={tw('px-8')}>

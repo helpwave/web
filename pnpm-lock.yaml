@@ -91,9 +91,6 @@ importers:
       react-intersection-observer:
         specifier: 9.8.2
         version: 9.8.2(react-dom@18.2.0)(react@18.2.0)
-      react-multi-carousel:
-        specifier: 2.8.5
-        version: 2.8.5
       vanilla-cookieconsent:
         specifier: 3.0.1
         version: 3.0.1
@@ -9628,11 +9625,6 @@ packages:
   /react-is@18.1.0:
     resolution: {integrity: sha512-Fl7FuabXsJnV5Q1qIOQwx/sagGF18kogb4gpfcG4gjLBWO0WDiiz1ko/ExayuxE7InyQkBLkxRFG5oxY6Uu3Kg==}
     dev: true
-
-  /react-multi-carousel@2.8.5:
-    resolution: {integrity: sha512-C5DAvJkfzR2JK9YixZ3oyF9x6R4LW6nzTpIXrl9Oujxi4uqP9SzVVCjl+JLM3tSdqdjAx/oWZK3dTVBSR73Q+w==}
-    engines: {node: '>=8'}
-    dev: false
 
   /react-refresh@0.14.0:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}

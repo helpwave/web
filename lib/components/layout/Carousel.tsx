@@ -191,11 +191,11 @@ export const Carousel = ({
         </div>
       )}
       {hintNext ? (
-        <div className={tw('relative flex flex-row h-[400px] max-h-[400px]')}>
+        <div className={tw('relative flex flex-row h-[400px]')}>
           {items.map(({ index, item }, listIndex) => (
             <div
               key={listIndex}
-              className={tw(`absolute w-1/2 left-1/2 max-h-[400px] overflow-hidden`)}
+              className={tw(`absolute w-1/2 left-1/2 h-full overflow-hidden`)}
               style={{ translate: getOffset(listIndex - 2) }}
               onClick={() => updateIndex(index)}
             >
@@ -205,15 +205,17 @@ export const Carousel = ({
           <div
             className={tw('absolute z-[1] left-0 h-full w-2/12')}
             style={{ background: 'linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))' }}
+            onClick={() => left()}
           />
           <div
             className={tw('absolute z-[1] right-0 h-full w-2/12')}
             style={{ background: 'linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))' }}
+            onClick={() => right()}
           />
         </div>
       ) : (
-        <div className={tw('px-8')}>
-          children[index]
+        <div className={tw('px-16 h-full')}>
+          {children[currentIndex]}
         </div>
       )}
     </div>

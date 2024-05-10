@@ -47,7 +47,7 @@ export const TextImage = ({
         backgroundSize: 'cover',
       }}>
       <div
-        className={tx(`flex flex-col px-6 py-12 rounded-2xl`, contentClassName)}
+        className={tx(`flex flex-col px-6 py-12 rounded-2xl h-full`, contentClassName)}
         style={{
           backgroundImage: `linear-gradient(to right, ${colorMapping[color]} 30%, ${withTransparency(colorMapping[color], '55')})`
         }}
@@ -57,9 +57,9 @@ export const TextImage = ({
             <Span className={tw('text-lg')}>{badge}</Span>
           </Chip>
         )}
-        <div className={tw('flex flex-col gap-y-1 text-white')}>
+        <div className={tw('flex flex-col gap-y-1 text-white overflow-hidden')}>
           <Span type="title" className={tw('!text-3xl')}>{title}</Span>
-          <Span className={tw('text-ellipses')}>{description}</Span>
+          <Span className={tw('text-ellipsis overflow-hidden')}>{description}</Span>
         </div>
       </div>
     </div>

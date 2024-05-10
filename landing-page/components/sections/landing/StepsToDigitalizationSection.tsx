@@ -65,6 +65,7 @@ export const StepsToDigitalizationSection = () => {
           description={translation.step1Description}
           imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
           color="primary"
+          className={tw('h-full overflow-hidden')}
         />
         <TextImage
           badge={`${translation.step} #2`}
@@ -72,6 +73,7 @@ export const StepsToDigitalizationSection = () => {
           description={translation.step2Description}
           imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
           color="secondary"
+          className={tw('h-full overflow-hidden')}
         />
         <TextImage
           badge={`${translation.step} #3`}
@@ -79,6 +81,7 @@ export const StepsToDigitalizationSection = () => {
           description={translation.step3Description}
           imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
           color="secondaryDark"
+          className={tw('h-full overflow-hidden')}
         />
       </Carousel>
     </SectionBase>

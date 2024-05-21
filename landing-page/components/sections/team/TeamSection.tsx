@@ -151,7 +151,7 @@ const teamData: Record<string, ProfileProps[]> = {
 
 const TeamSection = () => {
   return (
-    <SectionBase isFirstSection={true}>
+    <SectionBase>
       {Object.entries(teamData).map(([name, members]) => (
         <TeamGroup key={name} name={name} members={members} />
       ))}

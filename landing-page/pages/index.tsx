@@ -6,13 +6,12 @@ import { MousePointerClick } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Divider from '../components/Divider'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
-import ExpansionSection from '../components/sections/landing/ExpansionSection'
+import MarketStatsSection from '../components/sections/landing/MarketStatsSection'
 import PartnerSection from '../components/sections/landing/Partners'
 import StartSection from '../components/sections/landing/StartSection'
 import StorySection from '../components/sections/landing/Story'
+import { Page } from '@/components/Page'
+import VisionSection from '@/components/sections/landing/VisionSection'
 
 type HomePageTranslation = {
   checkOutFirstProduct: string,
@@ -37,12 +36,10 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
   const translation = useTranslation(defaultHomePageTranslation, overwriteTranslation)
 
   return (
-    <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
-      <Header/>
+    <Page outerClassName={tw('z-0')} className={tw('z-0')}>
       <StartSection/>
-      <Divider rotate={1}/>
       <PartnerSection/>
-      <Divider rotate={1}/>
+      <VisionSection/>
       <StorySection/>
       <div className={tw('relative flex flex-col items-center')}>
         <div className={tw('desktop:w-[620px] mx-20')}>
@@ -66,11 +63,10 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
             descriptionClassName={tw('!text-gray-600')}
           />
         </div>
-        <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-primary-900 z-[-1] translate-y-[2px]')}></div>
+        <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-secondary-800 z-[-1] translate-y-[2px]')}></div>
       </div>
-      <ExpansionSection/>
-      <Footer/>
-    </div>
+      <MarketStatsSection/>
+    </Page>
   )
 }
 

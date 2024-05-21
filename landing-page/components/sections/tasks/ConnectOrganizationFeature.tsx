@@ -22,23 +22,23 @@ type ConnectOrganizationFeatureSectionTranslation = {
 const defaultConnectOrganizationFeatureSectionTranslation: Record<Languages, ConnectOrganizationFeatureSectionTranslation> = {
   en: {
     title: 'Connect your organization in one tool',
-    description: '\\b{helpwave tasks} enables you to manage tasks and patients across your entire organization.',
-    feature1: 'Feature 1',
-    feature2: 'Feature 2',
-    feature3: 'Feature 3',
-    feature4: 'Feature 4',
-    feature5: 'Feature 5',
-    feature6: 'Feature 6',
+    description: 'Use \\b{helpwave tasks} to experience a user-centered management tool, designed to simplify workflows and ensure high quality patient care.',
+    feature1: 'Patient lists',
+    feature2: 'Care unit overview',
+    feature3: 'Tasks',
+    feature4: 'Task templates',
+    feature5: 'Patient properties',
+    feature6: 'Ward properties',
   },
   de: {
-    title: 'Verbinden Sie Ihr Organisation mit nur einem Tool',
-    description: '\\b{helpwave tasks} ermöglicht die Verwaltung von Aufgaben und Patienten über die gesamte Organisation hinweg.',
-    feature1: 'Feature 1',
-    feature2: 'Feature 2',
-    feature3: 'Feature 3',
-    feature4: 'Feature 4',
-    feature5: 'Feature 5',
-    feature6: 'Feature 6',
+    title: 'Verbinden Sie Ihre Organisation mit einem einzigen Tool',
+    description: 'Nutzen Sie \\b{helpwave tasks}, um ein benutzerzentriertes Management-Tool zu erleben, welches Arbeitsabläufe vereinfacht und eine qualitativ hochwertige Patientenversorgung gewährleistet.',
+    feature1: 'Patienten-Listen',
+    feature2: 'Stationsübersicht',
+    feature3: 'Tasks',
+    feature4: 'Task Vorlagen',
+    feature5: 'Patienten-Properties',
+    feature6: 'Stations-Properties',
   }
 }
 

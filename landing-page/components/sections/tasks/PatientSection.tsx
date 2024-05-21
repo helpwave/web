@@ -16,13 +16,13 @@ type PatientSectionTranslation = {
 
 const defaultPatientSectionTranslation: Record<Languages, PatientSectionTranslation> = {
   en: {
-    title: 'All that matters in one glance',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text.',
+    title: 'Ditch the printed patient list',
+    description: 'Use the patient list to keep track of what’s going on in your ward and never have an outdated version again.',
     patients: 'Patients'
   },
   de: {
-    title: 'Alle Information auf nur einen Blick',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text.',
+    title: 'Weg mit der gedruckten Patientenliste',
+    description: 'Nutzen Sie die Patientenliste, um den Überblick über die Vorgänge auf Ihrer Station zu behalten und nie wieder eine veraltete Version zu benutzen.',
     patients: 'Patienten'
   }
 }

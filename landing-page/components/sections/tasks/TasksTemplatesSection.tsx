@@ -16,13 +16,13 @@ type TasksTemplatesSectionTranslation = {
 
 const defaultTasksTemplatesSectionTranslation: Record<Languages, TasksTemplatesSectionTranslation> = {
   en: {
-    title: 'Collaborate',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text.',
+    title: 'Quality management and time efficiency',
+    description: 'Save recurring tasks as templates. Standardize your workflows and share them with your team.',
     taskTemplates: 'Task Templates'
   },
   de: {
-    title: 'Arbeite zusammen mit deinem Team',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text.',
+    title: 'Qualitätsmanagement und Zeiteffizienz',
+    description: 'Speichern Sie wiederkehrende Aufgaben als Vorlagen. Standardisieren Sie Ihre Arbeitsabläufe und teilen Sie diese mit Ihrem Team.',
     taskTemplates: 'Task Templates'
   }
 }

@@ -16,14 +16,14 @@ type TasksKanbanSectionTranslation = {
 
 const defaultTasksKanbanSectionTranslation: Record<Languages, TasksKanbanSectionTranslation> = {
   en: {
-    title: 'Collaborate',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text.',
-    tasks: 'Tasks'
+    title: 'Effective teamwork',
+    description: 'Are you part of the treatment team? See the progress without having to ask.',
+    tasks: 'Collaborate'
   },
   de: {
-    title: 'Arbeite zusammen mit deinem Team',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text.',
-    tasks: 'Tasks'
+    title: 'Effektive Teamarbeit',
+    description: 'Sind Sie Teil des Behandlungsteams? Sehen Sie Behandlungsfortschritte, ohne fragen zu müssen.',
+    tasks: 'Zusammenarbeiten'
   }
 }
 

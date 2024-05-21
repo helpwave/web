@@ -16,13 +16,13 @@ type PropertiesSectionTranslation = {
 
 const defaultPropertiesSectionTranslation: Record<Languages, PropertiesSectionTranslation> = {
   en: {
-    title: 'Customize your data',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text.',
+    title: 'Everything you need at a glance',
+    description: 'Tired of searching for allergy records? Keep track of the facts.',
     properties: 'Properties'
   },
   de: {
-    title: 'Gestalte deine Daten individuell',
-    description: 'Description Text Description Text Description Text Description Text Description Text Description Text.',
+    title: 'Alles, was Sie brauchen, auf einen Blick',
+    description: 'Müde von der Suche nach Allergiedaten? Behalten Sie den Überblick über die Fakten.',
     properties: 'Properties'
   }
 }

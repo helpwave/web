@@ -19,13 +19,13 @@ type MobileFeatureSectionTranslation = {
 const defaultMobileFeatureSectionTranslation: Record<Languages, MobileFeatureSectionTranslation> = {
   en: {
     title: 'Seamless mobile experience',
-    description: 'Use \\b{helpwave tasks} anywhere you go with the mobile app.',
+    description: 'You don\'t have time to log in to a desk workspace to complete or assign tasks? Use the mobile app and never forget a task again.',
     tradmarkPlaystore: 'Google Play and the Google Play logo are trademarks of Google LLC.',
     trademarkAppstore: 'App Store℠ and the Apple logo® are trademarks of Apple Inc.'
   },
   de: {
-    title: 'Nahtloser Übergang zur App',
-    description: 'Nutze \\b{helpwave tasks} einfach von unterwegs, um deine Aufgaben noch besser erledigen zu können.',
+    title: 'Nahtloses mobiles Erlebnis',
+    description: 'Sie haben keine Zeit, sich an einem Schreibtisch anzumelden, um Aufgaben zu erledigen oder zuzuweisen? Verwenden Sie die mobile App und vergessen Sie nie wieder eine Aufgabe.',
     tradmarkPlaystore: 'Google Play und das Google Play-Logo sind Marken von Google LLC.',
     trademarkAppstore: 'App Store℠ und das Apple logo® sind Marken von Apple Inc.'
   }
@@ -40,7 +40,7 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
       className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center items-center text-white !pb-0')}
       backgroundColor="darkSecondary"
     >
-      <div className={tw('flex flex-col gap-y-2 pb-16')}>
+      <div className={tw('flex flex-col gap-y-2 pb-16 w-3/5')}>
         <div className={tw('flex flex-col gap-y-2 mobile:pb-0 mobile:text-center')}>
           <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
           <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>

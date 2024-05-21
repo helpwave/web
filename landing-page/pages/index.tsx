@@ -6,12 +6,12 @@ import { MousePointerClick } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Divider from '../components/Divider'
-import ExpansionSection from '../components/sections/landing/ExpansionSection'
+import MarketStatsSection from '../components/sections/landing/MarketStatsSection'
 import PartnerSection from '../components/sections/landing/Partners'
 import StartSection from '../components/sections/landing/StartSection'
 import StorySection from '../components/sections/landing/Story'
 import { Page } from '@/components/Page'
+import VisionSection from '@/components/sections/landing/VisionSection'
 import { TasksDemoSection } from '@/components/sections/landing/TasksDemoSection'
 
 type HomePageTranslation = {
@@ -39,9 +39,8 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
   return (
     <Page outerClassName={tw('z-0')} className={tw('z-0')}>
       <StartSection/>
-      <Divider rotate={1}/>
       <PartnerSection/>
-      <Divider rotate={1}/>
+      <VisionSection/>
       <TasksDemoSection/>
       <StorySection/>
       <div className={tw('relative flex flex-col items-center')}>
@@ -66,9 +65,9 @@ const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomePageTr
             descriptionClassName={tw('!text-gray-600')}
           />
         </div>
-        <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-primary-900 z-[-1] translate-y-[2px]')}></div>
+        <div className={tw('absolute h-1/2 w-full top-1/2 bg-hw-secondary-800 z-[-1] translate-y-[2px]')}></div>
       </div>
-      <ExpansionSection/>
+      <MarketStatsSection/>
     </Page>
   )
 }

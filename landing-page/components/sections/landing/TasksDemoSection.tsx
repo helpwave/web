@@ -5,6 +5,7 @@ import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
 import { Span } from '@helpwave/common/components/Span'
 import Link from 'next/link'
 import Image from 'next/image'
+import { ItemGrid } from '@helpwave/common/components/layout/ItemGrid'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type TasksDemoSectionTranslation = {
@@ -14,38 +15,32 @@ type TasksDemoSectionTranslation = {
   feature1: string,
   feature2: string,
   feature3: string,
-  feature4: string,
-  feature5: string,
-  feature6: string
+  feature4: string
 }
 
 const defaultTasksDemoSectionTranslation: Record<Languages, TasksDemoSectionTranslation> = {
   en: {
     helpwaveTasks: 'helpwave tasks',
-    workflowManagement: 'Workflow management for the healthcare industry',
+    workflowManagement: 'The user-centered management tool, designed to simplify workflows and ensure high quality patient care.',
     tryDemo: 'Try demo',
-    feature1: 'Feature 1',
-    feature2: 'Feature 2',
-    feature3: 'Feature 3',
-    feature4: 'Feature 4',
-    feature5: 'Feature 5',
-    feature6: 'Feature 6'
+    feature1: 'Patient lists: it’s time to move from papert to digital',
+    feature2: 'Care unit overview and tasks: keep track of what’s going on',
+    feature3: 'Task templates: standardize recurring tasks and workflows',
+    feature4: 'Properties: all relevant facts at a glance',
   },
   de: {
     helpwaveTasks: 'helpwave tasks',
-    workflowManagement: 'Workflow-Management für das Gesundheitswesen',
+    workflowManagement: 'Das benutzerorientierte Management-Tool zur Vereinfachung von Arbeitsabläufen und zur Gewährleistung einer qualitativ hochwertigen Patientenversorgung.',
     tryDemo: 'Demo ausprobieren',
-    feature1: 'Feature 1',
-    feature2: 'Feature 2',
-    feature3: 'Feature 3',
-    feature4: 'Feature 4',
-    feature5: 'Feature 5',
-    feature6: 'Feature 6'
+    feature1: 'Patientenlisten: Es ist an der Zeit, von Papier auf digital umzusteigen',
+    feature2: 'Stationsübersicht und tasks: Behalten Sie den Überblick',
+    feature3: 'Task Vorlagen: Standardisieren Sie wiederkehrende Aufgaben und Arbeitsabläufe',
+    feature4: 'Properties: alle relevanten Fakten auf einen Blick',
   }
 }
 
 /**
- * Description
+ * A Section for showing helpwave tasks features and information about the demo
  */
 export const TasksDemoSection = () => {
   const translation = useTranslation(defaultTasksDemoSectionTranslation)
@@ -54,28 +49,18 @@ export const TasksDemoSection = () => {
   const imageURL = 'https://cdn.helpwave.de/products/tasks_preview.png'
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 !pb-0 w-full')}>
-      <div className={tw('flex flex-row w-full items-end justify-between gap-x-16')}>
+      <div className={tw('flex flex-col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
         <div className={tw('flex flex-col gap-y-2')}>
           <HelpwaveBadge className={tw('!text-hw-primary-800 !bg-hw-primary-200 !w-fit')} title={translation.helpwaveTasks}/>
           <Span type="title" className={tw('!text-2xl')}>{translation.workflowManagement}</Span>
-          <table>
-            <tbody>
-              <tr key="r1">
-                <td>{translation.feature1}</td>
-                <td>{translation.feature4}</td>
-              </tr>
-              <tr key="r2">
-                <td>{translation.feature2}</td>
-                <td>{translation.feature5}</td>
-              </tr>
-              <tr key="r3">
-                <td>{translation.feature3}</td>
-                <td>{translation.feature6}</td>
-              </tr>
-            </tbody>
-          </table>
+          <ItemGrid columns={1} className={tw('font-semibold')}>
+            {translation.feature1}
+            {translation.feature2}
+            {translation.feature3}
+            {translation.feature4}
+          </ItemGrid>
         </div>
-        <Link href={demoURL} className={tw('bg-black rounded-lg text-white h-min px-4 py-2')}>
+        <Link href={demoURL} className={tw('bg-black rounded-lg text-white h-min px-4 py-2 text-center')}>
           {translation.tryDemo}
         </Link>
       </div>

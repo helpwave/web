@@ -15,13 +15,11 @@ type LandingPageTranslation = {
 const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> = {
   en: {
     title: 'helpwave - the Operating System for Hospitals',
-    description: 'At helpwave, we don\'t see information technology as an old marriage that has fallen asleep, but as ' +
-      'a \\primary{newly} and \\negative{rekindeld} hot affair'
+    description: 'empowering medical heroes, united in technology'
   },
   de: {
-    // TODO improve translation
-    title: 'helpwave - the Operations System für Krankenhäuser',
-    description: 'Bei helpwave, sehen wir Informations-Technologie nicht ... '
+    title: 'helpwave - das Betriebssystem für Krankenhäuser',
+    description: 'Stärkung medizinischer Helden, vereint in Technologie'
   }
 }
 

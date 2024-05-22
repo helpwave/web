@@ -31,7 +31,7 @@ const defaultTasksDemoSectionTranslation: Record<Languages, TasksDemoSectionTran
   de: {
     helpwaveTasks: 'helpwave tasks',
     workflowManagement: 'Das benutzerorientierte Management-Tool zur Vereinfachung von Arbeitsabläufen und zur Gewährleistung einer qualitativ hochwertigen Patientenversorgung.',
-    tryDemo: 'Demo ausprobieren',
+    tryDemo: 'Demo testen',
     feature1: 'Patientenlisten: Es ist an der Zeit, von Papier auf digital umzusteigen',
     feature2: 'Stationsübersicht und tasks: Behalten Sie den Überblick',
     feature3: 'Task Vorlagen: Standardisieren Sie wiederkehrende Aufgaben und Arbeitsabläufe',
@@ -50,17 +50,21 @@ export const TasksDemoSection = () => {
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 !pb-0 w-full')}>
       <div className={tw('flex flex-col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
-        <div className={tw('flex flex-col gap-y-2')}>
+        <div className={tw('flex flex-col gap-y-4 desktop:max-w-[70%]')}>
           <HelpwaveBadge className={tw('!text-hw-primary-800 !bg-hw-primary-200 !w-fit')} title={translation.helpwaveTasks}/>
           <Span type="title" className={tw('!text-2xl')}>{translation.workflowManagement}</Span>
-          <ItemGrid columns={1} className={tw('font-semibold')}>
+          <ItemGrid columns={1} className={tw('font-medium mt-2')}>
             {translation.feature1}
             {translation.feature2}
             {translation.feature3}
             {translation.feature4}
           </ItemGrid>
         </div>
-        <Link href={demoURL} className={tw('bg-black rounded-lg text-white h-min px-4 py-2 text-center')}>
+        <Link
+          href={demoURL}
+          className={tw('bg-black rounded-lg text-lg text-white h-min px-6 py-2')}
+          style={{ textWrap: 'nowrap' }} // TODO does not seem supported by the current twind version (throws warnings for text-nowrap)
+        >
           {translation.tryDemo}
         </Link>
       </div>

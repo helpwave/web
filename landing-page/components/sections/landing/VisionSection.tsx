@@ -23,7 +23,7 @@ const defaultVisionSectionTranslation: Record<Languages, VisionSectionTranslatio
   de: {
     ourVision: 'Unsere Vision',
     title: 'Datenbasierte Unterstützung im Gesundheitswesen',
-    description: 'Unser innovativer Ansatz in der Softwareentwicklung erleichtert es dem Personal im Gesundheitswesen, den Fokus auf die Betreuung ihrer Patienten zu legen.',
+    description: 'Wir entwickeln innovative Software, die es Fachleuten im Gesundheitswesen ermöglicht, ihren Patienten die bestmögliche medizinische Versorgung zu bieten.',
   }
 }
 
@@ -33,7 +33,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
   return (
     <SectionBase className={tw('flex flex-row mobile:flex-col-reverse gap-8 items-center justify-center w-full')}>
       <div className={tw('flex flex-col w-1/2 mobile:w-full gap-y-2')}>
-        <Chip className={tw('!w-fit bg-gray-200')}>{translation.ourVision}</Chip>
+        <Chip className={tw('!w-fit bg-gray-200 font-semibold px-4')}>{translation.ourVision}</Chip>
         <h2><Span type="title" className={tw('!text-3xl')}>{translation.title}</Span></h2>
         <Span className={tw('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
       </div>

@@ -24,7 +24,7 @@ export const ItemGrid = ({
   className = ''
 }: ItemGridProps) => {
   return (
-    <div className={tx(`grid grid-cols-${columns} gap-x-6 gap-y-4`, className)}>
+    <div className={tx(`grid grid-cols-${columns} gap-x-6 gap-y-4 overflow-x-auto`, className)}>
       {children.map((value, index) => (
         <div key={index} className={tw('flex flex-row items-center gap-x-2')}>
           {icon}

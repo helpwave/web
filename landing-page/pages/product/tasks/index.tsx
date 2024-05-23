@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import StartSection from '@/components/sections/tasks/StartSection'
 import Divider from '@/components/Divider'
 import DemoSection from '@/components/sections/tasks/DemoSection'
-import ReachoutSection from '@/components/sections/tasks/ReachoutSection'
 import { Page } from '@/components/Page'
 import { ConnectOrganizationFeatureSection } from '@/components/sections/tasks/ConnectOrganizationFeature'
 import { MobileFeatureSection } from '@/components/sections/tasks/MobileFeatureSection'
@@ -23,7 +22,6 @@ const Tasks: NextPage = () => {
       <TasksKanbanSection/>
       <TasksTemplatesSection/>
       <PropertiesSection/>
-      <ReachoutSection/>
       <Divider/>
       <DemoSection/>
     </Page>

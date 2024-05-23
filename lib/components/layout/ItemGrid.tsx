@@ -9,7 +9,7 @@ type ItemGridProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 }
 
 const defaultIcon = (
-  <div className={tw('flex flex-col justify-center items-center bg-hw-primary-400 text-white rounded-full w-6 h-6')}>
+  <div className={tw('flex flex-col justify-center items-center bg-hw-primary-400 text-white rounded-full min-w-[24px] min-h-[24px]')}>
     <Check size={18} strokeWidth={2.5} />
   </div>
 )
@@ -21,7 +21,7 @@ export const ItemGrid = ({
   className = ''
 }: ItemGridProps) => {
   return (
-    <div className={tx(`grid grid-cols-${columns} gap-x-4 gap-y-2`, className)}>
+    <div className={tx(`grid grid-cols-${columns} gap-x-6 gap-y-4 overflow-x-auto`, className)}>
       {children.map((value, index) => (
         <div key={index} className={tw('flex flex-row items-center gap-x-2')}>
           {icon}

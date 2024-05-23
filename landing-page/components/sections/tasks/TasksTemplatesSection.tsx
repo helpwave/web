@@ -36,7 +36,7 @@ export const TasksTemplatesSection = ({ overwriteTranslation }: PropsForTranslat
       className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-4 justify-between mobile:justify-center items-center text-white')}
       backgroundColor="darkSecondary"
     >
-      <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>
+      <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0 overflow-hidden break-words')}>
         <div className={tw('flex flex-col gap-y-2')}>
           <div className={tw('flex flex-row gap-x-1 text-hw-primary-400')}>
             <Tag size={24} strokeWidth={3}/>

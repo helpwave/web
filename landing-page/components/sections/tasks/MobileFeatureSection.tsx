@@ -40,7 +40,7 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
       className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center items-center text-white !pb-0')}
       backgroundColor="darkSecondary"
     >
-      <div className={tw('flex flex-col gap-y-2 pb-16 w-3/5')}>
+      <div className={tw('flex flex-col gap-y-2 pb-16 desktop:w-3/5')}>
         <div className={tw('flex flex-col gap-y-2 mobile:pb-0 mobile:text-center')}>
           <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
           <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
@@ -66,7 +66,7 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
           alt=""
           width={0}
           height={0}
-          className={tw('w-fit max-h-[70vh]')}
+          className={tw('w-fit max-h-[70vh] mobile:-translate-x-[6%]')}
         />
       </div>
     </SectionBase>

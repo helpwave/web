@@ -55,8 +55,8 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
       className={tw('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-end items-center !pr-0')}
       backgroundColor="gray"
     >
-      <div className={tw('flex flex-col items-center flex-1 mobile:pr-6')}>
-        <div className={tw('flex flex-col gap-y-2 max-w-[500px]')}>
+      <div className={tw('flex flex-col items-center mobile:items-start flex-1 mobile:pr-6')}>
+        <div className={tw('flex flex-col gap-y-2 max-w-[500px] mobile:max-w-full')}>
           <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
           <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
           <ItemGrid className={tw('mt-2')}>

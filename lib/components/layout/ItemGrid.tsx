@@ -14,6 +14,9 @@ const defaultIcon = (
   </div>
 )
 
+/**
+ * A Component for creating a grid of items
+ */
 export const ItemGrid = ({
   children,
   icon = defaultIcon,

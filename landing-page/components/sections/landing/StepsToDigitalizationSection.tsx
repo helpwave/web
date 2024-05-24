@@ -21,28 +21,26 @@ type StepsToDigitalizationSectionTranslation = {
 
 const defaultStepsToDigitalizationSectionTranslation: Record<Languages, StepsToDigitalizationSectionTranslation> = {
   en: {
-    // TODO update
     title: '\\secondary{Digital exelence} in\\newline 3 simple steps',
     description: 'Our approach is to implement more efficient and fun\\newline processes in a simple yet powerful way.',
     step: 'Step',
-    step1Title: 'Identifying the problem',
-    step1Description: 'helpwave was born out of a simple question: How can we leverage our software expertise to support healthcare professionals? We have all encountered outdated, clunky software in our daily work, and have observed its impact on patient care and our own lives. Despite significant investments, current solutions often fall short. This is where helpwave steps in. We are committed to providing healthcare heroes with efficient, affordable tools, empowering hospitals to regain control over their infrastructure and data. By providing seamless access to vital information, we aim to enhance patient care and ease the burden on healthcare workers.',
-    step2Title: 'helpwave tasks and the Open Innovation Concept',
-    step2Description: 'helpwave is passionate about supporting those who dedicate their lives to patient care. We have developed helpwave tasks, a tool designed to simplify the lives of healthcare workers, integrating lean project management principles into healthcare teams. We collaborate closely with doctors, nurses, students, and administrators to enhance team organization, communication, and task management. At helpwave, we champion Open Innovation and Open Source principles, ensuring that our software is not only user-friendly but also community-driven and transparent. Join us in revolutionizing healthcare software, designed by healthcare workers, for healthcare workers.',
-    step3Title: 'The Future of helpwave',
-    step3Description: 'Drawing from our experience developing helpwave tasks, we have identified a critical issue in the healthcare software landscape: Deployment is a nightmare. Hospital IT infrastructure is often unreliable, outdated, and insecure, burdened by interoperability gaps and regulatory hurdles that favor large players. Enter helpwave: We are developing a platform to streamline software deployment in healthcare, empowering hospitals with control over their infrastructure and data. Our innovative technology is not just laying the groundwork for healthcare digitization, it is also democratizing market entry for new players, embodying the essence of Open Innovation. Join us at the table to revolutionize healthcare together.'
+    step1Title: 'Define the mission',
+    step1Description: 'At helpwave we are committed to driving unprecedented innovation. We believe in improving patient care by developing cutting-edge software in all areas of patient care.',
+    step2Title: 'Apply Open Innovation',
+    step2Description: 'We believe in the open source approach to ensure the highest quality work product. This unique approach allows our dedicated development team to focus on translating your requirements into innovative software features.',
+    step3Title: 'Aim for disruption',
+    step3Description: 'Regulatory burdens and high entry barriers make it difficult for small companies to enter the market, leading to a lack of competition. helpwave is here to change that. We provide a platform that invites everyone to the table, not just only the big players.'
   },
   de: {
-    // TODO update
     title: '\\secondary{Digitale Exelenz} in\\newline 3 Schritten',
     description: 'Unser Ansatz ist es, effizientere Prozesse zu implementieren, die Spaß machen\\newline - und das auf einfache, aber wirkungsvolle Weise.',
     step: 'Step',
-    step1Title: 'Lorem ipsum dolor sit ame',
-    step1Description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur',
-    step2Title: 'Lorem ipsum dolor sit ame',
-    step2Description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur',
-    step3Title: 'Lorem ipsum dolor sit ame',
-    step3Description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur'
+    step1Title: 'Definieren Sie die Mission', // TODO update
+    step1Description: 'Bei helpwave haben wir uns verpflichtet, beispiellose Innovationen voranzutreiben. Wir glauben an die Verbesserung der Patientenversorgung durch die Entwicklung innovativer Software in allen Bereichen der Patientenversorgung.',
+    step2Title: 'Offene Innovation anwenden',
+    step2Description: 'Wir glauben an den Open-Source-Ansatz, um die höchste Qualität des Arbeitsprodukts zu gewährleisten. Dieser einzigartige Ansatz ermöglicht es unserem engagierten Entwicklungsteam, sich auf die Umsetzung der Nutzer-Anforderungen in innovative Softwarefunktionen zu konzentrieren.',
+    step3Title: 'Disruption anstreben',
+    step3Description: 'Regulatorische Belastungen und hohe Eintrittsbarrieren erschweren den Markteintritt für kleine Unternehmen und führen zu mangelndem Wettbewerb. helpwave wird das ändern. Wir bieten eine Plattform, die jeden an den Tisch holt, nicht nur die großen Player.'
   }
 }
 

@@ -156,8 +156,10 @@ export const Carousel = ({
     ...after
   ]
 
+  const size = 300
+
   return (
-    <div className={tx('relative w-full overflow-hidden h-[400px]', className)}>
+    <div className={tx(`relative w-full overflow-hidden h-[${size}px]`, className)}>
       {arrows && (
         <>
           <div
@@ -191,7 +193,7 @@ export const Carousel = ({
         </div>
       )}
       {hintNext ? (
-        <div className={tw('relative flex flex-row h-[400px]')}>
+        <div className={tw(`relative flex flex-row h-[${size}px]`)}>
           {items.map(({ index, item }, listIndex) => (
             <div
               key={listIndex}
@@ -202,16 +204,6 @@ export const Carousel = ({
               {item}
             </div>
           ))}
-          <div
-            className={tw('absolute z-[1] left-0 h-full w-2/12')}
-            style={{ background: 'linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))' }}
-            onClick={() => left()}
-          />
-          <div
-            className={tw('absolute z-[1] right-0 h-full w-2/12')}
-            style={{ background: 'linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))' }}
-            onClick={() => right()}
-          />
         </div>
       ) : (
         <div className={tw('px-16 h-full')}>

@@ -5,12 +5,19 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '../../util/array'
 import { Circle } from '../Circle'
 
+type Heights = {
+  desktop: number,
+  tablet: number,
+  mobile: number
+}
+
 type CarouselProps = {
   children: ReactNode[],
   isLooping?: boolean,
   hintNext?: boolean,
   arrows?: boolean,
   dots?: boolean,
+  heights?: Heights,
   className?: string
 }
 
@@ -39,6 +46,11 @@ export const Carousel = ({
   hintNext = false,
   arrows = true,
   dots = true,
+  heights = {
+    desktop: 300,
+    tablet: 400,
+    mobile: 450,
+  },
   className = ''
 }: CarouselProps) => {
   const [{ currentIndex, transitionInformation }, setCarouselInformation] = useState<CarouselInformation>({
@@ -156,10 +168,10 @@ export const Carousel = ({
     ...after
   ]
 
-  const size = 300
+  const height = `desktop:h-[${heights?.desktop}px] tablet:h-[${heights?.tablet}px] mobile:h-[${heights?.mobile}px]`
 
   return (
-    <div className={tx(`relative w-full overflow-hidden h-[${size}px]`, className)}>
+    <div className={tx(`relative w-full overflow-hidden`, height, className)}>
       {arrows && (
         <>
           <div
@@ -193,11 +205,11 @@ export const Carousel = ({
         </div>
       )}
       {hintNext ? (
-        <div className={tw(`relative flex flex-row h-[${size}px]`)}>
+        <div className={tx(`relative flex flex-row`, height)}>
           {items.map(({ index, item }, listIndex) => (
             <div
               key={listIndex}
-              className={tw(`absolute w-1/2 left-1/2 h-full overflow-hidden`)}
+              className={tw(`absolute w-[70%] left-[50%] desktop:w-1/2 desktop:left-1/2 h-full overflow-hidden`)}
               style={{ translate: getOffset(listIndex - 2) }}
               onClick={() => updateIndex(index)}
             >

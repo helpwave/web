@@ -1,15 +1,32 @@
 import { tw, tx } from '@twind/core'
 import { colors } from '../twind/config'
+import type { Languages } from '../hooks/useLanguage'
+import type { PropsForTranslation } from '../hooks/useTranslation'
+import { useTranslation } from '../hooks/useTranslation'
 import { Chip } from './ChipList'
 import { Span } from './Span'
 
 const textImageColor = ['primary', 'secondary', 'secondaryDark', 'red'] as const
 type TextImageColor = typeof textImageColor[number]
 
+type TextImageTranslation = {
+  showMore: string
+}
+
+const defaultTextImageTranslation: Record<Languages, TextImageTranslation> = {
+  de: {
+    showMore: 'Mehr anzeigen'
+  },
+  en: {
+    showMore: 'Show more'
+  }
+}
+
 export type TextImageProps = {
   title: string,
   description: string,
   imageUrl: string,
+  onShowMoreClicked?: () => void,
   color?: TextImageColor,
   badge?: string,
   contentClassName?: string,
@@ -20,14 +37,18 @@ export type TextImageProps = {
  * A Component for layering a Text upon a Image
  */
 export const TextImage = ({
+  overwriteTranslation,
   title,
   description,
   imageUrl,
+  onShowMoreClicked,
   color = 'primary',
   badge,
   contentClassName = '',
   className = '',
-}: TextImageProps) => {
+}: PropsForTranslation<TextImageTranslation, TextImageProps>) => {
+  const translation = useTranslation(defaultTextImageTranslation, overwriteTranslation)
+
   const colorMapping: Record<TextImageColor, string> = {
     primary: colors.primary[600],
     secondary: colors.secondary[400],
@@ -61,6 +82,11 @@ export const TextImage = ({
           <Span type="title" className={tw('!text-3xl')}>{title}</Span>
           <Span className={tw('text-ellipsis overflow-hidden')}>{description}</Span>
         </div>
+        {onShowMoreClicked && (
+          <div className={tw('flex flex-row mt-2 text-white underline')}>
+            <button onClick={onShowMoreClicked}>{translation.showMore}</button>
+          </div>
+        )}
       </div>
     </div>
   )

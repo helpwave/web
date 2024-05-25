@@ -3,6 +3,8 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TextImage } from '@helpwave/common/components/TextImage'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
+import { useState } from 'react'
+import { Modal } from '@helpwave/common/components/modals/Modal'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type StorySliderSectionTranslation = {
@@ -47,6 +49,7 @@ const defaultStorySliderSectionTranslation: Record<Languages, StorySliderSection
  */
 export const StorySliderSection = () => {
   const translation = useTranslation(defaultStorySliderSectionTranslation)
+  const [modalValue, setModalValue] = useState<{titleText: string, description: string}>()
 
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 w-full !max-w-[1600px]')}>
@@ -59,6 +62,7 @@ export const StorySliderSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/doctors_discussing.jpg"
           color="primary"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.title1, description: translation.description1 })}
         />
         <TextImage
           badge={translation.chip2}
@@ -68,6 +72,7 @@ export const StorySliderSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/lake.jpg"
           color="secondary"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.title2, description: translation.description2 })}
         />
         <TextImage
           badge={translation.chip3}
@@ -77,8 +82,16 @@ export const StorySliderSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/dashboard.jpg"
           color="secondaryDark"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.title3, description: translation.description3 })}
         />
       </Carousel>
+      <Modal
+        id="storiesSliderModal"
+        isOpen={modalValue !== undefined}
+        {...modalValue}
+        onBackgroundClick={() => setModalValue(undefined)}
+        onCloseClick={() => setModalValue(undefined)}
+      />
     </SectionBase>
   )
 }

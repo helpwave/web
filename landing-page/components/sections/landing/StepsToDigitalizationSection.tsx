@@ -5,6 +5,8 @@ import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { TextImage } from '@helpwave/common/components/TextImage'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
+import { useState } from 'react'
+import { Modal } from '@helpwave/common/components/modals/Modal'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type StepsToDigitalizationSectionTranslation = {
@@ -49,6 +51,7 @@ const defaultStepsToDigitalizationSectionTranslation: Record<Languages, StepsToD
  */
 export const StepsToDigitalizationSection = () => {
   const translation = useTranslation(defaultStepsToDigitalizationSectionTranslation)
+  const [modalValue, setModalValue] = useState<{titleText: string, description: string}>()
 
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 w-full')}>
@@ -65,6 +68,7 @@ export const StepsToDigitalizationSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/doctors_discussing.jpg"
           color="primary"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.step1Title, description: translation.step1Description })}
         />
         <TextImage
           badge={`${translation.step} #2`}
@@ -74,6 +78,7 @@ export const StepsToDigitalizationSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/lake.jpg"
           color="secondary"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.step2Title, description: translation.step2Description })}
         />
         <TextImage
           badge={`${translation.step} #3`}
@@ -83,8 +88,16 @@ export const StepsToDigitalizationSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/dashboard.jpg"
           color="secondaryDark"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.step3Title, description: translation.step3Description })}
         />
       </Carousel>
+      <Modal
+        id="stepsToDigitizationModal"
+        isOpen={modalValue !== undefined}
+        {...modalValue}
+        onBackgroundClick={() => setModalValue(undefined)}
+        onCloseClick={() => setModalValue(undefined)}
+      />
     </SectionBase>
   )
 }

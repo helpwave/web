@@ -3,6 +3,8 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { TextImage } from '@helpwave/common/components/TextImage'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
+import { useState } from 'react'
+import { Modal } from '@helpwave/common/components/modals/Modal'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type StoriesSliderSectionTranslation = {
@@ -41,6 +43,7 @@ const defaultStoriesSliderSectionTranslation: Record<Languages, StoriesSliderSec
  */
 export const StoriesSliderSection = () => {
   const translation = useTranslation(defaultStoriesSliderSectionTranslation)
+  const [modalValue, setModalValue] = useState<{titleText: string, description: string}>()
 
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 w-full')}>
@@ -53,6 +56,7 @@ export const StoriesSliderSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/doctors_discussing.jpg"
           color="primary"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.step1Title, description: translation.step1Description })}
         />
         <TextImage
           badge={`${translation.step} #2`}
@@ -62,6 +66,7 @@ export const StoriesSliderSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/lake.jpg"
           color="secondary"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.step2Title, description: translation.step2Description })}
         />
         <TextImage
           badge={`${translation.step} #3`}
@@ -71,8 +76,16 @@ export const StoriesSliderSection = () => {
           imageUrl="https://cdn.helpwave.de/landing_page/dashboard.jpg"
           color="secondaryDark"
           className={tw('h-full overflow-hidden')}
+          onShowMoreClicked={() => setModalValue({ titleText: translation.step3Title, description: translation.step3Description })}
         />
       </Carousel>
+      <Modal
+        id="storySliderModal"
+        isOpen={modalValue !== undefined}
+        {...modalValue}
+        onBackgroundClick={() => setModalValue(undefined)}
+        onCloseClick={() => setModalValue(undefined)}
+      />
     </SectionBase>
   )
 }

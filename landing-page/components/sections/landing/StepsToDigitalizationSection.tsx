@@ -61,7 +61,8 @@ export const StepsToDigitalizationSection = () => {
           badge={`${translation.step} #1`}
           title={translation.step1Title}
           description={translation.step1Description}
-          imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+          // TODO make attribution https://www.freepik.com/free-photo/doctors-looking-laptop-while-sitting_5480800.htm#fromView=search&page=1&position=38&uuid=4c39262c-c1b1-4f11-a15e-7446ad1974d3
+          imageUrl="https://cdn.helpwave.de/landing_page/doctors_discussing.jpg"
           color="primary"
           className={tw('h-full overflow-hidden')}
         />
@@ -69,7 +70,8 @@ export const StepsToDigitalizationSection = () => {
           badge={`${translation.step} #2`}
           title={translation.step2Title}
           description={translation.step2Description}
-          imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+          // TODO make attribution https://www.freepik.com/free-photo/wide-shot-huge-tree-trunk-near-lake-surrounded-by-trees-blue-sky_7841618.htm#fromView=search&page=1&position=0&uuid=0752105f-3120-4f34-b3b7-48dd4a616223
+          imageUrl="https://cdn.helpwave.de/landing_page/lake.jpg"
           color="secondary"
           className={tw('h-full overflow-hidden')}
         />
@@ -77,7 +79,8 @@ export const StepsToDigitalizationSection = () => {
           badge={`${translation.step} #3`}
           title={translation.step3Title}
           description={translation.step3Description}
-          imageUrl="https://cdn.helpwave.de/partners/mshack_2023.png"
+          // TODO make attribution https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm#fromView=search&page=1&position=45&uuid=12db1ee2-bec5-40ce-a317-5d240ad56f12
+          imageUrl="https://cdn.helpwave.de/landing_page/dashboard.jpg"
           color="secondaryDark"
           className={tw('h-full overflow-hidden')}
         />

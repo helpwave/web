@@ -53,7 +53,7 @@ export const ModalHeader = ({
         )}
         {!!onCloseClick && (
           <button className={tw('flex flex-row gap-x-2')} onClick={onCloseClick}>
-            <Span>{translation.close}</Span>
+            <Span className={tw('mobile:hidden')}>{translation.close}</Span>
             <X/>
           </button>
         )}

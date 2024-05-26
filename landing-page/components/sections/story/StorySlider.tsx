@@ -5,6 +5,7 @@ import { TextImage } from '@helpwave/common/components/TextImage'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
 import { useState } from 'react'
 import { Modal } from '@helpwave/common/components/modals/Modal'
+import Scrollbars from 'react-custom-scrollbars-2'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type StoriesSliderSectionTranslation = {
@@ -82,7 +83,12 @@ export const StoriesSliderSection = () => {
       <Modal
         id="storySliderModal"
         isOpen={modalValue !== undefined}
-        {...modalValue}
+        titleText={modalValue?.titleText}
+        description={(
+          <Scrollbars autoHeightMax={500} autoHeight={true}>
+            {modalValue?.description}
+          </Scrollbars>
+        )}
         onBackgroundClick={() => setModalValue(undefined)}
         onCloseClick={() => setModalValue(undefined)}
       />

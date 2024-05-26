@@ -14,11 +14,11 @@ type StoryHeaderTranslation = {
 const defaultStoryHeaderTranslation: Record<Languages, StoryHeaderTranslation> = {
   en: {
     foundingStory: 'Founding Story',
-    foundingStoryDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tortor justo, semper at augue eget, auctor feugiat metus. Proin lacinia odio ante, nec maximus ipsum eleifend ut. Ut ornare nisl urna, nec sollicitudin ante dignissim.',
+    foundingStoryDescription: 'In 2022, the founders of helpwave came together at a hackathon, driven by a shared passion to transform the digital health space. Inspired by our shared vision, we created helpwave - an innovative open source platform designed to revolutionize healthcare. Our first product, helpwave tasks, ushers in a new era of streamlined and accessible healthcare solutions.',
   },
   de: {
     foundingStory: 'Gründungsgeschichte',
-    foundingStoryDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tortor justo, semper at augue eget, auctor feugiat metus. Proin lacinia odio ante, nec maximus ipsum eleifend ut. Ut ornare nisl urna, nec sollicitudin ante dignissim.',
+    foundingStoryDescription: 'Im Jahr 2022 trafen sich die Gründer von helpwave bei einem Hackathon, angetrieben von der gemeinsamen Leidenschaft, das digitale Gesundheitswesen zu verändern. Inspiriert von unserer gemeinsamen Vision, schufen wir helpwave - eine innovative Open-Source-Plattform, die das Gesundheitswesen revolutionieren soll. Unser erstes Produkt, helpwave tasks, läutet eine neue Ära rationalisierter und zugänglicher Gesundheitslösungen ein.',
   }
 }
 

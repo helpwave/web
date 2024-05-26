@@ -35,6 +35,18 @@ const freepikCredits: { text: string, link: string }[] = [
   {
     text: 'Image by pch.vector on Freepik',
     link: 'https://www.freepik.com/free-vector/expert-checking-business-leader-order_11235382.htm'
+  },
+  {
+    text: 'Image by freepik on Freepik',
+    link: 'https://www.freepik.com/free-photo/doctors-looking-laptop-while-sitting_5480800.htm'
+  },
+  {
+    text: 'Image by wirestock on Freepik',
+    link: 'https://www.freepik.com/free-photo/wide-shot-huge-tree-trunk-near-lake-surrounded-by-trees-blue-sky_7841618.htm'
+  },
+  {
+    text: 'Image by freepik on Freepik',
+    link: 'https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm'
   }
 ]
 

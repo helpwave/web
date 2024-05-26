@@ -20,6 +20,10 @@ const defaultPartnerSectionTranslation: Record<Languages, PartnerSectionTranslat
 
 const images: Partner[] = [
   {
+    name: 'Collective Incubator',
+    url: 'https://cdn.helpwave.de/partners/collective_incubator_black.svg'
+  },
+  {
     name: 'REACH',
     url: 'https://cdn.helpwave.de/partners/reach.svg'
   },

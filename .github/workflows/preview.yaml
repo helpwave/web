@@ -66,7 +66,7 @@ jobs:
 
       - name: Deploy preview to Fly
         id: deploy
-        uses: superfly/fly-pr-review-apps@1.2.0
+        uses: superfly/fly-pr-review-apps@1.2.1
         with:
           name: pr-${{ github.event.number }}-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ matrix.project }}
           config: ${{ matrix.project }}/fly.toml

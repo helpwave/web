@@ -9,13 +9,15 @@ import { PatientSection } from '@/components/sections/tasks/PatientSection'
 import { TasksKanbanSection } from '@/components/sections/tasks/TasksKanbanSection'
 import { TasksTemplatesSection } from '@/components/sections/tasks/TasksTemplatesSection'
 import { PropertiesSection } from '@/components/sections/tasks/PropertiesSection'
-import TrustedBySection from '@/components/sections/tasks/TrustedBySection'
 
 const Tasks: NextPage = () => {
   return (
     <Page>
       <StartSection/>
-      <TrustedBySection/>
+      {/*
+        Waiting for approval of UKM
+        <TrustedBySection/>
+      */}
       <ConnectOrganizationFeatureSection/>
       <MobileFeatureSection/>
       <PatientSection/>

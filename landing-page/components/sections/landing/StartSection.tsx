@@ -1,89 +1,48 @@
-import { Button } from '@helpwave/common/components/Button'
 import { tw } from '@helpwave/common/twind'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWithAction'
-import Link from 'next/link'
-import { MessageSquare } from 'lucide-react'
+import Image from 'next/image'
+import { Span } from '@helpwave/common/components/Span'
+import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type LandingPageTranslation = {
-  tryTheDemo: string,
-  discoverOurVision: string,
-  mediQuuCTAtitle: string,
-  mediQuuCTAdescription: string,
-  readLater: string
+  title: string,
+  description: string
 }
 
 const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> = {
   en: {
-    tryTheDemo: 'Try the demo!',
-    discoverOurVision: 'Discover Our Vision',
-    mediQuuCTAtitle: 'mediQuu becomes helpwave',
-    mediQuuCTAdescription: 'With great pleasure, we announce the acquisition of mediQuu by helpwave.',
-    readLater: 'Read more'
+    title: 'helpwave - the Operating System for Hospitals',
+    description: 'empowering \\primary{medical heroes}, united in \\positive{technology}'
   },
   de: {
-    tryTheDemo: 'Teste die Demo!',
-    discoverOurVision: 'Entdecken unsere Vision',
-    mediQuuCTAtitle: 'Aus mediQuu wird helpwave',
-    mediQuuCTAdescription: 'Mit großer Freude geben wir die Akquisition von mediQuu durch helpwave bekannt.',
-    readLater: 'Weiterlesen'
+    title: 'helpwave - das Betriebssystem für Krankenhäuser',
+    description: 'Stärkung \\primary{medizinischer Helden}, vereint in \\positive{Technologie}'
   }
 }
 
 const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageTranslation>) => {
   const translation = useTranslation(defaultLandingPageTranslation, overwriteTranslation)
-  const exploreURL = '/join'
-  const demoURL = 'https://staging-tasks.helpwave.de'
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 items-center justify-center w-full')}>
-      <div className={tw('w-full max-w-[600px] mobile:max-w-[400px]')}>
-        <div className={tw('font-space text-6xl mobile:text-5xl font-bold')}>helpwave</div>
-
-        <div className={tw('font-sans text-2xl mobile:text-lg font-medium mt-2 text-end')}>
-          {'empowering '}
-          <span className={tw('text-hw-primary-800')}>{'medical heroes'}</span>
-          {', '}
-          <br/>
-          {'united in '}
-          <span className={tw('text-green-600')}>{'technology'}</span>
-        </div>
-
-        <div className={tw('flex my-8 gap-8 justify-end')}>
-          <Button variant="tertiary" color="warn" onClick={() => {
-            window.location.href = exploreURL
-          }}>
-            {translation.discoverOurVision}
-          </Button>
-
-          <Button variant="textButton" color="neutral" onClick={() => {
-            window.open(demoURL, '_blank')
-          }}>
-            {translation.tryTheDemo}
-          </Button>
+    <SectionBase className={tw('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-center items-center desktop:pr-0 tablet:pr-0')}>
+      <div className={tw('flex flex-col items-center flex-1')}>
+        <div className={tw('flex flex-col gap-y-2 max-w-[600px]')}>
+          <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
+          <Span className={tw('font-space font-semibold !text-2xl')}><MarkdownInterpreter text={translation.description}/></Span>
         </div>
       </div>
-
-      <DescriptionWithAction
-        title={translation.mediQuuCTAtitle}
-        description={translation.mediQuuCTAdescription}
-        trailing={(
-          <div
-            className={tw('flex flex-row items-center desktop:justify-end mobile:justify-center grow desktop:pl-2 mobile:pt-2')}>
-            <Link
-              href="/mediquu"
-              className={tw('flex flex-row gap-x-4 whitespace-nowrap px-4 py-2 text-white bg-hw-primary-800 rounded-md')}
-            >
-              {translation.readLater}...
-              <MessageSquare/>
-            </Link>
-          </div>
-        )}
-        className={tw('max-w-[600px] !bg-gray-200 !py-4 !px-8 shadow')}
-        descriptionClassName={tw('!text-gray-600')}
-      />
+      <div className={tw('desktop:relative desktop:right-0 p-4 pr-0 mobile:pr-4 rounded-l-3xl mobile:rounded-3xl bg-white w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10 h-fit shadow-xl')}>
+        <Image
+          // TODO make attribution to https://www.freepik.com/free-vector/medics-working-charts_4950249.htm
+          src="https://cdn.helpwave.de/landing_page/doctor_statistics.svg"
+          alt=""
+          width={0}
+          height={0}
+          className={tw('w-full rounded-l-lg')}
+        />
+      </div>
     </SectionBase>
   )
 }

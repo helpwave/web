@@ -12,6 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const Basic: Story = {
   args: {
     size: 'small',
+    title: 'helpwave',
     className: ''
   },
 }

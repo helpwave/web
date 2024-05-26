@@ -60,6 +60,7 @@ const linkGroups: Record<Categories, LinkType[]> = {
     { name: 'Onepager', link: 'https://cdn.helpwave.de/helpwave_onepager.pdf' },
     { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' },
     { name: 'Tech-Radar', link: '/tech-radar', openInCurrentTab: true },
+    { name: 'Credits', link: '/credits', openInCurrentTab: true },
   ],
   products: [
     { name: 'tasks', link: '/product/tasks' },

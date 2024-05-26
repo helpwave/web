@@ -4,17 +4,17 @@ import { tx } from '@twind/core'
 type BackgroundColor = 'white' | 'black' | 'gray' | 'darkSecondary' | 'darkPrimary'
 
 type SectionBaseProps = PropsWithChildren & {
-  isFirstSection?: boolean,
   useDefaultStyle?: boolean,
   backgroundColor?: BackgroundColor,
+  outerClassName?: string,
   className?: string
 }
 
 export const SectionBase = ({
   children,
-  isFirstSection = false,
   useDefaultStyle = true,
   backgroundColor = 'white',
+  outerClassName,
   className,
 }: SectionBaseProps) => {
   return (
@@ -24,13 +24,12 @@ export const SectionBase = ({
       'bg-black': backgroundColor === 'black',
       'bg-hw-secondary-800': backgroundColor === 'darkSecondary',
       'bg-hw-primary-900': backgroundColor === 'darkPrimary'
-    })}>
+    }, outerClassName)}>
       <div
         className={tx(
           className,
           {
             'max-w-[1200px] desktop:px-24 tablet:px-12 mobile:px-6 py-16': useDefaultStyle,
-            'pt-32': useDefaultStyle && isFirstSection
           }
         )}
       >

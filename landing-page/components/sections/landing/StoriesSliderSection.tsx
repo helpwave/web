@@ -97,6 +97,7 @@ export const StorySliderSection = () => {
         )}
         onBackgroundClick={() => setModalValue(undefined)}
         onCloseClick={() => setModalValue(undefined)}
+        modalClassName={tw('max-w-[600px]')}
       />
     </SectionBase>
   )

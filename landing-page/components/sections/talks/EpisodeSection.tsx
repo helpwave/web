@@ -71,7 +71,7 @@ const EpisodeSection = ({ overwriteTranslation }: PropsForTranslation<EpisodeSec
         <h1 className={tw('font-space text-5xl overline')}>{translation.allEpisodes}</h1>
         {isLoading ? (<LoadingAnimation />) : data?.map(episode => (
           <Link key={episode.id} href={episode.link} target="_blank">
-            <div className={tw('w-full shadow-sm hover:border-solid hover:border-hw-pool-orange rounded-md transition-all duration-500 border-dashed border-2 p-8 my-8 flex gap-16')}>
+            <div className={tw('w-full shadow-sm hover:border-solid hover:border-hw-pool-orange rounded-md transition-all duration-500 border-dashed border-2 p-8 my-8 flex gap-16 bg-white')}>
               <div className={tw('w-3/4 mobile:!w-full')}>
                 <h4 className={tw('font-space text-2xl font-bold')}>{episode.title}</h4>
                 <p className={tw('text-gray-600 text-justify')}>published on {episode.date.toLocaleDateString('de-DE')}</p>

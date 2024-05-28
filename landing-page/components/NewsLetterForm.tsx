@@ -197,7 +197,7 @@ export const NewsLetterForm = ({
                 ...prevState,
                 industry
               }))}
-              className={tw('!w-full !max-w-[300px]')}
+              className={tw('!w-full !max-w-[300px] bg-white')}
             />
           </div>
           <div className={tw('flex flex-row justify-end mt-4')}>

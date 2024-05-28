@@ -34,7 +34,6 @@ export const PropertiesSection = ({ overwriteTranslation }: PropsForTranslation<
   return (
     <SectionBase
       className={tw('flex flex-row mobile:!flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
-      backgroundColor="white"
     >
       <div
         className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full desktop:min-w-[40%] w-2/5 z-10')}

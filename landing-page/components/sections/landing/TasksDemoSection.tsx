@@ -48,7 +48,10 @@ export const TasksDemoSection = () => {
   const demoURL = 'https://staging-tasks.helpwave.de'
   const imageURL = 'https://cdn.helpwave.de/products/tasks_preview.png'
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 !pb-0 w-full')}>
+    <SectionBase
+      className={tw('flex flex-col items-center gap-y-20 w-full')}
+      outerClassName={tw('pb-0')}
+    >
       <div className={tw('flex flex-col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
         <div className={tw('flex flex-col gap-y-4 desktop:max-w-[70%]')}>
           <HelpwaveBadge className={tw('!text-hw-primary-800 !bg-hw-primary-200 !w-fit')} title={translation.helpwaveTasks}/>
@@ -71,7 +74,7 @@ export const TasksDemoSection = () => {
       <Image
         src={imageURL}
         alt=""
-        className={tw('w-full rounded-t-2xl')}
+        className={tw('w-full rounded-t-2xl max-w-[1000px]')}
         style={{ transform: 'scale(101.28051%, 102.6862%) translate(-0.640255%, -1.3431%)' }}
         width={2351}
         height={1246}

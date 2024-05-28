@@ -26,7 +26,10 @@ const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> =
 const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageTranslation>) => {
   const translation = useTranslation(defaultLandingPageTranslation, overwriteTranslation)
   return (
-    <SectionBase className={tw('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-center items-center desktop:pr-0 tablet:pr-0')}>
+    <SectionBase
+      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-center items-center')}
+      outerClassName={tw('desktop:pr-0 tablet:pr-0 py-32')}
+    >
       <div className={tw('flex flex-col items-center flex-1')}>
         <div className={tw('flex flex-col gap-y-2 max-w-[600px]')}>
           <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>

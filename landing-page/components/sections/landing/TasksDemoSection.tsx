@@ -48,7 +48,7 @@ export const TasksDemoSection = () => {
   const demoURL = 'https://staging-tasks.helpwave.de'
   const imageURL = 'https://cdn.helpwave.de/products/tasks_preview.png'
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 !pb-0 w-full')}>
+    <SectionBase className={tw('flex flex-col gap-y-20 !pb-0 w-full text-white')} backgroundColor="darkSecondary">
       <div className={tw('flex flex-col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
         <div className={tw('flex flex-col gap-y-4 desktop:max-w-[70%]')}>
           <HelpwaveBadge className={tw('!text-hw-primary-800 !bg-hw-primary-200 !w-fit')} title={translation.helpwaveTasks}/>
@@ -62,7 +62,7 @@ export const TasksDemoSection = () => {
         </div>
         <Link
           href={demoURL}
-          className={tw('bg-black rounded-lg text-lg text-white h-min px-6 py-2')}
+          className={tw('bg-white rounded-lg text-lg font-bold text-hw-secondary-800 h-min px-6 py-2')}
           style={{ textWrap: 'nowrap' }} // TODO does not seem supported by the current twind version (throws warnings for text-nowrap)
         >
           {translation.tryDemo}

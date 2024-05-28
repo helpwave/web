@@ -53,8 +53,8 @@ export const StorySliderSection = () => {
   const [modalValue, setModalValue] = useState<{titleText: string, description: string}>()
 
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 w-full !max-w-[1600px]')}>
-      <Carousel hintNext={true} heights={{ desktop: 500, tablet: 600, mobile: 600 }}>
+    <SectionBase className={tw('flex flex-col gap-y-8 w-full !px-0 !max-w-[1600px]')}>
+      <Carousel hintNext={true}>
         <TextImage
           badge={translation.chip1}
           title={translation.title1}

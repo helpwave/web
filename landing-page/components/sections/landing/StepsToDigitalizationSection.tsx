@@ -55,12 +55,12 @@ export const StepsToDigitalizationSection = () => {
   const [modalValue, setModalValue] = useState<{titleText: string, description: string}>()
 
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 w-full')}>
+    <SectionBase className={tw('flex flex-col gap-y-8 w-full !px-0 !max-w-[1600px]')}>
       <div className={tw('flex flex-col items-center text-center gap-y-2')}>
         <h2><Span type="title" className={tw('!text-3xl')}><MarkdownInterpreter text={translation.title}/></Span></h2>
         <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
       </div>
-      <Carousel hintNext={true}>
+      <Carousel hintNext={true} heights={{ tablet: 300 }}>
         <TextImage
           badge={`${translation.step} #1`}
           title={translation.step1Title}

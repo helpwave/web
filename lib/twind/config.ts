@@ -193,6 +193,12 @@ export const config = defineConfig({
           '100%': { strokeDashoffset: '-1000' },
         },
       },
+      boxShadow: {
+        'around': '0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 -2px 2px 0 rgba(0, 0, 0, 0.1), 2px 0 2px 0 rgba(0, 0, 0, 0.1), -2px 0 2px 0 rgba(0, 0, 0, 0.1)',
+        'around-md': '0 4px 4px 0 rgba(0, 0, 0, 0.1), 0 -4px 4px 0 rgba(0, 0, 0, 0.1), 2px 0 2px 0 rgba(0, 0, 0, 0.1), -4px 0 4px 0 rgba(0, 0, 0, 0.1)',
+        'around-lg': '0 10px 10px 0 rgba(0, 0, 0, 0.1), 0 -10px 10px 0 rgba(0, 0, 0, 0.1), 10px 0 10px 0 rgba(0, 0, 0, 0.1), -10px 0 10px 0 rgba(0, 0, 0, 0.1)',
+        'around-xl': '0 20px 20px 0 rgba(0, 0, 0, 0.1), 0 -20px 20px 0 rgba(0, 0, 0, 0.1), 20px 0 20px 0 rgba(0, 0, 0, 0.1), -20px 0 20px 0 rgba(0, 0, 0, 0.1)',
+      }
     }
   },
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms(), presetTypography()]

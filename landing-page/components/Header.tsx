@@ -80,8 +80,8 @@ const Header = () => {
 
   return (
     <>
-      <div className={tw('absolute top-0 w-screen z-[50] bg-white')}>
-        <nav className={tw('flex mobile:px-4 tablet:px-8 desktop:px-16 items-center justify-between mobile:mx-auto w-full')}>
+      <div className={tw('absolute flex flex-row justify-center top-0 w-screen z-[50] bg-white mobile:px-6 tablet:px-12 desktop:px-24')}>
+        <nav className={tw('flex pt-2 items-center justify-between w-full max-w-[1200px]')}>
           <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
             <Helpwave/>
             <MarkdownInterpreter text={'\\helpwave'}/>

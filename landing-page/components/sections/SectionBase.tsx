@@ -23,13 +23,14 @@ export const SectionBase = ({
       'bg-gray-100': backgroundColor === 'gray',
       'bg-black': backgroundColor === 'black',
       'bg-hw-secondary-800': backgroundColor === 'darkSecondary',
-      'bg-hw-primary-900': backgroundColor === 'darkPrimary'
+      'bg-hw-primary-900': backgroundColor === 'darkPrimary',
+      'desktop:px-24 tablet:px-12 mobile:px-6 py-16': useDefaultStyle
     }, outerClassName)}>
       <div
         className={tx(
           className,
           {
-            'max-w-[1200px] desktop:px-24 tablet:px-12 mobile:px-6 py-16': useDefaultStyle,
+            'max-w-[1200px]': useDefaultStyle,
           }
         )}
       >

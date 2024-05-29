@@ -13,17 +13,23 @@ import Footer from '@/components/Footer'
 
 type CreditsPageTranslation = {
   title: string,
-  text: string
+  text: string,
+  flaticon: string,
+  createdBy: (name: string, author: string) => string
 }
 
 const defaultCreditsPageTranslation: Record<Languages, CreditsPageTranslation> = {
   en: {
     title: 'Credits',
-    text: 'To credit our use of stock-footage from other websites, we are pleased to list them on this page.'
+    text: 'To credit our use of stock-footage from other websites, we are pleased to list them on this page.',
+    flaticon: 'Icons by Flaticon',
+    createdBy: (name, author) => `${name} created by ${author}`
   },
   de: {
     title: 'Credits',
-    text: 'Um die Verwendung von Stock-Footage von anderen Websites zu würdigen, führen wir sie gerne auf dieser Seite auf.'
+    text: 'Um die Verwendung von Stock-Footage von anderen Websites zu würdigen, führen wir sie gerne auf dieser Seite auf.',
+    flaticon: 'Icons von Flaticon',
+    createdBy: (name, author) => `${name} erstellt von ${author}`
   }
 }
 
@@ -47,6 +53,14 @@ const freepikCredits: { text: string, link: string }[] = [
   {
     text: 'Image by freepik on Freepik',
     link: 'https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm'
+  }
+]
+
+const flaticonCredits: { author: string, link: string, name: string }[] = [
+  {
+    name: 'label',
+    author: 'Creatype',
+    link: 'https://www.flaticon.com/free-icons/label_7625549'
   }
 ]
 
@@ -83,16 +97,26 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
 
       <SectionBase backgroundColor="gray">
         <h2><Span type="subsectionTitle">Freepik</Span></h2>
-        <div className={tw('flex grow flex-col items-center min-w-50 items-center')}>
+        <div className={tw('flex grow flex-col items-center min-w-50 items-center gap-y-4')}>
           {
             freepikCredits.map((credit) => (
-              <div className={tw('mt-5 w-full')} key={credit.link}>
+              <div className={tw('w-full')} key={credit.link}>
                 <Span type="normal">{credit.text}</Span>
                 <Link href={credit.link} className={tw('underline block')} target="_blank">{credit.link}</Link>
               </div>
             ))
           }
         </div>
+
+      </SectionBase>
+
+      <SectionBase backgroundColor="white" className={tw('flex flex-col gap-y-2 w-full')}>
+        <h2><Span type="title">{translation.flaticon}</Span></h2>
+        {flaticonCredits.map(({ name, author, link }) => (
+          <Link key={name + author} href={link} title={name} className={tw('underline')} target="_blank">
+            {translation.createdBy(name, author)}
+          </Link>
+        ))}
       </SectionBase>
       <Footer/>
     </div>

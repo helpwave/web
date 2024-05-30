@@ -7,7 +7,7 @@ export type TagProps = Omit<ImageProps, 'src'|'alt'>
 /**
  * Tag icon from flaticon
  *
- * https://www.flaticon.com/free-icon/label_7625549
+ * https://www.flaticon.com/free-icon/price-tag_721550?term=label&page=1&position=8&origin=tag&related_id=721550
  *
  * When using it make attribution
  */

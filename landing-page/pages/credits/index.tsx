@@ -53,6 +53,10 @@ const freepikCredits: { text: string, link: string }[] = [
   {
     text: 'Image by freepik on Freepik',
     link: 'https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm'
+  },
+  {
+    text: 'Image by Those Icons on Freepik',
+    link: 'https://www.freepik.com/icon/donut-chart_483638'
   }
 ]
 
@@ -60,8 +64,18 @@ const flaticonCredits: { author: string, link: string, name: string }[] = [
   {
     name: 'label',
     author: 'Creatype',
-    link: 'https://www.flaticon.com/free-icons/label_7625549'
-  }
+    link: 'https://www.flaticon.com/free-icon/price-tag_721550?term=label&page=1&position=8&origin=tag&related_id=721550'
+  },
+  {
+    name: 'hospital',
+    author: 'Freepik',
+    link: 'https://www.flaticon.com/free-icon/hospital_3809392?term=hospital&page=1&position=8&origin=search&related_id=3809392'
+  },
+  {
+    name: 'doctors',
+    author: 'Slidicon',
+    link: 'https://www.flaticon.com/free-icon/doctors_3017241?term=doctors&page=1&position=14&origin=search&related_id=3017241'
+  },
 ]
 
 const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<CreditsPageTranslation>) => {

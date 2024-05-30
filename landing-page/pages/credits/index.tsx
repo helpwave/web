@@ -7,9 +7,8 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Link from 'next/link'
-import Header from '@/components/Header'
 import { SectionBase } from '@/components/sections/SectionBase'
-import Footer from '@/components/Footer'
+import { Page } from '@/components/Page'
 
 type CreditsPageTranslation = {
   title: string,
@@ -83,9 +82,7 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
   const imageUrl = 'https://cdn.helpwave.de/landing_page/credits.jpg'
 
   return (
-    <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
-      <Header/>
-
+    <Page>
       <SectionBase
         className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
       >
@@ -109,7 +106,7 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
         </div>
       </SectionBase>
 
-      <SectionBase backgroundColor="gray">
+      <SectionBase backgroundColor="gray" className={tw('w-full')}>
         <h2><Span type="subsectionTitle">Freepik</Span></h2>
         <div className={tw('flex grow flex-col items-center min-w-50 items-center gap-y-4')}>
           {
@@ -132,8 +129,7 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
           </Link>
         ))}
       </SectionBase>
-      <Footer/>
-    </div>
+    </Page>
   )
 }
 

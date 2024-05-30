@@ -33,7 +33,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
           <Span className={tw('font-space font-semibold !text-2xl')}><MarkdownInterpreter text={translation.description}/></Span>
         </div>
       </div>
-      <div className={tw('desktop:relative desktop:right-0 p-4 pr-0 mobile:pr-4 rounded-l-3xl mobile:rounded-3xl bg-white w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10 h-fit shadow-around-md')}>
+      <div className={tw('desktop:relative desktop:right-0 p-4 pr-0 mobile:pr-4 rounded-l-3xl mobile:rounded-3xl bg-white w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10 h-fit shadow-around-lg')}>
         <Image
           // TODO make attribution to https://www.freepik.com/free-vector/medics-working-charts_4950249.htm
           src="https://cdn.helpwave.de/landing_page/doctor_statistics.svg"

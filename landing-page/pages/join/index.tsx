@@ -3,11 +3,10 @@ import type { NextPage } from 'next'
 import { RadialRings } from '@helpwave/common/components/Ring'
 import { useEffect, useState } from 'react'
 import { Span } from '@helpwave/common/components/Span'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
 import type { NewsLetterFormType } from '@/components/NewsLetterForm'
 import { NewsLetterForm } from '@/components/NewsLetterForm'
 import { submitHubSpotForm } from '@/utils/hubspot'
+import { Page } from '@/components/Page'
 
 const submitNewsLetterForm = (form: NewsLetterFormType) => submitHubSpotForm(
   '26536657',
@@ -65,8 +64,7 @@ const NewsLetter: NextPage = () => {
   const waveWidth = (sizeCircle2 - sizeCircle1) / 20
 
   return (
-    <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
-      <Header/>
+    <Page className={tw('w-screen h-screen relative z-0')}>
       <div className={tw('h-screen z-[1]')}>
         <div className={tw('relative h-full overflow-hidden')}>
           <div className={tw(`absolute left-0 top-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2`)}>
@@ -94,8 +92,7 @@ const NewsLetter: NextPage = () => {
           </div>
         </div>
       </div>
-      <Footer/>
-    </div>
+    </Page>
   )
 }
 

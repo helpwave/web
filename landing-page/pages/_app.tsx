@@ -8,6 +8,8 @@ import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import Head from 'next/head'
 import { usePathname } from 'next/navigation'
 import { Toaster } from 'react-hot-toast'
+import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
+import { modalRootName } from '@helpwave/common/components/modals/Modal'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -27,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>helpwave</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1"/>
         <style>{`
           :root {
             --font-inter: ${inter.style.fontFamily};
@@ -37,10 +39,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <ProvideLanguage defaultLanguage={defaultLanguage}>
-          <div className={tw('font-sans')}>
-            <Component {...pageProps} />
-            <Toaster />
-          </div>
+          <ModalRegister>
+            <div className={tw('font-sans')} id={modalRootName}>
+              <Component {...pageProps} />
+              <Toaster/>
+            </div>
+          </ModalRegister>
         </ProvideLanguage>
       </QueryClientProvider>
     </>

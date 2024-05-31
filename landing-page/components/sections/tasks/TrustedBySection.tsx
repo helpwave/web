@@ -36,7 +36,7 @@ const TrustedBySection = () => {
       <Span type="title" className={tw('!text-2xl')}>{translation.title}</Span>
       <DividerInserter
         className={tw('flex flex-row gap-x-6 items-center justify-center w-full')}
-        divider={<VerticalDivider height={128}/>}
+        divider={index => (<VerticalDivider key={index} height={128}/>)}
       >
         {images.map(partner => (
           <Image

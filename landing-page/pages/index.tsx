@@ -6,6 +6,7 @@ import StartSection from '../components/sections/landing/StartSection'
 import { Page } from '@/components/Page'
 import VisionSection from '@/components/sections/landing/VisionSection'
 import { TasksDemoSection } from '@/components/sections/landing/TasksDemoSection'
+import { StepsToDigitalizationSection } from '@/components/sections/landing/StepsToDigitalizationSection'
 
 const Home: NextPage = () => {
   return (
@@ -13,8 +14,10 @@ const Home: NextPage = () => {
       <StartSection/>
       <PartnerSection/>
       <VisionSection/>
+      <StepsToDigitalizationSection/>
       <TasksDemoSection/>
       <MarketStatsSection/>
+      {/* TODO implement when ready <StoriesSliderSection/> */}
     </Page>
   )
 }

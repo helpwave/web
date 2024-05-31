@@ -1,13 +1,15 @@
 import type { NextPage } from 'next'
-import StoryStartSection from '@/components/sections/story/StoryStartSection'
 import StoryHeader from '@/components/sections/story/StoryHeader'
 import { Page } from '@/components/Page'
+import { StorySliderSection } from '@/components/sections/landing/StoriesSliderSection'
+import StoryInUseAtSection from '@/components/sections/story/StoryInUseAtSection'
 
 const Story: NextPage = () => {
   return (
     <Page>
       <StoryHeader/>
-      <StoryStartSection/>
+      <StorySliderSection/>
+      <StoryInUseAtSection/>
     </Page>
   )
 }

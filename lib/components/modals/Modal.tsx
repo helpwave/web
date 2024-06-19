@@ -23,9 +23,13 @@ const defaultModalHeaderTranslation: Record<Languages, ModalHeaderTranslation> =
 
 export type ModalHeaderProps = {
   onCloseClick?: () => void,
+  /** The title of the Modal. If you want to only set the text use `titleText` instead */
   title?: ReactNode,
+  /** The title text of the Modal. If you want to set a custom title use `title` instead */
   titleText?: string,
+  /** The description of the Modal. If you want to only set the text use `descriptionText` instead */
   description?: ReactNode,
+  /** The description text of the Modal. If you want to set a custom description use `description` instead */
   descriptionText?: string
 }
 

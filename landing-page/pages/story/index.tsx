@@ -1,16 +1,14 @@
-import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
-import StoryStartSection from '@/components/sections/story/StoryStartSection'
+import StoryHeader from '@/components/sections/story/StoryHeader'
+import { Page } from '@/components/Page'
+import { StorySliderSection } from '@/components/sections/landing/StoriesSliderSection'
 
 const Story: NextPage = () => {
   return (
-    <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
-      <Header/>
-      <StoryStartSection/>
-      <Footer/>
-    </div>
+    <Page>
+      <StoryHeader/>
+      <StorySliderSection/>
+    </Page>
   )
 }
 

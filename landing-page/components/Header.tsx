@@ -7,10 +7,12 @@ import Link from 'next/link'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import { Chip } from '@helpwave/common/components/ChipList'
 
 const homeURL = '/'
 
-const linkNames = ['products', 'story', 'team', 'talks', 'contact', 'tasks'] as const
+const linkNames = ['products', 'story', 'team', 'talks', 'tasks'] as const
 type LinkNames = typeof linkNames[number]
 
 type LinkType = {
@@ -38,37 +40,35 @@ const items: SubLinkType[] = [
     url: '/story'
   },
   {
-    name: 'team',
-    url: '/team'
-  },
-  {
     name: 'talks',
     url: '/talks'
   },
   {
-    name: 'contact',
-    url: 'mailto:contact@helpwave.de'
+    name: 'team',
+    url: '/team'
   },
 ]
 
-type HeaderTranslation = {[key in LinkNames]: string}
+type HeaderTranslation = {
+  contact: string
+} & { [key in LinkNames]: string }
 
 const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
   en: {
-    products: 'products',
-    story: 'story',
-    team: 'team',
-    talks: 'talks',
-    contact: 'contact',
-    tasks: 'tasks'
+    products: 'Products',
+    story: 'Story',
+    team: 'Team',
+    contact: 'Contact us',
+    tasks: 'tasks',
+    talks: 'Podcast',
   },
   de: {
     products: 'Produkte',
     story: 'Geschichte',
     team: 'Team',
-    talks: 'Talks',
     contact: 'Kontakt',
-    tasks: 'tasks'
+    tasks: 'tasks',
+    talks: 'Podcast',
   }
 }
 
@@ -76,12 +76,15 @@ const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false)
   const translation = useTranslation(defaultHeaderTranslation, {})
 
+  const navigationItemStyle = tw('!font-bold font-space')
+
   return (
-    <div>
+    <>
       <div className={tw('w-screen z-[50] fixed shadow-sm top-0 border bg-white')}>
         <nav className={tw('flex mobile:p-2 desktop:max-w-[1000px] items-center justify-between mx-auto')}>
           <Link href={homeURL}>
             <Helpwave/>
+            <MarkdownInterpreter text={'\\helpwave'}/>
           </Link>
           <div className={tw('mobile:hidden w-full')}>
             <div className={tw('flex flex-wrap items-center justify-evenly')}>
@@ -93,7 +96,7 @@ const Header = () => {
                 <div key={name}>
                   {subpage === undefined ? (
                     <Link href={url}>
-                      <Span type="navigationItem">
+                      <Span className={navigationItemStyle}>
                         {translation[name]}
                       </Span>
                     </Link>
@@ -102,7 +105,7 @@ const Header = () => {
                       alignment="tl"
                       trigger={(onClick, ref) => (
                         <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
-                          <Span type="navigationItem">
+                          <Span className={navigationItemStyle}>
                             {translation[name]}
                           </Span>
                         </div>
@@ -116,7 +119,7 @@ const Header = () => {
                         (
                           <Link key={subPageName} className={tw('cursor-pointer')} href={url + subPageUrl}>
                             <MenuItem alignment="left">
-                              <Span type="navigationItem">
+                              <Span className={navigationItemStyle}>
                                 {subPageName}
                               </Span>
                             </MenuItem>
@@ -126,22 +129,26 @@ const Header = () => {
                   )}
                 </div>
               ))}
+              <Link href="mailto:contact@helpwave.de">
+                <Chip
+                  variant="fullyRounded"
+                  color="black"
+                  className={tw('!py-2 !px-4 shadow-sm cursor-pointer')}
+                >
+                  {translation.contact}
+                </Chip>
+              </Link>
             </div>
           </div>
-
-          <div className={tw('w-full tablet:hidden desktop:hidden flex justify-between mx-2')}>
-            <Link href={homeURL}><span
-              className={tw('text-center text-2xl font-bold font-space')}>helpwave</span></Link>
-            <button onClick={() => setNavbarOpen(true)} className={tw('tablet:hidden desktop:hidden content-end')}
-                    aria-controls="navbar" aria-expanded="false">
-              <MenuIcon size={32}/>
-            </button>
-          </div>
+          <button onClick={() => setNavbarOpen(true)} className={tw('desktop:hidden tablet:hidden content-end')}
+                  aria-controls="navbar" aria-expanded="false">
+            <MenuIcon size={32}/>
+          </button>
         </nav>
       </div>
 
       {navbarOpen && (
-        <div className={tw('fixed w-screen h-screen z-[100] bg-white')}>
+        <div className={tw('absolute w-screen h-screen z-[100] bg-white')}>
           <div className={tw('text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
             <button onClick={() => setNavbarOpen(false)} className={tw('mb-5')}>
               <X size={64}/>
@@ -196,7 +203,7 @@ const Header = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }
 

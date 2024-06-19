@@ -1,68 +1,64 @@
 import { tw } from '@helpwave/common/twind'
-import Image from 'next/image'
-import Scrollbars from 'react-custom-scrollbars-2'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SectionBase } from '@/components/sections/SectionBase'
+import type { Partner } from '@/components/PartnerList'
+import { PartnerList } from '@/components/PartnerList'
 
-type Entry = {
-  name: string,
-  url: string
+type PartnerSectionTranslation = {
+  title: string
 }
 
-const images: Record<string, Entry> = {
-  gruendungsstipendium: {
-    name: 'Gründungsstipendium.NRW',
-    url: 'https://cdn.helpwave.de/partners/gruendungsstipendium.jpg'
+const defaultPartnerSectionTranslation: Record<Languages, PartnerSectionTranslation> = {
+  en: {
+    title: 'Our partners'
   },
-  ministryNrw: {
-    name: 'Ministerium für Wirtschaft, Industrie, Klimaschutz, und Energie des Landes NRW',
-    url: 'https://cdn.helpwave.de/partners/mfw.svg'
-  },
-  medLife: {
-    name: 'MedLife',
-    url: 'https://cdn.helpwave.de/partners/medlife.png'
-  },
-  mediQuu: {
-    name: 'mediQuu',
-    url: 'https://cdn.helpwave.de/mediquu/logo_2021.png'
-  },
-  reach: {
-    name: 'REACH',
-    url: 'https://cdn.helpwave.de/partners/reach.svg'
-  },
-  digitalHub: {
-    name: 'Digital Hub münsterLAND',
-    url: 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png'
-  },
-  muensterHack: {
-    name: 'Münsterhack',
-    url: 'https://cdn.helpwave.de/partners/mshack_2023.png',
+  de: {
+    title: 'Unsere Partner'
   }
 }
 
+const images: Partner[] = [
+  {
+    name: 'Collective Incubator',
+    url: 'https://cdn.helpwave.de/partners/collective_incubator_black.svg'
+  },
+  {
+    name: 'REACH',
+    url: 'https://cdn.helpwave.de/partners/reach.svg'
+  },
+  {
+    name: 'Digital Hub münsterLAND',
+    url: 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png'
+  },
+  {
+    name: 'Münsterhack',
+    url: 'https://cdn.helpwave.de/partners/mshack_2023.png',
+  },
+  {
+    name: 'Gründungsstipendium.NRW',
+    url: 'https://cdn.helpwave.de/partners/gruendungsstipendium.jpg'
+  },
+  {
+    name: 'Ministerium für Wirtschaft, Industrie, Klimaschutz, und Energie des Landes NRW',
+    url: 'https://cdn.helpwave.de/partners/mfw.svg'
+  },
+  {
+    name: 'MedLife',
+    url: 'https://cdn.helpwave.de/partners/medlife.png'
+  },
+  {
+    name: 'mediQuu',
+    url: 'https://cdn.helpwave.de/mediquu/logo_2021.png'
+  },
+]
+
 const PartnerSection = () => {
-  const size = 144
+  const translation = useTranslation(defaultPartnerSectionTranslation)
 
   return (
-    <SectionBase>
-      <Scrollbars
-        autoHeight={true}
-        autoHeightMax={144}
-        universal={true}
-      >
-        <div className={tw('flex gap-16 select-none justify-between items-center w-full')}>
-          {Object.entries(images).map(([_, { name, url }]) => (
-            <Image
-              key={name}
-              alt={name}
-              src={url}
-              style={{ objectFit: 'contain' }}
-              width={size}
-              height={size}
-              className={tw(`grayscale max-h-[${size}px]`)}
-            />
-          ))}
-        </div>
-      </Scrollbars>
+    <SectionBase className={tw('flex gap-16 select-none justify-between items-center w-full')} backgroundColor="gray">
+      <PartnerList title={translation.title} partners={images}/>
     </SectionBase>
   )
 }

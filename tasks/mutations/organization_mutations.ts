@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
+import type { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import {
   AcceptInvitationRequest,
   CreateOrganizationRequest,
@@ -14,7 +14,7 @@ import {
   AddMemberRequest,
   GetInvitationsByOrganizationRequest,
   RevokeInvitationRequest
-} from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
+} from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { Role } from './organization_member_mutations'
 import { getAuthenticatedGrpcMetadata, organizationService } from '@/utils/grpc'

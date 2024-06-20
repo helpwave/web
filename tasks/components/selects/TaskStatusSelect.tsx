@@ -1,6 +1,6 @@
 import { Select, type SelectProps } from '@helpwave/common/components/user-input/Select'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 
 type TaskStatusSelectTranslation = {
   unscheduled: string,

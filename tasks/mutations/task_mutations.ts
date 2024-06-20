@@ -17,7 +17,7 @@ import {
   AssignTaskToUserRequest,
   UnassignTaskFromUserRequest,
   type GetTasksByPatientSortedByStatusResponse
-} from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+} from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/util/noop'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'

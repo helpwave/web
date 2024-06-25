@@ -6,7 +6,7 @@ import {
   GetWardOverviewsRequest,
   GetWardRequest,
   UpdateWardRequest
-} from '@helpwave/proto-ts/proto/services/task_svc/v1/ward_svc_pb'
+} from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { getAuthenticatedGrpcMetadata, wardService } from '../utils/grpc'
 

@@ -14,7 +14,7 @@ const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, string> })[] = [
   {
     name: 'Christian Porschen',
-    title: 'Dr. med.',
+    prefix: 'Dr. med.',
     role: 'Chief Medical Officer',
     roleBadge: 'CMO',
     imageUrl: imageUrl('christian_porschen'),
@@ -78,7 +78,6 @@ const contactsMediquu: (ProfileProps & { translatedInfo?: Record<Languages, stri
     imageUrl: 'https://cdn.helpwave.de/mediquu/christian_remfert.jpg',
     socials: [
       { type: 'linkedin', url: 'https://www.linkedin.com/in/christian-remfert/' },
-      { type: 'mail', url: 'mailto:remfert@mediquu.de' },
     ],
     imageClassName: '!w-[230px] !h-[200px]',
     translatedInfo: {

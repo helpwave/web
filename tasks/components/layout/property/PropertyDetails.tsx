@@ -19,7 +19,7 @@ import {
   usePropertyArchiveMutation,
   usePropertyCreateMutation,
   usePropertyQuery, usePropertyUpdateMutation
-} from '@/mutations/property_mutations'
+} from '@/mutations/property/property_mutations'
 
 type PropertyDetailsTranslation = {
   propertyDetails: string,

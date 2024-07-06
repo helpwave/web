@@ -14,7 +14,7 @@ import {
   usePropertyListQuery, usePropertyWithValueCreateMutation,
   usePropertyWithValueListQuery,
   usePropertyWithValueUpdateMutation
-} from '@/mutations/property_mutations'
+} from '@/mutations/property/property_mutations'
 import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
 
 type PropertyListTranslation = {
@@ -109,7 +109,7 @@ export const PropertyList = ({
               <SearchableList
                 list={propertyList
                   .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))}
-                searchMapping={value => [value.basicInfo.propertyName]}
+                searchMapping={value => [value.name]}
                 itemMapper={property => (
                   <MenuItem
                     key={property.id}
@@ -118,7 +118,7 @@ export const PropertyList = ({
                     }}
                     className={tw('rounded-md')}
                   >
-                    {property.basicInfo.propertyName}
+                    {property.name}
                   </MenuItem>
                 )}
               />

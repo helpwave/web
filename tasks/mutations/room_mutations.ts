@@ -7,9 +7,9 @@ import {
   UpdateRoomRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/room_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
-import { getAuthenticatedGrpcMetadata, roomService } from '../utils/grpc'
 import type { BedDTO, BedWithPatientWithTasksNumberDTO, BedWithMinimalPatientDTO } from './bed_mutations'
 import { wardsQueryKey } from './ward_mutations'
+import { getAuthenticatedGrpcMetadata, roomService } from '@/utils/grpc'
 
 export const roomsQueryKey = 'rooms'
 

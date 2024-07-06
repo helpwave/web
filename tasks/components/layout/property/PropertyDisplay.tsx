@@ -15,7 +15,7 @@ import type { SubjectType, FieldType } from '@/components/layout/property/proper
 import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
 import { PropertyContext } from '@/pages/properties'
 import { SubjectTypeIcon } from '@/components/layout/property/SubjectTypeIcon'
-import { usePropertyListQuery } from '@/mutations/property_mutations'
+import { usePropertyListQuery } from '@/mutations/property/property_mutations'
 
 type PropertyDisplayTranslation = {
   properties: string,

@@ -11,14 +11,20 @@ import {
   OrganizationServicePromiseClient
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_grpc_web_pb'
 import { UserServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_grpc_web_pb'
-import { COOKIE_ID_TOKEN_KEY } from '../hooks/useAuth'
+import { PropertyServicePromiseClient } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_grpc_web_pb'
+import { LocalStorageService } from '@helpwave/common/util/storage'
 import { getConfig } from './config'
+import { COOKIE_ID_TOKEN_KEY } from '@/hooks/useAuth'
 import { LOCALSTORAGE_ORGANIZATION_KEY } from '@/hooks/useOrganization'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
-import { LocalStorageService } from '@helpwave/common/util/storage';
+import { PropertyOfflineServicePromiseClient } from '@/mutations/offline/property/property_service'
 
 const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
 const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`
+const propertySvcBaseUrl = `${getConfig().apiUrl}/property-svc`
+
+// TODO make this configurable
+export const isOfflineMode = false
 
 // TODO: Implement something like a service registry
 export const wardService = new WardServicePromiseClient(taskSvcBaseUrl)
@@ -26,6 +32,9 @@ export const roomService = new RoomServicePromiseClient(taskSvcBaseUrl)
 export const bedService = new BedServicePromiseClient(taskSvcBaseUrl)
 export const patientService = new PatientServicePromiseClient(taskSvcBaseUrl)
 export const taskTemplateService = new TaskTemplateServicePromiseClient(taskSvcBaseUrl)
+export const propertyService = isOfflineMode
+  ? new PropertyOfflineServicePromiseClient(propertySvcBaseUrl)
+  : new PropertyServicePromiseClient(propertySvcBaseUrl)
 export const taskService = new TaskServicePromiseClient(taskSvcBaseUrl)
 export const organizationService = new OrganizationServicePromiseClient(userSvcBaseUrl)
 export const userService = new UserServicePromiseClient(userSvcBaseUrl)

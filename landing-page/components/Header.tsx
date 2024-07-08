@@ -122,7 +122,7 @@ const Header = () => {
                         name: subPageName,
                         url: subPageUrl
                       }) =>
-                      (
+                        (
                         <Link key={subPageName} className={tw('cursor-pointer')} href={url + subPageUrl}>
                           <MenuItem alignment="left">
                             <Span className={navigationItemStyle}>
@@ -130,7 +130,7 @@ const Header = () => {
                             </Span>
                           </MenuItem>
                         </Link>
-                      ))}
+                        ))}
                     </Menu>
                   )}
                 </div>
@@ -192,7 +192,7 @@ const Header = () => {
                       name: subPageName,
                       url: subPageUrl
                     }) =>
-                    (
+                      (
                       <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)}
                         href={url + subPageUrl}>
                         <MenuItem alignment="left">
@@ -201,7 +201,7 @@ const Header = () => {
                           </Span>
                         </MenuItem>
                       </Link>
-                    ))}
+                      ))}
                   </Menu>
                 )}
               </div>

@@ -23,6 +23,7 @@ import {
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
+import { PropertyList } from '@/components/layout/property/PropertyList'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -211,6 +212,11 @@ export const PatientDetail = ({
               setTaskId(task.id)
             }}
           />
+        )}
+        {!!newPatient.id && (
+          <div className={tw('mt-4')}>
+            <PropertyList subjectID={newPatient.id} subjectType="patient"/>
+          </div>
         )}
         <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
           {!newPatient.discharged ?

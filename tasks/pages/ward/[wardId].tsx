@@ -298,7 +298,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
           <TwoColumn
             disableResize={false}
             constraints={{
-              right: { min: '580px' },
+              right: { min: '650px' },
               left: { min: '33%' }
             }}
             baseLayoutValue="-580px"

@@ -34,15 +34,21 @@ export type Property = {
 }
 
 export type PropertyValue = {
-  id: string,
-  subjectId: string,
-  propertyId: string,
   textValue?: string,
   numberValue?: number,
-  boolValue?: number,
-  dateValue?: number,
-  dataTimeValue?: number,
+  boolValue?: boolean,
+  dateValue?: Date,
+  dataTimeValue?: Date,
   selectValue?: string
+}
+
+export type AttachedProperty = {
+  propertyId: string,
+  subjectType: SubjectType,
+  fieldType: FieldType,
+  name: string,
+  description?: string,
+  value: PropertyValue
 }
 
 export type PropertyFieldType = {

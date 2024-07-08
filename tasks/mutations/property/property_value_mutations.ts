@@ -1,14 +1,58 @@
 import { noop } from '@helpwave/common/util/noop'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { PropertyWithValue, SubjectType } from '@/components/layout/property/property'
+import {
+  GetAttachedPropertyValuesRequest,
+  TaskPropertyMatcher
+} from '@helpwave/proto-ts/services/property_svc/v1/property_value_svc_pb'
+import type { SubjectType, AttachedProperty } from '@/mutations/property/common'
+import { fieldTypeMapperFromGRPC, propertyQueryKey } from '@/mutations/property/common'
+import { propertyValueService } from '@/utils/grpc'
 
-export const usePropertyWithValueListQuery = (propertyId: string | undefined, subjectType: SubjectType) => {
+export const usePropertyWithValueListQuery = (id: string | undefined, subjectType: SubjectType) => {
   return useQuery({
-    queryKey: [propertyWithValueQueryKey, propertyId, subjectType],
-    enabled: !!propertyId,
+    queryKey: [propertyQueryKey, id, subjectType],
+    enabled: !!id,
     queryFn: async () => {
+      if (!id) {
+        return undefined
+      }
       // TODO backend request here
+      const req = new GetAttachedPropertyValuesRequest()
+      const taskMatcher = new TaskPropertyMatcher()
+      switch (subjectType) {
+        case 'task':
+          taskMatcher.setTaskId(id)
+          break
+        // TODO this should be ward
+        case 'patient':
+          taskMatcher.setWardId(id)
+          break
+      }
+      req.setTaskMatcher(taskMatcher)
 
+      const res = await propertyValueService.getAttachedPropertyValues(req)
+
+      const results: AttachedProperty[] = res.getValuesList().map(result => {
+        const dateValue = result.getDateValue()
+
+        return {
+          propertyId: result.getPropertyId(),
+          name: result.getName(),
+          description: result.getDescription(),
+          subjectType,
+          fieldType: fieldTypeMapperFromGRPC(result.getFieldType()),
+          value: {
+            boolValue: result.getBoolValue(),
+            dateValue: dateValue ? new Date(dateValue.getYear(), dateValue.getMonth(), dateValue.getDay()) : undefined,
+            numberValue: result.getNumberValue(),
+            selectValue: result.getSelectValue(),
+            dataTimeValue: result.getDateTimeValue()?.toDate(),
+            textValue: result.getTextValue(),
+          }
+        }
+      })
+
+      return results
     },
   })
 }

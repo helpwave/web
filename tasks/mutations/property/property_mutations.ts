@@ -5,17 +5,17 @@ import {
   GetPropertiesBySubjectTypeRequest,
   GetPropertyRequest, UpdatePropertyRequest
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
+import { propertyService } from '@/utils/grpc'
 import type {
   Property, SelectOption,
   SubjectType
-} from '@/components/layout/property/property'
-import { propertyService } from '@/utils/grpc'
+} from '@/mutations/property/common'
 import {
   fieldTypeMapperFromGRPC, fieldTypeMapperToGRPC,
+  propertyQueryKey,
   subjectTypeMapperFromGRPC,
   subjectTypeMapperToGRPC
-} from '@/components/layout/property/property'
-import { propertyQueryKey } from '@/mutations/property/common'
+} from '@/mutations/property/common'
 
 export const usePropertyListQuery = (subjectType?: SubjectType) => {
   return useQuery({

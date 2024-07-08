@@ -13,11 +13,15 @@ import {
 import { UserServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_grpc_web_pb'
 import { PropertyServicePromiseClient } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_grpc_web_pb'
 import { LocalStorageService } from '@helpwave/common/util/storage'
+import {
+  PropertyValueServicePromiseClient
+} from '@helpwave/proto-ts/services/property_svc/v1/property_value_svc_grpc_web_pb'
 import { getConfig } from './config'
 import { COOKIE_ID_TOKEN_KEY } from '@/hooks/useAuth'
 import { LOCALSTORAGE_ORGANIZATION_KEY } from '@/hooks/useOrganization'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
 import { PropertyOfflineServicePromiseClient } from '@/mutations/offline/property/property_service'
+import { PropertyValueOfflineServicePromiseClient } from '@/mutations/offline/property/property_value_service'
 
 const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
 const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`
@@ -35,6 +39,10 @@ export const taskTemplateService = new TaskTemplateServicePromiseClient(taskSvcB
 export const propertyService = isOfflineMode
   ? new PropertyOfflineServicePromiseClient(propertySvcBaseUrl)
   : new PropertyServicePromiseClient(propertySvcBaseUrl)
+
+export const propertyValueService = isOfflineMode
+  ? new PropertyValueOfflineServicePromiseClient(propertySvcBaseUrl)
+  : new PropertyValueServicePromiseClient(propertySvcBaseUrl)
 export const taskService = new TaskServicePromiseClient(taskSvcBaseUrl)
 export const organizationService = new OrganizationServicePromiseClient(userSvcBaseUrl)
 export const userService = new UserServicePromiseClient(userSvcBaseUrl)

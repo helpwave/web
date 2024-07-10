@@ -12,7 +12,7 @@ import { Chip } from '@helpwave/common/components/ChipList'
 
 const homeURL = '/'
 
-const linkNames = ['products', 'story', 'team', 'talks', 'tasks'] as const
+const linkNames = ['products', 'mediquu', 'story', 'team', 'talks', 'tasks'] as const
 type LinkNames = typeof linkNames[number]
 
 type LinkType = {
@@ -36,6 +36,10 @@ const items: SubLinkType[] = [
     ]
   },
   {
+    name: 'mediquu',
+    url: '/mediquu'
+  },
+  {
     name: 'story',
     url: '/story'
   },
@@ -56,6 +60,7 @@ type HeaderTranslation = {
 const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
   en: {
     products: 'Products',
+    mediquu: 'mediQuu',
     story: 'Story',
     team: 'Team',
     contact: 'Contact us',
@@ -64,6 +69,7 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
   },
   de: {
     products: 'Produkte',
+    mediquu: 'mediQuu',
     story: 'Geschichte',
     team: 'Team',
     contact: 'Kontakt',
@@ -83,8 +89,8 @@ const Header = () => {
       <div className={tw('absolute flex flex-row justify-center top-0 w-screen z-[50] bg-white mobile:px-6 tablet:px-12 desktop:px-24')}>
         <nav className={tw('flex pt-2 items-center justify-between w-full max-w-[1200px]')}>
           <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
-            <Helpwave/>
-            <MarkdownInterpreter text={'\\helpwave'}/>
+            <Helpwave />
+            <MarkdownInterpreter text={'\\helpwave'} />
           </Link>
           <div className={tw('mobile:hidden w-full')}>
             <div className={tw('flex flex-wrap items-center justify-end gap-x-6')}>
@@ -117,13 +123,13 @@ const Header = () => {
                         url: subPageUrl
                       }) =>
                         (
-                          <Link key={subPageName} className={tw('cursor-pointer')} href={url + subPageUrl}>
-                            <MenuItem alignment="left">
-                              <Span className={navigationItemStyle}>
-                                {subPageName}
-                              </Span>
-                            </MenuItem>
-                          </Link>
+                        <Link key={subPageName} className={tw('cursor-pointer')} href={url + subPageUrl}>
+                          <MenuItem alignment="left">
+                            <Span className={navigationItemStyle}>
+                              {subPageName}
+                            </Span>
+                          </MenuItem>
+                        </Link>
                         ))}
                     </Menu>
                   )}
@@ -141,8 +147,8 @@ const Header = () => {
             </div>
           </div>
           <button onClick={() => setNavbarOpen(true)} className={tw('desktop:hidden tablet:hidden content-end')}
-                  aria-controls="navbar" aria-expanded="false">
-            <MenuIcon size={32}/>
+            aria-controls="navbar" aria-expanded="false">
+            <MenuIcon size={32} />
           </button>
         </nav>
       </div>
@@ -151,7 +157,7 @@ const Header = () => {
         <div className={tw('absolute w-screen h-screen z-[100] bg-white')}>
           <div className={tw('text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
             <button onClick={() => setNavbarOpen(false)} className={tw('mb-5')}>
-              <X size={64}/>
+              <X size={64} />
             </button>
 
             <div className={tw('w-full p-2')}>
@@ -187,14 +193,14 @@ const Header = () => {
                       url: subPageUrl
                     }) =>
                       (
-                        <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)}
-                              href={url + subPageUrl}>
-                          <MenuItem alignment="left">
-                            <Span type="heading">
-                              {subPageName}
-                            </Span>
-                          </MenuItem>
-                        </Link>
+                      <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)}
+                        href={url + subPageUrl}>
+                        <MenuItem alignment="left">
+                          <Span type="heading">
+                            {subPageName}
+                          </Span>
+                        </MenuItem>
+                      </Link>
                       ))}
                   </Menu>
                 )}

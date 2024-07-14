@@ -4,7 +4,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { Span } from '@helpwave/common/components/Span'
 import type { PropsWithChildren } from 'react'
-import { Hospital, PieChart, UsersRound } from 'lucide-react'
+import Image from 'next/image'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type MarketStatsItemProps = PropsWithChildren<{
@@ -16,8 +16,8 @@ const MarketStatsItem = ({ children, stat, title }: MarketStatsItemProps) => {
   return (
     <div className={tw('flex flex-col items-center')}>
       {children}
-      <span className={tw('text-3xl mt-2')}>{stat}</span>
-      <h4><Span type="description" className={tw('text-xl')}>{title}</Span></h4>
+      <Span className={tw('text-3xl mobile:text-xl mt-2 mobile:font-semibold')}>{stat}</Span>
+      <h4><Span type="description" className={tw('text-xl mobile:!text-base')}>{title}</Span></h4>
     </div>
   )
 }
@@ -55,15 +55,18 @@ const MarketStatsSection = ({ overwriteTranslation }: PropsForTranslation<Market
       <Span type="description" className={tw('text-center')}>{translation.marketPotential}</Span>
       <div className={tw('mt-8 w-full flex flex-wrap gap-y-16 gap-x-32 justify-evenly items-center')}>
         <MarketStatsItem stat="1.800" title={translation.hospitals}>
-          <Hospital size={72} />
+          {/* Image needs attribution to https://www.flaticon.com/free-icon/hospital_3809392?term=hospital&page=1&position=8&origin=search&related_id=3809392 */}
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/hospital.png" className={tw('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px] p-[5%]')}/>
         </MarketStatsItem>
 
         <MarketStatsItem stat="1.000.000" title={translation.healthcareWorkers}>
-          <UsersRound size={72} />
+          {/* Image needs attribution to https://www.flaticon.com/free-icon/hospital_3809392?term=hospital&page=1&position=8&origin=search&related_id=3809392 */}
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/doctors.png" className={tw('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px]')}/>
         </MarketStatsItem>
 
         <MarketStatsItem stat="12,1%" title={translation.gdp}>
-          <PieChart size={72} />
+          {/* Image needs attribution to https://www.freepik.com/icon/donut-chart_483638 */}
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/pie_chart.png" className={tw('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px]')}/>
         </MarketStatsItem>
       </div>
     </SectionBase>

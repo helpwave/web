@@ -118,7 +118,7 @@ const teamData: Record<string, ProfileProps[]> = {
     {
       name: 'Ludwig Maidowski',
       prefix: 'Dipl.-Jur.',
-      suffix: 'LL.M.',
+      suffix: 'Maître en droit, Paris II',
       role: 'medical professional & legal',
       tags: ['law', 'doctor', 'product'],
       imageUrl: imageUrl('ludwig_maidowski'),

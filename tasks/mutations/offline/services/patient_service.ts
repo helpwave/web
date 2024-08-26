@@ -91,6 +91,7 @@ export const PatientOfflineService = {
         return {
           ...value,
           isDischarged,
+          bedId: isDischarged ? undefined : value.bedId,
         }
       }
       return value
@@ -147,6 +148,8 @@ export const PatientOfflineService = {
   deletePatient: (id: string) => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
     valueStore.patients = valueStore.patients.filter(value => value.id !== id)
+    const tasks = TaskOfflineService.findTasks(id)
+    tasks.forEach(task => TaskOfflineService.delete(task.id))
   }
 }
 

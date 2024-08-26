@@ -8,7 +8,7 @@ import {
   UpdateWardRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
-import { getAuthenticatedGrpcMetadata, wardService } from '@/utils/grpc'
+import { APIServices, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 
 export const wardsQueryKey = 'wards'
 
@@ -67,7 +67,7 @@ export const useWardOverviewsQuery = (organisationId?: string) => {
     queryKey: [wardsQueryKey, organisationId],
     queryFn: async () => {
       const req = new GetWardOverviewsRequest()
-      const res = await wardService.getWardOverviews(req, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.ward.getWardOverviews(req, getAuthenticatedGrpcMetadata(organisationId))
 
       const wards: WardOverviewDTO[] = res.getWardsList().map((ward) => ({
         id: ward.getId(),
@@ -94,7 +94,7 @@ export const useWardDetailsQuery = (wardId?: string, organizationId?: string) =>
 
       const req = new GetWardDetailsRequest()
       req.setId(wardId)
-      const res = await wardService.getWardDetails(req, getAuthenticatedGrpcMetadata(organizationId))
+      const res = await APIServices.ward.getWardDetails(req, getAuthenticatedGrpcMetadata(organizationId))
 
       return {
         id: res.getId(),
@@ -125,7 +125,7 @@ export const useWardQuery = (id: string, organisationId?: string) => useQuery({
   queryFn: async (): Promise<WardWithOrganizationIdDTO> => {
     const req = new GetWardRequest()
     req.setId(id)
-    const res = await wardService.getWard(req, getAuthenticatedGrpcMetadata(organisationId))
+    const res = await APIServices.ward.getWard(req, getAuthenticatedGrpcMetadata(organisationId))
 
     if (!res.toObject()) {
       console.error('error in Ward query')
@@ -146,7 +146,7 @@ export const useWardUpdateMutation = (organisationId?: string, callback: (ward: 
       const req = new UpdateWardRequest()
       req.setId(ward.id)
       req.setName(ward.name)
-      await wardService.updateWard(req, getAuthenticatedGrpcMetadata(organisationId))
+      await APIServices.ward.updateWard(req, getAuthenticatedGrpcMetadata(organisationId))
 
       callback(ward)
     },
@@ -162,7 +162,7 @@ export const useWardCreateMutation = (organisationId?: string, callback: (ward: 
     mutationFn: async (ward: WardMinimalDTO) => {
       const createWardRequest = new CreateWardRequest()
       createWardRequest.setName(ward.name)
-      const res = await wardService.createWard(createWardRequest, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.ward.createWard(createWardRequest, getAuthenticatedGrpcMetadata(organisationId))
       const newWard: WardMinimalDTO = {
         ...ward,
         id: res.getId()
@@ -182,7 +182,7 @@ export const useWardDeleteMutation = (organisationId?: string, callback: () => v
     mutationFn: async (wardId: string) => {
       const req = new DeleteWardRequest()
       req.setId(wardId)
-      await wardService.deleteWard(req, getAuthenticatedGrpcMetadata(organisationId))
+      await APIServices.ward.deleteWard(req, getAuthenticatedGrpcMetadata(organisationId))
 
       callback()
     },

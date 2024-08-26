@@ -17,7 +17,7 @@ import {
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { Role } from './organization_member_mutations'
-import { getAuthenticatedGrpcMetadata, organizationService } from '@/utils/grpc'
+import { APIServices, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 
 export const organizationQueryKey = 'organizations'
 export const invitationsQueryKey = 'invitations'
@@ -96,7 +96,7 @@ export const useOrganizationQuery = (organizationId: string | undefined) => {
         req.setId(organizationId)
       }
 
-      const res = await organizationService.getOrganization(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.getOrganization(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in Organization')
@@ -124,7 +124,7 @@ export const useOrganizationsForUserQuery = () => {
     queryFn: async () => {
       const req = new GetOrganizationsForUserRequest()
 
-      const res = await organizationService.getOrganizationsForUser(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.getOrganizationsForUser(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('OrganizationsByUser failed')
@@ -161,7 +161,7 @@ export const useInvitationsByUserQuery = (state?: InvitationState) => {
       if (state) {
         req.setState(state)
       }
-      const res = await organizationService.getInvitationsByUser(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.getInvitationsByUser(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in InvitationsByUser')
@@ -195,7 +195,7 @@ export const useInvitationsByOrganizationQuery = (organizationId: string | undef
       if (organizationId) {
         req.setOrganizationId(organizationId)
       }
-      const res = await organizationService.getInvitationsByOrganization(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.getInvitationsByOrganization(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in OrganizationCreate')
@@ -221,7 +221,7 @@ export const useOrganizationCreateMutation = () => {
       req.setShortName(organization.shortName)
       req.setIsPersonal(organization.isPersonal)
       req.setContactEmail(organization.email)
-      const res = await organizationService.createOrganization(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.createOrganization(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         throw new Error('error in OrganizationCreate')
@@ -246,7 +246,7 @@ export const useOrganizationUpdateMutation = () => {
       req.setIsPersonal(organization.isPersonal)
       req.setAvatarUrl(organization.avatarURL)
       req.setContactEmail(organization.email)
-      const res = await organizationService.updateOrganization(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.updateOrganization(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         throw new Error('error in OrganizationUpdate')
@@ -266,7 +266,7 @@ export const useOrganizationDeleteMutation = () => {
     mutationFn: async (organizationId: string) => {
       const req = new DeleteOrganizationRequest()
       req.setId(organizationId)
-      const res = await organizationService.deleteOrganization(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.deleteOrganization(req, getAuthenticatedGrpcMetadata())
 
       const obj = res.toObject() // TODO: what is the type of this?
 
@@ -288,7 +288,7 @@ export const useInviteDeclineMutation = () => {
     mutationFn: async (inviteId: string) => {
       const req = new DeclineInvitationRequest()
       req.setInvitationId(inviteId)
-      const res = await organizationService.declineInvitation(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.declineInvitation(req, getAuthenticatedGrpcMetadata())
 
       const obj = res.toObject() // TODO: what is the type of this?
 
@@ -310,7 +310,7 @@ export const useInviteRevokeMutation = () => {
     mutationFn: async (inviteId: string) => {
       const req = new RevokeInvitationRequest()
       req.setInvitationId(inviteId)
-      const res = await organizationService.revokeInvitation(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.revokeInvitation(req, getAuthenticatedGrpcMetadata())
 
       const obj = res.toObject() // TODO: what is the type of this?
 
@@ -342,7 +342,7 @@ export const useInviteMemberMutation = (organizationId: string, callback: (invit
       req.setEmail(invite.email)
       req.setOrganizationId(organizationId)
 
-      const res = await organizationService.inviteMember(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.inviteMember(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getId()) {
         throw new Error('InviteMember failed')
@@ -363,7 +363,7 @@ export const useInviteAcceptMutation = () => {
     mutationFn: async (inviteId: string) => {
       const req = new AcceptInvitationRequest()
       req.setInvitationId(inviteId)
-      const res = await organizationService.acceptInvitation(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.acceptInvitation(req, getAuthenticatedGrpcMetadata())
       const obj = res.toObject()
 
       if (!obj) {
@@ -386,7 +386,7 @@ export const useAddMemberMutation = (organizationId: string) => { // TODO: unuse
       req.setId(organizationId)
       req.setUserId(userId)
 
-      const res = await organizationService.addMember(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.addMember(req, getAuthenticatedGrpcMetadata())
       const obj = res.toObject() // TODO: what is the type of this?
 
       if (!obj) {
@@ -409,7 +409,7 @@ export const useRemoveMemberMutation = (organizationId: string) => {
       req.setId(organizationId)
       req.setUserId(userId)
 
-      const res = await organizationService.removeMember(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.organization.removeMember(req, getAuthenticatedGrpcMetadata())
       const obj = res.toObject() // TODO: what is the type of this?
 
       if (!obj) {

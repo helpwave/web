@@ -15,7 +15,6 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { formatDateTime } from '@helpwave/common/util/date'
-import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
@@ -27,7 +26,6 @@ import {
 } from '@/mutations/task_template_mutations'
 import { useAuth } from '@/hooks/useAuth'
 import {
-  emptyTask,
   useAssignTaskToUserMutation,
   useSubTaskAddMutation,
   useTaskCreateMutation,
@@ -37,11 +35,12 @@ import {
   useTaskToInProgressMutation,
   useTaskToToDoMutation,
   useTaskUpdateMutation,
-  useUnassignTaskToUserMutation,
-  type TaskDTO
+  useUnassignTaskToUserMutation
 } from '@/mutations/task_mutations'
 import { type WardWithOrganizationIdDTO, useWardQuery } from '@/mutations/ward_mutations'
 import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
+import type { TaskDTO, TaskStatus } from '@/mutations/types/task'
+import { emptyTask } from '@/mutations/types/task'
 
 type TaskDetailViewTranslation = {
   close: string,
@@ -224,17 +223,17 @@ const TaskDetailViewSidebar = ({
         <label><Span type="labelMedium">{translation.status}</Span></label>
         <TaskStatusSelect
           value={task.status}
-          removeOptions={isCreating ? [TaskStatus.TASK_STATUS_DONE] : []}
+          removeOptions={isCreating ? ['done'] : []}
           onChange={(status) => {
             if (!isCreating) {
               switch (status) {
-                case TaskStatus.TASK_STATUS_TODO:
+                case 'todo':
                   toToDoMutation.mutate(task.id)
                   break
-                case TaskStatus.TASK_STATUS_IN_PROGRESS:
+                case 'inProgress':
                   toInProgressMutation.mutate(task.id)
                   break
-                case TaskStatus.TASK_STATUS_DONE:
+                case 'done':
                   toDoneMutation.mutate(task.id)
                   break
                 default:
@@ -322,7 +321,7 @@ export const TaskDetailView = ({
 
   const [task, setTask] = useState<TaskDTO>({
     ...emptyTask,
-    status: initialStatus ?? TaskStatus.TASK_STATUS_TODO
+    status: initialStatus ?? 'todo'
   })
 
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
@@ -375,7 +374,7 @@ export const TaskDetailView = ({
             <Button color="negative" onClick={() => setIsShowingDeleteDialog(true)}>
               {translation.delete}
             </Button>
-            {task.status !== TaskStatus.TASK_STATUS_DONE && (
+            {task.status !== 'done' && (
               <Button color="positive" onClick={() => {
                 toDoneMutation.mutate(task.id)
                 onClose()

@@ -7,7 +7,7 @@ import {
   UpdatePropertyRequest
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
 import { FieldType } from '@helpwave/proto-ts/services/property_svc/v1/types_pb'
-import { getAuthenticatedGrpcMetadata, propertyService } from '@/utils/grpc'
+import { getAuthenticatedGrpcMetadata, APIServices } from '@/utils/grpc'
 import type { Property, SelectOption, SubjectType } from '@/mutations/property/common'
 import {
   fieldTypeMapperFromGRPC,
@@ -25,7 +25,7 @@ export const usePropertyListQuery = (subjectType?: SubjectType) => {
       if (subjectType) {
         req.setSubjectType(subjectTypeMapperToGRPC(subjectType))
       }
-      const result = await propertyService.getPropertiesBySubjectType(req, getAuthenticatedGrpcMetadata())
+      const result = await APIServices.property.getPropertiesBySubjectType(req, getAuthenticatedGrpcMetadata())
       return result.getPropertiesList().filter(value => value.getFieldType() !== FieldType.FIELD_TYPE_UNSPECIFIED).map(property => {
         const selectData = property.getSelectData()
         if (!selectData) {
@@ -66,7 +66,7 @@ export const usePropertyQuery = (id?: string) => {
       const req = new GetPropertyRequest()
       req.setId(id)
 
-      const result = await propertyService.getProperty(req, getAuthenticatedGrpcMetadata())
+      const result = await APIServices.property.getProperty(req, getAuthenticatedGrpcMetadata())
 
       const selectData = result.getSelectData()
       if (!selectData) {
@@ -121,7 +121,7 @@ export const usePropertyCreateMutation = (callback: (property: Property) => void
       }))
       req.setSelectData(selectDataVal)
 
-      const result = await propertyService.createProperty(req, getAuthenticatedGrpcMetadata())
+      const result = await APIServices.property.createProperty(req, getAuthenticatedGrpcMetadata())
 
       const id = result.getPropertyId()
 
@@ -164,7 +164,7 @@ export const usePropertyUpdateMutation = (callback: (property: Property) => void
       */
       req.setSelectData(selectDataVal)
 
-      const result = await propertyService.updateProperty(req, getAuthenticatedGrpcMetadata())
+      const result = await APIServices.property.updateProperty(req, getAuthenticatedGrpcMetadata())
       if (!result.toObject()) {
         throw Error('usePropertyUpdateMutation: error in result')
       }
@@ -213,7 +213,7 @@ export const usePropertyChangeSelectOptionMutation = (callback: () => void = noo
       selectDataVal.setUpsertOptionsList([...updateList, ...createList])
       req.setSelectData(selectDataVal)
 
-      const result = await propertyService.updateProperty(req, getAuthenticatedGrpcMetadata())
+      const result = await APIServices.property.updateProperty(req, getAuthenticatedGrpcMetadata())
       if (!result.toObject()) {
         throw Error('usePropertyUpdateOrAddSelectDataMutation: error in result')
       }

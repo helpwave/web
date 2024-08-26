@@ -28,6 +28,8 @@ import { BedOfflineServicePromiseClient } from '@/mutations/offline/services/bed
 import { PatientOfflineServicePromiseClient } from '@/mutations/offline/services/patient_service'
 import { TaskOfflineServicePromiseClient } from '@/mutations/offline/services/task_service'
 import { TaskTemplateOfflineServicePromiseClient } from '@/mutations/offline/services/task_template_service'
+import { UserOfflineServicePromiseClient } from '@/mutations/offline/services/user_service'
+import { OrganizationOfflineServicePromiseClient } from '@/mutations/offline/services/organization_service'
 
 const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
 const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`
@@ -36,34 +38,46 @@ const propertySvcBaseUrl = `${getConfig().apiUrl}/property-svc`
 // TODO make this configurable
 export const isOfflineMode = true
 
-// TODO: Implement something like a service registry
-export const wardService = isOfflineMode
-  ? new WardOfflineServicePromiseClient(taskSvcBaseUrl)
-  : new WardServicePromiseClient(taskSvcBaseUrl)
-export const roomService = isOfflineMode
-  ? new RoomOfflineServicePromiseClient(taskSvcBaseUrl)
-  : new RoomServicePromiseClient(taskSvcBaseUrl)
-export const bedService = isOfflineMode
-  ? new BedOfflineServicePromiseClient(taskSvcBaseUrl)
-  : new BedServicePromiseClient(taskSvcBaseUrl)
-export const patientService = isOfflineMode
-  ? new PatientOfflineServicePromiseClient(taskSvcBaseUrl)
-  : new PatientServicePromiseClient(taskSvcBaseUrl)
-export const taskService = isOfflineMode
-  ? new TaskOfflineServicePromiseClient(taskSvcBaseUrl)
-  : new TaskServicePromiseClient(taskSvcBaseUrl)
-export const taskTemplateService = isOfflineMode
-  ? new TaskTemplateOfflineServicePromiseClient(taskSvcBaseUrl)
-  : new TaskTemplateServicePromiseClient(taskSvcBaseUrl)
-export const propertyService = isOfflineMode
-  ? new PropertyOfflineServicePromiseClient(propertySvcBaseUrl)
-  : new PropertyServicePromiseClient(propertySvcBaseUrl)
+type APIServicesType = {
+  organization: OrganizationOfflineServicePromiseClient,
+  user: UserServicePromiseClient,
+  ward: WardServicePromiseClient,
+  room: RoomServicePromiseClient,
+  bed: BedServicePromiseClient,
+  patient: PatientServicePromiseClient,
+  task: TaskServicePromiseClient,
+  taskTemplates: TaskTemplateServicePromiseClient,
+  property: PropertyServicePromiseClient,
+  propertyValues: PropertyValueServicePromiseClient
+}
 
-export const propertyValueService = isOfflineMode
-  ? new PropertyValueOfflineServicePromiseClient(propertySvcBaseUrl)
-  : new PropertyValueServicePromiseClient(propertySvcBaseUrl)
-export const organizationService = new OrganizationServicePromiseClient(userSvcBaseUrl)
-export const userService = new UserServicePromiseClient(userSvcBaseUrl)
+const offlineServices: APIServicesType = {
+  organization: new OrganizationOfflineServicePromiseClient(userSvcBaseUrl),
+  user: new UserOfflineServicePromiseClient(userSvcBaseUrl),
+  ward: new WardOfflineServicePromiseClient(taskSvcBaseUrl),
+  room: new RoomOfflineServicePromiseClient(taskSvcBaseUrl),
+  bed: new BedOfflineServicePromiseClient(taskSvcBaseUrl),
+  patient: new PatientOfflineServicePromiseClient(taskSvcBaseUrl),
+  task: new TaskOfflineServicePromiseClient(taskSvcBaseUrl),
+  taskTemplates: new TaskTemplateOfflineServicePromiseClient(taskSvcBaseUrl),
+  property: new PropertyOfflineServicePromiseClient(propertySvcBaseUrl),
+  propertyValues: new PropertyValueOfflineServicePromiseClient(propertySvcBaseUrl),
+}
+
+const onlineServices: APIServicesType = {
+  organization: new OrganizationServicePromiseClient(userSvcBaseUrl),
+  user: new UserServicePromiseClient(userSvcBaseUrl),
+  ward: new WardServicePromiseClient(taskSvcBaseUrl),
+  room: new RoomServicePromiseClient(taskSvcBaseUrl),
+  bed: new BedServicePromiseClient(taskSvcBaseUrl),
+  patient: new PatientServicePromiseClient(taskSvcBaseUrl),
+  task: new TaskServicePromiseClient(taskSvcBaseUrl),
+  taskTemplates: new TaskTemplateServicePromiseClient(taskSvcBaseUrl),
+  property: new PropertyServicePromiseClient(propertySvcBaseUrl),
+  propertyValues: new PropertyValueServicePromiseClient(propertySvcBaseUrl),
+}
+
+export const APIServices: APIServicesType = isOfflineMode ? offlineServices : onlineServices
 
 type AuthenticatedGrpcMetadata = {
   Authorization: string,

@@ -1,6 +1,6 @@
 import { Select, type SelectProps } from '@helpwave/common/components/user-input/Select'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
+import type { TaskStatus } from '@/mutations/types/task'
 
 type TaskStatusSelectTranslation = {
   unscheduled: string,
@@ -43,10 +43,10 @@ export const TaskStatusSelect = ({
   ...selectProps
 }: PropsForTranslation<TaskStatusSelectTranslation, TaskStatusSelectProps>) => {
   const translation = useTranslation(defaultTaskStatusSelectTranslation, overwriteTranslation)
-  const defaultOptions = [
-    { value: TaskStatus.TASK_STATUS_TODO, label: translation.unscheduled },
-    { value: TaskStatus.TASK_STATUS_IN_PROGRESS, label: translation.inProgress },
-    { value: TaskStatus.TASK_STATUS_DONE, label: translation.done }
+  const defaultOptions: {value: TaskStatus, label: string}[] = [
+    { value: 'todo', label: translation.unscheduled },
+    { value: 'inProgress', label: translation.inProgress },
+    { value: 'done', label: translation.done }
   ]
 
   const filteredOptions = defaultOptions.filter(defaultValue => !removeOptions?.find(value2 => value2 === defaultValue.value))

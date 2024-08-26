@@ -8,7 +8,7 @@ import {
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 import type { PatientDTO, PatientMinimalDTO, PatientWithTasksNumberDTO } from './patient_mutations'
 import { wardsQueryKey } from './ward_mutations'
-import { bedService, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
+import { APIServices, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 
 export type BedMinimalDTO = {
   id: string,
@@ -59,7 +59,7 @@ export const useBedQuery = (bedId: string | undefined) => {
       if (bedId) {
         req.setId(bedId)
       }
-      const res = await bedService.getBed(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.bed.getBed(req, getAuthenticatedGrpcMetadata())
 
       const bed: BedWithRoomId = {
         id: res.getId(),
@@ -79,7 +79,7 @@ export const useBedCreateMutation = () => {
       const req = new CreateBedRequest()
       req.setRoomId(bed.roomId)
       req.setName(bed.name)
-      const res = await bedService.createBed(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.bed.createBed(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.log('error in BedCreate')
@@ -88,7 +88,7 @@ export const useBedCreateMutation = () => {
       return { id: res.getId(), name: bed.name }
     },
     onSuccess: () => {
-      queryClient.refetchQueries([bedService]).then()
+      queryClient.refetchQueries([bedQueryKey]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       queryClient.refetchQueries([wardsQueryKey]).then()
     },
@@ -104,7 +104,7 @@ export const useBedUpdateMutation = () => {
       req.setName(bed.name)
       req.setRoomId(bed.roomId)
 
-      const res = await bedService.updateBed(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.bed.updateBed(req, getAuthenticatedGrpcMetadata())
 
       const obj = res.toObject() // TODO: what is the type of this?
 
@@ -115,7 +115,7 @@ export const useBedUpdateMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries([bedService]).then()
+      queryClient.refetchQueries([APIServices.bed]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
     },
   })
@@ -128,7 +128,7 @@ export const useBedDeleteMutation = () => {
       const req = new DeleteBedRequest()
       req.setId(bedId)
 
-      const res = await bedService.deleteBed(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.bed.deleteBed(req, getAuthenticatedGrpcMetadata())
 
       const obj = res.toObject() // TODO: what is the type of this?
 
@@ -139,7 +139,7 @@ export const useBedDeleteMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries([bedService]).then()
+      queryClient.refetchQueries([APIServices.bed]).then()
       queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
       queryClient.refetchQueries([wardsQueryKey]).then()
     },

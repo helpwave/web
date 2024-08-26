@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { ReadPublicProfileRequest } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_pb'
-import { getAuthenticatedGrpcMetadata, userService } from '../utils/grpc'
+import { APIServices, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 
 const userQueryKey = 'user'
 
@@ -16,7 +16,7 @@ export const useUserQuery = (userId: string|undefined) => {
       const req = new ReadPublicProfileRequest()
       req.setId(userId)
 
-      const res = await userService.readPublicProfile(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.user.readPublicProfile(req, getAuthenticatedGrpcMetadata())
       return res.toObject()
     },
   })

@@ -6,6 +6,7 @@ import type { RoomWithWardId } from '@/mutations/room_mutations'
 import type { BedWithRoomId } from '@/mutations/bed_mutations'
 import type { SubTaskDTO, TaskDTO } from '@/mutations/types/task'
 import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
+import type { OrganizationMinimalDTO, OrgMember } from '@/mutations/organization_mutations'
 
 const initialProperties: Property[] = [
   {
@@ -130,15 +131,32 @@ const initialAttachedProperties: AttachedProperty[] = [
     subjectId: '1',
   },
 ]
+const initialOrganizations: OrganizationMinimalDTO[] = [
+  {
+    id: 'organization',
+    email: 'test@helpwave.de',
+    shortName: 'hw-test',
+    longName: 'helpwave test organizations',
+    avatarURL: 'https://helpwave.de/favicon.ico',
+    isPersonal: true,
+    isVerified: true,
+  }
+]
+const initialMembers: UserValueStore[] = [
+  { id: 'user1', name: 'You', nickName: 'You', email: 'test@helpwave.de', avatarURL: 'https://helpwave.de/favicon.ico' },
+  { id: 'user2', name: 'Max', nickName: 'Max', email: 'test@helpwave.de', avatarURL: 'https://helpwave.de/favicon.ico' },
+  { id: 'user3', name: 'John', nickName: 'Doe', email: 'test@helpwave.de', avatarURL: 'https://helpwave.de/favicon.ico' },
+  { id: 'user4', name: 'Testine Test', nickName: 'Testine', email: 'test@helpwave.de', avatarURL: 'https://helpwave.de/favicon.ico' },
+]
 const initialWards: WardWithOrganizationIdDTO[] = [
   {
     id: 'ward1',
-    organizationId: 'organization1',
+    organizationId: 'organization',
     name: 'Intensive Care'
   },
   {
     id: 'ward2',
-    organizationId: 'organization1',
+    organizationId: 'organization',
     name: 'Radiology'
   }
 ]
@@ -238,10 +256,16 @@ export type TaskTemplateSubTaskValueStore = {
   creatorId: string
 }
 
+export type UserValueStore = Omit<OrgMember, 'role'> & {
+  nickName: string
+}
+
 export class OfflineValueStore {
   private static instance: OfflineValueStore
   properties: Property[] = initialProperties
   attachedProperties: AttachedProperty[] = initialAttachedProperties
+  organizations: OrganizationMinimalDTO[] = initialOrganizations
+  users: UserValueStore[] = initialMembers
   wards: WardWithOrganizationIdDTO[] = initialWards
   rooms: RoomWithWardId[] = initialRooms
   beds: BedWithRoomId[] = initialBeds

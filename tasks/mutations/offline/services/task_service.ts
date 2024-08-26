@@ -1,67 +1,100 @@
 import type { Metadata } from 'grpc-web'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_grpc_web_pb'
 import type {
+  AddSubTaskRequest,
+  AssignTaskToUserRequest,
   CreateTaskRequest,
   DeleteTaskRequest,
+  GetAssignedTasksRequest,
   GetTaskRequest,
   GetTasksByPatientRequest,
-  UpdateTaskRequest,
-  GetAssignedTasksRequest,
   GetTasksByPatientSortedByStatusRequest,
-  TaskToToDoRequest,
-  TaskToInProgressRequest,
-  TaskToDoneRequest,
   PublishTaskRequest,
-  UnpublishTaskResponse,
-  UnpublishTaskRequest,
-  AssignTaskToUserRequest,
+  RemoveSubTaskRequest,
+  SubTaskToDoneRequest,
+  SubTaskToToDoRequest,
+  TaskToDoneRequest,
+  TaskToInProgressRequest,
+  TaskToToDoRequest,
   UnassignTaskFromUserRequest,
-  AddSubTaskRequest,
-  UpdateSubTaskRequest, RemoveSubTaskRequest, SubTaskToToDoRequest, SubTaskToDoneRequest
+  UnpublishTaskRequest,
+  UnpublishTaskResponse,
+  UpdateSubTaskRequest,
+  UpdateTaskRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import {
+  AddSubTaskResponse,
+  AssignTaskToUserResponse,
   CreateTaskResponse,
   DeleteTaskResponse,
   GetAssignedTasksResponse,
   GetTaskResponse,
   GetTasksByPatientResponse,
-  UpdateTaskResponse,
   GetTasksByPatientSortedByStatusResponse,
-  TaskToToDoResponse,
-  TaskToInProgressResponse,
-  TaskToDoneResponse,
   PublishTaskResponse,
-  AssignTaskToUserResponse,
+  RemoveSubTaskResponse,
+  SubTaskToDoneResponse,
+  SubTaskToToDoResponse,
+  TaskToDoneResponse,
+  TaskToInProgressResponse,
+  TaskToToDoResponse,
   UnassignTaskFromUserResponse,
-  AddSubTaskResponse,
   UpdateSubTaskResponse,
-  RemoveSubTaskResponse, SubTaskToToDoResponse, SubTaskToDoneResponse
+  UpdateTaskResponse
 } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import type { SubTaskValueStore, TaskValueStore } from '@/mutations/offline/value_store'
 import { OfflineValueStore } from '@/mutations/offline/value_store'
 import { GRPCConverter } from '@/mutations/util'
 import type { SubTaskDTO, TaskStatus } from '@/mutations/types/task'
+import { PatientOfflineService } from '@/mutations/offline/services/patient_service'
 
 type TaskValueStoreUpdate = Omit<TaskValueStore, 'subtasks' | 'status' | 'creationDate' | 'patientId' | 'assigneeId' | 'creatorId' | 'isPublicVisible'>
 
 type SubTaskValueStoreUpdate = Omit<SubTaskDTO, 'isDone'>
 
-export const TaskOfflineService = {
-  findTask: (id: string): TaskValueStore => {
+export const SubTaskOfflineService = {
+  find: (id: string) : SubTaskValueStore | undefined => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
     // TODO check organization
-    const task = valueStore.tasks.find(value => value.id === id)
-    if (!task) {
-      throw Error(`FindTask: Could not find task with id ${id}`)
-    }
-    return task
+    return valueStore.subTasks.find(value => value.id === id)
+  },
+  findSubTasks: (taskId?: string) => {
+    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
+    return valueStore.subTasks.filter(value => !taskId && value.taskId === taskId)
+  },
+  create: (taskId: string, subTask: SubTaskValueStore) => {
+    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
+    valueStore.subTasks.push(subTask)
+  },
+  update: (subTask: SubTaskValueStoreUpdate) => {
+    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
+    valueStore.subTasks = valueStore.subTasks.map(value => value.id === subTask.id ? { ...value, ...subTask } : value)
+  },
+  updateStatus: (subTaskId: string, isDone: boolean) => {
+    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
+    valueStore.subTasks = valueStore.subTasks.map(value => value.id === subTaskId ? {
+      ...value,
+      isDone
+    } : value)
+  },
+  delete: (subTaskId: string) => {
+    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
+    valueStore.subTasks = valueStore.subTasks.filter(value => subTaskId !== value.id)
+  }
+}
+
+export const TaskOfflineService = {
+  find: (id: string): TaskValueStore | undefined => {
+    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
+    // TODO check organization
+    return valueStore.tasks.find(value => value.id === id)
   },
   findTasks: (patientId?: string): TaskValueStore[] => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
     // TODO check organization
     return valueStore.tasks.filter(value => !patientId || value.patientId === patientId)
   },
-  addTask: (task: TaskValueStore) => {
+  create: (task: TaskValueStore) => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
     return valueStore.tasks.push(task)
   },
@@ -106,58 +139,30 @@ export const TaskOfflineService = {
       task1.isPublicVisible = isPublic
     })
   },
-  deleteTaskStorage: (id: string) => {
+  delete: (id: string) => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
     valueStore.tasks = valueStore.tasks.filter(value => value.id !== id)
+    const subTasks = SubTaskOfflineService.findSubTasks(id)
+    subTasks.forEach(subTask => SubTaskOfflineService.delete(subTask.id))
   },
-}
-
-export const SubTaskOfflineService = {
-  findSubTask: (id: string) => {
-    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
-    // TODO check organization
-    const subTask = valueStore.subTasks.find(value => value.id === id)
-    if (!subTask) {
-      throw Error(`FindSubTask: Could not find subtask with id ${id}`)
-    }
-    return subTask
-  },
-
-  findSubTasks: (taskId?: string) => {
-    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
-    return valueStore.subTasks.filter(value => !taskId && value.taskId === taskId)
-  },
-  addSubTaskValueStore: (taskId: string, subTask: SubTaskValueStore) => {
-    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
-    valueStore.subTasks.push(subTask)
-  },
-  updateSubTaskValueStore: (subTask: SubTaskValueStoreUpdate) => {
-    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
-    valueStore.subTasks = valueStore.subTasks.map(value => value.id === subTask.id ? { ...value, ...subTask } : value)
-  },
-  updateSubTaskStatus: (subTaskId: string, isDone: boolean) => {
-    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
-    valueStore.subTasks = valueStore.subTasks.map(value => value.id === subTaskId ? {
-      ...value,
-      isDone
-    } : value)
-  },
-  removeSubTaskValueStore: (subTaskId: string) => {
-    const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
-    valueStore.subTasks = valueStore.subTasks.filter(value => subTaskId !== value.id)
-  }
 }
 
 export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
   async getTask(request: GetTaskRequest, _?: Metadata): Promise<GetTaskResponse> {
-    const task = TaskOfflineService.findTask(request.getId())
-
+    const task = TaskOfflineService.find(request.getId())
+    if (!task) {
+      throw Error(`FindTask: Could not find task with id ${request.getId()}`)
+    }
     const list = SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
       .setId(subtask.id)
       .setName(subtask.name)
       .setDone(subtask.isDone)
       .setCreatedBy('CreatorId') // TODO fix TaskOfflineService
     )
+    const patient = PatientOfflineService.find(task.patientId)
+    if (!patient) {
+      throw Error(`FindTask: Could not find patient with id ${task.patientId} for task`)
+    }
 
     const res = new GetTaskResponse()
       .setId(task.id)
@@ -167,7 +172,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
       .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
       .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
       .setCreatedBy(task.creatorId)
-      .setPatient() // TODO set TaskOfflineService
+      .setPatient(new GetTaskResponse.Patient().setId(patient.id).setName(patient.name))
       .setSubtasksList(list)
       .setOrganizationId('organization') // TODO fix TaskOfflineService
 
@@ -188,7 +193,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
-        .setPatientId(request.getPatientId()) // TODO set TaskOfflineService
+        .setPatientId(request.getPatientId())
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
@@ -215,7 +220,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setPublic(task.isPublicVisible)
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
-        .setPatientId(request.getPatientId()) // TODO set TaskOfflineService
+        .setPatientId(request.getPatientId())
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
@@ -240,6 +245,10 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
   async getAssignedTasks(_: GetAssignedTasksRequest, __?: Metadata): Promise<GetAssignedTasksResponse> {
     const tasks = TaskOfflineService.findTasks() // TODO filter by assignee
     const list = tasks.map(task => {
+      const patient = PatientOfflineService.find(task.patientId)
+      if (!patient) {
+        throw Error(`GetAssignedTasks: Could not find patient with id ${task.patientId} for task with id ${task.id}`)
+      }
       const res = new GetAssignedTasksResponse.Task()
         .setId(task.id)
         .setName(task.name)
@@ -248,7 +257,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
-        .setPatient() // TODO set TaskOfflineService
+        .setPatient(new GetAssignedTasksResponse.Task.Patient().setId(patient.id).setName(patient.name))
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
@@ -276,7 +285,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
       isPublicVisible: request.getPublic(),
     }
 
-    TaskOfflineService.addTask(newTask)
+    TaskOfflineService.create(newTask)
 
     return new CreateTaskResponse().setId(newTask.id)
   }
@@ -330,7 +339,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
   }
 
   async deleteTask(request: DeleteTaskRequest, _?: Metadata): Promise<DeleteTaskResponse> {
-    TaskOfflineService.deleteTaskStorage(request.getId())
+    TaskOfflineService.delete(request.getId())
     return new DeleteTaskResponse()
   }
 
@@ -342,7 +351,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
       isDone: request.getDone()
     }
 
-    SubTaskOfflineService.addSubTaskValueStore(request.getTaskId(), subtask)
+    SubTaskOfflineService.create(request.getTaskId(), subtask)
     return new AddSubTaskResponse()
   }
 
@@ -351,22 +360,22 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
       id: request.getId(),
       name: request.getName()
     }
-    SubTaskOfflineService.updateSubTaskValueStore(update)
+    SubTaskOfflineService.update(update)
     return new UpdateSubTaskResponse()
   }
 
   async subTaskToToDo(request: SubTaskToToDoRequest, _?: Metadata): Promise<SubTaskToToDoResponse> {
-    SubTaskOfflineService.updateSubTaskStatus(request.getId(), true)
+    SubTaskOfflineService.updateStatus(request.getId(), true)
     return new SubTaskToToDoResponse()
   }
 
   async subTaskToDone(request: SubTaskToDoneRequest, _?: Metadata): Promise<SubTaskToDoneResponse> {
-    SubTaskOfflineService.updateSubTaskStatus(request.getId(), false)
+    SubTaskOfflineService.updateStatus(request.getId(), false)
     return new SubTaskToDoneResponse()
   }
 
   async removeSubTask(request: RemoveSubTaskRequest, _?: Metadata): Promise<RemoveSubTaskResponse> {
-    SubTaskOfflineService.removeSubTaskValueStore(request.getId())
+    SubTaskOfflineService.delete(request.getId())
     return new RemoveSubTaskResponse()
   }
 }

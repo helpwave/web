@@ -38,7 +38,8 @@ type PatientListTranslation = {
   deleteDescriptionText: string,
   addPatient: string,
   search: string,
-  bed: string
+  bed: string,
+  otherWard: string
 }
 
 const defaultPatientListTranslations: Record<Languages, PatientListTranslation> = {
@@ -56,6 +57,7 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     addPatient: 'Add Patient',
     search: 'Search',
     bed: 'Bed',
+    otherWard: 'Other Ward',
   },
   de: {
     patients: 'Patienten',
@@ -71,6 +73,7 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     addPatient: 'Patient hinzufügen',
     search: 'Suchen',
     bed: 'Bett',
+    otherWard: 'Andere Station',
   }
 }
 
@@ -120,7 +123,9 @@ export const PatientList = ({
   const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
   const [deletePatient, setDeletePatient] = useState<PatientMinimalDTO>()
 
-  const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
+  const activeLabelText = (patient: PatientWithBedAndRoomDTO) => patient.room.wardId === wardId
+    ? `${patient.room.name} - ${patient.bed.name}`
+    : translation.otherWard
 
   const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
   const filteredUnassigned = !data ? [] : SimpleSearchWithMapping(search, data.unassigned, value => value.name)

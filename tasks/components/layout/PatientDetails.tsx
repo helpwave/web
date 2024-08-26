@@ -7,7 +7,6 @@ import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { ColumnTitle } from '../ColumnTitle'
 import { TasksKanbanBoard } from './TasksKanbanBoard'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
@@ -24,6 +23,7 @@ import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal
 import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 import { PropertyList } from '@/components/layout/property/PropertyList'
+import type { TaskStatus } from '@/mutations/types/task'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -208,7 +208,7 @@ export const PatientDetail = ({
             patientId={newPatient.id}
             editedTaskId={taskId}
             onEditTask={task => {
-              setInitialTaskStatus(task.status === TaskStatus.TASK_STATUS_DONE ? TaskStatus.TASK_STATUS_TODO : task.status)
+              setInitialTaskStatus(task.status === 'done' ? 'todo' : task.status)
               setTaskId(task.id)
             }}
           />

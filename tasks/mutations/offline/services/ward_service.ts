@@ -41,10 +41,12 @@ export const WardOfflineService = {
     }
     return ward
   },
-  findWards: (): WardWithOrganizationIdDTO[] => {
+  findWards: (organizationId?: string): WardWithOrganizationIdDTO[] => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
-    // TODO check organization
-    return valueStore.wards
+    if (!organizationId) {
+      return valueStore.wards
+    }
+    return valueStore.wards.filter(value => value.organizationId === organizationId)
   },
   create: (ward: WardWithOrganizationIdDTO) => {
     OfflineValueStore.getInstance().wards.push(ward)

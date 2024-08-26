@@ -8,10 +8,10 @@ import {
   GetAllTaskTemplatesByCreatorRequest,
   GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_pb'
-import type { SubTaskDTO } from './task_mutations'
-import { getAuthenticatedGrpcMetadata, taskTemplateService } from '@/utils/grpc'
+import { getAuthenticatedGrpcMetadata, APIServices } from '@/utils/grpc'
 import type { TaskTemplateFormType } from '@/pages/templates'
-import SubTask = CreateTaskTemplateRequest.SubTask // TODO: what even is this syntax???
+import SubTask = CreateTaskTemplateRequest.SubTask
+import type { SubTaskDTO } from '@/mutations/types/task' // TODO: what even is this syntax???
 
 export type TaskTemplateDTO = {
   wardId?: string,
@@ -36,7 +36,7 @@ export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: Task
       if (wardId !== undefined) {
         const req = new GetAllTaskTemplatesByWardRequest()
         req.setWardId(wardId)
-        const res = await taskTemplateService.getAllTaskTemplatesByWard(req, getAuthenticatedGrpcMetadata())
+        const res = await APIServices.taskTemplates.getAllTaskTemplatesByWard(req, getAuthenticatedGrpcMetadata())
         wardTaskTemplates = res.getTemplatesList().map((template) => ({
           id: template.getId(),
           wardId,
@@ -78,7 +78,7 @@ export const useAllTaskTemplatesByCreator = ({
         const req = new GetAllTaskTemplatesByCreatorRequest()
         req.setCreatedBy(createdBy)
         req.setPrivateOnly(onlyPrivate)
-        const res = await taskTemplateService.getAllTaskTemplatesByCreator(req, getAuthenticatedGrpcMetadata())
+        const res = await APIServices.taskTemplates.getAllTaskTemplatesByCreator(req, getAuthenticatedGrpcMetadata())
 
         personalTaskTemplates = res.getTemplatesList().map((template) => ({
           id: template.getId(),
@@ -125,7 +125,7 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
             continue
           }
           deleteSubtaskTaskTemplate.setId(id)
-          await taskTemplateService.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
+          await APIServices.taskTemplates.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
         }
       }
 
@@ -135,7 +135,7 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
           createSubTaskTemplate.setName(subtask.name)
           createSubTaskTemplate.setTaskTemplateId(taskTemplate.id)
 
-          const res = await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
+          const res = await APIServices.taskTemplates.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
           subtask.id = res.getId()
 
           continue
@@ -145,11 +145,11 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
         updateSubtaskTemplate.setName(subtask.name)
         updateSubtaskTemplate.setSubtaskId(subtask.id)
 
-        await taskTemplateService.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
+        await APIServices.taskTemplates.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
       }
 
       // update task template
-      const res = await taskTemplateService.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.taskTemplates.updateTaskTemplate(updateTaskTemplate, getAuthenticatedGrpcMetadata())
       const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
 
       templateForm.deletedSubtaskIds = []
@@ -191,7 +191,7 @@ export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplat
         createTaskTemplate.setWardId(wardId)
       }
 
-      const res = await taskTemplateService.createTaskTemplate(createTaskTemplate, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.taskTemplates.createTaskTemplate(createTaskTemplate, getAuthenticatedGrpcMetadata())
       const newTaskTemplate: TaskTemplateDTO = { ...taskTemplate, ...res }
 
       setTemplate(newTaskTemplate)
@@ -217,7 +217,7 @@ export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskT
     mutationFn: async (taskTemplate: TaskTemplateDTO) => {
       const deleteTaskTemplate = new DeleteTaskTemplateRequest()
       deleteTaskTemplate.setId(taskTemplate.id)
-      await taskTemplateService.deleteTaskTemplate(deleteTaskTemplate, getAuthenticatedGrpcMetadata())
+      await APIServices.taskTemplates.deleteTaskTemplate(deleteTaskTemplate, getAuthenticatedGrpcMetadata())
 
       setTemplate(undefined)
     },
@@ -244,7 +244,7 @@ export const useSubTaskTemplateDeleteMutation = (callback: () => void = noop) =>
     mutationFn: async (subtaskId: string) => {
       const deleteSubtaskTaskTemplate = new DeleteTaskTemplateSubTaskRequest()
       deleteSubtaskTaskTemplate.setId(subtaskId)
-      await taskTemplateService.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
+      await APIServices.taskTemplates.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
       queryClient.refetchQueries(['personalTaskTemplates']).then()
       callback()
       return deleteSubtaskTaskTemplate.toObject()
@@ -262,7 +262,7 @@ export const useSubTaskTemplateUpdateMutation = (callback: (subtask: SubTaskDTO)
       const updateSubtaskTemplate = new UpdateTaskTemplateSubTaskRequest()
       updateSubtaskTemplate.setName(subtask.name)
       updateSubtaskTemplate.setSubtaskId(subtask.id)
-      await taskTemplateService.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
+      await APIServices.taskTemplates.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
       const newSubtask: SubTaskDTO = { ...subtask }
       queryClient.refetchQueries(['wardTaskTemplates']).then()
       callback(newSubtask)
@@ -281,7 +281,7 @@ export const useSubTaskTemplateAddMutation = (taskTemplateId: string) => {
       const createSubTaskTemplate = new CreateTaskTemplateSubTaskRequest()
       createSubTaskTemplate.setName(subtask.name)
       createSubTaskTemplate.setTaskTemplateId(taskTemplateId)
-      await taskTemplateService.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
+      await APIServices.taskTemplates.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
 
       queryClient.refetchQueries(['wardTaskTemplates']).then()
       return createSubTaskTemplate.toObject()

@@ -15,7 +15,7 @@ import {
 } from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import type { BedWithPatientId } from './bed_mutations'
-import { patientService, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
+import { APIServices, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 import { roomOverviewsQueryKey, roomsQueryKey, type RoomWithMinimalBedAndPatient } from '@/mutations/room_mutations'
 import type { TaskDTO, TaskMinimalDTO } from '@/mutations/types/task'
 import { GRPCConverter } from '@/mutations/util'
@@ -54,7 +54,7 @@ export const emptyPatientMinimal: PatientMinimalDTO = {
 }
 
 export type PatientWithBedAndRoomDTO = PatientMinimalDTO & {
-  room: { id: string, name: string },
+  room: { id: string, name: string, wardId: string },
   bed: { id: string, name: string }
 }
 
@@ -103,7 +103,7 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
       const req = new GetPatientDetailsRequest()
       req.setId(patientId)
 
-      const res = await patientService.getPatientDetails(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.getPatientDetails(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getId()) {
         throw new Error('create room failed')
@@ -141,7 +141,7 @@ export const usePatientsByWardQuery = (wardId: string) => {
     queryFn: async () => {
       const req = new GetPatientsByWardRequest()
       req.setWardId(wardId)
-      const res = await patientService.getPatientsByWard(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.getPatientsByWard(req, getAuthenticatedGrpcMetadata())
 
       const patients: PatientWithBedIdDTO[] = res.getPatientsList().map((patient) => ({
         id: patient.getId(),
@@ -162,7 +162,7 @@ export const usePatientAssignmentByWardQuery = (wardId: string) => {
     queryFn: async () => {
       const req = new GetPatientAssignmentByWardRequest()
       req.setWardId(wardId)
-      const res = await patientService.getPatientAssignmentByWard(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.getPatientAssignmentByWard(req, getAuthenticatedGrpcMetadata())
 
       const rooms: RoomWithMinimalBedAndPatient[] = res.getRoomsList().map((room) => ({
         id: room.getId(),
@@ -205,7 +205,7 @@ export const usePatientListQuery = (organisationId?: string, wardId?: string) =>
       if (wardId) {
         req.setWardId(wardId)
       }
-      const res = await patientService.getPatientList(req, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.patient.getPatientList(req, getAuthenticatedGrpcMetadata(organisationId))
 
       const patientList: PatientListDTO = {
         active: res.getActiveList().map(value => {
@@ -228,7 +228,8 @@ export const usePatientListQuery = (organisationId?: string, wardId?: string) =>
             },
             room: {
               id: room?.getId() ?? '',
-              name: room?.getName() ?? ''
+              name: room?.getName() ?? '',
+              wardId: room?.getWardId() ?? ''
             }
           })
         }),
@@ -252,7 +253,7 @@ export const useRecentPatientsQuery = () => {
     queryKey: [patientsQueryKey],
     queryFn: async () => {
       const req = new GetRecentPatientsRequest()
-      const res = await patientService.getRecentPatients(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.getRecentPatients(req, getAuthenticatedGrpcMetadata())
 
       const patients: RecentPatientDTO[] = []
       for (const patient of res.getRecentPatientsList()) {
@@ -284,7 +285,7 @@ export const usePatientCreateMutation = (organisationId: string) => {
       const req = new CreatePatientRequest()
       req.setNotes(patient.note)
       req.setHumanReadableIdentifier(patient.name)
-      const res = await patientService.createPatient(req, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.patient.createPatient(req, getAuthenticatedGrpcMetadata(organisationId))
 
       const id = res.getId()
 
@@ -310,7 +311,7 @@ export const usePatientUpdateMutation = () => {
       req.setNotes(patient.note)
       req.setHumanReadableIdentifier(patient.name)
 
-      const res = await patientService.updatePatient(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.updatePatient(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         throw new Error('error in PatientUpdate')
@@ -332,7 +333,7 @@ export const usePatientDischargeMutation = (callback: () => void = noop) => {
       const req = new DischargePatientRequest()
       req.setId(patientId)
 
-      const res = await patientService.dischargePatient(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.dischargePatient(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         throw new Error('error in PatientDischarge')
@@ -356,7 +357,7 @@ export const useAssignBedMutation = (callback: (bed: BedWithPatientId) => void =
       req.setId(bed.patientId)
       req.setBedId(bed.id)
 
-      const res = await patientService.assignBed(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.assignBed(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         throw new Error('assign bed request failed')
@@ -379,7 +380,7 @@ export const useUnassignMutation = (callback: () => void = noop) => {
       const req = new UnassignBedRequest()
       req.setId(patientId)
 
-      const res = await patientService.unassignBed(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.unassignBed(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         throw new Error('assign bed request failed')
@@ -402,7 +403,7 @@ export const useDeletePatientMutation = () => {
       const req = new DeletePatientRequest()
       req.setId(patientId)
 
-      const res = await patientService.deletePatient(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.deletePatient(req, getAuthenticatedGrpcMetadata())
 
       return res.toObject()
     },
@@ -420,7 +421,7 @@ export const useReadmitPatientMutation = (callback: (patientId: string) => void 
       const req = new ReadmitPatientRequest()
       req.setPatientId(patientId)
 
-      const res = await patientService.readmitPatient(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.readmitPatient(req, getAuthenticatedGrpcMetadata())
 
       callback(patientId)
       return res.toObject()

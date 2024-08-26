@@ -8,8 +8,7 @@ import type {
   GetBedsByRoomRequest,
   GetBedsRequest,
   UpdateBedRequest
-  ,
-  GetBedByPatientResponse
+
 } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_pb'
 import {
   BulkCreateBedsResponse,
@@ -19,11 +18,15 @@ import {
   GetBedsByRoomResponse,
   GetBedsResponse,
   UpdateBedResponse
+  ,
+  GetBedByPatientResponse
 } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_pb'
 import { BedServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_grpc_web_pb'
 import { range } from '@helpwave/common/util/array'
 import { OfflineValueStore } from '@/mutations/offline/value_store'
 import type { BedWithRoomId } from '@/mutations/bed_mutations'
+import { PatientOfflineService } from '@/mutations/offline/services/patient_service'
+import { RoomOfflineService } from '@/mutations/offline/services/room_service'
 
 export const BedOfflineService = {
   find: (id: string): BedWithRoomId | undefined => {
@@ -63,7 +66,10 @@ export const BedOfflineService = {
   delete: (id: string) => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
     valueStore.beds = valueStore.beds.filter(value => value.id !== id)
-    // TODO cascade and unassign patients
+    const patient = PatientOfflineService.findByBed(id)
+    if (patient) {
+      PatientOfflineService.unassignBed(patient.id)
+    }
   }
 }
 
@@ -105,10 +111,25 @@ export class BedOfflineServicePromiseClient extends BedServicePromiseClient {
       .setBedsList(list)
   }
 
-  async getBedByPatient(__: GetBedByPatientRequest, _?: Metadata): Promise<GetBedByPatientResponse> {
-    // const patientId = request.getPatientId()
-    throw Error('Not implemented') // TODO implement
-    // return new GetBedByPatientResponse()
+  async getBedByPatient(request: GetBedByPatientRequest, _?: Metadata): Promise<GetBedByPatientResponse> {
+    const patient = PatientOfflineService.find(request.getPatientId())
+    if (!patient) {
+      throw Error(`GetBedByPatient: Could not find patient with id ${request.getPatientId()}`)
+    }
+    if (!patient.bedId) {
+      return new GetBedByPatientResponse()
+    }
+    const bed = BedOfflineService.find(patient.bedId)
+    if (!bed) {
+      return new GetBedByPatientResponse()
+    }
+    const room = RoomOfflineService.findRoom(bed.roomId)
+    if (!room) {
+      return new GetBedByPatientResponse()
+    }
+    return new GetBedByPatientResponse()
+      .setBed(new GetBedByPatientResponse.Bed().setId(bed.id).setName(bed.name))
+      .setRoom(new GetBedByPatientResponse.Room().setId(room.id).setName(room.id).setWardId(room.wardId))
   }
 
   async createBed(request: CreateBedRequest, _?: Metadata): Promise<CreateBedResponse> {

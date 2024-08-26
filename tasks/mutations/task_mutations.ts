@@ -20,7 +20,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/util/noop'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
-import { getAuthenticatedGrpcMetadata, taskService } from '@/utils/grpc'
+import { getAuthenticatedGrpcMetadata, APIServices } from '@/utils/grpc'
 import type { CreateSubTaskDTO, SortedTasks, SubTaskDTO, TaskDTO, TaskStatus } from '@/mutations/types/task'
 import { emptySortedTasks, emptyTask } from '@/mutations/types/task'
 import { GRPCConverter } from '@/mutations/util'
@@ -39,7 +39,7 @@ export const useTaskQuery = (taskId: string | undefined) => {
       const req = new GetTaskRequest()
       req.setId(taskId)
 
-      const res = await taskService.getTask(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.getTask(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('TasksByPatient query failed')
@@ -79,7 +79,7 @@ export const useTasksByPatientQuery = (patientId: string | undefined) => {
       const req = new GetTasksByPatientRequest()
       req.setPatientId(patientId)
 
-      const res = await taskService.getTasksByPatient(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.getTasksByPatient(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getTasksList()) {
         console.error('TasksByPatient query failed')
@@ -121,7 +121,7 @@ export const useTasksByPatientSortedByStatusQuery = (patientId: string | undefin
       const req = new GetTasksByPatientSortedByStatusRequest()
       req.setPatientId(patientId)
 
-      const res = await taskService.getTasksByPatientSortedByStatus(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.getTasksByPatientSortedByStatus(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('TasksByPatientSortedByStatus query failed')
@@ -168,7 +168,7 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       req.setInitialStatus(GRPCConverter.taskStatusToGrpc(task.status))
       req.setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
 
-      const res = await taskService.createTask(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.createTask(req, getAuthenticatedGrpcMetadata())
       const newTask = { ...task, id: res.getId() }
 
       callback(newTask)
@@ -198,7 +198,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
 
       getTask.setId(task.id)
 
-      const taskResponse = await taskService.getTask(getTask, getAuthenticatedGrpcMetadata())
+      const taskResponse = await APIServices.task.getTask(getTask, getAuthenticatedGrpcMetadata())
       const subtasksResponse = taskResponse.getSubtasksList()
       const taskSubtasks = task.subtasks
 
@@ -206,7 +206,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       const subtasksToDelete = subtasksResponse.filter(subtask => !taskSubtasks.some(taskSubtask => taskSubtask.id === subtask.getId()))
       for (const subtask of subtasksToDelete) {
         removeSubtask.setId(subtask.getId())
-        await taskService.removeSubTask(removeSubtask, getAuthenticatedGrpcMetadata())
+        await APIServices.task.removeSubTask(removeSubtask, getAuthenticatedGrpcMetadata())
       }
 
       const updateSubtask = new UpdateSubTaskRequest()
@@ -222,7 +222,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
           createSubTask.setTaskId(task.id)
           createSubTask.setDone(subtask.isDone)
 
-          const res = await taskService.addSubTask(createSubTask, getAuthenticatedGrpcMetadata())
+          const res = await APIServices.task.addSubTask(createSubTask, getAuthenticatedGrpcMetadata())
           subtask.id = res.getId()
 
           continue
@@ -230,19 +230,19 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
 
         if (subtask.isDone) {
           subTaskToDone.setId(subtask.id)
-          await taskService.subTaskToDone(subTaskToDone, getAuthenticatedGrpcMetadata())
+          await APIServices.task.subTaskToDone(subTaskToDone, getAuthenticatedGrpcMetadata())
         } else {
           subTaskToDo.setId(subtask.id)
-          await taskService.subTaskToToDo(subTaskToDo, getAuthenticatedGrpcMetadata())
+          await APIServices.task.subTaskToToDo(subTaskToDo, getAuthenticatedGrpcMetadata())
         }
 
         updateSubtask.setName(subtask.name)
         updateSubtask.setId(subtask.id)
 
-        await taskService.updateSubTask(updateSubtask, getAuthenticatedGrpcMetadata())
+        await APIServices.task.updateSubTask(updateSubtask, getAuthenticatedGrpcMetadata())
       }
 
-      await taskService.updateTask(updateTask, getAuthenticatedGrpcMetadata())
+      await APIServices.task.updateTask(updateTask, getAuthenticatedGrpcMetadata())
 
       callback()
       return updateTask.toObject()
@@ -260,7 +260,7 @@ export const useTaskDeleteMutation = (callback: () => void = noop) => {
     mutationFn: async (taskId: string) => {
       const req = new DeleteTaskRequest()
       req.setId(taskId)
-      await taskService.deleteTask(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.deleteTask(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
@@ -278,7 +278,7 @@ export const useTaskToToDoMutation = (callback: () => void = noop) => {
     mutationFn: async (taskId: string) => {
       const req = new TaskToToDoRequest()
       req.setId(taskId)
-      await taskService.taskToToDo(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.taskToToDo(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
@@ -296,7 +296,7 @@ export const useTaskToInProgressMutation = (callback: () => void = noop) => {
     mutationFn: async (taskId: string) => {
       const req = new TaskToInProgressRequest()
       req.setId(taskId)
-      await taskService.taskToInProgress(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.taskToInProgress(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
@@ -314,7 +314,7 @@ export const useTaskToDoneMutation = (callback: () => void = noop) => {
     mutationFn: async (taskId: string) => {
       const req = new TaskToDoneRequest()
       req.setId(taskId)
-      await taskService.taskToDone(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.taskToDone(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
@@ -339,7 +339,7 @@ export const useSubTaskAddMutation = (taskId: string | undefined, callback: (sub
       req.setName(subtask.name)
       req.setTaskId(usedTaskId)
       req.setDone(subtask.isDone)
-      const res = await taskService.addSubTask(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.addSubTask(req, getAuthenticatedGrpcMetadata())
 
       const newSubtask: SubTaskDTO = {
         id: res.getId(),
@@ -363,7 +363,7 @@ export const useSubTaskUpdateMutation = (callback: (subtask: SubTaskDTO) => void
       const req = new UpdateSubTaskRequest()
       req.setId(subtask.id)
       req.setName(subtask.name)
-      await taskService.updateSubTask(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.updateSubTask(req, getAuthenticatedGrpcMetadata())
       const newSubtask: SubTaskDTO = { ...subtask }
 
       callback(newSubtask)
@@ -381,7 +381,7 @@ export const useSubTaskDeleteMutation = (callback: () => void = noop) => {
     mutationFn: async (subtaskId: string) => {
       const req = new RemoveSubTaskRequest()
       req.setId(subtaskId)
-      await taskService.removeSubTask(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.removeSubTask(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
@@ -398,7 +398,7 @@ export const useSubTaskToToDoMutation = (callback: () => void = noop) => {
     mutationFn: async (subtaskId: string) => {
       const req = new SubTaskToToDoRequest()
       req.setId(subtaskId)
-      await taskService.subTaskToToDo(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.subTaskToToDo(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
@@ -415,7 +415,7 @@ export const useSubTaskToDoneMutation = (callback: () => void = noop) => {
     mutationFn: async (subtaskId: string) => {
       const req = new SubTaskToDoneRequest()
       req.setId(subtaskId)
-      await taskService.subTaskToDone(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.subTaskToDone(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
@@ -433,7 +433,7 @@ export const useAssignTaskToUserMutation = (callback: () => void = noop) => {
       const req = new AssignTaskToUserRequest()
       req.setId(taskAndUser.taskId)
       req.setUserId(taskAndUser.userId)
-      const res = await taskService.assignTaskToUser(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.assignTaskToUser(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in AssignTaskToUser')
@@ -454,7 +454,7 @@ export const useUnassignTaskToUserMutation = (callback: () => void = noop) => {
     mutationFn: async (taskId: string) => {
       const req = new UnassignTaskFromUserRequest()
       req.setId(taskId)
-      const res = await taskService.unassignTaskFromUser(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.unassignTaskFromUser(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in UnAssignTaskToUser')

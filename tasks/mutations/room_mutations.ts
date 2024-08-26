@@ -9,7 +9,7 @@ import {
 import { noop } from '@helpwave/common/util/noop'
 import type { BedDTO, BedWithPatientWithTasksNumberDTO, BedWithMinimalPatientDTO } from './bed_mutations'
 import { wardsQueryKey } from './ward_mutations'
-import { getAuthenticatedGrpcMetadata, roomService } from '@/utils/grpc'
+import { APIServices, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 
 export const roomsQueryKey = 'rooms'
 
@@ -49,7 +49,7 @@ export const useRoomQuery = (roomId?: string) => {
       if (roomId) {
         req.setId(roomId)
       }
-      const res = await roomService.getRoom(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.room.getRoom(req, getAuthenticatedGrpcMetadata())
 
       const room: RoomDTO = {
         id: res.getId(),
@@ -75,7 +75,7 @@ export const useRoomOverviewsQuery = (wardId: string | undefined) => {
       if (wardId) {
         req.setId(wardId)
       }
-      const res = await roomService.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.room.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
 
       const rooms: RoomOverviewDTO[] = res.getRoomsList().map((room) => ({
         id: room.getId(),
@@ -108,7 +108,7 @@ export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) 
       const req = new UpdateRoomRequest()
       req.setId(room.id)
       req.setName(room.name)
-      const res = await roomService.updateRoom(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.room.updateRoom(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in RoomUpdate')
@@ -130,7 +130,7 @@ export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void =
       const req = new CreateRoomRequest()
       req.setWardId(wardId)
       req.setName(room.name)
-      const res = await roomService.createRoom(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.room.createRoom(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getId()) {
         console.error('RoomCreate failed')
@@ -153,7 +153,7 @@ export const useRoomDeleteMutation = (callback: () => void = noop) => {
     mutationFn: async (roomId: string) => {
       const req = new DeleteRoomRequest()
       req.setId(roomId)
-      const res = await roomService.deleteRoom(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.room.deleteRoom(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('RoomDelete failed')

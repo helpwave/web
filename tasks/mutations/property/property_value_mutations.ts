@@ -14,7 +14,7 @@ import {
   propertyQueryKey,
   propertyValuesQueryKey
 } from '@/mutations/property/common'
-import { getAuthenticatedGrpcMetadata, propertyValueService } from '@/utils/grpc'
+import { getAuthenticatedGrpcMetadata, APIServices } from '@/utils/grpc'
 import { GRPCConverter } from '@/mutations/util'
 
 export const usePropertyWithValueListQuery = (subjectId: string | undefined, subjectType: SubjectType, wardId?: string) => {
@@ -39,7 +39,7 @@ export const usePropertyWithValueListQuery = (subjectId: string | undefined, sub
         console.warn("PropertyWithValueListQuery: subjectType patient isn't supported in production yet.")
       }
 
-      const res = await propertyValueService.getAttachedPropertyValues(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.propertyValues.getAttachedPropertyValues(req, getAuthenticatedGrpcMetadata())
 
       const results: DisplayableAttachedProperty[] = res.getValuesList().map(result => {
         const dateValue: ProtoDate | undefined = result.getDateValue()
@@ -86,7 +86,7 @@ export const useAttachedPropertyMutation = <T extends AttachedProperty>(callback
       req.setDateTimeValue(GRPCConverter.dateToTimestamp(property.value.dateTimeValue))
       req.setSelectValue(property.value.singleSelectValue)
 
-      await propertyValueService.attachPropertyValue(req, getAuthenticatedGrpcMetadata())
+      await APIServices.propertyValues.attachPropertyValue(req, getAuthenticatedGrpcMetadata())
 
       const newProperty: T = {
         ...property,

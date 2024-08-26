@@ -18,6 +18,10 @@ export type RoomMinimalDTO = {
   name: string
 }
 
+export type RoomWithWardId = RoomMinimalDTO & {
+  wardId: string
+}
+
 export type RoomDTO = RoomMinimalDTO & {
   beds: BedDTO[]
 }

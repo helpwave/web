@@ -20,22 +20,41 @@ import { getConfig } from './config'
 import { COOKIE_ID_TOKEN_KEY } from '@/hooks/useAuth'
 import { LOCALSTORAGE_ORGANIZATION_KEY } from '@/hooks/useOrganization'
 import type { OrganizationDTO } from '@/mutations/organization_mutations'
-import { PropertyOfflineServicePromiseClient } from '@/mutations/offline/property/property_service'
-import { PropertyValueOfflineServicePromiseClient } from '@/mutations/offline/property/property_value_service'
+import { PropertyOfflineServicePromiseClient } from '@/mutations/offline/services/property/property_service'
+import { PropertyValueOfflineServicePromiseClient } from '@/mutations/offline/services/property/property_value_service'
+import { WardOfflineServicePromiseClient } from '@/mutations/offline/services/ward_service'
+import { RoomOfflineServicePromiseClient } from '@/mutations/offline/services/room_service'
+import { BedOfflineServicePromiseClient } from '@/mutations/offline/services/bed_service'
+import { PatientOfflineServicePromiseClient } from '@/mutations/offline/services/patient_service'
+import { TaskOfflineServicePromiseClient } from '@/mutations/offline/services/task_service'
+import { TaskTemplateOfflineServicePromiseClient } from '@/mutations/offline/services/task_template_service'
 
 const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
 const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`
 const propertySvcBaseUrl = `${getConfig().apiUrl}/property-svc`
 
 // TODO make this configurable
-export const isOfflineMode = false
+export const isOfflineMode = true
 
 // TODO: Implement something like a service registry
-export const wardService = new WardServicePromiseClient(taskSvcBaseUrl)
-export const roomService = new RoomServicePromiseClient(taskSvcBaseUrl)
-export const bedService = new BedServicePromiseClient(taskSvcBaseUrl)
-export const patientService = new PatientServicePromiseClient(taskSvcBaseUrl)
-export const taskTemplateService = new TaskTemplateServicePromiseClient(taskSvcBaseUrl)
+export const wardService = isOfflineMode
+  ? new WardOfflineServicePromiseClient(taskSvcBaseUrl)
+  : new WardServicePromiseClient(taskSvcBaseUrl)
+export const roomService = isOfflineMode
+  ? new RoomOfflineServicePromiseClient(taskSvcBaseUrl)
+  : new RoomServicePromiseClient(taskSvcBaseUrl)
+export const bedService = isOfflineMode
+  ? new BedOfflineServicePromiseClient(taskSvcBaseUrl)
+  : new BedServicePromiseClient(taskSvcBaseUrl)
+export const patientService = isOfflineMode
+  ? new PatientOfflineServicePromiseClient(taskSvcBaseUrl)
+  : new PatientServicePromiseClient(taskSvcBaseUrl)
+export const taskService = isOfflineMode
+  ? new TaskOfflineServicePromiseClient(taskSvcBaseUrl)
+  : new TaskServicePromiseClient(taskSvcBaseUrl)
+export const taskTemplateService = isOfflineMode
+  ? new TaskTemplateOfflineServicePromiseClient(taskSvcBaseUrl)
+  : new TaskTemplateServicePromiseClient(taskSvcBaseUrl)
 export const propertyService = isOfflineMode
   ? new PropertyOfflineServicePromiseClient(propertySvcBaseUrl)
   : new PropertyServicePromiseClient(propertySvcBaseUrl)
@@ -43,7 +62,6 @@ export const propertyService = isOfflineMode
 export const propertyValueService = isOfflineMode
   ? new PropertyValueOfflineServicePromiseClient(propertySvcBaseUrl)
   : new PropertyValueServicePromiseClient(propertySvcBaseUrl)
-export const taskService = new TaskServicePromiseClient(taskSvcBaseUrl)
 export const organizationService = new OrganizationServicePromiseClient(userSvcBaseUrl)
 export const userService = new UserServicePromiseClient(userSvcBaseUrl)
 

@@ -3,15 +3,15 @@ import { noop } from '@helpwave/common/util/noop'
 import {
   CreatePropertyRequest,
   GetPropertiesBySubjectTypeRequest,
-  GetPropertyRequest, UpdatePropertyRequest
+  GetPropertyRequest,
+  UpdatePropertyRequest
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
-import { propertyService } from '@/utils/grpc'
-import type {
-  Property, SelectOption,
-  SubjectType
-} from '@/mutations/property/common'
+import { FieldType } from '@helpwave/proto-ts/services/property_svc/v1/types_pb'
+import { getAuthenticatedGrpcMetadata, propertyService } from '@/utils/grpc'
+import type { Property, SelectOption, SubjectType } from '@/mutations/property/common'
 import {
-  fieldTypeMapperFromGRPC, fieldTypeMapperToGRPC,
+  fieldTypeMapperFromGRPC,
+  fieldTypeMapperToGRPC,
   propertyQueryKey,
   subjectTypeMapperFromGRPC,
   subjectTypeMapperToGRPC
@@ -25,8 +25,8 @@ export const usePropertyListQuery = (subjectType?: SubjectType) => {
       if (subjectType) {
         req.setSubjectType(subjectTypeMapperToGRPC(subjectType))
       }
-      const result = await propertyService.getPropertiesBySubjectType(req)
-      return result.getPropertiesList().map(property => {
+      const result = await propertyService.getPropertiesBySubjectType(req, getAuthenticatedGrpcMetadata())
+      return result.getPropertiesList().filter(value => value.getFieldType() !== FieldType.FIELD_TYPE_UNSPECIFIED).map(property => {
         const selectData = property.getSelectData()
         if (!selectData) {
           throw Error('usePropertyListQuery could not find selectData')
@@ -55,10 +55,10 @@ export const usePropertyListQuery = (subjectType?: SubjectType) => {
   })
 }
 
-export const usePropertyQuery = (id?: string, subjectType?: SubjectType) => {
+export const usePropertyQuery = (id?: string) => {
   return useQuery({
-    queryKey: [propertyQueryKey, id, subjectType],
-    enabled: !!id && !!subjectType,
+    queryKey: [propertyQueryKey, id],
+    enabled: !!id,
     queryFn: async (): Promise<Property> => {
       if (!id) {
         throw Error('usePropertyQuery no id in mutate')
@@ -66,7 +66,7 @@ export const usePropertyQuery = (id?: string, subjectType?: SubjectType) => {
       const req = new GetPropertyRequest()
       req.setId(id)
 
-      const result = await propertyService.getProperty(req)
+      const result = await propertyService.getProperty(req, getAuthenticatedGrpcMetadata())
 
       const selectData = result.getSelectData()
       if (!selectData) {
@@ -121,7 +121,7 @@ export const usePropertyCreateMutation = (callback: (property: Property) => void
       }))
       req.setSelectData(selectDataVal)
 
-      const result = await propertyService.createProperty(req)
+      const result = await propertyService.createProperty(req, getAuthenticatedGrpcMetadata())
 
       const id = result.getPropertyId()
 
@@ -164,7 +164,7 @@ export const usePropertyUpdateMutation = (callback: (property: Property) => void
       */
       req.setSelectData(selectDataVal)
 
-      const result = await propertyService.updateProperty(req)
+      const result = await propertyService.updateProperty(req, getAuthenticatedGrpcMetadata())
       if (!result.toObject()) {
         throw Error('usePropertyUpdateMutation: error in result')
       }
@@ -213,7 +213,7 @@ export const usePropertyChangeSelectOptionMutation = (callback: () => void = noo
       selectDataVal.setUpsertOptionsList([...updateList, ...createList])
       req.setSelectData(selectDataVal)
 
-      const result = await propertyService.updateProperty(req)
+      const result = await propertyService.updateProperty(req, getAuthenticatedGrpcMetadata())
       if (!result.toObject()) {
         throw Error('usePropertyUpdateOrAddSelectDataMutation: error in result')
       }

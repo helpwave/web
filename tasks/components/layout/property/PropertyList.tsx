@@ -9,13 +9,16 @@ import { Span } from '@helpwave/common/components/Span'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { useEffect, useState } from 'react'
 import { SearchableList } from '@helpwave/common/components/SearchableList'
-import type { PropertyWithValue, SubjectType } from '@/components/layout/property/property'
 import {
-  usePropertyListQuery, usePropertyWithValueCreateMutation,
-  usePropertyWithValueListQuery,
-  usePropertyWithValueUpdateMutation
+  usePropertyListQuery
 } from '@/mutations/property/property_mutations'
 import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
+import type { AttachedProperty, SubjectType } from '@/mutations/property/common'
+import {
+  useAttachedPropertyMutation,
+  usePropertyWithValueListQuery
+} from '@/mutations/property/property_value_mutations'
+import { emptyPropertyValue } from '@/mutations/property/common'
 
 type PropertyListTranslation = {
   properties: string,
@@ -34,7 +37,7 @@ const defaultPropertyListTranslation: Record<Languages, PropertyListTranslation>
 }
 
 export type PropertyListProps = {
-  subjectID: string,
+  subjectId: string,
   subjectType: SubjectType
 }
 
@@ -43,7 +46,7 @@ export type PropertyListProps = {
  */
 export const PropertyList = ({
   overwriteTranslation,
-  subjectID,
+  subjectId,
   subjectType
 }: PropsForTranslation<PropertyListTranslation, PropertyListProps>) => {
   const translation = useTranslation(defaultPropertyListTranslation, overwriteTranslation)
@@ -53,10 +56,9 @@ export const PropertyList = ({
     isError: isErrorPropertyList
   } = usePropertyListQuery(subjectType)
 
-  const [properties, setProperties] = useState<PropertyWithValue[]>([])
-  const { data, isLoading, isError } = usePropertyWithValueListQuery(subjectID, subjectType)
-  const updatePropertyMutation = usePropertyWithValueUpdateMutation()
-  const createPropertyValue = usePropertyWithValueCreateMutation()
+  const [properties, setProperties] = useState<AttachedProperty[]>([])
+  const { data, isLoading, isError } = usePropertyWithValueListQuery(subjectId, subjectType)
+  const addOrUpdatePropertyMutation = useAttachedPropertyMutation()
 
   useEffect(() => {
     if (data) {
@@ -79,10 +81,10 @@ export const PropertyList = ({
         {properties && properties.map((property, index) => (
             <PropertyEntry
               key={index}
-              property={property}
+              attachedProperty={property}
               onChange={value => setProperties(prevState => prevState
-                .map(value1 => value1.id === value.id ? value : value1))}
-              onEditComplete={value => updatePropertyMutation.mutate(value)}
+                .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? value : value1))}
+              onEditComplete={value => addOrUpdatePropertyMutation.mutate(value)}
             />
         )
         )}
@@ -114,7 +116,8 @@ export const PropertyList = ({
                   <MenuItem
                     key={property.id}
                     onClick={() => {
-                      createPropertyValue.mutate({ ...property, propertyId: property.id, value: {}, id: subjectID })
+                      const attachedProperty : AttachedProperty = { propertyId: property.id, subjectId, value: emptyPropertyValue }
+                      addOrUpdatePropertyMutation.mutate(attachedProperty)
                     }}
                     className={tw('rounded-md')}
                   >

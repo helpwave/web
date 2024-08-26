@@ -10,7 +10,6 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
-import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { KanbanColumn } from '../KanbanColumn'
@@ -18,14 +17,13 @@ import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
 import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent } from '@/components/dnd-kit-instances/tasks'
 import {
-  emptySortedTasks,
   useTasksByPatientSortedByStatusQuery,
   useTaskToDoneMutation,
   useTaskToInProgressMutation,
-  useTaskToToDoMutation,
-  type SortedTasks,
-  type TaskDTO
+  useTaskToToDoMutation
 } from '@/mutations/task_mutations'
+import type { SortedTasks, TaskDTO, TaskStatus } from '@/mutations/types/task'
+import { emptySortedTasks } from '@/mutations/types/task'
 
 export type KanbanBoardObject = {
   draggedId?: string,
@@ -75,13 +73,13 @@ export const TasksKanbanBoard = ({
       return
     }
     switch (boardObject.overColumn) {
-      case TaskStatus.TASK_STATUS_TODO:
+      case 'todo':
         taskToToDoMutation.mutate(boardObject.draggedId)
         break
-      case TaskStatus.TASK_STATUS_IN_PROGRESS:
+      case 'inProgress':
         taskToInProgressMutation.mutate(boardObject.draggedId)
         break
-      case TaskStatus.TASK_STATUS_DONE:
+      case 'done':
         taskToDoneMutation.mutate(boardObject.draggedId)
         break
       default:
@@ -94,14 +92,14 @@ export const TasksKanbanBoard = ({
       return id as TaskStatus
     }
 
-    if (sortedTasks[TaskStatus.TASK_STATUS_TODO].find(value => value.id === id)) {
-      return TaskStatus.TASK_STATUS_TODO
+    if (sortedTasks.todo.find(value => value.id === id)) {
+      return 'todo'
     }
-    if (sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS].find(value => value.id === id)) {
-      return TaskStatus.TASK_STATUS_IN_PROGRESS
+    if (sortedTasks.inProgress.find(value => value.id === id)) {
+      return 'inProgress'
     }
-    if (sortedTasks[TaskStatus.TASK_STATUS_DONE].find(value => value.id === id)) {
-      return TaskStatus.TASK_STATUS_DONE
+    if (sortedTasks.done.find(value => value.id === id)) {
+      return 'done'
     }
 
     return undefined
@@ -179,7 +177,7 @@ export const TasksKanbanBoard = ({
   }
 
   const task = boardObject.draggedId ?
-      [...sortedTasks[TaskStatus.TASK_STATUS_TODO], ...sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS], ...sortedTasks[TaskStatus.TASK_STATUS_DONE]].find(value => value && value.id === boardObject.draggedId)
+      [...sortedTasks.todo, ...sortedTasks.inProgress, ...sortedTasks.done].find(value => value && value.id === boardObject.draggedId)
     : null
 
   function filterBySearch(tasks: TaskDTO[]): TaskDTO[] {
@@ -207,24 +205,24 @@ export const TasksKanbanBoard = ({
       >
         <div className={tw('grid grid-cols-3 gap-x-4 mt-6')}>
           <KanbanColumn
-            type={TaskStatus.TASK_STATUS_TODO}
-            tasks={filterBySearch(sortedTasks[TaskStatus.TASK_STATUS_TODO])}
+            type="todo"
+            tasks={filterBySearch(sortedTasks.todo)}
             draggedTileId={boardObject.draggedId ?? editedTaskId}
-            isDraggedOver={boardObject.overColumn === TaskStatus.TASK_STATUS_TODO}
+            isDraggedOver={boardObject.overColumn === 'todo'}
             onEditTask={onEditTask}
           />
           <KanbanColumn
-            type={TaskStatus.TASK_STATUS_IN_PROGRESS}
-            tasks={filterBySearch(sortedTasks[TaskStatus.TASK_STATUS_IN_PROGRESS])}
+            type="inProgress"
+            tasks={filterBySearch(sortedTasks.inProgress)}
             draggedTileId={boardObject.draggedId ?? editedTaskId}
-            isDraggedOver={boardObject.overColumn === TaskStatus.TASK_STATUS_IN_PROGRESS}
+            isDraggedOver={boardObject.overColumn === 'inProgress'}
             onEditTask={onEditTask}
           />
           <KanbanColumn
-            type={TaskStatus.TASK_STATUS_DONE}
-            tasks={filterBySearch(sortedTasks[TaskStatus.TASK_STATUS_DONE])}
+            type="done"
+            tasks={filterBySearch(sortedTasks.done)}
             draggedTileId={boardObject.draggedId ?? editedTaskId}
-            isDraggedOver={boardObject.overColumn === TaskStatus.TASK_STATUS_DONE}
+            isDraggedOver={boardObject.overColumn === 'done'}
             onEditTask={onEditTask}
           />
           <DragOverlay dropAnimation={dropAnimation}>

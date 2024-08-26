@@ -1,5 +1,4 @@
 import {
-  TaskStatus,
   GetTasksByPatientRequest,
   TaskToToDoRequest,
   TaskToInProgressRequest,
@@ -22,58 +21,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/util/noop'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 import { getAuthenticatedGrpcMetadata, taskService } from '@/utils/grpc'
-import { dateToTimestamp, timestampToDate } from '@/utils/timeConversion'
-
-export type SubTaskDTO = {
-  id: string,
-  name: string,
-  isDone: boolean
-}
-
-export type CreateSubTaskDTO = SubTaskDTO & {
-  taskId?: string
-}
-
-export type TaskDTO = {
-  id: string,
-  name: string,
-  assignee: string,
-  notes: string,
-  status: TaskStatus,
-  subtasks: SubTaskDTO[],
-  dueDate?: Date,
-  creationDate?: Date,
-  isPublicVisible: boolean
-}
-
-export const emptyTask: TaskDTO = {
-  id: '',
-  name: '',
-  assignee: '',
-  notes: '',
-  status: TaskStatus.TASK_STATUS_TODO,
-  subtasks: [],
-  dueDate: undefined,
-  isPublicVisible: false
-}
-
-export type TaskMinimalDTO = {
-  id: string,
-  name: string,
-  status: TaskStatus
-}
-
-export type SortedTasks = {
-  [TaskStatus.TASK_STATUS_TODO]: TaskDTO[],
-  [TaskStatus.TASK_STATUS_IN_PROGRESS]: TaskDTO[],
-  [TaskStatus.TASK_STATUS_DONE]: TaskDTO[]
-}
-
-export const emptySortedTasks: SortedTasks = {
-  [TaskStatus.TASK_STATUS_TODO]: [],
-  [TaskStatus.TASK_STATUS_IN_PROGRESS]: [],
-  [TaskStatus.TASK_STATUS_DONE]: []
-}
+import type { CreateSubTaskDTO, SortedTasks, SubTaskDTO, TaskDTO, TaskStatus } from '@/mutations/types/task'
+import { emptySortedTasks, emptyTask } from '@/mutations/types/task'
+import { GRPCConverter } from '@/mutations/util'
 
 export const tasksQueryKey = 'tasks'
 
@@ -99,11 +49,11 @@ export const useTaskQuery = (taskId: string | undefined) => {
       const task: TaskDTO = {
         id: res.getId(),
         name: res.getName(),
-        status: res.getStatus(),
+        status: GRPCConverter.taskStatusFromGRPC(res.getStatus()),
         notes: res.getDescription(),
         isPublicVisible: res.getPublic(),
         assignee: res.getAssignedUserId(),
-        dueDate: dueAt ? timestampToDate(dueAt) : undefined,
+        dueDate: dueAt ? GRPCConverter.timestampToDate(dueAt) : undefined,
         subtasks: res.getSubtasksList().map(subtask => ({
           id: subtask.getId(),
           name: subtask.getName(),
@@ -140,11 +90,11 @@ export const useTasksByPatientQuery = (patientId: string | undefined) => {
         return {
           id: task.getId(),
           name: task.getName(),
-          status: task.getStatus(),
+          status: GRPCConverter.taskStatusFromGRPC(task.getStatus()),
           notes: task.getDescription(),
           isPublicVisible: task.getPublic(),
           assignee: task.getAssignedUserId(),
-          dueDate: dueAt ? timestampToDate(dueAt) : undefined,
+          dueDate: dueAt ? GRPCConverter.timestampToDate(dueAt) : undefined,
           subtasks: task.getSubtasksList().map(subtask => ({
             id: subtask.getId(),
             name: subtask.getName(),
@@ -186,7 +136,7 @@ export const useTasksByPatientSortedByStatusQuery = (patientId: string | undefin
           notes: task.getDescription(),
           isPublicVisible: task.getPublic(),
           assignee: task.getAssignedUserId(),
-          dueDate: dueAt ? timestampToDate(dueAt) : undefined,
+          dueDate: dueAt ? GRPCConverter.timestampToDate(dueAt) : undefined,
           subtasks: task.getSubtasksList().map(subtask => ({
             id: subtask.getId(),
             name: subtask.getName(),
@@ -196,9 +146,9 @@ export const useTasksByPatientSortedByStatusQuery = (patientId: string | undefin
       }
 
       const tasks: SortedTasks = {
-        [TaskStatus.TASK_STATUS_TODO]: res.getTodoList().map(value => mapping(value, TaskStatus.TASK_STATUS_TODO)),
-        [TaskStatus.TASK_STATUS_IN_PROGRESS]: res.getInProgressList().map(value => mapping(value, TaskStatus.TASK_STATUS_IN_PROGRESS)),
-        [TaskStatus.TASK_STATUS_DONE]: res.getDoneList().map(value => mapping(value, TaskStatus.TASK_STATUS_DONE)),
+        todo: res.getTodoList().map(value => mapping(value, 'todo')),
+        inProgress: res.getInProgressList().map(value => mapping(value, 'inProgress')),
+        done: res.getDoneList().map(value => mapping(value, 'done')),
       }
 
       return tasks
@@ -215,8 +165,8 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       req.setPatientId(patientId)
       req.setDescription(task.notes)
       req.setPublic(task.isPublicVisible)
-      req.setInitialStatus(task.status)
-      req.setDueAt(task.dueDate ? dateToTimestamp(task.dueDate) : undefined)
+      req.setInitialStatus(GRPCConverter.taskStatusToGrpc(task.status))
+      req.setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
 
       const res = await taskService.createTask(req, getAuthenticatedGrpcMetadata())
       const newTask = { ...task, id: res.getId() }
@@ -240,7 +190,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       updateTask.setId(task.id)
       updateTask.setDescription(task.notes)
       updateTask.setName(task.name)
-      updateTask.setDueAt(task.dueDate ? dateToTimestamp(task.dueDate) : undefined)
+      updateTask.setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
       updateTask.setPublic(task.isPublicVisible)
 
       const getTask = new GetTaskRequest()

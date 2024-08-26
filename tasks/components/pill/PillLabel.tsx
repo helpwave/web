@@ -1,8 +1,8 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { Span } from '@helpwave/common/components/Span'
+import type { TaskStatus } from '@/mutations/types/task'
 
 type PillLabelTranslation = {
   text: string
@@ -10,41 +10,33 @@ type PillLabelTranslation = {
 
 export type TaskStateInformation = { colorLabel: string, translation: Record<Languages, PillLabelTranslation> }
 
-const TaskState = {
-  [TaskStatus.TASK_STATUS_TODO]: {
+const TaskState: Record<TaskStatus, TaskStateInformation> = {
+  todo: {
     colorLabel: 'hw-label-1',
     translation: {
       en: { text: 'unscheduled' },
       de: { text: 'Nicht Geplant' }
     }
   },
-  [TaskStatus.TASK_STATUS_IN_PROGRESS]: {
+  inProgress: {
     colorLabel: 'hw-label-2',
     translation: {
       en: { text: 'in progress' },
       de: { text: 'In Arbeit' }
     }
   },
-  [TaskStatus.TASK_STATUS_DONE]: {
+  done: {
     colorLabel: 'hw-label-3',
     translation: {
       en: { text: 'done' },
       de: { text: 'Fertig' }
     }
   },
-  // TODO change this
-  [TaskStatus.TASK_STATUS_UNSPECIFIED]: {
-    colorLabel: 'hw-label-1',
-    translation: {
-      en: { text: 'unscheduled' },
-      de: { text: 'Nicht Geplant' }
-    }
-  },
 } as const
 
 export type PillLabelProps = {
   count?: number,
-  state?: TaskStateInformation
+  taskStatus?: TaskStatus
 }
 
 /**
@@ -53,8 +45,9 @@ export type PillLabelProps = {
 const PillLabel = ({
   overwriteTranslation,
   count,
-  state = TaskState[TaskStatus.TASK_STATUS_TODO]
+  taskStatus = 'todo'
 }: PropsForTranslation<PillLabelTranslation, PillLabelProps>) => {
+  const state = TaskState[taskStatus]
   const translation = useTranslation(state.translation, overwriteTranslation)
   return (
     <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center

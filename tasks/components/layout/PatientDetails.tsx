@@ -215,7 +215,7 @@ export const PatientDetail = ({
         )}
         {!!newPatient.id && (
           <div className={tw('mt-4')}>
-            <PropertyList subjectID={newPatient.id} subjectType="patient"/>
+            <PropertyList subjectId={newPatient.id} subjectType="patient"/>
           </div>
         )}
         <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>

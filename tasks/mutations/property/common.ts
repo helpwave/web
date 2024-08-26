@@ -34,21 +34,46 @@ export type Property = {
 }
 
 export type PropertyValue = {
-  textValue?: string,
-  numberValue?: number,
-  boolValue?: boolean,
-  dateValue?: Date,
-  dataTimeValue?: Date,
-  selectValue?: string
+  textValue: string,
+  numberValue: number,
+  boolValue: boolean,
+  dateValue: Date,
+  dateTimeValue: Date,
+  singleSelectValue: string,
+  multiSelectValue: string[]
 }
 
+export const emptyPropertyValue: PropertyValue = {
+  boolValue: false,
+  textValue: '',
+  numberValue: 0,
+  dateValue: new Date(),
+  dateTimeValue: new Date(),
+  singleSelectValue: '',
+  multiSelectValue: []
+}
+
+/**
+ * The value of property attached to a subject
+ *
+ * This Object only stores the value.
+ *
+ * It is identified through the propertyId and the subjectType
+ */
 export type AttachedProperty = {
+  /**
+   * The identifier of the property for which this is a value
+   */
   propertyId: string,
+  subjectId: string,
+  value: PropertyValue
+}
+
+export type DisplayableAttachedProperty = AttachedProperty & {
   subjectType: SubjectType,
   fieldType: FieldType,
   name: string,
-  description?: string,
-  value: PropertyValue
+  description?: string
 }
 
 export type PropertyFieldType = {
@@ -120,10 +145,10 @@ export const fieldTypeMapperToGRPC = (fieldType: FieldType): GRPCFieldType => {
       return GRPCFieldType.FIELD_TYPE_NUMBER
     case 'text':
       return GRPCFieldType.FIELD_TYPE_TEXT
-    case 'dateTime':
-      return GRPCFieldType.FIELD_TYPE_DATE_TIME
     case 'date':
       return GRPCFieldType.FIELD_TYPE_DATE
+    case 'dateTime':
+      return GRPCFieldType.FIELD_TYPE_DATE_TIME
     case 'checkbox':
       return GRPCFieldType.FIELD_TYPE_CHECKBOX
     case 'singleSelect':
@@ -140,10 +165,10 @@ export const fieldTypeMapperFromGRPC = (fieldType: GRPCFieldType): FieldType => 
       return 'number'
     case GRPCFieldType.FIELD_TYPE_TEXT:
       return 'text'
-    case GRPCFieldType.FIELD_TYPE_DATE_TIME:
-      return 'dateTime'
     case GRPCFieldType.FIELD_TYPE_DATE:
       return 'date'
+    case GRPCFieldType.FIELD_TYPE_DATE_TIME:
+      return 'dateTime'
     case GRPCFieldType.FIELD_TYPE_CHECKBOX:
       return 'checkbox'
     case GRPCFieldType.FIELD_TYPE_SELECT:
@@ -156,3 +181,4 @@ export const fieldTypeMapperFromGRPC = (fieldType: GRPCFieldType): FieldType => 
 }
 
 export const propertyQueryKey: string = 'property'
+export const propertyValuesQueryKey: string = 'propertyValues'

@@ -1,53 +1,64 @@
 import { noop } from '@helpwave/common/util/noop'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+  AttachPropertyValueRequest,
   GetAttachedPropertyValuesRequest,
   TaskPropertyMatcher
 } from '@helpwave/proto-ts/services/property_svc/v1/property_value_svc_pb'
-import type { SubjectType, AttachedProperty } from '@/mutations/property/common'
-import { fieldTypeMapperFromGRPC, propertyQueryKey } from '@/mutations/property/common'
-import { propertyValueService } from '@/utils/grpc'
+import {
+  Date as ProtoDate
+} from '@helpwave/proto-ts/services/property_svc/v1/types_pb'
+import type { SubjectType, DisplayableAttachedProperty, AttachedProperty } from '@/mutations/property/common'
+import {
+  fieldTypeMapperFromGRPC,
+  propertyQueryKey,
+  propertyValuesQueryKey
+} from '@/mutations/property/common'
+import { getAuthenticatedGrpcMetadata, propertyValueService } from '@/utils/grpc'
+import { GRPCConverter } from '@/mutations/util'
 
-export const usePropertyWithValueListQuery = (id: string | undefined, subjectType: SubjectType) => {
+export const usePropertyWithValueListQuery = (subjectId: string | undefined, subjectType: SubjectType, wardId?: string) => {
   return useQuery({
-    queryKey: [propertyQueryKey, id, subjectType],
-    enabled: !!id,
+    queryKey: [propertyQueryKey, propertyValuesQueryKey, subjectId],
+    enabled: !!subjectId,
     queryFn: async () => {
-      if (!id) {
+      if (!subjectId) {
         return undefined
       }
-      // TODO backend request here
       const req = new GetAttachedPropertyValuesRequest()
       const taskMatcher = new TaskPropertyMatcher()
-      switch (subjectType) {
-        case 'task':
-          taskMatcher.setTaskId(id)
-          break
-        // TODO this should be ward
-        case 'patient':
-          taskMatcher.setWardId(id)
-          break
+      if (subjectType === 'task') {
+        taskMatcher.setTaskId(subjectId)
+        if (wardId) {
+          taskMatcher.setWardId(wardId)
+        }
       }
       req.setTaskMatcher(taskMatcher)
 
-      const res = await propertyValueService.getAttachedPropertyValues(req)
+      if (subjectType === 'patient') {
+        console.warn("PropertyWithValueListQuery: subjectType patient isn't supported in production yet.")
+      }
 
-      const results: AttachedProperty[] = res.getValuesList().map(result => {
-        const dateValue = result.getDateValue()
+      const res = await propertyValueService.getAttachedPropertyValues(req, getAuthenticatedGrpcMetadata())
+
+      const results: DisplayableAttachedProperty[] = res.getValuesList().map(result => {
+        const dateValue: ProtoDate | undefined = result.getDateValue()
 
         return {
           propertyId: result.getPropertyId(),
+          subjectId,
+          subjectType,
           name: result.getName(),
           description: result.getDescription(),
-          subjectType,
           fieldType: fieldTypeMapperFromGRPC(result.getFieldType()),
           value: {
-            boolValue: result.getBoolValue(),
-            dateValue: dateValue ? new Date(dateValue.getYear(), dateValue.getMonth(), dateValue.getDay()) : undefined,
-            numberValue: result.getNumberValue(),
-            selectValue: result.getSelectValue(),
-            dataTimeValue: result.getDateTimeValue()?.toDate(),
-            textValue: result.getTextValue(),
+            boolValue: result.getBoolValue() ?? false,
+            dateValue: dateValue?.getDate() ? dateValue.getDate()!.toDate() : new Date(),
+            numberValue: result.getNumberValue() ?? 0,
+            singleSelectValue: result.getSelectValue() ?? '',
+            dateTimeValue: result.getDateTimeValue()?.toDate() ?? new Date(),
+            textValue: result.getTextValue() ?? '',
+            multiSelectValue: [], // TODO update this when implemented on API
           }
         }
       })
@@ -57,54 +68,35 @@ export const usePropertyWithValueListQuery = (id: string | undefined, subjectTyp
   })
 }
 
-export const usePropertyWithValueCreateMutation = (callback: (property: PropertyWithValue) => void = noop) => {
+/**
+ * Mutation to insert or update a property value for a property attached to a subject
+ */
+export const useAttachedPropertyMutation = <T extends AttachedProperty>(callback: (property: T) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (property: PropertyWithValue) => {
-      // TODO backend request here
-      const newProperty: PropertyWithValue = {
+    mutationFn: async (property: T) => {
+      const req = new AttachPropertyValueRequest()
+
+      req.setPropertyId(property.propertyId)
+      req.setSubjectId(property.subjectId)
+      req.setTextValue(property.value.textValue)
+      req.setNumberValue(property.value.numberValue)
+      req.setBoolValue(property.value.boolValue)
+      req.setDateValue(new ProtoDate().setDate(GRPCConverter.dateToTimestamp(property.value.dateValue)))
+      req.setDateTimeValue(GRPCConverter.dateToTimestamp(property.value.dateTimeValue))
+      req.setSelectValue(property.value.singleSelectValue)
+
+      await propertyValueService.attachPropertyValue(req, getAuthenticatedGrpcMetadata())
+
+      const newProperty: T = {
         ...property,
-        id: Math.random().toString()
       }
-      propertiesWithValuesExample.push(newProperty)
 
       callback(newProperty)
-      return newProperty.id
+      return newProperty
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries([propertyWithValueQueryKey]).then()
-    },
-  })
-}
-
-export const usePropertyWithValueUpdateMutation = (callback: (property: PropertyWithValue) => void = noop) => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (property: PropertyWithValue) => {
-      // TODO backend request here
-      propertiesWithValuesExample = propertiesWithValuesExample.map(value => value.id === property.id ? property : value)
-
-      callback(property)
-      return property
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries([propertyWithValueQueryKey]).then()
-    },
-  })
-}
-
-export const usePropertyWithValueDeleteMutation = (property: PropertyWithValue, callback: () => void = noop) => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (property: PropertyWithValue) => {
-      // TODO backend request here
-      propertiesWithValuesExample = propertiesWithValuesExample.filter(value => value.id !== property.id)
-
-      callback()
-      return true
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries([propertyWithValueQueryKey]).then()
+    onSuccess: (data) => {
+      queryClient.invalidateQueries([propertyQueryKey, propertyValuesQueryKey, data.subjectId]).then()
     },
   })
 }

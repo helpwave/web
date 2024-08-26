@@ -73,7 +73,7 @@ export const WardDisplay = ({
                 })}
                 onTileClick={() => {
                   setOrganizationId(organizationId)
-                  router.push(`/ward/${ward.id}`)
+                  router.push(`/ward/${ward.id}`).then()
                 }}
               />
             ))}

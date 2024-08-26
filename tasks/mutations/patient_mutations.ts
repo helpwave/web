@@ -1,4 +1,3 @@
-import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
@@ -8,7 +7,6 @@ import {
   GetPatientsByWardRequest,
   AssignBedRequest,
   UnassignBedRequest,
-  GetPatientDetailsResponse,
   GetPatientAssignmentByWardRequest,
   GetPatientListRequest,
   DeletePatientRequest,
@@ -16,10 +14,11 @@ import {
   GetRecentPatientsRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
-import type { TaskDTO, TaskMinimalDTO } from './task_mutations'
 import type { BedWithPatientId } from './bed_mutations'
 import { patientService, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
 import { roomOverviewsQueryKey, roomsQueryKey, type RoomWithMinimalBedAndPatient } from '@/mutations/room_mutations'
+import type { TaskDTO, TaskMinimalDTO } from '@/mutations/types/task'
+import { GRPCConverter } from '@/mutations/util'
 
 export type PatientMinimalDTO = {
   id: string,
@@ -110,12 +109,6 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
         throw new Error('create room failed')
       }
 
-      const statusMap = {
-        [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_UNSPECIFIED]: TaskStatus.TASK_STATUS_UNSPECIFIED,
-        [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_TODO]: TaskStatus.TASK_STATUS_TODO,
-        [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_IN_PROGRESS]: TaskStatus.TASK_STATUS_IN_PROGRESS,
-        [GetPatientDetailsResponse.TaskStatus.TASK_STATUS_DONE]: TaskStatus.TASK_STATUS_DONE,
-      }
       const patient: PatientDetailsDTO = {
         id: res.getId(),
         note: res.getNotes(),
@@ -124,7 +117,7 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
         tasks: res.getTasksList().map(task => ({
           id: task.getId(),
           name: task.getName(),
-          status: statusMap[task.getStatus()],
+          status: GRPCConverter.taskStatusFromGRPC(task.getStatus()),
           notes: task.getDescription(),
           isPublicVisible: task.getPublic(),
           assignee: task.getAssignedUserId(),

@@ -20,9 +20,12 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
         question: 'I just want to continue using mediQuu products, what do I need to do?',
         answer: `
           We're glad to hear that! We'll make the transition as easy as possible for you.
-          \\b{There will be no changes to your contract or data protection terms.} In the coming weeks,
-          we will personally provide you with further information on the administrative details.
-          Protecting your data and ensuring your convenience are our top priorities.
+          \\b{There will be no changes to your contract or data protection terms.} Two emails will be sent to you in the next few days or may have already arrived in your mailbox. In one email, we will ask you to agree to the transfer of the contracts to helpwave under the existing conditions. The second email will ask you to confirm that helpwave is authorised to take over the mediQuu data under the existing data processing agreement. Please check your inbox and confirm the two emails by replying to them simply and informally. Here are two suggested wordings:
+          \\b{For the transfer of contracts:}
+          "Dear Sir or Madam, I hereby agree on behalf of practice XY to the transfer of my contracts to helpwave. I also agree to the terms and conditions and the privacy policy."
+          \\b{For the transfer of data:}
+          "Dear Sir or Madam, I hereby declare on behalf of practice XY my consent to the transfer of my personal data from mediQuu to helpwave within the scope of the existing data processing agreement."
+
         `
       },
       {
@@ -56,8 +59,12 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
         answer: `
           Das freut uns! Wir machen Ihnen den Übergang so einfach wie möglich.
           \\b{An Ihrem Vertrag und Ihren Datenschutzbedingungen ändert sich überhaupt nichts.}
-          In den kommenden Wochen werden wir Ihnen persönlich weitere Informationen zu den administrativen
-          Details zukommen lassen. Der Schutz Ihrer Daten und Ihr Komfort stehen dabei an erster Stelle.
+          In den kommenden Tagen werden Ihnen zwei eMails zugesendet oder sind vielleicht sogar schon ins Postfach gekommen. In einer Mail bitten wir Sie um Ihre Zustimmung zur Übernahme der Verträge zu den bestehenden Konditionen and helpwave. In der zweiten Mail geht es um Ihre Bestätigung, dass helpwave die Daten der mediQuu im Rahmen der bestehenden Datenverarbeitungsvereinbarung übernehmen darf. Schauen Sie bitte in Ihr Postfach und bestätigen Sie die beiden Mails in dem Sie einfach und formlos darauf antworten. Hier wären zwei Formulierungsvorschläge:
+          \\b{Zur Übernahme der Verträge:}
+          "Sehr geehrte Damen und Herren, hiermit stimme Ich im Namen der Praxis XY der Übernahme meiner Verträge durch helpwave zu. Außerdem stimme ich den AGBs und der Datenschutzerklärung zu."
+          \\b{Zur Übernahme der Daten:}
+          "Sehr geehrte Damen und Herren, hiermit erkläre Ich im Namen der Praxis XY meine Einwilligung zur Übertragung meiner personenbezogenen Daten von mediQuu an helpwave im Rahmen der bereits an die mediQuu erteilten Auftragsverarbeitungsvereinbarung."
+          Sie sehen also, hier handelt es sich um rein administrative Schritte, die wir Ihnen so einfach wie möglich machen wollen. Der Schutz Ihrer Daten und Ihr Komfort sind uns wichtig.
         `
       },
       {

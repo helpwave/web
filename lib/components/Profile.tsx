@@ -53,7 +53,8 @@ export type ProfileProps = HTMLAttributes<HTMLDivElement> & {
   name: string,
   imageUrl: string,
   badge?: ReactNode,
-  title?: string,
+  prefix?: string,
+  suffix?: string,
   roleBadge?: string,
   role?: string,
   /**
@@ -72,7 +73,8 @@ export const Profile = ({
   name,
   imageUrl,
   badge,
-  title,
+  prefix,
+  suffix,
   roleBadge,
   role,
   tags,
@@ -98,8 +100,9 @@ export const Profile = ({
           </div>
         )}
       </div>
-      {title && <Span className={tw('font-semibold')}>{title}</Span>}
+      {prefix && <Span className={tw('font-semibold')}>{prefix}</Span>}
       <h2 id={name}><Span type="title">{name}</Span></h2>
+      {suffix && <Span className={tw('text-sm mb-1')}>{suffix}</Span>}
       {role && <Span className={tw('font-space font-bold text-sm')}>{role}</Span>}
       {tags && (
         <div className={tw('flex flex-wrap mx-4 mt-2 gap-x-2 justify-center')}>

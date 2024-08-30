@@ -5,6 +5,7 @@ import { tw } from '@helpwave/common/twind'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { SubtaskTile } from './SubtaskTile'
 import { TaskTemplateContext } from '@/pages/templates'
 import {
@@ -12,9 +13,9 @@ import {
   useSubTaskDeleteMutation,
   useSubTaskToDoneMutation,
   useSubTaskToToDoMutation,
-  useSubTaskUpdateMutation,
-  type SubTaskDTO
+  useSubTaskUpdateMutation
 } from '@/mutations/task_mutations'
+import type { SubTaskDTO } from '@/mutations/types/task'
 
 type SubtaskViewTranslation = {
   subtasks: string,
@@ -23,7 +24,7 @@ type SubtaskViewTranslation = {
   newSubtask: string
 }
 
-const defaultSubtaskViewTranslation = {
+const defaultSubtaskViewTranslation: Record<Languages, SubtaskViewTranslation> = {
   en: {
     subtasks: 'Subtasks',
     remove: 'Remove',

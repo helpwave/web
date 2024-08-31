@@ -14,16 +14,13 @@ import {
   type TableState
 } from '@helpwave/common/components/Table'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
+import type { RoomMinimalDTO } from '@helpwave/api-services/types/tasks/room'
 import {
   useRoomCreateMutation,
-  useRoomDeleteMutation,
-  useRoomOverviewsQuery,
+  useRoomDeleteMutation, useRoomOverviewsQuery,
   useRoomUpdateMutation
-} from '@/mutations/room_mutations'
-import type {
-  RoomMinimalDTO
-} from '@/mutations/room_mutations'
+} from '@helpwave/api-services/mutations/tasks/room_mutations'
+import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 import { ManageBedsModal } from '@/components/modals/ManageBedsModal'
 
 type RoomListTranslation = {

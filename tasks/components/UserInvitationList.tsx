@@ -8,13 +8,13 @@ import { Button } from '@helpwave/common/components/Button'
 import { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Avatar } from '@helpwave/common/components/Avatar'
-import { useAuth } from '@/hooks/useAuth'
 import {
   useInvitationsByUserQuery,
   useInviteAcceptMutation,
-  useInviteDeclineMutation,
-  type Invitation
-} from '@/mutations/organization_mutations'
+  useInviteDeclineMutation
+} from '@helpwave/api-services/mutations/users/organization_mutations'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import type { Invitation } from '@helpwave/api-services/types/users/invitations'
 import { ReSignInModal } from '@/components/modals/ReSignInModal'
 
 type UserInvitationListTranslation = {

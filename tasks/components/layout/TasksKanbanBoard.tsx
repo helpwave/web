@@ -12,18 +12,18 @@ import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { KanbanColumn } from '../KanbanColumn'
-import { TaskCard } from '../cards/TaskCard'
-import { KanbanHeader } from '../KanbanHeader'
-import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent } from '@/components/dnd-kit-instances/tasks'
+import type { SortedTasks, TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
+import { emptySortedTasks } from '@helpwave/api-services/types/tasks/task'
 import {
   useTasksByPatientSortedByStatusQuery,
   useTaskToDoneMutation,
   useTaskToInProgressMutation,
   useTaskToToDoMutation
-} from '@/mutations/task_mutations'
-import type { SortedTasks, TaskDTO, TaskStatus } from '@/mutations/types/task'
-import { emptySortedTasks } from '@/mutations/types/task'
+} from '@helpwave/api-services/mutations/tasks/task_mutations'
+import { KanbanColumn } from '../KanbanColumn'
+import { TaskCard } from '../cards/TaskCard'
+import { KanbanHeader } from '../KanbanHeader'
+import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent } from '@/components/dnd-kit-instances/tasks'
 
 export type KanbanBoardObject = {
   draggedId?: string,

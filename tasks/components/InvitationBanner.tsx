@@ -4,7 +4,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import Link from 'next/link'
-import { useInvitationsByUserQuery } from '@/mutations/organization_mutations'
+import { useInvitationsByUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
 
 type InvitationBannerTranslation = {
   openInvites: string

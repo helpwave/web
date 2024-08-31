@@ -5,7 +5,8 @@ import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { emptyOrganization, type OrganizationMinimalDTO } from '@/mutations/organization_mutations'
+import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
+import { emptyOrganization } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationFormTranslation = {
   general: string,

@@ -8,8 +8,13 @@ import { defaultTableStatePagination, Table, updatePagination, type TableState }
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { useBedCreateMutation, useBedDeleteMutation, useBedUpdateMutation, type BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
-import { useRoomOverviewsQuery } from '@/mutations/room_mutations'
+import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
+import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
+import {
+  useBedCreateMutation,
+  useBedDeleteMutation,
+  useBedUpdateMutation
+} from '@helpwave/api-services/mutations/tasks/bed_mutations'
 
 type ManageBedsModalTranslation = {
   manageBedsIn: string,

@@ -14,8 +14,6 @@ import { PropertyServicePromiseClient } from '@helpwave/proto-ts/services/proper
 import {
   PropertyValueServicePromiseClient
 } from '@helpwave/proto-ts/services/property_svc/v1/property_value_svc_grpc_web_pb'
-import { OrganizationOfflineServicePromiseClient } from './offline/organization_service'
-import { UserOfflineServicePromiseClient } from './offline/user_service'
 import { APIServiceUrls } from './config/wrapper'
 import { WardOfflineServicePromiseClient } from './offline/tasks/ward_service'
 import { RoomOfflineServicePromiseClient } from './offline/tasks/room_service'
@@ -23,9 +21,11 @@ import { BedOfflineServicePromiseClient } from './offline/tasks/bed_service'
 import { PatientOfflineServicePromiseClient } from './offline/tasks/patient_service'
 import { TaskOfflineServicePromiseClient } from './offline/tasks/task_service'
 import { TaskTemplateOfflineServicePromiseClient } from './offline/tasks/task_template_service'
-import { PropertyOfflineServicePromiseClient } from './offline/property/property_service'
-import { PropertyValueOfflineServicePromiseClient } from './offline/property/property_value_service'
+import { PropertyOfflineServicePromiseClient } from './offline/properties/property_service'
+import { PropertyValueOfflineServicePromiseClient } from './offline/properties/property_value_service'
 import { getAPIServiceConfig } from './config/config'
+import { OrganizationOfflineServicePromiseClient } from './offline/users/organization_service'
+import { UserOfflineServicePromiseClient } from './offline/users/user_service'
 
 type APIServicesType = {
   organization: OrganizationOfflineServicePromiseClient,
@@ -56,12 +56,12 @@ const offlineServices: APIServicesType = {
 const onlineServices: APIServicesType = {
   organization: new OrganizationServicePromiseClient(APIServiceUrls.users),
   user: new UserServicePromiseClient(APIServiceUrls.users),
-  ward: new WardServicePromiseClient(APIServiceUrls.property),
-  room: new RoomServicePromiseClient(APIServiceUrls.property),
-  bed: new BedServicePromiseClient(APIServiceUrls.property),
-  patient: new PatientServicePromiseClient(APIServiceUrls.property),
-  task: new TaskServicePromiseClient(APIServiceUrls.property),
-  taskTemplates: new TaskTemplateServicePromiseClient(APIServiceUrls.property),
+  ward: new WardServicePromiseClient(APIServiceUrls.tasks),
+  room: new RoomServicePromiseClient(APIServiceUrls.tasks),
+  bed: new BedServicePromiseClient(APIServiceUrls.tasks),
+  patient: new PatientServicePromiseClient(APIServiceUrls.tasks),
+  task: new TaskServicePromiseClient(APIServiceUrls.tasks),
+  taskTemplates: new TaskTemplateServicePromiseClient(APIServiceUrls.tasks),
   property: new PropertyServicePromiseClient(APIServiceUrls.property),
   propertyValues: new PropertyValueServicePromiseClient(APIServiceUrls.property),
 }

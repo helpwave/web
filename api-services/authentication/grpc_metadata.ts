@@ -1,4 +1,7 @@
-import type { OrganizationDTO } from '../mutations/organization_mutations'
+import Cookies from 'js-cookie'
+import { LocalStorageService } from '@helpwave/common/util/storage'
+import type { OrganizationDTO } from '../types/users/organizations'
+import { COOKIE_ID_TOKEN_KEY, LOCALSTORAGE_ORGANIZATION_KEY } from './useAuth'
 
 type AuthenticatedGrpcMetadata = {
   Authorization: string,

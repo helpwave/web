@@ -14,12 +14,21 @@ export const equalSizeGroups = <T, >(array: T[], groupSize: number): T[][] => {
 /**
  * @param start
  * @param end inclusive
+ * @param allowEmptyRange Whether the range can be defined empty via end < start
  */
-export const range = (start: number, end: number) => Array.from({ length: end - start + 1 }, (_, index) => index + start)
+export const range = (start: number, end: number, allowEmptyRange: boolean = false) : number[] => {
+  if (end < start) {
+    if (!allowEmptyRange) {
+      console.warn(`range: end (${end}) < start (${start}) should be allowed explicitly, set allowEmptyRange to true`)
+    }
+    return []
+  }
+  return Array.from({ length: end - start + 1 }, (_, index) => index + start)
+}
 
 /** Finds the closest match
- * @param list: The list of all possible matches
- * @param firstCloser: Return whether a is closer than b
+ * @param list The list of all possible matches
+ * @param firstCloser Return whether item1 is closer than item2
  */
 export const closestMatch = <T, >(list: T[], firstCloser: (item1: T, item2: T) => boolean) => {
   return list.reduce((item1, item2) => {

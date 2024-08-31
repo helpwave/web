@@ -6,8 +6,8 @@ import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/compone
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { noop } from '@helpwave/common/util/noop'
-import { useWardQuery } from '@/mutations/ward_mutations'
-import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '@/mutations/patient_mutations'
+import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import type { RoomBedSelectIds } from '@/components/selects/RoomBedSelect'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 

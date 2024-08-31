@@ -9,24 +9,27 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { StepperInformation } from '@helpwave/common/components/StepperBar'
 import { StepperBar } from '@helpwave/common/components/StepperBar'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import {
+  usePropertyChangeSelectOptionMutation,
+  usePropertyCreateMutation,
+  usePropertyQuery,
+  usePropertyUpdateMutation
+} from '@helpwave/api-services/mutations/properties/property_mutations'
+import type { Property, SelectData } from '@helpwave/api-services/types/properties/property'
+import { emptyProperty } from '@helpwave/api-services/types/properties/property'
+import { range } from '@helpwave/common/util/array'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsRules } from '@/components/layout/property/PropertyDetailsRules'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
-import type { IdentifiedProperty } from '@/components/layout/property/property'
-import { emptyProperty } from '@/components/layout/property/property'
 import { PropertyContext } from '@/pages/properties'
-import {
-  usePropertyArchiveMutation,
-  usePropertyCreateMutation,
-  usePropertyQuery, usePropertyUpdateMutation
-} from '@/mutations/property/property_mutations'
 
 type PropertyDetailsTranslation = {
   propertyDetails: string,
   archiveProperty: string,
   archivePropertyDialogTitle: string,
   archivePropertyDialogDescription: string,
-  createProperty: string
+  createProperty: string,
+  newEntry: string
 }
 
 const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTranslation> = {
@@ -34,8 +37,9 @@ const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTransl
     propertyDetails: 'Property Details',
     archiveProperty: 'Archive Property',
     archivePropertyDialogTitle: 'Archive Property?',
-    archivePropertyDialogDescription: 'This will archive the property and it won\'t be shown anymore.', // TODO improve text
+    archivePropertyDialogDescription: 'This will archive the properties and it won\'t be shown anymore.', // TODO improve text
     createProperty: 'Create Property',
+    newEntry: 'New Entry',
   },
   de: {
     propertyDetails: 'Eigenschaftsdetails', // TODO better translation
@@ -43,13 +47,14 @@ const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTransl
     archivePropertyDialogTitle: 'Eigenschaft archivieren?',
     archivePropertyDialogDescription: 'Die Eigenschaft wird archiviert und ist danach nicht mehr sichtbar.', // TODO improve text
     createProperty: 'Eigenschaft Erstellen',
+    newEntry: 'Neuer Eintrag',
   }
 }
 
 export type PropertyDetailsProps = NonNullable<unknown>
 
 /**
- * A component for showing and changing property Details
+ * A component for showing and changing properties Details
  */
 export const PropertyDetails = ({
   overwriteTranslation,
@@ -68,22 +73,14 @@ export const PropertyDetails = ({
   } = useContext(PropertyContext)
   const isCreatingNewProperty = !contextState.propertyId
 
-  const { data, isError, isLoading } = usePropertyQuery(contextState.propertyId, 'patient')
+  const { data, isError, isLoading } = usePropertyQuery(contextState.propertyId)
   const updatePropertyMutation = usePropertyUpdateMutation()
-  const [value, setValue] = useState<IdentifiedProperty>({
-    id: '',
+  const updateSelectDataMutation = usePropertyChangeSelectOptionMutation()
+  const [value, setValue] = useState<Property>({
     ...emptyProperty,
-    basicInfo: {
-      ...emptyProperty.basicInfo,
-      subjectType: contextState.subjectType ?? emptyProperty.basicInfo.subjectType
-    }
   })
   const propertyCreateMutation = usePropertyCreateMutation(property => {
     updateContext({ ...contextState, propertyId: property.id })
-  })
-  const archivePropertyMutation = usePropertyArchiveMutation(() => {
-    setArchiveConfirm(false)
-    updateContext({ ...contextState, propertyId: undefined })
   })
 
   useEffect(() => {
@@ -103,7 +100,7 @@ export const PropertyDetails = ({
         descriptionText={translation.archivePropertyDialogDescription}
         onCancel={() => setArchiveConfirm(false)}
         onConfirm={() => {
-          archivePropertyMutation.mutate(value)
+          updatePropertyMutation.mutate({ ...value, isArchived: true })
         }}
         onCloseClick={() => setArchiveConfirm(false)}
         onBackgroundClick={() => setArchiveConfirm(false)}
@@ -127,15 +124,15 @@ export const PropertyDetails = ({
         loadingProps={{ classname: 'min-h-[400px] border-2 border-black rounded-xl' }}
       >
         <PropertyDetailsBasicInfo
-          value={value.basicInfo}
+          value={value}
           onChange={basicInfo => setValue({
             ...value,
-            basicInfo
+            ...basicInfo
           })}
           onEditComplete={
             basicInfo => updatePropertyMutation.mutate({
               ...value,
-              basicInfo
+              ...basicInfo
             })
           }
           inputGroupProps={{
@@ -145,16 +142,35 @@ export const PropertyDetails = ({
           }}
         />
         <PropertyDetailsField
-          value={value.field}
-          onChange={field => setValue({
-            ...value,
-            field
-          })}
-          onEditComplete={
-            field => updatePropertyMutation.mutate({
-              ...value,
-              field
-            })
+          value={value}
+          onChange={
+            (fieldDetails, selectUpdate) => {
+              /// Creating new Property case
+              if (value.id === '') {
+                setValue(prevState => {
+                  const selectData : SelectData = { ...fieldDetails.selectData }
+                  if (selectUpdate) {
+                    selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({ id: '', name: `${translation.newEntry} ${index + 1}`, description: '', isCustom: false })))
+                  }
+                  return { ...prevState, fieldType: fieldDetails.fieldType, selectData }
+                })
+                return
+              }
+
+              // TODO combine these
+              updatePropertyMutation.mutate({
+                ...value,
+                ...fieldDetails
+              })
+              if (selectUpdate) {
+                updateSelectDataMutation.mutate({
+                  propertyId: value.id,
+                  update: selectUpdate.update,
+                  add: range(0, selectUpdate.create - 1).map(index => ({ id: '', name: `${translation.newEntry} ${index + 1}`, description: '', isCustom: false })),
+                  remove: selectUpdate.delete.map(value1 => value1.id)
+                })
+              }
+            }
           }
           inputGroupProps={{
             expanded: !isCreatingNewProperty || step === 1 || step === 3,
@@ -163,15 +179,15 @@ export const PropertyDetails = ({
           }}
         />
         <PropertyDetailsRules
-          value={value.rules}
+          value={value}
           onChange={rules => setValue({
             ...value,
-            rules
+            ...rules
           })}
           onEditComplete={
             rules => updatePropertyMutation.mutate({
               ...value,
-              rules
+              ...rules
             })
           }
           inputGroupProps={{

@@ -10,9 +10,9 @@ import {
   validateAuthResponse
 } from 'oauth4webapi'
 import { getCookie, setCookie } from 'cookies-next'
-import { getConfig } from './config'
+import { getAPIServiceConfig } from '../config/config'
 
-const config = getConfig()
+const config = getAPIServiceConfig()
 const codeChallengeMethod = 'S256'
 
 const LOCALSTORAGE_KEY_STATE = 'oauth_state'

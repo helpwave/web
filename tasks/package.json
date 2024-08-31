@@ -14,7 +14,7 @@
     "@dnd-kit/sortable": "7.0.2",
     "@headlessui/react": "1.7.19",
     "@helpwave/common": "workspace:*",
-    "@helpwave/proto-ts": "0.44.0-94c8472.0",
+    "@helpwave/api-services": "workspace:*",
     "@radix-ui/react-checkbox": "1.0.4",
     "@tanstack/react-query": "4.36.1",
     "@tanstack/react-query-devtools": "5.35.5",

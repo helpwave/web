@@ -25,6 +25,7 @@ import { z } from 'zod'
 */
 
 const configSchema = z.object({
+  NODE_ENV: z.literal('production').or(z.literal('development')).default('production'),
   NEXT_PUBLIC_API_URL: z.string().url().default('https://api.helpwave.de'),
   NEXT_PUBLIC_OFFLINE_API: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_REQUEST_LOGGING: z.literal('true').or(z.literal('false')).optional(),
@@ -35,6 +36,7 @@ const configSchema = z.object({
   NEXT_PUBLIC_FAKE_TOKEN_ENABLE: z.literal('true').or(z.literal('false')).default('false'),
   NEXT_PUBLIC_FAKE_TOKEN: z.object({ sub: z.string().uuid(), name: z.string(), nickname: z.string(), email: z.string().email(), organizations: z.string().array() }).default({ sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984', name: 'Max Mustermann', nickname: 'max.mustermann', email: 'max.mustermann@helpwave.de', organizations: ['3b25c6f5-4705-4074-9fc6-a50c28eba406'] }),
 }).transform(obj => ({
+  env: obj.NODE_ENV,
   apiUrl: obj.NEXT_PUBLIC_API_URL,
   offlineAPI: obj.NEXT_PUBLIC_OFFLINE_API === 'true',
   requestLogging: obj.NEXT_PUBLIC_REQUEST_LOGGING === 'true',
@@ -55,6 +57,7 @@ const getAPIServiceConfig = () => {
   }
 
   const maybeConfig = configSchema.safeParse({
+    NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_OFFLINE_API: process.env.NEXT_PUBLIC_OFFLINE_API,
     NEXT_PUBLIC_REQUEST_LOGGING: process.env.NEXT_PUBLIC_REQUEST_LOGGING,

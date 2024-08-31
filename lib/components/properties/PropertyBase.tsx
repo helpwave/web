@@ -31,7 +31,7 @@ export type PropertyBaseProps = {
 }
 
 /**
- * A component for showing a property with uniform styling
+ * A component for showing a properties with uniform styling
  */
 export const PropertyBase = ({
   overwriteTranslation,

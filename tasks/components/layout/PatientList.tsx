@@ -10,8 +10,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Chip } from '@helpwave/common/components/ChipList'
-import { Draggable, Droppable } from '../dnd-kit-instances/patients'
-import { WardOverviewContext } from '@/pages/ward/[wardId]'
+import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
@@ -20,8 +19,9 @@ import {
   type PatientDTO,
   type PatientMinimalDTO,
   type PatientWithBedAndRoomDTO
-} from '@/mutations/patient_mutations'
-import { useWardQuery } from '@/mutations/ward_mutations'
+} from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import { Draggable, Droppable } from '../dnd-kit-instances/patients'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { AddPatientModal } from '@/components/modals/AddPatientModal'
 

@@ -7,10 +7,10 @@ import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { Avatar } from '@helpwave/common/components/Avatar'
-import { getConfig } from '@/utils/config'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { getAPIServiceConfig } from '@helpwave/api-services/config/config'
 
-const config = getConfig()
+const config = getAPIServiceConfig()
 
 type UserMenuTranslation = {
   profile: string,

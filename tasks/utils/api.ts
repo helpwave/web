@@ -1,7 +1,7 @@
 import type { z } from 'zod'
-import { getConfig } from './config'
+import { getAPIServiceConfig } from '@helpwave/api-services/config/config'
 
-const config = getConfig()
+const config = getAPIServiceConfig()
 
 const addContentType = (headers?: Headers) => {
   if (!headers) {
@@ -15,14 +15,14 @@ const addContentType = (headers?: Headers) => {
 const create = (path: string, options: RequestInit) => ({
   mock: <T>(mockedData: T) => ({
     json: <S extends z.ZodType<T>>(schema: S): Promise<z.output<S>> => {
-      const jsonPromise = config.mock ? Promise.resolve(mockedData) : fetch(config.apiUrl + path, options).then(res => res.json())
+      const jsonPromise = config.offlineAPI ? Promise.resolve(mockedData) : fetch(config.apiUrl + path, options).then(res => res.json())
       return jsonPromise.then(schema.parse)
     },
 
     text: <S extends z.ZodType<string>>(schema: S): Promise<z.output<S>> => {
       if (typeof mockedData !== 'string') throw new Error('Type mismatch: mocked data should be of type string when used in conjunctinon with ".text"')
 
-      const stringPromise = config.mock ? Promise.resolve(mockedData) : fetch(config.apiUrl + path, options).then(res => res.text())
+      const stringPromise = config.offlineAPI ? Promise.resolve(mockedData) : fetch(config.apiUrl + path, options).then(res => res.text())
       return stringPromise.then(schema.parse)
     }
   })

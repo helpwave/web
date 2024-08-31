@@ -1,12 +1,15 @@
 import { range } from '@helpwave/common/util/array'
-import type { AttachedProperty, Property } from '@/mutations/property/common'
-import { emptyProperty, emptyPropertyValue } from '@/mutations/property/common'
-import type { WardWithOrganizationIdDTO } from '@/mutations/ward_mutations'
-import type { RoomWithWardId } from '@/mutations/room_mutations'
-import type { BedWithRoomId } from '@/mutations/bed_mutations'
-import type { SubTaskDTO, TaskDTO } from '@/mutations/types/task'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
-import type { OrganizationMinimalDTO, OrgMember } from '@/mutations/organization_mutations'
+import type { Property } from '../types/properties/property'
+import { emptyProperty } from '../types/properties/property'
+import type { AttachedProperty } from '../types/properties/attached_property'
+import { emptyPropertyValue } from '../types/properties/attached_property'
+import type { OrganizationMinimalDTO } from '../types/users/organizations'
+import type { WardWithOrganizationIdDTO } from '../types/tasks/wards'
+import type { RoomWithWardId } from '../types/tasks/room'
+import type { BedWithRoomId } from '../types/tasks/bed'
+import type { SubTaskDTO, TaskDTO } from '../types/tasks/task'
+import type { OrganizationMember } from '../types/users/organization_member'
+import type { TaskTemplateDTO } from '../types/tasks/tasks_templates'
 
 const initialProperties: Property[] = [
   {
@@ -256,7 +259,7 @@ export type TaskTemplateSubTaskValueStore = {
   creatorId: string
 }
 
-export type UserValueStore = Omit<OrgMember, 'role'> & {
+export type UserValueStore = Omit<OrganizationMember, 'role'> & {
   nickName: string
 }
 

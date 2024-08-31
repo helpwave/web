@@ -5,8 +5,9 @@ import { CheckboxProperty } from '@helpwave/common/components/properties/Checkbo
 import { SingleSelectProperty } from '@helpwave/common/components/properties/SelectProperty'
 import { MultiSelectProperty } from '@helpwave/common/components/properties/MultiSelectProperty'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import type { AttachedProperty, Property } from '@/mutations/property/common'
-import { usePropertyQuery } from '@/mutations/property/property_mutations'
+import type { Property } from '@helpwave/api-services/types/properties/property'
+import type { AttachedProperty } from '@helpwave/api-services/types/properties/attached_property'
+import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 
 type PropertyEntryDisplayProps = {
   property: Property,
@@ -175,7 +176,7 @@ export const PropertyEntryDisplay = ({
 export type PropertyEntryProps = Omit<PropertyEntryDisplayProps, 'property'>
 
 /**
- * A Component for mapping a property to a specific type.
+ * A Component for mapping a properties to a specific type.
  *
  * It wraps the PropertyEntryDisplay with loading logic
  */

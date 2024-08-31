@@ -42,11 +42,11 @@ import {
   UpdateSubTaskResponse,
   UpdateTaskResponse
 } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
-import type { SubTaskValueStore, TaskValueStore } from '@/mutations/offline/value_store'
-import { OfflineValueStore } from '@/mutations/offline/value_store'
-import { GRPCConverter } from '@/mutations/util'
-import type { SubTaskDTO, TaskStatus } from '@/mutations/types/task'
-import { PatientOfflineService } from '@/mutations/offline/services/patient_service'
+import type { SubTaskValueStore, TaskValueStore } from '../value_store'
+import type { SubTaskDTO, TaskStatus } from '../../types/tasks/task'
+import { OfflineValueStore } from '../value_store'
+import { GRPCConverter } from '../../util/util'
+import { PatientOfflineService } from './patient_service'
 
 type TaskValueStoreUpdate = Omit<TaskValueStore, 'subtasks' | 'status' | 'creationDate' | 'patientId' | 'assigneeId' | 'creatorId' | 'isPublicVisible'>
 

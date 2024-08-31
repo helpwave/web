@@ -4,19 +4,17 @@ import Head from 'next/head'
 import { tw } from '@helpwave/common/twind'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import {
+  useCreateMutation, useDeleteMutation,
+  usePersonalTaskTemplateQuery, useUpdateMutation
+} from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { TaskTemplateDisplay } from '@/components/layout/TaskTemplateDisplay'
 import { TaskTemplateDetails } from '@/components/layout/TaskTemplateDetails'
 import titleWrapper from '@/utils/titleWrapper'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
-import {
-  useCreateMutation,
-  useDeleteMutation,
-  usePersonalTaskTemplateQuery,
-  useUpdateMutation
-} from '@/mutations/task_template_mutations'
-import { useAuth } from '@/hooks/useAuth'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type PersonalTaskTemplateTranslation = {

@@ -5,7 +5,7 @@ import { ToggleableInput } from '@helpwave/common/components/user-input/Toggleab
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { Button } from '@helpwave/common/components/Button'
 import { noop } from '@helpwave/common/util/noop'
-import type { SubTaskDTO } from '@/mutations/types/task'
+import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 
 type SubtaskTileTranslation = {
   subtasks: string,

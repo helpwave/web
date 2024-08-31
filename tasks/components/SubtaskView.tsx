@@ -6,16 +6,16 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { SubtaskTile } from './SubtaskTile'
-import { TaskTemplateContext } from '@/pages/templates'
+import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 import {
   useSubTaskAddMutation,
   useSubTaskDeleteMutation,
   useSubTaskToDoneMutation,
   useSubTaskToToDoMutation,
   useSubTaskUpdateMutation
-} from '@/mutations/task_mutations'
-import type { SubTaskDTO } from '@/mutations/types/task'
+} from '@helpwave/api-services/mutations/tasks/task_mutations'
+import { SubtaskTile } from './SubtaskTile'
+import { TaskTemplateContext } from '@/pages/templates'
 
 type SubtaskViewTranslation = {
   subtasks: string,

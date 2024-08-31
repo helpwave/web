@@ -1,3 +1,6 @@
+import type { PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
+import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
+import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import type {
   DragStartEvent as DragStartEventFree,
   DragMoveEvent as DragMoveEventFree,
@@ -8,10 +11,6 @@ import type {
 import { DndContext as DndContextFree } from '@/components/dnd-kit/typesafety'
 import { Droppable as DroppableFree } from '@/components/dnd-kit/Droppable'
 import { Draggable as DraggableFree } from '@/components/dnd-kit/Draggable'
-
-import type { PatientMinimalDTO } from '@/mutations/patient_mutations'
-import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
-import type { RoomOverviewDTO } from '@/mutations/room_mutations'
 
 type DraggableData = {
   // patient from 'patient list'

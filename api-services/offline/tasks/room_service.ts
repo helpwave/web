@@ -11,12 +11,12 @@ import {
   GetRoomResponse,
   GetRoomsByWardResponse, GetRoomsResponse, UpdateRoomResponse
 } from '@helpwave/proto-ts/services/task_svc/v1/room_svc_pb'
-import type { TaskValueStore } from '@/mutations/offline/value_store'
-import { OfflineValueStore } from '@/mutations/offline/value_store'
-import type { RoomWithWardId } from '@/mutations/room_mutations'
-import { BedOfflineService } from '@/mutations/offline/services/bed_service'
-import { PatientOfflineService } from '@/mutations/offline/services/patient_service'
-import { TaskOfflineService } from '@/mutations/offline/services/task_service'
+import type { RoomWithWardId } from '../../types/tasks/room'
+import type { TaskValueStore } from '../value_store'
+import { OfflineValueStore } from '../value_store'
+import { BedOfflineService } from './bed_service'
+import { PatientOfflineService } from './patient_service'
+import { TaskOfflineService } from './task_service'
 
 export const RoomOfflineService = {
   findRoom: (id: string): RoomWithWardId => {

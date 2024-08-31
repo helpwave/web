@@ -23,10 +23,10 @@ import {
 } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_pb'
 import { BedServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_grpc_web_pb'
 import { range } from '@helpwave/common/util/array'
-import { OfflineValueStore } from '@/mutations/offline/value_store'
-import type { BedWithRoomId } from '@/mutations/bed_mutations'
-import { PatientOfflineService } from '@/mutations/offline/services/patient_service'
-import { RoomOfflineService } from '@/mutations/offline/services/room_service'
+import type { BedWithRoomId } from '../../types/tasks/bed'
+import { OfflineValueStore } from '../value_store'
+import { PatientOfflineService } from './patient_service'
+import { RoomOfflineService } from './room_service'
 
 export const BedOfflineService = {
   find: (id: string): BedWithRoomId | undefined => {

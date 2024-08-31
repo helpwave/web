@@ -8,63 +8,14 @@ import {
   UpdateWardRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
-import { APIServices, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
-
-export const wardsQueryKey = 'wards'
-
-export type WardMinimalDTO = {
-  id: string,
-  name: string
-}
-
-export type WardWithOrganizationIdDTO = WardMinimalDTO & {
-  organizationId: string
-}
-
-export type WardOverviewDTO = WardMinimalDTO & {
-  bedCount: number,
-  unscheduled: number,
-  inProgress: number,
-  done: number
-}
-
-export const emptyWardOverview: WardOverviewDTO = {
-  id: '',
-  name: '',
-  bedCount: 0,
-  unscheduled: 0,
-  inProgress: 0,
-  done: 0
-}
-
-export type WardDetailDTO = WardMinimalDTO & {
-  rooms: {
-    id: string,
-    name: string,
-    beds: {
-      id: string
-    }[]
-  }[],
-  task_templates: {
-    id: string,
-    name: string,
-    subtasks: {
-      id: string,
-      name: string
-    }[]
-  }[]
-}
-
-export const emptyWard: WardDetailDTO = {
-  id: '',
-  name: '',
-  rooms: [],
-  task_templates: []
-}
+import { APIServices } from '../../services'
+import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
+import type { WardDetailDTO, WardMinimalDTO, WardOverviewDTO, WardWithOrganizationIdDTO } from '../../types/tasks/wards'
+import { QueryKeys } from '../query_keys'
 
 export const useWardOverviewsQuery = (organisationId?: string) => {
   return useQuery({
-    queryKey: [wardsQueryKey, organisationId],
+    queryKey: [QueryKeys.wards, organisationId],
     queryFn: async () => {
       const req = new GetWardOverviewsRequest()
       const res = await APIServices.ward.getWardOverviews(req, getAuthenticatedGrpcMetadata(organisationId))
@@ -85,7 +36,7 @@ export const useWardOverviewsQuery = (organisationId?: string) => {
 
 export const useWardDetailsQuery = (wardId?: string, organizationId?: string) => {
   return useQuery({
-    queryKey: [wardsQueryKey, wardId],
+    queryKey: [QueryKeys.wards, wardId],
     enabled: !!wardId,
     queryFn: async (): Promise<WardDetailDTO | null> => {
       if (!wardId) {
@@ -120,7 +71,7 @@ export const useWardDetailsQuery = (wardId?: string, organizationId?: string) =>
 }
 
 export const useWardQuery = (id: string, organisationId?: string) => useQuery({
-  queryKey: [wardsQueryKey, id],
+  queryKey: [QueryKeys.wards, id],
   enabled: !!id,
   queryFn: async (): Promise<WardWithOrganizationIdDTO> => {
     const req = new GetWardRequest()
@@ -151,7 +102,7 @@ export const useWardUpdateMutation = (organisationId?: string, callback: (ward: 
       callback(ward)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([wardsQueryKey]).then()
+      queryClient.invalidateQueries([QueryKeys.wards]).then()
     }
   })
 }
@@ -171,7 +122,7 @@ export const useWardCreateMutation = (organisationId?: string, callback: (ward: 
       callback(newWard)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([wardsQueryKey]).then()
+      queryClient.invalidateQueries([QueryKeys.wards]).then()
     }
   })
 }
@@ -187,7 +138,7 @@ export const useWardDeleteMutation = (organisationId?: string, callback: () => v
       callback()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([wardsQueryKey]).then()
+      queryClient.invalidateQueries([QueryKeys.wards]).then()
     }
   })
 }

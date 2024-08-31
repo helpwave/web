@@ -3,8 +3,8 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { SelectProps } from '@helpwave/common/components/user-input/Select'
 import { Select } from '@helpwave/common/components/user-input/Select'
-import type { SubjectType } from '@/components/layout/property/property'
-import { subjectTypeList } from '@/components/layout/property/property'
+import type { SubjectType } from '@/components/layout/property/properties'
+import { subjectTypeList } from '@/components/layout/property/properties'
 
 type PropertySubjectTypeSelectTranslation = {[key in SubjectType]: string}
 

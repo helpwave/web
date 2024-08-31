@@ -9,16 +9,15 @@ import { Span } from '@helpwave/common/components/Span'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { useEffect, useState } from 'react'
 import { SearchableList } from '@helpwave/common/components/SearchableList'
-import {
-  usePropertyListQuery
-} from '@/mutations/property/property_mutations'
-import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
-import type { AttachedProperty, SubjectType } from '@/mutations/property/common'
+import type { SubjectType } from '@helpwave/api-services/types/properties/property'
 import {
   useAttachedPropertyMutation,
   usePropertyWithValueListQuery
-} from '@/mutations/property/property_value_mutations'
-import { emptyPropertyValue } from '@/mutations/property/common'
+} from '@helpwave/api-services/mutations/properties/property_value_mutations'
+import type { AttachedProperty } from '@helpwave/api-services/types/properties/attached_property'
+import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
+import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
 
 type PropertyListTranslation = {
   properties: string,

@@ -15,16 +15,14 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { formatDateTime } from '@helpwave/common/util/date'
-import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import { SubtaskView } from '../SubtaskView'
-import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
-import { TaskStatusSelect } from '@/components/selects/TaskStatusSelect'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import type { TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
+import { emptyTask } from '@helpwave/api-services/types/tasks/task'
+import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
   usePersonalTaskTemplateQuery,
-  useWardTaskTemplateQuery,
-  type TaskTemplateDTO
-} from '@/mutations/task_template_mutations'
-import { useAuth } from '@/hooks/useAuth'
+  useWardTaskTemplateQuery
+} from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import {
   useAssignTaskToUserMutation,
   useSubTaskAddMutation,
@@ -36,11 +34,14 @@ import {
   useTaskToToDoMutation,
   useTaskUpdateMutation,
   useUnassignTaskToUserMutation
-} from '@/mutations/task_mutations'
-import { type WardWithOrganizationIdDTO, useWardQuery } from '@/mutations/ward_mutations'
+} from '@helpwave/api-services/mutations/tasks/task_mutations'
+import type { WardWithOrganizationIdDTO } from '@helpwave/api-services/types/tasks/wards'
+import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
+import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
+import { SubtaskView } from '../SubtaskView'
+import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
+import { TaskStatusSelect } from '@/components/selects/TaskStatusSelect'
 import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
-import type { TaskDTO, TaskStatus } from '@/mutations/types/task'
-import { emptyTask } from '@/mutations/types/task'
 
 type TaskDetailViewTranslation = {
   close: string,

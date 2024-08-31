@@ -14,8 +14,9 @@ import {
 } from '@helpwave/common/components/Table'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Avatar } from '@helpwave/common/components/Avatar'
-import { Role, useMembersByOrganizationQuery, type OrgMember } from '@/mutations/organization_member_mutations'
-import { useRemoveMemberMutation } from '@/mutations/organization_mutations'
+import type { OrganizationMember } from '@helpwave/api-services/types/users/organization_member'
+import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
+import { useRemoveMemberMutation } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { OrganizationContext } from '@/pages/organizations'
 
 type OrganizationMemberListTranslation = {
@@ -28,7 +29,6 @@ type OrganizationMemberListTranslation = {
   member: string,
   saveChanges: string,
   role: string,
-  roleTypes: Record<Role, string>,
   dangerZoneText: (single: boolean) => string,
   deleteConfirmText: (single: boolean) => string
 }
@@ -44,7 +44,6 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     member: 'Member',
     saveChanges: 'Save changes',
     role: 'Role',
-    roleTypes: { [Role.admin]: 'Admin', [Role.user]: 'User' },
     dangerZoneText: (single) => `Deleting ${single ? `a ${defaultOrganizationMemberListTranslations.en.member}` : defaultOrganizationMemberListTranslations.en.members} is a permanent action and cannot be undone. Be careful!`,
     deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultOrganizationMemberListTranslations.en.member : defaultOrganizationMemberListTranslations.en.members}?`,
   },
@@ -58,18 +57,17 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
     member: 'Mitglied',
     saveChanges: 'Speichern',
     role: 'Rolle',
-    roleTypes: { [Role.admin]: 'Administrator', [Role.user]: 'Nutzer' },
     dangerZoneText: (single) => `Das Löschen ${single ? `eines ${defaultOrganizationMemberListTranslations.de.member}` : `von ${defaultOrganizationMemberListTranslations.de.member}`} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
     deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? `das ausgewählte ${defaultOrganizationMemberListTranslations.de.member}` : `die ausgewählten ${defaultOrganizationMemberListTranslations.de.members}`}  löschen?`,
   }
 }
 
-type DeleteDialogState = {isShowing: boolean, member?: OrgMember}
+type DeleteDialogState = {isShowing: boolean, member?: OrganizationMember}
 const defaultDeleteDialogState: DeleteDialogState = { isShowing: false }
 
 export type OrganizationMemberListProps = {
   organizationId?: string,
-  members?: OrgMember[]
+  members?: OrganizationMember[]
 }
 
 /**
@@ -87,16 +85,16 @@ export const OrganizationMemberList = ({
   organizationId ??= context.state.organizationId
   const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
   const membersByOrganization = data ?? []
-  const usedMembers: OrgMember[] = members ?? membersByOrganization ?? []
+  const usedMembers: OrganizationMember[] = members ?? membersByOrganization ?? []
   const removeMemberMutation = useRemoveMemberMutation(organizationId)
 
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
 
   const hasSelectedMultiple = !!tableState.selection && tableState.selection.currentSelection.length > 1
-  const idMapping = (dataObject: OrgMember) => dataObject.id
+  const idMapping = (dataObject: OrganizationMember) => dataObject.id
 
   // TODO move this filtering to the Table component
-  const admins = usedMembers.filter(value => value.role === Role.admin).map(idMapping)
+  const admins: string[] = [] // usedMembers.filter(value => value.role === Role.admin).map(idMapping)
   if (tableState.selection?.currentSelection.find(value => admins.find(adminId => adminId === value))) {
     const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminId => adminId === value))
     setTableState({
@@ -177,7 +175,7 @@ export const OrganizationMemberList = ({
               <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
               }}>
                 <Span className={tw(`font-semibold`)}>
-                  {translation.roleTypes[orgMember.role]}
+                  {'N.A.' /* translation.roleTypes[orgMember.role] */}
                 </Span>
               </button>
             </div>,
@@ -186,7 +184,7 @@ export const OrganizationMemberList = ({
                 onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
                 color="negative"
                 variant="textButton"
-                disabled={orgMember.role === Role.admin}
+                // disabled={orgMember.role === Role.admin}
               >
                 {translation.remove}
               </Button>

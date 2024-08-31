@@ -4,11 +4,11 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Plus } from 'lucide-react'
+import type { TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
+import { emptyTask } from '@helpwave/api-services/types/tasks/task'
 import { Sortable } from './dnd-kit/Sortable'
 import { TaskCard } from './cards/TaskCard'
 import { PillLabel } from './pill/PillLabel'
-import type { TaskDTO, TaskStatus } from '@/mutations/types/task'
-import { emptyTask } from '@/mutations/types/task'
 
 type KanbanColumnsTranslation = {
   addTask: string

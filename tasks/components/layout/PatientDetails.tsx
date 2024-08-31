@@ -7,23 +7,24 @@ import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { ColumnTitle } from '../ColumnTitle'
-import { TasksKanbanBoard } from './TasksKanbanBoard'
-import { WardOverviewContext } from '@/pages/ward/[wardId]'
+import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import {
-  emptyPatientDetails,
   useAssignBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,
   useUnassignMutation,
-  type PatientDetailsDTO, useReadmitPatientMutation
-} from '@/mutations/patient_mutations'
+  useReadmitPatientMutation
+} from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import type { PatientDetailsDTO } from '@helpwave/api-services/types/tasks/patient'
+import { emptyPatientDetails } from '@helpwave/api-services/types/tasks/patient'
+import { ColumnTitle } from '../ColumnTitle'
+import { TasksKanbanBoard } from './TasksKanbanBoard'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 import { PropertyList } from '@/components/layout/property/PropertyList'
-import type { TaskStatus } from '@/mutations/types/task'
 
 type PatientDetailTranslation = {
   patientDetails: string,

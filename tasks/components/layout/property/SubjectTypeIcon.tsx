@@ -1,6 +1,6 @@
 import type { LucideProps } from 'lucide-react'
 import { Bed, Church, Cuboid, Landmark, UserRound } from 'lucide-react'
-import type { SubjectType } from '@/components/layout/property/property'
+import type { SubjectType } from '@/components/layout/property/properties'
 
 export type SubjectTypeIconProps = {
   subjectType: SubjectType

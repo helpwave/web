@@ -6,7 +6,7 @@ import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { tw } from '@helpwave/common/twind'
-import type { ImportanceType, PropertyRules } from '@/components/layout/property/property'
+import type { Property } from '@helpwave/api-services/types/properties/property'
 
 type PropertyDetailsRulesTranslation = {
   rules: string,
@@ -14,28 +14,26 @@ type PropertyDetailsRulesTranslation = {
   importanceDescription: string,
   alwaysVisible: string,
   alwaysVisibleDescription: string
-} & { [key in ImportanceType]: string }
+}
 
 const defaultPropertyDetailsRulesTranslation: Record<Languages, PropertyDetailsRulesTranslation> = {
   en: {
     rules: 'Rules',
     importance: 'Importance',
-    importanceDescription: 'The property gets visually highlighted on an entity if it is empty.',
-    optional: 'Optional',
-    softRequired: 'Soft-Required',
+    importanceDescription: 'The properties gets visually highlighted on an entity if it is empty.',
     alwaysVisible: 'Always Visible',
-    alwaysVisibleDescription: 'Will be displayed on entity even if the value of the property is empty',
+    alwaysVisibleDescription: 'Will be displayed on entity even if the value of the properties is empty',
   },
   de: {
     rules: 'Regeln',
     importance: 'Wichtigkeit',
     importanceDescription: 'Die Eigenschaft wird auf einer Entität visuell hervorgehoben wenn sie nicht ausgefüllt ist.',
-    optional: 'Optional',
-    softRequired: 'Soft-Required', // TODO better translation
     alwaysVisible: 'Immer sichtbar',
     alwaysVisibleDescription: 'Wird auf der Entität angezeigt selbst wenn der Wert nicht gesezt wurde',
   }
 }
+
+type PropertyRules = Pick<Property, 'alwaysIncludeForViewSource'>
 
 export type PropertyDetailsRulesProps = {
   value: PropertyRules,
@@ -58,30 +56,13 @@ export const PropertyDetailsRules = ({
   return (
     <InputGroup {...inputGroupProps} title={translation.rules}>
       <Tile
-        title={{ value: translation.softRequired, type: 'labelMedium' }}
-        description={{ value: translation.importanceDescription }}
-        suffix={(
-          <Checkbox
-            checked={value.importance === 'softRequired'}
-            onChange={isAlwaysVisible => {
-              const newValue: PropertyRules = {
-                ...value,
-                importance: isAlwaysVisible ? 'softRequired' : 'optional'
-              }
-              onChange(newValue)
-              onEditComplete(newValue)
-            }}
-          />
-        )}
-      />
-      <Tile
         title={{ value: translation.alwaysVisible, type: 'labelMedium' }}
         description={{ value: translation.alwaysVisibleDescription }}
         suffix={(
           <Checkbox
-            checked={value.isAlwaysVisible}
-            onChange={isAlwaysVisible => {
-              const newValue: PropertyRules = { ...value, isAlwaysVisible }
+            checked={value.alwaysIncludeForViewSource ?? false}
+            onChange={alwaysIncludeForViewSource => {
+              const newValue: PropertyRules = { ...value, alwaysIncludeForViewSource }
               onChange(newValue)
               onEditComplete(newValue)
             }}

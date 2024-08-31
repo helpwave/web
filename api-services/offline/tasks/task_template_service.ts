@@ -22,8 +22,8 @@ import {
   UpdateTaskTemplateResponse,
   UpdateTaskTemplateSubTaskResponse
 } from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_pb'
-import type { TaskTemplateSubTaskValueStore, TaskTemplateValueStore } from '@/mutations/offline/value_store'
-import { OfflineValueStore } from '@/mutations/offline/value_store'
+import type { TaskTemplateSubTaskValueStore, TaskTemplateValueStore } from '../value_store'
+import { OfflineValueStore } from '../value_store'
 
 type TaskTemplateValueStoreUpdate = Omit<TaskTemplateValueStore, 'isPublicVisible' | 'wardId' | 'creatorId'>
 

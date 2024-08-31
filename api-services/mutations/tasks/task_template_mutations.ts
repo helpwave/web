@@ -8,23 +8,10 @@ import {
   GetAllTaskTemplatesByCreatorRequest,
   GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_pb'
-import { getAuthenticatedGrpcMetadata, APIServices } from '@/utils/grpc'
-import type { TaskTemplateFormType } from '@/pages/templates'
-import SubTask = CreateTaskTemplateRequest.SubTask
-import type { SubTaskDTO } from '@/mutations/types/task' // TODO: what even is this syntax???
-
-export type TaskTemplateDTO = {
-  wardId?: string,
-  id: string,
-  name: string,
-  notes: string,
-  subtasks: {
-    isDone: boolean,
-    id: string,
-    name: string
-  }[],
-  isPublicVisible: boolean
-}
+import type { TaskTemplateDTO, TaskTemplateFormType } from '../../types/tasks/tasks_templates'
+import { APIServices } from '../../services'
+import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
+import type { SubTaskDTO } from '../../types/tasks/task'
 
 type QueryKey = 'personalTaskTemplates' | 'wardTaskTemplates'
 
@@ -182,7 +169,7 @@ export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplat
       createTaskTemplate.setName(taskTemplate.name)
       createTaskTemplate.setDescription(taskTemplate.notes)
       createTaskTemplate.setSubtasksList(taskTemplate.subtasks.map((cSubtask) => {
-        const subTask = new SubTask()
+        const subTask = new CreateTaskTemplateRequest.SubTask()
         subTask.setName(cSubtask.name)
         return subTask
       }))

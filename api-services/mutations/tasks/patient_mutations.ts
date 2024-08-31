@@ -14,86 +14,24 @@ import {
   GetRecentPatientsRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
-import type { BedWithPatientId } from './bed_mutations'
-import { APIServices, getAuthenticatedGrpcMetadata } from '@/utils/grpc'
-import { roomOverviewsQueryKey, roomsQueryKey, type RoomWithMinimalBedAndPatient } from '@/mutations/room_mutations'
-import type { TaskDTO, TaskMinimalDTO } from '@/mutations/types/task'
-import { GRPCConverter } from '@/mutations/util'
-
-export type PatientMinimalDTO = {
-  id: string,
-  name: string
-}
-
-export type PatientDTO = PatientMinimalDTO & {
-  note: string,
-  tasks: TaskMinimalDTO[]
-}
-
-export const emptyPatient: PatientDTO = {
-  id: '',
-  note: '',
-  name: '',
-  tasks: []
-}
-
-export type PatientWithTasksNumberDTO = PatientMinimalDTO & {
-  tasksUnscheduled: number,
-  tasksInProgress: number,
-  tasksDone: number
-}
-
-export type PatientCompleteDTO = PatientMinimalDTO & {
-  note: string,
-  tasks: TaskDTO[]
-}
-
-export const emptyPatientMinimal: PatientMinimalDTO = {
-  id: '',
-  name: ''
-}
-
-export type PatientWithBedAndRoomDTO = PatientMinimalDTO & {
-  room: { id: string, name: string, wardId: string },
-  bed: { id: string, name: string }
-}
-
-export type RecentPatientDTO = PatientMinimalDTO & {
-  wardId?: string,
-  room?: { id: string, name: string },
-  bed?: { id: string, name: string }
-}
-
-export type PatientListDTO = {
-  active: PatientWithBedAndRoomDTO[],
-  unassigned: PatientMinimalDTO[],
-  discharged: PatientMinimalDTO[]
-}
-
-export type PatientWithBedIdDTO = PatientMinimalDTO & {
-  note: string,
-  bedId: string
-}
-
-export type PatientDetailsDTO = PatientMinimalDTO & {
-  note: string,
-  tasks: TaskDTO[],
-  discharged: boolean
-}
-
-export const emptyPatientDetails: PatientDetailsDTO = {
-  id: '',
-  name: '',
-  note: '',
-  tasks: [],
-  discharged: false
-}
-
-const patientsQueryKey = 'patients'
+import { APIServices } from '../../services'
+import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
+import type {
+  PatientDetailsDTO, PatientDTO,
+  PatientListDTO,
+  PatientMinimalDTO,
+  PatientWithBedIdDTO,
+  RecentPatientDTO
+} from '../../types/tasks/patient'
+import { GRPCConverter } from '../../util/util'
+import { QueryKeys } from '../query_keys'
+import type { BedWithPatientId } from '../../types/tasks/bed'
+import type { RoomWithMinimalBedAndPatient } from '../../types/tasks/room'
+import { roomOverviewsQueryKey } from './room_mutations'
 
 export const usePatientDetailsQuery = (patientId: string | undefined) => {
   return useQuery({
-    queryKey: [patientsQueryKey, patientId],
+    queryKey: [QueryKeys.patients, patientId],
     enabled: !!patientId,
     queryFn: async () => {
       if (!patientId) {
@@ -137,7 +75,7 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
 
 export const usePatientsByWardQuery = (wardId: string) => {
   return useQuery({
-    queryKey: [patientsQueryKey, 'details'],
+    queryKey: [QueryKeys.patients, 'details'],
     queryFn: async () => {
       const req = new GetPatientsByWardRequest()
       req.setWardId(wardId)
@@ -157,7 +95,7 @@ export const usePatientsByWardQuery = (wardId: string) => {
 
 export const usePatientAssignmentByWardQuery = (wardId: string) => {
   return useQuery({
-    queryKey: [roomsQueryKey, 'patientAssignments'],
+    queryKey: [QueryKeys.rooms, 'patientAssignments'],
     enabled: !!wardId,
     queryFn: async () => {
       const req = new GetPatientAssignmentByWardRequest()
@@ -191,7 +129,7 @@ export const usePatientAssignmentByWardQuery = (wardId: string) => {
 
 export const usePatientListQuery = (organisationId?: string, wardId?: string) => {
   return useQuery({
-    queryKey: [patientsQueryKey, 'patientList', wardId],
+    queryKey: [QueryKeys.patients, 'patientList', wardId],
     enabled: !!organisationId,
     queryFn: async () => {
       const req = new GetPatientListRequest()
@@ -250,7 +188,7 @@ export const usePatientListQuery = (organisationId?: string, wardId?: string) =>
 
 export const useRecentPatientsQuery = () => {
   return useQuery({
-    queryKey: [patientsQueryKey],
+    queryKey: [QueryKeys.patients],
     queryFn: async () => {
       const req = new GetRecentPatientsRequest()
       const res = await APIServices.patient.getRecentPatients(req, getAuthenticatedGrpcMetadata())
@@ -296,8 +234,8 @@ export const usePatientCreateMutation = (organisationId: string) => {
       return { ...patient, id }
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.error(reason))
-      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([QueryKeys.rooms]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([QueryKeys.patients]).catch(reason => console.error(reason))
     }
   })
 }
@@ -320,8 +258,8 @@ export const usePatientUpdateMutation = () => {
       return patient
     },
     onSuccess: () => {
-      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
-      queryClient.refetchQueries([roomsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([QueryKeys.patients]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([QueryKeys.rooms]).catch(reason => console.error(reason))
     }
   })
 }
@@ -343,8 +281,8 @@ export const usePatientDischargeMutation = (callback: () => void = noop) => {
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).catch(reason => console.error(reason))
-      queryClient.refetchQueries([patientsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([QueryKeys.patients]).catch(reason => console.error(reason))
     }
   })
 }
@@ -367,8 +305,8 @@ export const useAssignBedMutation = (callback: (bed: BedWithPatientId) => void =
       return bed
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey]).then()
-      queryClient.refetchQueries([patientsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.rooms]).then()
+      queryClient.refetchQueries([QueryKeys.patients]).then()
     }
   })
 }
@@ -390,8 +328,8 @@ export const useUnassignMutation = (callback: () => void = noop) => {
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([patientsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.patients]).then()
     }
   })
 }
@@ -408,8 +346,8 @@ export const useDeletePatientMutation = () => {
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([patientsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.patients]).then()
     }
   })
 }
@@ -427,8 +365,8 @@ export const useReadmitPatientMutation = (callback: (patientId: string) => void 
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([patientsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.patients]).then()
     }
   })
 }

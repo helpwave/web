@@ -2,7 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
-import type { TaskStatus } from '@/mutations/types/task'
+import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 
 type PillLabelTranslation = {
   text: string

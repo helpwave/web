@@ -9,8 +9,8 @@ import titleWrapper from '@/utils/titleWrapper'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 import { PropertyDetails } from '@/components/layout/property/PropertyDetails'
 import { PropertyDisplay } from '@/components/layout/property/PropertyDisplay'
-import type { SubjectType } from '@/components/layout/property/property'
-import { subjectTypeList } from '@/components/layout/property/property'
+import type { SubjectType } from '@/components/layout/property/properties'
+import { subjectTypeList } from '@/components/layout/property/properties'
 
 type OrganizationsPageTranslation = {
   properties: string
@@ -76,7 +76,7 @@ const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<
         <TwoColumn
           disableResize={false}
           left={() => (
-            <PropertyDisplay/> // TODO property list
+            <PropertyDisplay/> // TODO properties list
           )}
           right={() => (
             <PropertyDetails

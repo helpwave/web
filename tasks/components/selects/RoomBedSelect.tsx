@@ -8,7 +8,7 @@ import { Span } from '@helpwave/common/components/Span'
 import { noop } from '@helpwave/common/util/noop'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Button } from '@helpwave/common/components/Button'
-import { usePatientAssignmentByWardQuery } from '@/mutations/patient_mutations'
+import { usePatientAssignmentByWardQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 
 type RoomBedSelectTranslation = {
   saved: string,

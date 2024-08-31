@@ -6,16 +6,23 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx . && tsc --noEmit"
   },
   "dependencies": {
+    "@helpwave/common": "workspace:*",
     "@helpwave/proto-ts": "0.44.0-94c8472.0",
     "@tanstack/react-query": "4.36.1",
     "@tanstack/react-query-devtools": "5.35.5",
     "@types/google-protobuf": "3.15.12",
+    "cookies-next": "2.1.2",
     "google-protobuf": "3.21.2",
+    "grpc-web": "1.5.0",
+    "oauth4webapi": "2.10.4",
+    "react": "18.3.1",
     "typescript": "5.4.5",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "workspace:*",
-    "@types/node": "20.12.11"
+    "@types/js-cookie": "3.0.6",
+    "@types/node": "20.12.11",
+    "@types/react": "18.3.1"
   }
 }

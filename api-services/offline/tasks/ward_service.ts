@@ -20,14 +20,14 @@ import {
   UpdateWardResponse
 } from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_pb'
 import type { Metadata } from 'grpc-web'
-import type { PatientValueStore, TaskValueStore } from '@/mutations/offline/value_store'
-import { OfflineValueStore } from '@/mutations/offline/value_store'
-import type { WardWithOrganizationIdDTO } from '@/mutations/ward_mutations'
-import { BedOfflineService } from '@/mutations/offline/services/bed_service'
-import { RoomOfflineService } from '@/mutations/offline/services/room_service'
-import type { BedWithRoomId } from '@/mutations/bed_mutations'
-import { PatientOfflineService } from '@/mutations/offline/services/patient_service'
-import { TaskOfflineService } from '@/mutations/offline/services/task_service'
+import type { WardWithOrganizationIdDTO } from '../../types/tasks/wards'
+import type { PatientValueStore, TaskValueStore } from '../value_store'
+import { OfflineValueStore } from '../value_store'
+import type { BedWithRoomId } from '../../types/tasks/bed'
+import { RoomOfflineService } from './room_service'
+import { BedOfflineService } from './bed_service'
+import { PatientOfflineService } from './patient_service'
+import { TaskOfflineService } from './task_service'
 
 type WardUpdate = Omit<WardWithOrganizationIdDTO, 'organizationId'>
 

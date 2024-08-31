@@ -19,17 +19,26 @@ import {
 } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/util/noop'
-import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
-import { getAuthenticatedGrpcMetadata, APIServices } from '@/utils/grpc'
-import type { CreateSubTaskDTO, SortedTasks, SubTaskDTO, TaskDTO, TaskStatus } from '@/mutations/types/task'
-import { emptySortedTasks, emptyTask } from '@/mutations/types/task'
-import { GRPCConverter } from '@/mutations/util'
-
-export const tasksQueryKey = 'tasks'
+import type {
+  CreateSubTaskDTO,
+  SortedTasks,
+  SubTaskDTO,
+  TaskDTO,
+  TaskStatus
+} from '../../types/tasks/task'
+import {
+  emptySortedTasks,
+  emptyTask
+} from '../../types/tasks/task'
+import { QueryKeys } from '../query_keys'
+import { APIServices } from '../../services'
+import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
+import { GRPCConverter } from '../../util/util'
+import { roomOverviewsQueryKey } from './room_mutations'
 
 export const useTaskQuery = (taskId: string | undefined) => {
   return useQuery({
-    queryKey: [tasksQueryKey],
+    queryKey: [QueryKeys.tasks],
     enabled: !!taskId,
     queryFn: async () => {
       if (!taskId) {
@@ -69,7 +78,7 @@ export const useTaskQuery = (taskId: string | undefined) => {
 export const tasksByPatientQueryKey = 'tasksByPatient'
 export const useTasksByPatientQuery = (patientId: string | undefined) => {
   return useQuery({
-    queryKey: [tasksQueryKey, tasksByPatientQueryKey],
+    queryKey: [QueryKeys.tasks, tasksByPatientQueryKey],
     enabled: !!patientId,
     queryFn: async () => {
       if (!patientId) {
@@ -111,7 +120,7 @@ export const useTasksByPatientQuery = (patientId: string | undefined) => {
 export const sortedTasksByPatientQueryKey = 'sortedTasksByPatient'
 export const useTasksByPatientSortedByStatusQuery = (patientId: string | undefined) => {
   return useQuery({
-    queryKey: [tasksQueryKey, sortedTasksByPatientQueryKey],
+    queryKey: [QueryKeys.tasks, sortedTasksByPatientQueryKey],
     enabled: !!patientId,
     queryFn: async () => {
       if (!patientId) {
@@ -175,8 +184,8 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       return newTask
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
     }
   })
 }
@@ -248,8 +257,8 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       return updateTask.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
     }
   })
 }
@@ -266,8 +275,8 @@ export const useTaskDeleteMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey, sortedTasksByPatientQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks, sortedTasksByPatientQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
     }
   })
 }
@@ -284,8 +293,8 @@ export const useTaskToToDoMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
     }
   })
 }
@@ -302,8 +311,8 @@ export const useTaskToInProgressMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
     }
   })
 }
@@ -320,8 +329,8 @@ export const useTaskToDoneMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
     }
   })
 }
@@ -351,7 +360,7 @@ export const useSubTaskAddMutation = (taskId: string | undefined, callback: (sub
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
     }
   })
 }
@@ -370,7 +379,7 @@ export const useSubTaskUpdateMutation = (callback: (subtask: SubTaskDTO) => void
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
     }
   })
 }
@@ -387,7 +396,7 @@ export const useSubTaskDeleteMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
     }
   })
 }
@@ -404,7 +413,7 @@ export const useSubTaskToToDoMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
     }
   })
 }
@@ -421,7 +430,7 @@ export const useSubTaskToDoneMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
     }
   })
 }
@@ -443,7 +452,7 @@ export const useAssignTaskToUserMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
     }
   })
 }
@@ -464,7 +473,7 @@ export const useUnassignTaskToUserMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([tasksQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).then()
     }
   })
 }

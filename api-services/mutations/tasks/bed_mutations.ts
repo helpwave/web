@@ -6,8 +6,10 @@ import {
   UpdateBedRequest
 } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_pb'
 import { QueryKeys } from '../query_keys'
-import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
-import { wardsQueryKey } from './ward_mutations'
+import { APIServices } from '../../services'
+import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
+import type { BedWithRoomId } from '../../types/tasks/bed'
+import { roomOverviewsQueryKey } from './room_mutations'
 
 export const useBedQuery = (bedId: string | undefined) => {
   return useQuery({
@@ -48,8 +50,8 @@ export const useBedCreateMutation = () => {
     },
     onSuccess: () => {
       queryClient.refetchQueries([QueryKeys.beds]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([wardsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.wards]).then()
     },
   })
 }
@@ -75,7 +77,7 @@ export const useBedUpdateMutation = () => {
     },
     onSuccess: () => {
       queryClient.refetchQueries([APIServices.bed]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
     },
   })
 }
@@ -99,8 +101,8 @@ export const useBedDeleteMutation = () => {
     },
     onSuccess: () => {
       queryClient.refetchQueries([APIServices.bed]).then()
-      queryClient.refetchQueries([roomsQueryKey, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([wardsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.wards]).then()
     },
   })
 }

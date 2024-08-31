@@ -12,7 +12,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import {
   useInvitationsByOrganizationQuery,
   useInviteMemberMutation, useInviteRevokeMutation
-} from '@/mutations/organization_mutations'
+} from '@helpwave/api-services/mutations/users/organization_mutations'
 import { OrganizationContext } from '@/pages/organizations'
 
 type OrganizationInvitationListTranslation = {

@@ -6,8 +6,8 @@ import { LockIcon } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Avatar } from '@helpwave/common/components/Avatar'
-import { useUserQuery } from '@/mutations/user_mutations'
-import type { TaskDTO } from '@/mutations/types/task'
+import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
+import { useUserQuery } from '@helpwave/api-services/mutations/users/user_mutations'
 
 type TaskCardTranslation = {
   assigned: string

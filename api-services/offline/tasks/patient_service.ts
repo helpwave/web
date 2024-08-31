@@ -32,13 +32,13 @@ import {
   UnassignBedResponse,
   UpdatePatientResponse
 } from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
-import type { PatientValueStore } from '@/mutations/offline/value_store'
-import { OfflineValueStore } from '@/mutations/offline/value_store'
-import { BedOfflineService } from '@/mutations/offline/services/bed_service'
-import type { RoomWithWardId } from '@/mutations/room_mutations'
-import { RoomOfflineService } from '@/mutations/offline/services/room_service'
-import { SubTaskOfflineService, TaskOfflineService } from '@/mutations/offline/services/task_service'
-import { GRPCConverter } from '@/mutations/util'
+import type { PatientValueStore } from '../value_store'
+import { OfflineValueStore } from '../value_store'
+import type { RoomWithWardId } from '../../types/tasks/room'
+import { GRPCConverter } from '../../util/util'
+import { SubTaskOfflineService, TaskOfflineService } from './task_service'
+import { BedOfflineService } from './bed_service'
+import { RoomOfflineService } from './room_service'
 
 export const PatientOfflineService = {
   find: (id: string): PatientValueStore | undefined => {

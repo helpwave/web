@@ -1,5 +1,6 @@
 import type { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import type { OrganizationDisplayableDTO } from './organizations'
+export { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 
 export type InvitationWithOrganizationId = {
   id: string,

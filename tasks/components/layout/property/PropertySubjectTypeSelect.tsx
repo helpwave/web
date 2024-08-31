@@ -3,25 +3,19 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { SelectProps } from '@helpwave/common/components/user-input/Select'
 import { Select } from '@helpwave/common/components/user-input/Select'
-import type { SubjectType } from '@/components/layout/property/properties'
-import { subjectTypeList } from '@/components/layout/property/properties'
+import type { SubjectType } from '@helpwave/api-services/types/properties/property'
+import { subjectTypeList } from '@helpwave/api-services/types/properties/property'
 
 type PropertySubjectTypeSelectTranslation = {[key in SubjectType]: string}
 
 const defaultPropertySubjectTypeSelectTranslation: Record<Languages, PropertySubjectTypeSelectTranslation> = {
   en: {
-    organization: 'Organization',
-    ward: 'Ward',
-    room: 'Room',
-    bed: 'Bed',
     patient: 'Patient',
+    task: 'Task',
   },
   de: {
-    organization: 'Organisation',
-    ward: 'Station',
-    room: 'Raum',
-    bed: 'Bett',
     patient: 'Patient',
+    task: 'Task',
   }
 }
 

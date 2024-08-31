@@ -15,11 +15,9 @@ import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
   usePatientListQuery,
-  useReadmitPatientMutation,
-  type PatientDTO,
-  type PatientMinimalDTO,
-  type PatientWithBedAndRoomDTO
+  useReadmitPatientMutation
 } from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import type { PatientDTO, PatientMinimalDTO, PatientWithBedAndRoomDTO } from '@helpwave/api-services/types/tasks/patient'
 import { Draggable, Droppable } from '../dnd-kit-instances/patients'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'

@@ -8,7 +8,6 @@ import { Span } from '@helpwave/common/components/Span'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { useOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
-import type { PatientDTO, PatientMinimalDTO } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import {
   useAssignBedMutation,
   usePatientCreateMutation,
@@ -16,6 +15,7 @@ import {
   useReadmitPatientMutation,
   useUnassignMutation
 } from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import type { PatientDTO, PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
 import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit-instances/patients'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PatientDetail } from '@/components/layout/PatientDetails'

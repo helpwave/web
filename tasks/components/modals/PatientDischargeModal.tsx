@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { PatientMinimalDTO } from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import type { PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
 
 type PatientDischargeModalTranslation = {
   followingPatient: string,

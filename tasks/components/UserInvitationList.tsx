@@ -5,7 +5,6 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
-import { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import {
@@ -15,6 +14,7 @@ import {
 } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import type { Invitation } from '@helpwave/api-services/types/users/invitations'
+import { InvitationState } from '@helpwave/api-services/types/users/invitations'
 import { ReSignInModal } from '@/components/modals/ReSignInModal'
 
 type UserInvitationListTranslation = {

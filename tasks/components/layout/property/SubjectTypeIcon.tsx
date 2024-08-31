@@ -1,6 +1,6 @@
 import type { LucideProps } from 'lucide-react'
-import { Bed, Church, Cuboid, Landmark, UserRound } from 'lucide-react'
-import type { SubjectType } from '@/components/layout/property/properties'
+import { NotepadText, UserRound } from 'lucide-react'
+import type { SubjectType } from '@helpwave/api-services/types/properties/property'
 
 export type SubjectTypeIconProps = {
   subjectType: SubjectType
@@ -8,10 +8,13 @@ export type SubjectTypeIconProps = {
 
 export const SubjectTypeIcon = ({ subjectType, ...props }: SubjectTypeIconProps) => {
   switch (subjectType) {
+    /*
     case 'organization': return (<Landmark {...props} />)
     case 'ward': return (<Church {...props} />)
     case 'room': return (<Cuboid {...props} />)
     case 'bed': return (<Bed {...props} />)
+     */
     case 'patient': return (<UserRound {...props} />)
+    case 'task': return (<NotepadText {...props} />)
   }
 }

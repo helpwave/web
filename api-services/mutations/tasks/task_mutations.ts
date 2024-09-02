@@ -13,8 +13,6 @@ import {
   SubTaskToDoneRequest,
   SubTaskToToDoRequest,
   GetTasksByPatientSortedByStatusRequest,
-  AssignTaskToUserRequest,
-  UnassignTaskFromUserRequest,
   type GetTasksByPatientSortedByStatusResponse
 } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -35,6 +33,12 @@ import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import { GRPCConverter } from '../../util/util'
 import { roomOverviewsQueryKey } from './room_mutations'
+import {AssignTaskRequest, UnassignTaskRequest} from "@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb";
+
+type TaskAssignmentRequestProps = {
+  taskId: string,
+  userId: string
+}
 
 export const useTaskQuery = (taskId: string | undefined) => {
   return useQuery({
@@ -54,20 +58,18 @@ export const useTaskQuery = (taskId: string | undefined) => {
         console.error('TasksByPatient query failed')
       }
 
-      const dueAt = res.getDueAt()
       const task: TaskDTO = {
         id: res.getId(),
         name: res.getName(),
         status: GRPCConverter.taskStatusFromGRPC(res.getStatus()),
         notes: res.getDescription(),
-        isPublicVisible: res.getPublic(),
-        assignee: res.getAssignedUserId(),
-        dueDate: dueAt ? GRPCConverter.timestampToDate(dueAt) : undefined,
+        assignee: res.getAssignedUsersList(),
         subtasks: res.getSubtasksList().map(subtask => ({
           id: subtask.getId(),
           name: subtask.getName(),
           isDone: subtask.getDone()
-        }))
+        })),
+        isPublicVisible: res.get
       }
 
       return task
@@ -88,13 +90,13 @@ export const useTasksByPatientQuery = (patientId: string | undefined) => {
       const req = new GetTasksByPatientRequest()
       req.setPatientId(patientId)
 
-      const res = await APIServices.task.getTasksByPatient(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getTasksList()) {
         console.error('TasksByPatient query failed')
       }
 
-      const tasks: TaskDTO[] = res.getTasksList().map(task => {
+      const tasks: TaskDTO[] = res.get().map(task => {
         const dueAt = task.getDueAt()
         return {
           id: task.getId(),
@@ -269,7 +271,7 @@ export const useTaskDeleteMutation = (callback: () => void = noop) => {
     mutationFn: async (taskId: string) => {
       const req = new DeleteTaskRequest()
       req.setId(taskId)
-      await APIServices.task.deleteTask(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
@@ -438,11 +440,11 @@ export const useSubTaskToDoneMutation = (callback: () => void = noop) => {
 export const useAssignTaskToUserMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (taskAndUser: {taskId: string, userId: string}) => {
-      const req = new AssignTaskToUserRequest()
-      req.setId(taskAndUser.taskId)
-      req.setUserId(taskAndUser.userId)
-      const res = await APIServices.task.assignTaskToUser(req, getAuthenticatedGrpcMetadata())
+    mutationFn: async ({taskId, userId}: TaskAssignmentRequestProps) => {
+      const req = new AssignTaskRequest()
+      req.setTaskId(taskId)
+      req.setUserId(userId)
+      const res = await APIServices.task.assignTask(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in AssignTaskToUser')
@@ -457,13 +459,14 @@ export const useAssignTaskToUserMutation = (callback: () => void = noop) => {
   })
 }
 
-export const useUnassignTaskToUserMutation = (callback: () => void = noop) => {
+export const useUnassignTaskMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (taskId: string) => {
-      const req = new UnassignTaskFromUserRequest()
-      req.setId(taskId)
-      const res = await APIServices.task.unassignTaskFromUser(req, getAuthenticatedGrpcMetadata())
+    mutationFn: async ({taskId, userId}: TaskAssignmentRequestProps) => {
+      const req = new UnassignTaskRequest()
+      req.setTaskId(taskId)
+      req.setUserId(userId)
+      const res = await APIServices.task.unassignTask(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
         console.error('error in UnAssignTaskToUser')

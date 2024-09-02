@@ -33,7 +33,7 @@ import {
   useTaskToInProgressMutation,
   useTaskToToDoMutation,
   useTaskUpdateMutation,
-  useUnassignTaskToUserMutation
+  useUnassignTaskMutation
 } from '@helpwave/api-services/mutations/tasks/task_mutations'
 import type { WardWithOrganizationIdDTO } from '@helpwave/api-services/types/tasks/wards'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
@@ -129,7 +129,7 @@ const TaskDetailViewSidebar = ({
   const updateTaskMutation = useTaskUpdateMutation()
 
   const assignTaskToUserMutation = useAssignTaskToUserMutation()
-  const unassignTaskToUserMutation = useUnassignTaskToUserMutation()
+  const unassignTaskToUserMutation = useUnassignTaskMutation()
 
   const toToDoMutation = useTaskToToDoMutation()
   const toInProgressMutation = useTaskToInProgressMutation()

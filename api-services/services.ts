@@ -1,11 +1,11 @@
 import { WardServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_grpc_web_pb'
 import { RoomServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/room_svc_grpc_web_pb'
 import { BedServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_grpc_web_pb'
-import { PatientServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_grpc_web_pb'
+import { PatientServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_grpc_web_pb'
 import {
   TaskTemplateServicePromiseClient
 } from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_grpc_web_pb'
-import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_grpc_web_pb'
+import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_grpc_web_pb'
 import {
   OrganizationServicePromiseClient
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_grpc_web_pb'

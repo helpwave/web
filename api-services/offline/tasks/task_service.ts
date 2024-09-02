@@ -1,5 +1,5 @@
 import type { Metadata } from 'grpc-web'
-import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_grpc_web_pb'
+import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_grpc_web_pb'
 import type {
   AddSubTaskRequest,
   AssignTaskToUserRequest,
@@ -21,7 +21,7 @@ import type {
   UnpublishTaskResponse,
   UpdateSubTaskRequest,
   UpdateTaskRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import {
   AddSubTaskResponse,
   AssignTaskToUserResponse,
@@ -41,7 +41,7 @@ import {
   UnassignTaskFromUserResponse,
   UpdateSubTaskResponse,
   UpdateTaskResponse
-} from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import type { SubTaskValueStore, TaskValueStore } from '../value_store'
 import type { SubTaskDTO, TaskStatus } from '../../types/tasks/task'
 import { OfflineValueStore } from '../value_store'
@@ -153,11 +153,10 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
     if (!task) {
       throw Error(`FindTask: Could not find task with id ${request.getId()}`)
     }
-    const list = SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
+    const list = SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.Subtask()
       .setId(subtask.id)
       .setName(subtask.name)
       .setDone(subtask.isDone)
-      .setCreatedBy('CreatorId') // TODO fix TaskOfflineService
     )
     const patient = PatientOfflineService.find(task.patientId)
     if (!patient) {
@@ -168,11 +167,9 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
       .setId(task.id)
       .setName(task.name)
       .setDescription(task.notes)
-      .setPublic(task.isPublicVisible)
       .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
-      .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
-      .setCreatedBy(task.creatorId)
-      .setPatient(new GetTaskResponse.Patient().setId(patient.id).setName(patient.name))
+      .setCreatedAt(task.creatorId)
+      .set(new GetTaskResponse.Patient().setId(patient.id).setName(patient.name))
       .setSubtasksList(list)
       .setOrganizationId('organization') // TODO fix TaskOfflineService
 

@@ -1,5 +1,5 @@
 import type { Metadata } from 'grpc-web'
-import { PatientServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_grpc_web_pb'
+import { PatientServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_grpc_web_pb'
 import type {
   AssignBedRequest,
   CreatePatientRequest,
@@ -15,7 +15,7 @@ import type {
   ReadmitPatientRequest,
   UnassignBedRequest,
   UpdatePatientRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_pb'
 import {
   AssignBedResponse,
   CreatePatientResponse,
@@ -31,7 +31,7 @@ import {
   ReadmitPatientResponse,
   UnassignBedResponse,
   UpdatePatientResponse
-} from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_pb'
 import type { PatientValueStore } from '../value_store'
 import { OfflineValueStore } from '../value_store'
 import type { RoomWithWardId } from '../../types/tasks/room'

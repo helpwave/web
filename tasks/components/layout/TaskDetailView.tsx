@@ -24,14 +24,11 @@ import {
   useWardTaskTemplateQuery
 } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import {
-  useAssignTaskToUserMutation,
+  useAssignTaskMutation,
   useSubTaskAddMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
   useTaskQuery,
-  useTaskToDoneMutation,
-  useTaskToInProgressMutation,
-  useTaskToToDoMutation,
   useTaskUpdateMutation,
   useUnassignTaskMutation
 } from '@helpwave/api-services/mutations/tasks/task_mutations'
@@ -128,12 +125,8 @@ const TaskDetailViewSidebar = ({
 
   const updateTaskMutation = useTaskUpdateMutation()
 
-  const assignTaskToUserMutation = useAssignTaskToUserMutation()
+  const assignTaskToUserMutation = useAssignTaskMutation()
   const unassignTaskToUserMutation = useUnassignTaskMutation()
-
-  const toToDoMutation = useTaskToToDoMutation()
-  const toInProgressMutation = useTaskToInProgressMutation()
-  const toDoneMutation = useTaskToDoneMutation()
 
   const updateTaskLocallyAndExternally = (task: TaskDTO) => {
     setTask(task)
@@ -177,9 +170,12 @@ const TaskDetailViewSidebar = ({
           />
           <Button
             onClick={() => {
-              setTask({ ...task, assignee: '' }) // TODO: why are we using empty strings instead of undefined?
-              if (!isCreating) {
-                unassignTaskToUserMutation.mutate(task.id)
+              setTask({ ...task, assignee: undefined })
+              if (!isCreating && task.assignee) {
+                unassignTaskToUserMutation.mutate({
+                  taskId: task.id,
+                  userId: task.assignee
+                })
               }
             }}
             variant="textButton"
@@ -226,22 +222,11 @@ const TaskDetailViewSidebar = ({
           value={task.status}
           removeOptions={isCreating ? ['done'] : []}
           onChange={(status) => {
+            const newTask = { ...task, status }
             if (!isCreating) {
-              switch (status) {
-                case 'todo':
-                  toToDoMutation.mutate(task.id)
-                  break
-                case 'inProgress':
-                  toInProgressMutation.mutate(task.id)
-                  break
-                case 'done':
-                  toDoneMutation.mutate(task.id)
-                  break
-                default:
-                  break
-              }
+              updateTaskMutation.mutate(newTask)
             }
-            setTask({ ...task, status })
+            setTask(newTask)
           }}
         />
       </div>
@@ -327,10 +312,9 @@ export const TaskDetailView = ({
 
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
 
-  const assignTaskToUserMutation = useAssignTaskToUserMutation()
+  const assignTaskToUserMutation = useAssignTaskMutation()
   const updateTaskMutation = useTaskUpdateMutation()
   const deleteTaskMutation = useTaskDeleteMutation(onClose)
-  const toDoneMutation = useTaskToDoneMutation()
 
   const createTaskMutation = useTaskCreateMutation(newTask => {
     newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
@@ -377,7 +361,7 @@ export const TaskDetailView = ({
             </Button>
             {task.status !== 'done' && (
               <Button color="positive" onClick={() => {
-                toDoneMutation.mutate(task.id)
+                updateTaskMutation.mutate({ ...task, status: 'done' })
                 onClose()
               }}>
                 {translation.finish}

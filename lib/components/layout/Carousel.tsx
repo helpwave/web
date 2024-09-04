@@ -256,13 +256,23 @@ export const Carousel = ({
 
   const height = `desktop:h-[${heights?.desktop}px] tablet:h-[${heights?.tablet}px] mobile:h-[${heights?.mobile}px]`
 
-  const onDrag = (event: React.DragEvent<HTMLDivElement>) => {
+  const onDragStart = (x: number) => setCarouselInformation(prevState => ({
+    ...prevState,
+    dragState: {
+      lastX: x,
+      startX: x,
+      startTime: Date.now(),
+      startIndex: currentIndex,
+    },
+    animationState: undefined // cancel animation
+  }))
+
+  const onDrag = (x: number, width: number) => {
     // For some weird reason the clientX is 0 on the last dragUpdate before drag end causing issues
-    if (!dragState || event.clientX === 0) {
+    if (!dragState || x === 0) {
       return
     }
-    const rect = (event.target as HTMLDivElement).getBoundingClientRect()
-    const offsetUpdate = (dragState.lastX - event.clientX) / rect.width
+    const offsetUpdate = (dragState.lastX - x) / width
     let newOffset = offset + offsetUpdate
     let newIndex = currentIndex
     if (newOffset >= 0.5) {
@@ -303,16 +313,16 @@ export const Carousel = ({
       currentIndex: newIndex,
       dragState: {
         ...dragState,
-        lastX: event.clientX
+        lastX: x
       },
     }))
   }
 
-  const onDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
+  const onDragEnd = (x: number) => {
     if (!dragState) {
       return
     }
-    const distance = dragState.startX - event.clientX
+    const distance = dragState.startX - x
     const duration = (Date.now() - dragState.startTime) // in milliseconds
     const velocity = distance / (Date.now() - dragState.startTime)
 
@@ -353,18 +363,12 @@ export const Carousel = ({
             }
           }}
           draggable={true}
-          onDragStart={event => setCarouselInformation(prevState => ({
-            ...prevState,
-            dragState: {
-              lastX: event.clientX,
-              startX: event.clientX,
-              startTime: Date.now(),
-              startIndex: currentIndex,
-            },
-            animationState: undefined // cancel animation
-          }))}
-          onDrag={onDrag}
-          onDragEnd={onDragEnd}
+          onDragStart={event => onDragStart(event.clientX)}
+          onDrag={event => onDrag(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
+          onDragEnd={event => onDragEnd(event.clientX)}
+          onTouchStart={event => onDragStart(event.touches[0]!.clientX)}
+          onTouchMove={event => onDrag(event.touches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
+          onTouchEnd={event => onDragEnd(event.touches[0]!.clientX)}
         />
         {arrows && (
           <>

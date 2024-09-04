@@ -32,6 +32,10 @@ const images: Partner[] = [
     url: 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png'
   },
   {
+    name: 'RWTH Aachen University',
+    url: 'https://cdn.helpwave.de/partners/rwth_logo.svg',
+  },
+  {
     name: 'Münsterhack',
     url: 'https://cdn.helpwave.de/partners/mshack_2023.png',
   },

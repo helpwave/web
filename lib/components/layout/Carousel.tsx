@@ -368,7 +368,8 @@ export const Carousel = ({
           onDragEnd={event => onDragEnd(event.clientX)}
           onTouchStart={event => onDragStart(event.touches[0]!.clientX)}
           onTouchMove={event => onDrag(event.touches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
-          onTouchEnd={event => onDragEnd(event.touches[0]!.clientX)}
+          onTouchEnd={event => onDragEnd(event.changedTouches[0]!.clientX)}
+          onTouchCancel={event => onDragEnd(event.changedTouches[0]!.clientX)}
         />
         {arrows && (
           <>

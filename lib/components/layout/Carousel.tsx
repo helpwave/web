@@ -79,7 +79,7 @@ export const Carousel = ({
     offset: 0,
   })
   const isAnimating = animationState !== undefined
-  const cardsPerSecond: number = 4 // in ms per card, musst be != 0
+  const cardsPerSecond: number = 4 // in ms per card, must be != 0
 
   const length = children.length
   const paddingItemCount = 2 // The number of items to append left and right of the list to allow for clean transition when looping

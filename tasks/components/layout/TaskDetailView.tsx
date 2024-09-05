@@ -27,7 +27,6 @@ import {
   useAssignTaskMutation,
   useSubTaskAddMutation,
   useTaskCreateMutation,
-  useTaskDeleteMutation,
   useTaskQuery,
   useTaskUpdateMutation,
   useUnassignTaskMutation
@@ -314,7 +313,6 @@ export const TaskDetailView = ({
 
   const assignTaskToUserMutation = useAssignTaskMutation()
   const updateTaskMutation = useTaskUpdateMutation()
-  const deleteTaskMutation = useTaskDeleteMutation(onClose)
 
   const createTaskMutation = useTaskCreateMutation(newTask => {
     newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
@@ -356,7 +354,11 @@ export const TaskDetailView = ({
       {!isCreating ?
           (
           <>
-            <Button color="negative" onClick={() => setIsShowingDeleteDialog(true)}>
+            <Button
+              color="negative"
+              disabled={true} // TODO reenable when backend allows it
+              onClick={() => setIsShowingDeleteDialog(true)}
+            >
               {translation.delete}
             </Button>
             {task.status !== 'done' && (
@@ -461,7 +463,7 @@ export const TaskDetailView = ({
         titleText={`${translation.deleteTask}?`}
         descriptionText={`${translation.deleteTaskDescription}`}
         onConfirm={() => {
-          deleteTaskMutation.mutate(task.id)
+          // deleteTaskMutation.mutate(task.id)
           setIsShowingDeleteDialog(false)
         }}
         onCancel={() => setIsShowingDeleteDialog(false)}

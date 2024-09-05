@@ -6,7 +6,11 @@ import {
   AssignBedRequest,
   UnassignBedRequest,
   ReadmitPatientRequest,
-  GetRecentPatientsRequest
+  GetRecentPatientsRequest,
+  GetPatientDetailsRequest,
+  GetPatientsByWardRequest,
+  GetPatientAssignmentByWardRequest,
+  GetPatientListRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { APIServices } from '../../services'
@@ -36,7 +40,7 @@ export const usePatientDetailsQuery = (patientId?: string) => {
       const req = new GetPatientDetailsRequest()
       req.setId(patientId)
 
-      const res = await APIServices.patient.getPatient(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.patient.getPatientDetails(req, getAuthenticatedGrpcMetadata())
 
       if (!res.getId()) {
         throw new Error('create room failed')
@@ -46,8 +50,8 @@ export const usePatientDetailsQuery = (patientId?: string) => {
         id: res.getId(),
         note: res.getNotes(),
         name: res.getHumanReadableIdentifier(),
-        discharged: res.get(),
-        tasks: res.getgetTasksList().map(task => ({
+        discharged: res.getIsDischarged(),
+        tasks: res.getTasksList().map(task => ({
           id: task.getId(),
           name: task.getName(),
           status: GRPCConverter.taskStatusFromGRPC(task.getStatus()),
@@ -306,6 +310,7 @@ export const useUnassignMutation = (callback: () => void = noop) => {
   })
 }
 
+/* TODO wait for backend decision on this
 export const useDeletePatientMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -323,6 +328,7 @@ export const useDeletePatientMutation = () => {
     }
   })
 }
+ */
 
 export const usePatientDischargeMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()

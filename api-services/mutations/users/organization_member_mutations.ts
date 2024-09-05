@@ -7,7 +7,7 @@ import type { OrganizationMember } from '../../types/users/organization_member'
 
 export const useMembersByOrganizationQuery = (organizationId: string | undefined) => {
   return useQuery({
-    queryKey: [QueryKeys.organizations, organizationId],
+    queryKey: [QueryKeys.organizations, organizationId, 'members'],
     enabled: !!organizationId,
     queryFn: async () => {
       if (!organizationId) {

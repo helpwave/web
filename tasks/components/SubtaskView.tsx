@@ -61,7 +61,7 @@ export const SubtaskView = ({
   const isCreatingTask = taskId === ''
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
   const deleteSubtaskMutation = useSubTaskDeleteMutation()
-  const updateSubtaskMutation = useSubTaskUpdateMutation()
+  const updateSubtaskMutation = useSubTaskUpdateMutation(taskId)
 
   const scrollableRef = useRef<Scrollbars>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)

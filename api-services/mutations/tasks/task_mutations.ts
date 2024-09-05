@@ -1,9 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/util/noop'
+import {
+  AssignTaskRequest,
+  UnassignTaskRequest,
+  CreateTaskRequest,
+  GetTaskRequest,
+  UpdateTaskRequest,
+  UpdateSubtaskRequest,
+  DeleteSubtaskRequest,
+  GetTasksByPatientRequest,
+  CreateSubtaskRequest,
+  CompleteSubtaskRequest, UncompleteSubtaskRequest
+} from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import type {
   CreateSubTaskDTO,
   SubTaskDTO,
-  TaskDTO,
+  TaskDTO
 } from '../../types/tasks/task'
 import {
   emptyTask
@@ -13,13 +25,6 @@ import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import { GRPCConverter } from '../../util/util'
 import { roomOverviewsQueryKey } from './room_mutations'
-import {
-  AssignTaskRequest,
-  UnassignTaskRequest,
-  CreateTaskRequest,
-  GetTaskRequest,
-  UpdateTaskRequest, UpdateSubtaskRequest, DeleteSubtaskRequest,
-} from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import { GRPCMapper } from './util'
 
 type TaskAssignmentRequestProps = {
@@ -29,7 +34,7 @@ type TaskAssignmentRequestProps = {
 
 export const useTaskQuery = (taskId: string | undefined) => {
   return useQuery({
-    queryKey: [QueryKeys.tasks, taskId],
+    queryKey: [QueryKeys.tasks, taskId, 'get'],
     enabled: !!taskId,
     queryFn: async () => {
       if (!taskId) {
@@ -50,8 +55,10 @@ export const useTaskQuery = (taskId: string | undefined) => {
         name: res.getName(),
         notes: res.getDescription(),
         status: GRPCConverter.taskStatusFromGRPC(res.getStatus()),
-        assignee: res.getAssignedUsersList(),
+        assignee: res.getAssignedUserId(),
         subtasks: res.getSubtasksList().map(GRPCMapper.subtaskFromGRPC),
+        creationDate: res.getCreatedAt() ? GRPCConverter.timestampToDate(res.getCreatedAt()!) : new Date(),
+        isPublicVisible: true, // TODO set when backend provides it
         // use res.getCreatedAt()
       }
 
@@ -72,9 +79,9 @@ export const useTasksByPatientQuery = (patientId: string | undefined) => {
       const req = new GetTasksByPatientRequest()
       req.setPatientId(patientId)
 
-      const res = await APIServices.task.getTask(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.getTasksByPatient(req, getAuthenticatedGrpcMetadata())
 
-      const tasks: TaskDTO[] = res.get().map(task => {
+      const tasks: TaskDTO[] = res.getTasksList().map(task => {
         const dueAt = task.getDueAt()
         return {
           id: task.getId(),
@@ -84,7 +91,9 @@ export const useTasksByPatientQuery = (patientId: string | undefined) => {
           isPublicVisible: task.getPublic(),
           assignee: task.getAssignedUserId(),
           dueDate: dueAt ? GRPCConverter.timestampToDate(dueAt) : undefined,
-          subtasks: task.getSubtasksList().map(GRPCMapper.subtaskFromGRPC)
+          subtasks: task.getSubtasksList().map(GRPCMapper.subtaskFromGRPC),
+          creationDate: task.getCreatedAt() ? GRPCConverter.timestampToDate(task.getCreatedAt()!) : undefined,
+          creatorId: task.getCreatedBy(),
         }
       })
 
@@ -93,6 +102,7 @@ export const useTasksByPatientQuery = (patientId: string | undefined) => {
   })
 }
 
+// TODO move patientId to task object
 export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, patientId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -114,8 +124,8 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       callback(newTask)
       return newTask
     },
-    onSuccess: (data) => {
-      queryClient.refetchQueries([QueryKeys.tasks, QueryKeys.patients, data.]).then()
+    onSuccess: () => {
+      queryClient.refetchQueries([QueryKeys.tasks, QueryKeys.patients]).then()
       queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
     }
   })
@@ -131,6 +141,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       updateTask.setDescription(task.notes)
       updateTask.setName(task.name)
       updateTask.setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
+      updateTask.setStatus(GRPCConverter.taskStatusToGrpc(task.status))
 
       await APIServices.task.updateTask(updateTask, getAuthenticatedGrpcMetadata())
 
@@ -144,6 +155,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
   })
 }
 
+/* TODO re-allow when backen implements this
 export const useTaskDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -161,6 +173,7 @@ export const useTaskDeleteMutation = (callback: () => void = noop) => {
     }
   })
 }
+ */
 
 // TODO: taskId: string | undefined => taskId: string -> A taskId is always required to create a SubTask
 export const useSubTaskAddMutation = (taskId: string | undefined, callback: (subtask: SubTaskDTO) => void = noop) => {
@@ -171,16 +184,15 @@ export const useSubTaskAddMutation = (taskId: string | undefined, callback: (sub
       if (!usedTaskId) {
         return
       }
-      const req = new AddSubTaskRequest()
-      req.setName(subtask.name)
+      const req = new CreateSubtaskRequest()
+      req.setSubtask(new CreateSubtaskRequest.Subtask().setName(subtask.name))
       req.setTaskId(usedTaskId)
-      req.setDone(subtask.isDone)
-      const res = await APIServices.task.addSubTask(req, getAuthenticatedGrpcMetadata())
+      const res = await APIServices.task.createSubtask(req, getAuthenticatedGrpcMetadata())
 
       const newSubtask: SubTaskDTO = {
-        id: res.getId(),
+        id: res.getSubtaskId(),
         name: subtask.name,
-        isDone: subtask.isDone,
+        isDone: false,
       }
 
       callback(newSubtask)
@@ -192,18 +204,29 @@ export const useSubTaskAddMutation = (taskId: string | undefined, callback: (sub
   })
 }
 
-export const useSubTaskUpdateMutation = (callback: (subtask: SubTaskDTO) => void = noop) => {
+// TODO move taskId parameter to subtask object
+export const useSubTaskUpdateMutation = (taskId?: string, callback: (subtask: SubTaskDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (subtask: SubTaskDTO) => {
+      if (!taskId) {
+        throw Error('SubTaskUpdateMutation: A taskId must be provided')
+      }
       const req = new UpdateSubtaskRequest()
       req.setSubtaskId(subtask.id)
-      req.setTaskId()
+      req.setTaskId(taskId)
       req.setSubtask(new UpdateSubtaskRequest.Subtask()
         .setName(subtask.name)
-        //.setDone(subtask.done)
+        // .setDone(subtask.done)
       )
       await APIServices.task.updateSubtask(req, getAuthenticatedGrpcMetadata())
+
+      // TODO remove this when the update can handle it
+      if (subtask.isDone) {
+        await APIServices.task.completeSubtask(new CompleteSubtaskRequest().setTaskId(taskId).setSubtaskId(subtask.id), getAuthenticatedGrpcMetadata())
+      } else {
+        await APIServices.task.uncompleteSubtask(new UncompleteSubtaskRequest().setTaskId(taskId).setSubtaskId(subtask.id), getAuthenticatedGrpcMetadata())
+      }
       const newSubtask: SubTaskDTO = { ...subtask }
 
       callback(newSubtask)
@@ -220,7 +243,7 @@ export const useSubTaskDeleteMutation = (callback: () => void = noop) => {
   return useMutation({
     mutationFn: async (subtaskId: string) => {
       const req = new DeleteSubtaskRequest()
-      //req.setTaskId()
+      // req.setTaskId()
       req.setSubtaskId(subtaskId)
       await APIServices.task.deleteSubtask(req, getAuthenticatedGrpcMetadata())
 

@@ -28,7 +28,7 @@ import type { Invitation, InvitationWithOrganizationId, InviteMemberType } from 
 
 export const useOrganizationQuery = (organizationId: string | undefined) => {
   return useQuery({
-    queryKey: [QueryKeys.organizations, organizationId],
+    queryKey: [QueryKeys.organizations, organizationId, 'get'],
     enabled: !!organizationId,
     queryFn: async () => {
       const req = new GetOrganizationRequest()
@@ -58,10 +58,9 @@ export const useOrganizationQuery = (organizationId: string | undefined) => {
   })
 }
 
-export const organizationsForUserQueryKey = 'organizationsForUser'
 export const useOrganizationsForUserQuery = () => {
   return useQuery({
-    queryKey: [QueryKeys.organizations, organizationsForUserQueryKey],
+    queryKey: [QueryKeys.organizations, 'organizationsForUser'],
     queryFn: async () => {
       const req = new GetOrganizationsForUserRequest()
 

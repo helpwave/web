@@ -14,8 +14,8 @@ importers:
         specifier: workspace:*
         version: link:../lib
       '@helpwave/proto-ts':
-        specifier: 0.44.0-94c8472.0
-        version: 0.44.0-94c8472.0
+        specifier: 0.45.0-0b57536.0
+        version: 0.45.0-0b57536.0
       '@tanstack/react-query':
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.3.1)(react@18.3.1)
@@ -2293,8 +2293,8 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@helpwave/proto-ts@0.44.0-94c8472.0:
-    resolution: {integrity: sha512-0BaWE+zKB2P4AsV3y3S/sshjzGPRdR8hjrggV47b9qzlOy2BYtQxMM98V6jnNFUNXHWDfkEkXN8B+iN9tim+KQ==}
+  /@helpwave/proto-ts@0.45.0-0b57536.0:
+    resolution: {integrity: sha512-HKdyiiIaaJVT+BwFU2Ct7uOETW19GrBQwYkApTPpQjPENYGflzs5ERjeRya/zByZQX9Cn4foFH062P91bJLxZw==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:

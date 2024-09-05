@@ -28,7 +28,7 @@ import { OrganizationOfflineServicePromiseClient } from './offline/users/organiz
 import { UserOfflineServicePromiseClient } from './offline/users/user_service'
 
 type APIServicesType = {
-  organization: OrganizationOfflineServicePromiseClient,
+  organization: OrganizationServicePromiseClient,
   user: UserServicePromiseClient,
   ward: WardServicePromiseClient,
   room: RoomServicePromiseClient,

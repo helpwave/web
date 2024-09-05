@@ -222,6 +222,7 @@ const initialTasks: TaskValueStore[] = initialPatients.map((patient) => range(0,
   creatorId: 'CreatorId',
   status: index === 4 ? 'done' : (index === 3 ? 'inProgress' : 'todo'),
   notes: '',
+  createdAt: new Date(),
 }))).flat()
 const initialSubTasks: SubTaskValueStore[] = initialTasks.map(task => range(0, 2).map<SubTaskValueStore>(index => ({
   id: `subTask${task.id}${index}`,
@@ -238,10 +239,10 @@ export type PatientValueStore = {
   isDischarged: boolean
 }
 
-export type TaskValueStore = Omit<TaskDTO, 'assignee' | 'subtasks'> & {
+export type TaskValueStore = Omit<TaskDTO, 'subtasks' | 'creationDate'> & {
   patientId: string,
   creatorId: string,
-  assigneeId?: string
+  createdAt: Date
 }
 
 export type SubTaskValueStore = SubTaskDTO & {

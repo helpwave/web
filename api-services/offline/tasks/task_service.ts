@@ -1,66 +1,53 @@
 import type { Metadata } from 'grpc-web'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_grpc_web_pb'
 import type {
-  AddSubTaskRequest,
-  AssignTaskToUserRequest,
+  AssignTaskRequest,
   CreateTaskRequest,
-  DeleteTaskRequest,
   GetAssignedTasksRequest,
   GetTaskRequest,
   GetTasksByPatientRequest,
   GetTasksByPatientSortedByStatusRequest,
-  PublishTaskRequest,
-  RemoveSubTaskRequest,
-  SubTaskToDoneRequest,
-  SubTaskToToDoRequest,
-  TaskToDoneRequest,
-  TaskToInProgressRequest,
-  TaskToToDoRequest,
-  UnassignTaskFromUserRequest,
-  UnpublishTaskRequest,
-  UnpublishTaskResponse,
-  UpdateSubTaskRequest,
   UpdateTaskRequest
+  ,
+  AssignTaskResponse,
+  UnassignTaskRequest,
+  CreateSubtaskRequest,
+  UpdateSubtaskRequest,
+  CompleteSubtaskRequest,
+  UncompleteSubtaskRequest, DeleteSubtaskRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import {
-  AddSubTaskResponse,
-  AssignTaskToUserResponse,
-  CreateTaskResponse,
-  DeleteTaskResponse,
+  CompleteSubtaskResponse,
+  CreateSubtaskResponse,
+  CreateTaskResponse, DeleteSubtaskResponse,
   GetAssignedTasksResponse,
   GetTaskResponse,
   GetTasksByPatientResponse,
-  GetTasksByPatientSortedByStatusResponse,
-  PublishTaskResponse,
-  RemoveSubTaskResponse,
-  SubTaskToDoneResponse,
-  SubTaskToToDoResponse,
-  TaskToDoneResponse,
-  TaskToInProgressResponse,
-  TaskToToDoResponse,
-  UnassignTaskFromUserResponse,
-  UpdateSubTaskResponse,
+  GetTasksByPatientSortedByStatusResponse, UnassignTaskResponse, UncompleteSubtaskResponse, UpdateSubtaskResponse,
   UpdateTaskResponse
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
+import { AssignTaskToUserResponse } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import type { SubTaskValueStore, TaskValueStore } from '../value_store'
 import type { SubTaskDTO, TaskStatus } from '../../types/tasks/task'
 import { OfflineValueStore } from '../value_store'
 import { GRPCConverter } from '../../util/util'
 import { PatientOfflineService } from './patient_service'
 
-type TaskValueStoreUpdate = Omit<TaskValueStore, 'subtasks' | 'status' | 'creationDate' | 'patientId' | 'assigneeId' | 'creatorId' | 'isPublicVisible'>
+type TaskValueStoreUpdate =
+  Pick<TaskValueStore, 'id'>
+  & Partial<Pick<TaskValueStore, 'name' | 'notes' | 'dueDate' | 'status'>>
 
 type SubTaskValueStoreUpdate = Omit<SubTaskDTO, 'isDone'>
 
 export const SubTaskOfflineService = {
-  find: (id: string) : SubTaskValueStore | undefined => {
+  find: (id: string): SubTaskValueStore | undefined => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
     // TODO check organization
     return valueStore.subTasks.find(value => value.id === id)
   },
   findSubTasks: (taskId?: string) => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
-    return valueStore.subTasks.filter(value => !taskId && value.taskId === taskId)
+    return valueStore.subTasks.filter(value => !taskId || value.taskId === taskId)
   },
   create: (taskId: string, subTask: SubTaskValueStore) => {
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
@@ -119,9 +106,10 @@ export const TaskOfflineService = {
   },
   updateTaskStorage: (task: TaskValueStoreUpdate) => {
     TaskOfflineService.updateTaskWithUpdater(task.id, task1 => {
-      task1.name = task.name
-      task1.notes = task.notes
-      task1.dueDate = task.dueDate
+      task1.name = task.name ?? task1.name
+      task1.notes = task.notes ?? task1.notes
+      task1.dueDate = task.dueDate ?? task1.dueDate
+      task1.status = task.status ?? task1.status
     })
   },
   changeTaskStatus: (taskId: string, taskStatus: TaskStatus) => {
@@ -131,7 +119,7 @@ export const TaskOfflineService = {
   },
   changeAssignment: (taskId: string, assignee?: string) => {
     TaskOfflineService.updateTaskWithUpdater(taskId, task1 => {
-      task1.assigneeId = assignee
+      task1.assignee = assignee
     })
   },
   changePublicity: (taskId: string, isPublic: boolean) => {
@@ -168,13 +156,11 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
       .setName(task.name)
       .setDescription(task.notes)
       .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
-      .setCreatedAt(task.creatorId)
-      .set(new GetTaskResponse.Patient().setId(patient.id).setName(patient.name))
+      .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt))
       .setSubtasksList(list)
-      .setOrganizationId('organization') // TODO fix TaskOfflineService
 
-    if (task.assigneeId) {
-      res.setAssignedUserId(task.assigneeId)
+    if (task.assignee) {
+      res.setAssignedUserId(task.assignee)
     }
     return res
   }
@@ -191,14 +177,14 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
         .setPatientId(request.getPatientId())
-        .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
+        .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt))
+        .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTasksByPatientResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
           .setDone(subtask.isDone)
-          .setCreatedBy('CreatorId') // TODO fix TaskOfflineService
         ))
-      if (task.assigneeId) {
-        res.setAssignedUserId(task.assigneeId)
+      if (task.assignee) {
+        res.setAssignedUserId(task.assignee)
       }
       return res
     }
@@ -218,14 +204,14 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
         .setPatientId(request.getPatientId())
-        .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
+        .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt))
+        .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTasksByPatientSortedByStatusResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
           .setDone(subtask.isDone)
-          .setCreatedBy('CreatorId') // TODO fix TaskOfflineService
         ))
-      if (task.assigneeId) {
-        res.setAssignedUserId(task.assigneeId)
+      if (task.assignee) {
+        res.setAssignedUserId(task.assignee)
       }
       return res
     }
@@ -255,14 +241,13 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
         .setPatient(new GetAssignedTasksResponse.Task.Patient().setId(patient.id).setName(patient.name))
-        .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
+        .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetAssignedTasksResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
           .setDone(subtask.isDone)
-          .setCreatedBy('CreatorId') // TODO fix TaskOfflineService
         ))
-      if (task.assigneeId) {
-        res.setAssignedUserId(task.assigneeId)
+      if (task.assignee) {
+        res.setAssignedUserId(task.assignee)
       }
       return res
     }
@@ -280,6 +265,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
       dueDate: request.getDueAt() ? GRPCConverter.timestampToDate(request.getDueAt()!) : undefined,
       status: GRPCConverter.taskStatusFromGRPC(request.getInitialStatus()),
       isPublicVisible: request.getPublic(),
+      createdAt: new Date(),
     }
 
     TaskOfflineService.create(newTask)
@@ -290,9 +276,10 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
   async updateTask(request: UpdateTaskRequest, _?: Metadata): Promise<UpdateTaskResponse> {
     const task: TaskValueStoreUpdate = {
       id: request.getId(),
-      name: request.getName(),
-      notes: request.getDescription(),
-      dueDate: request.getDueAt() ? GRPCConverter.timestampToDate(request.getDueAt()!) : undefined,
+      name: request.hasName() ? request.getName() : undefined,
+      notes: request.hasDescription() ? request.getDescription() : undefined,
+      dueDate: request.hasDueAt() ? GRPCConverter.timestampToDate(request.getDueAt()!) : undefined,
+      status: request.hasStatus() ? GRPCConverter.taskStatusFromGRPC(request.getStatus()) : undefined
     }
 
     TaskOfflineService.updateTaskStorage(task)
@@ -300,79 +287,62 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
     return new UpdateTaskResponse()
   }
 
-  async taskToToDo(request: TaskToToDoRequest, _?: Metadata): Promise<TaskToToDoResponse> {
-    TaskOfflineService.changeTaskStatus(request.getId(), 'todo')
-    return new TaskToToDoResponse()
-  }
-
-  async taskToInProgress(request: TaskToInProgressRequest, _?: Metadata): Promise<TaskToInProgressResponse> {
-    TaskOfflineService.changeTaskStatus(request.getId(), 'inProgress')
-    return new TaskToInProgressResponse()
-  }
-
-  async taskToDone(request: TaskToDoneRequest, _?: Metadata): Promise<TaskToDoneResponse> {
-    TaskOfflineService.changeTaskStatus(request.getId(), 'done')
-    return new TaskToDoneResponse()
-  }
-
-  async publishTask(request: PublishTaskRequest, _?: Metadata): Promise<PublishTaskResponse> {
-    TaskOfflineService.changePublicity(request.getId(), true)
-    return new PublishTaskResponse()
-  }
-
-  async unpublishTask(request: UnpublishTaskRequest, _?: Metadata): Promise<UnpublishTaskResponse> {
-    TaskOfflineService.changePublicity(request.getId(), false)
-    return new PublishTaskResponse()
-  }
-
-  async assignTaskToUser(request: AssignTaskToUserRequest, _?: Metadata): Promise<AssignTaskToUserResponse> {
-    TaskOfflineService.changeAssignment(request.getId(), request.getUserId()) // TODO check user id
+  async assignTask(request: AssignTaskRequest, _?: Metadata): Promise<AssignTaskResponse> {
+    TaskOfflineService.changeAssignment(request.getTaskId(), request.getUserId()) // TODO check user id
     return new AssignTaskToUserResponse()
   }
 
-  async unassignTaskFromUser(request: UnassignTaskFromUserRequest, _?: Metadata): Promise<UnassignTaskFromUserResponse> {
-    TaskOfflineService.changeAssignment(request.getId())
-    return new UnassignTaskFromUserResponse()
+  async unassignTask(request: UnassignTaskRequest, _?: Metadata): Promise<UnassignTaskResponse> {
+    TaskOfflineService.changeAssignment(request.getTaskId())
+    return new UnassignTaskResponse()
   }
 
+  /* not allowed anymore maybe reenable later
   async deleteTask(request: DeleteTaskRequest, _?: Metadata): Promise<DeleteTaskResponse> {
     TaskOfflineService.delete(request.getId())
     return new DeleteTaskResponse()
   }
+   */
 
-  async addSubTask(request: AddSubTaskRequest, _?: Metadata): Promise<AddSubTaskResponse> {
+  async createSubtask(request: CreateSubtaskRequest, _?: Metadata): Promise<CreateSubtaskResponse> {
+    if (!request.getSubtask()) {
+      throw Error('CreateSubtask: The Subtask must be set to create a new subtask')
+    }
     const subtask: SubTaskValueStore = {
       id: Math.random().toString(),
       taskId: request.getTaskId(),
-      name: request.getName(),
-      isDone: request.getDone()
+      name: request.getSubtask()!.getName(),
+      isDone: false,
     }
 
     SubTaskOfflineService.create(request.getTaskId(), subtask)
-    return new AddSubTaskResponse()
+    return new CreateSubtaskResponse()
   }
 
-  async updateSubTask(request: UpdateSubTaskRequest, _?: Metadata): Promise<UpdateSubTaskResponse> {
+  async updateSubtask(request: UpdateSubtaskRequest, _?: Metadata): Promise<UpdateSubtaskResponse> {
+    if (!request.getSubtask()) {
+      throw Error('UpdateSubtask: The Subtask must be set to update it')
+    }
     const update: SubTaskValueStoreUpdate = {
-      id: request.getId(),
-      name: request.getName()
+      id: request.getSubtaskId(),
+      name: request.getSubtask()!.getName()
     }
     SubTaskOfflineService.update(update)
-    return new UpdateSubTaskResponse()
+    return new UpdateSubtaskResponse()
   }
 
-  async subTaskToToDo(request: SubTaskToToDoRequest, _?: Metadata): Promise<SubTaskToToDoResponse> {
-    SubTaskOfflineService.updateStatus(request.getId(), true)
-    return new SubTaskToToDoResponse()
+  async completeSubtask(request: CompleteSubtaskRequest, _?: Metadata): Promise<CompleteSubtaskResponse> {
+    SubTaskOfflineService.updateStatus(request.getSubtaskId(), true)
+    return new CompleteSubtaskResponse()
   }
 
-  async subTaskToDone(request: SubTaskToDoneRequest, _?: Metadata): Promise<SubTaskToDoneResponse> {
-    SubTaskOfflineService.updateStatus(request.getId(), false)
-    return new SubTaskToDoneResponse()
+  async uncompleteSubtask(request: UncompleteSubtaskRequest, _?: Metadata): Promise<UncompleteSubtaskResponse> {
+    SubTaskOfflineService.updateStatus(request.getSubtaskId(), false)
+    return new UncompleteSubtaskResponse()
   }
 
-  async removeSubTask(request: RemoveSubTaskRequest, _?: Metadata): Promise<RemoveSubTaskResponse> {
-    SubTaskOfflineService.delete(request.getId())
-    return new RemoveSubTaskResponse()
+  async deleteSubtask(request: DeleteSubtaskRequest, _?: Metadata): Promise<DeleteSubtaskResponse> {
+    SubTaskOfflineService.delete(request.getSubtaskId())
+    return new DeleteSubtaskResponse()
   }
 }

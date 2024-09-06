@@ -3,7 +3,6 @@ import { tw, tx } from '@twind/core'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '../../util/array'
-import { noop } from '../../util/noop'
 import { clamp } from '../../util/math'
 import { EaseFunctions } from '../../util/easeFunctions'
 import type { Direction } from '../../util/loopingArray'
@@ -28,7 +27,6 @@ const defaultItemWidths: ItemWidths = {
 
 type CarouselProps = {
   children: ReactNode[],
-  onCardClick?: (index: number) => void,
   animationTime?: number,
   isLooping?: boolean,
   isAutoLooping?: boolean,
@@ -79,7 +77,6 @@ type CarouselInformation = {
 
 export const Carousel = ({
   children,
-  onCardClick = noop,
   animationTime = 200,
   isLooping = false,
   isAutoLooping = false,
@@ -115,7 +112,6 @@ export const Carousel = ({
 
   const util = useMemo(() => new LoopingArrayCalculator(length, isLooping, overScrollThreshold), [length, isLooping, overScrollThreshold])
   const currentIndex = util.getCorrectedPosition(LoopingArrayCalculator.withoutOffset(currentPosition))
-  const isAnimating = animationState !== undefined
   animationTime = Math.max(200, animationTime) // in ms, must be > 0
   autoLoopAnimationTime = Math.max(200, autoLoopAnimationTime)
 
@@ -336,38 +332,23 @@ export const Carousel = ({
     startAnimation()
   }
 
+  const dragHandlers = {
+    draggable: true,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) => {
+      onDragStart(event.clientX)
+      event.dataTransfer.setDragImage(document.createElement('div'), 0, 0)
+    },
+    onDrag: (event: React.DragEvent<HTMLDivElement>) => onDrag(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+    onDragEnd: (event: React.DragEvent<HTMLDivElement>) => onDragEnd(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+    onTouchStart: (event: React.TouchEvent<HTMLDivElement>) => onDragStart(event.touches[0]!.clientX),
+    onTouchMove: (event: React.TouchEvent<HTMLDivElement>) => onDrag(event.touches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+    onTouchEnd: (event: React.TouchEvent<HTMLDivElement>) => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+    onTouchCancel: (event: React.TouchEvent<HTMLDivElement>) => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+  }
+
   return (
     <div className={tw('flex flex-col items-center w-full gap-y-2')}>
       <div className={tx(`relative w-full overflow-hidden`, height, className)}>
-        <div
-          // This is the click target
-          className={tw('absolute z-20 h-full w-full')}
-          onClick={event => {
-            const rect = (event.target as HTMLDivElement).getBoundingClientRect()
-            const clickX = event.clientX - rect.left
-            const divWidth = rect.width
-            const sectionWidth = 0.22
-            if (clickX < divWidth * sectionWidth) {
-              left()
-            } else if (clickX > divWidth * (1 - sectionWidth)) {
-              right()
-            } else {
-              if (isAnimating) {
-                startAnimation()
-              } else {
-                onCardClick(currentPosition)
-              }
-            }
-          }}
-          draggable={true}
-          onDragStart={event => onDragStart(event.clientX)}
-          onDrag={event => onDrag(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
-          onDragEnd={event => onDragEnd(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
-          onTouchStart={event => onDragStart(event.touches[0]!.clientX)}
-          onTouchMove={event => onDrag(event.touches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
-          onTouchEnd={event => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
-          onTouchCancel={event => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
-        />
         {arrows && (
           <>
             <div
@@ -388,26 +369,29 @@ export const Carousel = ({
           <div className={tx(`relative flex flex-row`, height)}>
             <div className={tw('relative flex flex-row w-full px-2 overflow-hidden')}>
               {items.map(({
-                item
+                item,
+                index
               }, listIndex) => (
                 <div
                   key={listIndex}
-                  className={tx(`absolute left-[50%] desktop:w-[${itemWidths?.desktop}] tablet:w-[${itemWidths?.tablet}] mobile:w-[${itemWidths?.mobile}] h-full overflow-hidden`)}
+                  className={tx(`absolute left-[50%] desktop:w-[${itemWidths?.desktop}] tablet:w-[${itemWidths?.tablet}] mobile:w-[${itemWidths?.mobile}] h-full overflow-hidden`, { '!cursor-grabbing': !!dragState })}
                   style={{ translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
+                  {...dragHandlers}
+                  onClick={() => startAnimation(index)}
                 >
                   {item}
                 </div>
               ))}
             </div>
             <div
-              className={tw(`hidden desktop:block absolute left-0 h-full w-[22%] bg-gradient-to-r from-${blurColor} to-transparent`)}
+              className={tw(`hidden pointer-events-none desktop:block absolute left-0 h-full w-[20%] bg-gradient-to-r from-${blurColor} to-transparent`)}
             />
             <div
-              className={tw(`hidden desktop:block absolute right-0 h-full w-[22%] bg-gradient-to-l from-${blurColor} to-transparent`)}
+              className={tw(`hidden pointer-events-none desktop:block absolute right-0 h-full w-[20%] bg-gradient-to-l from-${blurColor} to-transparent`)}
             />
           </div>
         ) : (
-          <div className={tw('px-16 h-full')}>
+          <div className={tx('px-16 h-full', { '!cursor-grabbing': !!dragState })} {...dragHandlers}>
             {children[currentIndex]}
           </div>
         )}

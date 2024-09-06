@@ -89,7 +89,7 @@ export const Carousel = ({
   })
 
   const isAnimating = animationState !== undefined
-  const cardsPerSecond: number = 4 // in ms per card, musst be != 0
+  const cardsPerSecond: number = 4 // in ms per card, must be != 0
   const autoLoopCardsPerSecond: number = 1
 
   const length = children.length

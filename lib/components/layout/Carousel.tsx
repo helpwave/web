@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { tw, tx } from '@twind/core'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '../../util/array'
 import { noop } from '../../util/noop'
@@ -21,6 +21,7 @@ type CarouselProps = {
   children: ReactNode[],
   onCardClick?: (index: number) => void,
   isLooping?: boolean,
+  isAutoLooping?: boolean,
   hintNext?: boolean,
   arrows?: boolean,
   dots?: boolean,
@@ -40,8 +41,10 @@ type CarouselAnimationState = {
    * Value of either 1 or -1, 1 is forwards -1 is backwards
    */
   direction: number,
+  startIndex: number,
   startTime: number,
-  lastUpdate: number
+  lastUpdate: number,
+  isAutoLooping: boolean
 }
 
 type DragState = {
@@ -62,6 +65,7 @@ export const Carousel = ({
   children,
   onCardClick = noop,
   isLooping = false,
+  isAutoLooping = false,
   hintNext = false,
   arrows = false,
   dots = true,
@@ -69,6 +73,11 @@ export const Carousel = ({
   blurColor = 'white',
   className = ''
 }: CarouselProps) => {
+  if (isAutoLooping && !isLooping) {
+    console.error('When isAutoLooping is true, isLooping should also be true')
+    isLooping = true
+  }
+
   const [{
     currentIndex,
     offset,
@@ -78,8 +87,10 @@ export const Carousel = ({
     currentIndex: 0,
     offset: 0,
   })
+
   const isAnimating = animationState !== undefined
   const cardsPerSecond: number = 4 // in ms per card, musst be != 0
+  const autoLoopCardsPerSecond: number = 1
 
   const length = children.length
   const paddingItemCount = 2 // The number of items to append left and right of the list to allow for clean transition when looping
@@ -96,6 +107,16 @@ export const Carousel = ({
     return `${baseOffset}%`
   }
 
+  const getDistance = useCallback((start: number, target: number, offset: number) => {
+    let distanceForward = target - start
+    if (distanceForward < 0) {
+      distanceForward += length
+    }
+    const distanceBackward = length - distanceForward
+    const direction = distanceForward < distanceBackward ? 1 : -1
+    return Math.abs(Math.min(distanceForward, distanceBackward) + -direction * offset)
+  }, [length])
+
   const animation = useCallback((time: number) => {
     let keepAnimating: boolean = true
 
@@ -105,13 +126,19 @@ export const Carousel = ({
         currentIndex,
         offset,
         animationState,
+        dragState
       } = state
-      if (animationState === undefined) {
+      if (animationState === undefined || dragState !== undefined) {
         keepAnimating = false
         return state
       }
       const progress = (time - animationState.lastUpdate) / 1000 // passed seconds
-      const change = cardsPerSecond * progress * animationState.direction // the update offset to apply
+      const usedCardsPerSecond = animationState.isAutoLooping ? autoLoopCardsPerSecond : cardsPerSecond
+      const startDistance = getDistance(animationState.startIndex, currentIndex, offset)
+      // const targetDistance = getDistance(currentIndex, animationState.targetIndex, offset)
+      const distance = Math.min(startDistance, 0.5)
+      const smooth = Math.max(distance / 0.5, 0.3)
+      const change = smooth * usedCardsPerSecond * progress * animationState.direction // the update offset to apply
       let newOffset = change + offset
       let newIndex = currentIndex
       if (animationState.direction === 1) {
@@ -173,7 +200,29 @@ export const Carousel = ({
     if (keepAnimating) {
       requestAnimationFrame(animation)
     }
-  }, [isLooping, length])
+  }, [getDistance, isLooping, length])
+
+  useEffect(() => {
+    if (isAutoLooping && animationState === undefined && !dragState) {
+      setTimeout(() => {
+        requestAnimationFrame(startTime => {
+          setCarouselInformation(prevState => ({
+            ...prevState,
+            dragState: prevState.dragState,
+            animationState: prevState.animationState || prevState.dragState ? prevState.animationState : {
+              startIndex: currentIndex,
+              targetIndex: (currentIndex + 1) % length,
+              direction: 1, // always move forward
+              startTime,
+              lastUpdate: startTime,
+              isAutoLooping: true
+            }
+          }))
+          requestAnimationFrame(animation)
+        })
+      }, 5000)
+    }
+  }, [animation, animationState, currentIndex, dragState, isAutoLooping, length])
 
   const startAnimation = (targetIndex?: number) => {
     if (targetIndex === undefined) {
@@ -205,8 +254,10 @@ export const Carousel = ({
         animationState: {
           targetIndex,
           direction,
+          startIndex: currentIndex,
           startTime,
-          lastUpdate: startTime
+          lastUpdate: startTime,
+          isAutoLooping: false
         }
       }))
       requestAnimationFrame(animation)
@@ -299,7 +350,7 @@ export const Carousel = ({
     }
     // sanity check
     if (!isLooping) {
-      const overScrollThreshold = 0.2
+      const overScrollThreshold = 0.1
       if (newOffset > overScrollThreshold && newIndex === length - 1) {
         newOffset = overScrollThreshold
       } else if (newOffset < -overScrollThreshold && newIndex === 0) {

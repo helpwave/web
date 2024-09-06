@@ -94,7 +94,7 @@ export const StorySliderSection = () => {
 
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={tw('!px-0')}>
-      <Carousel hintNext={true} onCardClick={index => items[index]!.onShowMoreClicked!()}>
+      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} onCardClick={index => items[index]!.onShowMoreClicked!()}>
         {items.map((value, index) => (
           <div key={index} className={tw('px-[2.5%] h-full')}>
             <TextImage {...value} className={tw('h-full overflow-hidden')}/>

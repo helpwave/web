@@ -1,15 +1,16 @@
 import type { ReactNode } from 'react'
 import { tw, tx } from '@twind/core'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '../../util/array'
 import { noop } from '../../util/noop'
+import { clamp } from '../../util/math'
+import { EaseFunctions } from '../../util/easeFunctions'
+import type { Direction } from '../../util/loopingArray'
+import { LoopingArrayCalculator } from '../../util/loopingArray'
+import type { ScreenTypes } from '../../twind/config'
 
-type Heights = {
-  desktop: number,
-  tablet: number,
-  mobile: number
-}
+type Heights = Record<ScreenTypes, number>
 
 const defaultHeights: Heights = {
   desktop: 350,
@@ -17,16 +18,32 @@ const defaultHeights: Heights = {
   mobile: 350,
 }
 
+type ItemWidths = Record<ScreenTypes, string | undefined>
+
+const defaultItemWidths: ItemWidths = {
+  desktop: '50%',
+  tablet: '70%',
+  mobile: '70%',
+}
+
 type CarouselProps = {
   children: ReactNode[],
   onCardClick?: (index: number) => void,
+  animationTime?: number,
   isLooping?: boolean,
   isAutoLooping?: boolean,
+  autoLoopingTimeOut?: number,
+  autoLoopAnimationTime?: number,
   hintNext?: boolean,
   arrows?: boolean,
   dots?: boolean,
+  /**
+   * Percentage that is allowed to be scrolled further
+   */
+  overScrollThreshold?: number,
   heights?: Partial<Heights>,
   blurColor?: string,
+  itemWidths?: ItemWidths,
   className?: string
 }
 
@@ -36,14 +53,14 @@ type ItemType = {
 }
 
 type CarouselAnimationState = {
-  targetIndex: number,
+  targetPosition: number,
   /**
    * Value of either 1 or -1, 1 is forwards -1 is backwards
    */
-  direction: number,
-  startIndex: number,
-  startTime: number,
-  lastUpdate: number,
+  direction: Direction,
+  startPosition: number,
+  startTime?: number,
+  lastUpdateTime?: number,
   isAutoLooping: boolean
 }
 
@@ -55,8 +72,7 @@ type DragState = {
 }
 
 type CarouselInformation = {
-  currentIndex: number,
-  offset: number,
+  currentPosition: number,
   dragState?: DragState,
   animationState?: CarouselAnimationState
 }
@@ -64,13 +80,18 @@ type CarouselInformation = {
 export const Carousel = ({
   children,
   onCardClick = noop,
+  animationTime = 200,
   isLooping = false,
   isAutoLooping = false,
+  autoLoopingTimeOut = 5000,
+  autoLoopAnimationTime = 500,
   hintNext = false,
   arrows = false,
   dots = true,
+  overScrollThreshold = 0.1,
   heights = defaultHeights,
   blurColor = 'white',
+  itemWidths = defaultItemWidths,
   className = ''
 }: CarouselProps) => {
   if (isAutoLooping && !isLooping) {
@@ -79,43 +100,32 @@ export const Carousel = ({
   }
 
   const [{
-    currentIndex,
-    offset,
+    currentPosition,
     dragState,
     animationState,
   }, setCarouselInformation] = useState<CarouselInformation>({
-    currentIndex: 0,
-    offset: 0,
+    currentPosition: 0,
   })
-
-  const isAnimating = animationState !== undefined
-  const cardsPerSecond: number = 4 // in ms per card, must be != 0
-  const autoLoopCardsPerSecond: number = 1
+  const animationId = useRef<number | undefined>(undefined)
+  const timeOut = useRef<NodeJS.Timeout | undefined>(undefined)
+  autoLoopingTimeOut = Math.max(0, autoLoopingTimeOut)
 
   const length = children.length
-  const paddingItemCount = 2 // The number of items to append left and right of the list to allow for clean transition when looping
+  const paddingItemCount = 3 // The number of items to append left and right of the list to allow for clean transition when looping
+
+  const util = useMemo(() => new LoopingArrayCalculator(length, isLooping, overScrollThreshold), [length, isLooping, overScrollThreshold])
+  const currentIndex = util.getCorrectedPosition(LoopingArrayCalculator.withoutOffset(currentPosition))
+  const isAnimating = animationState !== undefined
+  animationTime = Math.max(200, animationTime) // in ms, must be > 0
+  autoLoopAnimationTime = Math.max(200, autoLoopAnimationTime)
 
   heights = { ...defaultHeights, ...heights }
+  itemWidths = { ...defaultItemWidths, ...itemWidths }
 
-  const getOffset = (index: number) => {
-    let baseOffset = -50 + -offset * 100
-    if (index === currentIndex) {
-      return `${baseOffset}%`
-    }
-    baseOffset += 100 * (index - currentIndex)
-
+  const getStyleOffset = (index: number) => {
+    const baseOffset = -50 + (index - currentPosition) * 100
     return `${baseOffset}%`
   }
-
-  const getDistance = useCallback((start: number, target: number, offset: number) => {
-    let distanceForward = target - start
-    if (distanceForward < 0) {
-      distanceForward += length
-    }
-    const distanceBackward = length - distanceForward
-    const direction = distanceForward < distanceBackward ? 1 : -1
-    return Math.abs(Math.min(distanceForward, distanceBackward) + -direction * offset)
-  }, [length])
 
   const animation = useCallback((time: number) => {
     let keepAnimating: boolean = true
@@ -123,8 +133,6 @@ export const Carousel = ({
     // Other calculation in the setState call to avoid updating the useCallback to often
     setCarouselInformation((state) => {
       const {
-        currentIndex,
-        offset,
         animationState,
         dragState
       } = state
@@ -132,155 +140,125 @@ export const Carousel = ({
         keepAnimating = false
         return state
       }
-      const progress = (time - animationState.lastUpdate) / 1000 // passed seconds
-      const usedCardsPerSecond = animationState.isAutoLooping ? autoLoopCardsPerSecond : cardsPerSecond
-      const startDistance = getDistance(animationState.startIndex, currentIndex, offset)
-      // const targetDistance = getDistance(currentIndex, animationState.targetIndex, offset)
-      const distance = Math.min(startDistance, 0.5)
-      const smooth = Math.max(distance / 0.5, 0.3)
-      const change = smooth * usedCardsPerSecond * progress * animationState.direction // the update offset to apply
-      let newOffset = change + offset
-      let newIndex = currentIndex
-      if (animationState.direction === 1) {
-        while (newIndex !== animationState.targetIndex && newOffset > 0.5) {
-          newOffset--
-          if (newIndex === length - 1) {
-            if (!isLooping) {
-              newOffset = 0
-              break
-            } else {
-              newIndex = (newIndex + 1) % length
-            }
-          } else {
-            newIndex++
+      if (!animationState.startTime || !animationState.lastUpdateTime) {
+        return {
+          ...state,
+          animationState: {
+            ...animationState,
+            startTime: time,
+            lastUpdateTime: time
           }
-        }
-        if (newIndex === animationState.targetIndex && newOffset > 0) {
-          newOffset = 0
-        }
-      } else {
-        while (newIndex !== animationState.targetIndex && newOffset < -0.5) {
-          newOffset++
-          if (newIndex === 0) {
-            if (!isLooping) {
-              newOffset = 0
-              break
-            } else {
-              newIndex--
-              if (newIndex < 0) {
-                newIndex += length
-              }
-            }
-          } else {
-            newIndex--
-          }
-        }
-        if (newIndex === animationState.targetIndex && newOffset < 0) {
-          newOffset = 0
         }
       }
+      const useAnimationTime = animationState.isAutoLooping ? autoLoopAnimationTime : animationTime
+      const progress = clamp((time - animationState.startTime) / useAnimationTime) // progress
+      const easedProgress = EaseFunctions.easeInEaseOut(progress)
+      const distance = util.getDistanceDirectional(animationState.startPosition, animationState.targetPosition, animationState.direction)
+      const newPosition = util.getCorrectedPosition(easedProgress * distance * animationState.direction + animationState.startPosition)
 
-      if (animationState.targetIndex === newIndex && newOffset === 0) {
+      if (animationState.targetPosition === newPosition || progress === 1) {
         keepAnimating = false
         return ({
-          currentIndex: newIndex,
-          offset: newOffset,
+          currentPosition: LoopingArrayCalculator.withoutOffset(newPosition),
           animationState: undefined
         })
       }
       return ({
-        currentIndex: newIndex,
-        offset: newOffset,
+        currentPosition: newPosition,
         animationState: {
           ...animationState!,
-          lastUpdate: time
+          lastUpdateTime: time
         }
       })
     })
     if (keepAnimating) {
-      requestAnimationFrame(animation)
+      animationId.current = requestAnimationFrame(time1 => animation(time1))
     }
-  }, [getDistance, isLooping, length])
+  }, [animationTime, autoLoopAnimationTime, util])
 
   useEffect(() => {
-    if (isAutoLooping && animationState === undefined && !dragState) {
-      setTimeout(() => {
-        requestAnimationFrame(startTime => {
-          setCarouselInformation(prevState => ({
-            ...prevState,
-            dragState: prevState.dragState,
-            animationState: prevState.animationState || prevState.dragState ? prevState.animationState : {
-              startIndex: currentIndex,
-              targetIndex: (currentIndex + 1) % length,
-              direction: 1, // always move forward
-              startTime,
-              lastUpdate: startTime,
-              isAutoLooping: true
-            }
-          }))
-          requestAnimationFrame(animation)
-        })
-      }, 5000)
+    if (animationState) {
+      animationId.current = requestAnimationFrame(animation)
     }
-  }, [animation, animationState, currentIndex, dragState, isAutoLooping, length])
+    return () => {
+      if (animationId.current) {
+        cancelAnimationFrame(animationId.current)
+        animationId.current = 0
+      }
+    }
+  }, [animationState]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const startAnimation = (targetIndex?: number) => {
-    if (targetIndex === undefined) {
-      targetIndex = currentIndex
+  const startAutoLoop = () => setCarouselInformation(prevState => ({
+    ...prevState,
+    dragState: prevState.dragState,
+    animationState: prevState.animationState || prevState.dragState ? prevState.animationState : {
+      startPosition: currentPosition,
+      targetPosition: (currentPosition + 1) % length,
+      direction: 1, // always move forward
+      isAutoLooping: true
     }
-    if (targetIndex === currentIndex && offset === 0) {
+  }))
+
+  useEffect(() => {
+    if (!animationId.current && !animationState && !dragState && !timeOut.current) {
+      if (autoLoopingTimeOut > 0) {
+        timeOut.current = setTimeout(() => {
+          startAutoLoop()
+          timeOut.current = undefined
+        }, autoLoopingTimeOut)
+      } else {
+        startAutoLoop()
+      }
+    }
+  }, [animationState, dragState, animationId.current, timeOut.current]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const startAnimation = (targetPosition?: number) => {
+    if (targetPosition === undefined) {
+      targetPosition = LoopingArrayCalculator.withoutOffset(currentPosition)
+    }
+    if (targetPosition === currentPosition) {
       return // we are exactly where we want to be
     }
 
     // find target index and fastest path to it
-    let direction = targetIndex <= currentIndex ? -1 : 1
-    if (isLooping) {
-      let distanceForward = targetIndex - currentIndex
-      if (distanceForward < 0) {
-        distanceForward += length
-      }
-      const distanceBackward = length - distanceForward
-      // let distance = Math.min(distanceForward, distanceBackward)
-      direction = distanceForward < distanceBackward ? 1 : -1
-    }
-    if (targetIndex === currentIndex) {
-      direction = offset > 0 ? -1 : 1
+    const direction = util.getBestDirection(currentPosition, targetPosition)
+    clearTimeout(timeOut.current)
+    timeOut.current = undefined
+    if (animationId.current) {
+      cancelAnimationFrame(animationId.current)
+      animationId.current = undefined
     }
 
-    requestAnimationFrame(startTime => {
-      setCarouselInformation(prevState => ({
-        ...prevState,
-        dragState: undefined,
-        animationState: {
-          targetIndex,
-          direction,
-          startIndex: currentIndex,
-          startTime,
-          lastUpdate: startTime,
-          isAutoLooping: false
-        }
-      }))
-      requestAnimationFrame(animation)
-    })
+    setCarouselInformation(prevState => ({
+      ...prevState,
+      dragState: undefined,
+      animationState: {
+        targetPosition: targetPosition!,
+        direction,
+        startPosition: currentPosition,
+        isAutoLooping: false
+      },
+      timeOut: undefined
+    }))
   }
 
   const canGoLeft = () => {
-    return isLooping || currentIndex !== 0
+    return isLooping || currentPosition !== 0
   }
 
   const canGoRight = () => {
-    return isLooping || currentIndex !== length - 1
+    return isLooping || currentPosition !== length - 1
   }
 
   const left = () => {
     if (canGoLeft()) {
-      startAnimation(currentIndex === 0 ? length - 1 : currentIndex - 1)
+      startAnimation(currentPosition === 0 ? length - 1 : LoopingArrayCalculator.withoutOffset(currentPosition - 1))
     }
   }
 
   const right = () => {
     if (canGoRight()) {
-      startAnimation((currentIndex + 1) % length)
+      startAnimation(LoopingArrayCalculator.withoutOffset((currentPosition + 1) % length))
     }
   }
 
@@ -313,7 +291,7 @@ export const Carousel = ({
       lastX: x,
       startX: x,
       startTime: Date.now(),
-      startIndex: currentIndex,
+      startIndex: currentPosition,
     },
     animationState: undefined // cancel animation
   }))
@@ -324,44 +302,11 @@ export const Carousel = ({
       return
     }
     const offsetUpdate = (dragState.lastX - x) / width
-    let newOffset = offset + offsetUpdate
-    let newIndex = currentIndex
-    if (newOffset >= 0.5) {
-      const ceiledOffset = Math.ceil(newOffset)
-      if (isLooping) {
-        newIndex = (currentIndex + ceiledOffset) % length
-      } else {
-        newIndex = Math.min(currentIndex + ceiledOffset, length - 1)
-      }
-      newOffset -= Math.min(ceiledOffset, 1) // 0.6 ceiled to 1 gets us -0.4, min constrain if we have large scrolls
-    } else if (newOffset <= -0.5) {
-      const flooredOffset = Math.floor(newOffset)
-      const absOffset = Math.abs(flooredOffset)
-
-      if (isLooping) {
-        newIndex = currentIndex - (absOffset % length)
-        if (newIndex < 0) {
-          newIndex += length
-        }
-      } else {
-        newIndex = Math.max(currentIndex - absOffset, 0)
-      }
-      newOffset += Math.max(-1, absOffset)
-    }
-    // sanity check
-    if (!isLooping) {
-      const overScrollThreshold = 0.1
-      if (newOffset > overScrollThreshold && newIndex === length - 1) {
-        newOffset = overScrollThreshold
-      } else if (newOffset < -overScrollThreshold && newIndex === 0) {
-        newOffset = -overScrollThreshold
-      }
-    }
+    const newPosition = util.getCorrectedPosition(currentPosition + offsetUpdate)
 
     setCarouselInformation(prevState => ({
       ...prevState,
-      offset: newOffset,
-      currentIndex: newIndex,
+      currentPosition: newPosition,
       dragState: {
         ...dragState,
         lastX: x
@@ -369,16 +314,17 @@ export const Carousel = ({
     }))
   }
 
-  const onDragEnd = (x: number) => {
+  const onDragEnd = (x: number, width: number) => {
     if (!dragState) {
       return
     }
     const distance = dragState.startX - x
+    const relativeDistance = distance / width
     const duration = (Date.now() - dragState.startTime) // in milliseconds
     const velocity = distance / (Date.now() - dragState.startTime)
 
-    const isSlide = Math.abs(velocity) > 2 || (duration < 200 && Math.abs(distance) > 20)
-    if (isSlide && dragState.startIndex === currentIndex) {
+    const isSlide = Math.abs(velocity) > 2 || (duration < 200 && (Math.abs(relativeDistance) > 0.2 || Math.abs(distance) > 50))
+    if (isSlide) {
       if (distance > 0 && canGoRight()) {
         right()
         return
@@ -409,18 +355,18 @@ export const Carousel = ({
               if (isAnimating) {
                 startAnimation()
               } else {
-                onCardClick(currentIndex)
+                onCardClick(currentPosition)
               }
             }
           }}
           draggable={true}
           onDragStart={event => onDragStart(event.clientX)}
           onDrag={event => onDrag(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
-          onDragEnd={event => onDragEnd(event.clientX)}
+          onDragEnd={event => onDragEnd(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
           onTouchStart={event => onDragStart(event.touches[0]!.clientX)}
           onTouchMove={event => onDrag(event.touches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
-          onTouchEnd={event => onDragEnd(event.changedTouches[0]!.clientX)}
-          onTouchCancel={event => onDragEnd(event.changedTouches[0]!.clientX)}
+          onTouchEnd={event => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
+          onTouchCancel={event => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
         />
         {arrows && (
           <>
@@ -446,8 +392,8 @@ export const Carousel = ({
               }, listIndex) => (
                 <div
                   key={listIndex}
-                  className={tx(`absolute w-[70%] left-[50%] desktop:w-1/2 desktop:left-1/2 h-full overflow-hidden`)}
-                  style={{ translate: getOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
+                  className={tx(`absolute left-[50%] desktop:w-[${itemWidths?.desktop}] tablet:w-[${itemWidths?.tablet}] mobile:w-[${itemWidths?.mobile}] h-full overflow-hidden`)}
+                  style={{ translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
                 >
                   {item}
                 </div>
@@ -474,7 +420,7 @@ export const Carousel = ({
               key={index}
               className={tx('hover:!bg-hw-primary-300 cursor-pointer first:rounded-l-md last:rounded-r-md min-w-[32px] min-h-[12px]', {
                 '!bg-gray-200': currentIndex !== index,
-                '!bg-hw-primary-200': currentIndex === index
+                '!bg-hw-primary-300/80': currentIndex === index
               })}
               onClick={() => startAnimation(index)}
             />

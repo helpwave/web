@@ -1,9 +1,7 @@
 import { tw } from '@twind/core'
 import Image from 'next/image'
-import { VerticalDivider } from '@helpwave/common/components/VerticalDivider'
 import { Span } from '@helpwave/common/components/Span'
-import Scrollbars from 'react-custom-scrollbars-2'
-import { DividerInserter } from '@helpwave/common/components/layout/DividerInserter'
+import { Carousel } from '@helpwave/common/components/layout/Carousel'
 
 export type Partner = {
   name: string,
@@ -25,27 +23,34 @@ export const PartnerList = ({
   return (
     <div className={tw('flex flex-col gap-y-4 items-center w-full')}>
       <Span type="title" className={tw('!text-2xl')}>{title}</Span>
-      <Scrollbars
-        autoHeight={true}
-        autoHeightMax={120}
-        universal={true}
+      <Carousel
+        hintNext={true} isLooping={true} isAutoLooping={true}
+        heights={{
+          tablet: 100,
+          mobile: 100,
+          desktop: 100
+        }} itemWidths={{
+          desktop: '20%',
+          tablet: '33%',
+          mobile: '50%'
+        }}
+        blurColor="transparent"
+        autoLoopingTimeOut={1000}
+        autoLoopAnimationTime={5000}
       >
-        <DividerInserter
-          className={tw('flex flex-row gap-x-6 items-center')}
-          divider={(index) => (<VerticalDivider key={index} height={120}/>)}
-        >
-          {partners.map(partner => (
+        {partners.map(partner => (
+          <div key={partner.name} className={tw('flex flex-col h-full items-center justify-center')}>
             <Image
               key={partner.name}
               width={0}
               height={0}
               src={partner.url}
               alt={partner.name}
-              className={tw('w-auto max-h-[60px]')}
+              className={tw('w-auto max-h-[100px] py-2 px-4')}
             />
-          ))}
-        </DividerInserter>
-      </Scrollbars>
+          </div>
+        ))}
+      </Carousel>
     </div>
   )
 }

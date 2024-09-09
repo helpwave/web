@@ -5,7 +5,7 @@ import { Page } from '@/components/Page'
 
 const TechRadar: NextPage = () => {
   return (
-    <Page pageTitleAddition="Tech Radar">
+    <Page pageTitleAddition="tech radar">
       <div className={tw('mt-16 flex items-center justify-center')}>
         <TechRadarComponent/>
       </div>

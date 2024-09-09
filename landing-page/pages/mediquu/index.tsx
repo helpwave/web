@@ -10,7 +10,7 @@ import { Page } from '@/components/Page'
 
 const MediQuuPage: NextPage = () => {
   return (
-    <Page pageTitleAddition="MediQuu">
+    <Page pageTitleAddition="mediQuu">
       <MediQuuHeaderSection/>
       <MediQuuInformationSection/>
       <BrandDescriptionsSection/>

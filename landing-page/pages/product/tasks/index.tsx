@@ -12,7 +12,7 @@ import { PropertiesSection } from '@/components/sections/tasks/PropertiesSection
 
 const Tasks: NextPage = () => {
   return (
-    <Page pageTitleAddition="tasks">
+    <Page pageTitleAddition="Tasks">
       <StartSection/>
       {/*
         Waiting for approval of UKM

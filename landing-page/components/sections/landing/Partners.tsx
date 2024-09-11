@@ -28,12 +28,12 @@ const images: Partner[] = [
     url: 'https://cdn.helpwave.de/partners/reach.svg'
   },
   {
-    name: 'Digital Hub münsterLAND',
-    url: 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png'
-  },
-  {
     name: 'RWTH Aachen University',
     url: 'https://cdn.helpwave.de/partners/rwth_logo.svg',
+  },
+  {
+    name: 'Digital Hub münsterLAND',
+    url: 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png'
   },
   {
     name: 'Münsterhack',

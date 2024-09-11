@@ -1,14 +1,15 @@
 import type { ReactNode } from 'react'
 import { tw, tx } from '@twind/core'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '../../util/array'
+import { clamp } from '../../util/math'
+import { EaseFunctions } from '../../util/easeFunctions'
+import type { Direction } from '../../util/loopingArray'
+import { LoopingArrayCalculator } from '../../util/loopingArray'
+import type { ScreenTypes } from '../../twind/config'
 
-type Heights = {
-  desktop: number,
-  tablet: number,
-  mobile: number
-}
+type Heights = Record<ScreenTypes, number>
 
 const defaultHeights: Heights = {
   desktop: 350,
@@ -16,14 +17,31 @@ const defaultHeights: Heights = {
   mobile: 350,
 }
 
+type ItemWidths = Record<ScreenTypes, string | undefined>
+
+const defaultItemWidths: ItemWidths = {
+  desktop: '50%',
+  tablet: '70%',
+  mobile: '70%',
+}
+
 type CarouselProps = {
   children: ReactNode[],
+  animationTime?: number,
   isLooping?: boolean,
+  isAutoLooping?: boolean,
+  autoLoopingTimeOut?: number,
+  autoLoopAnimationTime?: number,
   hintNext?: boolean,
   arrows?: boolean,
   dots?: boolean,
+  /**
+   * Percentage that is allowed to be scrolled further
+   */
+  overScrollThreshold?: number,
   heights?: Partial<Heights>,
   blurColor?: string,
+  itemWidths?: ItemWidths,
   className?: string
 }
 
@@ -32,167 +50,228 @@ type ItemType = {
   index: number
 }
 
-type TransitionInformation = {
-  oldIndex: number,
-  newIndex: number,
-  start: number,
-  direction: number,
-  speed: number,
-  change: number
+type CarouselAnimationState = {
+  targetPosition: number,
+  /**
+   * Value of either 1 or -1, 1 is forwards -1 is backwards
+   */
+  direction: Direction,
+  startPosition: number,
+  startTime?: number,
+  lastUpdateTime?: number,
+  isAutoLooping: boolean
+}
+
+type DragState = {
+  startX: number,
+  startTime: number,
+  lastX: number,
+  startIndex: number
 }
 
 type CarouselInformation = {
-  currentIndex: number,
-  transitionInformation?: TransitionInformation
+  currentPosition: number,
+  dragState?: DragState,
+  animationState?: CarouselAnimationState
 }
 
 export const Carousel = ({
   children,
+  animationTime = 200,
   isLooping = false,
+  isAutoLooping = false,
+  autoLoopingTimeOut = 5000,
+  autoLoopAnimationTime = 500,
   hintNext = false,
   arrows = false,
   dots = true,
+  overScrollThreshold = 0.1,
   heights = defaultHeights,
   blurColor = 'white',
+  itemWidths = defaultItemWidths,
   className = ''
 }: CarouselProps) => {
-  const [{ currentIndex, transitionInformation }, setCarouselInformation] = useState<CarouselInformation>({
-    currentIndex: 0
+  if (isAutoLooping && !isLooping) {
+    console.error('When isAutoLooping is true, isLooping should also be true')
+    isLooping = true
+  }
+
+  const [{
+    currentPosition,
+    dragState,
+    animationState,
+  }, setCarouselInformation] = useState<CarouselInformation>({
+    currentPosition: 0,
   })
-  const animationTime: number = 250 // in ms
+  const animationId = useRef<number | undefined>(undefined)
+  const timeOut = useRef<NodeJS.Timeout | undefined>(undefined)
+  autoLoopingTimeOut = Math.max(0, autoLoopingTimeOut)
 
   const length = children.length
-  const paddingItemCount = 2 // The number of items to append left and right of the list to allow for clean transition when looping
+  const paddingItemCount = 3 // The number of items to append left and right of the list to allow for clean transition when looping
+
+  const util = useMemo(() => new LoopingArrayCalculator(length, isLooping, overScrollThreshold), [length, isLooping, overScrollThreshold])
+  const currentIndex = util.getCorrectedPosition(LoopingArrayCalculator.withoutOffset(currentPosition))
+  animationTime = Math.max(200, animationTime) // in ms, must be > 0
+  autoLoopAnimationTime = Math.max(200, autoLoopAnimationTime)
 
   heights = { ...defaultHeights, ...heights }
+  itemWidths = { ...defaultItemWidths, ...itemWidths }
 
-  const getOffset = (index: number) => {
-    const padding = 10 // 10%
-    let baseOffset = -50 + (transitionInformation?.change ?? 0) * -(100 + padding)
-    if (index === currentIndex) {
-      return `${baseOffset}%`
-    }
-    baseOffset += (100 + padding) * (index - currentIndex)
-
+  const getStyleOffset = (index: number) => {
+    const baseOffset = -50 + (index - currentPosition) * 100
     return `${baseOffset}%`
   }
 
-  const updateCycle = useCallback((time: number) => {
+  const animation = useCallback((time: number) => {
+    let keepAnimating: boolean = true
+
+    // Other calculation in the setState call to avoid updating the useCallback to often
     setCarouselInformation((state) => {
       const {
-        currentIndex,
-        transitionInformation
+        animationState,
+        dragState
       } = state
-      if (transitionInformation === undefined) {
+      if (animationState === undefined || dragState !== undefined) {
+        keepAnimating = false
         return state
       }
-      const progress = (time - transitionInformation.start) / 1000
-      let change = transitionInformation.change + progress * transitionInformation.direction * transitionInformation.speed
-      let newIndex = currentIndex
-      if (transitionInformation.direction === 1) {
-        while (newIndex !== transitionInformation.newIndex && change > 1) {
-          change = change + 1
-          newIndex = (newIndex + 1) % length
-        }
-      } else {
-        while (newIndex !== transitionInformation.newIndex && change < -1) {
-          change = change + 1
-          newIndex--
-          if (newIndex < 0) {
-            newIndex = length - 1
+      if (!animationState.startTime || !animationState.lastUpdateTime) {
+        return {
+          ...state,
+          animationState: {
+            ...animationState,
+            startTime: time,
+            lastUpdateTime: time
           }
         }
       }
+      const useAnimationTime = animationState.isAutoLooping ? autoLoopAnimationTime : animationTime
+      const progress = clamp((time - animationState.startTime) / useAnimationTime) // progress
+      const easedProgress = EaseFunctions.easeInEaseOut(progress)
+      const distance = util.getDistanceDirectional(animationState.startPosition, animationState.targetPosition, animationState.direction)
+      const newPosition = util.getCorrectedPosition(easedProgress * distance * animationState.direction + animationState.startPosition)
 
-      if (transitionInformation?.newIndex === newIndex) {
+      if (animationState.targetPosition === newPosition || progress === 1) {
+        keepAnimating = false
         return ({
-          currentIndex: newIndex
+          currentPosition: LoopingArrayCalculator.withoutOffset(newPosition),
+          animationState: undefined
         })
       }
       return ({
-        currentIndex: newIndex,
-        transitionInformation: {
-          ...transitionInformation!,
-          change,
-          start: time
+        currentPosition: newPosition,
+        animationState: {
+          ...animationState!,
+          lastUpdateTime: time
         }
       })
     })
-    requestAnimationFrame(updateCycle)
-  }, [length])
+    if (keepAnimating) {
+      animationId.current = requestAnimationFrame(time1 => animation(time1))
+    }
+  }, [animationTime, autoLoopAnimationTime, util])
 
-  const updateIndex = (newIndex: number) => {
-    if (newIndex === currentIndex) {
-      return
+  useEffect(() => {
+    if (animationState) {
+      animationId.current = requestAnimationFrame(animation)
     }
-    let distanceForward = newIndex - currentIndex
-    if (distanceForward < 0) {
-      distanceForward += length
-    }
-    const distanceBackward = length - distanceForward
-    let distance = Math.min(distanceForward, distanceBackward)
-    let direction = distanceForward < distanceBackward ? 1 : -1
-    if (!isLooping) {
-      if (newIndex <= currentIndex) {
-        distance = distanceBackward
-        direction = -1
-      } else {
-        distance = distanceForward
-        direction = 1
+    return () => {
+      if (animationId.current) {
+        cancelAnimationFrame(animationId.current)
+        animationId.current = 0
       }
     }
+  }, [animationState]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const paddingPercentage = 1.1
+  const startAutoLoop = () => setCarouselInformation(prevState => ({
+    ...prevState,
+    dragState: prevState.dragState,
+    animationState: prevState.animationState || prevState.dragState ? prevState.animationState : {
+      startPosition: currentPosition,
+      targetPosition: (currentPosition + 1) % length,
+      direction: 1, // always move forward
+      isAutoLooping: true
+    }
+  }))
 
-    const newTransitionInformation = {
-      oldIndex: currentIndex,
-      newIndex,
-      direction,
-      speed: distance * paddingPercentage / (animationTime / 1000),
-      change: 0
+  useEffect(() => {
+    if (!animationId.current && !animationState && !dragState && !timeOut.current) {
+      if (autoLoopingTimeOut > 0) {
+        timeOut.current = setTimeout(() => {
+          startAutoLoop()
+          timeOut.current = undefined
+        }, autoLoopingTimeOut)
+      } else {
+        startAutoLoop()
+      }
+    }
+  }, [animationState, dragState, animationId.current, timeOut.current]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const startAnimation = (targetPosition?: number) => {
+    if (targetPosition === undefined) {
+      targetPosition = LoopingArrayCalculator.withoutOffset(currentPosition)
+    }
+    if (targetPosition === currentPosition) {
+      return // we are exactly where we want to be
     }
 
-    requestAnimationFrame(time => {
-      setCarouselInformation(prevState => ({
-        ...prevState,
-        transitionInformation: {
-          ...newTransitionInformation,
-          start: time,
-          change: prevState.transitionInformation?.change ?? newTransitionInformation.change
-        }
-      }))
-      requestAnimationFrame(updateCycle)
-    })
+    // find target index and fastest path to it
+    const direction = util.getBestDirection(currentPosition, targetPosition)
+    clearTimeout(timeOut.current)
+    timeOut.current = undefined
+    if (animationId.current) {
+      cancelAnimationFrame(animationId.current)
+      animationId.current = undefined
+    }
+
+    setCarouselInformation(prevState => ({
+      ...prevState,
+      dragState: undefined,
+      animationState: {
+        targetPosition: targetPosition!,
+        direction,
+        startPosition: currentPosition,
+        isAutoLooping: false
+      },
+      timeOut: undefined
+    }))
   }
 
   const canGoLeft = () => {
-    return isLooping || currentIndex !== 0
+    return isLooping || currentPosition !== 0
   }
 
   const canGoRight = () => {
-    return isLooping || currentIndex !== length - 1
+    return isLooping || currentPosition !== length - 1
   }
 
   const left = () => {
     if (canGoLeft()) {
-      updateIndex(currentIndex === 0 ? length - 1 : currentIndex - 1)
+      startAnimation(currentPosition === 0 ? length - 1 : LoopingArrayCalculator.withoutOffset(currentPosition - 1))
     }
   }
 
   const right = () => {
     if (canGoRight()) {
-      updateIndex((currentIndex + 1) % length)
+      startAnimation(LoopingArrayCalculator.withoutOffset((currentPosition + 1) % length))
     }
   }
 
-  let items: ItemType[] = children.map((item, index) => ({ index, item }))
+  let items: ItemType[] = children.map((item, index) => ({
+    index,
+    item
+  }))
 
   if (isLooping) {
     const before = createLoopingListWithIndex(children, length - 1, paddingItemCount, false).reverse().map(([index, item]) => ({
       index,
       item
     }))
-    const after = createLoopingListWithIndex(children, 0, paddingItemCount).map(([index, item]) => ({ index, item }))
+    const after = createLoopingListWithIndex(children, 0, paddingItemCount).map(([index, item]) => ({
+      index,
+      item
+    }))
     items = [
       ...before,
       ...items,
@@ -201,6 +280,71 @@ export const Carousel = ({
   }
 
   const height = `desktop:h-[${heights?.desktop}px] tablet:h-[${heights?.tablet}px] mobile:h-[${heights?.mobile}px]`
+
+  const onDragStart = (x: number) => setCarouselInformation(prevState => ({
+    ...prevState,
+    dragState: {
+      lastX: x,
+      startX: x,
+      startTime: Date.now(),
+      startIndex: currentPosition,
+    },
+    animationState: undefined // cancel animation
+  }))
+
+  const onDrag = (x: number, width: number) => {
+    // For some weird reason the clientX is 0 on the last dragUpdate before drag end causing issues
+    if (!dragState || x === 0) {
+      return
+    }
+    const offsetUpdate = (dragState.lastX - x) / width
+    const newPosition = util.getCorrectedPosition(currentPosition + offsetUpdate)
+
+    setCarouselInformation(prevState => ({
+      ...prevState,
+      currentPosition: newPosition,
+      dragState: {
+        ...dragState,
+        lastX: x
+      },
+    }))
+  }
+
+  const onDragEnd = (x: number, width: number) => {
+    if (!dragState) {
+      return
+    }
+    const distance = dragState.startX - x
+    const relativeDistance = distance / width
+    const duration = (Date.now() - dragState.startTime) // in milliseconds
+    const velocity = distance / (Date.now() - dragState.startTime)
+
+    const isSlide = Math.abs(velocity) > 2 || (duration < 200 && (Math.abs(relativeDistance) > 0.2 || Math.abs(distance) > 50))
+    if (isSlide) {
+      if (distance > 0 && canGoRight()) {
+        right()
+        return
+      } else if (distance < 0 && canGoLeft()) {
+        left()
+        return
+      }
+    }
+    startAnimation()
+  }
+
+  const dragHandlers = {
+    draggable: true,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) => {
+      onDragStart(event.clientX)
+      event.dataTransfer.setDragImage(document.createElement('div'), 0, 0)
+    },
+    onDrag: (event: React.DragEvent<HTMLDivElement>) => onDrag(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+    onDragEnd: (event: React.DragEvent<HTMLDivElement>) => onDragEnd(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+    onTouchStart: (event: React.TouchEvent<HTMLDivElement>) => onDragStart(event.touches[0]!.clientX),
+    onTouchMove: (event: React.TouchEvent<HTMLDivElement>) => onDrag(event.touches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+    onTouchEnd: (event: React.TouchEvent<HTMLDivElement>) => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+    onTouchCancel: (event: React.TouchEvent<HTMLDivElement>) => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
+  }
 
   return (
     <div className={tw('flex flex-col items-center w-full gap-y-2')}>
@@ -224,24 +368,30 @@ export const Carousel = ({
         {hintNext ? (
           <div className={tx(`relative flex flex-row`, height)}>
             <div className={tw('relative flex flex-row w-full px-2 overflow-hidden')}>
-              {items.map(({ index, item }, listIndex) => (
+              {items.map(({
+                item,
+                index
+              }, listIndex) => (
                 <div
                   key={listIndex}
-                  className={tx(`absolute w-[70%] left-[50%] desktop:w-1/2 desktop:left-1/2 h-full overflow-hidden`)}
-                  style={{ translate: getOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
-                  onClick={() => updateIndex(index)}
+                  className={tx(`absolute left-[50%] desktop:w-[${itemWidths?.desktop}] tablet:w-[${itemWidths?.tablet}] mobile:w-[${itemWidths?.mobile}] h-full overflow-hidden`, { '!cursor-grabbing': !!dragState })}
+                  style={{ translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
+                  {...dragHandlers}
+                  onClick={() => startAnimation(index)}
                 >
                   {item}
                 </div>
               ))}
             </div>
-            <div className={tw(`hidden desktop:block absolute left-0 h-full w-[22%] bg-gradient-to-r from-${blurColor} to-transparent`)}
-                 onClick={left}/>
-            <div className={tw(`hidden desktop:block absolute right-0 h-full w-[22%] bg-gradient-to-l from-${blurColor} to-transparent`)}
-                 onClick={right}/>
+            <div
+              className={tw(`hidden pointer-events-none desktop:block absolute left-0 h-full w-[20%] bg-gradient-to-r from-${blurColor} to-transparent`)}
+            />
+            <div
+              className={tw(`hidden pointer-events-none desktop:block absolute right-0 h-full w-[20%] bg-gradient-to-l from-${blurColor} to-transparent`)}
+            />
           </div>
         ) : (
-          <div className={tw('px-16 h-full')}>
+          <div className={tx('px-16 h-full', { '!cursor-grabbing': !!dragState })} {...dragHandlers}>
             {children[currentIndex]}
           </div>
         )}
@@ -254,9 +404,9 @@ export const Carousel = ({
               key={index}
               className={tx('hover:!bg-hw-primary-300 cursor-pointer first:rounded-l-md last:rounded-r-md min-w-[32px] min-h-[12px]', {
                 '!bg-gray-200': currentIndex !== index,
-                '!bg-hw-primary-200': currentIndex === index
+                '!bg-hw-primary-300/80': currentIndex === index
               })}
-              onClick={() => updateIndex(index)}
+              onClick={() => startAnimation(index)}
             />
           ))}
         </div>

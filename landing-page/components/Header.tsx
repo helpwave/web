@@ -12,12 +12,13 @@ import { Chip } from '@helpwave/common/components/ChipList'
 
 const homeURL = '/'
 
-const linkNames = ['products', 'mediquu', 'story', 'team', 'talks', 'tasks'] as const
+const linkNames = ['products', 'mediquu', 'story', 'support', 'team', 'talks', 'tasks', 'appzumdoc', 'netzmanager'] as const
 type LinkNames = typeof linkNames[number]
 
 type LinkType = {
   name: LinkNames,
-  url: string
+  url: string,
+  external?: boolean
 }
 
 type SubLinkType = LinkType & {
@@ -32,6 +33,16 @@ const items: SubLinkType[] = [
       {
         name: 'tasks',
         url: '/tasks',
+      },
+      {
+        name: 'appzumdoc',
+        url: 'https://app-zum-doc.de',
+        external: true
+      },
+      {
+        name: 'netzmanager',
+        url: 'https://mediquu.de/mediquu_netzmanager.html',
+        external: true
       }
     ]
   },
@@ -46,6 +57,10 @@ const items: SubLinkType[] = [
   {
     name: 'talks',
     url: '/talks'
+  },
+  {
+    name: 'support',
+    url: 'https://support.helpwave.de',
   },
   {
     name: 'team',
@@ -65,7 +80,10 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
     team: 'Team',
     contact: 'Contact us',
     tasks: 'tasks',
+    support: 'Support',
     talks: 'Podcast',
+    appzumdoc: 'App Zum Doc',
+    netzmanager: 'mediQuu Netzmanager',
   },
   de: {
     products: 'Produkte',
@@ -74,7 +92,10 @@ const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {
     team: 'Team',
     contact: 'Kontakt',
     tasks: 'tasks',
+    support: 'Hilfe',
     talks: 'Podcast',
+    appzumdoc: 'App Zum Doc',
+    netzmanager: 'mediQuu Netzmanager',
   }
 }
 
@@ -97,7 +118,7 @@ const Header = () => {
               {items.map(({
                 name,
                 url,
-                subpage
+                subpage,
               }) => (
                 <div key={name}>
                   {subpage === undefined ? (
@@ -120,10 +141,11 @@ const Header = () => {
                     >
                       {subpage.map(({
                         name: subPageName,
-                        url: subPageUrl
+                        url: subPageUrl,
+                        external: subPageExternal,
                       }) =>
                         (
-                        <Link key={subPageName} className={tw('cursor-pointer')} href={url + subPageUrl}>
+                        <Link key={subPageName} className={tw('cursor-pointer')} href={subPageExternal ? subPageUrl : url + subPageUrl}>
                           <MenuItem alignment="left">
                             <Span className={navigationItemStyle}>
                               {subPageName}
@@ -171,7 +193,7 @@ const Header = () => {
             {items.map(({
               name,
               url,
-              subpage
+              subpage,
             }) => (
               <div key={name} className={tw('w-full p-2')}>
                 {subpage === undefined ? (
@@ -190,11 +212,12 @@ const Header = () => {
                   )}>
                     {subpage.map(({
                       name: subPageName,
-                      url: subPageUrl
+                      url: subPageUrl,
+                      external: subPageExternal
                     }) =>
                       (
                       <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)}
-                        href={url + subPageUrl}>
+                        href={subPageExternal ? subPageUrl : url + subPageUrl}>
                         <MenuItem alignment="left">
                           <Span type="heading">
                             {subPageName}

@@ -49,9 +49,10 @@ const linkGroups: Record<Categories, LinkType[]> = {
     { name: 'web', link: 'https://github.com/helpwave/web' },
     { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },
     { name: 'services', link: 'https://github.com/helpwave/services' },
-    { name: 'Staging  ~ tasks', link: 'https://staging-tasks.helpwave.de' },
+    { name: 'helpwave tasks (stating)', link: 'https://staging-tasks.helpwave.de' },
   ],
   general: [
+    { name: 'Support', link: 'https://support.helpwave.de' },
     { name: 'Imprint', link: 'https://cdn.helpwave.de/imprint.html' },
     { name: 'Privacy', link: 'https://cdn.helpwave.de/privacy.html' },
     { name: 'Cookies', link: '', onClick: () => CookieConsent.showPreferences() },
@@ -63,7 +64,7 @@ const linkGroups: Record<Categories, LinkType[]> = {
     { name: 'Credits', link: '/credits', openInCurrentTab: true },
   ],
   products: [
-    { name: 'tasks', link: '/product/tasks' },
+    { name: 'helpwave tasks', link: '/product/tasks' },
     { name: 'App Zum Doc', link: 'https://app-zum-doc.de/' },
     { name: 'mediQuu Netzmanager', link: 'https://mediquu.de/mediquu_netzmanager.html' },
     /* { name: 'scaffold', link: '/product/scaffold' },

@@ -72,7 +72,7 @@ const Menu = <T extends HTMLElement>({
       {trigger(() => setOpen(!open), triggerRef)}
       {open ? (
         <div ref={menuRef} onClick={e => e.stopPropagation()}
-             className={tx('absolute top-full mt-1 py-2 w-40 rounded-lg bg-white ring-1 ring-slate-900/5 text-sm leading-6 font-semibold text-slate-700 shadow-md z-[1]', {
+             className={tx('absolute top-full mt-1 py-2 w-60 rounded-lg bg-white ring-1 ring-slate-900/5 text-sm leading-6 font-semibold text-slate-700 shadow-md z-[1]', {
                '    top-[8px]': alignment[0] === 't',
                ' bottom-[8px]': alignment[0] === 'b',
                '  left-[-8px]': alignment[1] === 'l',

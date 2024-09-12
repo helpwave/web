@@ -199,14 +199,14 @@ const Header = () => {
                 {subpage === undefined ? (
                   <Link href={url} onClick={() => setNavbarOpen(false)}>
                     <Span type="heading">
-                      {name}
+                      {translation[name]}
                     </Span>
                   </Link>
                 ) : (
                   <Menu<HTMLDivElement> alignment="tl" trigger={(onClick, ref) => (
                     <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
                       <Span type="heading">
-                        {name}
+                        {translation[name]}
                       </Span>
                     </div>
                   )}>
@@ -220,7 +220,7 @@ const Header = () => {
                         href={subPageExternal ? subPageUrl : url + subPageUrl}>
                         <MenuItem alignment="left">
                           <Span type="heading">
-                            {subPageName}
+                            {translation[subPageName]}
                           </Span>
                         </MenuItem>
                       </Link>

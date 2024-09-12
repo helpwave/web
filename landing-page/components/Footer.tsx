@@ -64,6 +64,8 @@ const linkGroups: Record<Categories, LinkType[]> = {
   ],
   products: [
     { name: 'tasks', link: '/product/tasks' },
+    { name: 'App Zum Doc', link: 'https://app-zum-doc.de/' },
+    { name: 'mediQuu Netzmanager', link: 'https://mediquu.de/mediquu_netzmanager.html' },
     /* { name: 'scaffold', link: '/product/scaffold' },
       { name: 'cloud', link: '/product/cloud' },
       { name: 'impulse', link: '/product/impulse' },

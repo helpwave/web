@@ -17,10 +17,10 @@ type HomeTranslation = {
 
 const defaultHomeTranslation: Record<Languages, HomeTranslation> = {
   en: {
-    home: 'Home',
+    home: 'home',
   },
   de: {
-    home: 'Home',
+    home: 'home',
   }
 }
 

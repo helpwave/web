@@ -49,7 +49,7 @@ const linkGroups: Record<Categories, LinkType[]> = {
     { name: 'web', link: 'https://github.com/helpwave/web' },
     { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },
     { name: 'services', link: 'https://github.com/helpwave/services' },
-    { name: 'helpwave tasks (stating)', link: 'https://staging-tasks.helpwave.de' },
+    { name: 'helpwave tasks (staging)', link: 'https://staging-tasks.helpwave.de' },
   ],
   general: [
     { name: 'Support', link: 'https://support.helpwave.de' },

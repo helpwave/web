@@ -148,7 +148,7 @@ const Header = () => {
                         <Link key={subPageName} className={tw('cursor-pointer')} href={subPageExternal ? subPageUrl : url + subPageUrl}>
                           <MenuItem alignment="left">
                             <Span className={navigationItemStyle}>
-                              {subPageName}
+                              {translation[subPageName]}
                             </Span>
                           </MenuItem>
                         </Link>

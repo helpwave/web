@@ -20,7 +20,7 @@ export const SingleSelectPropertyExample = ({
   }, [hintText])
 
   useEffect(() => {
-    if (options.find(value1 => value1.value === value ?? '')) {
+    if (options.find(value1 => value1.value === value)) {
       setUsedValue(value)
     }
   }, [value, options])

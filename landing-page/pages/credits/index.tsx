@@ -85,6 +85,7 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
     <Page pageTitleAddition={translation.title}>
       <SectionBase
         className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
+        backgroundColor="white"
       >
         <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>
           <div className={tw('flex flex-col gap-y-2')}>

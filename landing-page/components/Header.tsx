@@ -107,7 +107,7 @@ const Header = () => {
 
   return (
     <>
-      <div className={tw('absolute flex flex-row justify-center top-0 w-screen z-[50] bg-white mobile:px-6 tablet:px-12 desktop:px-24')}>
+      <div className={tw('absolute flex flex-row justify-center top-0 w-screen z-[50] bg-hw-grayscale-50 mobile:px-6 tablet:px-12 desktop:px-24')}>
         <nav className={tw('flex pt-2 items-center justify-between w-full max-w-[1200px]')}>
           <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
             <Helpwave />
@@ -176,7 +176,7 @@ const Header = () => {
       </div>
 
       {navbarOpen && (
-        <div className={tw('absolute w-screen h-screen z-[100] bg-white')}>
+        <div className={tw('absolute w-screen h-screen z-[100] bg-hw-grayscale-50')}>
           <div className={tw('text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
             <button onClick={() => setNavbarOpen(false)} className={tw('mb-5')}>
               <X size={64} />

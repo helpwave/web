@@ -82,7 +82,7 @@ const NewsLetter: NextPage = () => {
 
   return (
     <Page className={tw('w-screen h-screen relative z-0')} pageTitleAddition={translation.title}>
-      <SectionBase className={tw('h-screen z-[1]')}>
+      <SectionBase className={tw('h-screen z-[1] w-full !max-w-full')} outerClassName={tw('!p-0')}>
         <div className={tw('relative h-full overflow-hidden')}>
           <div className={tw(`absolute left-0 top-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2`)}>
             {width !== 0 && height !== 0 && (

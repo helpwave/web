@@ -4,7 +4,8 @@ import Link from 'next/link'
 
 export type TeamMemberProps = {
   name: string,
-  title: string | undefined,
+  prefix: string | undefined,
+  suffix: string | undefined,
   pictureURL: string | undefined,
   role: string,
   tags: string[],
@@ -13,7 +14,8 @@ export type TeamMemberProps = {
 
 const TeamMember = ({
   name,
-  title,
+  prefix,
+  suffix,
   pictureURL,
   role,
   tags,
@@ -38,8 +40,9 @@ const TeamMember = ({
   return (
     <div className={tw('flex flex-col h-full mb-8 w-1/2 text-center p-8 min-w-[300px] items-center')}>
       <Image alt="Profilepicture" src={backedPictureURL} style={{ objectFit: 'contain' }} width={size} height={size} className={tx(`w-[${size}px] tansition-all duration-500 shadow-md hover:shadow-2xl rounded-full object-center m-auto mb-6`)}/>
-      <h4 className={tw('font-space text-gray-600 text-lg h-[32px]')}>{title}</h4>
+      <h4 className={tw('font-space text-gray-600 text-lg h-[32px]')}>{prefix}</h4>
       <h2 className={tw('text-3xl font-inter')}>{name}</h2>
+      <h4 className={tw('font-space text-gray-600 text-sm h-[32px]')}>{suffix}</h4>
       <h3 className={tw('mt-4 text-2xl font-space')}>{role} <span className={tw('text-md text-sm font-sans')}>{shorthand}</span></h3>
       <h4 className={tw('mt-2 text-lg font-space leading-none justify-center flex flex-wrap gap-2 text-gray-600 max-w-[300px]')}> {generatedSocials} {hashTags}</h4>
     </div>

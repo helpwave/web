@@ -5,7 +5,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { Tag } from 'lucide-react'
+import { TagIcon } from '@helpwave/common/icons/Tag'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type TasksTemplatesSectionTranslation = {
@@ -35,11 +35,12 @@ export const TasksTemplatesSection = ({ overwriteTranslation }: PropsForTranslat
     <SectionBase
       className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-4 justify-between mobile:justify-center items-center text-white')}
       backgroundColor="darkSecondary"
+      outerClassName={tw('py-24')}
     >
       <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0 overflow-hidden break-words')}>
         <div className={tw('flex flex-col gap-y-2')}>
-          <div className={tw('flex flex-row gap-x-1 text-hw-primary-400')}>
-            <Tag size={24} strokeWidth={3}/>
+          <div className={tw('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
+            <TagIcon/>
             <Span className={tw('text-lg font-bold')}>{translation.taskTemplates}</Span>
           </div>
           <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>

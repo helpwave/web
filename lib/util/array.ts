@@ -11,6 +11,10 @@ export const equalSizeGroups = <T, >(array: T[], groupSize: number): T[][] => {
   return groups
 }
 
+/**
+ * @param start
+ * @param end inclusive
+ */
 export const range = (start: number, end: number) => Array.from({ length: end - start + 1 }, (_, index) => index + start)
 
 /** Finds the closest match
@@ -46,7 +50,7 @@ export const getNeighbours = <T, >(list: T[], item: T, neighbourDistance: number
   }
   const end = (index + neighbourDistance + 1) % list.length
 
-  const result:T[] = []
+  const result: T[] = []
   let ignoreOnce = list.length === totalItems
   for (let i = start; i !== end || ignoreOnce; i = (i + 1) % list.length) {
     result.push(list[i]!)
@@ -55,4 +59,30 @@ export const getNeighbours = <T, >(list: T[], item: T, neighbourDistance: number
     }
   }
   return result
+}
+
+export const createLoopingListWithIndex = <T, >(list: T[], startIndex: number = 0, length: number = 0, forwards: boolean = true) => {
+  if (length < 0) {
+    console.warn(`createLoopingList: length must be >= 0, given ${length}`)
+  } else if (length === 0) {
+    length = list.length
+  }
+
+  const returnList: [number, T][] = []
+
+  if (forwards) {
+    for (let i = startIndex; returnList.length < length; i = (i + 1) % list.length) {
+      returnList.push([i, list[i]!])
+    }
+  } else {
+    for (let i = startIndex; returnList.length < length; i = i === 0 ? i = list.length - 1 : i - 1) {
+      returnList.push([i, list[i]!])
+    }
+  }
+
+  return returnList
+}
+
+export const createLoopingList = <T, >(list: T[], startIndex: number = 0, length: number = 0, forwards: boolean = true) => {
+  return createLoopingListWithIndex(list, startIndex, length, forwards).map(([_, item]) => item)
 }

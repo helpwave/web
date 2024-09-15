@@ -37,8 +37,9 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
 
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center items-center text-white !pb-0')}
+      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center items-center text-white')}
       backgroundColor="darkSecondary"
+      outerClassName={tw('!pb-0')}
     >
       <div className={tw('flex flex-col gap-y-2 pb-16 desktop:w-3/5')}>
         <div className={tw('flex flex-col gap-y-2 mobile:pb-0 mobile:text-center')}>

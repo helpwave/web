@@ -53,7 +53,7 @@ export const ModalHeader = ({
         )}
         {!!onCloseClick && (
           <button className={tw('flex flex-row gap-x-2')} onClick={onCloseClick}>
-            <Span>{translation.close}</Span>
+            <Span className={tw('mobile:hidden')}>{translation.close}</Span>
             <X/>
           </button>
         )}
@@ -113,29 +113,28 @@ export const Modal = ({
   const isLast = register.length < 1 || register[register.length - 1] === id
   const isSecondLast = register.length < 2 || register[register.length - 2] === id
 
-  const backgroundNormal = (
-    <div
-      className={tx('fixed inset-0 h-screen w-screen bg-black/70', backgroundClassName)}
-    />
-  )
-
-  const clickTargetBackground = (
-    <div
-      className={tx('fixed inset-0 h-screen w-screen')}
-      onClick={onBackgroundClick}
-    />
-  )
-
   return ReactDOM.createPortal(
     <div className={tx('fixed inset-0 overflow-y-auto z-[99]')} id={id}>
-      {isLast && register.length === 1 && backgroundNormal}
-      {clickTargetBackground}
+      {isLast && (
+        <div
+          className={tx('fixed inset-0 h-screen w-screen', backgroundClassName, {
+            'bg-black/70': isLast && register.length === 1,
+          })}
+          onClick={onBackgroundClick}
+        />
+      )}
       <div
         className={tx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
         <ModalHeader {...modalHeaderProps} />
         {children}
       </div>
-      {isSecondLast && register.length > 1 && backgroundNormal}
+      {!isLast && (
+        <div
+          className={tx('fixed inset-0 h-screen w-screen', backgroundClassName, {
+            'bg-black/70': isSecondLast && register.length > 1,
+          })}
+        />
+      )}
     </div>,
     modalRoot,
     id

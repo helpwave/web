@@ -208,6 +208,12 @@ export const config = defineConfig({
           '100%': { strokeDashoffset: '-1000' },
         },
       },
+      boxShadow: {
+        'around': '0 2px 2px 0 rgba(0, 0, 0, 0.02), 0 -2px 2px 0 rgba(0, 0, 0, 0.02), 2px 0 2px 0 rgba(0, 0, 0, 0.02), -2px 0 2px 0 rgba(0, 0, 0, 0.02)',
+        'around-md': '0 5px 5px 0 rgba(0, 0, 0, 0.02), 0 -5px 5px 0 rgba(0, 0, 0, 0.02), 5px 0 5px 0 rgba(0, 0, 0, 0.02), -5px 0 5px 0 rgba(0, 0, 0, 0.02)',
+        'around-lg': '0 10px 10px 0 rgba(0, 0, 0, 0.02), 0 -10px 10px 0 rgba(0, 0, 0, 0.02), 10px 0 10px 0 rgba(0, 0, 0, 0.02), -10px 0 10px 0 rgba(0, 0, 0, 0.02)',
+        'around-xl': '0 20px 20px 0 rgba(0, 0, 0, 0.02), 0 -20px 20px 0 rgba(0, 0, 0, 0.02), 20px 0 20px 0 rgba(0, 0, 0, 0.02), -20px 0 20px 0 rgba(0, 0, 0, 0.02)',
+      }
     }
   },
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms(), presetTypography()]

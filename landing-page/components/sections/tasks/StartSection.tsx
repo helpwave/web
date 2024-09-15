@@ -33,7 +33,10 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
   const screenshotURL = 'https://cdn.helpwave.de/products/helpwave_tasks_ui_elements.png'
 
   return (
-    <SectionBase className={tw('flex flex-col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center')}>
+    <SectionBase
+      className={tw('flex flex-col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center')}
+      outerClassName={tw('py-24')}
+    >
       <Image
         alt="Screenshots"
         src={screenshotURL}

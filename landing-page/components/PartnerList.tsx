@@ -32,7 +32,7 @@ export const PartnerList = ({
       >
         <DividerInserter
           className={tw('flex flex-row gap-x-6 items-center')}
-          divider={<VerticalDivider height={120}/>}
+          divider={(index) => (<VerticalDivider key={index} height={120}/>)}
         >
           {partners.map(partner => (
             <Image

@@ -1,6 +1,4 @@
 import type { NextPage } from 'next'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import { MediQuuHeaderSection } from '@/components/sections/mediQuu/Header'
 import { MediQuuInformationSection } from '@/components/sections/mediQuu/InformationSection'
 import { BrandDescriptionsSection } from '@/components/sections/mediQuu/BrandInformationSection'
@@ -12,8 +10,7 @@ import { Page } from '@/components/Page'
 
 const MediQuuPage: NextPage = () => {
   return (
-    <Page>
-      <Header/>
+    <Page pageTitleAddition="mediQuu">
       <MediQuuHeaderSection/>
       <MediQuuInformationSection/>
       <BrandDescriptionsSection/>
@@ -21,7 +18,6 @@ const MediQuuPage: NextPage = () => {
       <RoadmapSection/>
       <MediQuuFAQSection/>
       <ContactSection/>
-      <Footer/>
     </Page>
   )
 }

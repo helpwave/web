@@ -5,7 +5,7 @@ import { Page } from '@/components/Page'
 
 const Talks: NextPage = () => {
   return (
-    <Page>
+    <Page pageTitleAddition="talks">
       <StartSection/>
       <EpisodeSection/>
     </Page>

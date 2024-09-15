@@ -1,6 +1,6 @@
 import { tw, tx } from '../twind'
 
-const astNodeModifierTypes = ['none', 'italic', 'bold', 'underline', 'font-space', 'primary', 'warn', 'positive', 'negative'] as const
+const astNodeModifierTypes = ['none', 'italic', 'bold', 'underline', 'font-space', 'primary', 'secondary', 'warn', 'positive', 'negative'] as const
 type ASTNodeModifierType = typeof astNodeModifierTypes[number]
 
 const astNodeInserterType = ['helpwave', 'newline'] as const
@@ -57,6 +57,13 @@ export const ASTNodeInterpreter = ({
             key={index} node={value}/>
         ))}</span>
       )
+    case 'secondary':
+      return (
+        <span className={tw('text-hw-secondary-400')}>{node.children.map((value, index) => (
+          <ASTNodeInterpreter
+            key={index} node={value}/>
+        ))}</span>
+      )
     case 'warn':
       return (
         <span className={tw('text-hw-warn-400')}>{node.children.map((value, index) => (
@@ -89,6 +96,7 @@ const modifierIdentifierMapping = [
   { id: 'u', name: 'underline' },
   { id: 'space', name: 'font-space' },
   { id: 'primary', name: 'primary' },
+  { id: 'secondary', name: 'secondary' },
   { id: 'warn', name: 'warn' },
   { id: 'positive', name: 'positive' },
   { id: 'negative', name: 'negative' },

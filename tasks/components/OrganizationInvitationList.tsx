@@ -7,7 +7,7 @@ import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
-import { InvitationState } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
+import { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import {
   useInvitationsByOrganizationQuery,

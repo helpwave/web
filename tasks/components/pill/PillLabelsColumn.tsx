@@ -1,5 +1,5 @@
 import { tw } from '@helpwave/common/twind'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { PillLabel, TaskState } from './PillLabel'
 
 export type PillLabelsColumnProps = {

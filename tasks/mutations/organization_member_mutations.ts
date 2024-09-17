@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { GetMembersByOrganizationRequest } from '@helpwave/proto-ts/proto/services/user_svc/v1/organization_svc_pb'
+import { GetMembersByOrganizationRequest } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { getAuthenticatedGrpcMetadata, organizationService } from '../utils/grpc'
 
 // TODO replace later

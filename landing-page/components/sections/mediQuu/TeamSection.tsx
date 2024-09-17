@@ -11,10 +11,10 @@ import { SectionBase } from '@/components/sections/SectionBase'
 
 const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 
-const contacts: (ProfileProps & { translatedInfo?: Record<Languages, string> })[] = [
+const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, string> })[] = [
   {
     name: 'Christian Porschen',
-    title: 'Dr. med.',
+    prefix: 'Dr. med.',
     role: 'Chief Medical Officer',
     roleBadge: 'CMO',
     imageUrl: imageUrl('christian_porschen'),
@@ -68,6 +68,9 @@ const contacts: (ProfileProps & { translatedInfo?: Record<Languages, string> })[
     ],
     imageClassName: '!w-[230px] !h-[200px]'
   },
+]
+
+const contactsMediquu: (ProfileProps & { translatedInfo?: Record<Languages, string> })[] = [
   {
     name: 'Christian Remfert',
     roleBadge: 'Advisor',
@@ -75,7 +78,6 @@ const contacts: (ProfileProps & { translatedInfo?: Record<Languages, string> })[
     imageUrl: 'https://cdn.helpwave.de/mediquu/christian_remfert.jpg',
     socials: [
       { type: 'linkedin', url: 'https://www.linkedin.com/in/christian-remfert/' },
-      { type: 'mail', url: 'mailto:remfert@mediquu.de' },
     ],
     imageClassName: '!w-[230px] !h-[200px]',
     translatedInfo: {
@@ -123,8 +125,22 @@ export const TeamSection = () => {
     <SectionBase className={tw('flex flex-col')}>
       <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
       <Span>{translation.subTitle}</Span>
-      <div className={tw('flex flex-wrap desktop:justify-around mobile:justify-around gap-x-8 gap-y-6 mt-8')}>
-        {contacts.map(value => {
+      <div className={tw('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-8')}>
+        {contactsHelpwave.map(value => {
+          const profileProps = { ...value }
+          delete profileProps.translatedInfo
+          return (
+            <Profile
+              key={value.name}
+              info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
+              {...profileProps}
+              className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
+            />
+          )
+        })}
+      </div>
+      <div className={tw('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-6')}>
+        {contactsMediquu.map(value => {
           const profileProps = { ...value }
           delete profileProps.translatedInfo
           return (

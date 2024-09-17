@@ -5,9 +5,8 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
 import { SectionBase } from '@/components/sections/SectionBase'
+import { Page } from '@/components/Page'
 
 type NotFoundTranslation = {
   notFound: string,
@@ -39,9 +38,8 @@ const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {
 const NotFound: NextPage = () => {
   const translation = useTranslation(defaultNotFoundTranslation)
   return (
-    <div className={tw('w-screen h-screen bg-white relative z-0 overflow-x-hidden')}>
-      <Header/>
-      <SectionBase className={tw('flex flex-col h-screen items-center justify-center text-center')}>
+    <Page className={tw('h-screen')} pageTitleAddition={translation.notFound}>
+      <SectionBase className={tw('flex flex-col h-full items-center justify-center text-center')} outerClassName={tw('h-full')}>
         <Helpwave className={tw('w-full left-1/2')} size={256} animate="bounce"/>
         <h1 className={tw('text-9xl mobile:text-6xl font-space mb-8')}>{`404 ${translation.notFound}`}</h1>
         <p className={tw('text-4xl mobile:text-xl font-inter')}>{translation.description}</p>
@@ -49,8 +47,7 @@ const NotFound: NextPage = () => {
           {translation.toHomePage(<Link className={tw('underline text-cyan-900')} href="/">home page</Link>)}
         </p>
       </SectionBase>
-      <Footer/>
-    </div>
+    </Page>
   )
 }
 

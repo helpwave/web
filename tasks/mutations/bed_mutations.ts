@@ -4,7 +4,7 @@ import {
   DeleteBedRequest,
   GetBedRequest,
   UpdateBedRequest
-} from '@helpwave/proto-ts/proto/services/task_svc/v1/bed_svc_pb'
+} from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_pb'
 import { roomOverviewsQueryKey, roomsQueryKey } from './room_mutations'
 import type { PatientDTO, PatientMinimalDTO, PatientWithTasksNumberDTO } from './patient_mutations'
 import { wardsQueryKey } from './ward_mutations'

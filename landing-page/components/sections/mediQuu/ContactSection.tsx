@@ -116,7 +116,7 @@ export const ContactSection = ({
 
   return (
     <SectionBase className={tw('flex desktop:flex-row desktop:justify-between mobile:flex-col w-full gap-8')} backgroundColor="gray">
-      <div className={tw('flex flex-col gap-y-1 desktop:w-1/2')}>
+      <div className={tw('flex flex-col gap-y-1 tablet:w-2/5 desktop:w-1/2')}>
         <Span type="title" className={tw('text-hw-secondary-400 !text-3xl')}>{translation.contact}</Span>
         <Span>{translation.contactDescription}</Span>
         {contacts.length > 0 && (
@@ -130,7 +130,7 @@ export const ContactSection = ({
           </div>
         )}
       </div>
-      <div className={tw('flex flex-col gap-y-2 desktop:w-1/2')}>
+      <div className={tw('flex flex-col gap-y-2 tablet:w-3/5 desktop:w-1/2')}>
         <Input
           value={contactForm.firstname}
           placeholder={translation.firstname}

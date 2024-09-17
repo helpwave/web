@@ -1,17 +1,32 @@
 import { tw, tx } from '@twind/core'
-import Image from 'next/image'
 import { colors } from '../twind/config'
+import type { Languages } from '../hooks/useLanguage'
+import type { PropsForTranslation } from '../hooks/useTranslation'
+import { useTranslation } from '../hooks/useTranslation'
 import { Chip } from './ChipList'
 import { Span } from './Span'
 
 const textImageColor = ['primary', 'secondary', 'secondaryDark', 'red'] as const
 type TextImageColor = typeof textImageColor[number]
 
+type TextImageTranslation = {
+  showMore: string
+}
+
+const defaultTextImageTranslation: Record<Languages, TextImageTranslation> = {
+  de: {
+    showMore: 'Mehr anzeigen'
+  },
+  en: {
+    showMore: 'Show more'
+  }
+}
+
 export type TextImageProps = {
   title: string,
   description: string,
   imageUrl: string,
-  imageClassName?: string,
+  onShowMoreClicked?: () => void,
   color?: TextImageColor,
   badge?: string,
   contentClassName?: string,
@@ -22,15 +37,18 @@ export type TextImageProps = {
  * A Component for layering a Text upon a Image
  */
 export const TextImage = ({
+  overwriteTranslation,
   title,
   description,
   imageUrl,
-  imageClassName = '',
+  onShowMoreClicked,
   color = 'primary',
   badge,
   contentClassName = '',
   className = '',
-}: TextImageProps) => {
+}: PropsForTranslation<TextImageTranslation, TextImageProps>) => {
+  const translation = useTranslation(defaultTextImageTranslation, overwriteTranslation)
+
   const colorMapping: Record<TextImageColor, string> = {
     primary: colors.primary[600],
     secondary: colors.secondary[400],
@@ -43,19 +61,16 @@ export const TextImage = ({
   }
 
   return (
-    <div className={tx('relative rounded-2xl overflow-hidden', className)}>
-      <Image
-        src={imageUrl}
-        alt=""
-        className={tx('absolute z-[-1] top-0 left-0 object-cover', imageClassName)} style={{ height: 'auto', width: 'auto' }}
-        width={0}
-        height={0}
-        priority={true}
-      />
+    <div
+      className={tx('rounded-2xl w-full', className)}
+      style={{
+        backgroundImage: `url(${imageUrl})`,
+        backgroundSize: 'cover',
+      }}>
       <div
-        className={tx(`flex flex-col px-6 py-12`, contentClassName)}
+        className={tx(`flex flex-col px-6 py-12 rounded-2xl h-full`, contentClassName)}
         style={{
-          backgroundImage: `linear-gradient(to right, ${colorMapping[color]} 20%, ${withTransparency(colorMapping[color], '55')})`
+          backgroundImage: `linear-gradient(to right, ${colorMapping[color]} 30%, ${withTransparency(colorMapping[color], '55')})`
         }}
       >
         {badge && (
@@ -63,10 +78,15 @@ export const TextImage = ({
             <Span className={tw('text-lg')}>{badge}</Span>
           </Chip>
         )}
-        <div className={tw('flex flex-col gap-y-1 text-white')}>
+        <div className={tw('flex flex-col gap-y-1 text-white overflow-hidden')}>
           <Span type="title" className={tw('!text-3xl')}>{title}</Span>
-          <Span>{description}</Span>
+          <Span className={tw('text-ellipsis overflow-hidden')}>{description}</Span>
         </div>
+        {onShowMoreClicked && (
+          <div className={tw('flex flex-row mt-2 text-white underline')}>
+            <button onClick={onShowMoreClicked}>{translation.showMore}</button>
+          </div>
+        )}
       </div>
     </div>
   )

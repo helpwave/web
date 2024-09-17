@@ -40,8 +40,12 @@ const MobileInterceptor: NextPage = ({ overwriteTranslation }: PropsForTranslati
     <div className={tw('w-screen h-[80vh] flex flex-col items-center justify-center')}>
       <Helpwave className={tw('w-1/3 mx-auto h-auto mb-2 text-black')}/>
       <Span type="subsectionTitle" className={tw('mb-8')}>{translation.pleaseDownloadApp}</Span>
-      <Link href={playStoreLink}>{translation.playStore}</Link>
-      <Link href={appstoreLink}>{translation.appStore}</Link>
+      <Link href={playStoreLink}>
+        {translation.playStore}
+      </Link>
+      <Link href={appstoreLink}>
+        {translation.appStore}
+      </Link>
     </div>
   )
 }

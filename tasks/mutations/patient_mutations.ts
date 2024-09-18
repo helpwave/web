@@ -1,4 +1,4 @@
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
@@ -14,7 +14,7 @@ import {
   DeletePatientRequest,
   ReadmitPatientRequest,
   GetRecentPatientsRequest
-} from '@helpwave/proto-ts/proto/services/task_svc/v1/patient_svc_pb'
+} from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import type { TaskDTO, TaskMinimalDTO } from './task_mutations'
 import type { BedWithPatientId } from './bed_mutations'

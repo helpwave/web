@@ -7,7 +7,7 @@ import {
   DeleteTaskTemplateSubTaskRequest,
   GetAllTaskTemplatesByCreatorRequest,
   GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
-} from '@helpwave/proto-ts/proto/services/task_svc/v1/task_template_svc_pb'
+} from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_pb'
 import type { SubTaskDTO } from './task_mutations'
 import { getAuthenticatedGrpcMetadata, taskTemplateService } from '@/utils/grpc'
 import type { TaskTemplateFormType } from '@/pages/templates'

@@ -62,7 +62,7 @@ export const Select = <T, >({
       {label && (
         <Label {...label} labelType={label.labelType ?? 'labelBig'} className={tx('mb-1', label.className)} />
       )}
-      <Menu as="div" className={tw('relative w-full text-gray-700')}>
+      <Menu as="div" className={tw('relative text-gray-700')}>
         {({ open }) => (
           <>
             <Menu.Button

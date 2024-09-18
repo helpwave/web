@@ -35,7 +35,7 @@ const teamData: Record<string, ProfileProps[]> = {
     },
     {
       name: 'Christian Porschen',
-      title: 'Dr. med.',
+      prefix: 'Dr. med.',
       role: 'Chief Medical Officer',
       roleBadge: 'CMO',
       imageUrl: imageUrl('christian_porschen'),
@@ -51,6 +51,7 @@ const teamData: Record<string, ProfileProps[]> = {
   development: [
     {
       name: 'Felix Thape',
+      suffix: 'B. Sc. RWTH',
       role: 'fullstack wizard',
       imageUrl: imageUrl('felix_thape'),
       tags: ['maintainer', 'web', 'mobile'],
@@ -62,6 +63,7 @@ const teamData: Record<string, ProfileProps[]> = {
     },
     {
       name: 'Max Baumann',
+      suffix: 'B. Sc. RWTH',
       role: 'backend magician',
       imageUrl: imageUrl('max_baumann'),
       tags: ['microservices', 'deployment', 'database'],
@@ -115,6 +117,8 @@ const teamData: Record<string, ProfileProps[]> = {
   medical: [
     {
       name: 'Ludwig Maidowski',
+      prefix: 'Dipl.-Jur.',
+      suffix: 'Maître en droit, Paris II',
       role: 'medical professional & legal',
       tags: ['law', 'doctor', 'product'],
       imageUrl: imageUrl('ludwig_maidowski'),
@@ -151,7 +155,7 @@ const teamData: Record<string, ProfileProps[]> = {
 
 const TeamSection = () => {
   return (
-    <SectionBase isFirstSection={true}>
+    <SectionBase>
       {Object.entries(teamData).map(([name, members]) => (
         <TeamGroup key={name} name={name} members={members} />
       ))}

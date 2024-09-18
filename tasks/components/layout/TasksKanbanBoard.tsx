@@ -10,7 +10,7 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { tw } from '@helpwave/common/twind'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
+import { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { KanbanColumn } from '../KanbanColumn'

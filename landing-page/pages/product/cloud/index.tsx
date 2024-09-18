@@ -4,7 +4,7 @@ import { Page } from '@/components/Page'
 
 const Cloud: NextPage = () => {
   return (
-    <Page>
+    <Page pageTitleAddition="cloud">
       <div className={tw('pt-32 pb-16')}>
         <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
           <h1 className={tw('font-space text-6xl font-bold')}>

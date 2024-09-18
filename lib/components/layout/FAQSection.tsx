@@ -42,8 +42,8 @@ export const FAQSection = ({
           label={(<h3 id={id} className={tw('select-none')}><Span type="title">{title}</Span></h3>)}
           clickOnlyOnHeader={false}
           icon={(expanded) => expanded ?
-              (<ChevronUp size={chevronSize} className={tw('text-blue-600')}/>) :
-              (<ChevronDown size={chevronSize} className={tw('text-blue-600')}/>)
+              (<ChevronUp size={chevronSize} className={tw(`text-blue-600 min-w-[${chevronSize}px]`)}/>) :
+              (<ChevronDown size={chevronSize} className={tw(`text-blue-600 min-w-[${chevronSize}px]`)}/>)
           }
           className={tx('bg-white rounded-xl px-4 py-2', expandableClassName)}
         >

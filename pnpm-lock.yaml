@@ -241,8 +241,8 @@ importers:
         specifier: workspace:*
         version: link:../lib
       '@helpwave/proto-ts':
-        specifier: 0.44.0-94c8472.0
-        version: 0.44.0-94c8472.0
+        specifier: 0.43.0-57aba8c.0
+        version: 0.43.0-57aba8c.0
       '@radix-ui/react-checkbox':
         specifier: 1.0.4
         version: 1.0.4(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
@@ -2241,8 +2241,8 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@helpwave/proto-ts@0.44.0-94c8472.0:
-    resolution: {integrity: sha512-0BaWE+zKB2P4AsV3y3S/sshjzGPRdR8hjrggV47b9qzlOy2BYtQxMM98V6jnNFUNXHWDfkEkXN8B+iN9tim+KQ==}
+  /@helpwave/proto-ts@0.43.0-57aba8c.0:
+    resolution: {integrity: sha512-K9/cyZGlYFQ9twjZWQJwNSV2RU8k+F/c6O2QbJXOZkV9noNJMB6VkX47iylWjp4IALxXHl4E1tjZdGQrR83x8g==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:

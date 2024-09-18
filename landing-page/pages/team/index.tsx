@@ -4,7 +4,7 @@ import { Page } from '@/components/Page'
 
 const Team: NextPage = () => {
   return (
-    <Page>
+    <Page pageTitleAddition="team">
       <TeamSection/>
     </Page>
   )

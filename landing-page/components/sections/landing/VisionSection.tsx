@@ -34,6 +34,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
     <SectionBase
       className={tw('flex flex-row mobile:flex-col-reverse gap-8 items-center justify-center w-full')}
       outerClassName={tw('py-24')}
+      backgroundColor="white"
     >
       <div className={tw('flex flex-col w-1/2 mobile:w-full gap-y-2')}>
         <Chip className={tw('!w-fit bg-gray-200 font-semibold px-4')}>{translation.ourVision}</Chip>

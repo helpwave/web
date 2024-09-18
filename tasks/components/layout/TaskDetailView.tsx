@@ -14,7 +14,7 @@ import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ModalHeader } from '@helpwave/common/components/modals/Modal'
-import { formatDateTime } from '@helpwave/common/util/date'
+import { formatDate } from '@helpwave/common/util/date'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
@@ -193,14 +193,14 @@ const TaskDetailViewSidebar = ({
         <label><Span type="labelMedium">{translation.dueDate}</Span></label>
         <div className={tw('flex flex-row items-center gap-x-2')}>
           <Input
-            value={task.dueDate ? formatDateTime(task.dueDate) : ''}
+            value={task.dueDate ? formatDate(task.dueDate) : ''}
             type="datetime-local"
-            onChange={(value, event) => {
+            onChangeEvent={(event) => {
               if (!event.target.value) {
                 event.preventDefault()
                 return
               }
-              const dueDate = new Date(value)
+              const dueDate = new Date(event.target.value)
               updateTaskLocallyAndExternally({
                 ...task,
                 dueDate

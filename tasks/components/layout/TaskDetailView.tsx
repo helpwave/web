@@ -194,14 +194,14 @@ const TaskDetailViewSidebar = ({
         <label><Span type="labelMedium">{translation.dueDate}</Span></label>
         <div className={tw('flex flex-row items-center gap-x-2')}>
           <Input
-            value={task.dueDate ? formatDateTime(task.dueDate) : ''}
+            value={task.dueDate ? formatDate(task.dueDate) : ''}
             type="datetime-local"
-            onChange={(value, event) => {
+            onChangeEvent={(event) => {
               if (!event.target.value) {
                 event.preventDefault()
                 return
               }
-              const dueDate = new Date(value)
+              const dueDate = new Date(event.target.value)
               updateTaskLocallyAndExternally({
                 ...task,
                 dueDate

@@ -30,6 +30,7 @@ export type InputProps = {
    * @default noop
    */
   onChange?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
+  onChangeEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
   className?: string,
   onEditCompleted?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
   expanded?: boolean
@@ -46,6 +47,7 @@ const ControlledInput = ({
   value,
   label,
   onChange = noop,
+  onChangeEvent = noop,
   className = '',
   onEditCompleted,
   expanded = true,
@@ -90,6 +92,7 @@ const ControlledInput = ({
             })
           }
           onChange(value, e)
+          onChangeEvent(e)
         }}
         {...restProps}
       />

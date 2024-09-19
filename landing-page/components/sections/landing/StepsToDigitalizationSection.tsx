@@ -3,6 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import type { TextImageProps } from '@helpwave/common/components/TextImage'
 import { TextImage } from '@helpwave/common/components/TextImage'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
 import { useState } from 'react'
@@ -54,43 +55,62 @@ export const StepsToDigitalizationSection = () => {
   const translation = useTranslation(defaultStepsToDigitalizationSectionTranslation)
   const [modalValue, setModalValue] = useState<{titleText: string, description: string}>()
 
+  const items: TextImageProps[] = [
+    {
+      badge: `${translation.step} #1`,
+      title: translation.step1Title,
+      description: translation.step1Description,
+      // make attribution https://www.freepik.com/free-photo/doctors-looking-laptop-while-sitting_5480800.htm#fromView=search&page=1&position=38&uuid=4c39262c-c1b1-4f11-a15e-7446ad1974d3
+      imageUrl: 'https://cdn.helpwave.de/landing_page/doctors_discussing.jpg',
+      color: 'primary',
+      onShowMoreClicked: () => setModalValue({
+        titleText: translation.step1Title,
+        description: translation.step1Description
+      })
+    },
+    {
+      badge: `${translation.step} #2`,
+      title: translation.step2Title,
+      description: translation.step2Description,
+      // make attribution https://www.freepik.com/free-photo/wide-shot-huge-tree-trunk-near-lake-surrounded-by-trees-blue-sky_7841618.htm#fromView=search&page=1&position=0&uuid=0752105f-3120-4f34-b3b7-48dd4a616223
+      imageUrl: 'https://cdn.helpwave.de/landing_page/lake.jpg',
+      color: 'secondary',
+      onShowMoreClicked: () => setModalValue({
+        titleText: translation.step2Title,
+        description: translation.step2Description
+      })
+    },
+    {
+      badge: `${translation.step} #3`,
+      title: translation.step3Title,
+      description: translation.step3Description,
+      // make attribution https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm#fromView=search&page=1&position=45&uuid=12db1ee2-bec5-40ce-a317-5d240ad56f12
+      imageUrl: 'https://cdn.helpwave.de/landing_page/dashboard.jpg',
+      color: 'secondaryDark',
+      onShowMoreClicked: () => setModalValue({
+        titleText: translation.step3Title,
+        description: translation.step3Description
+      })
+    },
+  ]
+
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 w-full !px-0 !max-w-[1600px]')}>
+    <SectionBase className={tw('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={tw('!px-0')}>
       <div className={tw('flex flex-col items-center text-center gap-y-2')}>
         <h2><Span type="title" className={tw('!text-3xl')}><MarkdownInterpreter text={translation.title}/></Span></h2>
         <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
       </div>
-      <Carousel hintNext={true} heights={{ tablet: 300 }}>
-        <TextImage
-          badge={`${translation.step} #1`}
-          title={translation.step1Title}
-          description={translation.step1Description}
-          // TODO make attribution https://www.freepik.com/free-photo/doctors-looking-laptop-while-sitting_5480800.htm#fromView=search&page=1&position=38&uuid=4c39262c-c1b1-4f11-a15e-7446ad1974d3
-          imageUrl="https://cdn.helpwave.de/landing_page/doctors_discussing.jpg"
-          color="primary"
-          className={tw('h-full overflow-hidden')}
-          onShowMoreClicked={() => setModalValue({ titleText: translation.step1Title, description: translation.step1Description })}
-        />
-        <TextImage
-          badge={`${translation.step} #2`}
-          title={translation.step2Title}
-          description={translation.step2Description}
-          // TODO make attribution https://www.freepik.com/free-photo/wide-shot-huge-tree-trunk-near-lake-surrounded-by-trees-blue-sky_7841618.htm#fromView=search&page=1&position=0&uuid=0752105f-3120-4f34-b3b7-48dd4a616223
-          imageUrl="https://cdn.helpwave.de/landing_page/lake.jpg"
-          color="secondary"
-          className={tw('h-full overflow-hidden')}
-          onShowMoreClicked={() => setModalValue({ titleText: translation.step2Title, description: translation.step2Description })}
-        />
-        <TextImage
-          badge={`${translation.step} #3`}
-          title={translation.step3Title}
-          description={translation.step3Description}
-          // TODO make attribution https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm#fromView=search&page=1&position=45&uuid=12db1ee2-bec5-40ce-a317-5d240ad56f12
-          imageUrl="https://cdn.helpwave.de/landing_page/dashboard.jpg"
-          color="secondaryDark"
-          className={tw('h-full overflow-hidden')}
-          onShowMoreClicked={() => setModalValue({ titleText: translation.step3Title, description: translation.step3Description })}
-        />
+      <Carousel
+        hintNext={true}
+        heights={{ tablet: 300 }}
+        onCardClick={index => items[index]!.onShowMoreClicked!()}
+        blurColor="hw-grayscale-50"
+      >
+        {items.map((value, index) => (
+          <div key={index} className={tw('px-[2.5%] h-full')}>
+            <TextImage {...value} className={tw('h-full overflow-hidden')}/>
+          </div>
+        ))}
       </Carousel>
       <Modal
         id="stepsToDigitizationModal"

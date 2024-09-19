@@ -47,15 +47,10 @@ export const PropertyBase = ({
   const translation = useTranslation(defaultPropertyBaseTranslation, overwriteTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (
-    <div
-      className={tx('flex flex-row border border-2 rounded-[16px] group', {
-        'hover:border-hw-primary-800 border-gray-200 ': !requiredAndNoValue,
-        'hover:border-hw-warn-800 border-hw-warn-700': requiredAndNoValue,
-      }, className)}
-    >
+    <div className={tx('flex flex-row group', className)}>
       <div
         className={
-          tx('flex flex-row gap-x-2 min-w-[200px] overflow-hidden px-4 py-2 items-center rounded-l-xl border-2 border-r-0', {
+          tx('flex flex-row gap-x-2 !w-[200px] px-4 py-2 items-center rounded-l-xl border-2 border-r-0', {
             'bg-gray-100 text-black group-hover:border-hw-primary-800 border-gray-400': !requiredAndNoValue,
             'bg-hw-warn-600 text-hw-warn-100 group-hover:border-hw-warn-800 border-hw-warn-700': requiredAndNoValue,
           }, className)}

@@ -3,10 +3,13 @@ import type { NextPage } from 'next'
 import { RadialRings } from '@helpwave/common/components/Ring'
 import { useEffect, useState } from 'react'
 import { Span } from '@helpwave/common/components/Span'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { NewsLetterFormType } from '@/components/NewsLetterForm'
 import { NewsLetterForm } from '@/components/NewsLetterForm'
 import { submitHubSpotForm } from '@/utils/hubspot'
 import { Page } from '@/components/Page'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 const submitNewsLetterForm = (form: NewsLetterFormType) => submitHubSpotForm(
   '26536657',
@@ -39,7 +42,21 @@ const submitNewsLetterForm = (form: NewsLetterFormType) => submitHubSpotForm(
   ]
 )
 
+type NewsLetterTranslation = {
+  title: string
+}
+
+const defaultNewsLetterTranslation: Record<Languages, NewsLetterTranslation> = {
+  en: {
+    title: 'Join Newsletter',
+  },
+  de: {
+    title: 'Newsletter anmelden',
+  }
+}
+
 const NewsLetter: NextPage = () => {
+  const translation = useTranslation(defaultNewsLetterTranslation)
   const [{ width, height }, setSize] = useState<{width: number, height: number}>({ width: 0, height: 0 })
 
   useEffect(() => {
@@ -64,8 +81,8 @@ const NewsLetter: NextPage = () => {
   const waveWidth = (sizeCircle2 - sizeCircle1) / 20
 
   return (
-    <Page className={tw('w-screen h-screen relative z-0')}>
-      <div className={tw('h-screen z-[1]')}>
+    <Page className={tw('w-screen h-screen relative z-0')} pageTitleAddition={translation.title}>
+      <SectionBase className={tw('h-screen z-[1] w-full !max-w-full')} outerClassName={tw('!p-0')}>
         <div className={tw('relative h-full overflow-hidden')}>
           <div className={tw(`absolute left-0 top-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2`)}>
             {width !== 0 && height !== 0 && (
@@ -91,7 +108,7 @@ const NewsLetter: NextPage = () => {
             />
           </div>
         </div>
-      </div>
+      </SectionBase>
     </Page>
   )
 }

@@ -8,6 +8,58 @@ importers:
 
   .: {}
 
+  api-services:
+    dependencies:
+      '@helpwave/common':
+        specifier: workspace:*
+        version: link:../lib
+      '@helpwave/proto-ts':
+        specifier: 0.44.0-94c8472.0
+        version: 0.44.0-94c8472.0
+      '@tanstack/react-query':
+        specifier: 4.36.1
+        version: 4.36.1(react-dom@18.3.1)(react@18.3.1)
+      '@tanstack/react-query-devtools':
+        specifier: 5.35.5
+        version: 5.35.5(@tanstack/react-query@4.36.1)(react@18.3.1)
+      '@types/google-protobuf':
+        specifier: 3.15.12
+        version: 3.15.12
+      cookies-next:
+        specifier: 2.1.2
+        version: 2.1.2
+      google-protobuf:
+        specifier: 3.21.2
+        version: 3.21.2
+      grpc-web:
+        specifier: 1.5.0
+        version: 1.5.0
+      oauth4webapi:
+        specifier: 2.10.4
+        version: 2.10.4
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      typescript:
+        specifier: 5.4.5
+        version: 5.4.5
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@helpwave/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@types/js-cookie':
+        specifier: 3.0.6
+        version: 3.0.6
+      '@types/node':
+        specifier: 20.12.11
+        version: 20.12.11
+      '@types/react':
+        specifier: 18.3.1
+        version: 18.3.1
+
   eslint-config:
     dependencies:
       '@typescript-eslint/eslint-plugin':
@@ -237,12 +289,12 @@ importers:
       '@headlessui/react':
         specifier: 1.7.19
         version: 1.7.19(react-dom@18.3.1)(react@18.3.1)
+      '@helpwave/api-services':
+        specifier: workspace:*
+        version: link:../api-services
       '@helpwave/common':
         specifier: workspace:*
         version: link:../lib
-      '@helpwave/proto-ts':
-        specifier: 0.43.0-57aba8c.0
-        version: 0.43.0-57aba8c.0
       '@radix-ui/react-checkbox':
         specifier: 1.0.4
         version: 1.0.4(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
@@ -2241,8 +2293,8 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@helpwave/proto-ts@0.43.0-57aba8c.0:
-    resolution: {integrity: sha512-K9/cyZGlYFQ9twjZWQJwNSV2RU8k+F/c6O2QbJXOZkV9noNJMB6VkX47iylWjp4IALxXHl4E1tjZdGQrR83x8g==}
+  /@helpwave/proto-ts@0.44.0-94c8472.0:
+    resolution: {integrity: sha512-0BaWE+zKB2P4AsV3y3S/sshjzGPRdR8hjrggV47b9qzlOy2BYtQxMM98V6jnNFUNXHWDfkEkXN8B+iN9tim+KQ==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:

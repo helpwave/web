@@ -79,8 +79,7 @@ export const GRPCConverter = {
       case 'singleSelect':
         return GRPCFieldType.FIELD_TYPE_SELECT
       case 'multiSelect':
-        // TODO change this when multiselect support is enabled
-        return GRPCFieldType.FIELD_TYPE_UNSPECIFIED
+        return GRPCFieldType.FIELD_TYPE_MULTI_SELECT
     }
   },
   fieldTypeMapperFromGRPC: (fieldType: GRPCFieldType): FieldType => {
@@ -97,10 +96,10 @@ export const GRPCConverter = {
         return 'checkbox'
       case GRPCFieldType.FIELD_TYPE_SELECT:
         return 'singleSelect'
+      case GRPCFieldType.FIELD_TYPE_MULTI_SELECT:
+        return 'multiSelect'
       case GRPCFieldType.FIELD_TYPE_UNSPECIFIED:
         throw Error('Unspecified FieldType')
-      // TODO change this when multiselect support is enabled
-      // return 'multiSelect'
     }
   }
 }

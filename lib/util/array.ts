@@ -16,7 +16,7 @@ export const equalSizeGroups = <T, >(array: T[], groupSize: number): T[][] => {
  * @param end inclusive
  * @param allowEmptyRange Whether the range can be defined empty via end < start
  */
-export const range = (start: number, end: number, allowEmptyRange: boolean = false) : number[] => {
+export const range = (start: number, end: number, allowEmptyRange: boolean = false): number[] => {
   if (end < start) {
     if (!allowEmptyRange) {
       console.warn(`range: end (${end}) < start (${start}) should be allowed explicitly, set allowEmptyRange to true`)
@@ -94,4 +94,22 @@ export const createLoopingListWithIndex = <T, >(list: T[], startIndex: number = 
 
 export const createLoopingList = <T, >(list: T[], startIndex: number = 0, length: number = 0, forwards: boolean = true) => {
   return createLoopingListWithIndex(list, startIndex, length, forwards).map(([_, item]) => item)
+}
+
+export const ArrayUtil = {
+  unique: <T>(list: T[]): T[] => {
+    const seen = new Set<T>()
+    return list.filter((item) => {
+      if (seen.has(item)) {
+        return false
+      }
+      seen.add(item)
+      return true
+    })
+  },
+
+  difference: <T>(list: T[], removeList: T[]): T[] => {
+    const remove = new Set<T>(removeList)
+    return list.filter((item) => !remove.has(item))
+  }
 }

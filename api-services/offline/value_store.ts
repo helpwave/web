@@ -2,7 +2,6 @@ import { range } from '@helpwave/common/util/array'
 import type { Property } from '../types/properties/property'
 import { emptyProperty } from '../types/properties/property'
 import type { AttachedProperty } from '../types/properties/attached_property'
-import { emptyPropertyValue } from '../types/properties/attached_property'
 import type { OrganizationMinimalDTO } from '../types/users/organizations'
 import type { WardWithOrganizationIdDTO } from '../types/tasks/wards'
 import type { RoomWithWardId } from '../types/tasks/room'
@@ -124,16 +123,7 @@ const initialProperties: Property[] = [
     subjectType: 'task'
   },
 ]
-const initialAttachedProperties: AttachedProperty[] = [
-  {
-    propertyId: '1',
-    value: {
-      ...emptyPropertyValue,
-      dateValue: new Date(2000)
-    },
-    subjectId: '1',
-  },
-]
+const initialAttachedProperties: AttachedProperty[] = []
 const initialOrganizations: OrganizationMinimalDTO[] = [
   {
     id: 'organization',

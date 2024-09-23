@@ -14,7 +14,10 @@ import {
   useAttachedPropertyMutation,
   usePropertyWithValueListQuery
 } from '@helpwave/api-services/mutations/properties/property_value_mutations'
-import type { AttachedProperty } from '@helpwave/api-services/types/properties/attached_property'
+import type {
+  AttachedProperty,
+  DisplayableAttachedProperty
+} from '@helpwave/api-services/types/properties/attached_property'
 import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
 import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
@@ -55,7 +58,7 @@ export const PropertyList = ({
     isError: isErrorPropertyList
   } = usePropertyListQuery(subjectType)
 
-  const [properties, setProperties] = useState<AttachedProperty[]>([])
+  const [properties, setProperties] = useState<DisplayableAttachedProperty[]>([])
   const { data, isLoading, isError } = usePropertyWithValueListQuery(subjectId, subjectType)
   const addOrUpdatePropertyMutation = useAttachedPropertyMutation()
 
@@ -82,8 +85,8 @@ export const PropertyList = ({
               key={index}
               attachedProperty={property}
               onChange={value => setProperties(prevState => prevState
-                .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? value : value1))}
-              onEditComplete={value => addOrUpdatePropertyMutation.mutate(value)}
+                .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? { ...value1, ...value } : value1))}
+              onEditComplete={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
             />
         )
         )}
@@ -116,9 +119,9 @@ export const PropertyList = ({
                     key={property.id}
                     onClick={() => {
                       const attachedProperty : AttachedProperty = { propertyId: property.id, subjectId, value: emptyPropertyValue }
-                      addOrUpdatePropertyMutation.mutate(attachedProperty)
+                      addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
                     }}
-                    className={tw('rounded-md')}
+                    className={tw('rounded-md cursor-pointer')}
                   >
                     {property.name}
                   </MenuItem>

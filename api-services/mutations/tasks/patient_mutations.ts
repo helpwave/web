@@ -50,7 +50,7 @@ export const usePatientDetailsQuery = (patientId: string | undefined) => {
       const patient: PatientDetailsDTO = {
         id: res.getId(),
         note: res.getNotes(),
-        name: res.getName(),
+        name: res.getHumanReadableIdentifier(),
         discharged: res.getIsDischarged(),
         tasks: res.getTasksList().map(task => ({
           id: task.getId(),
@@ -206,8 +206,14 @@ export const useRecentPatientsQuery = () => {
           id: patient.getId(),
           name: patient.getHumanReadableIdentifier(),
           wardId,
-          bed: bed ? { id: bed.getId(), name: bed.getName() } : undefined,
-          room: room ? { id: room.getId(), name: room.getId() } : undefined
+          bed: bed ? {
+            id: bed.getId(),
+            name: bed.getName()
+          } : undefined,
+          room: room ? {
+            id: room.getId(),
+            name: room.getId()
+          } : undefined
         })
       }
 
@@ -221,8 +227,8 @@ export const usePatientCreateMutation = (organisationId: string) => {
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
       const req = new CreatePatientRequest()
-      req.setNotes(patient.note)
-      req.setHumanReadableIdentifier(patient.name)
+        .setNotes(patient.note)
+        .setHumanReadableIdentifier(patient.name)
       const res = await APIServices.patient.createPatient(req, getAuthenticatedGrpcMetadata(organisationId))
 
       const id = res.getId()
@@ -231,7 +237,10 @@ export const usePatientCreateMutation = (organisationId: string) => {
         throw new Error('create room failed')
       }
 
-      return { ...patient, id }
+      return {
+        ...patient,
+        id
+      }
     },
     onSuccess: () => {
       queryClient.refetchQueries([QueryKeys.rooms]).catch(reason => console.error(reason))

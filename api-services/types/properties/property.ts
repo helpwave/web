@@ -24,7 +24,7 @@ export type Property = {
   description?: string,
   isArchived: boolean,
   setId?: string,
-  selectData: SelectData,
+  selectData?: SelectData,
   alwaysIncludeForViewSource?: boolean
 }
 

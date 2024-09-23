@@ -1,22 +1,24 @@
-import type { FieldType, SubjectType } from './property'
+import type { FieldType, SelectOption, SubjectType } from './property'
+
+export type AttachPropertySelectValue = Omit<SelectOption, 'isCustom'>
 
 export type PropertyValue = {
-  textValue: string,
-  numberValue: number,
-  boolValue: boolean,
-  dateValue: Date,
-  dateTimeValue: Date,
-  singleSelectValue: string,
-  multiSelectValue: string[]
+  textValue?: string,
+  numberValue?: number,
+  boolValue?: boolean,
+  dateValue?: Date,
+  dateTimeValue?: Date,
+  singleSelectValue?: AttachPropertySelectValue,
+  multiSelectValue: AttachPropertySelectValue[]
 }
 
 export const emptyPropertyValue: PropertyValue = {
-  boolValue: false,
-  textValue: '',
-  numberValue: 0,
-  dateValue: new Date(),
-  dateTimeValue: new Date(),
-  singleSelectValue: '',
+  boolValue: undefined,
+  textValue: undefined,
+  numberValue: undefined,
+  dateValue: undefined,
+  dateTimeValue: undefined,
+  singleSelectValue: undefined,
   multiSelectValue: []
 }
 

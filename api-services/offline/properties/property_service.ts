@@ -31,19 +31,25 @@ export class PropertyOfflineServicePromiseClient extends PropertyServicePromiseC
       if (value.setId) {
         res.setSetId(value.setId)
       }
-      const selectData = new GetPropertiesBySubjectTypeResponse.Property.SelectData()
-      selectData.setAllowFreetext(value.selectData.isAllowingFreetext)
-      selectData.setOptionsList(value.selectData.options.map(value => {
-        const option = new GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption()
-        option.setId(value.id)
-        option.setName(value.name)
-        if (value.description) {
-          option.setDescription(value.description)
+      if (value.fieldType === 'singleSelect' || value.fieldType === 'multiSelect') {
+        if (!value.selectData) {
+          throw Error('SelectData not set on a Select Property')
         }
-        option.setIsCustom(value.isCustom)
-        return option
-      }))
-      res.setSelectData(selectData)
+        const selectData = new GetPropertiesBySubjectTypeResponse.Property.SelectData()
+        selectData.setAllowFreetext(value.selectData.isAllowingFreetext)
+        selectData.setOptionsList(value.selectData.options.map(value => {
+          const option = new GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption()
+          option.setId(value.id)
+          option.setName(value.name)
+          if (value.description) {
+            option.setDescription(value.description)
+          }
+          option.setIsCustom(value.isCustom)
+          return option
+        }))
+        res.setSelectData(selectData)
+      }
+
       return res
     })
     const result = new GetPropertiesBySubjectTypeResponse()
@@ -69,21 +75,24 @@ export class PropertyOfflineServicePromiseClient extends PropertyServicePromiseC
     if (value.setId) {
       res.setSetId(value.setId)
     }
-
-    const selectData = new GetPropertiesBySubjectTypeResponse.Property.SelectData()
-    selectData.setAllowFreetext(value.selectData.isAllowingFreetext)
-    selectData.setOptionsList(value.selectData.options.map(value => {
-      const option = new GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption()
-      option.setId(value.id)
-      option.setName(value.name)
-      if (value.description) {
-        option.setDescription(value.description)
+    if (value.fieldType === 'singleSelect' || value.fieldType === 'multiSelect') {
+      if (!value.selectData) {
+        throw Error('SelectData not set on a Select Property')
       }
-      option.setIsCustom(value.isCustom)
-      return option
-    }))
-    res.setSelectData(selectData)
-
+      const selectData = new GetPropertiesBySubjectTypeResponse.Property.SelectData()
+      selectData.setAllowFreetext(value.selectData.isAllowingFreetext)
+      selectData.setOptionsList(value.selectData.options.map(value => {
+        const option = new GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption()
+        option.setId(value.id)
+        option.setName(value.name)
+        if (value.description) {
+          option.setDescription(value.description)
+        }
+        option.setIsCustom(value.isCustom)
+        return option
+      }))
+      res.setSelectData(selectData)
+    }
     return res
   }
 
@@ -138,13 +147,13 @@ export class PropertyOfflineServicePromiseClient extends PropertyServicePromiseC
     if (request.hasSubjectType()) {
       newValue.subjectType = GRPCConverter.subjectTypeMapperFromGRPC(request.getSubjectType())
     }
-    if (request.hasSelectData()) {
+    if ((property.fieldType === 'singleSelect' || property.fieldType === 'multiSelect') && request.hasSelectData()) {
       const selectUpdate = request.getSelectData()!
-      const selectData: SelectData = { ...property.selectData }
+      const selectData: SelectData = { ...property.selectData! }
       if (selectUpdate.hasAllowFreetext()) {
         selectData.isAllowingFreetext = selectUpdate.getAllowFreetext()
       }
-      const removeList : string[] = selectUpdate.getRemoveOptionsList()
+      const removeList: string[] = selectUpdate.getRemoveOptionsList()
       selectData.options = selectData.options.filter(value => !removeList.includes(value.id))
       for (const upsertItem of selectUpdate.getUpsertOptionsList()) {
         const index = selectData.options.findIndex(value => value.id === upsertItem.getId())
@@ -157,7 +166,7 @@ export class PropertyOfflineServicePromiseClient extends PropertyServicePromiseC
           if (upsertItem.hasDescription()) {
             option.description = upsertItem.getDescription()
           }
-          newValue.selectData.options[index] = option
+          newValue.selectData!.options[index] = option
         }
       }
     }

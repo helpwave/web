@@ -59,7 +59,7 @@ export const usePropertyWithValueListQuery = (subjectId: string | undefined, sub
             boolValue: result.getBoolValue() ?? false,
             dateValue: dateValue?.getDate() ? dateValue.getDate()!.toDate() : new Date(),
             numberValue: result.getNumberValue() ?? 0,
-            singleSelectValue: result.getSelectValue() ?? '',
+            singleSelectValue: result.getSelectValue()?.getId() ?? '', // TODO consider this
             dateTimeValue: result.getDateTimeValue()?.toDate() ?? new Date(),
             textValue: result.getTextValue() ?? '',
             multiSelectValue: [], // TODO update this when implemented on API

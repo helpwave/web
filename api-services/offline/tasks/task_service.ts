@@ -7,23 +7,20 @@ import type {
   GetTaskRequest,
   GetTasksByPatientRequest,
   GetTasksByPatientSortedByStatusRequest,
-  UpdateTaskRequest
-  ,
+  UpdateTaskRequest,
   AssignTaskResponse,
   UnassignTaskRequest,
   CreateSubtaskRequest,
   UpdateSubtaskRequest,
-  CompleteSubtaskRequest,
-  UncompleteSubtaskRequest, DeleteSubtaskRequest
+  DeleteSubtaskRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import {
-  CompleteSubtaskResponse,
   CreateSubtaskResponse,
   CreateTaskResponse, DeleteSubtaskResponse,
   GetAssignedTasksResponse,
   GetTaskResponse,
   GetTasksByPatientResponse,
-  GetTasksByPatientSortedByStatusResponse, UnassignTaskResponse, UncompleteSubtaskResponse, UpdateSubtaskResponse,
+  GetTasksByPatientSortedByStatusResponse, UnassignTaskResponse, UpdateSubtaskResponse,
   UpdateTaskResponse
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import { AssignTaskToUserResponse } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
@@ -37,7 +34,7 @@ type TaskValueStoreUpdate =
   Pick<TaskValueStore, 'id'>
   & Partial<Pick<TaskValueStore, 'name' | 'notes' | 'dueDate' | 'status'>>
 
-type SubTaskValueStoreUpdate = Omit<SubTaskDTO, 'isDone'>
+type SubTaskValueStoreUpdate = Pick<SubTaskDTO, 'id'> & Partial<Omit<SubTaskDTO, 'id'>>
 
 export const SubTaskOfflineService = {
   find: (id: string): SubTaskValueStore | undefined => {
@@ -141,7 +138,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
     if (!task) {
       throw Error(`FindTask: Could not find task with id ${request.getId()}`)
     }
-    const list = SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.Subtask()
+    const list = SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
       .setId(subtask.id)
       .setName(subtask.name)
       .setDone(subtask.isDone)
@@ -240,7 +237,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
-        .setPatient(new GetAssignedTasksResponse.Task.Patient().setId(patient.id).setName(patient.name))
+        .setPatient(new GetAssignedTasksResponse.Task.Patient().setId(patient.id).setHumanReadableIdentifier(patient.name))
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetAssignedTasksResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
@@ -320,25 +317,17 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
   }
 
   async updateSubtask(request: UpdateSubtaskRequest, _?: Metadata): Promise<UpdateSubtaskResponse> {
-    if (!request.getSubtask()) {
+    const subtask = request.getSubtask()
+    if (!subtask) {
       throw Error('UpdateSubtask: The Subtask must be set to update it')
     }
     const update: SubTaskValueStoreUpdate = {
       id: request.getSubtaskId(),
-      name: request.getSubtask()!.getName()
+      name: subtask.hasName() ? subtask.getName() : undefined,
+      isDone: subtask.hasDone() ? subtask.getDone() : undefined,
     }
     SubTaskOfflineService.update(update)
     return new UpdateSubtaskResponse()
-  }
-
-  async completeSubtask(request: CompleteSubtaskRequest, _?: Metadata): Promise<CompleteSubtaskResponse> {
-    SubTaskOfflineService.updateStatus(request.getSubtaskId(), true)
-    return new CompleteSubtaskResponse()
-  }
-
-  async uncompleteSubtask(request: UncompleteSubtaskRequest, _?: Metadata): Promise<UncompleteSubtaskResponse> {
-    SubTaskOfflineService.updateStatus(request.getSubtaskId(), false)
-    return new UncompleteSubtaskResponse()
   }
 
   async deleteSubtask(request: DeleteSubtaskRequest, _?: Metadata): Promise<DeleteSubtaskResponse> {

@@ -20,11 +20,16 @@ import type { DisplayableAttachedProperty } from '../../types/properties/attache
 export class PropertyValueOfflineServicePromiseClient extends PropertyValueServicePromiseClient {
   async getAttachedPropertyValues(request: GetAttachedPropertyValuesRequest, _?: Metadata): Promise<GetAttachedPropertyValuesResponse> {
     const taskMatcher = request.getTaskMatcher()
+    const patientMatcher = request.getPatientMatcher()
     let subjectId: string | undefined
     let subjectType: string | undefined
     if (taskMatcher) {
       subjectId = taskMatcher.getTaskId()
       subjectType = 'task'
+    }
+    if (patientMatcher) {
+      subjectId = patientMatcher.getPatientId()
+      subjectType = 'patient'
     }
 
     const valueStore: OfflineValueStore = OfflineValueStore.getInstance()
@@ -50,7 +55,10 @@ export class PropertyValueOfflineServicePromiseClient extends PropertyValueServi
       const protoDate: ProtoDate = new ProtoDate().setDate(GRPCConverter.dateToTimestamp(value.value.dateValue))
       attachedProperty.setDateValue(protoDate)
       attachedProperty.setDateTimeValue(GRPCConverter.dateToTimestamp(value.value.dateTimeValue))
-      attachedProperty.setSelectValue(value.value.singleSelectValue)
+      attachedProperty.setSelectValue(new GetAttachedPropertyValuesResponse.Value.SelectValueOption()
+        .setId(value.value.singleSelectValue) // TODO fix this by using an id for every select value
+        .setName(value.value.singleSelectValue)
+        .setDescription(''))
       return attachedProperty
     })
 

@@ -9,8 +9,7 @@ import {
   UpdateSubtaskRequest,
   DeleteSubtaskRequest,
   GetTasksByPatientRequest,
-  CreateSubtaskRequest,
-  CompleteSubtaskRequest, UncompleteSubtaskRequest
+  CreateSubtaskRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import type {
   CreateSubTaskDTO,
@@ -214,19 +213,13 @@ export const useSubTaskUpdateMutation = (taskId?: string, callback: (subtask: Su
       }
       const req = new UpdateSubtaskRequest()
       req.setSubtaskId(subtask.id)
-      req.setTaskId(taskId)
-      req.setSubtask(new UpdateSubtaskRequest.Subtask()
-        .setName(subtask.name)
-        // .setDone(subtask.done)
-      )
+        .setTaskId(taskId)
+        .setSubtask(new UpdateSubtaskRequest.Subtask()
+          .setName(subtask.name)
+          .setDone(subtask.isDone)
+        )
       await APIServices.task.updateSubtask(req, getAuthenticatedGrpcMetadata())
 
-      // TODO remove this when the update can handle it
-      if (subtask.isDone) {
-        await APIServices.task.completeSubtask(new CompleteSubtaskRequest().setTaskId(taskId).setSubtaskId(subtask.id), getAuthenticatedGrpcMetadata())
-      } else {
-        await APIServices.task.uncompleteSubtask(new UncompleteSubtaskRequest().setTaskId(taskId).setSubtaskId(subtask.id), getAuthenticatedGrpcMetadata())
-      }
       const newSubtask: SubTaskDTO = { ...subtask }
 
       callback(newSubtask)

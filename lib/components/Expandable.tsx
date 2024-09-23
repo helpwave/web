@@ -1,6 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { forwardRef, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
+import { tw } from '@twind/core'
 import { tx } from '../twind'
 
 export type ExpandableProps = PropsWithChildren<{
@@ -28,7 +29,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
   headerClassName = ''
 }, ref) => {
   const [expanded, setExpanded] = useState(initialExpansion)
-  icon ??= expanded1 => expanded1 ? <ChevronUp size={16}/> : <ChevronDown size={16}/>
+  icon ??= expanded1 => expanded1 ? <ChevronUp size={16} className={tw('min-w-[16px]')}/> : <ChevronDown size={16} className={tw('min-w-[16px]')}/>
 
   return (
     <div
@@ -37,7 +38,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
       onClick={() => !clickOnlyOnHeader && setExpanded(!expanded)}
     >
       <div
-        className={tx('flex flex-row justify-between items-center cursor-pointer', headerClassName)}
+        className={tx('flex flex-row justify-between items-center cursor-pointer gap-x-2', headerClassName)}
         onClick={() => clickOnlyOnHeader && setExpanded(!expanded)}
       >
         {label}

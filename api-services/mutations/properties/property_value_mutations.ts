@@ -3,7 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AttachPropertyValueRequest,
   GetAttachedPropertyValuesRequest,
-  TaskPropertyMatcher
+  TaskPropertyMatcher,
+  PatientPropertyMatcher
 } from '@helpwave/proto-ts/services/property_svc/v1/property_value_svc_pb'
 import {
   Date as ProtoDate
@@ -20,21 +21,26 @@ export const usePropertyWithValueListQuery = (subjectId: string | undefined, sub
     queryKey: [QueryKeys.properties, QueryKeys.attachedProperties, subjectId],
     enabled: !!subjectId,
     queryFn: async () => {
+      console.log('usePropertyWithValueListQuery', subjectId, subjectType)
       if (!subjectId) {
         return undefined
       }
       const req = new GetAttachedPropertyValuesRequest()
-      const taskMatcher = new TaskPropertyMatcher()
-      if (subjectType === 'task') {
-        taskMatcher.setTaskId(subjectId)
-        if (wardId) {
-          taskMatcher.setWardId(wardId)
-        }
-      }
-      req.setTaskMatcher(taskMatcher)
 
-      if (subjectType === 'patient') {
-        console.warn("PropertyWithValueListQuery: subjectType patient isn't supported in production yet.")
+      const taskMatcher = new TaskPropertyMatcher()
+      const patientMatcher = new PatientPropertyMatcher()
+
+      switch (subjectType) {
+        case 'task':
+          taskMatcher.setTaskId(subjectId)
+          if (wardId) taskMatcher.setWardId(wardId)
+          req.setTaskMatcher(taskMatcher)
+          break
+        case 'patient':
+          patientMatcher.setPatientId(subjectId)
+          if (wardId) patientMatcher.setWardId(wardId)
+          req.setPatientMatcher(patientMatcher)
+          break
       }
 
       const res = await APIServices.propertyValues.getAttachedPropertyValues(req, getAuthenticatedGrpcMetadata())

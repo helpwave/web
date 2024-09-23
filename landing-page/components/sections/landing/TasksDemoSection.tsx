@@ -65,7 +65,7 @@ export const TasksDemoSection = () => {
         </div>
         <Link
           href={demoURL}
-          className={tw('bg-black rounded-lg text-lg text-white h-min px-6 py-2')}
+          className={tw('bg-white rounded-lg text-lg font-bold text-hw-secondary-800 h-min px-6 py-2')}
           style={{ textWrap: 'nowrap' }} // TODO does not seem supported by the current twind version (throws warnings for text-nowrap)
         >
           {translation.tryDemo}

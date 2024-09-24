@@ -10,7 +10,7 @@ import { FieldType } from '@helpwave/proto-ts/services/property_svc/v1/types_pb'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import { QueryKeys } from '../query_keys'
-import type { Property, SelectOption, SubjectType } from '../../types/properties/property'
+import type { Property, SelectData, SelectOption, SubjectType } from '../../types/properties/property'
 import { GRPCConverter } from '../../util/util'
 
 export const usePropertyListQuery = (subjectType?: SubjectType) => {
@@ -66,28 +66,33 @@ export const usePropertyQuery = (id?: string) => {
 
       const result = await APIServices.property.getProperty(req, getAuthenticatedGrpcMetadata())
 
-      const selectData = result.getSelectData()
-      if (!selectData) {
-        throw Error('usePropertyQuery could not find selectData')
-      }
-      return {
-        id: result.getId(),
-        name: result.getName(),
-        description: result.getDescription(),
-        subjectType: GRPCConverter.subjectTypeMapperFromGRPC(result.getSubjectType()),
-        fieldType: GRPCConverter.fieldTypeMapperFromGRPC(result.getFieldType()),
-        isArchived: result.getIsArchived(),
-        setId: result.getSetId(),
-        alwaysIncludeForViewSource: undefined,
-        selectData: {
-          isAllowingFreetext: selectData.getAllowFreetext(),
-          options: selectData.getOptionsList().map(option => ({
+      const fieldType = GRPCConverter.fieldTypeMapperFromGRPC(result.getFieldType())
+      let selectData: SelectData | undefined
+      if (fieldType === 'singleSelect' || fieldType === 'multiSelect') {
+        const responseSelectData = result.getSelectData()
+        if (!responseSelectData) {
+          throw Error('usePropertyQuery could not find selectData')
+        }
+        selectData = {
+          isAllowingFreetext: responseSelectData.getAllowFreetext(),
+          options: responseSelectData.getOptionsList().map(option => ({
             id: option.getId(),
             name: option.getName(),
             description: option.getDescription(),
             isCustom: option.getIsCustom()
           }))
         }
+      }
+      return {
+        id: result.getId(),
+        name: result.getName(),
+        description: result.getDescription(),
+        subjectType: GRPCConverter.subjectTypeMapperFromGRPC(result.getSubjectType()),
+        fieldType,
+        isArchived: result.getIsArchived(),
+        setId: result.getSetId(),
+        alwaysIncludeForViewSource: undefined,
+        selectData,
       }
     },
   })

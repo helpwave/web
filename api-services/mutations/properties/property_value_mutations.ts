@@ -145,11 +145,13 @@ export const useAttachedPropertyMutation = <T extends AttachedProperty>(callback
             )
           }
           break
+        default:
+          console.warn('invalid type for property value mutation')
       }
 
+      console.log(property.value, fieldType)
       await APIServices.propertyValues.attachPropertyValue(req, getAuthenticatedGrpcMetadata())
 
-      console.log(req)
       const newProperty: T = {
         ...property,
       }

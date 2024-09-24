@@ -29,20 +29,21 @@ export const usePropertyWithValueListQuery = (subjectId: string | undefined, sub
       }
       const req = new GetAttachedPropertyValuesRequest()
 
-      const taskMatcher = new TaskPropertyMatcher()
-      const patientMatcher = new PatientPropertyMatcher()
-
       switch (subjectType) {
-        case 'task':
+        case 'task': {
+          const taskMatcher = new TaskPropertyMatcher()
           taskMatcher.setTaskId(subjectId)
           if (wardId) taskMatcher.setWardId(wardId)
           req.setTaskMatcher(taskMatcher)
           break
-        case 'patient':
+        }
+        case 'patient': {
+          const patientMatcher = new PatientPropertyMatcher()
           patientMatcher.setPatientId(subjectId)
           if (wardId) patientMatcher.setWardId(wardId)
           req.setPatientMatcher(patientMatcher)
           break
+        }
       }
 
       const res = await APIServices.propertyValues.getAttachedPropertyValues(req, getAuthenticatedGrpcMetadata())
@@ -149,7 +150,6 @@ export const useAttachedPropertyMutation = <T extends AttachedProperty>(callback
           console.warn('invalid type for property value mutation')
       }
 
-      console.log(property.value, fieldType)
       await APIServices.propertyValues.attachPropertyValue(req, getAuthenticatedGrpcMetadata())
 
       const newProperty: T = {

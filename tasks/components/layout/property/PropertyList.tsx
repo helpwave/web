@@ -87,6 +87,7 @@ export const PropertyList = ({
               onChange={value => setProperties(prevState => prevState
                 .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? { ...value1, ...value } : value1))}
               onEditComplete={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
+              onRemove={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
             />
         )
         )}

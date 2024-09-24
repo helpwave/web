@@ -11,6 +11,7 @@ import type {
   AttachPropertySelectValue
 } from '@helpwave/api-services/types/properties/attached_property'
 import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
 
 type PropertyEntryDisplayProps = {
   property: Property,
@@ -36,7 +37,7 @@ export const PropertyEntryDisplay = ({
     name: property.name,
     readOnly,
     onRemove: onRemove ? () => {
-      onRemove(attachedProperty)
+      onRemove({ ...attachedProperty, value: emptyPropertyValue })
     } : undefined,
   }
 
@@ -135,7 +136,7 @@ export const PropertyEntryDisplay = ({
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.selectData.options
+          options={property.selectData!.options
             .map(option => ({
               value: option,
               label: option.name
@@ -161,7 +162,7 @@ export const PropertyEntryDisplay = ({
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.selectData.options
+          options={property.selectData!.options
             .filter(option => option !== undefined)
             .map(option => ({
               value: option,

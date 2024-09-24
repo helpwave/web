@@ -1,5 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
+import {
+  CreatePersonalOrganizationResponse,
+  InvitationState
+} from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import {
   AcceptInvitationRequest,
   CreateOrganizationRequest,
@@ -13,7 +16,8 @@ import {
   RemoveMemberRequest,
   AddMemberRequest,
   GetInvitationsByOrganizationRequest,
-  RevokeInvitationRequest
+  RevokeInvitationRequest,
+  CreatePersonalOrganizationRequest
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { Role } from './organization_member_mutations'
@@ -123,7 +127,6 @@ export const useOrganizationsForUserQuery = () => {
     queryKey: [organizationQueryKey, organizationsForUserQueryKey],
     queryFn: async () => {
       const req = new GetOrganizationsForUserRequest()
-
       const res = await organizationService.getOrganizationsForUser(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
@@ -422,4 +425,17 @@ export const useRemoveMemberMutation = (organizationId: string) => {
       queryClient.refetchQueries({ queryKey: [invitationsQueryKey] }).then()
     }
   })
+}
+
+export const createPersonalOrganization = async (): Promise<CreatePersonalOrganizationResponse.AsObject> => {
+  const req = new CreatePersonalOrganizationRequest()
+
+  const res = await organizationService.createPersonalOrganization(req, getAuthenticatedGrpcMetadata())
+  const obj = res.toObject()
+
+  if (!obj) {
+    throw new Error('CreatePersonalOrganization failed')
+  }
+
+  return obj
 }

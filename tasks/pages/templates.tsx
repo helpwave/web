@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { tw } from '@helpwave/common/twind'
@@ -82,6 +82,10 @@ const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForT
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { user } = useAuth()
   const { isLoading, isError, data } = usePersonalTaskTemplateQuery(user?.id)
+
+  useEffect(() => {
+    console.log('PTTP', user) //
+  }, [user])
 
   const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 

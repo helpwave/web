@@ -12,6 +12,7 @@ import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
+import { ProvideAuth } from '@/hooks/useAuth'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -31,28 +32,30 @@ function MyApp({
 }: AppProps) {
   return (
     <ProvideLanguage>
-      { /* v Scans the user agent */}
-      {!isMobile ? (
-        <>
-          <Head>
-            <title>{titleWrapper()}</title>
-            <style>{`
-        :root {
-          --font-inter: ${inter.style.fontFamily};
-          --font-space: ${spaceGrotesk.style.fontFamily};
-        }
-      `}</style>
-          </Head>
-          <QueryClientProvider client={queryClient}>
-            <ModalRegister>
-              <div className={tw('font-sans')} id={modalRootName}>
-                <Component {...pageProps} />
-              </div>
-            </ModalRegister>
-            <ReactQueryDevtools buttonPosition="bottom-left" position="left" />
-          </QueryClientProvider>
-        </>
-      ) : (<MobileInterceptor {...pageProps} />)}
+      <ProvideAuth>
+        { /* v Scans the user agent */}
+        {!isMobile ? (
+          <>
+            <Head>
+              <title>{titleWrapper()}</title>
+              <style>{`
+          :root {
+            --font-inter: ${inter.style.fontFamily};
+            --font-space: ${spaceGrotesk.style.fontFamily};
+          }
+        `}</style>
+            </Head>
+            <QueryClientProvider client={queryClient}>
+              <ModalRegister>
+                <div className={tw('font-sans')} id={modalRootName}>
+                  <Component {...pageProps} />
+                </div>
+              </ModalRegister>
+              <ReactQueryDevtools buttonPosition="bottom-left" position="left" />
+            </QueryClientProvider>
+          </>
+        ) : (<MobileInterceptor {...pageProps} />)}
+      </ProvideAuth>
     </ProvideLanguage>
   )
 }

@@ -1,16 +1,15 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
-import { useOrganizationsForUserQuery, type OrganizationDTO } from '@/mutations/organization_mutations'
+import { type OrganizationDTO, useOrganizationsForUserQuery } from '@/mutations/organization_mutations'
 import { OrganizationContext } from '@/pages/organizations'
 import { useAuth } from '@/hooks/useAuth'
 import { getConfig } from '@/utils/config'
-import { useOrganization } from '@/hooks/useOrganization'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -55,8 +54,6 @@ export const OrganizationDisplay = ({
   usedOrganizations = usedOrganizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
   const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)
 
-  const { setOrganization } = useOrganization()
-
   const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
     <div className={tw('py-4 px-6')}>
@@ -69,7 +66,6 @@ export const OrganizationDisplay = ({
             isSelected={usedSelectedId === organization.id}
             onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
             onTileClick={() => {
-              setOrganization(organization)
               router.push(`/organizations/${organization.id}`)
             }}
           />

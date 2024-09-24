@@ -19,7 +19,6 @@ import {
   useOrganizationUpdateMutation
 } from '@/mutations/organization_mutations'
 import { useAuth } from '@/hooks/useAuth'
-import { useOrganization } from '@/hooks/useOrganization'
 import { ReSignInModal } from '@/components/modals/ReSignInModal'
 
 type OrganizationDetailTranslation = {
@@ -97,12 +96,6 @@ export const OrganizationDetail = ({
       })
     }
   }, [data, isCreatingNewOrganization])
-
-  const { setOrganizationId } = useOrganization()
-
-  useEffect(() => {
-    setOrganizationId(contextState.organizationId)
-  }, [contextState.organizationId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 

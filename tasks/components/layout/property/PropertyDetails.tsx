@@ -16,7 +16,7 @@ import {
   usePropertyUpdateMutation
 } from '@helpwave/api-services/mutations/properties/property_mutations'
 import type { Property, SelectData } from '@helpwave/api-services/types/properties/property'
-import { emptyProperty } from '@helpwave/api-services/types/properties/property'
+import { emptyProperty, emptySelectData } from '@helpwave/api-services/types/properties/property'
 import { range } from '@helpwave/common/util/array'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsRules } from '@/components/layout/property/PropertyDetailsRules'
@@ -145,12 +145,16 @@ export const PropertyDetails = ({
           value={value}
           onChange={
             (fieldDetails, selectUpdate) => {
+              const isSelect = fieldDetails.fieldType === 'singleSelect' || fieldDetails.fieldType === 'multiSelect'
               /// Creating new Property case
               if (value.id === '') {
                 setValue(prevState => {
-                  const selectData : SelectData = { ...fieldDetails.selectData }
-                  if (selectUpdate) {
-                    selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({ id: '', name: `${translation.newEntry} ${index + 1}`, description: '', isCustom: false })))
+                  let selectData : SelectData|undefined = fieldDetails.selectData ? { ...fieldDetails.selectData } : undefined
+                  if (isSelect) {
+                    selectData ??= emptySelectData
+                    if (selectUpdate) {
+                      selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({ id: '', name: `${translation.newEntry} ${index + 1}`, description: '', isCustom: false })))
+                    }
                   }
                   return { ...prevState, fieldType: fieldDetails.fieldType, selectData }
                 })

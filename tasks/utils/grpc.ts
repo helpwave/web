@@ -28,9 +28,6 @@ type AuthenticatedGrpcMetadata = {
 }
 
 const defaultOrganization = `3b25c6f5-4705-4074-9fc6-a50c28eba406`
-/**
- * @deprecated Use `grpcWrapper()` instead
- */
 export const getAuthenticatedGrpcMetadata = (_: string = defaultOrganization): AuthenticatedGrpcMetadata => {
   // TODO: Implement way better API for get the current id token and DONT hardcode the organization id
   const idToken = keycloak?.token

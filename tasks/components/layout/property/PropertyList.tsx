@@ -20,6 +20,9 @@ import type {
 } from '@helpwave/api-services/types/properties/attached_property'
 import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
+import {
+  useUpdatePropertyViewRuleRequest
+} from '@helpwave/api-services/mutations/properties/property_view_src_mutations'
 import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
 
 type PropertyListTranslation = {
@@ -61,6 +64,7 @@ export const PropertyList = ({
   const [properties, setProperties] = useState<DisplayableAttachedProperty[]>([])
   const { data, isLoading, isError } = usePropertyWithValueListQuery(subjectId, subjectType)
   const addOrUpdatePropertyMutation = useAttachedPropertyMutation()
+  const updateViewRulesMutation = useUpdatePropertyViewRuleRequest(subjectType)
 
   useEffect(() => {
     if (data) {
@@ -121,6 +125,7 @@ export const PropertyList = ({
                     onClick={() => {
                       const attachedProperty : AttachedProperty = { propertyId: property.id, subjectId, value: emptyPropertyValue }
                       addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
+                      updateViewRulesMutation.mutate({ subjectId, appendToAlwaysInclude: [property.id] })
                     }}
                     className={tw('rounded-md cursor-pointer')}
                   >

@@ -37,7 +37,6 @@ export const usePropertyListQuery = (subjectType?: SubjectType) => {
           fieldType,
           isArchived: property.getIsArchived(),
           setId: property.getSetId(),
-          alwaysIncludeForViewSource: undefined,
           selectData: mustHaveSelectData ? {
             isAllowingFreetext: selectData!.getAllowFreetext(),
             options: selectData!.getOptionsList().map(option => ({
@@ -91,7 +90,7 @@ export const usePropertyQuery = (id?: string) => {
         fieldType,
         isArchived: result.getIsArchived(),
         setId: result.getSetId(),
-        alwaysIncludeForViewSource: undefined,
+        alwaysIncludeForViewSource: result.getAlwaysIncludeForViewSource(),
         selectData,
       }
     },

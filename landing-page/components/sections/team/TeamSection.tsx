@@ -29,7 +29,7 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'linkedin', url: 'https://www.linkedin.com/in/f-evers/' },
         { type: 'mail', url: 'mailto:felix.evers@helpwave.de' },
         { type: 'website', url: 'https://felixevers.de' },
-        { type: 'github', url: 'https://github.com/use-to' },
+        { type: 'github', url: 'https://github.com/felixevers' },
       ],
       imageClassName: 'w-[230px] h-[200px]'
     },
@@ -68,10 +68,10 @@ const teamData: Record<string, ProfileProps[]> = {
       imageUrl: imageUrl('max_baumann'),
       tags: ['microservices', 'deployment', 'database'],
       socials: [
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/max-bmn/' },
         { type: 'mail', url: 'mailto:max.baumann@helpwave.de' },
         { type: 'website', url: 'https://bmn.dev' },
         { type: 'github', url: 'https://github.com/fosefx' },
-        { type: 'linkedin', url: 'https://www.linkedin.com/in/max-bmn/' },
       ],
       imageClassName: 'w-[200px] h-[200px]'
     },
@@ -94,10 +94,10 @@ const teamData: Record<string, ProfileProps[]> = {
       tags: ['microservices', 'web', 'grpc'],
       imageUrl: imageUrl('paul_kalhorn'),
       socials: [
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/paul-kalhorn-7b2343228/' },
         { type: 'mail', url: 'mailto:paul.kalhorn@helpwave.de' },
         { type: 'website', url: 'https://kalhorn.io/' },
         { type: 'github', url: 'https://github.com/PaulKalho' },
-        { type: 'linkedin', url: 'https://www.linkedin.com/in/paul-kalhorn-7b2343228/' },
       ],
       imageClassName: 'w-[200px] h-[200px]'
     },
@@ -107,9 +107,9 @@ const teamData: Record<string, ProfileProps[]> = {
       tags: ['uiux', 'web', 'mobile'],
       imageUrl: imageUrl('jonas_ester'),
       socials: [
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/jonas-ester-b063a8188/' },
         { type: 'mail', url: 'mailto:jonas.ester@helpwave.de' },
         { type: 'website', url: 'https://www.jonasester.de/' },
-        { type: 'linkedin', url: 'https://www.linkedin.com/in/jonas-ester-b063a8188/' },
       ],
       imageClassName: 'w-[200px] h-[200px]'
     }
@@ -123,8 +123,8 @@ const teamData: Record<string, ProfileProps[]> = {
       tags: ['law', 'doctor', 'product'],
       imageUrl: imageUrl('ludwig_maidowski'),
       socials: [
-        { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
         { type: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
+        { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
       ],
       imageClassName: 'w-[200px] h-[200px]'
     },
@@ -147,6 +147,7 @@ const teamData: Record<string, ProfileProps[]> = {
       socials: [
         { type: 'linkedin', url: 'https://www.linkedin.com/in/pierre-d-02239011a/' },
         { type: 'mail', url: 'mailto:pierre.duergen@helpwave.de' },
+        { type: 'website', url: 'https://www.pierreduergen.de/' },
       ],
       imageClassName: 'w-[200px] h-[200px]'
     },

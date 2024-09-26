@@ -33,9 +33,6 @@ export const initKeycloak = (keycloak: Keycloak) => {
 }
 
 export const getToken = async (minValidity = 30) => {
-  const { fakeTokenEnable, fakeToken } = getConfig()
-  if (fakeTokenEnable) return fakeToken
-
   if (!keycloak) throw new Error('Keycloak uninitialized. Call initKeycloak before')
   return keycloak
     .updateToken(minValidity)
@@ -48,6 +45,12 @@ export const getToken = async (minValidity = 30) => {
     .catch((err) => {
       console.warn('failed to refresh token', err)
     })
+}
+
+export const getCurrentTokenAndUpdateInBackground = (minValidity = 30) => {
+  const { fakeTokenEnable, fakeToken } = getConfig()
+  if (fakeTokenEnable) return fakeToken
+  getToken(minValidity)
 }
 
 export default keycloak

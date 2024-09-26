@@ -5,10 +5,6 @@ import { getConfig } from '@/utils/config'
 import keycloak, { initKeycloak } from '@/utils/keycloak'
 import { createPersonalOrganization } from '@/mutations/organization_mutations'
 
-export const COOKIE_ID_TOKEN_KEY = 'id-token'
-export const COOKIE_REFRESH_TOKEN_KEY = 'refresh-token'
-export const LOCALSTORAGE_HREF_AFTER_AUTH_KEY = 'href-after-auth'
-
 const IdTokenClaimsSchema = z.object({
   sub: z.string().uuid(),
   email: z.string().email(),
@@ -101,6 +97,7 @@ export const useAuth = (): AuthContextValue => {
   const authContext = useContext(AuthContext)
 
   useEffect(() => {
+    if (config.fakeTokenEnable) return
     keycloak?.updateToken(30)
       .then(() => {
         if (!authContext?.setUser || !keycloak?.token) return
@@ -122,6 +119,16 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
   const didInit = useRef(false)
 
   useEffect(() => {
+    if (config.fakeTokenEnable) {
+      console.log(config.fakeTokenEnable)
+      const user = tokenToUser(config.fakeToken)
+      if (!user) throw new Error('Invalid fake token')
+      didInit.current = true
+      setUser(user)
+      setToken(config.fakeToken)
+      return
+    }
+
     if (didInit.current || !keycloak) {
       return
     }
@@ -166,11 +173,17 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
         setToken(keycloak.token)
       }
     })
-  })
+  }, [token])
+
+  const signOut = () => {
+    if (config.fakeTokenEnable || !keycloak) return
+    keycloak.logout({ redirectUri: 'https://helpwave.de' })
+  }
 
   const redirectUserToOrganizationSelection = () => {
+    if (config.fakeTokenEnable || !keycloak) return
     // TODO: Change org without relogin
-    keycloak?.logout({ redirectUri: window.location.href })
+    keycloak.logout({ redirectUri: window.location.href })
   }
 
   return (
@@ -180,7 +193,7 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
       token,
       organization: user?.organization,
       organizations: user?.organization ? [user.organization.id] : [],
-      signOut: () => keycloak?.logout({ redirectUri: 'https://helpwave.de' }),
+      signOut,
       redirectUserToOrganizationSelection,
     }}>
       {children}

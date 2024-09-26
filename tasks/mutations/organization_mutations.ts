@@ -1,27 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  CreatePersonalOrganizationResponse,
-  InvitationState
-} from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
-import {
   AcceptInvitationRequest,
+  AddMemberRequest,
   CreateOrganizationRequest,
+  CreatePersonalOrganizationRequest,
+  CreatePersonalOrganizationResponse,
   DeclineInvitationRequest,
   DeleteOrganizationRequest,
+  GetInvitationsByOrganizationRequest,
   GetInvitationsByUserRequest,
   GetOrganizationRequest,
   GetOrganizationsForUserRequest,
-  UpdateOrganizationRequest,
+  InvitationState,
   InviteMemberRequest,
   RemoveMemberRequest,
-  AddMemberRequest,
-  GetInvitationsByOrganizationRequest,
   RevokeInvitationRequest,
-  CreatePersonalOrganizationRequest
+  UpdateOrganizationRequest
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { Role } from './organization_member_mutations'
-import { getAuthenticatedGrpcMetadata, organizationService } from '@/utils/grpc'
+import { getAuthenticatedGrpcMetadata, grpcWrapper, organizationService } from '@/utils/grpc'
 
 export const organizationQueryKey = 'organizations'
 export const invitationsQueryKey = 'invitations'
@@ -430,7 +428,7 @@ export const useRemoveMemberMutation = (organizationId: string) => {
 export const createPersonalOrganization = async (): Promise<CreatePersonalOrganizationResponse.AsObject> => {
   const req = new CreatePersonalOrganizationRequest()
 
-  const res = await organizationService.createPersonalOrganization(req, getAuthenticatedGrpcMetadata())
+  const res = await grpcWrapper(organizationService.createPersonalOrganization, req)
   const obj = res.toObject()
 
   if (!obj) {

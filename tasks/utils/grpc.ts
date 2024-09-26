@@ -8,10 +8,12 @@ import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/services/us
 import { UserServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_grpc_web_pb'
 import type { Metadata } from 'grpc-web'
 import { getConfig } from './config'
-import keycloak, { getToken } from '@/utils/keycloak'
+import { getCurrentTokenAndUpdateInBackground } from '@/utils/keycloak'
 
-const taskSvcBaseUrl = `${getConfig().apiUrl}/task-svc`
-const userSvcBaseUrl = `${getConfig().apiUrl}/user-svc`
+const { apiUrl, fakeToken, fakeTokenEnable } = getConfig()
+
+const taskSvcBaseUrl = `${apiUrl}/task-svc`
+const userSvcBaseUrl = `${apiUrl}/user-svc`
 
 // TODO: Implement something like a service registry
 export const wardService = new WardServicePromiseClient(taskSvcBaseUrl)
@@ -29,13 +31,11 @@ type AuthenticatedGrpcMetadata = {
 
 const defaultOrganization = `3b25c6f5-4705-4074-9fc6-a50c28eba406`
 export const getAuthenticatedGrpcMetadata = (_: string = defaultOrganization): AuthenticatedGrpcMetadata => {
-  // TODO: Implement way better API for get the current id token and DONT hardcode the organization id
-  const idToken = keycloak?.token
-  getToken()
-  return { Authorization: `Bearer ${idToken}` }
+  const token = getCurrentTokenAndUpdateInBackground()
+  return { Authorization: `Bearer ${token}` }
 }
 
 export const grpcWrapper = async <ReqMsg, ResMsg>(rpc: (msg: ReqMsg, metadata?: Metadata) => Promise<ResMsg>, msg: ReqMsg, metadata?: Metadata|undefined): Promise<ResMsg> => {
-  await getToken()
-  return rpc(msg, { Authorization: `Bearer ${keycloak?.token}`, ...metadata })
+  const token = getCurrentTokenAndUpdateInBackground()
+  return rpc(msg, { Authorization: `Bearer ${token}`, ...metadata })
 }

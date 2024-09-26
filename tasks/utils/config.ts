@@ -59,7 +59,7 @@ const configSchema = z.object({
     family_name: 'Mustermann',
     organization: {
       id: '3b25c6f5-4705-4074-9fc6-a50c28eba406',
-      name: 'helpwave fake'
+      name: 'helpwave test'
     }
   }),
   NEXT_PUBLIC_FEEDBACK_FORM_URL: z.string().url().default('https://share-eu1.hsforms.com/1Libxb_ANSm-CpMCQ37Ti6Qfsrtd'),

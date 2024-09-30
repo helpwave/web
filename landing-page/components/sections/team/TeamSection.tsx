@@ -74,21 +74,7 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'github', url: 'https://github.com/fosefx' },
       ],
       imageClassName: 'w-[200px] h-[200px]'
-    },
-    {
-      name: 'Florian Sabonchi',
-      role: 'fullstack sorcerer',
-      imageUrl: imageUrl('florian_sabonchi'),
-      tags: ['flutter', 'react', 'go'],
-      socials: [
-        { type: 'linkedin', url: 'https://www.linkedin.com/in/florian-s-599819211/' },
-        { type: 'mail', url: 'mailto:florian.sabonchi@helpwave.de' },
-        { type: 'medium', url: 'https://medium.com/@sabonchi' },
-        { type: 'github', url: 'https://github.com/florian-sabonchi' },
-      ],
-      imageClassName: 'w-[200px] h-[200px]'
-    },
-    {
+    }, {
       name: 'Paul Kalhorn',
       role: 'fullstack jedi',
       tags: ['microservices', 'web', 'grpc'],
@@ -117,7 +103,7 @@ const teamData: Record<string, ProfileProps[]> = {
   medical: [
     {
       name: 'Ludwig Maidowski',
-      prefix: 'Dipl.-Jur.',
+      prefix: 'Dr. med., Dipl.-Jur.',
       suffix: 'Maître en droit, Paris II',
       role: 'medical professional & legal',
       tags: ['law', 'doctor', 'product'],
@@ -148,6 +134,19 @@ const teamData: Record<string, ProfileProps[]> = {
         { type: 'linkedin', url: 'https://www.linkedin.com/in/pierre-d-02239011a/' },
         { type: 'mail', url: 'mailto:pierre.duergen@helpwave.de' },
         { type: 'website', url: 'https://www.pierreduergen.de/' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
+    },
+  ],
+  customer: [
+    {
+      name: 'Sonja Prenzler',
+      role: 'customer champion',
+      imageUrl: imageUrl('sonja_prenzler'),
+      tags: ['customer', 'business', 'information systems'],
+      socials: [
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/sonja-prenzler-33a7b8295/' },
+        { type: 'mail', url: 'mailto:sonja.prenzler@helpwave.de' },
       ],
       imageClassName: 'w-[200px] h-[200px]'
     },

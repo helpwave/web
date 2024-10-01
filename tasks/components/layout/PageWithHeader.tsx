@@ -4,12 +4,12 @@ import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import type { Crumb } from '@helpwave/common/components/BreadCrumb'
 import { BreadCrumb } from '@helpwave/common/components/BreadCrumb'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 import { UserMenu } from '@/components/UserMenu'
 import { Header, type HeaderProps } from '@/components/Header'
 import { FeedbackButton } from '@/components/FeedbackButton'
-import { useAuth } from '@/hooks/useAuth'
 import { ProvideOrganization } from '@/hooks/useOrganization'
-import type { OrganizationDTO } from '@/mutations/organization_mutations'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[]

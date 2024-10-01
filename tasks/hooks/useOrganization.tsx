@@ -2,9 +2,9 @@ import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect } from 'react'
 import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
 import { useQueryClient } from '@tanstack/react-query'
-import type { OrganizationDTO } from '@/mutations/organization_mutations'
-import { useOrganizationsForUserQuery } from '@/mutations/organization_mutations'
-import { useAuth } from '@/hooks/useAuth'
+import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
+import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { OrganizationSwitchModal } from '@/components/modals/OrganizationSwitchModal'
 
 export const LOCALSTORAGE_ORGANIZATION_KEY = 'organization'
@@ -56,14 +56,14 @@ export const ProvideOrganization = ({
     if (storedOrganization) {
       setOrganization(storedOrganization)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setOrganizationSwitchModalOpen(!organization)
     if (organization) {
       setStoredOrganization(organization)
     }
-  }, [organization])
+  }, [organization]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const setOrganizationId = (organizationId: string) => {
     const organization = organizations?.find((organization) => organization.id === organizationId)

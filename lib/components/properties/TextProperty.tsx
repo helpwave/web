@@ -23,7 +23,8 @@ const defaultTextPropertyTranslation: Record<Languages, TextPropertyTranslation>
 
 export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
   value?: string,
-  onChange?: (value: string) => void
+  onChange?: (value: string) => void,
+  onEditComplete?: (value: string) => void
 }
 
 /**
@@ -35,6 +36,7 @@ export const TextProperty = ({
   readOnly,
   onChange = noop,
   onRemove = noop,
+  onEditComplete = noop,
   ...baseProps
 }: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
   const translation = useTranslation(defaultTextPropertyTranslation, overwriteTranslation)
@@ -54,7 +56,7 @@ export const TextProperty = ({
             className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
             rows={5}
             defaultStyle={false}
-            value={value?.toString() ?? ''}
+            value={value ?? ''}
             readOnly={readOnly}
             placeholder={`${translation.value}...`}
             onChange={(value) => {
@@ -68,7 +70,7 @@ export const TextProperty = ({
               if (!value) {
                 onRemove()
               } else {
-                onChange(value)
+                onEditComplete(value)
               }
             }}
           />

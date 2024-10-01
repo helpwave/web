@@ -17,6 +17,7 @@ type CheckboxProps = {
   disabled?: boolean,
   onChange?: (checked: boolean) => void,
   onChangeTristate?: (checked: CheckedState) => void,
+  size?: number,
   className?: string
 }
 
@@ -25,7 +26,20 @@ type CheckboxProps = {
  *
  * The state is managed by the parent
  */
-const ControlledCheckbox = ({ id, label, checked, disabled, onChange, onChangeTristate, className }: CheckboxProps) => {
+const ControlledCheckbox = ({
+  id,
+  label,
+  checked,
+  disabled,
+  onChange,
+  onChangeTristate,
+  size = 18,
+  className = ''
+}: CheckboxProps) => {
+  // Make sure there is an appropriate minimum
+  const usedSize = Math.max(size, 14)
+  const innerIconSize = usedSize - 4
+
   return (
     <div className={tw('flex justify-center items-center space-x-2')}>
       <CheckboxPrimitive.Root
@@ -40,18 +54,18 @@ const ControlledCheckbox = ({ id, label, checked, disabled, onChange, onChangeTr
         checked={checked}
         disabled={disabled}
         id={id}
-        className={tx('w-[18px] h-[18px] flex items-center border border-2 border-gray-300 rounded outline-none focus:border-hw-primary-500', {
+        className={tx(`w-[${usedSize}px] h-[${usedSize}px] flex items-center border border-2 border-gray-300 rounded outline-none focus:border-hw-primary-500`, {
           'text-gray-400': disabled,
           'bg-hw-primary-300 border-hw-primary-500 hover:border-hw-primary-700 text-hw-primary-500': checked === true || checked === 'indeterminate',
           'bg-white hover:border-gray-400 focus:hover:border-hw-primary-700': !checked
         }, className)}
       >
         <CheckboxPrimitive.Indicator>
-          {checked === true && <Check width={14} height={14}/>}
-          {checked === 'indeterminate' && <Minus width={14} height={14}/>}
+          {checked === true && <Check width={innerIconSize} height={innerIconSize}/>}
+          {checked === 'indeterminate' && <Minus width={innerIconSize} height={innerIconSize}/>}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
-      {label && <Label {...label} htmlFor={id} />}
+      {label && <Label {...label} htmlFor={id}/>}
     </div>
   )
 }

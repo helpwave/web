@@ -17,7 +17,6 @@ import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import type { TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import { emptyTask } from '@helpwave/api-services/types/tasks/task'
-import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
   usePersonalTaskTemplateQuery,
   useWardTaskTemplateQuery
@@ -30,9 +29,9 @@ import {
   useTaskUpdateMutation,
   useUnassignTaskMutation
 } from '@helpwave/api-services/mutations/tasks/task_mutations'
-import type { WardWithOrganizationIdDTO } from '@helpwave/api-services/types/tasks/wards'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { formatDate } from '@helpwave/common/util/date'
+import { useCurrentOrganization } from '@helpwave/api-services/authentication/useCurrentOrganization'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
@@ -106,8 +105,6 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
 type TaskDetailViewSidebarProps = {
   task: TaskDTO,
   setTask: (task: TaskDTO) => void,
-  // TODO: get rid of the undefined; rather extract all error and loading states and have the confidence that things aren't undefined anymore
-  ward: WardWithOrganizationIdDTO | undefined,
   isCreating: boolean
 }
 
@@ -115,12 +112,12 @@ const TaskDetailViewSidebar = ({
   overwriteTranslation,
   task,
   setTask,
-  ward,
   isCreating
 }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
+  const organization = useCurrentOrganization()
 
   const updateTaskMutation = useTaskUpdateMutation()
 
@@ -158,7 +155,7 @@ const TaskDetailViewSidebar = ({
         <label><Span type="labelMedium">{translation.assignee}</Span></label>
         <div className={tw('flex flex-row items-center gap-x-2')}>
           <AssigneeSelect
-            organizationId={ward?.organizationId ?? ''}
+            organizationId={organization?.id ?? ''}
             value={task.assignee}
             onChange={(assignee) => {
               setTask({ ...task, assignee })
@@ -292,7 +289,6 @@ export const TaskDetailView = ({
   const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
   const router = useRouter()
   const { user } = useAuth()
-  const ward = useWardQuery(wardId).data
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
@@ -415,7 +411,7 @@ export const TaskDetailView = ({
           </div>
           <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
         </div>
-        <TaskDetailViewSidebar task={task} setTask={setTask} ward={ward} isCreating={isCreating}/>
+        <TaskDetailViewSidebar task={task} setTask={setTask} isCreating={isCreating}/>
       </div>
       {buttons}
     </div>

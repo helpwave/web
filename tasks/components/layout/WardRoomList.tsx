@@ -9,7 +9,7 @@ import Link from 'next/link'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
-import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import { useCurrentOrganization } from '@helpwave/api-services/authentication/useCurrentOrganization'
 import { RoomOverview } from '../RoomOverview'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 
@@ -57,7 +57,7 @@ export const WardRoomList = ({
     isError,
     isLoading
   } = useRoomOverviewsQuery(contextState.wardId)
-  const { data: ward } = useWardQuery(contextState.wardId)
+  const organization = useCurrentOrganization()
 
   const displayableRooms = (rooms ?? data ?? []).filter(room => room.beds.length > 0)
 
@@ -87,7 +87,7 @@ export const WardRoomList = ({
           )) : (
             <div className={tw('flex flex-col gap-y-2 items-center')}>
               <Span>{translation.noRooms}</Span>
-              <Link href={`/organizations/${(ward ?? contextState).organizationId}?wardId=${contextState.wardId}`}>
+              <Link href={`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`}>
                 <Button>{translation.editWard}</Button>
               </Link>
             </div>

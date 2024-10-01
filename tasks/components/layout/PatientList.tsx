@@ -10,7 +10,6 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Chip } from '@helpwave/common/components/ChipList'
-import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
   usePatientDischargeMutation,
   usePatientListQuery,
@@ -107,7 +106,6 @@ export const PatientList = ({
 }: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(defaultPatientListTranslations, overwriteTranslation)
   const [search, setSearch] = useState('')
-  const ward = useWardQuery(wardId).data
   const {
     state: context,
     updateContext
@@ -116,7 +114,7 @@ export const PatientList = ({
     data,
     isLoading,
     isError
-  } = usePatientListQuery(ward?.organizationId, wardId) // TODO: is this the right organizationId?; related: https://github.com/helpwave/web/issues/793
+  } = usePatientListQuery(wardId) // TODO: is this the right organizationId?; related: https://github.com/helpwave/web/issues/793
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
   const readmitPatientMutation = useReadmitPatientMutation()

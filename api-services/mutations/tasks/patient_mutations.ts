@@ -126,23 +126,15 @@ export const usePatientAssignmentByWardQuery = (wardId: string) => {
   })
 }
 
-export const usePatientListQuery = (organisationId?: string, wardId?: string) => {
+export const usePatientListQuery = (wardId?: string) => {
   return useQuery({
     queryKey: [QueryKeys.patients, 'patientList', wardId],
-    enabled: !!organisationId,
     queryFn: async () => {
       const req = new GetPatientListRequest()
-      if (!organisationId) {
-        return {
-          active: [],
-          discharged: [],
-          unassigned: []
-        }
-      }
       if (wardId) {
         req.setWardId(wardId)
       }
-      const res = await APIServices.patient.getPatientList(req, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.patient.getPatientList(req, getAuthenticatedGrpcMetadata())
 
       const patientList: PatientListDTO = {
         active: res.getActiveList().map(value => {
@@ -215,14 +207,14 @@ export const useRecentPatientsQuery = () => {
   })
 }
 
-export const usePatientCreateMutation = (organisationId: string) => {
+export const usePatientCreateMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
       const req = new CreatePatientRequest()
       req.setNotes(patient.note)
       req.setHumanReadableIdentifier(patient.name)
-      const res = await APIServices.patient.createPatient(req, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.patient.createPatient(req, getAuthenticatedGrpcMetadata())
 
       const id = res.getId()
 

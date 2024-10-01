@@ -8,7 +8,6 @@ import type {
   GetTasksByPatientRequest,
   GetTasksByPatientSortedByStatusRequest,
   UpdateTaskRequest,
-  AssignTaskResponse,
   UnassignTaskRequest,
   CreateSubtaskRequest,
   UpdateSubtaskRequest,
@@ -21,9 +20,9 @@ import {
   GetTaskResponse,
   GetTasksByPatientResponse,
   GetTasksByPatientSortedByStatusResponse, UnassignTaskResponse, UpdateSubtaskResponse,
-  UpdateTaskResponse
+  UpdateTaskResponse,
+  AssignTaskResponse
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
-import { AssignTaskToUserResponse } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import type { SubTaskValueStore, TaskValueStore } from '../value_store'
 import type { SubTaskDTO, TaskStatus } from '../../types/tasks/task'
 import { OfflineValueStore } from '../value_store'
@@ -153,7 +152,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
       .setName(task.name)
       .setDescription(task.notes)
       .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
-      .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt))
+      .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt!))
       .setSubtasksList(list)
 
     if (task.assignee) {
@@ -174,7 +173,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
         .setPatientId(request.getPatientId())
-        .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt))
+        .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt!))
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTasksByPatientResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
@@ -201,7 +200,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
         .setCreatedBy(task.creatorId)
         .setPatientId(request.getPatientId())
-        .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt))
+        .setCreatedAt(GRPCConverter.dateToTimestamp(task.createdAt!))
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTasksByPatientSortedByStatusResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
@@ -286,7 +285,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
 
   async assignTask(request: AssignTaskRequest, _?: Metadata): Promise<AssignTaskResponse> {
     TaskOfflineService.changeAssignment(request.getTaskId(), request.getUserId()) // TODO check user id
-    return new AssignTaskToUserResponse()
+    return new AssignTaskResponse()
   }
 
   async unassignTask(request: UnassignTaskRequest, _?: Metadata): Promise<UnassignTaskResponse> {

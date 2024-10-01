@@ -359,7 +359,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
         if (bed) {
           room = RoomOfflineService.findRoom(bed.roomId)
         }
-        return new GetRecentPatientsResponse.PatientWithRoomAndBed()
+        return new GetRecentPatientsResponse.Patient()
           .setId(patient.id)
           .setHumanReadableIdentifier(patient.name)
           .setBed(bed

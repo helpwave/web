@@ -255,10 +255,10 @@ const TaskDetailViewSidebar = ({
           />
         )}
       </div>
-      {task.creationDate && (
+      {task.createdAt && (
         <div className={tw('flex flex-col gap-y-1')}>
           <Span type="labelMedium">{translation.creationTime}</Span>
-          <TimeDisplay date={new Date(task.creationDate)}/>
+          <TimeDisplay date={new Date(task.createdAt)}/>
         </div>
       )}
     </div>

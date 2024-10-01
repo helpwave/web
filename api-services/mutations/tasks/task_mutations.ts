@@ -56,7 +56,7 @@ export const useTaskQuery = (taskId: string | undefined) => {
         status: GRPCConverter.taskStatusFromGRPC(res.getStatus()),
         assignee: res.getAssignedUserId(),
         subtasks: res.getSubtasksList().map(GRPCMapper.subtaskFromGRPC),
-        creationDate: res.getCreatedAt() ? GRPCConverter.timestampToDate(res.getCreatedAt()!) : new Date(),
+        createdAt: res.getCreatedAt() ? GRPCConverter.timestampToDate(res.getCreatedAt()!) : new Date(),
         isPublicVisible: true, // TODO set when backend provides it
         // use res.getCreatedAt()
       }

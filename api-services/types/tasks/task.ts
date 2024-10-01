@@ -18,7 +18,7 @@ export type TaskDTO = {
   status: TaskStatus,
   subtasks: SubTaskDTO[],
   dueDate?: Date,
-  creationDate?: Date,
+  createdAt?: Date,
   creatorId?: string,
   isPublicVisible: boolean
 }

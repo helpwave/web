@@ -24,7 +24,7 @@ export type Property = {
   description?: string,
   isArchived: boolean,
   setId?: string,
-  selectData: SelectData,
+  selectData?: SelectData,
   alwaysIncludeForViewSource?: boolean
 }
 
@@ -34,29 +34,32 @@ export const emptySelectOption: SelectOption = {
   description: undefined,
   isCustom: false,
 }
+
+export const emptySelectData: SelectData = {
+  isAllowingFreetext: true,
+  options: [
+    {
+      ...emptySelectOption,
+      name: 'Select 1'
+    },
+    {
+      ...emptySelectOption,
+      name: 'Select 2'
+    },
+    {
+      ...emptySelectOption,
+      name: 'Select 3'
+    },
+  ]
+}
+
 export const emptyProperty: Property = {
   id: '',
   name: 'Name',
   description: undefined,
   subjectType: 'patient',
   fieldType: 'multiSelect',
-  selectData: {
-    isAllowingFreetext: true,
-    options: [
-      {
-        ...emptySelectOption,
-        name: 'Select 1'
-      },
-      {
-        ...emptySelectOption,
-        name: 'Select 2'
-      },
-      {
-        ...emptySelectOption,
-        name: 'Select 3'
-      },
-    ]
-  },
+  selectData: emptySelectData,
   isArchived: false,
   setId: undefined,
   alwaysIncludeForViewSource: false,

@@ -190,7 +190,7 @@ export const PropertyDetailsField = ({
       />
       {isSelectType && (
         <PropertySelectOptionsUpdater
-          value={usedValue.selectData}
+          value={usedValue.selectData!}
           onChange={(selectData, update) => onChange({ ...usedValue, selectData }, update)}
         />
       )}
@@ -200,9 +200,9 @@ export const PropertyDetailsField = ({
           description={{ value: translation.allowCustomValuesDescription }}
           suffix={(
             <Checkbox
-              checked={usedValue.selectData.isAllowingFreetext}
+              checked={usedValue.selectData!.isAllowingFreetext}
               onChange={isAllowingFreetext => {
-                const newValue: PropertyFieldDetails = { ...value, selectData: { ...usedValue.selectData, isAllowingFreetext } }
+                const newValue: PropertyFieldDetails = { ...value, selectData: { ...usedValue.selectData!, isAllowingFreetext } }
                 onChange(newValue)
               }}
               size={20}

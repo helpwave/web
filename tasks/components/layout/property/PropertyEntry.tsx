@@ -6,8 +6,12 @@ import { SingleSelectProperty } from '@helpwave/common/components/properties/Sel
 import { MultiSelectProperty } from '@helpwave/common/components/properties/MultiSelectProperty'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { Property } from '@helpwave/api-services/types/properties/property'
-import type { AttachedProperty } from '@helpwave/api-services/types/properties/attached_property'
+import type {
+  AttachedProperty,
+  AttachPropertySelectValue
+} from '@helpwave/api-services/types/properties/attached_property'
 import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
 
 type PropertyEntryDisplayProps = {
   property: Property,
@@ -33,7 +37,7 @@ export const PropertyEntryDisplay = ({
     name: property.name,
     readOnly,
     onRemove: onRemove ? () => {
-      onRemove(attachedProperty)
+      onRemove({ ...attachedProperty, value: emptyPropertyValue })
     } : undefined,
   }
 
@@ -122,7 +126,7 @@ export const PropertyEntryDisplay = ({
       )
     case 'singleSelect':
       return (
-        <SingleSelectProperty<string>
+        <SingleSelectProperty<AttachPropertySelectValue>
           {...commonProps}
           value={attachedProperty.value.singleSelectValue}
           onChange={selectValue => {
@@ -132,17 +136,18 @@ export const PropertyEntryDisplay = ({
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.selectData.options
+          options={property.selectData!.options
             .map(option => ({
-              value: option.id,
+              value: option,
               label: option.name
             }))}
-          searchMapping={option => [option.value]}
+          searchMapping={option => [option.value.name]}
+          selectedDisplayOverwrite={attachedProperty.value.singleSelectValue?.name}
         />
       )
     case 'multiSelect':
       return (
-        <MultiSelectProperty<string>
+        <MultiSelectProperty<AttachPropertySelectValue>
           {...commonProps}
           onChange={multiSelect => {
             const newProperty: AttachedProperty = {
@@ -157,14 +162,14 @@ export const PropertyEntryDisplay = ({
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.selectData.options
+          options={property.selectData!.options
             .filter(option => option !== undefined)
             .map(option => ({
-              value: option.id,
+              value: option,
               label: option.name,
-              selected: !!attachedProperty.value.multiSelectValue.find(value => value === option.id)
+              selected: !!attachedProperty.value.multiSelectValue.find(value => value.id === option.id)
             }))}
-          search={{ searchMapping: value => [value.value] }}
+          search={{ searchMapping: value => [value.value.name] }}
         />
       )
     default:

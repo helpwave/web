@@ -76,7 +76,7 @@ const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<
         <TwoColumn
           disableResize={false}
           left={() => (
-            <PropertyDisplay/> // TODO properties list
+            <PropertyDisplay/>
           )}
           right={() => (
             <PropertyDetails

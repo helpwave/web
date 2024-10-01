@@ -10,7 +10,7 @@ import { FieldType } from '@helpwave/proto-ts/services/property_svc/v1/types_pb'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import { QueryKeys } from '../query_keys'
-import type { Property, SelectOption, SubjectType } from '../../types/properties/property'
+import type { Property, SelectData, SelectOption, SubjectType } from '../../types/properties/property'
 import { GRPCConverter } from '../../util/util'
 
 export const usePropertyListQuery = (subjectType?: SubjectType) => {
@@ -23,8 +23,10 @@ export const usePropertyListQuery = (subjectType?: SubjectType) => {
       }
       const result = await APIServices.property.getPropertiesBySubjectType(req, getAuthenticatedGrpcMetadata())
       return result.getPropertiesList().filter(value => value.getFieldType() !== FieldType.FIELD_TYPE_UNSPECIFIED).map(property => {
+        const fieldType = GRPCConverter.fieldTypeMapperFromGRPC(property.getFieldType())
         const selectData = property.getSelectData()
-        if (!selectData) {
+        const mustHaveSelectData = fieldType === 'singleSelect' || fieldType === 'multiSelect'
+        if (!selectData && mustHaveSelectData) {
           throw Error('usePropertyListQuery could not find selectData')
         }
         return {
@@ -32,19 +34,18 @@ export const usePropertyListQuery = (subjectType?: SubjectType) => {
           name: property.getName(),
           description: property.getDescription(),
           subjectType: GRPCConverter.subjectTypeMapperFromGRPC(property.getSubjectType()),
-          fieldType: GRPCConverter.fieldTypeMapperFromGRPC(property.getFieldType()),
+          fieldType,
           isArchived: property.getIsArchived(),
           setId: property.getSetId(),
-          alwaysIncludeForViewSource: undefined,
-          selectData: {
-            isAllowingFreetext: selectData.getAllowFreetext(),
-            options: selectData.getOptionsList().map(option => ({
+          selectData: mustHaveSelectData ? {
+            isAllowingFreetext: selectData!.getAllowFreetext(),
+            options: selectData!.getOptionsList().map(option => ({
               id: option.getId(),
               name: option.getName(),
               description: option.getDescription(),
               isCustom: option.getIsCustom()
             }))
-          }
+          } : undefined
         }
       })
     },
@@ -64,28 +65,33 @@ export const usePropertyQuery = (id?: string) => {
 
       const result = await APIServices.property.getProperty(req, getAuthenticatedGrpcMetadata())
 
-      const selectData = result.getSelectData()
-      if (!selectData) {
-        throw Error('usePropertyQuery could not find selectData')
-      }
-      return {
-        id: result.getId(),
-        name: result.getName(),
-        description: result.getDescription(),
-        subjectType: GRPCConverter.subjectTypeMapperFromGRPC(result.getSubjectType()),
-        fieldType: GRPCConverter.fieldTypeMapperFromGRPC(result.getFieldType()),
-        isArchived: result.getIsArchived(),
-        setId: result.getSetId(),
-        alwaysIncludeForViewSource: undefined,
-        selectData: {
-          isAllowingFreetext: selectData.getAllowFreetext(),
-          options: selectData.getOptionsList().map(option => ({
+      const fieldType = GRPCConverter.fieldTypeMapperFromGRPC(result.getFieldType())
+      let selectData: SelectData | undefined
+      if (fieldType === 'singleSelect' || fieldType === 'multiSelect') {
+        const responseSelectData = result.getSelectData()
+        if (!responseSelectData) {
+          throw Error('usePropertyQuery could not find selectData')
+        }
+        selectData = {
+          isAllowingFreetext: responseSelectData.getAllowFreetext(),
+          options: responseSelectData.getOptionsList().map(option => ({
             id: option.getId(),
             name: option.getName(),
             description: option.getDescription(),
             isCustom: option.getIsCustom()
           }))
         }
+      }
+      return {
+        id: result.getId(),
+        name: result.getName(),
+        description: result.getDescription(),
+        subjectType: GRPCConverter.subjectTypeMapperFromGRPC(result.getSubjectType()),
+        fieldType,
+        isArchived: result.getIsArchived(),
+        setId: result.getSetId(),
+        alwaysIncludeForViewSource: result.getAlwaysIncludeForViewSource(),
+        selectData,
       }
     },
   })
@@ -105,23 +111,31 @@ export const usePropertyCreateMutation = (callback: (property: Property) => void
       if (property.setId) {
         req.setSetId(property.setId)
       }
-      const selectDataVal = new CreatePropertyRequest.SelectData()
-      selectDataVal.setAllowFreetext(property.selectData.isAllowingFreetext)
-      selectDataVal.setOptionsList(property.selectData.options.map(option => {
-        const optionVal = new CreatePropertyRequest.SelectData.SelectOption()
-        optionVal.setName(option.name)
-        if (option.description) {
-          optionVal.setDescription(option.description)
+      if (property.fieldType === 'singleSelect' || property.fieldType === 'multiSelect') {
+        if (!property.selectData) {
+          throw Error('Select FieldType, but select data not set')
         }
-        return optionVal
-      }))
-      req.setSelectData(selectDataVal)
+        const selectDataVal = new CreatePropertyRequest.SelectData()
+        selectDataVal.setAllowFreetext(property.selectData.isAllowingFreetext)
+        selectDataVal.setOptionsList(property.selectData.options.map(option => {
+          const optionVal = new CreatePropertyRequest.SelectData.SelectOption()
+          optionVal.setName(option.name)
+          if (option.description) {
+            optionVal.setDescription(option.description)
+          }
+          return optionVal
+        }))
+        req.setSelectData(selectDataVal)
+      }
 
       const result = await APIServices.property.createProperty(req, getAuthenticatedGrpcMetadata())
 
       const id = result.getPropertyId()
 
-      const newValue = { ...property, id }
+      const newValue = {
+        ...property,
+        id
+      }
       callback(newValue)
       return newValue
     },
@@ -146,19 +160,24 @@ export const usePropertyUpdateMutation = (callback: (property: Property) => void
       if (property.setId) {
         req.setSetId(property.setId)
       }
-      const selectDataVal = new UpdatePropertyRequest.SelectData()
-      selectDataVal.setAllowFreetext(property.selectData.isAllowingFreetext)
-      /* This is done in a separate function
-      selectDataVal.set(properties.selectData.options.map(option => {
-        const optionVal = new UpdatePropertyRequest.SelectData.SelectOption()
-        optionVal.setName(option.name)
-        if (option.description) {
-          optionVal.setDescription(option.description)
+      if (property.fieldType === 'singleSelect' || property.fieldType === 'multiSelect') {
+        if (!property.selectData) {
+          throw Error('Select FieldType, but select data not set')
         }
-        return optionVal
-      }))
-      */
-      req.setSelectData(selectDataVal)
+        const selectDataVal = new UpdatePropertyRequest.SelectData()
+        selectDataVal.setAllowFreetext(property.selectData.isAllowingFreetext)
+        /* This is done in a separate function
+          selectDataVal.set(properties.selectData.options.map(option => {
+            const optionVal = new UpdatePropertyRequest.SelectData.SelectOption()
+            optionVal.setName(option.name)
+            if (option.description) {
+              optionVal.setDescription(option.description)
+            }
+            return optionVal
+          }))
+          */
+        req.setSelectData(selectDataVal)
+      }
 
       const result = await APIServices.property.updateProperty(req, getAuthenticatedGrpcMetadata())
       if (!result.toObject()) {

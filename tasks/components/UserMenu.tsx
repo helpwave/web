@@ -18,7 +18,8 @@ type UserMenuTranslation = {
   signOut: string,
   taskTemplates: string,
   invitations: string,
-  organizations: string
+  organizations: string,
+  properties: string
 }
 
 const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
@@ -28,7 +29,8 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     signOut: 'Sign Out',
     taskTemplates: 'Task Templates',
     invitations: 'Invitations',
-    organizations: 'Organizations'
+    organizations: 'Organizations',
+    properties: 'Properties'
   },
   de: {
     profile: 'Profil',
@@ -36,7 +38,8 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     signOut: 'Ausloggen',
     taskTemplates: 'Vorlagen',
     invitations: 'Einladungen',
-    organizations: 'Organisationen'
+    organizations: 'Organisationen',
+    properties: 'Properties'
   }
 }
 
@@ -77,6 +80,9 @@ export const UserMenu = ({
           alignment="left">{translation.language}</MenuItem></div>
         <div className={tw('cursor-pointer')} onClick={() => router.push('/templates')}>
           <MenuItem alignment="left">{translation.taskTemplates}</MenuItem>
+        </div>
+        <div className={tw('cursor-pointer')} onClick={() => router.push('/properties')}>
+          <MenuItem alignment="left">{translation.properties}</MenuItem>
         </div>
         <div className={tw('cursor-pointer')} onClick={() => router.push('/organizations')}>
           <MenuItem alignment="left">{translation.organizations}</MenuItem>

@@ -11,12 +11,18 @@ import { useEffect, useState } from 'react'
 import { SearchableList } from '@helpwave/common/components/SearchableList'
 import type { SubjectType } from '@helpwave/api-services/types/properties/property'
 import {
-  useAttachedPropertyMutation,
+  useAttachPropertyMutation,
   usePropertyWithValueListQuery
 } from '@helpwave/api-services/mutations/properties/property_value_mutations'
-import type { AttachedProperty } from '@helpwave/api-services/types/properties/attached_property'
+import type {
+  AttachedProperty,
+  DisplayableAttachedProperty
+} from '@helpwave/api-services/types/properties/attached_property'
 import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
+import {
+  useUpdatePropertyViewRuleRequest
+} from '@helpwave/api-services/mutations/properties/property_view_src_mutations'
 import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
 
 type PropertyListTranslation = {
@@ -55,9 +61,10 @@ export const PropertyList = ({
     isError: isErrorPropertyList
   } = usePropertyListQuery(subjectType)
 
-  const [properties, setProperties] = useState<AttachedProperty[]>([])
+  const [properties, setProperties] = useState<DisplayableAttachedProperty[]>([])
   const { data, isLoading, isError } = usePropertyWithValueListQuery(subjectId, subjectType)
-  const addOrUpdatePropertyMutation = useAttachedPropertyMutation()
+  const addOrUpdatePropertyMutation = useAttachPropertyMutation()
+  const updateViewRulesMutation = useUpdatePropertyViewRuleRequest(subjectType)
 
   useEffect(() => {
     if (data) {
@@ -82,8 +89,9 @@ export const PropertyList = ({
               key={index}
               attachedProperty={property}
               onChange={value => setProperties(prevState => prevState
-                .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? value : value1))}
-              onEditComplete={value => addOrUpdatePropertyMutation.mutate(value)}
+                .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? { ...value1, ...value } : value1))}
+              onEditComplete={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
+              onRemove={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
             />
         )
         )}
@@ -116,9 +124,10 @@ export const PropertyList = ({
                     key={property.id}
                     onClick={() => {
                       const attachedProperty : AttachedProperty = { propertyId: property.id, subjectId, value: emptyPropertyValue }
-                      addOrUpdatePropertyMutation.mutate(attachedProperty)
+                      addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
+                      updateViewRulesMutation.mutate({ subjectId, appendToAlwaysInclude: [property.id] })
                     }}
-                    className={tw('rounded-md')}
+                    className={tw('rounded-md cursor-pointer')}
                   >
                     {property.name}
                   </MenuItem>

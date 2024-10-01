@@ -19,7 +19,6 @@ import type { Property, SelectData } from '@helpwave/api-services/types/properti
 import { emptyProperty, emptySelectData } from '@helpwave/api-services/types/properties/property'
 import { range } from '@helpwave/common/util/array'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
-import { PropertyDetailsRules } from '@/components/layout/property/PropertyDetailsRules'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
 import { PropertyContext } from '@/pages/properties'
 
@@ -62,9 +61,10 @@ export const PropertyDetails = ({
   const translation = useTranslation(defaultPropertyDetailsTranslation, overwriteTranslation)
 
   const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
+  const lastStep = 2
   const [stepper, setStepper] = useState<StepperInformation>({
     step: 0,
-    lastStep: 3,
+    lastStep,
     seenSteps: new Set([0])
   })
   const {
@@ -130,15 +130,24 @@ export const PropertyDetails = ({
             ...basicInfo
           })}
           onEditComplete={
-            basicInfo => updatePropertyMutation.mutate({
-              ...value,
-              ...basicInfo
-            })
+            basicInfo => {
+              if (isCreatingNewProperty) {
+                setValue({
+                  ...value,
+                  ...basicInfo
+                })
+                return
+              }
+              updatePropertyMutation.mutate({
+                ...value,
+                ...basicInfo
+              })
+            }
           }
           inputGroupProps={{
-            expanded: !isCreatingNewProperty || step === 0 || step === 3,
+            expanded: !isCreatingNewProperty || step === 0 || step === lastStep,
             isExpandable: !isCreatingNewProperty,
-            disabled: isCreatingNewProperty && step !== 0 && step !== 3
+            disabled: isCreatingNewProperty && step !== 0 && step !== lastStep
           }}
         />
         <PropertyDetailsField
@@ -146,8 +155,7 @@ export const PropertyDetails = ({
           onChange={
             (fieldDetails, selectUpdate) => {
               const isSelect = fieldDetails.fieldType === 'singleSelect' || fieldDetails.fieldType === 'multiSelect'
-              /// Creating new Property case
-              if (value.id === '') {
+              if (isCreatingNewProperty) {
                 setValue(prevState => {
                   let selectData : SelectData|undefined = fieldDetails.selectData ? { ...fieldDetails.selectData } : undefined
                   if (isSelect) {
@@ -177,27 +185,9 @@ export const PropertyDetails = ({
             }
           }
           inputGroupProps={{
-            expanded: !isCreatingNewProperty || step === 1 || step === 3,
+            expanded: !isCreatingNewProperty || step === 1 || step === lastStep,
             isExpandable: !isCreatingNewProperty,
-            disabled: isCreatingNewProperty && step !== 1 && step !== 3
-          }}
-        />
-        <PropertyDetailsRules
-          value={value}
-          onChange={rules => setValue({
-            ...value,
-            ...rules
-          })}
-          onEditComplete={
-            rules => updatePropertyMutation.mutate({
-              ...value,
-              ...rules
-            })
-          }
-          inputGroupProps={{
-            expanded: !isCreatingNewProperty || step === 2 || step === 3,
-            isExpandable: !isCreatingNewProperty,
-            disabled: isCreatingNewProperty && step !== 2 && step !== 3
+            disabled: isCreatingNewProperty && step !== 1 && step !== lastStep
           }}
         />
         <div className={tw('flex grow')}></div>

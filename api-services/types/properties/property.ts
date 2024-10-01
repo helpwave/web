@@ -59,7 +59,7 @@ export const emptyProperty: Property = {
   description: undefined,
   subjectType: 'patient',
   fieldType: 'multiSelect',
-  selectData: undefined,
+  selectData: emptySelectData,
   isArchived: false,
   setId: undefined,
   alwaysIncludeForViewSource: false,

@@ -91,7 +91,7 @@ type AttachedPropertyMutationUpdate<T extends AttachedProperty> = Update<T> & {
 /**
  * Mutation to insert or update a properties value for a properties attached to a subject
  */
-export const useAttachedPropertyMutation = <T extends AttachedProperty>(callback: (property: T) => void = noop) => {
+export const useAttachPropertyMutation = <T extends AttachedProperty>(callback: (property: T) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (update: AttachedPropertyMutationUpdate<T>) => {

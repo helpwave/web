@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { SearchableList } from '@helpwave/common/components/SearchableList'
 import type { SubjectType } from '@helpwave/api-services/types/properties/property'
 import {
-  useAttachedPropertyMutation,
+  useAttachPropertyMutation,
   usePropertyWithValueListQuery
 } from '@helpwave/api-services/mutations/properties/property_value_mutations'
 import type {
@@ -63,7 +63,7 @@ export const PropertyList = ({
 
   const [properties, setProperties] = useState<DisplayableAttachedProperty[]>([])
   const { data, isLoading, isError } = usePropertyWithValueListQuery(subjectId, subjectType)
-  const addOrUpdatePropertyMutation = useAttachedPropertyMutation()
+  const addOrUpdatePropertyMutation = useAttachPropertyMutation()
   const updateViewRulesMutation = useUpdatePropertyViewRuleRequest(subjectType)
 
   useEffect(() => {

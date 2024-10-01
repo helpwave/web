@@ -5,8 +5,10 @@ import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
-import type { PropertyBasicInfo } from '@/components/layout/property/property'
+import type { Property } from '@helpwave/api-services/types/properties/property'
 import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
+
+type PropertyBasicInfo = Pick<Property, 'name' | 'description' | 'subjectType'>
 
 type PropertyDetailsBasicInfoTranslation = {
   basicInfo: string,
@@ -54,7 +56,6 @@ export const PropertyDetailsBasicInfo = ({
   return (
     <InputGroup {...inputGroupProps} title={translation.basicInfo}>
       <PropertySubjectTypeSelect
-        // TODO add icons
         value={value.subjectType}
         label={{ name: translation.subjectType, labelType: 'labelMedium' }}
         onChange={subjectType => {
@@ -65,9 +66,9 @@ export const PropertyDetailsBasicInfo = ({
       />
       <Input
         label={{ name: translation.propertyName, labelType: 'labelMedium' }}
-        value={value.propertyName}
-        onChange={propertyName => onChange({ ...value, propertyName })}
-        onEditCompleted={propertyName => onEditComplete({ ...value, propertyName })}
+        value={value.name}
+        onChange={name => onChange({ ...value, name })}
+        onEditCompleted={name => onEditComplete({ ...value, name })}
       />
       <Textarea
         label={{ name: translation.description, labelType: 'labelMedium' }}

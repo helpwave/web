@@ -1,10 +1,10 @@
 import { Mail } from 'lucide-react'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Link from 'next/link'
-import { useInvitationsByUserQuery } from '@/mutations/organization_mutations'
+import { useInvitationsByUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
+import { InvitationState } from '@helpwave/api-services/types/users/invitations'
 
 type InvitationBannerTranslation = {
   openInvites: string

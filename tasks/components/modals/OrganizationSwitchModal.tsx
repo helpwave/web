@@ -7,7 +7,7 @@ import type { SelectOption } from '@helpwave/common/components/user-input/Select
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { useMemo, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
-import type { OrganizationDTO } from '@/mutations/organization_mutations'
+import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationSwitchModalTranslation = {
   switchOrganization: string,

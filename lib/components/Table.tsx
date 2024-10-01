@@ -57,7 +57,7 @@ export const pageForItem = <T, >(data: T[], item: T, entriesPerPage: number, ide
   if (index !== -1) {
     return Math.floor(index / entriesPerPage)
   }
-  console.warn("item doesn't exist on data", item)
+  console.warn("item doesn't exist on data", item, data)
   return 0
 }
 

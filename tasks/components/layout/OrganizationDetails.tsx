@@ -5,20 +5,20 @@ import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
-import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
-import { OrganizationMemberList } from '../OrganizationMemberList'
-import { ColumnTitle } from '../ColumnTitle'
-import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
-import { OrganizationContext } from '@/pages/organizations'
 import {
-  type OrganizationMinimalDTO,
   useInviteMemberMutation,
   useOrganizationCreateMutation,
   useOrganizationDeleteMutation,
   useOrganizationQuery,
   useOrganizationUpdateMutation
-} from '@/mutations/organization_mutations'
-import { useAuth } from '@/hooks/useAuth'
+} from '@helpwave/api-services/mutations/users/organization_mutations'
+import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
+import { OrganizationMemberList } from '../OrganizationMemberList'
+import { ColumnTitle } from '../ColumnTitle'
+import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
+import { OrganizationContext } from '@/pages/organizations'
 import { useOrganization } from '@/hooks/useOrganization'
 import { ReSignInModal } from '@/components/modals/ReSignInModal'
 

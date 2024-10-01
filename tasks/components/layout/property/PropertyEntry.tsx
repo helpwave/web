@@ -4,56 +4,103 @@ import { DateProperty } from '@helpwave/common/components/properties/DatePropert
 import { CheckboxProperty } from '@helpwave/common/components/properties/CheckboxProperty'
 import { SingleSelectProperty } from '@helpwave/common/components/properties/SelectProperty'
 import { MultiSelectProperty } from '@helpwave/common/components/properties/MultiSelectProperty'
-import type { PropertyWithValue } from '@/components/layout/property/property'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import type { Property } from '@helpwave/api-services/types/properties/property'
+import type {
+  AttachedProperty,
+  AttachPropertySelectValue
+} from '@helpwave/api-services/types/properties/attached_property'
+import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
 
-export type PropertyEntryProps = {
-  property: PropertyWithValue,
-  onChange: (property: PropertyWithValue) => void,
-  onEditComplete: (property: PropertyWithValue) => void,
+type PropertyEntryDisplayProps = {
+  property: Property,
+  attachedProperty: AttachedProperty,
+  onChange: (property: AttachedProperty) => void,
+  onEditComplete: (property: AttachedProperty) => void,
+  onRemove?: (property: AttachedProperty) => void,
   readOnly?: boolean
 }
 
 /**
- * A Component for mapping a property to a specific type
+ * A component for displaying a PropertyEntry
  */
-export const PropertyEntry = ({
+export const PropertyEntryDisplay = ({
   property,
+  attachedProperty,
   onChange,
   onEditComplete,
+  onRemove,
   readOnly = false
-}: PropertyEntryProps) => {
+}: PropertyEntryDisplayProps) => {
   const commonProps = {
-    name: property.basicInfo.propertyName,
+    name: property.name,
     readOnly,
-    softRequired: property.rules.importance === 'softRequired',
-    onRemove: () => onChange({ ...property, value: {} }),
+    onRemove: onRemove ? () => {
+      onRemove({ ...attachedProperty, value: emptyPropertyValue })
+    } : undefined,
   }
-  switch (property.field.fieldType) {
+
+  // Util for making quick updates
+  const updater = (update: (property: AttachedProperty) => void) => {
+    const newProperty: AttachedProperty = {
+      ...attachedProperty,
+      value: { ...attachedProperty.value }
+    }
+    update(newProperty)
+    return newProperty
+  }
+
+  switch (property.fieldType) {
     case 'text':
       return (
         <TextProperty
           {...commonProps}
-          value={property.value.text}
-          onChange={text => onChange({ ...property, value: { text } })}
-          onEditComplete={text => onEditComplete({ ...property, value: { text } })}
+          value={attachedProperty.value.textValue}
+          onChange={textValue => onChange(updater(property1 => {
+            property1.value.textValue = textValue
+          }))}
+          onEditComplete={textValue => onEditComplete(updater(property1 => {
+            property1.value.textValue = textValue
+          }))}
         />
       )
     case 'number':
       return (
         <NumberProperty
           {...commonProps}
-          value={property.value.numberInput}
-          onChange={numberInput => onChange({ ...property, value: { numberInput } })}
-          onEditComplete={numberInput => onEditComplete({ ...property, value: { numberInput } })}
+          value={attachedProperty.value.numberValue}
+          onChange={numberValue => onChange(updater(property1 => {
+            property1.value.numberValue = numberValue
+          }))}
+          onEditComplete={numberValue => onEditComplete(updater(property1 => {
+            property1.value.numberValue = numberValue
+          }))}
         />
       )
     case 'date':
       return (
         <DateProperty
           {...commonProps}
-          value={property.value.date}
-          onChange={date => {
-            const newProperty = { ...property, value: { date } }
+          value={attachedProperty.value.dateValue}
+          onChange={dateValue => {
+            const newProperty = updater(property1 => {
+              property1.value.dateValue = dateValue
+            })
+            onChange(newProperty)
+            onEditComplete(newProperty)
+          }}
+        />
+      )
+    case 'dateTime':
+      return (
+        <DateProperty
+          {...commonProps}
+          value={attachedProperty.value.dateTimeValue}
+          onChange={dateValue => {
+            const newProperty = updater(property1 => {
+              property1.value.dateValue = dateValue
+            })
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
@@ -62,11 +109,16 @@ export const PropertyEntry = ({
     case 'checkbox':
       return (
         <CheckboxProperty
-          // CheckboxProperty cannot have a onRemove because it is omitted
-          {...{ ...commonProps, onRemove: undefined }}
-          value={property.value.checkbox ?? false} // potentially inconsistent
-          onChange={checkbox => {
-            const newProperty: PropertyWithValue = { ...property, value: { checkbox } }
+          // CheckboxProperty cannot have a onRemove because it is omitted, which must be enforced here
+          {...{
+            ...commonProps,
+            onRemove: undefined
+          }}
+          value={attachedProperty.value.boolValue}
+          onChange={boolValue => {
+            const newProperty = updater(property1 => {
+              property1.value.boolValue = boolValue
+            })
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
@@ -74,48 +126,82 @@ export const PropertyEntry = ({
       )
     case 'singleSelect':
       return (
-        <SingleSelectProperty<string>
+        <SingleSelectProperty<AttachPropertySelectValue>
           {...commonProps}
-          value={property.value.singleSelect}
-          onChange={singleSelect => {
-            const newProperty: PropertyWithValue = { ...property, value: { singleSelect } }
+          value={attachedProperty.value.singleSelectValue}
+          onChange={selectValue => {
+            const newProperty = updater(property1 => {
+              property1.value.singleSelectValue = selectValue
+            })
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.field.entryList
-            .filter(option => option !== undefined)
-            .map(option => ({ value: option!, label: option! }))}
-          searchMapping={option => [option.value]}
+          options={property.selectData!.options
+            .map(option => ({
+              value: option,
+              label: option.name
+            }))}
+          searchMapping={option => [option.value.name]}
+          selectedDisplayOverwrite={attachedProperty.value.singleSelectValue?.name}
         />
       )
     case 'multiSelect':
       return (
-        <MultiSelectProperty<string>
+        <MultiSelectProperty<AttachPropertySelectValue>
           {...commonProps}
           onChange={multiSelect => {
-            const newProperty: PropertyWithValue = {
-              ...property,
+            const newProperty: AttachedProperty = {
+              ...attachedProperty,
               value: {
-                multiSelect: multiSelect
+                ...attachedProperty.value,
+                multiSelectValue: multiSelect
                   .filter(value => value.selected && value.value !== undefined)
-                  .map(value => value.value as string)
+                  .map(value => value.value)
               }
             }
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.field.entryList
+          options={property.selectData!.options
             .filter(option => option !== undefined)
             .map(option => ({
-              value: option!,
-              label: option!,
-              selected: !!property.value.multiSelect?.find(value => value === option)
+              value: option,
+              label: option.name,
+              selected: !!attachedProperty.value.multiSelectValue.find(value => value.id === option.id)
             }))}
-          search={{ searchMapping: value => [value.value] }}
+          search={{ searchMapping: value => [value.value.name] }}
         />
       )
     default:
-      console.error(`incorrect property type: ${property.field.fieldType}`)
+      console.error(`Unimplemented property type used for PropertyEntry: ${property.fieldType}`)
       return <></>
   }
+}
+
+export type PropertyEntryProps = Omit<PropertyEntryDisplayProps, 'property'>
+
+/**
+ * A Component for mapping a properties to a specific type.
+ *
+ * It wraps the PropertyEntryDisplay with loading logic
+ */
+export const PropertyEntry = ({
+  attachedProperty,
+  ...restProps
+}: PropertyEntryProps) => {
+  const {
+    data: property,
+    isError,
+    isLoading
+  } = usePropertyQuery(attachedProperty.propertyId)
+
+  return (
+    <LoadingAndErrorComponent
+      isLoading={isLoading}
+      hasError={isError || !property}
+      minimumLoadingDuration={500}
+    >
+      <PropertyEntryDisplay property={property!} attachedProperty={attachedProperty} {...restProps}/>
+    </LoadingAndErrorComponent>
+  )
 }

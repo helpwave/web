@@ -6,11 +6,12 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import Link from 'next/link'
+import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
+import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
+import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
+import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { RoomOverview } from '../RoomOverview'
-import { useRoomOverviewsQuery, type RoomOverviewDTO } from '@/mutations/room_mutations'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
-import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
-import { useWardQuery } from '@/mutations/ward_mutations'
 
 type WardRoomListTranslation = {
   roomOverview: string,

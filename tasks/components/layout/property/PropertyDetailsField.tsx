@@ -11,23 +11,123 @@ import { Span } from '@helpwave/common/components/Span'
 import { Plus, X } from 'lucide-react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import type { FieldType, PropertyFieldType } from '@/components/layout/property/property'
-import { fieldTypeList } from '@/components/layout/property/property'
+import type { FieldType, Property, SelectData, SelectOption } from '@helpwave/api-services/types/properties/property'
+import { fieldTypeList } from '@helpwave/api-services/types/properties/property'
+import { useEffect, useState } from 'react'
+
+type SelectDataUpdate = {
+  create: number,
+  update: (SelectOption & { index: number })[],
+  delete: { id: string, index: number }[]
+}
+
+type PropertySelectOptionsUpdaterPropsTranslation = {
+  newEntry: string,
+  values: string
+}
+
+const defaultPropertySelectOptionsUpdaterPropsTranslation: Record<Languages, PropertySelectOptionsUpdaterPropsTranslation> = {
+  en: {
+    newEntry: 'New Entry',
+    values: 'Values',
+  },
+  de: {
+    newEntry: 'Neuer Eintrag',
+    values: 'Werte',
+  }
+}
+
+type PropertySelectOptionsUpdaterProps = {
+  value: SelectData,
+  onChange: (data: SelectData, update: SelectDataUpdate) => void
+}
+
+type PropertySelectOptionsUpdaterState = {
+  data: SelectData,
+  update: SelectDataUpdate
+}
+
+export const PropertySelectOptionsUpdater = ({
+  overwriteTranslation,
+  value,
+  onChange,
+}: PropsForTranslation<PropertySelectOptionsUpdaterPropsTranslation, PropertySelectOptionsUpdaterProps>) => {
+  const translation = useTranslation(defaultPropertySelectOptionsUpdaterPropsTranslation, overwriteTranslation)
+  const [state, setState] = useState<PropertySelectOptionsUpdaterState>({ data: value, update: { create: 0, update: [], delete: [] } })
+  const { data, update } = state
+
+  useEffect(() => {
+    setState({ data: value, update: { create: 0, update: [], delete: [] } })
+  }, [value])
+
+  return (
+    <div className={tw('flex flex-col mt-2 gap-y-1')}>
+      <div className={tw('flex flex-row justify-between items-center')}>
+        <Span type="labelMedium">{translation.values}</Span>
+        <Plus
+          className={tw('text-white bg-hw-primary-400 hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
+          size={20}
+          onClick={() => {
+            onChange({ ...data }, { ...update, create: update.create + 1 })
+          }}
+        />
+      </div>
+      <Scrollbars autoHide autoHeight autoHeightMax={400}>
+        <div className={tw('flex flex-col gap-y-2 mr-3')}>
+          {data.options.map((entry, index) => (
+            <div key={index} className={tw('flex flex-row items-center justify-between gap-x-4')}>
+              <Input
+                value={entry.name ?? ''}
+                placeholder={`${translation.newEntry} ${index + 1}`}
+                onChange={text => {
+                  const newList = [...data.options]
+                  const newEntry = { ...entry, name: text }
+                  newList[index] = newEntry
+                  setState(
+                    { data: { ...data, options: newList }, update: { ...update, update: [...update.update, { ...newEntry, index }] } }
+                  )
+                }}
+                onEditCompleted={text => {
+                  const newList = [...data.options]
+                  const newEntry = { ...entry, name: text }
+                  newList[index] = newEntry
+                  onChange(
+                    { ...data, options: newList },
+                    { ...update, update: [...update.update, { ...newEntry, index }] }
+                  )
+                }}
+              />
+              <X
+                className={tw('text-hw-negative-400 hover:text-hw-negative-600')}
+                size={20}
+                onClick={() => {
+                  const newList = data.options.filter((_, index1) => index1 !== index)
+                  onChange({ ...data, options: newList },
+                    { ...update, delete: [...update.delete, { id: entry.id, index }] }
+                  )
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </Scrollbars>
+    </div>
+  )
+}
+
+type PropertyFieldDetails = Pick<Property, 'fieldType' | 'selectData'>
 
 type PropertyDetailsFieldTranslation = {
   field: string,
   fieldType: string,
-  values: string,
   allowCustomValues: string,
-  allowCustomValuesDescription: string,
-  newEntry: string
+  allowCustomValuesDescription: string
 } & { [key in FieldType]: string }
 
 const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsFieldTranslation> = {
   en: {
     field: 'Field',
     fieldType: 'Field Type',
-    values: 'Values',
     multiSelect: 'Multi Select',
     singleSelect: 'Single Select',
     number: 'Number',
@@ -37,12 +137,10 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     checkbox: 'Checkbox',
     allowCustomValues: 'Allow custom values',
     allowCustomValuesDescription: 'Let users enter a free text when the predefined values are not enough.',
-    newEntry: 'New Entry'
   },
   de: {
     field: 'Property Eingabe', // TODO better translation
     fieldType: 'Property Typ',
-    values: 'Werte',
     multiSelect: 'Multi Select',
     singleSelect: 'Single Select',
     number: 'Zahl',
@@ -52,14 +150,12 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     checkbox: 'Checkbox',
     allowCustomValues: 'Hinzufügen neuer Werte',
     allowCustomValuesDescription: 'Werte können neu hinzugefügt werden,wenn sie nicht vorhanden sind.',
-    newEntry: 'Neuer Eintrag'
   }
 }
 
 export type PropertyDetailsFieldProps = {
-  value: PropertyFieldType,
-  onChange: (value: PropertyFieldType) => void,
-  onEditComplete: (value: PropertyFieldType) => void,
+  value: PropertyFieldDetails,
+  onChange: (value: PropertyFieldDetails, update?: SelectDataUpdate) => void,
   inputGroupProps?: Omit<InputGroupProps, 'title'>
 }
 
@@ -70,71 +166,33 @@ export const PropertyDetailsField = ({
   overwriteTranslation,
   value,
   onChange,
-  onEditComplete,
   inputGroupProps
 }: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
   const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
+  const [usedValue, setUsedValue] = useState<PropertyFieldDetails>(value)
   const isSelectType = value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect'
+
+  useEffect(() => {
+    setUsedValue(value)
+  }, [value])
+
   return (
     <InputGroup {...inputGroupProps} title={translation.field}>
       <Select
         // TODO add icons
-        value={value.fieldType}
+        value={usedValue.fieldType}
         label={{ name: translation.fieldType, labelType: 'labelMedium' }}
         options={fieldTypeList.map(fieldType => ({ value: fieldType, label: translation[fieldType] }))}
         onChange={fieldType => {
-          const newValue = { ...value, fieldType }
+          const newValue = { ...usedValue, fieldType }
           onChange(newValue)
-          onEditComplete(newValue)
         }}
       />
       {isSelectType && (
-        <div className={tw('flex flex-col mt-2 gap-y-1')}>
-          <div className={tw('flex flex-row justify-between items-center')}>
-            <Span type="labelMedium">{translation.values}</Span>
-            <Plus
-              className={tw('text-white bg-hw-primary-400 hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
-              size={20}
-              onClick={() => {
-                const newList = [...value.entryList]
-                newList.push(undefined)
-                onChange({ ...value, entryList: newList })
-              }}
-            />
-          </div>
-          <Scrollbars autoHide autoHeight autoHeightMax={400}>
-            <div className={tw('flex flex-col gap-y-2 mr-3')}>
-              {value.entryList.map((entry, index) => (
-                <div key={index} className={tw('flex flex-row items-center justify-between gap-x-4')}>
-                  <Input
-                    value={entry ?? ''}
-                    placeholder={`${translation.newEntry} ${index + 1}`}
-                    onChange={text => {
-                      const newList = [...value.entryList]
-                      newList[index] = text
-                      onChange({ ...value, entryList: newList })
-                    }}
-                    onEditCompleted={text => {
-                      const newList = [...value.entryList]
-                      newList[index] = text
-                      onEditComplete({ ...value, entryList: newList })
-                    }}
-                  />
-                  <X
-                    className={tw('text-hw-negative-400 hover:text-hw-negative-600')}
-                    size={20}
-                    onClick={() => {
-                      const newList = value.entryList.filter((_, index1) => index1 !== index)
-                      const newValue = { ...value, entryList: newList }
-                      onChange(newValue)
-                      onEditComplete(newValue)
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          </Scrollbars>
-        </div>
+        <PropertySelectOptionsUpdater
+          value={usedValue.selectData!}
+          onChange={(selectData, update) => onChange({ ...usedValue, selectData }, update)}
+        />
       )}
       {isSelectType && (
         <Tile
@@ -142,11 +200,10 @@ export const PropertyDetailsField = ({
           description={{ value: translation.allowCustomValuesDescription }}
           suffix={(
             <Checkbox
-              checked={value.isAllowingCustomValues}
-              onChange={isAllowingCustomValues => {
-                const newValue = { ...value, isAllowingCustomValues }
+              checked={usedValue.selectData!.isAllowingFreetext}
+              onChange={isAllowingFreetext => {
+                const newValue: PropertyFieldDetails = { ...value, selectData: { ...usedValue.selectData!, isAllowingFreetext } }
                 onChange(newValue)
-                onEditComplete(newValue)
               }}
               size={20}
             />

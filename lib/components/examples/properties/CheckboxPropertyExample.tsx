@@ -10,7 +10,7 @@ export type CheckboxPropertyExampleProps = Omit<CheckboxPropertyProps, 'onChange
  * Example for using the CheckboxProperty
  */
 export const CheckboxPropertyExample = ({
-  value,
+  value = false,
   ...restProps
 }: CheckboxPropertyExampleProps) => {
   const [usedValue, setUsedValue] = useState<boolean>(value)

@@ -3,14 +3,14 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { SubjectType } from '@helpwave/api-services/types/properties/property'
+import { subjectTypeList } from '@helpwave/api-services/types/properties/property'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 import { PropertyDetails } from '@/components/layout/property/PropertyDetails'
 import { PropertyDisplay } from '@/components/layout/property/PropertyDisplay'
-import type { SubjectType } from '@/components/layout/property/property'
-import { subjectTypeList } from '@/components/layout/property/property'
 
 type OrganizationsPageTranslation = {
   properties: string
@@ -76,7 +76,7 @@ const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<
         <TwoColumn
           disableResize={false}
           left={() => (
-            <PropertyDisplay/> // TODO property list
+            <PropertyDisplay/>
           )}
           right={() => (
             <PropertyDetails

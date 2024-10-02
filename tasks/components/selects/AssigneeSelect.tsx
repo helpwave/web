@@ -13,13 +13,12 @@ export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {
  */
 export const AssigneeSelect = ({
   value,
-  organizationId,
   className,
   isHidingCurrentValue = false,
   onChange,
   ...selectProps
 } : AssigneeSelectProps) => {
-  const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
+  const { data, isLoading, isError } = useMembersByOrganizationQuery()
 
   return (
     <LoadingAndErrorComponent

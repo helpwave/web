@@ -9,7 +9,7 @@ import type {
   GetBedsRequest,
   UpdateBedRequest
 
-} from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_pb'
 import {
   BulkCreateBedsResponse,
   CreateBedResponse,
@@ -17,11 +17,10 @@ import {
   GetBedResponse,
   GetBedsByRoomResponse,
   GetBedsResponse,
-  UpdateBedResponse
-  ,
+  UpdateBedResponse,
   GetBedByPatientResponse
-} from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_pb'
-import { BedServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_grpc_web_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_pb'
+import { BedServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_grpc_web_pb'
 import { range } from '@helpwave/common/util/array'
 import type { BedWithRoomId } from '../../types/tasks/bed'
 import { OfflineValueStore } from '../value_store'

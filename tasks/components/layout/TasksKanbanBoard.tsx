@@ -15,10 +15,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import type { SortedTasks, TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import { emptySortedTasks } from '@helpwave/api-services/types/tasks/task'
 import {
-  useTasksByPatientSortedByStatusQuery,
-  useTaskToDoneMutation,
-  useTaskToInProgressMutation,
-  useTaskToToDoMutation
+  useTasksByPatientQuery, useTaskUpdateMutation
 } from '@helpwave/api-services/mutations/tasks/task_mutations'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
@@ -47,13 +44,23 @@ export const TasksKanbanBoard = ({
   onEditTask,
   editedTaskId
 }: KanbanBoardProps) => {
-  const { data, isLoading, isError } = useTasksByPatientSortedByStatusQuery(patientId)
+  const { data, isLoading, isError } = useTasksByPatientQuery(patientId)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [sortedTasks, setSortedTasks] = useState<SortedTasks>(emptySortedTasks)
 
+  const updateTaskMutation = useTaskUpdateMutation()
+
+  const task = boardObject.draggedId ?
+      [...sortedTasks.todo, ...sortedTasks.inProgress, ...sortedTasks.done].find(value => value && value.id === boardObject.draggedId)
+    : null
+
   useEffect(() => {
     if (data) {
-      setSortedTasks(data)
+      setSortedTasks({
+        todo: data.filter(task => task.status === 'todo'),
+        inProgress: data.filter(task => task.status === 'inProgress'),
+        done: data.filter(task => task.status === 'done')
+      })
     }
   }, [data])
 
@@ -64,27 +71,15 @@ export const TasksKanbanBoard = ({
     })
   )
 
-  const taskToToDoMutation = useTaskToToDoMutation()
-  const taskToInProgressMutation = useTaskToInProgressMutation()
-  const taskToDoneMutation = useTaskToDoneMutation()
-
   const onEndChanging = () => {
     if (!boardObject.draggedId) {
       return
     }
-    switch (boardObject.overColumn) {
-      case 'todo':
-        taskToToDoMutation.mutate(boardObject.draggedId)
-        break
-      case 'inProgress':
-        taskToInProgressMutation.mutate(boardObject.draggedId)
-        break
-      case 'done':
-        taskToDoneMutation.mutate(boardObject.draggedId)
-        break
-      default:
-        break
+    if (!task) {
+      return
     }
+    const status: TaskStatus = boardObject.overColumn as TaskStatus
+    updateTaskMutation.mutate({ ...task, status })
   }
 
   function findColumn(id: string | TaskStatus): TaskStatus | undefined {
@@ -175,10 +170,6 @@ export const TasksKanbanBoard = ({
   const dropAnimation: DropAnimation = {
     ...defaultDropAnimation,
   }
-
-  const task = boardObject.draggedId ?
-      [...sortedTasks.todo, ...sortedTasks.inProgress, ...sortedTasks.done].find(value => value && value.id === boardObject.draggedId)
-    : null
 
   function filterBySearch(tasks: TaskDTO[]): TaskDTO[] {
     return tasks.filter(value => value.name.replaceAll(' ', '').toLowerCase().indexOf(boardObject.searchValue.replaceAll(' ', '').toLowerCase()) !== -1)

@@ -5,9 +5,7 @@ import type {
   CreatePropertyRequest, UpdatePropertyRequest
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
 import {
-  GetPropertiesBySubjectTypeResponse, GetPropertyResponse
-  , CreatePropertyResponse
-  , UpdatePropertyResponse
+  GetPropertiesBySubjectTypeResponse, GetPropertyResponse, CreatePropertyResponse, UpdatePropertyResponse
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
 import type { Metadata } from 'grpc-web'
 import { OfflineValueStore } from '../value_store'
@@ -79,10 +77,10 @@ export class PropertyOfflineServicePromiseClient extends PropertyServicePromiseC
       if (!value.selectData) {
         throw Error('SelectData not set on a Select Property')
       }
-      const selectData = new GetPropertiesBySubjectTypeResponse.Property.SelectData()
+      const selectData = new GetPropertyResponse.SelectData()
       selectData.setAllowFreetext(value.selectData.isAllowingFreetext)
       selectData.setOptionsList(value.selectData.options.map(value => {
-        const option = new GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption()
+        const option = new GetPropertyResponse.SelectData.SelectOption()
         option.setId(value.id)
         option.setName(value.name)
         if (value.description) {

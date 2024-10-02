@@ -13,23 +13,22 @@ export type TaskStatus = 'done' | 'inProgress' | 'todo'
 export type TaskDTO = {
   id: string,
   name: string,
-  assignee: string,
+  assignee?: string,
   notes: string,
   status: TaskStatus,
   subtasks: SubTaskDTO[],
   dueDate?: Date,
-  creationDate?: Date,
+  createdAt?: Date,
+  creatorId?: string,
   isPublicVisible: boolean
 }
 
 export const emptyTask: TaskDTO = {
   id: '',
   name: '',
-  assignee: '',
   notes: '',
   status: 'todo',
   subtasks: [],
-  dueDate: undefined,
   isPublicVisible: false
 }
 

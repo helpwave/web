@@ -1,9 +1,8 @@
 import type { Metadata } from 'grpc-web'
-import { PatientServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_grpc_web_pb'
+import { PatientServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_grpc_web_pb'
 import type {
   AssignBedRequest,
   CreatePatientRequest,
-  DeletePatientRequest,
   DischargePatientRequest,
   GetPatientAssignmentByWardRequest,
   GetPatientByBedRequest,
@@ -15,11 +14,10 @@ import type {
   ReadmitPatientRequest,
   UnassignBedRequest,
   UpdatePatientRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_pb'
 import {
   AssignBedResponse,
   CreatePatientResponse,
-  DeletePatientResponse,
   DischargePatientResponse,
   GetPatientAssignmentByWardResponse,
   GetPatientByBedResponse,
@@ -31,7 +29,7 @@ import {
   ReadmitPatientResponse,
   UnassignBedResponse,
   UpdatePatientResponse
-} from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_pb'
 import type { PatientValueStore } from '../value_store'
 import { OfflineValueStore } from '../value_store'
 import type { RoomWithWardId } from '../../types/tasks/room'
@@ -194,8 +192,8 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
         .setPublic(task.isPublicVisible)
         .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
         .setSubtasksList(subTasks)
-      if (task.assigneeId) {
-        res.setAssignedUserId(task.assigneeId)
+      if (task.assignee) {
+        res.setAssignedUserId(task.assignee)
       }
       return res
     })
@@ -203,7 +201,6 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
     return new GetPatientDetailsResponse()
       .setId(patient.id)
       .setHumanReadableIdentifier(patient.name)
-      .setName(patient.name)
       .setNotes(patient.notes)
       .setIsDischarged(patient.isDischarged)
       .setBed(bed
@@ -260,13 +257,13 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
             .setPublic(task.isPublicVisible)
             .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
             .setSubtasksList(subTasks)
-          if (task.assigneeId) {
-            res.setAssignedUserId(task.assigneeId)
+          if (task.assignee) {
+            res.setAssignedUserId(task.assignee)
           }
           return res
         })
 
-        return new GetPatientListResponse.PatientWithRoomAndBed()
+        return new GetPatientListResponse.Patient()
           .setId(patient.id)
           .setHumanReadableIdentifier(patient.name)
           .setNotes(patient.notes)
@@ -301,8 +298,8 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
             .setPublic(task.isPublicVisible)
             .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
             .setSubtasksList(subTasks)
-          if (task.assigneeId) {
-            res.setAssignedUserId(task.assigneeId)
+          if (task.assignee) {
+            res.setAssignedUserId(task.assignee)
           }
           return res
         })
@@ -332,17 +329,15 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
             .setPublic(task.isPublicVisible)
             .setStatus(GRPCConverter.taskStatusToGrpc(task.status))
             .setSubtasksList(subTasks)
-          if (task.assigneeId) {
-            res.setAssignedUserId(task.assigneeId)
+          if (task.assignee) {
+            res.setAssignedUserId(task.assignee)
           }
           return res
         })
-        return new GetPatientListResponse.PatientWithRoomAndBed()
+        return new GetPatientListResponse.Patient()
           .setId(patient.id)
           .setHumanReadableIdentifier(patient.name)
           .setNotes(patient.notes)
-          .setBed()
-          .setRoom()
           .setTasksList(tasks)
       }
       )
@@ -364,7 +359,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
         if (bed) {
           room = RoomOfflineService.findRoom(bed.roomId)
         }
-        return new GetRecentPatientsResponse.PatientWithRoomAndBed()
+        return new GetRecentPatientsResponse.Patient()
           .setId(patient.id)
           .setHumanReadableIdentifier(patient.name)
           .setBed(bed
@@ -427,10 +422,11 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
     return new UpdatePatientResponse()
   }
 
+  /* TODO reeanable once backend point exists
   async deletePatient(request: DeletePatientRequest, _?: Metadata): Promise<DeletePatientResponse> {
     PatientOfflineService.deletePatient(request.getId())
     return new DeletePatientResponse()
-  }
+  } */
 
   async readmitPatient(request: ReadmitPatientRequest, _?: Metadata): Promise<ReadmitPatientResponse> {
     PatientOfflineService.changeAdmittance(request.getPatientId(), false)

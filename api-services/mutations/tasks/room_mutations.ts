@@ -5,7 +5,7 @@ import {
   GetRoomOverviewsByWardRequest,
   GetRoomRequest,
   UpdateRoomRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/room_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/room_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import type { RoomDTO, RoomMinimalDTO, RoomOverviewDTO } from '../../types/tasks/room'
 import { APIServices } from '../../services'

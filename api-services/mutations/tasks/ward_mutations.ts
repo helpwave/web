@@ -6,11 +6,11 @@ import {
   GetWardOverviewsRequest,
   GetWardRequest,
   UpdateWardRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/ward_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
-import type { WardDetailDTO, WardMinimalDTO, WardOverviewDTO, WardWithOrganizationIdDTO } from '../../types/tasks/wards'
+import type { WardDetailDTO, WardMinimalDTO, WardOverviewDTO } from '../../types/tasks/wards'
 import { QueryKeys } from '../query_keys'
 
 export const useWardOverviewsQuery = (organisationId?: string) => {
@@ -73,7 +73,7 @@ export const useWardDetailsQuery = (wardId?: string, organizationId?: string) =>
 export const useWardQuery = (id: string, organisationId?: string) => useQuery({
   queryKey: [QueryKeys.wards, id],
   enabled: !!id,
-  queryFn: async (): Promise<WardWithOrganizationIdDTO> => {
+  queryFn: async (): Promise<WardMinimalDTO> => {
     const req = new GetWardRequest()
     req.setId(id)
     const res = await APIServices.ward.getWard(req, getAuthenticatedGrpcMetadata(organisationId))
@@ -85,7 +85,6 @@ export const useWardQuery = (id: string, organisationId?: string) => useQuery({
     return {
       id: res.getId(),
       name: res.getName(),
-      organizationId: res.getOrganizationId()
     }
   }
 })

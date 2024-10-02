@@ -5,9 +5,9 @@ import {
   CreateTaskTemplateSubTaskRequest,
   DeleteTaskTemplateRequest,
   DeleteTaskTemplateSubTaskRequest,
-  GetAllTaskTemplatesByCreatorRequest,
-  GetAllTaskTemplatesByWardRequest, UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_pb'
+  UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest,
+  GetAllTaskTemplatesRequest
+} from '@helpwave/proto-ts/services/tasks_svc/v1/task_template_svc_pb'
 import type { TaskTemplateDTO, TaskTemplateFormType } from '../../types/tasks/tasks_templates'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
@@ -15,15 +15,15 @@ import type { SubTaskDTO } from '../../types/tasks/task'
 
 type QueryKey = 'personalTaskTemplates' | 'wardTaskTemplates'
 
-export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
+export const useWardTaskTemplateQuery = (wardId?: string) => {
   return useQuery({
     queryKey: ['wardTaskTemplates', wardId],
     queryFn: async () => {
       let wardTaskTemplates: TaskTemplateDTO[] = []
       if (wardId !== undefined) {
-        const req = new GetAllTaskTemplatesByWardRequest()
+        const req = new GetAllTaskTemplatesRequest()
         req.setWardId(wardId)
-        const res = await APIServices.taskTemplates.getAllTaskTemplatesByWard(req, getAuthenticatedGrpcMetadata())
+        const res = await APIServices.taskTemplates.getAllTaskTemplates(req, getAuthenticatedGrpcMetadata())
         wardTaskTemplates = res.getTemplatesList().map((template) => ({
           id: template.getId(),
           wardId,
@@ -41,7 +41,6 @@ export const useWardTaskTemplateQuery = (wardId?: string, onSuccess: (data: Task
 
       return wardTaskTemplates
     },
-    onSuccess
   })
 }
 
@@ -62,10 +61,10 @@ export const useAllTaskTemplatesByCreator = ({
     queryFn: async () => {
       let personalTaskTemplates: TaskTemplateDTO[] = []
       if (createdBy !== undefined) {
-        const req = new GetAllTaskTemplatesByCreatorRequest()
+        const req = new GetAllTaskTemplatesRequest()
         req.setCreatedBy(createdBy)
         req.setPrivateOnly(onlyPrivate)
-        const res = await APIServices.taskTemplates.getAllTaskTemplatesByCreator(req, getAuthenticatedGrpcMetadata())
+        const res = await APIServices.taskTemplates.getAllTaskTemplates(req, getAuthenticatedGrpcMetadata())
 
         personalTaskTemplates = res.getTemplatesList().map((template) => ({
           id: template.getId(),

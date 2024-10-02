@@ -4,7 +4,7 @@ import {
   DeleteBedRequest,
   GetBedRequest,
   UpdateBedRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_pb'
 import { QueryKeys } from '../query_keys'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'

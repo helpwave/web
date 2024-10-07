@@ -83,10 +83,6 @@ const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForT
   const { user } = useAuth()
   const { isLoading, isError, data } = usePersonalTaskTemplateQuery(user?.id)
 
-  useEffect(() => {
-    console.log('PTTP', user) //
-  }, [user])
-
   const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
   const wardId = '' // TODO: why is this empty? (tracing back where is value originally came from lead me to the fact that this value would always be undefined or an empty string, thus I hardcoded it here now but it would be great to know if this is correct)

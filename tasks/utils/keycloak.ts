@@ -51,6 +51,7 @@ export const getCurrentTokenAndUpdateInBackground = (minValidity = 30) => {
   const { fakeTokenEnable, fakeToken } = getConfig()
   if (fakeTokenEnable) return fakeToken
   getToken(minValidity)
+  return keycloak?.token
 }
 
 export default keycloak

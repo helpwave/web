@@ -46,9 +46,10 @@ export const loadKeycloakAdapter = (kc: Keycloak): KeycloakAdapter => {
     login: function(options) {
       const u = new URL(kc.createLoginUrl(options))
 
-      if (Object.keys(keycloak?.tokenParsed?.organization).length !== 0) {
+      if (Object.keys(keycloak?.tokenParsed?.organization || []).length !== 0) {
         u.searchParams.set('prompt', 'select_account') // Shows the organization selector on login and re-login
       }
+
       window.location.assign(u)
       return createPromise().promise
     },

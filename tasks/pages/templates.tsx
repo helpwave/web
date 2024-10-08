@@ -2,13 +2,15 @@ import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { tw } from '@helpwave/common/twind'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import {
-  useCreateMutation, useDeleteMutation,
-  usePersonalTaskTemplateQuery, useUpdateMutation
+  useCreateMutation,
+  useDeleteMutation,
+  usePersonalTaskTemplateQuery,
+  useUpdateMutation
 } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'

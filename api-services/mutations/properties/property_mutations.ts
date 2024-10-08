@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/util/noop'
 import {
   CreatePropertyRequest,
-  GetPropertiesBySubjectTypeRequest,
+  GetPropertiesRequest,
   GetPropertyRequest,
   UpdatePropertyRequest
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
@@ -17,11 +17,11 @@ export const usePropertyListQuery = (subjectType?: SubjectType) => {
   return useQuery({
     queryKey: [QueryKeys.properties, subjectType ?? 'all'],
     queryFn: async (): Promise<Property[]> => {
-      const req = new GetPropertiesBySubjectTypeRequest()
+      const req = new GetPropertiesRequest()
       if (subjectType) {
         req.setSubjectType(GRPCConverter.subjectTypeMapperToGRPC(subjectType))
       }
-      const result = await APIServices.property.getPropertiesBySubjectType(req, getAuthenticatedGrpcMetadata())
+      const result = await APIServices.property.getProperties(req, getAuthenticatedGrpcMetadata())
       return result.getPropertiesList().filter(value => value.getFieldType() !== FieldType.FIELD_TYPE_UNSPECIFIED).map(property => {
         const fieldType = GRPCConverter.fieldTypeMapperFromGRPC(property.getFieldType())
         const selectData = property.getSelectData()

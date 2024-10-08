@@ -1,24 +1,28 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
+import type {
+  CreatePersonalOrganizationResponse,
+  InvitationState
+} from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import {
   AcceptInvitationRequest,
+  AddMemberRequest,
   CreateOrganizationRequest,
+  CreatePersonalOrganizationRequest,
   DeclineInvitationRequest,
   DeleteOrganizationRequest,
+  GetInvitationsByOrganizationRequest,
   GetInvitationsByUserRequest,
   GetOrganizationRequest,
   GetOrganizationsForUserRequest,
-  UpdateOrganizationRequest,
   InviteMemberRequest,
   RemoveMemberRequest,
-  AddMemberRequest,
-  GetInvitationsByOrganizationRequest,
-  RevokeInvitationRequest
+  RevokeInvitationRequest,
+  UpdateOrganizationRequest
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { QueryKeys } from '../query_keys'
 import { APIServices } from '../../services'
-import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
+import { getAuthenticatedGrpcMetadata, grpcWrapper } from '../../authentication/grpc_metadata'
 import type {
   OrganizationDTO,
   OrganizationMinimalDTO,
@@ -64,7 +68,6 @@ export const useOrganizationsForUserQuery = () => {
     queryKey: [QueryKeys.organizations, organizationsForUserQueryKey],
     queryFn: async () => {
       const req = new GetOrganizationsForUserRequest()
-
       const res = await APIServices.organization.getOrganizationsForUser(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
@@ -362,4 +365,17 @@ export const useRemoveMemberMutation = (organizationId: string) => {
       queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
     }
   })
+}
+
+export const createPersonalOrganization = async (): Promise<CreatePersonalOrganizationResponse.AsObject> => {
+  const req = new CreatePersonalOrganizationRequest()
+
+  const res = await grpcWrapper(APIServices.organization.createPersonalOrganization, req)
+  const obj = res.toObject()
+
+  if (!obj) {
+    throw new Error('CreatePersonalOrganization failed')
+  }
+
+  return obj
 }

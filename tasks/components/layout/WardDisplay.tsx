@@ -2,14 +2,13 @@ import { useContext } from 'react'
 import { useRouter } from 'next/router'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
-import { useOrganization } from '@/hooks/useOrganization'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -51,8 +50,6 @@ export const WardDisplay = ({
   selectedWardId ??= context.state.wardId
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / 250), 1)
 
-  const { setOrganizationId } = useOrganization()
-
   return (
     <div className={tw('py-4 px-6')}>
       <ColumnTitle title={translation.wards}/>
@@ -72,7 +69,6 @@ export const WardDisplay = ({
                   wardId: ward.id
                 })}
                 onTileClick={() => {
-                  setOrganizationId(organizationId)
                   router.push(`/ward/${ward.id}`).then()
                 }}
               />

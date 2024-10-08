@@ -4,11 +4,11 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
-import { useWardOverviewsQuery } from '@/mutations/ward_mutations'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -69,7 +69,7 @@ export const WardDisplay = ({
                   wardId: ward.id
                 })}
                 onTileClick={() => {
-                  router.push(`/ward/${ward.id}`)
+                  router.push(`/ward/${ward.id}`).then()
                 }}
               />
             ))}

@@ -57,7 +57,7 @@ export const pageForItem = <T, >(data: T[], item: T, entriesPerPage: number, ide
   if (index !== -1) {
     return Math.floor(index / entriesPerPage)
   }
-  console.warn("item doesn't exist on data", item)
+  console.warn("item doesn't exist on data", item, data)
   return 0
 }
 
@@ -204,6 +204,8 @@ export const Table = <T, >({
   let entriesPerPage = 5
   const [tableState, updateTableState] = stateManagement
 
+  let shownElements = sortedData
+
   if (tableState?.pagination) {
     if (tableState.pagination.entriesPerPage < 1) {
       console.error('tableState.pagination.entriesPerPage must be >= 1', tableState.pagination.entriesPerPage)
@@ -217,13 +219,15 @@ export const Table = <T, >({
     } else {
       currentPage = tableState.pagination.currentPage
     }
-  }
 
-  if (focusElement) {
-    currentPage = pageForItem(sortedData, focusElement, entriesPerPage, identifierMapping)
-  }
+    if (focusElement) {
+      currentPage = pageForItem(sortedData, focusElement, entriesPerPage, identifierMapping)
+    }
 
-  const shownElements = sortedData.slice(currentPage * entriesPerPage, Math.min(sortedData.length, (currentPage + 1) * entriesPerPage))
+    shownElements = sortedData.slice(currentPage * entriesPerPage, Math.min(sortedData.length, (currentPage + 1) * entriesPerPage))
+  } else {
+    currentPage = 0
+  }
 
   const headerRow = tw('border-b-2 border-gray-300')
   const headerPaddingHead = tw('pb-2')

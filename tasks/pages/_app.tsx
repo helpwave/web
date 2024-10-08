@@ -10,9 +10,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production'
+import { ProvideAuth } from '@helpwave/api-services/authentication/useAuth'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
-import { ProvideAuth } from '@/hooks/useAuth'
 
 const inter = Inter({
   subsets: ['latin'],

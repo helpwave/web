@@ -3,12 +3,12 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import type { TaskStatus } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_pb'
 import { Plus } from 'lucide-react'
+import type { TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
+import { emptyTask } from '@helpwave/api-services/types/tasks/task'
 import { Sortable } from './dnd-kit/Sortable'
 import { TaskCard } from './cards/TaskCard'
-import { PillLabel, TaskState } from './pill/PillLabel'
-import { emptyTask, type TaskDTO } from '@/mutations/task_mutations'
+import { PillLabel } from './pill/PillLabel'
 
 type KanbanColumnsTranslation = {
   addTask: string
@@ -53,7 +53,7 @@ export const KanbanColumn = ({
       className={tx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver },
         'flex flex-col gap-y-4 border-2 border-dashed rounded-lg p-2')}
     >
-      <PillLabel count={tasks.length} state={TaskState[type]}/>
+      <PillLabel count={tasks.length} taskStatus={type}/>
       <SortableContext
         id={type.toString()}
         items={tasks}

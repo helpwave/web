@@ -10,18 +10,16 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Chip } from '@helpwave/common/components/ChipList'
-import { Draggable, Droppable } from '../dnd-kit-instances/patients'
-import { WardOverviewContext } from '@/pages/ward/[wardId]'
+import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
   useDeletePatientMutation,
   usePatientDischargeMutation,
   usePatientListQuery,
-  useReadmitPatientMutation,
-  type PatientDTO,
-  type PatientMinimalDTO,
-  type PatientWithBedAndRoomDTO
-} from '@/mutations/patient_mutations'
-import { useWardQuery } from '@/mutations/ward_mutations'
+  useReadmitPatientMutation
+} from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import type { PatientDTO, PatientMinimalDTO, PatientWithBedAndRoomDTO } from '@helpwave/api-services/types/tasks/patient'
+import { Draggable, Droppable } from '../dnd-kit-instances/patients'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { AddPatientModal } from '@/components/modals/AddPatientModal'
 
@@ -38,7 +36,8 @@ type PatientListTranslation = {
   deleteDescriptionText: string,
   addPatient: string,
   search: string,
-  bed: string
+  bed: string,
+  otherWard: string
 }
 
 const defaultPatientListTranslations: Record<Languages, PatientListTranslation> = {
@@ -56,6 +55,7 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     addPatient: 'Add Patient',
     search: 'Search',
     bed: 'Bed',
+    otherWard: 'Other Ward',
   },
   de: {
     patients: 'Patienten',
@@ -71,6 +71,7 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
     addPatient: 'Patient hinzufügen',
     search: 'Suchen',
     bed: 'Bett',
+    otherWard: 'Andere Station',
   }
 }
 
@@ -120,7 +121,9 @@ export const PatientList = ({
   const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
   const [deletePatient, setDeletePatient] = useState<PatientMinimalDTO>()
 
-  const activeLabelText = (patient: PatientWithBedAndRoomDTO) => `${patient.room.name} - ${patient.bed.name}`
+  const activeLabelText = (patient: PatientWithBedAndRoomDTO) => patient.room.wardId === wardId
+    ? `${patient.room.name} - ${patient.bed.name}`
+    : translation.otherWard
 
   const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
   const filteredUnassigned = !data ? [] : SimpleSearchWithMapping(search, data.unassigned, value => value.name)

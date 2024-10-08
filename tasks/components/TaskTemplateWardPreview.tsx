@@ -6,9 +6,9 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useWardTaskTemplateQuery } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
-import { useWardTaskTemplateQuery } from '@/mutations/task_template_mutations'
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,

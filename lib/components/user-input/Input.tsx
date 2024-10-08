@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, type ChangeEvent, type HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type HTMLInputTypeAttribute,
+  type InputHTMLAttributes
+} from 'react'
 import { tx } from '../../twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
@@ -22,10 +29,10 @@ export type InputProps = {
    * That could be enforced through a union type but that seems a bit overkill
    * @default noop
    */
-  onChange?: (text: string) => void,
+  onChange?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
   onChangeEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
   className?: string,
-  onEditCompleted?: (text: string) => void,
+  onEditCompleted?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
   expanded?: boolean
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
@@ -72,7 +79,7 @@ const ControlledInput = ({
             onBlur(event)
           }
           if (onEditCompleted) {
-            onEditCompleted(event.target.value)
+            onEditCompleted(event.target.value, event)
             clearUpdateTimer()
           }
         }}
@@ -80,11 +87,11 @@ const ControlledInput = ({
           const value = e.target.value
           if (onEditCompleted) {
             restartTimer(() => {
-              onEditCompleted(value)
+              onEditCompleted(value, e)
               clearUpdateTimer()
             })
           }
-          onChange(value)
+          onChange(value, e)
           onChangeEvent(e)
         }}
         {...restProps}
@@ -112,9 +119,9 @@ const UncontrolledInput = ({
 }: UncontrolledInputProps) => {
   const [value, setValue] = useState(defaultValue)
 
-  const handleChange = (text: string) => {
+  const handleChange = (text: string, event: ChangeEvent<HTMLInputElement>) => {
     setValue(text)
-    onChange(text)
+    onChange(text, event)
   }
 
   return (

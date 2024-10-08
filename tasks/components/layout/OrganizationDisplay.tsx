@@ -3,13 +3,14 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { getAPIServiceConfig } from '@helpwave/api-services/config/config'
+import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
+import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
-import { type OrganizationDTO, useOrganizationsForUserQuery } from '@/mutations/organization_mutations'
 import { OrganizationContext } from '@/pages/organizations'
-import { useAuth } from '@/hooks/useAuth'
-import { getConfig } from '@/utils/config'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -49,7 +50,7 @@ export const OrganizationDisplay = ({
   const { data } = useOrganizationsForUserQuery()
   let usedOrganizations: OrganizationDTO[] = organizations ?? data ?? []
   const { organizations: tokenOrganizations } = useAuth()
-  const { fakeTokenEnable } = getConfig()
+  const { fakeTokenEnable } = getAPIServiceConfig()
 
   usedOrganizations = usedOrganizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
   const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)

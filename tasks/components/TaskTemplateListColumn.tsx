@@ -4,8 +4,8 @@ import { tw, tx } from '@helpwave/common/twind'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
 import { Edit } from 'lucide-react'
+import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,

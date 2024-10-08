@@ -101,7 +101,7 @@ const Footer = () => {
             {index === 2 && (
                 <Select<Languages>
                   className={tw('w-fit')}
-                  textColor={tw('text-white')}
+                  textColor={tw('text-white bg-transparent')}
                   hoverColor={tw('hover:text-white')}
                   value={language}
                   onChange={(language) => setLanguage(language)}

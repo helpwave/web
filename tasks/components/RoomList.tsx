@@ -14,15 +14,13 @@ import {
   type TableState
 } from '@helpwave/common/components/Table'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
+import type { RoomMinimalDTO } from '@helpwave/api-services/types/tasks/room'
 import {
-  emptyRoomOverview,
   useRoomCreateMutation,
-  useRoomDeleteMutation,
-  useRoomOverviewsQuery,
-  useRoomUpdateMutation,
-  type RoomOverviewDTO
-} from '@/mutations/room_mutations'
+  useRoomDeleteMutation, useRoomOverviewsQuery,
+  useRoomUpdateMutation
+} from '@helpwave/api-services/mutations/tasks/room_mutations'
+import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 import { ManageBedsModal } from '@/components/modals/ManageBedsModal'
 
 type RoomListTranslation = {
@@ -77,8 +75,12 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
   }
 }
 
+export type RoomListRoomRepresentation = RoomMinimalDTO & {
+  bedCount: number
+}
+
 export type RoomListProps = {
-  rooms?: RoomOverviewDTO[], // TODO replace with more optimized RoomDTO
+  rooms?: RoomListRoomRepresentation[], // TODO replace with more optimized RoomDTO
   roomsPerPage?: number
 }
 
@@ -95,24 +97,32 @@ export const RoomList = ({
     pagination: defaultTableStatePagination,
     selection: defaultTableStateSelection
   })
-  const [usedRooms, setUsedRooms] = useState<RoomOverviewDTO[]>(rooms ?? [])
-  const [focusElement, setFocusElement] = useState<RoomOverviewDTO>()
+  const [usedRooms, setUsedRooms] = useState<RoomListRoomRepresentation[]>(rooms ?? [])
+  const [focusElement, setFocusElement] = useState<RoomListRoomRepresentation>()
   const [isEditing, setIsEditing] = useState(false)
   const [managedRoom, setManagedRoom] = useState<string>()
 
-  const identifierMapping = (dataObject: RoomOverviewDTO) => dataObject.id
+  const identifierMapping = (dataObject: RoomListRoomRepresentation) => dataObject.id
   const creatRoomMutation = useRoomCreateMutation((room) => {
     context.updateContext({ ...context.state })
-    setFocusElement({ ...emptyRoomOverview, id: room.id })
+    setFocusElement({ ...room, bedCount: 0 })
+    setUsedRooms(prevState => [...prevState, { ...room, bedCount: 0 }])
   }, context.state.wardId ?? '') // Not good but should be safe most of the time
-  const deleteRoomMutation = useRoomDeleteMutation(() => context.updateContext({ ...context.state }))
+  const deleteRoomMutation = useRoomDeleteMutation(() => {
+    context.updateContext({ ...context.state })
+    setFocusElement(undefined)
+  })
   const updateRoomMutation = useRoomUpdateMutation(() => context.updateContext({ ...context.state }))
 
   const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId) // TODO use a more light weight query
 
   useEffect(() => {
     if (data && !isEditing) {
-      setUsedRooms(data)
+      setUsedRooms(data.map(room => ({
+        id: room.id,
+        name: room.name,
+        bedCount: room.beds.length
+      })))
     }
   }, [data, isEditing])
   // undefined = dont show
@@ -127,7 +137,7 @@ export const RoomList = ({
     // TODO remove below for an actual room add
     const newRoom = {
       id: '',
-      name: 'room' + (usedRooms.length + 1),
+      name: translation.room + (usedRooms.length + 1),
     }
     creatRoomMutation.mutate(newRoom)
   }
@@ -145,7 +155,7 @@ export const RoomList = ({
         onBackgroundClick={() => setDeletionConfirmDialogElement(undefined)}
         onCloseClick={() => setDeletionConfirmDialogElement(undefined)}
         onConfirm={() => {
-          let toDeleteElements: RoomOverviewDTO[]
+          let toDeleteElements: RoomListRoomRepresentation[]
           if (deletionConfirmDialogElement) {
             toDeleteElements = usedRooms.filter(value => identifierMapping(value) === deletionConfirmDialogElement)
           } else {
@@ -227,7 +237,7 @@ export const RoomList = ({
               />
             </div>,
             <div key="bedcount" className={tw('w-20')}>
-              <Span>{room.beds.length}</Span>
+              <Span>{room.bedCount}</Span>
             </div>,
             <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
               <Button

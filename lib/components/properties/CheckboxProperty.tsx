@@ -26,7 +26,7 @@ const defaultCheckboxPropertyTranslation: Record<Languages, CheckboxPropertyTran
 }
 
 export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'|'onRemove'> & {
-  value: boolean,
+  value?: boolean,
   onChange?: (value: boolean) => void
 }
 
@@ -54,7 +54,7 @@ export const CheckboxProperty = ({
         >
           <Checkbox
             // TODO make bigger as in #904
-            checked={value}
+            checked={value ?? true}
             disabled={readOnly}
             onChange={onChange}
           />

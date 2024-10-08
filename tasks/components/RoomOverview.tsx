@@ -1,14 +1,15 @@
 import { tw } from '@helpwave/common/twind'
 import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
-import type { RoomOverviewDTO } from '../mutations/room_mutations'
-import type { BedMinimalDTO } from '../mutations/bed_mutations'
-import { WardOverviewContext } from '../pages/ward/[wardId]'
-import { emptyPatient, type PatientDTO } from '../mutations/patient_mutations'
+import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
+import type { BedMinimalDTO } from '@helpwave/api-services/types/tasks/bed'
+import type { PatientDTO } from '@helpwave/api-services/types/tasks/patient'
+import { emptyPatient } from '@helpwave/api-services/types/tasks/patient'
 import { BedCard } from './cards/BedCard'
 import { PatientCard } from './cards/PatientCard'
 import { Droppable, Draggable } from './dnd-kit-instances/patients'
 import { DragCard } from './cards/DragCard'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 
 export type RoomOverviewProps = {
   room: RoomOverviewDTO

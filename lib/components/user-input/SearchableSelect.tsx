@@ -6,7 +6,7 @@ import type { SelectOption, SelectProps } from './Select'
 import { Select } from './Select'
 import { Input } from './Input'
 
-export type SearchableSelectProps<T> = Omit<SelectProps<T>, 'selectedDisplayOverwrite'> & {
+export type SearchableSelectProps<T> = SelectProps<T> & {
   searchMapping: (value: SelectOption<T>) => string[]
 }
 
@@ -25,7 +25,6 @@ export const SearchableSelect = <T, >({
     <Select
       value={value}
       options={filteredOptions}
-      selectedDisplayOverwrite={options.find(option => option.value === value)?.label}
       additionalItems={[(
         <div key="selectSearch" className={tw('flex flex-row gap-x-2 items-center')}>
           <Input autoFocus={true} value={search} onChange={setSearch} />

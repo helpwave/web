@@ -1,7 +1,7 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { z } from 'zod'
-import keycloak, { initKeycloak } from '../util/keycloak'
+import keycloakInstance, { KeycloakService } from '../util/keycloak'
 import { createPersonalOrganization } from '../mutations/users/organization_mutations'
 import { getAPIServiceConfig } from '../config/config'
 
@@ -98,10 +98,10 @@ export const useAuth = (): AuthContextValue => {
 
   useEffect(() => {
     if (config.fakeTokenEnable) return
-    keycloak?.updateToken(30)
+    keycloakInstance?.updateToken(30)
       .then(() => {
-        if (!authContext?.setUser || !keycloak?.token) return
-        const user = tokenToUser(keycloak.token)
+        if (!authContext?.setUser || !keycloakInstance?.token) return
+        const user = tokenToUser(keycloakInstance.token)
         if (!user) {
           console.warn('after creating organization, no token after updateToken')
           return
@@ -129,18 +129,18 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
       return
     }
 
-    if (didInit.current || !keycloak) {
+    if (didInit.current || !keycloakInstance) {
       return
     }
     didInit.current = true
 
-    initKeycloak(keycloak).then(() => {
-      if (!keycloak?.token) {
+    KeycloakService.initKeycloak(keycloakInstance).then(() => {
+      if (!keycloakInstance?.token) {
         console.warn('after init keycloak, no token')
         return
       }
 
-      const user = tokenToUser(keycloak.token)
+      const user = tokenToUser(keycloakInstance.token)
       if (!user) {
         console.warn('after init keycloak, cannot get user from token')
         return
@@ -150,14 +150,14 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
         console.info('after init keycloak, no organization found, creating personal')
         createPersonalOrganization()
           .then(() => {
-            keycloak?.updateToken(-1)
+            keycloakInstance?.updateToken(-1)
               .then(() => {
-                if (!keycloak?.token) {
+                if (!keycloakInstance?.token) {
                   console.warn('after creating organization, no token after updateToken')
                   return
                 }
 
-                const user = tokenToUser(keycloak.token)
+                const user = tokenToUser(keycloakInstance.token)
                 if (!user) {
                   console.warn('after creating organization, cannot get user from token')
                   return
@@ -170,20 +170,20 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
           .catch(console.error)
       } else {
         setUser(user)
-        setToken(keycloak.token)
+        setToken(keycloakInstance.token)
       }
     })
   }, [token])
 
   const signOut = () => {
-    if (config.fakeTokenEnable || !keycloak) return
-    keycloak.logout({ redirectUri: 'https://helpwave.de' })
+    if (config.fakeTokenEnable || !keycloakInstance) return
+    keycloakInstance.logout({ redirectUri: 'https://helpwave.de' })
   }
 
   const redirectUserToOrganizationSelection = () => {
-    if (config.fakeTokenEnable || !keycloak) return
+    if (config.fakeTokenEnable || !keycloakInstance) return
     // TODO: Change org without relogin
-    keycloak.logout({ redirectUri: window.location.href })
+    keycloakInstance.logout({ redirectUri: window.location.href })
   }
 
   return (

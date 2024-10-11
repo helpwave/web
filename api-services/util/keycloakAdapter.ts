@@ -8,7 +8,7 @@
  */
 
 import type Keycloak, { KeycloakAdapter, KeycloakLoginOptions } from 'keycloak-js'
-import keycloak from './keycloak'
+import keycloakInstance from './keycloak'
 
 function createPromise() {
   // Need to create a native Promise which also preserves the
@@ -46,7 +46,7 @@ export const loadKeycloakAdapter = (kc: Keycloak): KeycloakAdapter => {
     login: function(options) {
       const u = new URL(kc.createLoginUrl(options))
 
-      if (Object.keys(keycloak?.tokenParsed?.organization || []).length !== 0) {
+      if (Object.keys(keycloakInstance?.tokenParsed?.organization || []).length !== 0) {
         u.searchParams.set('prompt', 'select_account') // Shows the organization selector on login and re-login
       }
 

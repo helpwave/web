@@ -29,7 +29,7 @@ export const PageWithHeader = ({
   if (!user) return null
 
   const feedbackButton = <FeedbackButton/>
-  const organization = <div onClick={() => redirectUserToOrganizationSelection()}>{user?.organization?.name}</div>
+  const organization = <button onClick={() => redirectUserToOrganizationSelection()}>{user?.organization?.name}</button>
   const userMenu = <UserMenu />
 
   return (

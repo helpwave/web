@@ -34,7 +34,31 @@ const configSchema = z.object({
   NEXT_PUBLIC_OAUTH_CLIENT_ID: z.string().default('425f8b8d-c786-4ff7-b2bf-e52f505fb588'),
   NEXT_PUBLIC_OAUTH_SCOPES: z.string().default('openid,offline_access,email,nickname,name,organizations'),
   NEXT_PUBLIC_FAKE_TOKEN_ENABLE: z.literal('true').or(z.literal('false')).default('false'),
-  NEXT_PUBLIC_FAKE_TOKEN: z.object({ sub: z.string().uuid(), name: z.string(), nickname: z.string(), email: z.string().email(), organizations: z.string().array() }).default({ sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984', name: 'Max Mustermann', nickname: 'max.mustermann', email: 'max.mustermann@helpwave.de', organizations: ['3b25c6f5-4705-4074-9fc6-a50c28eba406'] }),
+  NEXT_PUBLIC_FAKE_TOKEN: z.object({
+    sub: z.string().uuid(),
+    email: z.string().email(),
+    email_verified: z.boolean(),
+    name: z.string(),
+    preferred_username: z.string(),
+    given_name: z.string(),
+    family_name: z.string(),
+    organization: z.object({
+      id: z.string().uuid(),
+      name: z.string()
+    })
+  }).default({
+    sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984',
+    email: 'max.mustermann@helpwave.de',
+    email_verified: true,
+    name: 'Max Mustermann',
+    preferred_username: 'max.mustermann',
+    given_name: 'Max',
+    family_name: 'Mustermann',
+    organization: {
+      id: '3b25c6f5-4705-4074-9fc6-a50c28eba406',
+      name: 'helpwave test'
+    }
+  }),
 }).transform(obj => ({
   env: obj.NODE_ENV,
   apiUrl: obj.NEXT_PUBLIC_API_URL,

@@ -19,7 +19,6 @@ import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
 import { OrganizationContext } from '@/pages/organizations'
-import { useOrganization } from '@/hooks/useOrganization'
 import { ReSignInModal } from '@/components/modals/ReSignInModal'
 
 type OrganizationDetailTranslation = {
@@ -97,12 +96,6 @@ export const OrganizationDetail = ({
       })
     }
   }, [data, isCreatingNewOrganization])
-
-  const { setOrganizationId } = useOrganization()
-
-  useEffect(() => {
-    setOrganizationId(contextState.organizationId)
-  }, [contextState.organizationId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 

@@ -1,33 +1,38 @@
 import type { Metadata } from 'grpc-web'
 import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_grpc_web_pb'
 import type {
+  AcceptInvitationRequest,
+  AddMemberRequest,
+  AddMemberResponse,
   CreateOrganizationRequest,
+  DeclineInvitationRequest,
+  DeleteOrganizationRequest,
+  GetInvitationsByOrganizationRequest,
+  GetInvitationsByUserRequest,
   GetMembersByOrganizationRequest,
   GetOrganizationRequest,
   GetOrganizationsByUserRequest,
   GetOrganizationsForUserRequest,
-  CreateOrganizationForUserRequest,
-  UpdateOrganizationRequest,
-  DeleteOrganizationRequest,
-  GetInvitationsByOrganizationRequest,
   InviteMemberRequest,
   InviteMemberResponse,
-  GetInvitationsByUserRequest,
+  RemoveMemberRequest,
+  RemoveMemberResponse,
   RevokeInvitationRequest,
-  AcceptInvitationRequest,
-  DeclineInvitationRequest, AddMemberRequest, RemoveMemberRequest, AddMemberResponse, RemoveMemberResponse
+  UpdateOrganizationRequest
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import {
   AcceptInvitationResponse,
-  CreateOrganizationForUserResponse,
-  CreateOrganizationResponse, DeclineInvitationResponse,
+  CreateOrganizationResponse,
+  DeclineInvitationResponse,
   DeleteOrganizationResponse,
-  GetInvitationsByOrganizationResponse, GetInvitationsByUserResponse,
+  GetInvitationsByOrganizationResponse,
+  GetInvitationsByUserResponse,
   GetMembersByOrganizationResponse,
   GetOrganizationMember,
   GetOrganizationResponse,
   GetOrganizationsByUserResponse,
-  GetOrganizationsForUserResponse, RevokeInvitationResponse,
+  GetOrganizationsForUserResponse,
+  RevokeInvitationResponse,
   UpdateOrganizationResponse
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import type { OrganizationMinimalDTO } from '../../types/users/organizations'
@@ -151,22 +156,6 @@ export class OrganizationOfflineServicePromiseClient extends OrganizationService
     OrganizationOfflineService.create(newOrganization)
 
     return new CreateOrganizationResponse().setId(newOrganization.id)
-  }
-
-  async createOrganizationForUser(request: CreateOrganizationForUserRequest, _?: Metadata): Promise<CreateOrganizationForUserResponse> {
-    const newOrganization: OrganizationMinimalDTO = {
-      id: Math.random().toString(),
-      shortName: request.getShortName(),
-      longName: request.getLongName(),
-      avatarURL: 'https://helpwave.de/favicon.ico',
-      email: request.getContactEmail(),
-      isPersonal: request.getIsPersonal(),
-      isVerified: true
-    }
-
-    OrganizationOfflineService.create(newOrganization)
-
-    return new CreateOrganizationForUserResponse().setId(newOrganization.id)
   }
 
   async updateOrganization(request: UpdateOrganizationRequest, _?: Metadata): Promise<UpdateOrganizationResponse> {

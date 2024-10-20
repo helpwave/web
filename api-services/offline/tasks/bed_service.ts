@@ -1,6 +1,5 @@
 import type { Metadata } from 'grpc-web'
 import type {
-  BulkCreateBedsRequest,
   CreateBedRequest,
   DeleteBedRequest,
   GetBedByPatientRequest,
@@ -11,17 +10,15 @@ import type {
 
 } from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_pb'
 import {
-  BulkCreateBedsResponse,
   CreateBedResponse,
   DeleteBedResponse,
+  GetBedByPatientResponse,
   GetBedResponse,
   GetBedsByRoomResponse,
   GetBedsResponse,
-  UpdateBedResponse,
-  GetBedByPatientResponse
+  UpdateBedResponse
 } from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_pb'
-import { BedServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_grpc_web_pb'
-import { range } from '@helpwave/common/util/array'
+import { BedServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_grpc_web_pb'
 import type { BedWithRoomId } from '../../types/tasks/bed'
 import { OfflineValueStore } from '../value_store'
 import { PatientOfflineService } from './patient_service'
@@ -141,25 +138,6 @@ export class BedOfflineServicePromiseClient extends BedServicePromiseClient {
     BedOfflineService.addBed(newBed)
 
     return new CreateBedResponse().setId(newBed.id)
-  }
-
-  async bulkCreateBeds(request: BulkCreateBedsRequest, _?: Metadata): Promise<BulkCreateBedsResponse> {
-    const roomId = request.getRoomId() // TODO check existence
-    const beds: BedWithRoomId[] = range(0, request.getAmountOfBeds() - 1).map(value => ({
-      id: Math.random().toString(),
-      name: `Bed ${value + 1}`,
-      roomId,
-    }))
-
-    for (const bed of beds) {
-      BedOfflineService.addBed(bed)
-    }
-
-    const list = beds.map(bed => new BulkCreateBedsResponse.Bed()
-      .setId(bed.id)
-      .setName(bed.name))
-
-    return new BulkCreateBedsResponse().setBedsList(list)
   }
 
   async updateBed(request: UpdateBedRequest, _?: Metadata): Promise<UpdateBedResponse> {

@@ -1,11 +1,13 @@
 import { PropertyServicePromiseClient } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_grpc_web_pb'
 import type {
-  GetPropertiesBySubjectTypeRequest,
+  GetPropertiesRequest,
   GetPropertyRequest,
   CreatePropertyRequest, UpdatePropertyRequest
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
 import {
-  GetPropertiesBySubjectTypeResponse, GetPropertyResponse, CreatePropertyResponse, UpdatePropertyResponse
+  GetPropertiesResponse, GetPropertyResponse
+  , CreatePropertyResponse
+  , UpdatePropertyResponse
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
 import type { Metadata } from 'grpc-web'
 import { OfflineValueStore } from '../value_store'
@@ -13,11 +15,11 @@ import type { Property, SelectData, SelectOption } from '../../types/properties/
 import { GRPCConverter } from '../../util/util'
 
 export class PropertyOfflineServicePromiseClient extends PropertyServicePromiseClient {
-  async getPropertiesBySubjectType(request: GetPropertiesBySubjectTypeRequest, _?: Metadata): Promise<GetPropertiesBySubjectTypeResponse> {
+  async getPropertiesBySubjectType(request: GetPropertiesRequest, _?: Metadata): Promise<GetPropertiesResponse> {
     const subjectType = GRPCConverter.subjectTypeMapperFromGRPC(request.getSubjectType())
     const properties = OfflineValueStore.getInstance().properties.filter(value => value.subjectType === subjectType)
     const values = properties.map(value => {
-      const res: GetPropertiesBySubjectTypeResponse.Property = new GetPropertiesBySubjectTypeResponse.Property()
+      const res: GetPropertiesResponse.Property = new GetPropertiesResponse.Property()
       res.setSubjectType(GRPCConverter.subjectTypeMapperToGRPC(value.subjectType))
       res.setId(value.id)
       res.setName(value.name)
@@ -33,10 +35,10 @@ export class PropertyOfflineServicePromiseClient extends PropertyServicePromiseC
         if (!value.selectData) {
           throw Error('SelectData not set on a Select Property')
         }
-        const selectData = new GetPropertiesBySubjectTypeResponse.Property.SelectData()
+        const selectData = new GetPropertiesResponse.Property.SelectData()
         selectData.setAllowFreetext(value.selectData.isAllowingFreetext)
         selectData.setOptionsList(value.selectData.options.map(value => {
-          const option = new GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption()
+          const option = new GetPropertiesResponse.Property.SelectData.SelectOption()
           option.setId(value.id)
           option.setName(value.name)
           if (value.description) {
@@ -50,7 +52,7 @@ export class PropertyOfflineServicePromiseClient extends PropertyServicePromiseC
 
       return res
     })
-    const result = new GetPropertiesBySubjectTypeResponse()
+    const result = new GetPropertiesResponse()
     result.setPropertiesList(values)
     return result
   }

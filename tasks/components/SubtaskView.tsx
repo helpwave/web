@@ -10,8 +10,6 @@ import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 import {
   useSubTaskAddMutation,
   useSubTaskDeleteMutation,
-  useSubTaskToDoneMutation,
-  useSubTaskToToDoMutation,
   useSubTaskUpdateMutation
 } from '@helpwave/api-services/mutations/tasks/task_mutations'
 import { SubtaskTile } from './SubtaskTile'
@@ -55,7 +53,6 @@ export const SubtaskView = ({
   overwriteTranslation,
   subtasks,
   taskId,
-  taskTemplateId,
   onChange,
 }: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
@@ -64,9 +61,7 @@ export const SubtaskView = ({
   const isCreatingTask = taskId === ''
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
   const deleteSubtaskMutation = useSubTaskDeleteMutation()
-  const updateSubtaskMutation = useSubTaskUpdateMutation()
-  const setSubtaskToToDoMutation = useSubTaskToToDoMutation()
-  const setSubtaskToDoneMutation = useSubTaskToDoneMutation()
+  const updateSubtaskMutation = useSubTaskUpdateMutation(taskId)
 
   const scrollableRef = useRef<Scrollbars>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
@@ -93,21 +88,6 @@ export const SubtaskView = ({
       onChange(filteredSubtasks)
       deleteSubtaskMutation.mutate(subtask.id)
     }
-  }
-
-  const changeSubtaskState = (subtask: SubTaskDTO, done: boolean) => {
-    // taskTemplateId === "" for the creation of a template // TODO: this seems like a terrible way of differentiating things..
-    if (taskTemplateId !== undefined) {
-      return
-    }
-    if (!isCreatingTask) {
-      if (done) {
-        setSubtaskToDoneMutation.mutate(subtask.id)
-      } else {
-        setSubtaskToToDoMutation.mutate(subtask.id)
-      }
-    }
-    subtask.isDone = done
   }
 
   return (
@@ -137,18 +117,15 @@ export const SubtaskView = ({
               <SubtaskTile
                 key={index}
                 subtask={subtask}
-                onNameChange={newSubtask => {
+                onChange={newSubtask => {
                   const newSubtasks = [...subtasks]
                   newSubtasks[index] = newSubtask
-                  onChange(newSubtasks)
-                }}
-                onNameEditCompleted={newSubtask => {
-                  if (!isCreatingTask) {
+                  if (subtask.id) {
                     updateSubtaskMutation.mutate(newSubtask)
                   }
+                  onChange(newSubtasks)
                 }}
                 onRemoveClick={() => removeSubtask(subtask, index)}
-                onDoneChange={(done) => changeSubtaskState(subtask, done)}
               />
             ))}
           </div>

@@ -1,4 +1,4 @@
-import { WardServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_grpc_web_pb'
+import { WardServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/ward_svc_grpc_web_pb'
 import type {
   CreateWardRequest,
   DeleteWardRequest,
@@ -8,7 +8,7 @@ import type {
   GetWardRequest,
   GetWardsRequest,
   UpdateWardRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/ward_svc_pb'
 import {
   CreateWardResponse,
   DeleteWardResponse,
@@ -18,7 +18,7 @@ import {
   GetWardResponse,
   GetWardsResponse,
   UpdateWardResponse
-} from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/ward_svc_pb'
 import type { Metadata } from 'grpc-web'
 import type { WardWithOrganizationIdDTO } from '../../types/tasks/wards'
 import type { PatientValueStore, TaskValueStore } from '../value_store'
@@ -88,7 +88,6 @@ export class WardOfflineServicePromiseClient extends WardServicePromiseClient {
     return new GetWardResponse()
       .setName(ward.name)
       .setId(ward.id)
-      .setOrganizationId(ward.organizationId)
   }
 
   async getWardDetails(request: GetWardDetailsRequest, _?: Metadata): Promise<GetWardDetailsResponse> {

@@ -7,7 +7,6 @@ import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@d
 import { Span } from '@helpwave/common/components/Span'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
-import { useOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
 import {
   useAssignBedMutation,
   usePatientCreateMutation,
@@ -92,10 +91,6 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
   }>()
   const wardId = useRouteParameters<'wardId'>().wardId
   const ward = useWardQuery(wardId).data
-
-  // TODO: is using '' as an org id a good idea?
-  const organizationId = ward?.organizationId ?? ''
-  const { data: organization } = useOrganizationQuery(organizationId)
 
   const [contextState, setContextState] = useState<WardOverviewContextState>({
     wardId
@@ -209,7 +204,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     setContextState({ wardId })
   }, [wardId])
 
-  const createPatientMutation = usePatientCreateMutation(organizationId)
+  const createPatientMutation = usePatientCreateMutation()
 
   // TOOD: can we somehow assert that the patient is not undefined here?
   const createPatient = () => contextState.patient && createPatientMutation.mutateAsync(contextState.patient)
@@ -232,12 +227,13 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     <PageWithHeader
       crumbs={[
         {
-          display: organization?.shortName ?? translation.organization,
-          link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations'
+          // TODO fix later
+          display: translation.organization,
+          link: `/organizations`
         },
         {
           display: ward?.name ?? translation.ward,
-          link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations'
+          link: `/organizations/?wardId=${wardId}`
         },
         {
           display: translation.room,

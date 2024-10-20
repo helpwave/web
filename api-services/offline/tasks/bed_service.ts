@@ -18,7 +18,7 @@ import {
   GetBedsResponse,
   UpdateBedResponse
 } from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_pb'
-import { BedServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_grpc_web_pb'
+import { BedServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_grpc_web_pb'
 import type { BedWithRoomId } from '../../types/tasks/bed'
 import { OfflineValueStore } from '../value_store'
 import { PatientOfflineService } from './patient_service'

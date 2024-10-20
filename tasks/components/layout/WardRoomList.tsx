@@ -9,7 +9,7 @@ import Link from 'next/link'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
-import { useCurrentOrganization } from '@helpwave/api-services/authentication/useCurrentOrganization'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { RoomOverview } from '../RoomOverview'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 
@@ -57,7 +57,7 @@ export const WardRoomList = ({
     isError,
     isLoading
   } = useRoomOverviewsQuery(contextState.wardId)
-  const organization = useCurrentOrganization()
+  const { organization } = useAuth()
 
   const displayableRooms = (rooms ?? data ?? []).filter(room => room.beds.length > 0)
 

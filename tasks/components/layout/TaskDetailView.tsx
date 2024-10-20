@@ -31,7 +31,6 @@ import {
 } from '@helpwave/api-services/mutations/tasks/task_mutations'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { formatDate } from '@helpwave/common/util/date'
-import { useCurrentOrganization } from '@helpwave/api-services/authentication/useCurrentOrganization'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
@@ -117,7 +116,7 @@ const TaskDetailViewSidebar = ({
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
-  const organization = useCurrentOrganization()
+  const { organization } = useAuth()
 
   const updateTaskMutation = useTaskUpdateMutation()
 

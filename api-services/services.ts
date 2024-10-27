@@ -1,9 +1,11 @@
-import { WardServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/ward_svc_grpc_web_pb'
-import { RoomServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/room_svc_grpc_web_pb'
-import { BedServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/bed_svc_grpc_web_pb'
-import { PatientServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_grpc_web_pb'
-import { TaskTemplateServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_grpc_web_pb'
-import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/task_svc_grpc_web_pb'
+import { WardServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/ward_svc_grpc_web_pb'
+import { RoomServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/room_svc_grpc_web_pb'
+import { BedServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_grpc_web_pb'
+import { PatientServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_grpc_web_pb'
+import {
+  TaskTemplateServicePromiseClient
+} from '@helpwave/proto-ts/services/tasks_svc/v1/task_template_svc_grpc_web_pb'
+import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_grpc_web_pb'
 import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_grpc_web_pb'
 import { UserServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_grpc_web_pb'
 import { PropertyServicePromiseClient } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_grpc_web_pb'
@@ -28,7 +30,7 @@ import { OrganizationOfflineServicePromiseClient } from './offline/users/organiz
 import { UserOfflineServicePromiseClient } from './offline/users/user_service'
 
 type APIServicesType = {
-  organization: OrganizationOfflineServicePromiseClient,
+  organization: OrganizationServicePromiseClient,
   user: UserServicePromiseClient,
   ward: WardServicePromiseClient,
   room: RoomServicePromiseClient,
@@ -54,7 +56,7 @@ const offlineServices: APIServicesType = {
   property: new PropertyOfflineServicePromiseClient(APIServiceUrls.property),
   propertyValues: new PropertyValueOfflineServicePromiseClient(APIServiceUrls.property),
   propertyViewSource: new PropertyViewsServicePromiseClient(APIServiceUrls.property), // TODO replace with an offline client
-  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates)
+  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates) // TODO replace with an offline client
 }
 
 const onlineServices: APIServicesType = {
@@ -69,7 +71,7 @@ const onlineServices: APIServicesType = {
   property: new PropertyServicePromiseClient(APIServiceUrls.property),
   propertyValues: new PropertyValueServicePromiseClient(APIServiceUrls.property),
   propertyViewSource: new PropertyViewsServicePromiseClient(APIServiceUrls.property),
-  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates)
+  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates) // TODO replace with an offline client
 }
 
 export const APIServices: APIServicesType = getAPIServiceConfig().offlineAPI ? offlineServices : onlineServices

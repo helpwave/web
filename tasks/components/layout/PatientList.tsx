@@ -10,9 +10,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Chip } from '@helpwave/common/components/ChipList'
-import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
-  useDeletePatientMutation,
   usePatientDischargeMutation,
   usePatientListQuery,
   useReadmitPatientMutation
@@ -109,7 +107,6 @@ export const PatientList = ({
 }: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(defaultPatientListTranslations, overwriteTranslation)
   const [search, setSearch] = useState('')
-  const ward = useWardQuery(wardId).data
   const {
     state: context,
     updateContext
@@ -119,21 +116,20 @@ export const PatientList = ({
     isLoading,
     isError,
     refetch: refetchPatientListQuery
-  } = usePatientListQuery(ward?.organizationId, wardId) // TODO: is this the right organizationId?; related: https://github.com/helpwave/web/issues/793
+  } = usePatientListQuery(wardId) // TODO: is this the right organizationId?; related: https://github.com/helpwave/web/issues/793
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
-  const deletePatientMutation = useDeletePatientMutation()
   const readmitPatientMutation = useReadmitPatientMutation()
   const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
   const [deletePatient, setDeletePatient] = useState<PatientMinimalDTO>()
 
-  const { observeAttribute, observable } = useUpdates()
+  const { observeAttribute } = useUpdates()
   useEffect(() => {
     const subscription = observeAttribute('aggregateId', 'patient').subscribe(() => refetchPatientListQuery())
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, [observeAttribute, refetchPatientListQuery])
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => patient.room.wardId === wardId
     ? `${patient.room.name} - ${patient.bed.name}`
@@ -152,7 +148,7 @@ export const PatientList = ({
         descriptionText={translation.deleteDescriptionText}
         onConfirm={() => {
           if (deletePatient) {
-            deletePatientMutation.mutate(deletePatient.id)
+            // deletePatientMutation.mutate(deletePatient.id)
           }
           setDeletePatient(undefined)
         }}
@@ -267,7 +263,10 @@ export const PatientList = ({
                   )}
                 >
                   {filteredUnassigned.map((patient) => (
-                    <Draggable id={patient.id} key={patient.id} data={{ patient, discharged: false }}>
+                    <Draggable id={patient.id} key={patient.id} data={{
+                      patient,
+                      discharged: false
+                    }}>
                       {() => (
                         <div
                           key={patient.id}
@@ -309,7 +308,10 @@ export const PatientList = ({
                   header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
                 >
                   {filteredDischarged.map(patient => (
-                    <Draggable id={patient.id} key={patient.id} data={{ patient, discharged: true }}>
+                    <Draggable id={patient.id} key={patient.id} data={{
+                      patient,
+                      discharged: true
+                    }}>
                       {() => (
                         <div
                           key={patient.id}
@@ -327,10 +329,15 @@ export const PatientList = ({
                             }}>
                               {translation.readmit}
                             </Button>
-                            <Button color="negative" variant="textButton" onClick={event => {
-                              event.stopPropagation()
-                              setDeletePatient(patient)
-                            }}>
+                            <Button
+                              color="negative"
+                              variant="textButton" onClick={event => {
+                                event.stopPropagation()
+                                setDeletePatient(patient)
+                              }}
+                              // TODO enable when patient delete is possible again
+                              disabled={true}
+                            >
                               {translation.delete}
                             </Button>
                           </div>

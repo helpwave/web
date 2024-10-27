@@ -228,10 +228,9 @@ export type PatientValueStore = {
   isDischarged: boolean
 }
 
-export type TaskValueStore = Omit<TaskDTO, 'assignee' | 'subtasks'> & {
+export type TaskValueStore = Omit<TaskDTO, 'subtasks'> & {
   patientId: string,
-  creatorId: string,
-  assigneeId?: string
+  creatorId: string
 }
 
 export type SubTaskValueStore = SubTaskDTO & {

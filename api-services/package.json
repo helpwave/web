@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@helpwave/common": "workspace:*",
-    "@helpwave/proto-ts": "0.59.0-12e8933.0",
+    "@helpwave/proto-ts": "0.60.0-1191f09.0",
     "@tanstack/react-query": "4.36.1",
     "@tanstack/react-query-devtools": "5.35.5",
     "@types/google-protobuf": "3.15.12",
@@ -17,6 +17,7 @@
     "keycloak-js": "^25.0.5",
     "oauth4webapi": "2.10.4",
     "react": "18.3.1",
+    "rxjs": "^7.8.1",
     "typescript": "5.4.5",
     "zod": "3.23.8"
   },

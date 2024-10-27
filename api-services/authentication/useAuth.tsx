@@ -120,7 +120,6 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (config.fakeTokenEnable) {
-      console.log(config.fakeTokenEnable)
       const user = tokenToUser(config.fakeToken)
       if (!user) throw new Error('Invalid fake token')
       didInit.current = true

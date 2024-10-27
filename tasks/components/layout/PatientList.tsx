@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -17,7 +17,12 @@ import {
   usePatientListQuery,
   useReadmitPatientMutation
 } from '@helpwave/api-services/mutations/tasks/patient_mutations'
-import type { PatientDTO, PatientMinimalDTO, PatientWithBedAndRoomDTO } from '@helpwave/api-services/types/tasks/patient'
+import type {
+  PatientDTO,
+  PatientMinimalDTO,
+  PatientWithBedAndRoomDTO
+} from '@helpwave/api-services/types/tasks/patient'
+import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { Draggable, Droppable } from '../dnd-kit-instances/patients'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
@@ -112,7 +117,8 @@ export const PatientList = ({
   const {
     data,
     isLoading,
-    isError
+    isError,
+    refetch: refetchPatientListQuery
   } = usePatientListQuery(ward?.organizationId, wardId) // TODO: is this the right organizationId?; related: https://github.com/helpwave/web/issues/793
   const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
   const dischargeMutation = usePatientDischargeMutation()
@@ -120,6 +126,14 @@ export const PatientList = ({
   const readmitPatientMutation = useReadmitPatientMutation()
   const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
   const [deletePatient, setDeletePatient] = useState<PatientMinimalDTO>()
+
+  const { observeAttribute, observable } = useUpdates()
+  useEffect(() => {
+    const subscription = observeAttribute('aggregateId', 'patient').subscribe(() => refetchPatientListQuery())
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => patient.room.wardId === wardId
     ? `${patient.room.name} - ${patient.bed.name}`

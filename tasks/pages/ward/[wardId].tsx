@@ -1,7 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
@@ -16,6 +16,7 @@ import {
   useUnassignMutation
 } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import type { PatientDTO, PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
+import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit-instances/patients'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PatientDetail } from '@/components/layout/PatientDetails'
@@ -91,11 +92,19 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     bed?: BedWithPatientWithTasksNumberDTO
   }>()
   const wardId = useRouteParameters<'wardId'>().wardId
-  const ward = useWardQuery(wardId).data
+  const { data: ward, refetch } = useWardQuery(wardId)
 
   // TODO: is using '' as an org id a good idea?
   const organizationId = ward?.organizationId ?? ''
   const { data: organization } = useOrganizationQuery(organizationId)
+
+  const { observeAttribute } = useUpdates()
+  useEffect(() => {
+    const subscription = observeAttribute('aggregateType', 'task').subscribe(() => refetch())
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
 
   const [contextState, setContextState] = useState<WardOverviewContextState>({
     wardId

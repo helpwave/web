@@ -125,7 +125,7 @@ export const PatientList = ({
 
   const { observeAttribute } = useUpdates()
   useEffect(() => {
-    const subscription = observeAttribute('aggregateId', 'patient').subscribe(() => refetchPatientListQuery())
+    const subscription = observeAttribute('aggregateType', 'patient').subscribe(() => refetchPatientListQuery())
     return () => {
       subscription.unsubscribe()
     }

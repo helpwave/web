@@ -10,9 +10,9 @@ import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/ty
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { RoomOverview } from '../RoomOverview'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
-import { useUpdates } from '@helpwave/api-services/util/useUpdates';
 
 type WardRoomListTranslation = {
   roomOverview: string,

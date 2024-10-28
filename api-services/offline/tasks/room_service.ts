@@ -1,16 +1,14 @@
 import type { Metadata } from 'grpc-web'
-import { RoomServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/room_svc_grpc_web_pb'
+import { RoomServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/room_svc_grpc_web_pb'
 import type {
   CreateRoomRequest, DeleteRoomRequest, GetRoomOverviewsByWardRequest,
-  GetRoomRequest,
-  GetRoomsByWardRequest
-  , GetRoomsRequest, UpdateRoomRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/room_svc_pb'
+  GetRoomRequest, GetRoomsRequest, UpdateRoomRequest
+} from '@helpwave/proto-ts/services/tasks_svc/v1/room_svc_pb'
 import {
   CreateRoomResponse, DeleteRoomResponse, GetRoomOverviewsByWardResponse,
   GetRoomResponse,
-  GetRoomsByWardResponse, GetRoomsResponse, UpdateRoomResponse
-} from '@helpwave/proto-ts/services/task_svc/v1/room_svc_pb'
+  GetRoomsResponse, UpdateRoomResponse
+} from '@helpwave/proto-ts/services/tasks_svc/v1/room_svc_pb'
 import type { RoomWithWardId } from '../../types/tasks/room'
 import type { TaskValueStore } from '../value_store'
 import { OfflineValueStore } from '../value_store'
@@ -73,37 +71,20 @@ export class RoomOfflineServicePromiseClient extends RoomServicePromiseClient {
       .setId(room.id)
       .setName(room.name)
       .setWardId(room.wardId)
-      .setOrganizationId('organization') // TODO fix RoomOfflineService
       .setBedsList([])
   }
 
-  async getRooms(_: GetRoomsRequest, __?: Metadata): Promise<GetRoomsResponse> {
-    const rooms = RoomOfflineService.findRooms()
+  async getRooms(request: GetRoomsRequest, __?: Metadata): Promise<GetRoomsResponse> {
+    const rooms = RoomOfflineService.findRooms(request.hasWardId() ? request.getWardId() : undefined)
 
     const list = rooms.map(room => new GetRoomsResponse.Room()
       .setId(room.id)
       .setName(room.name)
       .setWardId(room.wardId)
-      .setOrganizationId('organization') // TODO fix RoomOfflineService
       .setBedsList([])
     )
 
     return new GetRoomsResponse()
-      .setRoomsList(list)
-  }
-
-  async getRoomsByWard(request: GetRoomsByWardRequest, _?: Metadata): Promise<GetRoomsByWardResponse> {
-    const rooms = RoomOfflineService.findRooms(request.getWardId())
-
-    const list = rooms.map(room => new GetRoomsByWardResponse.Room()
-      .setId(room.id)
-      .setName(room.name)
-      .setWardId(room.wardId)
-      .setOrganizationId('organization') // TODO fix RoomOfflineService
-      .setBedsList([])
-    )
-
-    return new GetRoomsByWardResponse()
       .setRoomsList(list)
   }
 

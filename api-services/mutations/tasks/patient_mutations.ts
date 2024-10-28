@@ -2,17 +2,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreatePatientRequest,
   DischargePatientRequest,
-  GetPatientDetailsRequest,
   UpdatePatientRequest,
-  GetPatientsByWardRequest,
   AssignBedRequest,
   UnassignBedRequest,
-  GetPatientAssignmentByWardRequest,
-  GetPatientListRequest,
-  DeletePatientRequest,
   ReadmitPatientRequest,
-  GetRecentPatientsRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/patient_svc_pb'
+  GetRecentPatientsRequest,
+  GetPatientDetailsRequest,
+  GetPatientsByWardRequest,
+  GetPatientAssignmentByWardRequest,
+  GetPatientListRequest
+} from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
@@ -29,7 +28,7 @@ import type { BedWithPatientId } from '../../types/tasks/bed'
 import type { RoomWithMinimalBedAndPatient } from '../../types/tasks/room'
 import { roomOverviewsQueryKey } from './room_mutations'
 
-export const usePatientDetailsQuery = (patientId: string | undefined) => {
+export const usePatientDetailsQuery = (patientId?: string) => {
   return useQuery({
     queryKey: [QueryKeys.patients, patientId],
     enabled: !!patientId,
@@ -127,23 +126,15 @@ export const usePatientAssignmentByWardQuery = (wardId: string) => {
   })
 }
 
-export const usePatientListQuery = (organisationId?: string, wardId?: string) => {
+export const usePatientListQuery = (wardId?: string) => {
   return useQuery({
     queryKey: [QueryKeys.patients, 'patientList', wardId],
-    enabled: !!organisationId,
     queryFn: async () => {
       const req = new GetPatientListRequest()
-      if (!organisationId) {
-        return {
-          active: [],
-          discharged: [],
-          unassigned: []
-        }
-      }
       if (wardId) {
         req.setWardId(wardId)
       }
-      const res = await APIServices.patient.getPatientList(req, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.patient.getPatientList(req, getAuthenticatedGrpcMetadata())
 
       const patientList: PatientListDTO = {
         active: res.getActiveList().map(value => {
@@ -206,14 +197,8 @@ export const useRecentPatientsQuery = () => {
           id: patient.getId(),
           name: patient.getHumanReadableIdentifier(),
           wardId,
-          bed: bed ? {
-            id: bed.getId(),
-            name: bed.getName()
-          } : undefined,
-          room: room ? {
-            id: room.getId(),
-            name: room.getId()
-          } : undefined
+          bed: bed ? { id: bed.getId(), name: bed.getName() } : undefined,
+          room: room ? { id: room.getId(), name: room.getId() } : undefined
         })
       }
 
@@ -222,14 +207,14 @@ export const useRecentPatientsQuery = () => {
   })
 }
 
-export const usePatientCreateMutation = (organisationId: string) => {
+export const usePatientCreateMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (patient: PatientDTO) => {
       const req = new CreatePatientRequest()
-        .setNotes(patient.note)
-        .setHumanReadableIdentifier(patient.name)
-      const res = await APIServices.patient.createPatient(req, getAuthenticatedGrpcMetadata(organisationId))
+      req.setNotes(patient.note)
+      req.setHumanReadableIdentifier(patient.name)
+      const res = await APIServices.patient.createPatient(req, getAuthenticatedGrpcMetadata())
 
       const id = res.getId()
 
@@ -237,10 +222,7 @@ export const usePatientCreateMutation = (organisationId: string) => {
         throw new Error('create room failed')
       }
 
-      return {
-        ...patient,
-        id
-      }
+      return { ...patient, id }
     },
     onSuccess: () => {
       queryClient.refetchQueries([QueryKeys.rooms]).catch(reason => console.error(reason))
@@ -269,29 +251,6 @@ export const usePatientUpdateMutation = () => {
     onSuccess: () => {
       queryClient.refetchQueries([QueryKeys.patients]).catch(reason => console.error(reason))
       queryClient.refetchQueries([QueryKeys.rooms]).catch(reason => console.error(reason))
-    }
-  })
-}
-
-export const usePatientDischargeMutation = (callback: () => void = noop) => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (patientId: string) => {
-      const req = new DischargePatientRequest()
-      req.setId(patientId)
-
-      const res = await APIServices.patient.dischargePatient(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        throw new Error('error in PatientDischarge')
-      }
-
-      callback()
-      return res.toObject()
-    },
-    onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(reason => console.error(reason))
-      queryClient.refetchQueries([QueryKeys.patients]).catch(reason => console.error(reason))
     }
   })
 }
@@ -343,6 +302,7 @@ export const useUnassignMutation = (callback: () => void = noop) => {
   })
 }
 
+/* TODO wait for backend decision on this
 export const useDeletePatientMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -357,6 +317,30 @@ export const useDeletePatientMutation = () => {
     onSuccess: () => {
       queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
       queryClient.refetchQueries([QueryKeys.patients]).then()
+    }
+  })
+}
+ */
+
+export const usePatientDischargeMutation = (callback: () => void = noop) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (patientId: string) => {
+      const req = new DischargePatientRequest()
+      req.setId(patientId)
+
+      const res = await APIServices.patient.dischargePatient(req, getAuthenticatedGrpcMetadata())
+
+      if (!res.toObject()) {
+        throw new Error('error in PatientDischarge')
+      }
+
+      callback()
+      return res.toObject()
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(reason => console.error(reason))
+      queryClient.refetchQueries([QueryKeys.patients]).catch(reason => console.error(reason))
     }
   })
 }

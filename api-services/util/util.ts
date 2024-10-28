@@ -80,6 +80,8 @@ export const GRPCConverter = {
         return GRPCFieldType.FIELD_TYPE_SELECT
       case 'multiSelect':
         return GRPCFieldType.FIELD_TYPE_MULTI_SELECT
+      default:
+        return GRPCFieldType.FIELD_TYPE_UNSPECIFIED
     }
   },
   fieldTypeMapperFromGRPC: (fieldType: GRPCFieldType): FieldType => {

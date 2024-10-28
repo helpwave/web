@@ -5,7 +5,7 @@ import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata
 import { QueryKeys } from '../query_keys'
 import type { OrganizationMember } from '../../types/users/organization_member'
 
-export const useMembersByOrganizationQuery = (organizationId: string | undefined) => {
+export const useMembersByOrganizationQuery = (organizationId?: string) => {
   return useQuery({
     queryKey: [QueryKeys.organizations, organizationId, 'members'],
     enabled: !!organizationId,

@@ -1,27 +1,25 @@
 import type { Metadata } from 'grpc-web'
-import { TaskTemplateServicePromiseClient } from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_grpc_web_pb'
+import {
+  TaskTemplateServicePromiseClient
+} from '@helpwave/proto-ts/services/tasks_svc/v1/task_template_svc_grpc_web_pb'
 import type {
   CreateTaskTemplateRequest,
   CreateTaskTemplateSubTaskRequest,
   DeleteTaskTemplateRequest,
   DeleteTaskTemplateSubTaskRequest,
-  GetAllTaskTemplatesByCreatorRequest,
-  GetAllTaskTemplatesByWardRequest,
   GetAllTaskTemplatesRequest,
   UpdateTaskTemplateRequest,
   UpdateTaskTemplateSubTaskRequest
-} from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/task_template_svc_pb'
 import {
   CreateTaskTemplateResponse,
   CreateTaskTemplateSubTaskResponse,
   DeleteTaskTemplateResponse,
   DeleteTaskTemplateSubTaskResponse,
-  GetAllTaskTemplatesByCreatorResponse,
-  GetAllTaskTemplatesByWardResponse,
   GetAllTaskTemplatesResponse,
   UpdateTaskTemplateResponse,
   UpdateTaskTemplateSubTaskResponse
-} from '@helpwave/proto-ts/services/task_svc/v1/task_template_svc_pb'
+} from '@helpwave/proto-ts/services/tasks_svc/v1/task_template_svc_pb'
 import type { TaskTemplateSubTaskValueStore, TaskTemplateValueStore } from '../value_store'
 import { OfflineValueStore } from '../value_store'
 
@@ -97,8 +95,14 @@ export class TaskTemplateOfflineServicePromiseClient extends TaskTemplateService
     valueStore.taskTemplates = valueStore.taskTemplates.filter(value => value.id !== id)
   }
 
-  async getAllTaskTemplates(_: GetAllTaskTemplatesRequest, __?: Metadata): Promise<GetAllTaskTemplatesResponse> {
-    const taskTemplates = this.allTaskTemplates()
+  async getAllTaskTemplates(request: GetAllTaskTemplatesRequest, __?: Metadata): Promise<GetAllTaskTemplatesResponse> {
+    let taskTemplates = this.allTaskTemplates()
+    if (request.hasWardId()) {
+      taskTemplates = taskTemplates.filter(value => value.wardId === request.getWardId())
+    }
+    if (request.hasCreatedBy()) {
+      taskTemplates = taskTemplates.filter(value => value.creatorId === request.getCreatedBy())
+    }
     const list = taskTemplates.map(taskTemplate => new GetAllTaskTemplatesResponse.TaskTemplate()
       .setId(taskTemplate.id)
       .setName(taskTemplate.name)
@@ -113,41 +117,6 @@ export class TaskTemplateOfflineServicePromiseClient extends TaskTemplateService
     )
 
     return new GetAllTaskTemplatesResponse().setTemplatesList(list)
-  }
-
-  async getAllTaskTemplatesByWard(request: GetAllTaskTemplatesByWardRequest, _?: Metadata): Promise<GetAllTaskTemplatesByWardResponse> {
-    const taskTemplates = this.findTaskTemplatesByWardId(request.getWardId())
-    const list = taskTemplates.map(taskTemplate => new GetAllTaskTemplatesByWardResponse.TaskTemplate()
-      .setId(taskTemplate.id)
-      .setName(taskTemplate.name)
-      .setDescription(taskTemplate.notes)
-      .setIsPublic(taskTemplate.isPublicVisible)
-      .setCreatedBy(taskTemplate.creatorId)
-      .setSubtasksList(this.findTaskTemplateSubTasks(taskTemplate.id).map(subtaskTemplate => new GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask()
-        .setId(subtaskTemplate.id)
-        .setName(subtaskTemplate.name)
-        .setTaskTemplateId(taskTemplate.id)
-      ))
-    )
-
-    return new GetAllTaskTemplatesByWardResponse().setTemplatesList(list)
-  }
-
-  async getAllTaskTemplatesByCreator(request: GetAllTaskTemplatesByCreatorRequest, _?: Metadata): Promise<GetAllTaskTemplatesByCreatorResponse> {
-    const taskTemplates = this.findTaskTemplatesByCreator(request.getCreatedBy())
-    const list = taskTemplates.map(taskTemplate => new GetAllTaskTemplatesByCreatorResponse.TaskTemplate()
-      .setId(taskTemplate.id)
-      .setName(taskTemplate.name)
-      .setDescription(taskTemplate.notes)
-      .setIsPublic(taskTemplate.isPublicVisible)
-      .setSubtasksList(this.findTaskTemplateSubTasks(taskTemplate.id).map(subtaskTemplate => new GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask()
-        .setId(subtaskTemplate.id)
-        .setName(subtaskTemplate.name)
-        .setTaskTemplateId(taskTemplate.id)
-      ))
-    )
-
-    return new GetAllTaskTemplatesByCreatorResponse().setTemplatesList(list)
   }
 
   async createTaskTemplate(request: CreateTaskTemplateRequest, _?: Metadata): Promise<CreateTaskTemplateResponse> {

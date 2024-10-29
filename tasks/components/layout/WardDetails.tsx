@@ -6,18 +6,18 @@ import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import {
+  useWardCreateMutation,
+  useWardDeleteMutation,
+  useWardUpdateMutation,
+  useWardDetailsQuery
+} from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import type { WardDetailDTO } from '@helpwave/api-services/types/tasks/wards'
+import { emptyWard } from '@helpwave/api-services/types/tasks/wards'
 import { ColumnTitle } from '../ColumnTitle'
 import { RoomList } from '../RoomList'
 import { WardForm } from '../WardForm'
 import { TaskTemplateWardPreview } from '../TaskTemplateWardPreview'
-import {
-  emptyWard,
-  useWardCreateMutation,
-  useWardDeleteMutation,
-  useWardUpdateMutation,
-  useWardDetailsQuery,
-  type WardDetailDTO
-} from '@/mutations/ward_mutations'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 
 type WardDetailTranslation = {

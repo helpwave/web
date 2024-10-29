@@ -6,11 +6,12 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import Link from 'next/link'
+import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
+import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
+import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { RoomOverview } from '../RoomOverview'
-import { useRoomOverviewsQuery, type RoomOverviewDTO } from '@/mutations/room_mutations'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
-import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
-import { useWardQuery } from '@/mutations/ward_mutations'
 
 type WardRoomListTranslation = {
   roomOverview: string,
@@ -56,7 +57,7 @@ export const WardRoomList = ({
     isError,
     isLoading
   } = useRoomOverviewsQuery(contextState.wardId)
-  const { data: ward } = useWardQuery(contextState.wardId)
+  const { organization } = useAuth()
 
   const displayableRooms = (rooms ?? data ?? []).filter(room => room.beds.length > 0)
 
@@ -86,7 +87,7 @@ export const WardRoomList = ({
           )) : (
             <div className={tw('flex flex-col gap-y-2 items-center')}>
               <Span>{translation.noRooms}</Span>
-              <Link href={`/organizations/${(ward ?? contextState).organizationId}?wardId=${contextState.wardId}`}>
+              <Link href={`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`}>
                 <Button>{translation.editWard}</Button>
               </Link>
             </div>

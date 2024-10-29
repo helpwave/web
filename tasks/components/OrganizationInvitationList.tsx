@@ -7,12 +7,12 @@ import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
-import { InvitationState } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import {
   useInvitationsByOrganizationQuery,
   useInviteMemberMutation, useInviteRevokeMutation
-} from '@/mutations/organization_mutations'
+} from '@helpwave/api-services/mutations/users/organization_mutations'
+import { InvitationState } from '@helpwave/api-services/types/users/invitations'
 import { OrganizationContext } from '@/pages/organizations'
 
 type OrganizationInvitationListTranslation = {

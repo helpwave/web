@@ -1,4 +1,4 @@
-class StorageSerice {
+class StorageService {
   // this seems to be a bug in eslint as 'paramter-properties' is a special syntax of typescript
   // eslint-disable-next-line no-useless-constructor
   constructor(private storage: Storage) {}
@@ -24,13 +24,13 @@ class StorageSerice {
   }
 }
 
-export class LocalStorageService extends StorageSerice {
+export class LocalStorageService extends StorageService {
   constructor() {
     super(window.localStorage)
   }
 }
 
-export class SessionStorageService extends StorageSerice {
+export class SessionStorageService extends StorageService {
   constructor() {
     super(window.sessionStorage)
   }

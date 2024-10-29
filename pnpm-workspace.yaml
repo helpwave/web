@@ -4,3 +4,4 @@ packages:
   - landing-page
   - eslint-config
   - scripts
+  - api-services

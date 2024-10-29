@@ -5,6 +5,16 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
+import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
+import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import {
+  useAssignBedMutation,
+  usePatientCreateMutation,
+  usePatientDischargeMutation,
+  useReadmitPatientMutation,
+  useUnassignMutation
+} from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import type { PatientDTO, PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
 import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit-instances/patients'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PatientDetail } from '@/components/layout/PatientDetails'
@@ -12,19 +22,8 @@ import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
 import { WardRoomList } from '@/components/layout/WardRoomList'
 import { PatientList } from '@/components/layout/PatientList'
-import type { PatientDTO, PatientMinimalDTO } from '@/mutations/patient_mutations'
-import {
-  useAssignBedMutation,
-  usePatientCreateMutation,
-  usePatientDischargeMutation,
-  useReadmitPatientMutation,
-  useUnassignMutation
-} from '@/mutations/patient_mutations'
 import { DragCard } from '@/components/cards/DragCard'
-import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
 import { PatientCard } from '@/components/cards/PatientCard'
-import { useWardQuery } from '@/mutations/ward_mutations'
-import { useOrganizationQuery } from '@/mutations/organization_mutations'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardOverviewTranslation = {
@@ -92,10 +91,6 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
   }>()
   const wardId = useRouteParameters<'wardId'>().wardId
   const ward = useWardQuery(wardId).data
-
-  // TODO: is using '' as an org id a good idea?
-  const organizationId = ward?.organizationId ?? ''
-  const { data: organization } = useOrganizationQuery(organizationId)
 
   const [contextState, setContextState] = useState<WardOverviewContextState>({
     wardId
@@ -209,7 +204,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     setContextState({ wardId })
   }, [wardId])
 
-  const createPatientMutation = usePatientCreateMutation(organizationId)
+  const createPatientMutation = usePatientCreateMutation()
 
   // TOOD: can we somehow assert that the patient is not undefined here?
   const createPatient = () => contextState.patient && createPatientMutation.mutateAsync(contextState.patient)
@@ -232,12 +227,13 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     <PageWithHeader
       crumbs={[
         {
-          display: organization?.shortName ?? translation.organization,
-          link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations'
+          // TODO fix later
+          display: translation.organization,
+          link: `/organizations`
         },
         {
           display: ward?.name ?? translation.ward,
-          link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations'
+          link: `/organizations/?wardId=${wardId}`
         },
         {
           display: translation.room,
@@ -298,7 +294,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
           <TwoColumn
             disableResize={false}
             constraints={{
-              right: { min: '580px' },
+              right: { min: '650px' },
               left: { min: '33%' }
             }}
             baseLayoutValue="-580px"

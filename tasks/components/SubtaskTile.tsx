@@ -4,8 +4,7 @@ import { tw } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { Button } from '@helpwave/common/components/Button'
-import { noop } from '@helpwave/common/util/noop'
-import type { SubTaskDTO } from '@/mutations/task_mutations'
+import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 
 type SubtaskTileTranslation = {
   subtasks: string,
@@ -26,9 +25,7 @@ const defaultSubtaskTileTranslation = {
 type SubtaskTileProps = {
   subtask: SubTaskDTO,
   onRemoveClick: () => void,
-  onNameChange: (subtask: SubTaskDTO) => void,
-  onNameEditCompleted?: (subtask: SubTaskDTO) => void,
-  onDoneChange: (done: boolean) => void
+  onChange: (subtask: SubTaskDTO) => void
 }
 
 /**
@@ -38,36 +35,48 @@ export const SubtaskTile = ({
   overwriteTranslation,
   subtask,
   onRemoveClick,
-  onNameChange,
-  onNameEditCompleted = noop,
-  onDoneChange
+  onChange,
 }: PropsForTranslation<SubtaskTileTranslation, SubtaskTileProps>) => {
   const translation = useTranslation(defaultSubtaskTileTranslation, overwriteTranslation)
 
   const minTaskNameLength = 2
   const maxTaskNameLength = 64
-  const [checked, setChecked] = useState(false)
+  const [localSubtask, setLocalSubtask] = useState<SubTaskDTO>({ ...subtask })
 
   useEffect(() => {
-    setChecked(subtask.isDone)
-  }, [subtask.isDone])
+    setLocalSubtask(subtask)
+  }, [subtask])
 
   return (
     <div className={tw('flex flex-row gap-x-2 items-center overflow-x-hidden')}>
       <div>
         <Checkbox
-          onChange={done => {
-            onDoneChange(done)
-            setChecked(subtask.isDone)
+          onChange={isDone => {
+            const newSubtask: SubTaskDTO = {
+              ...localSubtask,
+              isDone
+            }
+            onChange(newSubtask)
+            setLocalSubtask(newSubtask)
           }}
-          checked={checked}
+          checked={localSubtask.isDone}
         />
       </div>
       <ToggleableInput
         value={subtask.name}
         className={tw('')}
-        onChange={text => onNameChange({ ...subtask, name: text })}
-        onEditCompleted={text => onNameEditCompleted({ ...subtask, name: text })}
+        onChange={name => setLocalSubtask({
+          ...subtask,
+          name
+        })}
+        onEditCompleted={name => {
+          const newSubtask: SubTaskDTO = {
+            ...localSubtask,
+            name
+          }
+          onChange(newSubtask)
+          setLocalSubtask(newSubtask)
+        }}
         id={subtask.name}
         minLength={minTaskNameLength}
         maxLength={maxTaskNameLength}

@@ -145,6 +145,9 @@ export const Carousel = ({
             lastUpdateTime: time
           }
         }
+        if (newIndex === animationState.targetIndex && newOffset < 0) {
+          newOffset = 0
+        }
       }
       const useAnimationTime = animationState.isAutoLooping ? autoLoopAnimationTime : animationTime
       const progress = clamp((time - animationState.startTime) / useAnimationTime) // progress
@@ -181,6 +184,12 @@ export const Carousel = ({
         cancelAnimationFrame(animationId.current)
         animationId.current = 0
       }
+      const distanceBackward = length - distanceForward
+      // let distance = Math.min(distanceForward, distanceBackward)
+      direction = distanceForward < distanceBackward ? 1 : -1
+    }
+    if (targetIndex === currentIndex) {
+      direction = offset > 0 ? -1 : 1
     }
   }, [animationState]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -349,6 +358,35 @@ export const Carousel = ({
   return (
     <div className={tw('flex flex-col items-center w-full gap-y-2')}>
       <div className={tx(`relative w-full overflow-hidden`, height, className)}>
+        <div
+          // This is the click target
+          className={tw('absolute z-20 h-full w-full')}
+          onClick={event => {
+            const rect = (event.target as HTMLDivElement).getBoundingClientRect()
+            const clickX = event.clientX - rect.left
+            const divWidth = rect.width
+            const sectionWidth = 0.22
+            if (clickX < divWidth * sectionWidth) {
+              left()
+            } else if (clickX > divWidth * (1 - sectionWidth)) {
+              right()
+            } else {
+              if (isAnimating) {
+                startAnimation()
+              } else {
+                onCardClick(currentIndex)
+              }
+            }
+          }}
+          draggable={true}
+          onDragStart={event => onDragStart(event.clientX)}
+          onDrag={event => onDrag(event.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
+          onDragEnd={event => onDragEnd(event.clientX)}
+          onTouchStart={event => onDragStart(event.touches[0]!.clientX)}
+          onTouchMove={event => onDrag(event.touches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width)}
+          onTouchEnd={event => onDragEnd(event.changedTouches[0]!.clientX)}
+          onTouchCancel={event => onDragEnd(event.changedTouches[0]!.clientX)}
+        />
         {arrows && (
           <>
             <div

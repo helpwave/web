@@ -7,9 +7,9 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
+import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { SubtaskView } from '../SubtaskView'
 import { ColumnTitle } from '../ColumnTitle'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
 import { TaskTemplateContext, type TaskTemplateFormType } from '@/pages/templates'
 
 type TaskTemplateDetailsTranslation = {

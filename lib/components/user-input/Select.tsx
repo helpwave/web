@@ -57,16 +57,23 @@ export const Select = <T, >({
   if (!showDisabledOptions) {
     filteredOptions = filteredOptions.filter(value => !value.disabled)
   }
+  const selectedOption = options.find(option => option.value === value)
+  if (value !== undefined && selectedOption === undefined && selectedDisplayOverwrite === undefined) {
+    console.warn('The selected value is not found in the options list. This might be an error on your part or' +
+      ' default behavior if it is complex data type on which === does not work. In case of the latter' +
+      ' use selectedDisplayOverwrite to set your selected text or component')
+  }
+
   return (
     <div className={tx(className)}>
       {label && (
-        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={tx('mb-1', label.className)} />
+        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={tx('mb-1', label.className)}/>
       )}
-      <Menu as="div" className={tw('relative w-full text-gray-700')}>
+      <Menu as="div" className={tw('relative text-gray-700')}>
         {({ open }) => (
           <>
             <Menu.Button
-              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium',
+              className={tx('inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium bg-white',
                 textColor,
                 {
                   'rounded-b-lg': !open,
@@ -76,7 +83,7 @@ export const Select = <T, >({
               )}
               disabled={isDisabled}
             >
-              <Span>{selectedDisplayOverwrite ?? options.find(option => option.value === value)?.label ?? hintText}</Span>
+              <Span>{selectedDisplayOverwrite ?? selectedOption?.label ?? hintText}</Span>
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items
@@ -95,7 +102,7 @@ export const Select = <T, >({
                 <Menu.Item key={`item${index}`}>
                   {
                     <div
-                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0',
+                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0 cursor-pointer',
                         option.className, {
                           'bg-gray-100': option.value === value,
                           'bg-gray-50': index % 2 === 1,

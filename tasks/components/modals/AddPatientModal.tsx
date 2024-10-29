@@ -6,8 +6,8 @@ import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/compone
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { noop } from '@helpwave/common/util/noop'
-import { useWardQuery } from '@/mutations/ward_mutations'
-import { emptyPatient, useAssignBedMutation, usePatientCreateMutation } from '@/mutations/patient_mutations'
+import { useAssignBedMutation, usePatientCreateMutation } from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import { emptyPatient } from '@helpwave/api-services/types/tasks/patient'
 import type { RoomBedSelectIds } from '@/components/selects/RoomBedSelect'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 
@@ -52,9 +52,7 @@ export const AddPatientModal = ({
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)
   const assignBedMutation = useAssignBedMutation()
-  const ward = useWardQuery(wardId).data
-  const organisationId = ward?.organizationId ?? ''
-  const createPatientMutation = usePatientCreateMutation(organisationId)
+  const createPatientMutation = usePatientCreateMutation()
 
   const minimumNameLength = 4
   const trimmedPatientName = patientName.trim()

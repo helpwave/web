@@ -4,11 +4,11 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { useRouter } from 'next/router'
 import { Span } from '@helpwave/common/components/Span'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import { useRecentPatientsQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import { WardCard } from '../cards/WardCard'
 import { InvitationBanner } from '../InvitationBanner'
 import { PatientCard } from '../cards/PatientCard'
-import { useRecentPatientsQuery } from '@/mutations/patient_mutations'
-import { useWardOverviewsQuery } from '@/mutations/ward_mutations'
 
 type DashboardDisplayTranslation = {
   patients: string,

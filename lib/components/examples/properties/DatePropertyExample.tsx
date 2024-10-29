@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import type { DatePropertyProps } from '../../properties/DateProperty'
 import { DateProperty } from '../../properties/DateProperty'
+import { noop } from '../../../util/noop'
 
-export type DatePropertyExampleProps = Omit<DatePropertyProps, 'onChange'|'onRemove'> & {
+export type DatePropertyExampleProps = DatePropertyProps & {
   readOnly: boolean
 }
 
@@ -10,14 +11,34 @@ export type DatePropertyExampleProps = Omit<DatePropertyProps, 'onChange'|'onRem
  * Example for using the DateProperty
  */
 export const DatePropertyExample = ({
-  date,
+  value,
+  onChange = noop,
+  onRemove = noop,
+  onEditComplete = noop,
   ...restProps
 }: DatePropertyExampleProps) => {
-  const [usedDate, setUsedDate] = useState<Date | undefined>(date)
+  const [usedDate, setUsedDate] = useState<Date | undefined>(value)
 
   useEffect(() => {
-    setUsedDate(date)
-  }, [date])
+    setUsedDate(value)
+  }, [value])
 
-  return (<DateProperty {...restProps} onChange={setUsedDate} onRemove={() => setUsedDate(undefined)} date={usedDate}/>)
+  return (
+    <DateProperty
+      {...restProps}
+      onChange={date => {
+        setUsedDate(date)
+        onChange(date)
+      }}
+      onEditComplete={date => {
+        setUsedDate(date)
+        onEditComplete(date)
+      }}
+      onRemove={() => {
+        setUsedDate(undefined)
+        onRemove()
+      }}
+      value={usedDate}
+    />
+  )
 }

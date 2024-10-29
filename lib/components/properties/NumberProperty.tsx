@@ -24,8 +24,9 @@ const defaultNumberPropertyTranslation: Record<Languages, NumberPropertyTranslat
 
 export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
   value?: number,
-  suffix: string,
-  onChange?: (value: number) => void
+  suffix?: string,
+  onChange?: (value: number) => void,
+  onEditComplete?: (value: number) => void
 }
 
 /**
@@ -36,6 +37,7 @@ export const NumberProperty = ({
   value,
   onChange = noop,
   onRemove = noop,
+  onEditComplete = noop,
   readOnly,
   suffix,
   ...baseProps
@@ -73,11 +75,11 @@ export const NumberProperty = ({
               if (isNaN(numberValue)) {
                 onRemove()
               } else {
-                onChange(numberValue)
+                onEditComplete(numberValue)
               }
             }}
           />
-          <Span className={tx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</Span>
+          {suffix && <Span className={tx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</Span>}
         </div>
       )}
     />

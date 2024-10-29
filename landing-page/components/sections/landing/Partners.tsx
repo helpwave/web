@@ -20,10 +20,6 @@ const defaultPartnerSectionTranslation: Record<Languages, PartnerSectionTranslat
 
 const images: Partner[] = [
   {
-    name: 'Collective Incubator',
-    url: 'https://cdn.helpwave.de/partners/collective_incubator_black.svg'
-  },
-  {
     name: 'REACH',
     url: 'https://cdn.helpwave.de/partners/reach.svg'
   },
@@ -32,28 +28,36 @@ const images: Partner[] = [
     url: 'https://cdn.helpwave.de/partners/rwth_logo.svg',
   },
   {
+    name: 'MedLife',
+    url: 'https://cdn.helpwave.de/partners/medlife.png'
+  },
+  {
+    name: 'Collective Incubator',
+    url: 'https://cdn.helpwave.de/partners/collective_incubator_black.svg'
+  },
+  {
+    name: 'mediQuu',
+    url: 'https://cdn.helpwave.de/mediquu/logo_2021.png'
+  },
+  {
+    name: 'Digital Hub Aachen',
+    url: 'https://cdn.helpwave.de/partners/digitalhub_aachen.png'
+  },
+  {
     name: 'Digital Hub münsterLAND',
     url: 'https://cdn.helpwave.de/partners/digitalhub_muensterland.png'
-  },
-  {
-    name: 'Münsterhack',
-    url: 'https://cdn.helpwave.de/partners/mshack_2023.png',
-  },
-  {
-    name: 'Gründungsstipendium.NRW',
-    url: 'https://cdn.helpwave.de/partners/gruendungsstipendium.jpg'
   },
   {
     name: 'Ministerium für Wirtschaft, Industrie, Klimaschutz, und Energie des Landes NRW',
     url: 'https://cdn.helpwave.de/partners/mfw.svg'
   },
   {
-    name: 'MedLife',
-    url: 'https://cdn.helpwave.de/partners/medlife.png'
+    name: 'Gründungsstipendium.NRW',
+    url: 'https://cdn.helpwave.de/partners/gruendungsstipendium.jpg'
   },
   {
-    name: 'mediQuu',
-    url: 'https://cdn.helpwave.de/mediquu/logo_2021.png'
+    name: 'Münsterhack',
+    url: 'https://cdn.helpwave.de/partners/mshack_2023.png',
   },
 ]
 

@@ -1,10 +1,31 @@
 import type { PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import type { Observable } from 'rxjs'
+import { filter, fromEvent, map, startWith, Subject } from 'rxjs'
 import type { DomainEvent } from '@helpwave/proto-ts/services/updates_svc/v1/updates_svc_pb'
 import { ReceiveUpdatesResponse } from '@helpwave/proto-ts/services/updates_svc/v1/updates_svc_pb'
-import type { Observable } from 'rxjs'
-import { filter, Subject } from 'rxjs'
 import ReceiveUpdatesStreamHandler from './ReceiveUpdatesStreamHandler'
+
+// Two types of speed should be enough.
+// There is currently no reason for a frontend developer
+// to differentiate between for example 2g or 3g.
+let networkSpeed$: Observable<'slow' | 'fast'> | undefined
+
+if (typeof window !== 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const connection = (navigator as any).connection
+
+  if (connection && connection?.effectiveType) {
+    networkSpeed$ = fromEvent(connection, 'change')
+      .pipe(
+        startWith(connection!.effectiveType!),
+        map((event) => {
+          const effectiveType = typeof event === 'string' ? event : connection!.effectiveType!
+          return ['3g', '4g'].includes(effectiveType) ? 'fast' : 'slow'
+        })
+      )
+  }
+}
 
 type UpdatesSubject = {
   aggregateType: string,
@@ -33,9 +54,8 @@ export const ProvideUpdates = ({ children }: PropsWithChildren) => {
   const [revision, setRevision] = useState<number>()
 
   useEffect(() => {
-    const subscription = ReceiveUpdatesStreamHandler
+    const receiveUpdatesStreamHandlerSubscription = ReceiveUpdatesStreamHandler
       .getInstance()
-      .start()
       .observable
       .subscribe((res) => {
         let domainEvent: DomainEvent
@@ -53,9 +73,22 @@ export const ProvideUpdates = ({ children }: PropsWithChildren) => {
         // Only set revision when handlers are executed successfully
         setRevision(res.getRevision())
       })
+
+    const networkSpeedSubscription = networkSpeed$
+      ?.subscribe((speed) => {
+        switch (speed) {
+          case 'slow':
+            ReceiveUpdatesStreamHandler.getInstance().stop()
+            break
+          case 'fast':
+            ReceiveUpdatesStreamHandler.getInstance().start()
+            break
+        }
+      })
+
     return () => {
-      subscription.unsubscribe()
-      ReceiveUpdatesStreamHandler.getInstance().stop()
+      networkSpeedSubscription?.unsubscribe()
+      receiveUpdatesStreamHandlerSubscription.unsubscribe()
     }
   }, [])
 

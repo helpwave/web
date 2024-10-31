@@ -15,8 +15,6 @@ import { ProvideUpdates } from '@helpwave/api-services/util/useUpdates'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
 
-global.XMLHttpRequest = require('xhr2')
-
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter'

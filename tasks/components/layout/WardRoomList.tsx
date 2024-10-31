@@ -69,7 +69,7 @@ export const WardRoomList = ({
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, [observeAttribute, refetch])
 
   return (
     <div className={tw('flex flex-col px-6 py-4')}

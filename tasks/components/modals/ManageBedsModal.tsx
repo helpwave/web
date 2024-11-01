@@ -85,7 +85,7 @@ export const ManageBedsModal = ({
   const updateBedMutation = useBedUpdateMutation()
   const deleteBedMutation = useBedDeleteMutation()
 
-  const addBed = () => room && addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1 ?? 1}`, roomId })
+  const addBed = () => room && addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1}`, roomId })
 
   const maxBedNameLength = 16
 

@@ -14,8 +14,8 @@ importers:
         specifier: workspace:*
         version: link:../lib
       '@helpwave/proto-ts':
-        specifier: 0.59.0-12e8933.0
-        version: 0.59.0-12e8933.0
+        specifier: 0.60.0-1191f09.0
+        version: 0.60.0-1191f09.0
       '@tanstack/react-query':
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.3.1)(react@18.3.1)
@@ -43,6 +43,9 @@ importers:
       react:
         specifier: 18.3.1
         version: 18.3.1
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -301,6 +304,9 @@ importers:
       '@helpwave/common':
         specifier: workspace:*
         version: link:../lib
+      '@helpwave/proto-ts':
+        specifier: 0.60.0-1191f09.0
+        version: 0.60.0-1191f09.0
       '@radix-ui/react-checkbox':
         specifier: 1.0.4
         version: 1.0.4(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
@@ -364,6 +370,9 @@ importers:
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
       simplebar-core:
         specifier: 1.2.5
         version: 1.2.5
@@ -2299,8 +2308,8 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@helpwave/proto-ts@0.59.0-12e8933.0:
-    resolution: {integrity: sha512-2lNz070tJSCHA1tAZ66+Mk7tgC+Ni2MlvWT3jL4Gp5l8UYswf9uGmWJYWmgNn/LGtPNnYE1UK9b6O3OmXsJcTQ==}
+  /@helpwave/proto-ts@0.60.0-1191f09.0:
+    resolution: {integrity: sha512-PlFXjSoKFCA2nReg1yLWxAfpo5bk+Px8P2afGQpsIAVpE9am+tz02uvst6TzR/1D8E6SiRu9G6BKydxYFW/bzQ==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:
@@ -10073,6 +10082,12 @@ packages:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
     dependencies:
       queue-microtask: 1.2.3
+
+  /rxjs@7.8.1:
+    resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
 
   /safe-array-concat@1.1.0:
     resolution: {integrity: sha512-ZdQ0Jeb9Ofti4hbt5lX3T2JcAamT9hfzYU1MNB+z/jaEbB6wfFfPIR/zEORmZqobkCCJhSjodobH6WHNmJ97dg==}

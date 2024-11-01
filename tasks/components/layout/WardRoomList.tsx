@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { tw } from '@helpwave/common/twind'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -10,6 +10,7 @@ import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/ty
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { RoomOverview } from '../RoomOverview'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 
@@ -55,11 +56,20 @@ export const WardRoomList = ({
   const {
     data,
     isError,
-    isLoading
+    isLoading,
+    refetch
   } = useRoomOverviewsQuery(contextState.wardId)
   const { organization } = useAuth()
 
   const displayableRooms = (rooms ?? data ?? []).filter(room => room.beds.length > 0)
+
+  const { observeAttribute } = useUpdates()
+  useEffect(() => {
+    const subscription = observeAttribute('aggregateType', 'patient').subscribe(() => refetch())
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [observeAttribute, refetch])
 
   return (
     <div className={tw('flex flex-col px-6 py-4')}

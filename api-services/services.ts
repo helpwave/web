@@ -6,9 +6,7 @@ import {
   TaskTemplateServicePromiseClient
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_template_svc_grpc_web_pb'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_grpc_web_pb'
-import {
-  OrganizationServicePromiseClient
-} from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_grpc_web_pb'
+import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_grpc_web_pb'
 import { UserServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_grpc_web_pb'
 import { PropertyServicePromiseClient } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_grpc_web_pb'
 import {
@@ -17,6 +15,7 @@ import {
 import {
   PropertyViewsServicePromiseClient
 } from '@helpwave/proto-ts/services/property_svc/v1/property_views_svc_grpc_web_pb'
+import { UpdatesServicePromiseClient } from '@helpwave/proto-ts/services/updates_svc/v1/updates_svc_grpc_web_pb'
 import { APIServiceUrls } from './config/wrapper'
 import { WardOfflineServicePromiseClient } from './offline/tasks/ward_service'
 import { RoomOfflineServicePromiseClient } from './offline/tasks/room_service'
@@ -41,7 +40,8 @@ type APIServicesType = {
   taskTemplates: TaskTemplateServicePromiseClient,
   property: PropertyServicePromiseClient,
   propertyValues: PropertyValueServicePromiseClient,
-  propertyViewSource: PropertyViewsServicePromiseClient
+  propertyViewSource: PropertyViewsServicePromiseClient,
+  updates: UpdatesServicePromiseClient
 }
 
 const offlineServices: APIServicesType = {
@@ -55,7 +55,8 @@ const offlineServices: APIServicesType = {
   taskTemplates: new TaskTemplateOfflineServicePromiseClient(APIServiceUrls.tasks),
   property: new PropertyOfflineServicePromiseClient(APIServiceUrls.property),
   propertyValues: new PropertyValueOfflineServicePromiseClient(APIServiceUrls.property),
-  propertyViewSource: new PropertyViewsServicePromiseClient(APIServiceUrls.property) // TODO replace with an offline client
+  propertyViewSource: new PropertyViewsServicePromiseClient(APIServiceUrls.property), // TODO replace with an offline client
+  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates) // TODO replace with an offline client
 }
 
 const onlineServices: APIServicesType = {
@@ -69,7 +70,8 @@ const onlineServices: APIServicesType = {
   taskTemplates: new TaskTemplateServicePromiseClient(APIServiceUrls.tasks),
   property: new PropertyServicePromiseClient(APIServiceUrls.property),
   propertyValues: new PropertyValueServicePromiseClient(APIServiceUrls.property),
-  propertyViewSource: new PropertyViewsServicePromiseClient(APIServiceUrls.property)
+  propertyViewSource: new PropertyViewsServicePromiseClient(APIServiceUrls.property),
+  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates) // TODO replace with an offline client
 }
 
 export const APIServices: APIServicesType = getAPIServiceConfig().offlineAPI ? offlineServices : onlineServices

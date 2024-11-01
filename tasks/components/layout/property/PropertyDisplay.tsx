@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Plus, Tag } from 'lucide-react'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Button } from '@helpwave/common/components/Button'
@@ -13,6 +13,7 @@ import { Tile } from '@helpwave/common/components/layout/Tile'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { FieldType, Property, SubjectType } from '@helpwave/api-services/types/properties/property'
 import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
 import { PropertyContext } from '@/pages/properties'
 import { SubjectTypeIcon } from '@/components/layout/property/SubjectTypeIcon'
@@ -84,12 +85,20 @@ export const PropertyDisplay = ({
     updateContext
   } = useContext(PropertyContext)
   // TODO replace with backend request
-  const { data: propertyList, isLoading, isError } = usePropertyListQuery(contextState.subjectType)
+  const { data: propertyList, isLoading, isError, refetch } = usePropertyListQuery(contextState.subjectType)
   const [search, setSearch] = useState<string>(initialSearchValue)
+  const { observeAttribute } = useUpdates()
 
   // TODO could be computationally intensive consider forwarding to the backend later on
   const filteredProperties: Property[] = propertyList ? MultiSubjectSearchWithMapping([contextState.subjectType ?? '', search], propertyList,
     property => [property.name, property.description, property.subjectType]) : []
+
+  useEffect(() => {
+    const subscription = observeAttribute('aggregateType', 'property').subscribe(() => refetch())
+    return () => {
+      subscription.unsubscribe()
+    }
+  })
 
   return (
     <div className={tw('py-4 px-6 flex flex-col gap-y-4')}>

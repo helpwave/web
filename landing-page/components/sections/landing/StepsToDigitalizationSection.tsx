@@ -25,7 +25,7 @@ type StepsToDigitalizationSectionTranslation = {
 
 const defaultStepsToDigitalizationSectionTranslation: Record<Languages, StepsToDigitalizationSectionTranslation> = {
   en: {
-    title: '\\secondary{Digital exelence} in\\newline 3 simple steps',
+    title: '\\secondary{Digital excellence} in\\newline 3 simple steps',
     description: 'Our approach is to implement more efficient and fun\\newline processes in a simple yet powerful way.',
     step: 'Step',
     step1Title: 'Define the mission',

@@ -170,7 +170,7 @@ export const TaskTemplateDetails = ({
       <div className={tx('flex flex-row mt-12',
         {
           'justify-between': !isCreatingNewTemplate,
-          'justify-end': isCreatingNewTemplate,
+          'justify-center': isCreatingNewTemplate,
         })}
       >
         <Button

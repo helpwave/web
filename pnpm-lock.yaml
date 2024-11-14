@@ -44,7 +44,7 @@ importers:
         specifier: 18.3.1
         version: 18.3.1
       rxjs:
-        specifier: ^7.8.1
+        specifier: 7.8.1
         version: 7.8.1
       typescript:
         specifier: 5.6.3
@@ -371,7 +371,7 @@ importers:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       rxjs:
-        specifier: ^7.8.1
+        specifier: 7.8.1
         version: 7.8.1
       simplebar-core:
         specifier: 1.2.6
@@ -11091,7 +11091,7 @@ packages:
       micromatch: 4.0.5
       normalize-path: 3.0.0
       object-hash: 3.0.0
-      picocolors: 1.0.0
+      picocolors: 1.1.1
       postcss: 8.4.32
       postcss-import: 15.1.0(postcss@8.4.32)
       postcss-js: 4.0.1(postcss@8.4.32)

@@ -15,14 +15,14 @@ import {
 } from '@helpwave/api-services/mutations/users/organization_mutations'
 import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWithAction'
+import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
 import { OrganizationContext } from '@/pages/organizations'
 import { ReSignInModal } from '@/components/modals/ReSignInModal'
-import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWithAction'
-import { usePropertyListQuery } from '@/mutations/property_mutations'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,

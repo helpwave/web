@@ -1,57 +1,52 @@
-import { Button } from '@helpwave/common/components/Button'
 import { tw } from '@helpwave/common/twind'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import Image from 'next/image'
+import { Span } from '@helpwave/common/components/Span'
+import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type LandingPageTranslation = {
-  tryTheDemo: string,
-  discoverOurVision: string
+  title: string,
+  description: string
 }
 
 const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> = {
   en: {
-    tryTheDemo: 'Try the demo!',
-    discoverOurVision: 'Discover Our Vision'
+    title: 'helpwave - the Operating System for Hospitals',
+    description: 'empowering \\primary{medical heroes}, united in \\positive{technology}'
   },
   de: {
-    tryTheDemo: 'Teste die Demo!',
-    discoverOurVision: 'Entdecken unsere Vision'
+    title: 'helpwave - das Betriebssystem für Krankenhäuser',
+    description: 'Stärkung \\primary{medizinischer Helden}, vereint in \\positive{Technologie}'
   }
 }
 
 const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageTranslation>) => {
   const translation = useTranslation(defaultLandingPageTranslation, overwriteTranslation)
-  const exploreURL = '/join'
-  const demoURL = 'https://staging-tasks.helpwave.de'
   return (
-    <div className={tw('pt-32 pb-16 flex gap-32 items-center justify-center')}>
-      <div className={tw('desktop:w-3/4')}>
-        <div className={tw('font-space text-6xl font-bold')}>helpwave</div>
-
-        <div className={tw('font-sans text-2xl font-medium mt-2 text-end')}>
-          {'empowering '}
-          <span className={tw('text-hw-primary-800')}>{'medical heroes'}</span>
-          {', '}
-          <br className={tw('mobile:hidden')}/>
-          {'united in '}
-          <span className={tw('text-green-600')}>{'technology'}</span>
-        </div>
-
-        <div className={tw('flex my-8 gap-8 justify-end')}>
-          <Button variant="tertiary" color="warn" onClick={() => { window.location.href = exploreURL }}>
-            {translation.discoverOurVision}
-          </Button>
-
-          <Button variant="textButton" color="neutral" onClick={() => { window.open(demoURL, '_blank') }}>
-            {translation.tryTheDemo}
-          </Button>
+    <SectionBase
+      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-center items-center')}
+      outerClassName={tw('desktop:pr-0 tablet:pr-0 py-32')}
+    >
+      <div className={tw('flex flex-col items-center flex-1')}>
+        <div className={tw('flex flex-col gap-y-2 max-w-[600px]')}>
+          <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
+          <Span className={tw('font-space font-semibold !text-2xl')}><MarkdownInterpreter text={translation.description}/></Span>
         </div>
       </div>
-
-      <div className={tw('mobile:hidden w-2/7')}>
+      <div className={tw('desktop:relative desktop:right-0 p-4 pr-0 mobile:pr-4 rounded-l-3xl mobile:rounded-3xl bg-white w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10 h-fit shadow-around-lg')}>
+        <Image
+          // TODO make attribution to https://www.freepik.com/free-vector/medics-working-charts_4950249.htm
+          src="https://cdn.helpwave.de/landing_page/doctor_statistics.svg"
+          alt=""
+          width={0}
+          height={0}
+          className={tw('w-full rounded-l-lg')}
+        />
       </div>
-    </div>
+    </SectionBase>
   )
 }
 

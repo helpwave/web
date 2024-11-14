@@ -3,20 +3,20 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState, type TaskTemplateContextState } from '@/pages/templates'
-import { TwoColumn } from '@/components/layout/TwoColumn'
-import { PageWithHeader } from '@/components/layout/PageWithHeader'
-import titleWrapper from '@/utils/titleWrapper'
-import { TaskTemplateDisplay } from '@/components/layout/TaskTemplateDisplay'
+import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
   useCreateMutation,
   useDeleteMutation,
   useUpdateMutation,
   useWardTaskTemplateQuery
-} from '@/mutations/task_template_mutations'
+} from '@helpwave/api-services/mutations/tasks/task_template_mutations'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { emptyTaskTemplate, TaskTemplateContext, taskTemplateContextState, type TaskTemplateContextState } from '@/pages/templates'
+import { TwoColumn } from '@/components/layout/TwoColumn'
+import { PageWithHeader } from '@/components/layout/PageWithHeader'
+import titleWrapper from '@/utils/titleWrapper'
+import { TaskTemplateDisplay } from '@/components/layout/TaskTemplateDisplay'
 import { TaskTemplateDetails } from '@/components/layout/TaskTemplateDetails'
-import { useWardQuery } from '@/mutations/ward_mutations'
-import { useOrganizationQuery } from '@/mutations/organization_mutations'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardTaskTemplateTranslation = {
@@ -47,8 +47,7 @@ const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTrans
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId)
   const { data: ward } = useWardQuery(wardId)
-  const { data: organization } = useOrganizationQuery(ward?.organizationId)
-
+  const { organization } = useAuth()
   const [contextState, setContextState] = useState<TaskTemplateContextState>(taskTemplateContextState)
 
   const createMutation = useCreateMutation(wardId, 'wardTaskTemplates', taskTemplate =>
@@ -92,8 +91,8 @@ const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTrans
   return (
     <PageWithHeader
       crumbs={[
-        { display: organization?.shortName ?? translation.organization, link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations' },
-        { display: ward?.name ?? translation.ward, link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations' },
+        { display: organization?.name ?? translation.organization, link: `/organizations?organizationId=${organization?.id}` },
+        { display: ward?.name ?? translation.ward, link: `/organizations/${organization?.id}?wardId=${wardId}` },
         { display: translation.taskTemplates, link: `/ward/${wardId}/templates` }
       ]}
     >

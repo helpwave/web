@@ -5,9 +5,9 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Button } from '@helpwave/common/components/Button'
 import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
-import type { TaskTemplateDTO } from '@/mutations/task_template_mutations'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,

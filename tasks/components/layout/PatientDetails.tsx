@@ -7,19 +7,20 @@ import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import { ColumnTitle } from '../ColumnTitle'
-import { TasksKanbanBoard } from './TasksKanbanBoard'
-import { WardOverviewContext } from '@/pages/ward/[wardId]'
+import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import {
-  emptyPatientDetails,
   useAssignBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,
   useUnassignMutation,
-  type PatientDetailsDTO, useReadmitPatientMutation
-} from '@/mutations/patient_mutations'
+  useReadmitPatientMutation
+} from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import type { PatientDetailsDTO } from '@helpwave/api-services/types/tasks/patient'
+import { emptyPatientDetails } from '@helpwave/api-services/types/tasks/patient'
+import { ColumnTitle } from '../ColumnTitle'
+import { TasksKanbanBoard } from './TasksKanbanBoard'
+import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
@@ -208,38 +209,36 @@ export const PatientDetail = ({
             patientId={newPatient.id}
             editedTaskId={taskId}
             onEditTask={task => {
-              setInitialTaskStatus(task.status === TaskStatus.TASK_STATUS_DONE ? TaskStatus.TASK_STATUS_TODO : task.status)
+              setInitialTaskStatus(task.status === 'done' ? 'todo' : task.status)
               setTaskId(task.id)
             }}
           />
         )}
         {!!newPatient.id && (
           <div className={tw('mt-4')}>
-            <PropertyList subjectID={newPatient.id} subjectType="patient"/>
+            <PropertyList subjectId={newPatient.id} subjectType="patient"/>
           </div>
         )}
-        <div className={tw('sticky flex flex-row  bottom-6 right-4 justify-end')}>
-          <div className={tw('sticky flex flex-row p-2 mt-6 gap-x-4 bg-white border-2 rounded-xl')}>
-            {!newPatient.discharged ?
-                (
-                <>
-                  <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
-                    {translation.unassign}
-                  </Button>
-                  <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)}>
-                    {translation.dischargePatient}
-                  </Button>
-                </>
-                ) : (
-                <Button color="positive" onClick={() => readmitMutation.mutate(newPatient.id)}>
-                  {translation.readmit}
+        <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
+          {!newPatient.discharged ?
+              (
+              <>
+                <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
+                  {translation.unassign}
                 </Button>
-                )}
-            <Button color="accent" onClick={() => {
-              clearUpdateTimer(true)
-              updateMutation.mutate(newPatient)
-            }}>{translation.saveChanges}</Button>
-          </div>
+                <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
+                  {translation.dischargePatient}
+                </Button>
+              </>
+              ) : (
+              <Button color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
+                {translation.readmit}
+              </Button>
+              )}
+          <Button color="accent" onClick={() => {
+            clearUpdateTimer(true)
+            updateMutation.mutate(newPatient)
+          }}>{translation.saveChanges}</Button>
         </div>
       </LoadingAndErrorComponent>
     </div>

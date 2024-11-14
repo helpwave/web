@@ -9,12 +9,20 @@ import { Span } from '@helpwave/common/components/Span'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { useEffect, useState } from 'react'
 import { SearchableList } from '@helpwave/common/components/SearchableList'
-import type { PropertyWithValue, SubjectType } from '@/components/layout/property/property'
+import type { SubjectType } from '@helpwave/api-services/types/properties/property'
 import {
-  usePropertyListQuery, usePropertyWithValueCreateMutation,
-  usePropertyWithValueListQuery,
-  usePropertyWithValueUpdateMutation
-} from '@/mutations/property_mutations'
+  useAttachPropertyMutation,
+  usePropertyWithValueListQuery
+} from '@helpwave/api-services/mutations/properties/property_value_mutations'
+import type {
+  AttachedProperty,
+  DisplayableAttachedProperty
+} from '@helpwave/api-services/types/properties/attached_property'
+import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
+import {
+  useUpdatePropertyViewRuleRequest
+} from '@helpwave/api-services/mutations/properties/property_view_src_mutations'
 import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
 
 type PropertyListTranslation = {
@@ -34,7 +42,7 @@ const defaultPropertyListTranslation: Record<Languages, PropertyListTranslation>
 }
 
 export type PropertyListProps = {
-  subjectID: string,
+  subjectId: string,
   subjectType: SubjectType
 }
 
@@ -43,7 +51,7 @@ export type PropertyListProps = {
  */
 export const PropertyList = ({
   overwriteTranslation,
-  subjectID,
+  subjectId,
   subjectType
 }: PropsForTranslation<PropertyListTranslation, PropertyListProps>) => {
   const translation = useTranslation(defaultPropertyListTranslation, overwriteTranslation)
@@ -53,10 +61,10 @@ export const PropertyList = ({
     isError: isErrorPropertyList
   } = usePropertyListQuery(subjectType)
 
-  const [properties, setProperties] = useState<PropertyWithValue[]>([])
-  const { data, isLoading, isError } = usePropertyWithValueListQuery(subjectID, subjectType)
-  const updatePropertyMutation = usePropertyWithValueUpdateMutation()
-  const createPropertyValue = usePropertyWithValueCreateMutation()
+  const [properties, setProperties] = useState<DisplayableAttachedProperty[]>([])
+  const { data, isLoading, isError } = usePropertyWithValueListQuery(subjectId, subjectType)
+  const addOrUpdatePropertyMutation = useAttachPropertyMutation()
+  const updateViewRulesMutation = useUpdatePropertyViewRuleRequest(subjectType)
 
   useEffect(() => {
     if (data) {
@@ -79,10 +87,11 @@ export const PropertyList = ({
         {properties && properties.map((property, index) => (
             <PropertyEntry
               key={index}
-              property={property}
+              attachedProperty={property}
               onChange={value => setProperties(prevState => prevState
-                .map(value1 => value1.id === value.id ? value : value1))}
-              onEditComplete={value => updatePropertyMutation.mutate(value)}
+                .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? { ...value1, ...value } : value1))}
+              onEditComplete={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
+              onRemove={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
             />
         )
         )}
@@ -109,16 +118,18 @@ export const PropertyList = ({
               <SearchableList
                 list={propertyList
                   .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))}
-                searchMapping={value => [value.basicInfo.propertyName]}
+                searchMapping={value => [value.name]}
                 itemMapper={property => (
                   <MenuItem
                     key={property.id}
                     onClick={() => {
-                      createPropertyValue.mutate({ ...property, propertyId: property.id, value: {}, id: subjectID })
+                      const attachedProperty : AttachedProperty = { propertyId: property.id, subjectId, value: emptyPropertyValue }
+                      addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
+                      updateViewRulesMutation.mutate({ subjectId, appendToAlwaysInclude: [property.id] })
                     }}
-                    className={tw('rounded-md')}
+                    className={tw('rounded-md cursor-pointer')}
                   >
-                    {property.basicInfo.propertyName}
+                    {property.name}
                   </MenuItem>
                 )}
               />

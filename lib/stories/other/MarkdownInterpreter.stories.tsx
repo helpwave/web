@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const MarkdownInterpreterVariation: Story = {
   args: {
     text: '\\helpwave \\i{italic} \\{Escape\\} \\\\ \\b{bold} \\u{underline} ' +
-      '\\space{space-grotesk} \\positive{positive} \\negative{negative} \\warn{warn} ' +
+      '\\space{space-grotesk} \\newline Newline \\positive{positive} \\negative{negative} \\warn{warn} ' +
       '\\primary{primary} \\b{\\i{\\u{bold and italic and underlined \\primary{also primary}}}}',
   },
 }

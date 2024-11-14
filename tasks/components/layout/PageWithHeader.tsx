@@ -1,15 +1,11 @@
 import type { PropsWithChildren } from 'react'
-import { useState } from 'react'
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import type { Crumb } from '@helpwave/common/components/BreadCrumb'
 import { BreadCrumb } from '@helpwave/common/components/BreadCrumb'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { UserMenu } from '@/components/UserMenu'
 import { Header, type HeaderProps } from '@/components/Header'
 import { FeedbackButton } from '@/components/FeedbackButton'
-import { useAuth } from '@/hooks/useAuth'
-import { ProvideOrganization } from '@/hooks/useOrganization'
-import type { OrganizationDTO } from '@/mutations/organization_mutations'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[]
@@ -28,14 +24,12 @@ export const PageWithHeader = ({
   rightSide,
   crumbs
 }: PropsWithChildren<PageWithHeaderProps>) => {
-  const { user } = useAuth()
-  const [isOrganizationSwitchModalOpen, setOrganizationSwitchModalOpen] = useState(false)
-  const [organization, setOrganization] = useState<OrganizationDTO>()
+  const { user, redirectUserToOrganizationSelection } = useAuth()
 
   if (!user) return null
 
   const feedbackButton = <FeedbackButton/>
-  const organizationName = (organization?.shortName && <Span onClick={() => setOrganizationSwitchModalOpen(true)} className={tw('cursor-pointer hover:cursor-pointer')}>{organization.shortName}</Span>)
+  const organization = <button onClick={() => redirectUserToOrganizationSelection()}>{user?.organization?.name}</button>
   const userMenu = <UserMenu />
 
   return (
@@ -44,16 +38,9 @@ export const PageWithHeader = ({
         title={title}
         withIcon={withIcon}
         leftSide={[(crumbs ? <BreadCrumb crumbs={crumbs}/> : undefined), ...(leftSide ?? [])]}
-        rightSide={[...(rightSide ?? []), feedbackButton, organizationName, userMenu]}
+        rightSide={[...(rightSide ?? []), feedbackButton, organization, userMenu]}
       />
-      <ProvideOrganization
-        organization={organization}
-        setOrganization={setOrganization}
-        isOrganizationSwitchModalOpen={isOrganizationSwitchModalOpen}
-        setOrganizationSwitchModalOpen={setOrganizationSwitchModalOpen}
-      >
-        {children}
-      </ProvideOrganization>
+      {children}
     </div>
   )
 }

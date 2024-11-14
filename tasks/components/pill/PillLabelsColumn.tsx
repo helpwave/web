@@ -1,6 +1,5 @@
 import { tw } from '@helpwave/common/twind'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
-import { PillLabel, TaskState } from './PillLabel'
+import { PillLabel } from './PillLabel'
 
 export type PillLabelsColumnProps = {
   unscheduledCount?: number,
@@ -14,9 +13,9 @@ export type PillLabelsColumnProps = {
 const PillLabelsColumn = ({ unscheduledCount, inProgressCount, doneCount }: PillLabelsColumnProps) => {
   return (
     <div className={tw('flex flex-col gap-y-2')}>
-      <PillLabel count={unscheduledCount} state={TaskState[TaskStatus.TASK_STATUS_TODO]}/>
-      <PillLabel count={inProgressCount} state={TaskState[TaskStatus.TASK_STATUS_IN_PROGRESS]}/>
-      <PillLabel count={doneCount} state={TaskState[TaskStatus.TASK_STATUS_DONE]}/>
+      <PillLabel count={unscheduledCount} taskStatus="todo"/>
+      <PillLabel count={inProgressCount} taskStatus="inProgress"/>
+      <PillLabel count={doneCount} taskStatus="done"/>
     </div>
   )
 }

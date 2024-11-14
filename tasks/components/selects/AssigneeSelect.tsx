@@ -2,7 +2,7 @@ import type { SelectProps } from '@helpwave/common/components/user-input/Select'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { tx } from '@helpwave/common/twind'
 import { SearchableSelect } from '@helpwave/common/components/user-input/SearchableSelect'
-import { useMembersByOrganizationQuery } from '@/mutations/organization_member_mutations'
+import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 
 export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {
   organizationId: string
@@ -13,13 +13,12 @@ export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {
  */
 export const AssigneeSelect = ({
   value,
-  organizationId,
   className,
   isHidingCurrentValue = false,
   onChange,
   ...selectProps
 } : AssigneeSelectProps) => {
-  const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
+  const { data, isLoading, isError } = useMembersByOrganizationQuery()
 
   return (
     <LoadingAndErrorComponent

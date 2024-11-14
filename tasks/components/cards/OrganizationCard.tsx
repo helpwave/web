@@ -3,8 +3,8 @@ import { Mail } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { AvatarGroup } from '@helpwave/common/components/AvatarGroup'
+import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 import { EditCard, type EditCardProps } from './EditCard'
-import type { OrganizationDTO } from '@/mutations/organization_mutations'
 
 type OrganizationCardTranslation = {
   member: string,

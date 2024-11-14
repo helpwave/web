@@ -1,10 +1,21 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { Span } from '@helpwave/common/components/Span'
+import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
+import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import {
+  useAssignBedMutation,
+  usePatientCreateMutation,
+  usePatientDischargeMutation,
+  useReadmitPatientMutation,
+  useUnassignMutation
+} from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import type { PatientDTO, PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
+import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { DndContext, type DragEndEvent, type DragStartEvent } from '@/components/dnd-kit-instances/patients'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PatientDetail } from '@/components/layout/PatientDetails'
@@ -12,19 +23,8 @@ import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
 import { WardRoomList } from '@/components/layout/WardRoomList'
 import { PatientList } from '@/components/layout/PatientList'
-import type { PatientDTO, PatientMinimalDTO } from '@/mutations/patient_mutations'
-import {
-  useAssignBedMutation,
-  usePatientCreateMutation,
-  usePatientDischargeMutation,
-  useReadmitPatientMutation,
-  useUnassignMutation
-} from '@/mutations/patient_mutations'
 import { DragCard } from '@/components/cards/DragCard'
-import type { BedWithPatientWithTasksNumberDTO } from '@/mutations/bed_mutations'
 import { PatientCard } from '@/components/cards/PatientCard'
-import { useWardQuery } from '@/mutations/ward_mutations'
-import { useOrganizationQuery } from '@/mutations/organization_mutations'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardOverviewTranslation = {
@@ -91,11 +91,15 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     bed?: BedWithPatientWithTasksNumberDTO
   }>()
   const wardId = useRouteParameters<'wardId'>().wardId
-  const ward = useWardQuery(wardId).data
+  const { data: ward, refetch } = useWardQuery(wardId)
 
-  // TODO: is using '' as an org id a good idea?
-  const organizationId = ward?.organizationId ?? ''
-  const { data: organization } = useOrganizationQuery(organizationId)
+  const { observeAttribute } = useUpdates()
+  useEffect(() => {
+    const subscription = observeAttribute('aggregateType', 'task').subscribe(() => refetch())
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [observeAttribute, refetch])
 
   const [contextState, setContextState] = useState<WardOverviewContextState>({
     wardId
@@ -209,7 +213,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     setContextState({ wardId })
   }, [wardId])
 
-  const createPatientMutation = usePatientCreateMutation(organizationId)
+  const createPatientMutation = usePatientCreateMutation()
 
   // TOOD: can we somehow assert that the patient is not undefined here?
   const createPatient = () => contextState.patient && createPatientMutation.mutateAsync(contextState.patient)
@@ -232,12 +236,13 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     <PageWithHeader
       crumbs={[
         {
-          display: organization?.shortName ?? translation.organization,
-          link: ward ? `/organizations?organizationId=${ward.organizationId}` : '/organizations'
+          // TODO fix later
+          display: translation.organization,
+          link: `/organizations`
         },
         {
           display: ward?.name ?? translation.ward,
-          link: ward ? `/organizations/${ward.organizationId}?wardId=${wardId}` : '/organizations'
+          link: `/organizations/?wardId=${wardId}`
         },
         {
           display: translation.room,

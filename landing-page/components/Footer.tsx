@@ -49,9 +49,10 @@ const linkGroups: Record<Categories, LinkType[]> = {
     { name: 'web', link: 'https://github.com/helpwave/web' },
     { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },
     { name: 'services', link: 'https://github.com/helpwave/services' },
-    { name: 'Staging  ~ tasks', link: 'https://staging-tasks.helpwave.de' },
+    { name: 'helpwave tasks (staging)', link: 'https://staging-tasks.helpwave.de' },
   ],
   general: [
+    { name: 'Support', link: 'https://support.helpwave.de' },
     { name: 'Imprint', link: 'https://cdn.helpwave.de/imprint.html' },
     { name: 'Privacy', link: 'https://cdn.helpwave.de/privacy.html' },
     { name: 'Cookies', link: '', onClick: () => CookieConsent.showPreferences() },
@@ -60,9 +61,12 @@ const linkGroups: Record<Categories, LinkType[]> = {
     { name: 'Onepager', link: 'https://cdn.helpwave.de/helpwave_onepager.pdf' },
     { name: 'LOI', link: 'https://cdn.helpwave.de/helpwave_letter_of_intent.pdf' },
     { name: 'Tech-Radar', link: '/tech-radar', openInCurrentTab: true },
+    { name: 'Credits', link: '/credits', openInCurrentTab: true },
   ],
   products: [
-    { name: 'tasks', link: '/product/tasks' },
+    { name: 'helpwave tasks', link: '/product/tasks' },
+    { name: 'App Zum Doc', link: 'https://app-zum-doc.de/' },
+    { name: 'mediQuu Netzmanager', link: 'https://mediquu.de/mediquu_netzmanager.html' },
     /* { name: 'scaffold', link: '/product/scaffold' },
       { name: 'cloud', link: '/product/cloud' },
       { name: 'impulse', link: '/product/impulse' },
@@ -88,7 +92,7 @@ const Footer = () => {
 
   return (
     <div className={tw('w-screen bg-black text-white py-8 flex flex-col items-center justify-center')}>
-      <div className={tw('flex flex-wrap mobile:w-full mobile:px-16 mx-auto justify-between')}>
+      <div className={tw('flex flex-wrap w-full max-w-[900px] mobile:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
         {grouping.map((groups, index) => (
           <div key={index} className={tw('flex flex-col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
             {groups.map((category) => (
@@ -97,7 +101,7 @@ const Footer = () => {
             {index === 2 && (
                 <Select<Languages>
                   className={tw('w-fit')}
-                  textColor={tw('text-white')}
+                  textColor={tw('text-white bg-transparent')}
                   hoverColor={tw('hover:text-white')}
                   value={language}
                   onChange={(language) => setLanguage(language)}

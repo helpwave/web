@@ -1,18 +1,30 @@
-import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
-import StartSection from '@/components/sections/story/StartSection'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import StoryHeader from '@/components/sections/story/StoryHeader'
+import { Page } from '@/components/Page'
+import { StorySliderSection } from '@/components/sections/landing/StoriesSliderSection'
+
+type StoryTranslation = {
+  title: string
+}
+
+const defaultStoryTranslation: Record<Languages, StoryTranslation> = {
+  en: {
+    title: 'Story',
+  },
+  de: {
+    title: 'Story',
+  }
+}
 
 const Story: NextPage = () => {
+  const translation = useTranslation(defaultStoryTranslation)
   return (
-    <div className={tw('w-screen h-screen bg-white parent relative z-0 overflow-x-hidden')}>
-      <Header />
-      <div className={tw('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
-        <StartSection />
-      </div>
-      <Footer />
-    </div>
+    <Page pageTitleAddition={translation.title}>
+      <StoryHeader/>
+      <StorySliderSection/>
+    </Page>
   )
 }
 

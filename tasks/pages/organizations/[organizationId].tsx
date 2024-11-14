@@ -2,12 +2,12 @@ import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { WardDisplay } from '@/components/layout/WardDisplay'
 import { WardDetail } from '@/components/layout/WardDetails'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import titleWrapper from '@/utils/titleWrapper'
-import { useOrganizationQuery } from '@/mutations/organization_mutations'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardsPageTranslation = {

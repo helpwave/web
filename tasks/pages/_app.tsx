@@ -10,6 +10,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production'
+import { ProvideAuth } from '@helpwave/api-services/authentication/useAuth'
+import { ProvideUpdates } from '@helpwave/api-services/util/useUpdates'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
 
@@ -33,25 +35,27 @@ function MyApp({
     <ProvideLanguage>
       { /* v Scans the user agent */}
       {!isMobile ? (
-        <>
-          <Head>
-            <title>{titleWrapper()}</title>
-            <style>{`
-        :root {
-          --font-inter: ${inter.style.fontFamily};
-          --font-space: ${spaceGrotesk.style.fontFamily};
-        }
-      `}</style>
-          </Head>
-          <QueryClientProvider client={queryClient}>
-            <ModalRegister>
-              <div className={tw('font-sans')} id={modalRootName}>
-                <Component {...pageProps} />
-              </div>
-            </ModalRegister>
-            <ReactQueryDevtools buttonPosition="bottom-left" position="left" />
-          </QueryClientProvider>
-        </>
+        <ProvideAuth>
+          <ProvideUpdates>
+            <Head>
+              <title>{titleWrapper()}</title>
+              <style>{`
+            :root {
+              --font-inter: ${inter.style.fontFamily};
+              --font-space: ${spaceGrotesk.style.fontFamily};
+            }
+            `}</style>
+            </Head>
+            <QueryClientProvider client={queryClient}>
+              <ModalRegister>
+                <div className={tw('font-sans')} id={modalRootName}>
+                  <Component {...pageProps} />
+                </div>
+              </ModalRegister>
+              <ReactQueryDevtools buttonPosition="bottom-left" position="left" />
+            </QueryClientProvider>
+          </ProvideUpdates>
+        </ProvideAuth>
       ) : (<MobileInterceptor {...pageProps} />)}
     </ProvideLanguage>
   )

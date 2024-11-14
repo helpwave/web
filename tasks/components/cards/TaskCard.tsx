@@ -3,12 +3,11 @@ import { Card, type CardProps } from '@helpwave/common/components/Card'
 import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator'
 import { Span } from '@helpwave/common/components/Span'
 import { LockIcon } from 'lucide-react'
-import { TaskStatus } from '@helpwave/proto-ts/proto/services/task_svc/v1/task_svc_pb'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Avatar } from '@helpwave/common/components/Avatar'
-import type { TaskDTO } from '@/mutations/task_mutations'
-import { useUserQuery } from '@/mutations/user_mutations'
+import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
+import { useUserQuery } from '@helpwave/api-services/mutations/users/user_mutations'
 
 type TaskCardTranslation = {
   assigned: string
@@ -38,7 +37,7 @@ export const TaskCard = ({
 }: PropsForTranslation<TaskCardTranslation, TaskCardProps>) => {
   const translation = useTranslation(defaultTaskCardTranslations, overwriteTranslation)
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
-  const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== TaskStatus.TASK_STATUS_DONE
+  const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== 'done'
 
   const { data: assignee } = useUserQuery(task.assignee)
 

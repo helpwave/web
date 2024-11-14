@@ -5,24 +5,23 @@ import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Span } from '@helpwave/common/components/Span'
-import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWithAction'
 import Link from 'next/link'
-import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
-import { OrganizationMemberList } from '../OrganizationMemberList'
-import { ColumnTitle } from '../ColumnTitle'
-import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
-import { OrganizationContext } from '@/pages/organizations'
 import {
-  type OrganizationMinimalDTO,
   useInviteMemberMutation,
   useOrganizationCreateMutation,
   useOrganizationDeleteMutation,
   useOrganizationQuery,
   useOrganizationUpdateMutation
-} from '@/mutations/organization_mutations'
-import { useAuth } from '@/hooks/useAuth'
-import { useOrganization } from '@/hooks/useOrganization'
+} from '@helpwave/api-services/mutations/users/organization_mutations'
+import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
+import { OrganizationMemberList } from '../OrganizationMemberList'
+import { ColumnTitle } from '../ColumnTitle'
+import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
+import { OrganizationContext } from '@/pages/organizations'
 import { ReSignInModal } from '@/components/modals/ReSignInModal'
+import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWithAction'
 import { usePropertyListQuery } from '@/mutations/property_mutations'
 
 type OrganizationDetailTranslation = {
@@ -110,12 +109,6 @@ export const OrganizationDetail = ({
       })
     }
   }, [data, isCreatingNewOrganization])
-
-  const { setOrganizationId } = useOrganization()
-
-  useEffect(() => {
-    setOrganizationId(contextState.organizationId)
-  }, [contextState.organizationId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const inviteMemberMutation = useInviteMemberMutation(contextState.organizationId)
 

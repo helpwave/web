@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Span } from '@helpwave/common/components/Span'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Plus, Tag } from 'lucide-react'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Button } from '@helpwave/common/components/Button'
@@ -11,11 +11,12 @@ import { MultiSubjectSearchWithMapping } from '@helpwave/common/util/simpleSearc
 import { Table } from '@helpwave/common/components/Table'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import type { SubjectType, FieldType } from '@/components/layout/property/property'
+import type { FieldType, Property, SubjectType } from '@helpwave/api-services/types/properties/property'
+import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
 import { PropertyContext } from '@/pages/properties'
 import { SubjectTypeIcon } from '@/components/layout/property/SubjectTypeIcon'
-import { usePropertyListQuery } from '@/mutations/property_mutations'
 
 type PropertyDisplayTranslation = {
   properties: string,
@@ -43,11 +44,8 @@ const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTransl
     date: 'Date',
     dateTime: 'Date and Time',
     checkbox: 'Checkbox',
-    organization: 'Organization',
-    ward: 'Ward',
-    room: 'Room',
-    bed: 'Bed',
     patient: 'Patient',
+    task: 'Task'
   },
   de: {
     properties: 'Eigenschaften',
@@ -64,11 +62,8 @@ const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTransl
     date: 'Datum',
     dateTime: 'Datum und Zeit',
     checkbox: 'Checkbox',
-    organization: 'Organisation',
-    ward: 'Station',
-    room: 'Raum',
-    bed: 'Bett',
     patient: 'Patient',
+    task: 'Task'
   }
 }
 
@@ -77,7 +72,7 @@ export type PropertyDisplayProps = {
 }
 
 /**
- * A component for showing and changing property Details
+ * A component for showing and changing properties Details
  */
 export const PropertyDisplay = ({
   overwriteTranslation,
@@ -90,12 +85,20 @@ export const PropertyDisplay = ({
     updateContext
   } = useContext(PropertyContext)
   // TODO replace with backend request
-  const { data: propertyList, isLoading, isError } = usePropertyListQuery(contextState.subjectType)
+  const { data: propertyList, isLoading, isError, refetch } = usePropertyListQuery(contextState.subjectType)
   const [search, setSearch] = useState<string>(initialSearchValue)
+  const { observeAttribute } = useUpdates()
 
   // TODO could be computationally intensive consider forwarding to the backend later on
-  const filteredProperties = propertyList ? MultiSubjectSearchWithMapping([contextState.subjectType ?? '', search], propertyList,
-    property => [property.basicInfo.propertyName, property.basicInfo.description, property.basicInfo.subjectType]) : []
+  const filteredProperties: Property[] = propertyList ? MultiSubjectSearchWithMapping([contextState.subjectType ?? '', search], propertyList,
+    property => [property.name, property.description, property.subjectType]) : []
+
+  useEffect(() => {
+    const subscription = observeAttribute('aggregateType', 'property').subscribe(() => refetch())
+    return () => {
+      subscription.unsubscribe()
+    }
+  })
 
   return (
     <div className={tw('py-4 px-6 flex flex-col gap-y-4')}>
@@ -153,12 +156,12 @@ export const PropertyDisplay = ({
           rowMappingToCells={property => [
             (<Tile
               key="field-type-cell"
-              title={{ value: property.basicInfo.propertyName }}
-              description={{ value: translation[property.field.fieldType] }}
+              title={{ value: property.name }}
+              description={{ value: translation[property.fieldType] }}
             />),
             (<div key="subject-type-cell" className={tw('flex flex-row gap-x-2')}>
-              <SubjectTypeIcon subjectType={property.basicInfo.subjectType}/>
-              <Span>{translation[property.basicInfo.subjectType]}</Span>
+              <SubjectTypeIcon subjectType={property.subjectType}/>
+              <Span>{translation[property.subjectType]}</Span>
             </div>),
             (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
               <Button variant="textButton" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>

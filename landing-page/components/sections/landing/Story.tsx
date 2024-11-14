@@ -2,6 +2,7 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { SectionBase } from '@/components/sections/SectionBase'
 
 type StoryBlockProps = {
   pill?: string,
@@ -15,8 +16,8 @@ const StoryBlock = ({
   content,
 }: StoryBlockProps) => {
   return (
-    <div className={tw('desktop:w-2/3')}>
-      <div className={tw('flex flex-column h-[48px] items-end')}>
+    <div className={tw('w-2/3 mobile:w-full tablet:w-full')}>
+      <div className={tw('flex flex-col items-start')}>
         {pill && <h4 className={tw('text-sm text-green-600 bg-green-100 px-3 py-0.5 font-semibold tracking-widest rounded-lg')}>{pill}</h4>}
       </div>
       <h2 className={tw('pt-4 text-4xl font-space font-bold')}>{header}</h2>
@@ -84,7 +85,7 @@ const defaultStoryTranslation: Record<Languages, StoryTranslation> = {
 const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTranslation>) => {
   const translation = useTranslation(defaultStoryTranslation, overwriteTranslation)
   return (
-    <div className={tw('m-auto pb-16 pt-8 relative flex mobile:flex-wrap gap-16')}>
+    <SectionBase className={tw('flex tablet:flex-wrap mobile:flex-wrap w-full relative gap-16')} backgroundColor="gray">
       <StoryBlock
         pill={translation.innovation}
         header={translation.innovationHeader}
@@ -100,7 +101,7 @@ const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTransla
         header={translation.missionHeader}
         content={translation.missionDescription}
       />
-    </div>
+    </SectionBase>
   )
 }
 

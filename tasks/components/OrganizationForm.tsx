@@ -5,7 +5,8 @@ import { Input } from '@helpwave/common/components/user-input/Input'
 import { Span } from '@helpwave/common/components/Span'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { emptyOrganization, type OrganizationMinimalDTO } from '@/mutations/organization_mutations'
+import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
+import { emptyOrganization } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationFormTranslation = {
   general: string,
@@ -154,7 +155,7 @@ export const OrganizationForm = ({
     <LoadingAndErrorComponent
       isLoading={!organizationForm}
       loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[350px]') }}
-      minimumLoadingDuration={200} // prevents errors flickering TODO investigate this
+      minimumLoadingDuration={200} // prevents errors flickering
     >
       <Span type="subsectionTitle">{translation.general}</Span>
       <div className={tw('mt-2 mb-1')}>

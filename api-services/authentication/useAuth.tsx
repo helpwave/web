@@ -40,7 +40,7 @@ const UserFromIdTokenClaims = IdTokenClaimsSchema.transform((obj) => ({
   email: obj.email,
   name: obj.name,
   nickname: obj.preferred_username,
-  avatarUrl: `https://source.boringavatars.com/marble/80/${obj.sub}`,
+  avatarUrl: `https://cdn.helpwave.de/boringavatar.svg#${obj.sub}`,
   organization: obj.organization
 }))
 

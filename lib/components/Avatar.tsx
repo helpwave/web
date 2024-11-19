@@ -22,7 +22,7 @@ export type AvatarProps = {
  */
 const Avatar = ({ avatarUrl, alt, size = 'medium', className = '' }: AvatarProps) => {
   // TODO remove later
-  avatarUrl = 'https://source.boringavatars.com/marble/80'
+  avatarUrl = 'https://cdn.helpwave.de/boringavatar.svg'
   const usedSize = avtarSizeMapping[size]
   return (
     // TODO transparent or white background later

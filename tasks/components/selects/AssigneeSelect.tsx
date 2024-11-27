@@ -3,6 +3,9 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { tx } from '@helpwave/common/twind'
 import { SearchableSelect } from '@helpwave/common/components/user-input/SearchableSelect'
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
+import { useEffect } from 'react'
+import { noop } from '@helpwave/common/util/noop'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 
 export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {
   organizationId: string
@@ -18,7 +21,11 @@ export const AssigneeSelect = ({
   onChange,
   ...selectProps
 } : AssigneeSelectProps) => {
-  const { data, isLoading, isError } = useMembersByOrganizationQuery()
+  const { organization } = useAuth()
+  // TODO fix that the organization matches the selected organization
+  const { data, isLoading, isError } = useMembersByOrganizationQuery(organization?.id)
+
+  useEffect(noop, [value, data])
 
   return (
     <LoadingAndErrorComponent

@@ -117,7 +117,7 @@ export const DatePicker = ({
           />
           <div className={tw('mt-1')}>
             <Button
-              variant="textButton"
+              variant="text"
               onClick={() => {
                 const newDate = new Date()
                 newDate.setHours(value.getHours(), value.getMinutes())

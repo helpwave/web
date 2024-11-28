@@ -69,7 +69,6 @@ export const StepperBar = ({
           onClick={() => {
             update(step - 1)
           }}
-          variant="tertiary"
           className={tw('flex flex-row gap-x-1 items-center justify-center')}
         >
           <ChevronLeft size={14}/>

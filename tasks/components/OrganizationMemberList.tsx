@@ -142,7 +142,7 @@ export const OrganizationMemberList = ({
             {tableState.selection && tableState.selection.currentSelection.length > 0 && (
               <Button
                 onClick={() => setDeleteDialogState({ isShowing: true })}
-                color="negative"
+                color="hw-negative"
               >
                 {translation.removeSelection}
               </Button>
@@ -182,8 +182,8 @@ export const OrganizationMemberList = ({
             <div key="remove" className={tw('flex flex-row justify-end')}>
               <Button
                 onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
-                color="negative"
-                variant="textButton"
+                color="hw-negative"
+                variant="text"
                 // disabled={orgMember.role === Role.admin}
               >
                 {translation.remove}

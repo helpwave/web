@@ -55,7 +55,7 @@ export const DescriptionWithAction = ({
       {trailing}
       {!trailing && trailingButtonText && (
         <div className={tw('flex flex-row items-center desktop:justify-end mobile:justify-center grow')}>
-          <Button color="accent" onClick={trailingButtonFunction} className={tw('whitespace-nowrap')}>
+          <Button onClick={trailingButtonFunction} className={tw('whitespace-nowrap')}>
             {trailingButtonText}
           </Button>
         </div>

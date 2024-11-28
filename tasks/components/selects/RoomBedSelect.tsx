@@ -135,7 +135,7 @@ export const RoomBedSelect = ({
                 setTouched(false)
               }
             }}
-            variant="tertiary"
+            variant="text-border"
             disabled={!hasChanges}
           >
             <div className={tw('flex flex-row gap-x-2 items-center')}>
@@ -154,8 +154,8 @@ export const RoomBedSelect = ({
               setTouched(false)
               onChange({})
             }}
-            variant="tertiary"
-            color="negative"
+            variant="text-border"
+            color="hw-negative"
           >
             <div className={tw('flex flex-row gap-x-2 items-center')}>
               {translation.revert}

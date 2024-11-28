@@ -55,7 +55,7 @@ export const TaskTemplateCard = ({
           <Span type="subsubsectionTitle" className={tw('!flex-1')}>{name}</Span>
           {typeForLabel && (
             <Chip
-              color={typeForLabel === 'ward' ? 'blue' : 'pink'}
+              color={typeForLabel === 'ward' ? 'hw-label-blue' : 'hw-label-pink'}
               variant="fullyRounded"
             >
               {typeForLabel === 'ward' ? translation.ward : translation.personal}

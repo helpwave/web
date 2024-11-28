@@ -12,8 +12,8 @@ type Story = StoryObj<typeof meta>;
 export const LoadingButtonVariation: Story = {
   args: {
     children: 'Modify my `isLoading` properties',
-    color: 'accent',
-    variant: 'primary',
+    color: 'hw-primary',
+    variant: 'background',
     size: 'medium',
     disabled: false,
     className: 'rounded',

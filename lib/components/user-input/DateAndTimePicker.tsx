@@ -142,7 +142,7 @@ export const DateTimePicker = ({
       </div>
       <div className={tw('flex flex-row justify-end')}>
         <div className={tw('flex flex-row gap-x-2 mt-1')}>
-          <Button size="medium" color="negative" onClick={onRemove}>{translation.clear}</Button>
+          <Button size="medium" color="hw-negative" onClick={onRemove}>{translation.clear}</Button>
           <Button
             size="medium"
             onClick={() => onFinish(value)}

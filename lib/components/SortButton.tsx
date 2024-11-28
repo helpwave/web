@@ -16,7 +16,7 @@ export const SortButton = ({
   children,
   ascending,
   color = 'none',
-  variant = 'textButton',
+  variant = 'text',
   onClick,
   ...buttonProps
 }: SortButtonProps) => {

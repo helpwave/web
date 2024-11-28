@@ -91,14 +91,14 @@ export const UserInvitationList = ({
               </div>,
               <Button
                 key="accept"
-                color="positive"
+                color="hw-positive"
                 onClick={() => acceptInvite(invite.id)}
               >
                 {translation.accept}
               </Button>,
               <Button
                 key="decline"
-                color="negative"
+                color="hw-negative"
                 onClick={() => declineInviteMutation.mutate(invite.id)}
               >
                 {translation.decline}

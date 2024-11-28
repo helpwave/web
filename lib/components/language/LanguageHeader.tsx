@@ -36,7 +36,7 @@ export const LanguageHeader = ({
       />
       <div className={tw('flex flex-row h-8 w-full py-2 mb-2 justify-end items-center')}>
         <Button
-          variant="tertiary"
+          variant="text-border"
           onClick={() => setIsOpen(true)}
           className={tw('!py-[2px] !px-1')}
         >

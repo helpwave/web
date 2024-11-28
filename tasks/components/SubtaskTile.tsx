@@ -85,8 +85,8 @@ export const SubtaskTile = ({
         className={tw('ml-4')}
         onClick={onRemoveClick}
         aria-label={translation.remove}
-        variant="textButton"
-        color="negative"
+        variant="text"
+        color="hw-negative"
       >
         {translation.remove}
       </Button>

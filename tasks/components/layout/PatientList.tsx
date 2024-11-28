@@ -190,7 +190,7 @@ export const PatientList = ({
         <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
         <Button
           className={tw('whitespace-nowrap')}
-          color="positive"
+          color="hw-positive"
           onClick={() => {
             setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
           }}
@@ -231,10 +231,10 @@ export const PatientList = ({
                     >
                       <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                       <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                        <Chip color="blue" variant="fullyRounded">
+                        <Chip color="hw-label-blue" variant="fullyRounded">
                           {activeLabelText(patient)}
                         </Chip>
-                        <Button color="negative" variant="textButton" onClick={event => {
+                        <Button color="hw-negative" variant="text" onClick={event => {
                           event.stopPropagation()
                           setDischargingPatient(patient)
                         }}>
@@ -257,7 +257,7 @@ export const PatientList = ({
                   initiallyOpen={initialOpenedSections?.unassigned}
                   disabled={filteredUnassigned.length <= 0}
                   header={(
-                    <Span type="accent" className={tw('text-hw-label-yellow-text')}>
+                    <Span type="accent" className={tw('text-hw-label-yellow-400')}>
                       {`${translation.unassigned} (${filteredUnassigned.length})`}
                     </Span>
                   )}
@@ -278,10 +278,10 @@ export const PatientList = ({
                         >
                           <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
                           <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                            <Chip color="yellow" variant="fullyRounded">
+                            <Chip color="hw-label-yellow" variant="fullyRounded">
                               {`${translation.unassigned}`}
                             </Chip>
-                            <Button color="negative" variant="textButton" onClick={event => {
+                            <Button color="hw-negative" variant="text" onClick={event => {
                               event.stopPropagation()
                               setDischargingPatient(patient)
                             }}>
@@ -323,15 +323,15 @@ export const PatientList = ({
                         >
                           <Span className={tw('font-space font-bold')}>{patient.name}</Span>
                           <div className={tw('flex flex-row gap-x-4')}>
-                            <Button color="accent" variant="textButton" onClick={event => {
+                            <Button variant="text" onClick={event => {
                               event.stopPropagation()
                               readmitPatientMutation.mutate(patient.id)
                             }}>
                               {translation.readmit}
                             </Button>
                             <Button
-                              color="negative"
-                              variant="textButton" onClick={event => {
+                              color="hw-negative"
+                              variant="text" onClick={event => {
                                 event.stopPropagation()
                                 setDeletePatient(patient)
                               }}

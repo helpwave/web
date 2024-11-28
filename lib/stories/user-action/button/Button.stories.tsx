@@ -12,8 +12,8 @@ type Story = StoryObj<typeof meta>;
 export const ButtonVariation: Story = {
   args: {
     children: 'Test',
-    color: 'accent',
-    variant: 'primary',
+    color: 'hw-primary',
+    variant: 'background',
     size: 'medium',
     disabled: false,
     className: 'rounded',

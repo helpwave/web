@@ -57,13 +57,13 @@ export const DiscardChangesDialog = ({
     >
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-        <Button color="positive" onClick={onSave}>
+        <Button color="hw-positive" onClick={onSave}>
           {translation.save}
         </Button>
-        <Button color="negative" onClick={onDontSave}>
+        <Button color="hw-negative" onClick={onDontSave}>
           {translation.dontSave}
         </Button>
-        <Button autoFocus color="neutral" onClick={onCancel}>
+        <Button autoFocus color="hw-neutral" onClick={onCancel}>
           {translation.cancel}
         </Button>
       </div>

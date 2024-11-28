@@ -50,10 +50,10 @@ export const TextImage = ({
   const translation = useTranslation(defaultTextImageTranslation, overwriteTranslation)
 
   const colorMapping: Record<TextImageColor, string> = {
-    primary: colors.primary[600],
-    secondary: colors.secondary[400],
-    secondaryDark: colors.secondary[800],
-    red: colors.negative[700]
+    primary: colors['hw-primary'][600],
+    secondary: colors['hw-secondary'][400],
+    secondaryDark: colors['hw-secondary'][800],
+    red: colors['hw-negative'][700]
   }
 
   const withTransparency = (color: string, transparency: string) => {

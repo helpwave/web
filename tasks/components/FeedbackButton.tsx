@@ -23,7 +23,7 @@ export const FeedbackButton = ({ overwriteTranslation }: PropsForTranslation<Fee
   const onClick = () => window.open(config.feedbackFormUrl, '_blank')
 
   return (
-    <Button variant="tertiary" color="neutral" onClick={onClick}>
+    <Button variant="text-border" color="hw-neutral" className="!text-black" onClick={onClick}>
       {translation.text}
     </Button>
   )

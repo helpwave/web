@@ -22,7 +22,7 @@ export const VerticalDivider = ({
   color = 'primary'
 }: VerticalDividerProps) => {
   const colorString = {
-    primary: colors.primary[400],
+    primary: colors['hw-primary'][400],
     black: '000000'
   }[color]
 

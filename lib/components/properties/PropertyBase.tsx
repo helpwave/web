@@ -71,8 +71,8 @@ export const PropertyBase = ({
         {onRemove && (
           <Button
             onClick={onRemove}
-            color="negative"
-            variant="textButton"
+            color="hw-negative"
+            variant="text"
             className={tx('pr-4', { '!text-transparent': !hasValue || readOnly })}
             disabled={!hasValue || readOnly}
           >

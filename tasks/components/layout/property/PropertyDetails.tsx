@@ -110,8 +110,8 @@ export const PropertyDetails = ({
         <Span type="heading">{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</Span>
         {!isCreatingNewProperty && (
           <Button
-            variant="textButton"
-            color="negative"
+            variant="text"
+            color="hw-negative"
             onClick={() => setArchiveConfirm(true)}
           >
             {translation.archiveProperty}

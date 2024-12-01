@@ -1,7 +1,10 @@
 import type { HTMLProps, PropsWithChildren } from 'react'
 import { tx } from '../twind'
+import { getColoring } from '../coloring/util'
+import type { AppColor } from '../twind/config'
+import { appColorNames } from '../twind/config'
 
-type ChipColorTypes = 'label-1' | 'label-2' | 'label-3' | 'blue' | 'pink' | 'yellow' | 'darkPrimary' | 'lightPrimary' | 'black'; // extended these colors for more variations
+type ChipColorTypes = AppColor | 'darkPrimary' | 'lightPrimary' | 'black' // extended these colors for more variations
 
 type ChipVariant = 'normal' | 'fullyRounded'
 
@@ -28,13 +31,8 @@ export const Chip = ({
         {
           'bg-hw-primary-800 text-white': color === 'darkPrimary',
           'bg-hw-primary-200 text-hw-primary-800': color === 'lightPrimary',
-          'bg-hw-label-pink-background text-hw-label-pink-text': color === 'pink',
-          'bg-hw-label-blue-background text-hw-label-blue-text': color === 'blue',
-          'bg-hw-label-yellow-background text-hw-label-yellow-text': color === 'yellow',
           'bg-black text-white': color === 'black',
-          'bg-hw-label-1-background text-hw-label-1-text': color === 'label-1',
-          'bg-hw-label-2-background text-hw-label-2-text': color === 'label-2',
-          'bg-hw-label-3-background text-hw-label-3-text': color === 'label-3',
+          [getColoring({ color: color! as AppColor, style: 'tonal-opaque' })]: appColorNames.some(value => value === color),
         },
         {
           'rounded-md px-2 py-1': variant === 'normal',

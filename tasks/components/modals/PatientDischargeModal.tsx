@@ -39,7 +39,7 @@ export const PatientDischargeModal = ({
   return (
     <ConfirmDialog
       titleText={titleText ?? translation.dischargePatient}
-      buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'negative' }]}
+      buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'hw-negative' }]}
       {...confirmDialogProps}
     >
       {patient && (

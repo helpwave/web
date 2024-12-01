@@ -51,9 +51,9 @@ const PillLabel = ({
   const translation = useTranslation(state.translation, overwriteTranslation)
   return (
     <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center
-       bg-${state.colorLabel}-background text-${state.colorLabel}-text text-sm`)}>
-      <div className={tw(`flex flex-row items-center text-${state.colorLabel}-text`)}>
-        <div className={tw(`rounded-full w-2 h-2 bg-${state.colorLabel}-accent`)}/>
+       bg-${state.colorLabel}-100 text-${state.colorLabel}-800 text-sm`)}>
+      <div className={tw(`flex flex-row items-center text-${state.colorLabel}-800`)}>
+        <div className={tw(`rounded-full w-2 h-2 bg-${state.colorLabel}-400`)}/>
         <div className={tw('w-2')}/>
         <Span>{translation.text}</Span>
       </div>

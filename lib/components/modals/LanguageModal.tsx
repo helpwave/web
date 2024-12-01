@@ -67,7 +67,7 @@ export const LanguageModal = ({
             onChange={(language: string) => setLanguage(language as Languages)}
           />
           <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-            <Button autoFocus color="positive" onClick={onDone}>
+            <Button autoFocus color="hw-positive" onClick={onDone}>
               {translation.done}
             </Button>
           </div>

@@ -173,8 +173,8 @@ const TaskDetailViewSidebar = ({
                 })
               }
             }}
-            variant="textButton"
-            color="negative"
+            variant="text"
+            color="hw-negative"
             disabled={!task.assignee}
           >
             <X size={24}/>
@@ -202,8 +202,8 @@ const TaskDetailViewSidebar = ({
           { /* TODO reenable when backend has implemented a remove duedate
           <Button
             onClick={() => setTask({ ...task, dueDate: undefined })}
-            variant="textButton"
-            color="negative"
+            variant="text"
+            color="hw-negative"
             disabled={!task.dueDate}
           >
             <X size={24}/>
@@ -232,8 +232,8 @@ const TaskDetailViewSidebar = ({
             <Span>{task.isPublicVisible ? translation.public : translation.private}</Span>
             {!task.isPublicVisible && !isCreating && (
               <Button
-                color="neutral"
-                variant="tertiary"
+                color="hw-neutral"
+                variant="text-border"
                 className={tw('!py-1 !px-2')}
                 onClick={() => setIsShowingPublicDialog(true)}
               >
@@ -350,14 +350,14 @@ export const TaskDetailView = ({
           (
           <>
             <Button
-              color="negative"
+              color="hw-negative"
               disabled={true} // TODO reenable when backend allows it
               onClick={() => setIsShowingDeleteDialog(true)}
             >
               {translation.delete}
             </Button>
             {task.status !== 'done' && (
-              <Button color="positive" onClick={() => {
+              <Button color="hw-positive" onClick={() => {
                 updateTaskMutation.mutate({ ...task, status: 'done' })
                 onClose()
               }}>
@@ -368,7 +368,7 @@ export const TaskDetailView = ({
           )
         :
           (
-          <Button color="accent" onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
+          <Button onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
             {translation.create}
           </Button>
           )
@@ -464,7 +464,7 @@ export const TaskDetailView = ({
         onCancel={() => setIsShowingDeleteDialog(false)}
         onCloseClick={() => setIsShowingDeleteDialog(false)}
         onBackgroundClick={() => setIsShowingDeleteDialog(false)}
-        buttonOverwrites={[{}, {}, { color: 'negative' }]}
+        buttonOverwrites={[{}, {}, { color: 'hw-negative' }]}
       />
       <LoadingAndErrorComponent
         isLoading={(isLoading || !data) && !isCreating}

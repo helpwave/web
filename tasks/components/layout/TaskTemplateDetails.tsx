@@ -181,7 +181,7 @@ export const TaskTemplateDetails = ({
           {isCreatingNewTemplate ? translation.create : translation.update}
         </Button>
         { !isCreatingNewTemplate &&
-          (<Button variant="textButton" color="negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</Button>)
+          (<Button variant="text" color="hw-negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</Button>)
         }
       </div>
     </div>

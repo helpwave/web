@@ -88,8 +88,8 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(newData)
               setTableState(removeFromTableSelection(tableState, [dataObject], data.length, idMapping))
             }}
-            variant="textButton"
-            color="negative"
+            variant="text"
+            color="hw-negative"
           >Delete</Button>
         ]}
         header={[
@@ -144,7 +144,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
           {'Add Data'}
         </Button>
         <Button
-          color="negative"
+          color="hw-negative"
           className={tw('w-auto')}
           onClick={() => {
             const selectedData = data.filter((d) => tableState.selection?.currentSelection.includes(idMapping(d)))

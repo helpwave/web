@@ -63,13 +63,19 @@ export const ConfirmDialog = ({
 }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
 
+  const mapping: Record<ConfirmDialogType, ButtonColorType> = {
+    neutral: 'hw-neutral',
+    negative: 'hw-negative',
+    positive: 'hw-positive'
+  }
+
   return (
     <Modal {...restProps}>
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
         {onCancel && (
           <Button
-            color={buttonOverwrites?.[0].color ?? 'neutral'}
+            color={buttonOverwrites?.[0].color ?? 'hw-neutral'}
             onClick={onCancel}
             disabled={buttonOverwrites?.[0].disabled ?? false}
           >
@@ -78,7 +84,7 @@ export const ConfirmDialog = ({
         )}
         {onDecline && (
           <Button
-            color={buttonOverwrites?.[1].color ?? 'negative'}
+            color={buttonOverwrites?.[1].color ?? 'hw-negative'}
             onClick={onDecline}
 
             disabled={buttonOverwrites?.[1].disabled ?? false}
@@ -88,7 +94,7 @@ export const ConfirmDialog = ({
         )}
         <Button
           autoFocus
-          color={buttonOverwrites?.[2].color ?? confirmType}
+          color={buttonOverwrites?.[2].color ?? mapping[confirmType]}
           onClick={onConfirm}
           disabled={buttonOverwrites?.[2].disabled ?? false}
         >

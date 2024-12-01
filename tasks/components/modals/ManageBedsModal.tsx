@@ -106,7 +106,7 @@ export const ManageBedsModal = ({
           <>
             <div className={tw('flex flex-row justify-between items-end mb-2 mt-4')}>
               <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
-              <Button color="positive" onClick={addBed}>{translation.addBed}</Button>
+              <Button color="hw-positive" onClick={addBed}>{translation.addBed}</Button>
             </div>
             <Table
               data={beds}
@@ -138,8 +138,8 @@ export const ManageBedsModal = ({
                       deleteBedMutation.mutate(bed.id)
                       setTableState({ pagination: tableState.pagination ? updatePagination(tableState.pagination, beds.length - 1) : undefined })
                     }}
-                    color="negative"
-                    variant="textButton"
+                    color="hw-negative"
+                    variant="text"
                   >
                     {translation.remove}
                   </Button>

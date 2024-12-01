@@ -124,8 +124,8 @@ export const PropertyDisplay = ({
             />
             <Button
               className={tw('w-full !px-0')}
-              variant="textButton"
-              color="negative"
+              variant="text"
+              color="hw-negative"
               onClick={() => {
                 updateContext({ ...contextState, subjectType: undefined })
                 setSearch('')
@@ -164,7 +164,7 @@ export const PropertyDisplay = ({
               <Span>{translation[property.subjectType]}</Span>
             </div>),
             (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
-              <Button variant="textButton" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
+              <Button variant="text" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
                 <Span>{translation.edit}</Span>
               </Button>
             </div>)

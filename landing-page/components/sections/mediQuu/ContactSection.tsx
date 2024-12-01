@@ -153,7 +153,7 @@ export const ContactSection = ({
         />
         {contactForm.hasError && (<Span className={tw('text-hw-negative-400 font-semibold my-1')}>{translation.error}</Span>)}
         <LoadingButton
-          color="accent-secondary"
+          color="hw-secondary"
           onClick={() => {
             if (!isSending) {
               setIsSending(true)

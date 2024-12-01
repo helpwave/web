@@ -223,19 +223,19 @@ export const PatientDetail = ({
           {!newPatient.discharged ?
               (
               <>
-                <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
+                <Button color="hw-warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
                   {translation.unassign}
                 </Button>
-                <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
+                <Button color="hw-negative" onClick={() => setIsShowingDischargeDialog(true)} >
                   {translation.dischargePatient}
                 </Button>
               </>
               ) : (
-              <Button color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
+              <Button color="hw-positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
                 {translation.readmit}
               </Button>
               )}
-          <Button color="accent" onClick={() => {
+          <Button color="hw-primary" onClick={() => {
             clearUpdateTimer(true)
             updateMutation.mutate(newPatient)
           }}>{translation.saveChanges}</Button>

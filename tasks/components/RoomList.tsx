@@ -187,12 +187,12 @@ export const RoomList = ({
             {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
               <Button
                 onClick={() => setDeletionConfirmDialogElement('')}
-                color="negative"
+                color="hw-negative"
               >
                 {translation.removeSelection}
               </Button>
             )}
-            <Button onClick={addRoom} color="positive">
+            <Button onClick={addRoom} color="hw-positive">
               {translation.addRoom}
             </Button>
           </div>
@@ -242,8 +242,8 @@ export const RoomList = ({
             <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
               <Button
                 onClick={() => setManagedRoom(room.id)}
-                variant="textButton"
-                color="neutral"
+                variant="text"
+                color="hw-neutral"
               >
                 {translation.manage}
               </Button>
@@ -251,8 +251,8 @@ export const RoomList = ({
             <div key="remove" className={tw('flex flex-row justify-end')}>
               <Button
                 onClick={() => setDeletionConfirmDialogElement(room.id)}
-                color="negative"
-                variant="textButton"
+                color="hw-negative"
+                variant="text"
               >
                 {translation.remove}
               </Button>

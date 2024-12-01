@@ -170,8 +170,8 @@ export const WardDetail = ({
           <Button
             onClick={() => setIsShowingConfirmDialog(true)}
             className={tw('px-0 font-bold text-left')}
-            color="negative"
-            variant="textButton"
+            color="hw-negative"
+            variant="text"
           >
             {translation.deleteWard}
           </Button>

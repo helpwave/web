@@ -131,14 +131,14 @@ export const OrganizationInvitationList = ({
         }]}
         buttonOverwrites={[
           {},
-          { disabled: !isValidEmail, color: 'positive', text: translation.addAndNext },
-          { disabled: !isValidEmail, color: 'accent', text: translation.add }
+          { disabled: !isValidEmail, color: 'hw-positive', text: translation.addAndNext },
+          { disabled: !isValidEmail, color: 'hw-primary', text: translation.add }
         ]}
       />
       <div className={tw('flex flex-row justify-between')}>
         <Span type="tableName">{`${translation.invitations} (${usedInvitations.length})`}</Span>
         <Button
-          color="positive"
+          color="hw-positive"
           onClick={() => setInviteMemberModalEmail('')}
         >
           {translation.inviteMember}
@@ -158,8 +158,8 @@ export const OrganizationInvitationList = ({
           </div>,
           <div key="remove" className={tw('flex flex-row justify-end')}>
             <Button
-              color="negative"
-              variant="textButton"
+              color="hw-negative"
+              variant="text"
               onClick={() => {
                 if (!isCreatingOrganization) {
                   revokeInviteMutation.mutate(invite.id)

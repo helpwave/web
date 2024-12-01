@@ -18,7 +18,7 @@ export const ChipListVariation: Story = {
       { children: 'Chip 4 different children', variant: 'fullyRounded' },
       { children: 'Chip 5 with text' },
       { children: 'Chip 6 custom style', className: '!bg-red-400' },
-      { children: 'Chip 7 in yellow', color: 'yellow' },
+      { children: 'Chip 7 in yellow', color: 'hw-label-yellow' },
       { children: 'Chip 8 with very very long text' },
       { children: 'Chip 9' },
     ],

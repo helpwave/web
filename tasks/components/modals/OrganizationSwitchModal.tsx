@@ -62,7 +62,7 @@ export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneTo
           onChange={setOrganization}
         />
         <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-          <Button autoFocus color="positive" disabled={!organization} onClick={onDone}>
+          <Button autoFocus color="hw-positive" disabled={!organization} onClick={onDone}>
             {translation.ok}
           </Button>
         </div>

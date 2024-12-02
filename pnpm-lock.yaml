@@ -14,8 +14,8 @@ importers:
         specifier: workspace:*
         version: link:../lib
       '@helpwave/proto-ts':
-        specifier: 0.60.0-1191f09.0
-        version: 0.60.0-1191f09.0
+        specifier: 0.61.0-e1d7c0c.0
+        version: 0.61.0-e1d7c0c.0
       '@tanstack/react-query':
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.3.1)(react@18.3.1)
@@ -311,8 +311,8 @@ importers:
         specifier: workspace:*
         version: link:../lib
       '@helpwave/proto-ts':
-        specifier: 0.60.0-1191f09.0
-        version: 0.60.0-1191f09.0
+        specifier: 0.61.0-e1d7c0c.0
+        version: 0.61.0-e1d7c0c.0
       '@radix-ui/react-checkbox':
         specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
@@ -2454,8 +2454,8 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@helpwave/proto-ts@0.60.0-1191f09.0:
-    resolution: {integrity: sha512-PlFXjSoKFCA2nReg1yLWxAfpo5bk+Px8P2afGQpsIAVpE9am+tz02uvst6TzR/1D8E6SiRu9G6BKydxYFW/bzQ==}
+  /@helpwave/proto-ts@0.61.0-e1d7c0c.0:
+    resolution: {integrity: sha512-xSHZXSEFtJ4jGWHR3HIj4TdOgIhO7gOrUV16xaR7H/WLKYQgr1uBmd92ycvfDtLvwtDeNu1nETEToD8odzeyUQ==}
     dev: false
 
   /@humanwhocodes/config-array@0.13.0:

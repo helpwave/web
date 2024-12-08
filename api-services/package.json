@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@helpwave/common": "workspace:*",
-    "@helpwave/proto-ts": "0.60.0-1191f09.0",
+    "@helpwave/proto-ts": "0.61.0-e1d7c0c.0",
     "@tanstack/react-query": "4.36.1",
     "@tanstack/react-query-devtools": "5.59.16",
     "@types/google-protobuf": "3.15.12",

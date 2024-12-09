@@ -3,25 +3,53 @@ import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import type { BedMinimalDTO } from '@helpwave/api-services/types/tasks/bed'
-import type { PatientDTO } from '@helpwave/api-services/types/tasks/patient'
+import type { Gender, PatientDTO } from '@helpwave/api-services/types/tasks/patient'
 import { emptyPatient } from '@helpwave/api-services/types/tasks/patient'
+import type { AppColor } from '@helpwave/common/twind/config'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { BedCard } from './cards/BedCard'
 import { PatientCard } from './cards/PatientCard'
 import { Droppable, Draggable } from './dnd-kit-instances/patients'
 import { DragCard } from './cards/DragCard'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 
+type RoomOverviewTranslation = Record<Gender, string>
+
+const defaultRoomOverviewTranslations: Record<Languages, RoomOverviewTranslation> = {
+  en: {
+    male: 'M',
+    female: 'F',
+    diverse: 'D',
+  },
+  de: {
+    male: 'M',
+    female: 'F',
+    diverse: 'D',
+  }
+}
+
 export type RoomOverviewProps = {
-  room: RoomOverviewDTO
+  room: RoomOverviewDTO,
+  gender?: Gender // TODO get from room later on
 }
 
 /**
  * A component to show all beds and patients within a room in a ward
  */
-export const RoomOverview = ({ room }: RoomOverviewProps) => {
+export const RoomOverview = ({ room, gender = 'male', overwriteTranslation }: PropsForTranslation<RoomOverviewTranslation, RoomOverviewProps>) => {
+  const translation = useTranslation(defaultRoomOverviewTranslations, overwriteTranslation)
   const context = useContext(WardOverviewContext)
   const ref = useRef<HTMLDivElement>(null)
   const [columns, setColumns] = useState(3)
+
+  const genderColorMapping: Record<Gender, AppColor> = {
+    male: 'hw-male',
+    female: 'hw-female',
+    diverse: 'hw-diverse',
+  }
+  const usedColor = genderColorMapping[gender]
 
   const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patientId?: string, patient?: PatientDTO) =>
     context.updateContext({
@@ -43,8 +71,11 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   return (
     <div className={tw('flex flex-col w-full')} ref={ref}>
       <div className={tw('flex flex-row items-center mb-1')}>
-        <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <Span type="subsectionTitle">{room.name}</Span>
+        <div className={tw(`w-3 h-3 mx-2 rounded-full bg-${usedColor}-400`)}/>
+        <div className={tw('flex flex-row items-center gap-x-2')}>
+          <Span type="subsectionTitle">{room.name}</Span>
+          <Span type="description" className="text-sm font-semibold">({translation[gender]})</Span>
+        </div>
       </div>
       <div className={tw(`grid grid-cols-${columns} gap-4`)}>
         {room.beds.map((bed) => bed.patient && bed.patient?.id ?
@@ -59,13 +90,10 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                         <PatientCard
                           bedName={bed.name}
                           patientName={bed.patient.name}
-                          doneTasks={bed.patient.tasksDone}
-                          inProgressTasks={bed.patient.tasksInProgress}
-                          unscheduledTasks={bed.patient.tasksUnscheduled}
+                          openTasks={bed.patient.tasksUnscheduled}
                           onTileClick={(event) => {
                             event.stopPropagation()
                             if (bed.patient) {
-                              // LINTER: `bed.patient.id` gets evaluated as undefined without this if
                               setSelectedBed(room, bed, bed.patient.id)
                             }
                           }}

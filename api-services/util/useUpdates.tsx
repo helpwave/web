@@ -2,8 +2,6 @@ import type { PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import type { Observable } from 'rxjs'
 import { filter, fromEvent, map, startWith, Subject } from 'rxjs'
-import type { DomainEvent } from '@helpwave/proto-ts/services/updates_svc/v1/updates_svc_pb'
-import { ReceiveUpdatesResponse } from '@helpwave/proto-ts/services/updates_svc/v1/updates_svc_pb'
 import ReceiveUpdatesStreamHandler from './ReceiveUpdatesStreamHandler'
 
 // Two types of speed should be enough.
@@ -28,6 +26,8 @@ if (typeof window !== 'undefined') {
 }
 
 type UpdatesSubject = {
+  eventId: string,
+  eventType: string,
   aggregateType: string,
   aggregateId: string
 }
@@ -58,16 +58,14 @@ export const ProvideUpdates = ({ children }: PropsWithChildren) => {
       .getInstance()
       .observable
       .subscribe((res) => {
-        let domainEvent: DomainEvent
-
-        switch (res.getEventCase()) {
-          case ReceiveUpdatesResponse.EventCase.DOMAIN_EVENT:
-            domainEvent = res.getDomainEvent()!
-            updatesSubject.next({
-              aggregateType: domainEvent.getAggregateType(),
-              aggregateId: domainEvent.getAggregateId()
-            })
-            break
+        if (res.hasEvent()) {
+          const event = res.getEvent()!
+          updatesSubject.next({
+            eventId: event.getEventId(),
+            eventType: event.getEventType(),
+            aggregateType: event.getAggregateType(),
+            aggregateId: event.getAggregateId()
+          })
         }
 
         // Only set revision when handlers are executed successfully

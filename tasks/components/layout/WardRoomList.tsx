@@ -88,20 +88,23 @@ export const WardRoomList = ({
         isLoading={isLoading}
         hasError={isError}
       >
-        {displayableRooms.length > 0 ?
-          displayableRooms.map(room => (
-            <RoomOverview
-              key={room.id}
-              room={room}
-            />
-          )) : (
+        {displayableRooms.length > 0 ? (
+          <div className={tw('flex flex-col gap-y-4')}>
+            {displayableRooms.map(room => (
+              <RoomOverview
+                key={room.id}
+                room={room}
+              />
+            ))}
+          </div>
+        ) : (
             <div className={tw('flex flex-col gap-y-2 items-center')}>
               <Span>{translation.noRooms}</Span>
               <Link href={`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`}>
                 <Button>{translation.editWard}</Button>
               </Link>
             </div>
-          )}
+        )}
       </LoadingAndErrorComponent>
     </div>
   )

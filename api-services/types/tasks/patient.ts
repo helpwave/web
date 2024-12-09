@@ -1,5 +1,8 @@
 import type { TaskDTO, TaskMinimalDTO } from './task'
 
+export const genders = ['male', 'female', 'diverse'] as const
+export type Gender = typeof genders[number]
+
 export type PatientMinimalDTO = {
   id: string,
   name: string

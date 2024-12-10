@@ -7,7 +7,6 @@ import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import {
   useAssignBedMutation,
   usePatientDetailsQuery,
@@ -19,12 +18,12 @@ import {
 import type { PatientDetailsDTO } from '@helpwave/api-services/types/tasks/patient'
 import { emptyPatientDetails } from '@helpwave/api-services/types/tasks/patient'
 import { ColumnTitle } from '../ColumnTitle'
-import { TasksKanbanBoard } from './TasksKanbanBoard'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 import { PropertyList } from '@/components/layout/property/PropertyList'
+import { TaskTable } from '@/components/layout/TaskTable'
 
 type PatientDetailTranslation = {
   patientDetails: string,
@@ -92,7 +91,6 @@ export const PatientDetail = ({
   const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
   const [taskId, setTaskId] = useState<string>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
-  const [initialTaskStatus, setInitialTaskStatus] = useState<TaskStatus>()
 
   const maxHumanReadableIdentifierLength = 24
 
@@ -151,7 +149,6 @@ export const PatientDetail = ({
         wardId={wardId}
         taskId={taskId}
         patientId={newPatient.id}
-        initialStatus={initialTaskStatus}
       />
       <ColumnTitle title={translation.patientDetails}/>
       <LoadingAndErrorComponent
@@ -204,15 +201,19 @@ export const PatientDetail = ({
           </div>
         </div>
         {!!newPatient.id && (
-          <TasksKanbanBoard
-            key={newPatient.id}
+          <>
+            <TaskTable
+            key={newPatient.id + 'openTasks'}
             patientId={newPatient.id}
-            editedTaskId={taskId}
-            onEditTask={task => {
-              setInitialTaskStatus(task.status === 'done' ? 'todo' : task.status)
-              setTaskId(task.id)
-            }}
+            type="openTasks"
+            className={tw('mb-4')}
           />
+            <TaskTable
+              key={newPatient.id + 'closedTasks'}
+              patientId={newPatient.id}
+              type="closedTasks"
+            />
+          </>
         )}
         {!!newPatient.id && (
           <div className={tw('mt-4')}>
@@ -226,12 +227,12 @@ export const PatientDetail = ({
                 <Button color="hw-warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
                   {translation.unassign}
                 </Button>
-                <Button color="hw-negative" onClick={() => setIsShowingDischargeDialog(true)} >
+                <Button color="hw-negative" onClick={() => setIsShowingDischargeDialog(true)}>
                   {translation.dischargePatient}
                 </Button>
               </>
               ) : (
-              <Button color="hw-positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
+              <Button color="hw-positive" onClick={() => readmitMutation.mutate(newPatient.id)}>
                 {translation.readmit}
               </Button>
               )}

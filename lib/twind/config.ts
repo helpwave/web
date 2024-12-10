@@ -80,6 +80,7 @@ export const colors: Record<AppColor, ShadedColors> = {
     900: '#5D4D80',
   }),
   'hw-secondary': generateShadingColors({
+    100: '#e4e8ef',
     200: '#93a4bf',
     300: '#7290c2',
     400: '#3272DF',

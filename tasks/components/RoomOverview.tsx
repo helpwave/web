@@ -31,25 +31,28 @@ const defaultRoomOverviewTranslations: Record<Languages, RoomOverviewTranslation
 }
 
 export type RoomOverviewProps = {
-  room: RoomOverviewDTO,
-  gender?: Gender // TODO get from room later on
+  room: RoomOverviewDTO
 }
 
 /**
  * A component to show all beds and patients within a room in a ward
  */
-export const RoomOverview = ({ room, gender = 'male', overwriteTranslation }: PropsForTranslation<RoomOverviewTranslation, RoomOverviewProps>) => {
+export const RoomOverview = ({ room, overwriteTranslation }: PropsForTranslation<RoomOverviewTranslation, RoomOverviewProps>) => {
   const translation = useTranslation(defaultRoomOverviewTranslations, overwriteTranslation)
   const context = useContext(WardOverviewContext)
   const ref = useRef<HTMLDivElement>(null)
   const [columns, setColumns] = useState(3)
+
+  // const patients = room.beds.filter(value => value.patient !== null).map(value => value.patient!)
+  const gender: Gender | undefined = undefined
+  // TODO set gender according to patients
 
   const genderColorMapping: Record<Gender, AppColor> = {
     male: 'hw-male',
     female: 'hw-female',
     diverse: 'hw-diverse',
   }
-  const usedColor = genderColorMapping[gender]
+  const usedColor = genderColorMapping[gender ?? 'diverse']
 
   const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patientId?: string, patient?: PatientDTO) =>
     context.updateContext({
@@ -74,7 +77,7 @@ export const RoomOverview = ({ room, gender = 'male', overwriteTranslation }: Pr
         <div className={tw(`w-3 h-3 mx-2 rounded-full bg-${usedColor}-400`)}/>
         <div className={tw('flex flex-row items-center gap-x-2')}>
           <Span type="subsectionTitle">{room.name}</Span>
-          <Span type="description" className="text-sm font-semibold">({translation[gender]})</Span>
+          {gender && <Span type="description" className="text-sm font-semibold">({translation[gender]})</Span>}
         </div>
       </div>
       <div className={tw(`grid grid-cols-${columns} gap-4`)}>

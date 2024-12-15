@@ -51,9 +51,9 @@ export const PatientCard = ({
   bedName,
   patientName,
   openTasks = 0,
-  gender = 'diverse',
+  gender = 'diverse', // TODO change to required when patient has this property
   hasWarning = false,
-  age = 32,
+  age = 32, // TODO change to required when patient has this property
   isSelected,
   className,
   ...restCardProps

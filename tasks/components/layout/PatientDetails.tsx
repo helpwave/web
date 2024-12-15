@@ -207,11 +207,15 @@ export const PatientDetail = ({
             patientId={newPatient.id}
             type="openTasks"
             className={tw('mb-4')}
+            onAddTaskClick={() => setTaskId('')}
+            onTaskClick={(task) => setTaskId(task.id)}
           />
             <TaskTable
               key={newPatient.id + 'closedTasks'}
               patientId={newPatient.id}
               type="closedTasks"
+              onAddTaskClick={() => setTaskId('')}
+              onTaskClick={(task) => setTaskId(task.id)}
             />
           </>
         )}

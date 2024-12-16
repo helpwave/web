@@ -85,10 +85,10 @@ export const TaskTable = ({
   const { data } = useTasksByPatientQuery(patientId)
   const updateTaskMutation = useTaskUpdateMutation()
 
-  const padding = shortcut.tablePadding('p-2 first:pl-4 last:pr-4')
-  const border = shortcut.tableBorder('border-b-2 first:border-l-2 last:border-r-2')
-  const firstRowBorder = shortcut.tableFirstRowBorder('border-t-2 first:rounded-tl-lg last:rounded-tr-lg')
-  const lastRowBorder = shortcut.tableLastRowBorder('first:rounded-bl-lg last:rounded-br-lg')
+  const padding = shortcut('p-2 first:pl-4 last:pr-4')
+  const border = shortcut('border-b-2 first:border-l-2 last:border-r-2')
+  const firstRowBorder = shortcut('border-t-2 first:rounded-tl-lg last:rounded-tr-lg')
+  const lastRowBorder = shortcut('first:rounded-bl-lg last:rounded-br-lg')
   const headerStyle = tw(`${padding} ${border} ${firstRowBorder}`)
 
   const filteredTasks = (data ?? []).filter(value => (value.status === 'todo' && type === 'openTasks') || (value.status === 'done' && type === 'closedTasks'))

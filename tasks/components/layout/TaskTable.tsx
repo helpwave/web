@@ -66,7 +66,7 @@ export type TaskTableProps = {
   patientId: string,
   onAddTaskClick?: () => void,
   onTaskClick?: (task: TaskDTO) => void,
-  maximumTasksShown: number,
+  maximumTasksShown?: number,
   className?: string
 }
 

@@ -5,7 +5,6 @@ import { useContext, useEffect, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Button } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { Span } from '@helpwave/common/components/Span'
 import {
   defaultTableStatePagination,
   defaultTableStateSelection,
@@ -182,7 +181,7 @@ export const RoomList = ({
         errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
       >
         <div className={tw('flex flex-row justify-between items-center mb-2')}>
-          <Span type="tableName">{translation.rooms + ` (${usedRooms.length})`}</Span>
+          <span className={tw('textstyle-table-name')}>{translation.rooms + ` (${usedRooms.length})`}</span>
           <div className={tw('flex flex-row gap-x-2')}>
             {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
               <Button
@@ -206,9 +205,9 @@ export const RoomList = ({
           }]}
           identifierMapping={identifierMapping}
           header={[
-            <Span key="name" type="tableHeader">{translation.roomName}</Span>,
-            <Span key="bedcount" type="tableHeader">{translation.bedCount}</Span>,
-            <Span key="manage" type="tableHeader" >{translation.manageBeds}</Span>,
+            <span key="name" className={tw('textstyle-table-header')}>{translation.roomName}</span>,
+            <span key="bedcount" className={tw('textstyle-table-header')}>{translation.bedCount}</span>,
+            <span key="manage" className={tw('textstyle-table-header')}>{translation.manageBeds}</span>,
             <></>
           ]}
           rowMappingToCells={room => [
@@ -237,7 +236,7 @@ export const RoomList = ({
               />
             </div>,
             <div key="bedcount" className={tw('w-20')}>
-              <Span>{room.bedCount}</Span>
+              <span>{room.bedCount}</span>
             </div>,
             <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
               <Button

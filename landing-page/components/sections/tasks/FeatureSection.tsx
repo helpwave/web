@@ -1,4 +1,3 @@
-import { Span } from '@helpwave/common/components/Span'
 import { tw, tx } from '@helpwave/common/twind'
 import Image from 'next/image'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -32,12 +31,12 @@ const FeatureItem = ({
       </div>
 
       <div className={tw('flex flex-col w-1/3 mobile:!w-full')}>
-        <Span type="title" className={tw('!text-4xl')}>
+        <span className={tw('textstyle-title-2xl')}>
           {title}
-        </Span>
-        <Span type="description" className={tw('text-gray-600')}>
+        </span>
+        <span className={tw('textstyle-description text-gray-600')}>
           {description}
-        </Span>
+        </span>
       </div>
     </div>
   )

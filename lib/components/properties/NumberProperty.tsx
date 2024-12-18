@@ -5,7 +5,6 @@ import { Input } from '../user-input/Input'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
-import { Span } from '../Span'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -79,7 +78,7 @@ export const NumberProperty = ({
               }
             }}
           />
-          {suffix && <Span className={tx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</Span>}
+          {suffix && <span className={tx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</span>}
         </div>
       )}
     />

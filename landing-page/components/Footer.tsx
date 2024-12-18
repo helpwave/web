@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
-import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -117,7 +116,7 @@ const Footer = () => {
       <div
         className={tw('flex flex-row justify-center w-full h-[128px] items-center justify-center mx-auto font-space')}>
         <Helpwave color="white" size={128}/>
-        <Span type="subsectionTitle">&copy; {year} helpwave</Span>
+        <span className={tw('textstyle-title-normal')}>&copy; {year} helpwave</span>
       </div>
     </div>
   )

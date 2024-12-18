@@ -5,7 +5,6 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Plus, Tag } from 'lucide-react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Span } from '@helpwave/common/components/Span'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { useEffect, useState } from 'react'
 import { SearchableList } from '@helpwave/common/components/SearchableList'
@@ -80,7 +79,7 @@ export const PropertyList = ({
     >
       <div className={tw('flex flex-col gap-y-2')}>
         <Tile
-          title={{ value: translation.properties, type: 'title' }}
+          title={{ value: translation.properties, className: 'textstyle-title-lg' }}
           prefix={<Tag className={tw('text-hw-primary-400')} size={20}/>}
           className={tw('!gap-x-2')}
         />
@@ -103,7 +102,7 @@ export const PropertyList = ({
               onClick={onClick}
             >
               <Plus size={20}/>
-              <Span>{translation.addProperty}</Span>
+              <span>{translation.addProperty}</span>
             </div>
           )}
           menuClassName={tw('min-w-[200px] p-2 ')}

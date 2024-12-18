@@ -4,7 +4,6 @@ import { Plus } from 'lucide-react'
 import { tw } from '@helpwave/common/twind'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
-import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 import {
@@ -93,7 +92,7 @@ export const SubtaskView = ({
   return (
     <div className={tw('flex flex-col gap-y-2')}>
       <div className={tw('flex flex-row items-center justify-between')}>
-        <Span type="subsectionTitle">{translation.subtasks}</Span>
+        <span className={tw('textstyle-title-normal')}>{translation.subtasks}</span>
         <Button
           onClick={() => {
             const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
@@ -106,7 +105,7 @@ export const SubtaskView = ({
         >
           <div className={tw('flex flex-row items-center gap-x-2')}>
             <Plus size={18}/>
-            <Span>{translation.addSubtask}</Span>
+            <span>{translation.addSubtask}</span>
           </div>
         </Button>
       </div>

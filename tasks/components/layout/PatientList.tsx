@@ -3,7 +3,6 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
-import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -186,7 +185,7 @@ export const PatientList = ({
         wardId={context.wardId}
       />
       <div className={tw('flex flex-row gap-x-2 items-center')}>
-        <Span type="subsectionTitle" className={tw('pr-4')}>{translation.patients}</Span>
+        <span className={tw('textstyle-title-normal pr-4')}>{translation.patients}</span>
         <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
         <Button
           className={tw('whitespace-nowrap')}
@@ -209,7 +208,7 @@ export const PatientList = ({
             <HideableContentSection
               initiallyOpen={initialOpenedSections?.active}
               disabled={filteredActive.length <= 0}
-              header={<Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>}
+              header={<span className={tw('textstyle-accent')}>{`${translation.active} (${filteredActive.length})`}</span>}
             >
               {filteredActive.map(patient => (
                 <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
@@ -229,7 +228,7 @@ export const PatientList = ({
                         bedId: patient.bed.id
                       })}
                     >
-                      <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
+                      <span className={tw('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
                       <div className={tw('flex flex-row flex-1 justify-between items-center')}>
                         <Chip color="hw-label-blue" variant="fullyRounded">
                           {activeLabelText(patient)}
@@ -257,9 +256,9 @@ export const PatientList = ({
                   initiallyOpen={initialOpenedSections?.unassigned}
                   disabled={filteredUnassigned.length <= 0}
                   header={(
-                    <Span type="accent" className={tw('text-hw-label-yellow-400')}>
+                    <span className={tw('textstyle-accent text-hw-label-yellow-400')}>
                       {`${translation.unassigned} (${filteredUnassigned.length})`}
-                    </Span>
+                    </span>
                   )}
                 >
                   {filteredUnassigned.map((patient) => (
@@ -276,7 +275,7 @@ export const PatientList = ({
                             patientId: patient.id
                           })}
                         >
-                          <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
+                          <span className={tw('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
                           <div className={tw('flex flex-row flex-1 justify-between items-center')}>
                             <Chip color="hw-label-yellow" variant="fullyRounded">
                               {`${translation.unassigned}`}
@@ -305,7 +304,7 @@ export const PatientList = ({
                 <HideableContentSection
                   initiallyOpen={initialOpenedSections?.discharged}
                   disabled={filteredDischarged.length <= 0}
-                  header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
+                  header={<span className={tw('textstyle-accent')}>{`${translation.discharged} (${filteredDischarged.length})`}</span>}
                 >
                   {filteredDischarged.map(patient => (
                     <Draggable id={patient.id} key={patient.id} data={{
@@ -321,7 +320,7 @@ export const PatientList = ({
                             patientId: patient.id
                           })}
                         >
-                          <Span className={tw('font-space font-bold')}>{patient.name}</Span>
+                          <span className={tw('textstyle-title-sm')}>{patient.name}</span>
                           <div className={tw('flex flex-row gap-x-4')}>
                             <Button variant="text" onClick={event => {
                               event.stopPropagation()

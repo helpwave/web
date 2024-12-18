@@ -52,16 +52,16 @@ export const BrandDescriptionsSection = () => {
   return (
     <SectionBase className={tw('flex flex-col gap-8 justify-center')} backgroundColor="gray">
       <Tile
-        title={{ value: translation.aboutMediQuuTitle, type: 'title' }}
-        description={{ value: translation.aboutMediQuuDescription, type: 'normal' }}
+        title={{ value: translation.aboutMediQuuTitle, className: 'textstyle-title-lg' }}
+        description={{ value: translation.aboutMediQuuDescription, className: '' }}
         prefix={(
           <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64} />
         )}
         className={tw('bg-white rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:flex-col tablet:flex-col')}
       />
       <Tile
-        title={{ value: translation.aboutHelpwaveTitle, type: 'title' }}
-        description={{ value: translation.aboutHelpwaveDescription, type: 'normal' }}
+        title={{ value: translation.aboutHelpwaveTitle, className: 'textstyle-title-lg' }}
+        description={{ value: translation.aboutHelpwaveDescription, className: '' }}
         prefix={(
           <div className={tw('min-w-[220px]')}>
             <HelpwaveBadge

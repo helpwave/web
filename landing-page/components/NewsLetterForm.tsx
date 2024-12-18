@@ -2,7 +2,6 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { useState } from 'react'
 import { Select } from '@helpwave/common/components/user-input/Select'
@@ -119,8 +118,8 @@ export const NewsLetterForm = ({
   return (
     <div className={tw('rounded-lg py-2 px-4 w-full bg-[#FFFFFFEE] border border-2')}>
       <div className={tw('flex flex-col')}>
-        <Span type="title">{translation.title}</Span>
-        <Span type="formDescription">{translation.subtitle}</Span>
+        <span className={tw('textstyle-title-md')}>{translation.title}</span>
+        <span className={tw('textstyle-form-description')}>{translation.subtitle}</span>
         <div className={tw('flex flex-col my-2 gap-y-1')}>
         <form>
           <Input

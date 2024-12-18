@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
-import { Span } from '@helpwave/common/components/Span'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ItemGrid } from '@helpwave/common/components/layout/ItemGrid'
@@ -55,7 +54,7 @@ export const TasksDemoSection = () => {
       <div className={tw('flex flex-col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
         <div className={tw('flex flex-col gap-y-4 desktop:max-w-[70%]')}>
           <HelpwaveBadge className={tw('!text-hw-primary-800 !bg-hw-primary-200 !w-fit')} title={translation.helpwaveTasks}/>
-          <Span type="title" className={tw('!text-2xl')}>{translation.workflowManagement}</Span>
+          <span className={tw('textstyle-title-lg')}>{translation.workflowManagement}</span>
           <ItemGrid columns={1} className={tw('font-medium mt-2')}>
             {translation.feature1}
             {translation.feature2}

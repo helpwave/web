@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 
 export type HeaderProps = {
@@ -35,7 +34,7 @@ const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: Heade
               </Link>
             </div>
           )}
-          {title && <Span type="title">{title}</Span>}
+          {title && <span className={tw('textstyle-title-md')}>{title}</span>}
           {leftSide?.filter(value => value !== undefined).map((value, index) => (
             <div key={'leftAction' + index} className={tw('flex flex-row items-center')}>
               {(index !== 0 || title || withIcon) && <div className={tw('bg-gray-300 rounded h-8 w-0.5 mx-4')}/>}

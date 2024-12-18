@@ -5,7 +5,6 @@ import { Checkbox } from '../user-input/Checkbox'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
-import { Span } from '../Span'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -58,7 +57,9 @@ export const CheckboxProperty = ({
             disabled={readOnly}
             onChange={onChange}
           />
-          <Span className={tw('font-semibold select-none cursor-pointer')} onClick={() => onChange(!value)}>{`${translation.yes}/${translation.no}`}</Span>
+          <span className={tw('font-semibold select-none cursor-pointer')} onClick={() => onChange(!value)}>
+            {`${translation.yes}/${translation.no}`}
+          </span>
         </div>
       )}
     />

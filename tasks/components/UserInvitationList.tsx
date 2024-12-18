@@ -3,7 +3,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Avatar } from '@helpwave/common/components/Avatar'
@@ -80,14 +79,14 @@ export const UserInvitationList = ({
             stateManagement={[tableState, setTableState]}
             identifierMapping={idMapping}
             header={[
-              <Span key="organization" type="tableHeader">{translation.organization}</Span>,
+              <span key="organization" className={tw('textstyle-table-header')}>{translation.organization}</span>,
               <></>,
               <></>
             ]}
             rowMappingToCells={invite => [
               <div key="name" className={tw('flex flex-row justify-start items-center gap-x-2')}>
                 <Avatar avatarUrl={invite.organization.id} alt=""/>
-                <Span>{invite.organization.longName}</Span>
+                <span>{invite.organization.longName}</span>
               </div>,
               <Button
                 key="accept"

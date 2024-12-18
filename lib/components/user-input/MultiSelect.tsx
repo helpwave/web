@@ -6,7 +6,6 @@ import type { PropsForTranslation } from '../../hooks/useTranslation'
 import type { Languages } from '../../hooks/useLanguage'
 import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import { tx, tw } from '../../twind'
-import { Span } from '../Span'
 import { Menu, MenuItem } from './Menu'
 import { Input } from './Input'
 import { Checkbox } from './Checkbox'
@@ -95,7 +94,7 @@ export const MultiSelect = <T, >({
   const selectedItems = options.filter(value => value.selected)
   const menuButtonText = selectedItems.length === 0 ?
     hintText ?? translation.select
-    : <Span>{`${selectedItems.length} ${translation.selected}`}</Span>
+    : <span>{`${selectedItems.length} ${translation.selected}`}</span>
 
   return (
     <div className={tx(className)}>

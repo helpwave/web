@@ -2,7 +2,6 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Modal, type ModalProps } from '@helpwave/common/components/modals/Modal'
-import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { defaultTableStatePagination, Table, updatePagination, type TableState } from '@helpwave/common/components/Table'
 import { useEffect, useState } from 'react'
@@ -105,7 +104,7 @@ export const ManageBedsModal = ({
         {room && beds && (
           <>
             <div className={tw('flex flex-row justify-between items-end mb-2 mt-4')}>
-              <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
+              <span className={tw('textstyle-table-name')}>{`${translation.beds} (${beds.length})`}</span>
               <Button color="hw-positive" onClick={addBed}>{translation.addBed}</Button>
             </div>
             <Table
@@ -113,8 +112,8 @@ export const ManageBedsModal = ({
               stateManagement={[tableState, setTableState]}
               identifierMapping={identifierMapping}
               header={[
-                <Span key="name" type="tableHeader">{translation.name}</Span>,
-                <Span key="patient" type="tableHeader">{translation.patient}</Span>,
+                <span key="name" className={tw('textstyle-table-header')}>{translation.name}</span>,
+                <span key="patient" className={tw('textstyle-table-header')}>{translation.patient}</span>,
                 <></>
               ]}
               rowMappingToCells={bed => [
@@ -129,7 +128,7 @@ export const ManageBedsModal = ({
                   />
                 </div>,
                 <div key="patient" className={tw('w-20')}>
-                  <Span>{bed.patient ? bed.patient.name : '-'}</Span>
+                  <span>{bed.patient ? bed.patient.name : '-'}</span>
                 </div>,
                 <div key="remove" className={tw('flex flex-row justify-end')}>
                   <Button

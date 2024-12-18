@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Github, Globe, Linkedin, Mail } from 'lucide-react'
 import { Helpwave } from '../icons/Helpwave'
-import { Span } from './Span'
 import { Chip } from './ChipList'
 
 type SocialType = 'mail' | 'github' | 'linkedin' | 'website' | 'medium'
@@ -100,16 +99,16 @@ export const Profile = ({
           </div>
         )}
       </div>
-      {prefix && <Span className={tw('font-semibold')}>{prefix}</Span>}
-      <h2 id={name}><Span type="title">{name}</Span></h2>
-      {suffix && <Span className={tw('text-sm mb-1')}>{suffix}</Span>}
-      {role && <Span className={tw('font-space font-bold text-sm')}>{role}</Span>}
+      {prefix && <span className={tw('font-semibold')}>{prefix}</span>}
+      <h2 id={name} className={tw('textstyle-title-md')}>{name}</h2>
+      {suffix && <span className={tw('text-sm mb-1')}>{suffix}</span>}
+      {role && <span className={tw('font-space font-bold text-sm')}>{role}</span>}
       {tags && (
         <div className={tw('flex flex-wrap mx-4 mt-2 gap-x-2 justify-center')}>
-          {tags.map((tag, index) => <Span key={index} type="description" className={tw('text-sm')}>{`#${tag}`}</Span>)}
+          {tags.map((tag, index) => <span key={index} className={tw('textstyle-description text-sm')}>{`#${tag}`}</span>)}
         </div>
       )}
-      {info && <Span className={tw('mt-2 text-sm')}>{info}</Span>}
+      {info && <span className={tw('mt-2 text-sm')}>{info}</span>}
       {socials && (
         <div className={tw('flex flex-wrap flex-grow items-end justify-center gap-x-4 gap-y-2 mt-4')}>
           {socials.map((socialIconProps, index) => (

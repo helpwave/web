@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import type { MultiSelectProps } from '../user-input/MultiSelect'
 import { MultiSelect } from '../user-input/MultiSelect'
 import { ChipList } from '../ChipList'
-import { Span } from '../Span'
 
 type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'search' | 'selectedDisplay'> & {
   enableSearch: boolean,
@@ -44,7 +43,7 @@ export const MultiSelectExample = ({
           ({ items }) => {
             const selected = items.filter(value => value.selected)
             if (selected.length === 0) {
-              return <Span>Select</Span>
+              return (<span>Select</span>)
             }
             return (
             <ChipList

@@ -1,6 +1,5 @@
 import { tw } from '@twind/core'
 import Image from 'next/image'
-import { Span } from '@helpwave/common/components/Span'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
 
 export type Partner = {
@@ -22,7 +21,7 @@ export const PartnerList = ({
 }: PartnerListProps) => {
   return (
     <div className={tw('flex flex-col gap-y-4 items-center w-full')}>
-      <Span type="title" className={tw('!text-2xl')}>{title}</Span>
+      <span className={tw('textstyle-title-lg')}>{title}</span>
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
         heights={{

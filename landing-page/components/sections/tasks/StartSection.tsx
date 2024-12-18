@@ -6,7 +6,6 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { Chip } from '@helpwave/common/components/ChipList'
-import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { SectionBase } from '@/components/sections/SectionBase'
 
@@ -48,12 +47,10 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
         <Link href={demoURL} target="_blank">
           <Chip className={tw('flex flex-row gap-x-2 w-fit items-center')} color="lightPrimary">
             <Helpwave size={24} className={tw('min-w-[24px] min-h-[24px]')}/>
-            <Span className={tw('font-bold')}>helpwave tasks</Span>
+            <span className={tw('font-bold')}>helpwave tasks</span>
           </Chip>
         </Link>
-        <h4>
-          <Span type="title" className={tw('!text-4xl font-bold')}>{translation.title}</Span>
-        </h4>
+        <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
         <MarkdownInterpreter text={translation.text} className={tw('text-xl font-medium')}/>
       </div>
     </SectionBase>

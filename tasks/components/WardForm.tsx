@@ -3,7 +3,6 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { Span } from '@helpwave/common/components/Span'
 
 type WardFormTranslation = {
   general: string,
@@ -93,9 +92,9 @@ export const WardForm = ({
                maxLength={maxWardNameLength}
                className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <Span type="formError">{nameErrorMessage}</Span>}
+        {isDisplayingShortNameError && <span className={tw('textstyle-form-error')}>{nameErrorMessage}</span>}
       </div>
-      <Span type="formDescription">{translation.nameDescription}</Span>
+      <span className={tw('textstyle-form-description')}>{translation.nameDescription}</span>
     </form>
   )
 }

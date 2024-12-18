@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import Image from 'next/image'
 import { SectionBase } from '@/components/sections/SectionBase'
 
@@ -29,8 +28,8 @@ const StoryHeader = ({ overwriteTranslation }: PropsForTranslation<StoryHeaderTr
     <SectionBase className={tw('text-white')} backgroundColor="black">
       <div className={tw('flex flex-col items-center desktop:!flex-row gap-x-16 gap-y-8 justify-between')}>
         <div className={tw('flex flex-col gap-y-2')}>
-          <Span type="title" className={tw('!text-3xl')}>{translation.foundingStory}</Span>
-          <Span>{translation.foundingStoryDescription}</Span>
+          <span className={tw('textstyle-title-xl')}>{translation.foundingStory}</span>
+          <span>{translation.foundingStoryDescription}</span>
         </div>
         <Image src="https://cdn.helpwave.de/story/audience_award_mshack.png" alt="" width={0} height={0} className={tw('w-full desktop:max-w-[60%]')}/>
       </div>

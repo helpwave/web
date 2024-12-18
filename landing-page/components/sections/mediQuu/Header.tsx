@@ -1,7 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import Image from 'next/image'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
@@ -33,8 +32,8 @@ export const MediQuuHeaderSection = () => {
     <SectionBase backgroundColor="gray">
       <div className={tw('flex flex-row w-full gap-x-4 gap-y-8 mobile:!flex-col-reverse mobile:items-center')}>
         <div className={tw('flex flex-col gap-y-2 desktop:max-w-[50%]')}>
-          <Span type="title" className={tw('!text-5xl')}>{translation.title}</Span>
-          <Span className={tw('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></Span>
+          <span className={tw('textstyle-title-2xl')}>{translation.title}</span>
+          <span className={tw('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></span>
         </div>
         <div className={tw('flex flex-row justify-center items-center grow')}>
           <div className={tw('flex flex-col gap-y-4 min-w-[350px] max-w-[350px]')}>

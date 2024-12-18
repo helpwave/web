@@ -3,7 +3,6 @@ import { tw } from '@helpwave/common/twind'
 import { LucideArrowLeftRight } from 'lucide-react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
-import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
@@ -57,10 +56,11 @@ export const TaskTemplateDisplay = ({
   const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
   return (
     <div className={tw('py-4 px-6')}>
-      <div className={tw('flex flex-row items-center justify-between mb-4')}>
-        <Span type="subsectionTitle">
+      <div className={
+        tw('flex flex-row items-center justify-between mb-4')}>
+        <span className={tw('textstyle-title-normal')}>
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
-        </Span>
+        </span>
         { (variant === 'wardTemplates' || wardId) && (
           <Button
             onClick={() => {

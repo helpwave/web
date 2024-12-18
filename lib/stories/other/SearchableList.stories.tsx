@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { SearchableList } from '../../components/SearchableList'
-import { Span } from '../../components/Span'
 
 const meta = {
   title: 'Other/SearchableList',
@@ -15,7 +14,7 @@ export const SearchableListVariation: Story = {
     list: ['Apple', 'Banana', 'Pineapple', 'Pear', 'Strawberry', 'Raspberry', 'Wildberry'],
     initialSearch: '',
     searchMapping: value => [value],
-    itemMapper: value => <Span>{value}</Span>,
+    itemMapper: value => <span>{value}</span>,
     className: '',
     overwriteTranslation: {},
   },

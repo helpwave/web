@@ -3,7 +3,6 @@ import { Popcorn } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type StoryStartSectionTranslation = {
@@ -78,37 +77,38 @@ const StoryStartSection = ({ overwriteTranslation }: PropsForTranslation<StorySt
 
   return (
     <SectionBase className={tw('flex flex-col gap-y-8')}>
-        <div className={tw('flex flex-row mobile:flex-col mobile:text-center gap-8 text-6xl text-hw-negative-700 items-center')}>
-          <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full')} />
-          {translation.ourStory}
-        </div>
+      <div
+        className={tw('flex flex-row mobile:flex-col mobile:text-center gap-8 text-6xl text-hw-negative-700 items-center')}>
+        <Popcorn size="128" color="#A54F5C" className={tw('inline mobile:w-full')}/>
+        {translation.ourStory}
+      </div>
 
-        <div>
-          <h2 className={tw('font-space text-4xl font-light')}>
-            1. {translation.identifyingTheProblemTitle}
-          </h2>
-          <p className={tw('mt-2 text-justify')}>
-            <Span type="block">{translation.identifyingTheProblemText}</Span>
-          </p>
-        </div>
+      <div>
+        <h2 className={tw('font-space text-4xl font-light')}>
+          1. {translation.identifyingTheProblemTitle}
+        </h2>
+        <p className={tw('mt-2 text-justify')}>
+          {translation.identifyingTheProblemText}
+        </p>
+      </div>
 
-        <div>
-          <h2 className={tw('font-space text-4xl font-light')}>
-            2. {translation.tasksAndOpenInnovationTitle}
-          </h2>
-          <p className={tw('mt-2 text-justify')}>
-            <Span type="block">{translation.tasksAndOpenInnovationText}</Span>
-          </p>
-        </div>
+      <div>
+        <h2 className={tw('font-space text-4xl font-light')}>
+          2. {translation.tasksAndOpenInnovationTitle}
+        </h2>
+        <p className={tw('mt-2 text-justify')}>
+          {translation.tasksAndOpenInnovationText}
+        </p>
+      </div>
 
-        <div>
-          <h2 className={tw('font-space text-4xl font-light')}>
-            3. {translation.futureTitle}
-          </h2>
-          <p className={tw('mt-2 text-justify')}>
-            <Span type="block">{translation.futureText}</Span>
-          </p>
-        </div>
+      <div>
+        <h2 className={tw('font-space text-4xl font-light')}>
+          3. {translation.futureTitle}
+        </h2>
+        <p className={tw('mt-2 text-justify')}>
+          {translation.futureText}
+        </p>
+      </div>
     </SectionBase>
   )
 }

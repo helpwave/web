@@ -1,7 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@twind/core'
-import { Span } from '@helpwave/common/components/Span'
 import Image from 'next/image'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import type { ReactNode } from 'react'
@@ -52,12 +51,12 @@ export const MediQuuInformationSection = () => {
                height={150}/>
       </div>
       <div className={tw('flex flex-col')}>
-        <Span type="heading" className={tw('text-hw-secondary-400')}>{translation.title}</Span>
-        <Span className={tw('text-justify')}>{translation.subTitle1}</Span>
+        <span className={tw('textstyle-title-lg text-hw-secondary-400')}>{translation.title}</span>
+        <span className={tw('text-justify')}>{translation.subTitle1}</span>
         <br/>
-        <Span className={tw('text-justify')}><MarkdownInterpreter text={translation.subTitle2}/></Span>
+        <span className={tw('text-justify')}><MarkdownInterpreter text={translation.subTitle2}/></span>
         <br/>
-        <Span className={tw('text-justify')}>{translation.subTitle3}</Span>
+        <span className={tw('text-justify')}>{translation.subTitle3}</span>
       </div>
     </SectionBase>
   )

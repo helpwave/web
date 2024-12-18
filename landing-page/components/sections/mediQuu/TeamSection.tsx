@@ -4,7 +4,6 @@ import { Profile } from '@helpwave/common/components/Profile'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import { tx } from '@twind/core'
 import { MediQuuBadge } from '@/components/sections/mediQuu/MediQuuBadge'
 import { SectionBase } from '@/components/sections/SectionBase'
@@ -123,8 +122,8 @@ export const TeamSection = () => {
   const usedLanguage = useLanguage().language
   return (
     <SectionBase className={tw('flex flex-col')}>
-      <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
-      <Span>{translation.subTitle}</Span>
+      <span className={tw('textstyle-title-xl text-hw-secondary-400 mb-1')}>{translation.title}</span>
+      <span>{translation.subTitle}</span>
       <div className={tw('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-8')}>
         {contactsHelpwave.map(value => {
           const profileProps = { ...value }

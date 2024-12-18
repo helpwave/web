@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { Span } from '@helpwave/common/components/Span'
 import type { PropsWithChildren } from 'react'
 import Image from 'next/image'
 import { SectionBase } from '@/components/sections/SectionBase'
@@ -16,8 +15,8 @@ const MarketStatsItem = ({ children, stat, title }: MarketStatsItemProps) => {
   return (
     <div className={tw('flex flex-col items-center')}>
       {children}
-      <Span className={tw('text-3xl mobile:text-xl mt-2 mobile:font-semibold')}>{stat}</Span>
-      <h4><Span type="description" className={tw('text-xl mobile:!text-base')}>{title}</Span></h4>
+      <span className={tw('text-3xl mobile:text-xl mt-2 mobile:font-semibold')}>{stat}</span>
+      <h4><span className={tw('textstyle-description text-xl mobile:!text-base')}>{title}</span></h4>
     </div>
   )
 }
@@ -52,7 +51,7 @@ const MarketStatsSection = ({ overwriteTranslation }: PropsForTranslation<Market
   return (
     <SectionBase backgroundColor="darkSecondary" className={tw('flex flex-col text-white pb-24 font-space')}>
       <h1 className={tw('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>
-      <Span type="description" className={tw('text-center')}>{translation.marketPotential}</Span>
+      <span className={tw('text-center textstyle-description')}>{translation.marketPotential}</span>
       <div className={tw('mt-8 w-full flex flex-wrap gap-y-16 gap-x-32 justify-evenly items-center')}>
         <MarketStatsItem stat="1.800" title={translation.hospitals}>
           {/* Image needs attribution to https://www.flaticon.com/free-icon/hospital_3809392?term=hospital&page=1&position=8&origin=search&related_id=3809392 */}

@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const TileWithImageVariation: Story = {
   args: {
-    title: { value: 'About helpwave', type: 'title' },
+    title: { value: 'About helpwave', className: 'textstyle-title-lg' },
     description: {
       value: 'Regulatory burdens and high barriers to entry make it difficult for small companies to enter the market,' +
           ' leading to a lack of competition. helpwave is here to change that. We offer a platform that brings everyone to' +

@@ -1,4 +1,3 @@
-import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import { Menu as MenuIcon, X } from 'lucide-react'
@@ -103,8 +102,6 @@ const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false)
   const translation = useTranslation(defaultHeaderTranslation, {})
 
-  const navigationItemStyle = tw('!font-bold font-space')
-
   return (
     <>
       <div className={tw('absolute flex flex-row justify-center top-0 w-screen z-[50] bg-hw-grayscale-50 mobile:px-6 tablet:px-12 desktop:px-24')}>
@@ -123,18 +120,18 @@ const Header = () => {
                 <div key={name}>
                   {subpage === undefined ? (
                     <Link href={url}>
-                      <Span className={navigationItemStyle}>
+                      <span className={tw('textstyle-navigation-item')}>
                         {translation[name]}
-                      </Span>
+                      </span>
                     </Link>
                   ) : (
                     <Menu<HTMLDivElement>
                       alignment="tl"
                       trigger={(onClick, ref) => (
                         <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
-                          <Span className={navigationItemStyle}>
+                          <span className={tw('textstyle-navigation-item')}>
                             {translation[name]}
-                          </Span>
+                          </span>
                         </div>
                       )}
                       showOnHover={true}
@@ -147,9 +144,9 @@ const Header = () => {
                         (
                         <Link key={subPageName} className={tw('cursor-pointer')} href={subPageExternal ? subPageUrl : url + subPageUrl}>
                           <MenuItem alignment="left">
-                            <Span className={navigationItemStyle}>
+                            <span className={tw('textstyle-navigation-item')}>
                               {translation[subPageName]}
-                            </Span>
+                            </span>
                           </MenuItem>
                         </Link>
                         ))}
@@ -184,9 +181,9 @@ const Header = () => {
 
             <div className={tw('w-full p-2')}>
               <Link href="/" onClick={() => setNavbarOpen(false)}>
-                <Span type="heading">
+                <span className={tw('textstyle-title-lg')}>
                   home
-                </Span>
+                </span>
               </Link>
             </div>
 
@@ -198,16 +195,16 @@ const Header = () => {
               <div key={name} className={tw('w-full p-2')}>
                 {subpage === undefined ? (
                   <Link href={url} onClick={() => setNavbarOpen(false)}>
-                    <Span type="heading">
+                    <span className={tw('textstyle-title-lg')}>
                       {translation[name]}
-                    </Span>
+                    </span>
                   </Link>
                 ) : (
                   <Menu<HTMLDivElement> alignment="tl" trigger={(onClick, ref) => (
                     <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
-                      <Span type="heading">
+                      <span className={tw('textstyle-title-lg')}>
                         {translation[name]}
-                      </Span>
+                      </span>
                     </div>
                   )}>
                     {subpage.map(({
@@ -219,9 +216,9 @@ const Header = () => {
                       <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)}
                         href={subPageExternal ? subPageUrl : url + subPageUrl}>
                         <MenuItem alignment="left">
-                          <Span type="heading">
+                          <span className={tw('textstyle-title-lg')}>
                             {translation[subPageName]}
-                          </Span>
+                          </span>
                         </MenuItem>
                       </Link>
                       ))}

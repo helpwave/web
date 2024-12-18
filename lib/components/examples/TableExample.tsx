@@ -8,7 +8,6 @@ import {
   Table
 } from '../Table'
 import { tw } from '../../twind'
-import { Span } from '../Span'
 import { Input } from '../user-input/Input'
 import { Button } from '../Button'
 import { SortButton } from '../SortButton'
@@ -72,7 +71,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
         data={data}
         identifierMapping={idMapping}
         rowMappingToCells={dataObject => [
-          <Span key="id" type="title" className={tw('w-[100px] text-ellipsis overflow-hidden block')}>{dataObject.id}</Span>,
+          <span key="id" className={tw('textstyle-title-md w-[100px] text-ellipsis overflow-hidden block')}>{dataObject.id}</span>,
           <Input key="name" value={dataObject.name} onChange={text => {
             setData(data.map(value => value.id === dataObject.id ? { ...dataObject, name: text } : value))
             setSorting(undefined)
@@ -101,7 +100,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.id[newTableSorting]))
             }}
           >
-            <Span type="tableHeader">Id</Span>
+            <span className={tw('textstyle-table-header')}>Id</span>
           </SortButton>,
           <SortButton
             key="name"
@@ -111,7 +110,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.name[newTableSorting]))
             }}
           >
-            <Span type="tableHeader">Name</Span>
+            <span className={tw('textstyle-table-header')}>Name</span>
           </SortButton>,
           <SortButton
             key="name"
@@ -121,7 +120,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.age[newTableSorting]))
             }}
           >
-            <Span key="age" type="tableHeader">age</Span>
+            <span key="age" className={tw('textstyle-table-header')}>age</span>
           </SortButton>,
           <></>
         ]}

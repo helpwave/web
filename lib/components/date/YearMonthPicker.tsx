@@ -4,7 +4,6 @@ import { noop } from '../../util/noop'
 import { equalSizeGroups, range } from '../../util/array'
 import { tw, tx } from '../../twind'
 import { Expandable } from '../Expandable'
-import { Span } from '../Span'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
 import { useLocale } from '../../hooks/useLanguage'
 
@@ -59,7 +58,7 @@ export const YearMonthPicker = ({
               <Expandable
                 key={year}
                 ref={(value.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
-                label={<Span className={tx({ '!text-hw-primary-400 font-bold': selectedYear })}>{year}</Span>}
+                label={<span className={tx({ '!text-hw-primary-400 font-bold': selectedYear })}>{year}</span>}
                 className={tw('gap-y-2 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-sm')}
                 headerClassName={tw('px-2 py-1 rounded-lg bg-gray-100 hover:bg-hw-primary-200')}
                 initialExpansion={showValueOpen && selectedYear}

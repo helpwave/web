@@ -1,7 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import { FAQSection } from '@helpwave/common/components/layout/FAQSection'
 import { SectionBase } from '@/components/sections/SectionBase'
 
@@ -95,8 +94,8 @@ export const MediQuuFAQSection = () => {
   const translation = useTranslation(defaultMediQuuFAQTranslation)
   return (
     <SectionBase backgroundColor="gray" className={tw('flex flex-col w-full')}>
-      <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
-      <Span>{translation.subTitle}</Span>
+      <span className={tw('textstyle-title-xl text-hw-secondary-400 mb-1')}>{translation.title}</span>
+      <span>{translation.subTitle}</span>
       <div className={tw('flex flex-col gap-y-4 mt-8')}>
         <FAQSection
           entries={translation.faqs.map((faq, index) => ({

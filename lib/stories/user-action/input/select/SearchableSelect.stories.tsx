@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { SearchableSelectExample } from '../../../../components/examples/SearchableSelectExample'
-import { Span } from '../../../../components/Span'
 
 const meta = {
   title: 'User-Action/Input/Select',
@@ -18,7 +17,7 @@ export const SearchableSelectVariations: Story = {
       { value: 'Entry 1', label: 'Entry 1' },
       { value: 'Entry 2', label: 'Entry 2', disabled: true },
       { value: 'Entry 3', label: 'Entry 3' },
-      { value: 'Custom styled', label: <Span className="!text-red-400">Custom styled</Span> },
+      { value: 'Custom styled', label: <span className="!text-red-400">Custom styled</span> },
       { value: 'Entry 5', label: 'Entry 5' },
       { value: 'Entry 6', label: 'Entry 6', disabled: true }
     ],

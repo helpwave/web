@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -107,7 +106,7 @@ export const PropertyDetails = ({
         confirmType="negative"
       />
       <div className={tw('top-0 flex flex-row justify-between items-center')}>
-        <Span type="heading">{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</Span>
+        <span className={tw('textstyle-title-lg')}>{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
         {!isCreatingNewProperty && (
           <Button
             variant="text"

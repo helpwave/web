@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { tw, tx } from '@helpwave/common/twind'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
-import { Span } from '@helpwave/common/components/Span'
 import type { News } from '@helpwave/common/util/news'
 import Image from 'next/image'
 
@@ -23,7 +22,7 @@ export const NewsDisplay = ({ news, titleOnTop = true }: NewsDisplayProps) => {
         <div className={tw('min-w-[100px]')}>
           <TimeDisplay date={news.date} mode="date"/>
         </div>
-        <Span type="title" className={tw('text-hw-primary-700')}>{news.title}</Span>
+        <span className={tw('textstyle-title-md text-hw-primary-700')}>{news.title}</span>
       </div>
       <div className={tw('flex flex-col gap-y-2 flex-1')}>
         {news.description.map((value, index) => value instanceof URL ? (
@@ -37,7 +36,7 @@ export const NewsDisplay = ({ news, titleOnTop = true }: NewsDisplayProps) => {
             />
         )
           :
-          <Span key={index} className={tw('font-medium')}>{value}</Span>)
+          <span key={index} className={tw('font-medium')}>{value}</span>)
         }
       </div>
     </div>

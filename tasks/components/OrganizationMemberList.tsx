@@ -4,7 +4,6 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Span } from '@helpwave/common/components/Span'
 import {
   defaultTableStatePagination,
   defaultTableStateSelection,
@@ -137,7 +136,7 @@ export const OrganizationMemberList = ({
         loadingProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
       >
         <div className={tw('flex flex-row justify-between items-center mb-2')}>
-          <Span type="tableName">{translation.members + ` (${usedMembers.length})`}</Span>
+          <span className={tw('textstyle-table-name')}>{translation.members + ` (${usedMembers.length})`}</span>
           <div className={tw('flex flex-row gap-x-2')}>
             {tableState.selection && tableState.selection.currentSelection.length > 0 && (
               <Button
@@ -154,10 +153,10 @@ export const OrganizationMemberList = ({
           stateManagement={[tableState, setTableState]}
           header={[
             <div key="member" className={tw('flex flex-row')}>
-              <Span type="tableHeader">{translation.member}</Span>
+              <span className={tw('textstyle-table-header')}>{translation.member}</span>
             </div>,
             <div key="role" className={tw('flex flex-row')}>
-              <Span type="tableHeader">{translation.role}</Span>
+              <span className={tw('textstyle-table-header')}>{translation.role}</span>
             </div>,
             <></>
           ]}
@@ -165,18 +164,18 @@ export const OrganizationMemberList = ({
             <div key="member" className={tw('flex flex-row items-center h-12 overflow-hidden max-w-[200px]')}>
               <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
               <div className={tw('flex flex-col ml-2')}>
-                <Span className={tw('font-bold truncate')}>{orgMember.name}</Span>
+                <span className={tw('font-bold truncate')}>{orgMember.name}</span>
                 <a href={`mailto:${orgMember.email}`}>
-                  <Span type="description" className={tw('text-sm truncate')}>{orgMember.email}</Span>
+                  <span className={tw('textstyle-description text-sm truncate')}>{orgMember.email}</span>
                 </a>
               </div>
             </div>,
             <div key="role" className={tw('flex flex-row items-center mr-2')}>
               <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
               }}>
-                <Span className={tw(`font-semibold`)}>
+                <span className={tw(`font-semibold`)}>
                   {'N.A.' /* translation.roleTypes[orgMember.role] */}
-                </Span>
+                </span>
               </button>
             </div>,
             <div key="remove" className={tw('flex flex-row justify-end')}>

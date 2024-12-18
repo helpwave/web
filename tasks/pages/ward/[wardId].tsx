@@ -4,7 +4,6 @@ import Head from 'next/head'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
-import { Span } from '@helpwave/common/components/Span'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
@@ -326,8 +325,9 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
           {/* TODO Later reenable the dropAnimation */}
           <DragOverlay style={{ width: '200px' }} dropAnimation={null}>
             {draggedPatient && (draggedPatient.patient ? (
-              <DragCard
-                cardDragProperties={{ isDragging: true }}><Span>{draggedPatient.patient.name}</Span></DragCard>
+              <DragCard cardDragProperties={{ isDragging: true }}>
+                <span>{draggedPatient.patient.name}</span>
+              </DragCard>
             )
               : draggedPatient.bed && draggedPatient.bed.patient && (
                 <PatientCard

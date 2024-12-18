@@ -4,7 +4,6 @@ import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import { Chip } from './ChipList'
-import { Span } from './Span'
 
 const textImageColor = ['primary', 'secondary', 'secondaryDark', 'red'] as const
 type TextImageColor = typeof textImageColor[number]
@@ -75,12 +74,12 @@ export const TextImage = ({
       >
         {badge && (
           <Chip variant="fullyRounded" className={tw(`!bg-white !text-[${colorMapping[color]}] mb-2 !px-4`)}>
-            <Span className={tw('text-lg')}>{badge}</Span>
+            <span className={tw('text-lg')}>{badge}</span>
           </Chip>
         )}
         <div className={tw('flex flex-col gap-y-1 text-white overflow-hidden')}>
-          <Span type="title" className={tw('!text-3xl')}>{title}</Span>
-          <Span className={tw('text-ellipsis overflow-hidden')}>{description}</Span>
+          <span className={tw('textstyle-title-xl')}>{title}</span>
+          <span className={tw('text-ellipsis overflow-hidden')}>{description}</span>
         </div>
         {onShowMoreClicked && (
           <div className={tw('flex flex-row mt-2 text-white underline')}>

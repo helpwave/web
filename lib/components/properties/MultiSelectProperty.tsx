@@ -5,7 +5,6 @@ import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import type { MultiSelectProps } from '../user-input/MultiSelect'
 import { MultiSelect } from '../user-input/MultiSelect'
-import { Span } from '../Span'
 import { ChipList } from '../ChipList'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
@@ -64,7 +63,7 @@ export const MultiSelectProperty = <T, >({
             selectedDisplay={({ items }) => {
               const selected = items.filter(value => value.selected)
               if (selected.length === 0) {
-                return <Span>Select</Span>
+                return (<span>Select</span>)
               }
               return (
                 <ChipList

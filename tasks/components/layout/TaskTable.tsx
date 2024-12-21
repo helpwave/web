@@ -6,12 +6,17 @@ import { shortcut, tw, tx } from '@twind/core'
 import { ChevronDown, ChevronRight, ChevronUp, Plus } from 'lucide-react'
 import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
-import { useTasksByPatientQuery, useTaskUpdateMutation } from '@helpwave/api-services/mutations/tasks/task_mutations'
+import {
+  useTaskCreateMutation,
+  useTasksByPatientQuery,
+  useTaskUpdateMutation
+} from '@helpwave/api-services/mutations/tasks/task_mutations'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { Chip } from '@helpwave/common/components/ChipList'
 import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator'
 import { noop } from '@helpwave/common/util/noop'
 import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
+import { TaskTemplateSelect } from '@/components/selects/TaskTemplateSelect'
 
 export type TaskTableTranslation = {
   open: string,
@@ -84,6 +89,7 @@ export const TaskTable = ({
   const [isShowingAll, setIsShowingAll] = useState(false)
   const { data } = useTasksByPatientQuery(patientId)
   const updateTaskMutation = useTaskUpdateMutation()
+  const createTaskMutation = useTaskCreateMutation(() => {}, patientId)
 
   const padding = shortcut('p-2 first:pl-4 last:pr-4')
   const border = shortcut('border-b-2 first:border-l-2 last:border-r-2')
@@ -107,12 +113,19 @@ export const TaskTable = ({
         </button>
         {type === 'openTasks' && (
           <div className={tw('flex flex-row gap-x-4 items-center')}>
-            <Button className={tw('flex flex-row gap-x-1 items-center')} color="hw-primary" variant="tonal-opaque">
-              {/* TODO make this its own component with a select */}
-              {translation.addTaskGroup}
-              <ChevronDown/>
-            </Button>
-            <Button className={tw('flex flex-row gap-x-1 items-center')} color="hw-primary" variant="background"
+            <TaskTemplateSelect
+              onChange={(value) => {
+                createTaskMutation.mutate({
+                  ...value,
+                  status: 'todo',
+                })
+              }}
+              buttonClassName={tw('!bg-hw-primary-150 !text-hw-primary-700 hover:!bg-hw-primary-250 hover:!text-hw-primary-800 !border-0')}
+              selectedDisplayOverwrite={(
+                <span className={tw('whitespace-nowrap')}>{translation.addTaskGroup}</span>
+              )}
+            />
+            <Button className={tw('flex flex-row gap-x-1 items-center w-full')} color="hw-primary" variant="background"
                     onClick={onAddTaskClick}>
               <Plus/>
               {translation.addTask}

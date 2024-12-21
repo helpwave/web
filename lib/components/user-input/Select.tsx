@@ -29,7 +29,8 @@ export type SelectProps<T> = {
    * The items will be at the start of the select and aren't selectable
    */
   additionalItems?: ReactNode[],
-  selectedDisplayOverwrite?: ReactNode
+  selectedDisplayOverwrite?: ReactNode,
+  buttonClassName?: string
 };
 
 /**
@@ -51,6 +52,7 @@ export const Select = <T, >({
   hoverColor = 'hover:bg-gray-100',
   additionalItems,
   selectedDisplayOverwrite,
+  buttonClassName = ''
 }: SelectProps<T>) => {
   // Notice: for more complex types this check here might need an additional compare method
   let filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
@@ -79,7 +81,8 @@ export const Select = <T, >({
                   'rounded-b-lg': !open,
                   [hoverColor]: !isDisabled,
                   'bg-gray-100 cursor-not-allowed text-gray-500': isDisabled
-                }
+                },
+                buttonClassName
               )}
               disabled={isDisabled}
             >

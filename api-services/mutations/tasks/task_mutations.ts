@@ -113,6 +113,12 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       req.setPublic(task.isPublicVisible)
       req.setInitialStatus(GRPCConverter.taskStatusToGrpc(task.status))
       req.setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
+      req.setSubtasksList(task.subtasks.map(value => {
+        const subtask = new CreateTaskRequest.SubTask()
+        subtask.setName(value.name)
+        subtask.setDone(value.isDone)
+        return subtask
+      }))
 
       const res = await APIServices.task.createTask(req, getAuthenticatedGrpcMetadata())
       const newTask: TaskDTO = {

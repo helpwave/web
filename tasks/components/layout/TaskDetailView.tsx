@@ -3,24 +3,18 @@ import { tw, tx } from '@helpwave/common/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { Button } from '@helpwave/common/components/Button'
-import { X } from 'lucide-react'
+import { ArrowLeftFromLine, ArrowRightFromLine, Plus, X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { ModalHeader } from '@helpwave/common/components/modals/Modal'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import type { TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import { emptyTask } from '@helpwave/api-services/types/tasks/task'
-import {
-  usePersonalTaskTemplateQuery,
-  useWardTaskTemplateQuery
-} from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import {
   useAssignTaskMutation,
   useSubTaskAddMutation,
@@ -29,10 +23,10 @@ import {
   useTaskUpdateMutation,
   useUnassignTaskMutation
 } from '@helpwave/api-services/mutations/tasks/task_mutations'
-import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { formatDate } from '@helpwave/common/util/date'
-import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
-import { SubtaskView } from '../SubtaskView'
+import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
+import { Avatar } from '@helpwave/common/components/Avatar'
+import { noop } from '@helpwave/common/util/noop'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
 import { TaskStatusSelect } from '@/components/selects/TaskStatusSelect'
 import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
@@ -55,7 +49,10 @@ type TaskDetailViewTranslation = {
   publish: string,
   publishTask: string,
   publishTaskDescription: string,
-  finish: string
+  finish: string,
+  following: string,
+  previous: string,
+  addTask: string
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -78,6 +75,9 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publishTask: 'Publish task',
     publishTaskDescription: 'This cannot be undone',
     finish: 'Finish task',
+    following: 'Following Tasks',
+    previous: 'Previous Tasks',
+    addTask: 'Add Task'
   },
   de: {
     close: 'Schließen',
@@ -98,21 +98,131 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
     finish: 'Fertigstellen',
+    following: 'Nachfolgende Tasks',
+    previous: 'Vorherige Tasks',
+    addTask: 'Task hinzufügen'
   }
 }
 
-type TaskDetailViewSidebarProps = {
+type SubTaskTileProps = {
+  name: string,
+  isDone: boolean,
+  assignee?: string,
+  dueDate?: Date,
+  onClick?: () => void
+}
+
+const SubTaskTile = ({
+  name,
+  isDone,
+  dueDate,
+  assignee,
+  onClick = noop
+}: SubTaskTileProps) => {
+  return (
+    <div className={tw('flex flex-row justify-between items-center')} onClick={onClick}>
+      <div className={tw('flex flex-row gap-x-1 items-center')}>
+        <Checkbox checked={isDone} color="hw-positive" className={tw('rounded-full')}/>
+        <span>{name}</span>
+      </div>
+      <div className={tw('flex flex-row gap-x-1 justify-end items-center')}>
+        {dueDate && (<span className={tw('text-gray-400')}>{formatDate(dueDate)}</span>)}
+        { /* TODO replace url later on */}
+        {assignee ? (<Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>) : (
+          <div
+            className={tw('flex flex-row items-center justify-center w-8 h-8 rounded-full border-2 border-dashed border-gray-400 text-gray-400')}>
+            <Plus size={24}/>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+type TaskRelationType = 'following' | 'previous'
+
+type TaskDetailViewSubtasksSidebarProps = {
+  tasks: TaskDTO[],
+  type: TaskRelationType,
+  isInitiallyExpanded?: boolean,
+  onClick?: (task: TaskDTO) => void,
+  onAddClick?: (type: TaskRelationType) => void
+}
+
+const TaskDetailViewSubtasksSidebar = ({
+  tasks,
+  type,
+  isInitiallyExpanded = false,
+  onClick = noop,
+  onAddClick = noop
+}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSubtasksSidebarProps>) => {
+  const translation = useTranslation(defaultTaskDetailViewTranslation)
+  const [isExpanded, setExpanded] = useState(isInitiallyExpanded)
+
+  return (
+    <div className={tx('flex flex-col rounded-lg justify-between p-2 pb-0', {
+      'min-w-[250px]': isExpanded,
+      'cursor-pointer hover:bg-gray-100': !isExpanded
+    })} onClick={() => {
+      if (!isExpanded) {
+        setExpanded(true)
+      }
+    }}>
+      <div className={tx('flex flex-col gap-y-2', { 'items-center gap-y-3': !isExpanded })}>
+        {isExpanded && (<span>{type === 'following' ? translation.following : translation.previous}</span>)}
+        {tasks.map(task => isExpanded ?
+            (
+            <SubTaskTile
+              key={task.id}
+              name={task.name}
+              isDone={task.status === 'done'}
+              assignee={task.assignee}
+              dueDate={task.dueDate}
+              onClick={() => onClick(task)}
+            />
+            ) :
+            (
+            <Checkbox key={task.id} checked={task.status === 'done'} className={tw('rounded-full')}
+                      color="hw-positive"/>
+            )
+        )}
+        {isExpanded ? (
+          <button className={tw('flex flex-row gap-x-2 items-center w-full')} onClick={() => onAddClick(type)}>
+            <Plus size={24}/>
+            <span>{translation.addTask}</span>
+          </button>
+        ) : (
+          <div
+            className={tw('flex flex-row items-center justify-center w-[18px] h-[18px] rounded-full border-2 border-dashed border-gray-400 text-gray-400')}>
+            <Plus size={18}/>
+          </div>
+        )}
+      </div>
+      <button
+        className={tx('flex flex-row w-full hover:bg-gray-100 p-2 rounded-lg', { 'justify-end': type === 'previous' })}
+        onClick={() => isExpanded && setExpanded(false)}
+      >
+        {((isExpanded && type === 'previous') || (!isExpanded && type === 'following')) ?
+            (<ArrowLeftFromLine size={24}/>)
+          : (<ArrowRightFromLine size={24}/>)
+        }
+      </button>
+    </div>
+  )
+}
+
+type TaskDetailViewInformationSectionProps = {
   task: TaskDTO,
   setTask: (task: TaskDTO) => void,
   isCreating: boolean
 }
 
-const TaskDetailViewSidebar = ({
+const TaskDetailViewInformationSection = ({
   overwriteTranslation,
   task,
   setTask,
   isCreating
-}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
+}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewInformationSectionProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
@@ -279,15 +389,11 @@ export const TaskDetailView = ({
   overwriteTranslation,
   patientId,
   taskId = '',
-  wardId,
   initialStatus,
   onClose
 }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
-  const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
-  const router = useRouter()
-  const { user } = useAuth()
 
   const minTaskNameLength = 4
   const maxTaskNameLength = 32
@@ -322,17 +428,6 @@ export const TaskDetailView = ({
       setTask(data)
     }
   }, [data, taskId])
-
-  const {
-    data: personalTaskTemplatesData,
-    isLoading: personalTaskTemplatesIsLoading,
-    error: personalTaskTemplatesError
-  } = usePersonalTaskTemplateQuery(user?.id)
-  const {
-    data: wardTaskTemplatesData,
-    isLoading: wardTaskTemplatesIsLoading,
-    error: wardTaskTemplatesError
-  } = useWardTaskTemplateQuery(wardId)
 
   const taskNameMinimumLength = 1
   const isValid = task.name.length >= taskNameMinimumLength
@@ -376,80 +471,6 @@ export const TaskDetailView = ({
     </div>
   )
 
-  const tasksDetails = (
-    <div className={tx('flex flex-col', {
-      'pl-6': isCreating,
-      'px-2': !isCreating
-    })}>
-      <ModalHeader
-        title={(
-          <ToggleableInput
-            autoFocus={isCreating}
-            initialState="editing"
-            id="name"
-            value={task.name}
-            onChange={(name) => setTask({ ...task, name })}
-            onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, name: text })}
-            labelClassName={tw('text-2xl font-bold')}
-            minLength={minTaskNameLength}
-            maxLength={maxTaskNameLength}
-            size={24}
-          />
-        )}
-        onCloseClick={onClose}
-      />
-      <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
-        <div className={tw('flex flex-col gap-y-8 w-[60%] min-w-[500px]')}>
-          <div className={tw('min-h-[25%]')}>
-            <Textarea
-              headline={translation.notes}
-              value={task.notes}
-              onChange={(description) => setTask({ ...task, notes: description })}
-              onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
-            />
-          </div>
-          <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
-        </div>
-        <TaskDetailViewSidebar task={task} setTask={setTask} isCreating={isCreating}/>
-      </div>
-      {buttons}
-    </div>
-  )
-
-  const taskTemplates =
-    personalTaskTemplatesData && wardTaskTemplatesData
-      ? [
-          ...(personalTaskTemplatesData.map((taskTemplate) => ({
-            taskTemplate,
-            type: 'personal' as const
-          }))),
-          ...(wardTaskTemplatesData.map((taskTemplate) => ({
-            taskTemplate,
-            type: 'ward' as const
-          })))
-        ].sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))
-      : []
-
-  const templateSidebar = (
-    <div
-      className={tw('fixed flex flex-col w-[250px] -translate-x-[250px] -translate-y-4 overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full')}
-    >
-      {personalTaskTemplatesData && wardTaskTemplatesData && (
-        <TaskTemplateListColumn
-          templates={taskTemplates}
-          activeId={selectedTemplateId}
-          onTileClick={({ id, name, notes, subtasks }) => {
-            setSelectedTemplateId(id)
-            setTask({ ...task, name, notes, subtasks })
-          }}
-          onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
-        />
-      )}
-      {(personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading || personalTaskTemplatesError || wardTaskTemplatesError) ?
-        <LoadingAnimation/> : null}
-    </div>
-  )
-
   return (
     <>
       <ConfirmDialog
@@ -472,9 +493,55 @@ export const TaskDetailView = ({
         loadingProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
         errorProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
       >
-        <div className={tx('relative flex flex-row')}>
-          {isCreating && templateSidebar}
-          {tasksDetails}
+        <ModalHeader
+          title={(
+            <ToggleableInput
+              autoFocus={isCreating}
+              initialState="editing"
+              id="name"
+              value={task.name}
+              onChange={(name) => setTask({ ...task, name })}
+              onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, name: text })}
+              labelClassName={tw('text-2xl font-bold')}
+              minLength={minTaskNameLength}
+              maxLength={maxTaskNameLength}
+              size={24}
+            />
+          )}
+          onCloseClick={onClose}
+        />
+        <div className={tw('flex flex-row mt-2 gap-x-4 min-w-[600px]')}>
+          <TaskDetailViewSubtasksSidebar tasks={task.subtasks.map(subtask => ({
+            // TODO change this once tasks as subtasks is implemented
+            id: subtask.id,
+            name: subtask.name,
+            status: subtask.isDone ? 'done' : 'todo',
+            notes: '',
+            subtasks: [],
+            isPublicVisible: false
+          }))} type="previous"/>
+          <div className={tw('flex flex-col min-w-[450px] h-full')}>
+            <Textarea
+              headline={translation.notes}
+              value={task.notes}
+              onChange={(description) => setTask({ ...task, notes: description })}
+              onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
+              className={tw('!h-[500px]')}
+            />
+          </div>
+          <div className={tw('flex flex-col min-w-[250px] gap-y-2 justify-between items-start')}>
+            <TaskDetailViewInformationSection task={task} setTask={setTask} isCreating={isCreating}/>
+            {buttons}
+          </div>
+          <TaskDetailViewSubtasksSidebar tasks={task.subtasks.map(subtask => ({
+            // TODO change this once tasks as subtasks is implemented
+            id: subtask.id,
+            name: subtask.name,
+            status: subtask.isDone ? 'done' : 'todo',
+            notes: '',
+            subtasks: [],
+            isPublicVisible: false
+          }))} type="following"/>
         </div>
       </LoadingAndErrorComponent>
     </>

@@ -33,17 +33,18 @@ export const PropertiesSection = ({ overwriteTranslation }: PropsForTranslation<
 
   return (
     <SectionBase
+      outerClassName={tw('desktop:py-0 tablet:py-0')}
       className={tw('flex flex-row mobile:!flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
     >
       <div
-        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full desktop:min-w-[40%] w-2/5 z-10')}
+        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[40%] w-2/5 z-10')}
       >
         <Image
           src={imageUrl}
           alt=""
-          width={0}
-          height={0}
-          className={tw('w-fit max-h-[70vh]')}
+          width={443}
+          height={649}
+          className={tw('max-h-[70vh]')}
         />
       </div>
       <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>

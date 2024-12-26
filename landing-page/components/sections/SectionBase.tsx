@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { tx } from '@twind/core'
+import { apply, tx } from '@twind/core'
 
 type BackgroundColor = 'white' | 'black' | 'gray' | 'darkSecondary' | 'darkPrimary'
 
@@ -24,7 +24,7 @@ export const SectionBase = ({
       'bg-hw-grayscale-1000': backgroundColor === 'black',
       'bg-hw-secondary-800': backgroundColor === 'darkSecondary',
       'bg-hw-primary-900': backgroundColor === 'darkPrimary',
-      'desktop:px-24 tablet:px-12 mobile:px-6 py-16': useDefaultStyle
+      [apply('desktop:px-24 tablet:px-12 mobile:px-6 py-16')]: useDefaultStyle
     }, outerClassName)}>
       <div
         className={tx(

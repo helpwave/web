@@ -32,7 +32,7 @@ export const TasksAppStoreBadge = () => {
     <Link href={linkURL}>
       <Image
         alt={alt} src={imageURL} height={0} width={156}
-        className={tw('w-full !h-[54px]')}
+        className={tw('w-full min-h-[54px] max-h-[54px] min-w-[156px] max-w-[156px]')}
       />
     </Link>
   )

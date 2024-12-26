@@ -26,7 +26,7 @@ export const TasksPlaystoreBadge = () => {
     en: '/images/google_play_badge_english.png'
   }[language]
   return (
-    <Link href={linkURL}>
+    <Link href={linkURL} target="_blank">
       <Image alt={alt} src={imageURL} height={0} width={0} className={tx('w-full min-h-[54px] max-h-[54px] min-w-[182px] max-w-[182px]')}/>
     </Link>
   )

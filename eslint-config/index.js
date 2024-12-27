@@ -1,4 +1,4 @@
-import reactRecommendedEslint from 'eslint-plugin-react/configs/recommended.js'
+import reactRecommendedEslint from 'eslint-plugin-react'
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import stylisticEslint from '@stylistic/eslint-plugin'
@@ -9,7 +9,7 @@ import customRules from './custom-rules/index.js'
 export default [
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
-  reactRecommendedEslint,
+  reactRecommendedEslint.configs.flat.recommended,
   customRules.configs.recommended,
   {
     languageOptions: {
@@ -26,11 +26,11 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
       'custom-rules/no-empty-then': 'error',
       'no-undef': 'off', // handled by typescript itself
-      'sort-imports': 'warn',
+      'sort-imports': 'off',
       'no-unneeded-ternary': 'off', // ternary operators are often more clear than '||', '&&' or '??'
       'no-use-before-define': 'off',
       'jsx-quotes': ['error', 'prefer-double'],
-      '@stylistic/quotes': ['error', 'single', {avoidEscape: true, allowTemplateLiterals: true}],
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
       '@stylistic/object-curly-spacing': ['warn', 'always'],
       'no-trailing-spaces': ['error'],
       '@stylistic/comma-dangle': ['error', {
@@ -55,10 +55,10 @@ export default [
           multilineDetection: 'brackets'
         }
       ],
-      '@typescript-eslint/consistent-type-imports': ['error', {prefer: 'type-imports'}],
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       '@typescript-eslint/no-use-before-define': ['error'],
-      '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
-      'react/jsx-curly-brace-presence': ['error', {props: 'never', children: 'ignore', propElementValues: 'always'}],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'ignore', propElementValues: 'always' }],
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react/jsx-wrap-multilines': ['error', {

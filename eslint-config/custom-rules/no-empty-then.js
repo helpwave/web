@@ -29,7 +29,7 @@ export default {
 
           if (hasNoArguments || isArgumentEmptyFunction) {
             context.report({
-              node: args[0] ?? node.callee,
+              node: node.callee.property,
               message: 'Do not use empty then blocks, either use it optimistically or catch and print errors.',
               fix(fixer) {
                 const sourceCode = context.getSourceCode();

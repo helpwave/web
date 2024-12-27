@@ -2,6 +2,7 @@
   "name": "@helpwave/common",
   "version": "1.0.0",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",

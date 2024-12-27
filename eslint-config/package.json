@@ -4,16 +4,14 @@
   "description": "A standard set of eslint rules",
   "main": "index.js",
   "license": "MIT",
-  "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "@typescript-eslint/parser": "6.21.0",
-    "eslint": "8.57.1",
-    "eslint-config-standard": "17.1.0",
-    "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-n": "16.6.2",
-    "eslint-plugin-promise": "6.6.0",
-    "eslint-plugin-react": "7.37.2",
-    "eslint-plugin-react-hooks": "4.6.2",
-    "eslint-plugin-tailwindcss": "3.17.5"
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "9.17.0",
+    "@stylistic/eslint-plugin": "2.12.1",
+    "eslint": "9.17.0",
+    "eslint-plugin-react": "7.37.3",
+    "eslint-plugin-react-hooks": "5.1.0",
+    "typescript": "5.7.2",
+    "typescript-eslint": "8.18.2"
   }
 }

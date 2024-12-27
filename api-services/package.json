@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.jsx,.ts,.tsx . && tsc --noEmit"
   },
+  "type": "module",
   "dependencies": {
     "@helpwave/common": "workspace:*",
     "@helpwave/proto-ts": "0.61.0-e1d7c0c.0",

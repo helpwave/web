@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.ts",
   "scripts": {
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx . && tsc --noEmit"
+    "lint": "eslint . && tsc --noEmit"
   },
   "type": "module",
   "dependencies": {

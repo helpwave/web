@@ -32,7 +32,6 @@
     "@types/node": "20.17.10",
     "@types/react": "18.3.17",
     "@types/react-dom": "18.3.5",
-    "@next/eslint-plugin-next": "14.2.20",
     "@helpwave/eslint-config": "workspace:*",
     "typescript": "5.7.2"
   }

@@ -1,5 +1,3 @@
-import config from './index.js'
+import configs from './index.js'
 
-export default [
-  ...config,
-]
+export default configs.recommended

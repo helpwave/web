@@ -4,9 +4,10 @@ import tseslint from 'typescript-eslint';
 import stylisticEslint from '@stylistic/eslint-plugin'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import customRules from './custom-rules/index.js'
+import nextConfig from  '@next/eslint-plugin-next'
 
 /** @type {import('eslint').Linter.Config} */
-export default [
+const recommended = [
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   reactRecommendedEslint.configs.flat.recommended,
@@ -77,4 +78,28 @@ export default [
         version: 'detect'
       }
     }
-  }]
+  },
+]
+
+/** @type {import('eslint').Linter.Config} */
+const nextExtension = [
+  ...recommended,
+  {
+    ignores: ['build/**', '.next/*']
+  },
+  {
+    plugins: {
+      '@next/next': nextConfig,
+    },
+    rules: {
+      ...nextConfig.configs.recommended.rules,
+      ...nextConfig.configs['core-web-vitals'].rules,
+      '@next/next/no-duplicate-head': 'off', // This rule produces errors for
+    }
+  },
+]
+
+export default {
+  recommended,
+  nextExtension
+}

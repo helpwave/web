@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@helpwave/eslint-config": "workspace:*",
-    "@next/eslint-plugin-next": "14.2.20",
     "@types/js-cookie": "3.0.6",
     "@types/node": "20.17.10",
     "@types/react": "18.3.17",

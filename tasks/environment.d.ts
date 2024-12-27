@@ -10,6 +10,6 @@ declare namespace NodeJS {
     NEXT_PUBLIC_FEEDBACK_FORM_URL?: string,
     NEXT_PUBLIC_FEATURES_FEED_URL?: string,
     NEXT_PUBLIC_IMPRINT_URL?: string,
-    NEXT_PUBLIC_PRIVACY_URL?: string
+    NEXT_PUBLIC_PRIVACY_URL?: string,
   }
 }

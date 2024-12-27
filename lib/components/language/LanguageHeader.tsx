@@ -8,7 +8,7 @@ import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 
 type LanguageHeaderTranslation = {
-  languages: string
+  languages: string,
 }
 
 const defaultLanguageHeaderTranslation: Record<Languages, LanguageHeaderTranslation> = {

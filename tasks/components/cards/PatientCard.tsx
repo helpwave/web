@@ -6,7 +6,7 @@ import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import { DragCard, type DragCardProps } from './DragCard'
 
 type PatientCardTranslation = {
-  bedNotAssigned: string
+  bedNotAssigned: string,
 }
 
 const defaultPatientCardTranslations: Record<Languages, PatientCardTranslation> = {
@@ -23,7 +23,7 @@ export type PatientCardProps = DragCardProps & {
   patientName: string,
   unscheduledTasks?: number,
   inProgressTasks?: number,
-  doneTasks?: number
+  doneTasks?: number,
 }
 
 /**

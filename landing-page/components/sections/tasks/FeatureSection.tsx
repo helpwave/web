@@ -11,7 +11,7 @@ type FeatureItemProps = {
   size: number,
   title: string,
   description: string,
-  reverse?: boolean
+  reverse?: boolean,
 }
 
 const FeatureItem = ({
@@ -49,7 +49,7 @@ type FeatureSectionTranslation = {
   collaborateTitle: string,
   collaborateText: string,
   patientsTitle: string,
-  patientsText: string
+  patientsText: string,
 }
 
 const defaultFeatureSectionTranslation: Record<Languages, FeatureSectionTranslation> = {

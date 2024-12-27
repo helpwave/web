@@ -7,7 +7,7 @@ import type { PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patie
 
 type PatientDischargeModalTranslation = {
   followingPatient: string,
-  dischargePatient: string
+  dischargePatient: string,
 }
 
 const defaultPatientDischargeModalTranslation: Record<Languages, PatientDischargeModalTranslation> = {
@@ -22,7 +22,7 @@ const defaultPatientDischargeModalTranslation: Record<Languages, PatientDischarg
 }
 
 export type PatientDischargeModalProps = Omit<ConfirmDialogProps, 'title' | 'descriptionText'> & {
-  patient?: PatientMinimalDTO
+  patient?: PatientMinimalDTO,
 }
 
 /**

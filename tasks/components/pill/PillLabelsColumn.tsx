@@ -4,7 +4,7 @@ import { PillLabel } from './PillLabel'
 export type PillLabelsColumnProps = {
   unscheduledCount?: number,
   inProgressCount?: number,
-  doneCount?: number
+  doneCount?: number,
 }
 
 /**

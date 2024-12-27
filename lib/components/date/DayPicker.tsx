@@ -10,7 +10,7 @@ export type DayPickerProps = {
   onChange?: (date: Date) => void,
   weekStart?: WeekDay,
   markToday?: boolean,
-  className?: string
+  className?: string,
 }
 
 /**

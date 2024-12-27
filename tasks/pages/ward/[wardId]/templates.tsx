@@ -23,7 +23,7 @@ type WardTaskTemplateTranslation = {
   taskTemplates: string,
   organization: string,
   ward: string,
-  wardTaskTemplates: string
+  wardTaskTemplates: string,
 }
 
 const defaultWardTaskTemplateTranslations = {

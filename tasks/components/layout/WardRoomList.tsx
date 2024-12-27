@@ -18,7 +18,7 @@ type WardRoomListTranslation = {
   roomOverview: string,
   showPatientList: string,
   editWard: string,
-  noRooms: string
+  noRooms: string,
 }
 
 const defaultWardRoomListTranslation: Record<Languages, WardRoomListTranslation> = {
@@ -38,7 +38,7 @@ const defaultWardRoomListTranslation: Record<Languages, WardRoomListTranslation>
 
 export type WardRoomListProps = {
   selectedBed?: BedWithPatientWithTasksNumberDTO,
-  rooms?: RoomOverviewDTO[]
+  rooms?: RoomOverviewDTO[],
 }
 
 /**

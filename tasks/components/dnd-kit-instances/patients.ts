@@ -15,19 +15,19 @@ import { Draggable as DraggableFree } from '@/components/dnd-kit/Draggable'
 type DraggableData = {
   // patient from 'patient list'
   patient: PatientMinimalDTO,
-  discharged: boolean
+  discharged: boolean,
 } | {
   // patient from 'room overview'
   bed: BedWithPatientWithTasksNumberDTO,
   room: RoomOverviewDTO,
-  patient: PatientMinimalDTO
+  patient: PatientMinimalDTO,
 }
 type DroppableData = {
   bed: BedWithPatientWithTasksNumberDTO,
   room: RoomOverviewDTO,
-  patient: PatientMinimalDTO | undefined
+  patient: PatientMinimalDTO | undefined,
 } | {
-  patientListSection: 'unassigned' | 'discharged'
+  patientListSection: 'unassigned' | 'discharged',
 }
 
 export const Droppable = DroppableFree<DraggableData, DroppableData>

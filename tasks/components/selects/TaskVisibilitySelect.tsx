@@ -3,7 +3,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 
 type TaskVisibilitySelectTranslation = {
   private: string,
-  public: string
+  public: string,
 }
 
 const defaultTaskVisibilitySelectTranslation = {

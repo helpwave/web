@@ -7,7 +7,7 @@ import { useInvitationsByUserQuery } from '@helpwave/api-services/mutations/user
 import { InvitationState } from '@helpwave/api-services/types/users/invitations'
 
 type InvitationBannerTranslation = {
-  openInvites: string
+  openInvites: string,
 }
 
 const defaultInvitationBannerTranslation: Record<Languages, InvitationBannerTranslation> = {
@@ -20,7 +20,7 @@ const defaultInvitationBannerTranslation: Record<Languages, InvitationBannerTran
 }
 
 export type InvitationBannerProps = {
-  invitationCount?: number
+  invitationCount?: number,
 }
 
 /**

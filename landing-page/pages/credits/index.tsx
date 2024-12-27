@@ -14,7 +14,7 @@ type CreditsPageTranslation = {
   title: string,
   text: string,
   flaticon: string,
-  createdBy: (name: string, author: string) => string
+  createdBy: (name: string, author: string) => string,
 }
 
 const defaultCreditsPageTranslation: Record<Languages, CreditsPageTranslation> = {

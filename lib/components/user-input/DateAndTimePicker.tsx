@@ -28,7 +28,7 @@ type TimeTranslation = {
   september: string,
   october: string,
   november: string,
-  december: string
+  december: string,
 }
 
 const defaultTimeTranslation: Record<Languages, TimeTranslation> = {
@@ -83,7 +83,7 @@ export type DateTimePickerProps = {
   onFinish?: (date: Date) => void,
   onRemove?: () => void,
   datePickerProps?: Omit<DatePickerProps, 'onChange' | 'value' | 'start' | 'end'>,
-  timePickerProps?: Omit<TimePickerProps, 'onChange' | 'time' | 'maxHeight'>
+  timePickerProps?: Omit<TimePickerProps, 'onChange' | 'time' | 'maxHeight'>,
 }
 
 /**

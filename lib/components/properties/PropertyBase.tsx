@@ -7,7 +7,7 @@ import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 
 type PropertyBaseTranslation = {
-  remove: string
+  remove: string,
 }
 
 const defaultPropertyBaseTranslation: Record<Languages, PropertyBaseTranslation> = {
@@ -27,7 +27,7 @@ export type PropertyBaseProps = {
   softRequired?: boolean,
   readOnly?: boolean,
   icon?: ReactNode,
-  className?: string
+  className?: string,
 }
 
 /**

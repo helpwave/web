@@ -84,7 +84,7 @@ const buildAuthorizationUrl = (params: {
   codeChallenge: string,
   redirectUri: string,
   scopes: string[],
-  state: string
+  state: string,
 }): URL => {
   const authorizationUrl = new URL(params.baseUrl)
   authorizationUrl.searchParams.set('client_id', params.clientId)

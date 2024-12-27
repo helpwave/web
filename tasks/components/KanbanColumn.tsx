@@ -11,7 +11,7 @@ import { TaskCard } from './cards/TaskCard'
 import { PillLabel } from './pill/PillLabel'
 
 type KanbanColumnsTranslation = {
-  addTask: string
+  addTask: string,
 }
 
 const defaultKanbanColumnsTranslations: Record<Languages, KanbanColumnsTranslation> = {
@@ -28,7 +28,7 @@ type KanbanColumnProps = {
   type: TaskStatus,
   isDraggedOver: boolean,
   draggedTileId?: string,
-  onEditTask: (task: TaskDTO) => void
+  onEditTask: (task: TaskDTO) => void,
 }
 
 /**

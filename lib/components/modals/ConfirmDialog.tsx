@@ -9,7 +9,7 @@ import { Modal, type ModalProps } from './Modal'
 type ConfirmDialogTranslation = {
   confirm: string,
   cancel: string,
-  decline: string
+  decline: string,
 }
 
 export type ConfirmDialogType = 'positive' | 'negative' | 'neutral'
@@ -30,7 +30,7 @@ const defaultConfirmDialogTranslation = {
 export type ButtonOverwriteType = {
   text?: string,
   color?: ButtonColorType,
-  disabled?: boolean
+  disabled?: boolean,
 }
 
 export type ConfirmDialogProps = ModalProps & {
@@ -43,7 +43,7 @@ export type ConfirmDialogProps = ModalProps & {
   /**
    * Order: Cancel, Decline, Confirm
    */
-  buttonOverwrites?: [ButtonOverwriteType, ButtonOverwriteType, ButtonOverwriteType]
+  buttonOverwrites?: [ButtonOverwriteType, ButtonOverwriteType, ButtonOverwriteType],
 }
 
 /**

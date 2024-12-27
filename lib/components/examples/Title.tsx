@@ -6,7 +6,7 @@ import type { Languages } from '../../hooks/useLanguage'
 type TitleTranslation = {
   welcome: string,
   goodToSeeYou: string,
-  page: (page: number) => string
+  page: (page: number) => string,
 }
 
 const defaultTitleTranslations: Record<Languages, TitleTranslation> = {
@@ -23,7 +23,7 @@ const defaultTitleTranslations: Record<Languages, TitleTranslation> = {
 }
 
 type TitleProps = {
-  name: string
+  name: string,
 }
 
 /**

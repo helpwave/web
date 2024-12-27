@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import type { Observable } from 'rxjs'
-import { filter, fromEvent, map, startWith, Subject } from 'rxjs'
+import { Subject, filter, fromEvent, map, startWith } from 'rxjs'
 import ReceiveUpdatesStreamHandler from './ReceiveUpdatesStreamHandler'
 
 // Two types of speed should be enough.
@@ -29,7 +29,7 @@ type UpdatesSubject = {
   eventId: string,
   eventType: string,
   aggregateType: string,
-  aggregateId: string
+  aggregateId: string,
 }
 
 const updatesSubject = new Subject<UpdatesSubject>()
@@ -38,7 +38,7 @@ export type UpdatesContextValue = {
   revision?: number,
   connected: boolean,
   observable: Observable<UpdatesSubject>,
-  observeAttribute: <K extends keyof UpdatesSubject>(attribute: K, value: UpdatesSubject[K]) => Observable<UpdatesSubject>
+  observeAttribute: <K extends keyof UpdatesSubject>(attribute: K, value: UpdatesSubject[K]) => Observable<UpdatesSubject>,
 }
 
 export const UpdatesContext = createContext<UpdatesContextValue>({

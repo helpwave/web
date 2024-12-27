@@ -31,7 +31,7 @@ type WardDetailTranslation = {
   deleteWard: string,
   create: string,
   update: string,
-  roomsNotOnCreate: string
+  roomsNotOnCreate: string,
 }
 
 const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = {
@@ -66,7 +66,7 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
 export type WardDetailProps = {
   organizationId: string,
   ward?: WardDetailDTO,
-  width?: number
+  width?: number,
 }
 
 /**

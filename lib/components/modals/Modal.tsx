@@ -9,7 +9,7 @@ import { useTranslation } from '../../hooks/useTranslation'
 import { ModalContext } from './ModalRegister'
 
 type ModalHeaderTranslation = {
-  close: string
+  close: string,
 }
 
 const defaultModalHeaderTranslation: Record<Languages, ModalHeaderTranslation> = {
@@ -30,7 +30,7 @@ export type ModalHeaderProps = {
   /** The description of the Modal. If you want to only set the text use `descriptionText` instead */
   description?: ReactNode,
   /** The description text of the Modal. If you want to set a custom description use `description` instead */
-  descriptionText?: string
+  descriptionText?: string,
 }
 
 /**
@@ -74,7 +74,7 @@ export type ModalProps = {
   isOpen: boolean,
   onBackgroundClick?: MouseEventHandler<HTMLDivElement>,
   backgroundClassName?: string,
-  modalClassName?: string
+  modalClassName?: string,
 } & ModalHeaderProps
 
 /**

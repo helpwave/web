@@ -12,7 +12,7 @@ import { OrganizationOverviewContext } from '@/pages/organizations/[organization
 
 type WardDisplayTranslation = {
   wards: string,
-  addWard: string
+  addWard: string,
 }
 
 const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> = {
@@ -29,7 +29,7 @@ const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> 
 export type WardDisplayProps = {
   organizationId: string,
   selectedWardId?: string,
-  width?: number
+  width?: number,
 }
 
 /**
@@ -69,7 +69,7 @@ export const WardDisplay = ({
                   wardId: ward.id
                 })}
                 onTileClick={() => {
-                  router.push(`/ward/${ward.id}`).then()
+                  router.push(`/ward/${ward.id}`).catch(console.error)
                 }}
               />
             ))}

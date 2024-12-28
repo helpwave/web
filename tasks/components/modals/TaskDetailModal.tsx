@@ -167,7 +167,6 @@ const ExpandableSidebar = ({
 
   return (
     <div className={tx(apply('flex flex-col rounded-lg justify-between p-2 pb-0'), className, {
-      'min-w-[250px]': isExpanded,
       'cursor-pointer hover:bg-gray-100': !isExpanded
     })} onClick={() => {
       if (!isExpanded) {
@@ -573,6 +572,10 @@ export const TaskDetailModal = ({
             onSubtaskChange={subtask => updateSubtask.mutate({ id: subtask.id, name: subtask.name, isDone: subtask.status === 'done' })}
             isExpanded={followingExpanded}
             onExpansionChange={isExpanded => setExpansionState({ ...expansionState, followingExpanded: isExpanded })}
+            className={tx({
+              [`min-w-[${expandedWidth}px] max-w-[${expandedWidth}px]`]: followingExpanded,
+              [`min-w-[${notExpandedWidth}px] max-w-[${notExpandedWidth}px]`]: !followingExpanded,
+            })}
           />
         </div>
       </LoadingAndErrorComponent>

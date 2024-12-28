@@ -1,6 +1,7 @@
 import { useContext, useEffect, type MouseEventHandler, type PropsWithChildren, type ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import { X } from 'lucide-react'
+import { apply } from '@twind/core'
 import { Span } from '../Span'
 import { tx, tw } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
@@ -128,7 +129,8 @@ export const Modal = ({
         />
       )}
       <div
-        className={tx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
+        className={tx(apply('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl'), modalClassName)}
+      >
         <ModalHeader {...modalHeaderProps} />
         {children}
       </div>

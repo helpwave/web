@@ -1,34 +1,6 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { useState } from 'react'
 import { tx } from '@twind/core'
-
-type UseHoverStateProps = { closingDelay: number }
-const defaultUseHoverStateProps: UseHoverStateProps = {
-  closingDelay: 200
-}
-
-// TODO move this outside of this component and also replace inside the menu component
-const useHoverState = (props: Partial<UseHoverStateProps> | undefined = undefined) => {
-  const { closingDelay } = { ...defaultUseHoverStateProps, ...props }
-
-  const [open, setOpen] = useState(false)
-  const [timer, setTimer] = useState<NodeJS.Timeout>()
-
-  const onMouseEnter = () => {
-    clearTimeout(timer)
-    setOpen(true)
-  }
-
-  const onMouseLeave = () => {
-    setTimer(setTimeout(() => {
-      setOpen(false)
-    }, closingDelay))
-  }
-
-  return {
-    open, setOpen, handlers: { onMouseEnter, onMouseLeave }
-  }
-}
+import { useHoverState } from '../hooks/useHoverState'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -75,7 +47,7 @@ export const Tooltip = ({
   zIndex = 10,
   offset = 6,
 }: TooltipProps) => {
-  const { open, handlers } = useHoverState()
+  const { isHovered, handlers } = useHoverState()
 
   const positionClasses = {
     top: `bottom-full left-1/2 -translate-x-1/2 mb-[${offset}px]`,
@@ -108,7 +80,7 @@ export const Tooltip = ({
       {...handlers}
     >
       {children}
-      {open && (
+      {isHovered && (
         <div
           className={tx(`opacity-0 absolute z-[${zIndex}] text-black text-xs font-semibold text-[${borderColor}] px-2 py-1 rounded whitespace-nowrap border-2 border-${borderColor}
            animate-tooltip-fade-in animation-delay-${animationDelay} shadow-lg bg-${backgroundColor}`, positionClasses[position], tooltipClassName)}

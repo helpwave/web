@@ -17,7 +17,7 @@ type PropertyViewRuleFilterUpdate = {
   appendToAlwaysInclude?: string[],
   removeFromAlwaysInclude?: string[],
   appendToDontAlwaysInclude?: string[],
-  removeFromDontAlwaysInclude?: string[]
+  removeFromDontAlwaysInclude?: string[],
 }
 
 export const useUpdatePropertyViewRuleRequest = (subjectType: SubjectType, wardId?: string) => {
@@ -50,7 +50,7 @@ export const useUpdatePropertyViewRuleRequest = (subjectType: SubjectType, wardI
       await APIServices.propertyViewSource.updatePropertyViewRule(req, getAuthenticatedGrpcMetadata())
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.properties]).then()
+      queryClient.invalidateQueries([QueryKeys.properties]).catch(console.error)
     }
   })
 }

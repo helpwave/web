@@ -3,7 +3,7 @@ import { tx } from '@twind/core'
 
 export type DividerInserterProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   children: ReactNode[],
-  divider: (index: number) => ReactNode
+  divider: (index: number) => ReactNode,
 }
 
 /**

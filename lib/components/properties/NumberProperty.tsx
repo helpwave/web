@@ -10,7 +10,7 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
 type NumberPropertyTranslation = {
-  value: string
+  value: string,
 }
 
 const defaultNumberPropertyTranslation: Record<Languages, NumberPropertyTranslation> = {
@@ -26,7 +26,7 @@ export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'ha
   value?: number,
   suffix?: string,
   onChange?: (value: number) => void,
-  onEditComplete?: (value: number) => void
+  onEditComplete?: (value: number) => void,
 }
 
 /**

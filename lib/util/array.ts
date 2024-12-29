@@ -1,4 +1,4 @@
-export const equalSizeGroups = <T, >(array: T[], groupSize: number): T[][] => {
+export const equalSizeGroups = <T >(array: T[], groupSize: number): T[][] => {
   if (groupSize <= 0) {
     console.warn(`group size should be greater than 0: groupSize = ${groupSize}`)
     return [[...array]]
@@ -30,7 +30,7 @@ export const range = (start: number, end: number, allowEmptyRange: boolean = fal
  * @param list The list of all possible matches
  * @param firstCloser Return whether item1 is closer than item2
  */
-export const closestMatch = <T, >(list: T[], firstCloser: (item1: T, item2: T) => boolean) => {
+export const closestMatch = <T >(list: T[], firstCloser: (item1: T, item2: T) => boolean) => {
   return list.reduce((item1, item2) => {
     return firstCloser(item1, item2) ? item1 : item2
   })
@@ -40,7 +40,7 @@ export const closestMatch = <T, >(list: T[], firstCloser: (item1: T, item2: T) =
  * returns the item in middle of a list and its neighbours before and after
  * e.g. [1,2,3,4,5,6] for item = 1 would return [5,6,1,2,3]
  */
-export const getNeighbours = <T, >(list: T[], item: T, neighbourDistance: number = 2) => {
+export const getNeighbours = <T >(list: T[], item: T, neighbourDistance: number = 2) => {
   const index = list.indexOf(item)
   const totalItems = neighbourDistance * 2 + 1
   if (list.length < totalItems) {
@@ -70,7 +70,7 @@ export const getNeighbours = <T, >(list: T[], item: T, neighbourDistance: number
   return result
 }
 
-export const createLoopingListWithIndex = <T, >(list: T[], startIndex: number = 0, length: number = 0, forwards: boolean = true) => {
+export const createLoopingListWithIndex = <T >(list: T[], startIndex: number = 0, length: number = 0, forwards: boolean = true) => {
   if (length < 0) {
     console.warn(`createLoopingList: length must be >= 0, given ${length}`)
   } else if (length === 0) {
@@ -92,7 +92,7 @@ export const createLoopingListWithIndex = <T, >(list: T[], startIndex: number = 
   return returnList
 }
 
-export const createLoopingList = <T, >(list: T[], startIndex: number = 0, length: number = 0, forwards: boolean = true) => {
+export const createLoopingList = <T >(list: T[], startIndex: number = 0, length: number = 0, forwards: boolean = true) => {
   return createLoopingListWithIndex(list, startIndex, length, forwards).map(([_, item]) => item)
 }
 

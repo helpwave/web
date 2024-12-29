@@ -14,7 +14,7 @@ export type AvatarProps = {
   avatarUrl: string,
   alt: string,
   size?: AvatarSize,
-  className?: string
+  className?: string,
 }
 
 /**

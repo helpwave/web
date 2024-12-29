@@ -5,7 +5,7 @@ import { tw, tx } from '../twind'
 export type HideableContentSectionProps = PropsWithChildren & {
   initiallyOpen?: boolean,
   disabled: boolean,
-  header: ReactNode
+  header: ReactNode,
 }
 
 /**

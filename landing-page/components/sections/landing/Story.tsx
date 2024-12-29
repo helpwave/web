@@ -7,7 +7,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type StoryBlockProps = {
   pill?: string,
   header: string,
-  content: string
+  content: string,
 }
 
 const StoryBlock = ({
@@ -38,7 +38,7 @@ type StoryTranslation = {
   disruptionDescription: string,
   mission: string,
   missionHeader: string,
-  missionDescription: string
+  missionDescription: string,
 }
 
 const defaultStoryTranslation: Record<Languages, StoryTranslation> = {

@@ -4,7 +4,7 @@ import { tx } from '../twind'
 export type HelpwaveProps = SVGProps<SVGSVGElement> & {
   color?: string,
   animate?: 'none' | 'loading' | 'pulse' | 'bounce',
-  size?: number
+  size?: number,
 }
 
 /**

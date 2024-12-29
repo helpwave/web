@@ -18,7 +18,7 @@ type CheckboxProps = {
   onChange?: (checked: boolean) => void,
   onChangeTristate?: (checked: CheckedState) => void,
   size?: number,
-  className?: string
+  className?: string,
 }
 
 /**
@@ -74,7 +74,7 @@ type UncontrolledCheckboxProps = Omit<CheckboxProps, 'value' | 'checked'> & {
   /**
    * @default false
    */
-  defaultValue?: CheckedState
+  defaultValue?: CheckedState,
 }
 
 /**

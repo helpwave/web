@@ -11,7 +11,7 @@ type ReachoutSectionTranslation = {
   medicalHeroText: string,
   hospitalManagerTitle: string,
   hospitalManagerSubtitle: string,
-  hospitalManagerText: string
+  hospitalManagerText: string,
 }
 
 const defaultReachoutSectionTranslation: Record<Languages, ReachoutSectionTranslation> = {

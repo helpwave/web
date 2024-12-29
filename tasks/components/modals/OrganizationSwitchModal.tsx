@@ -11,13 +11,13 @@ import type { OrganizationDTO } from '@helpwave/api-services/types/users/organiz
 
 type OrganizationSwitchModalTranslation = {
   switchOrganization: string,
-  ok: string
+  ok: string,
 }
 
 type OrganizationSwitchModalProps = ModalProps & {
   currentOrganization?: string,
   organizations?: OrganizationDTO[],
-  onDone: (organization?: OrganizationDTO) => void
+  onDone: (organization?: OrganizationDTO) => void,
 }
 
 const defaultOrganizationSwitchModalTranslation: Record<Languages, OrganizationSwitchModalTranslation> = {

@@ -11,7 +11,7 @@ export type InputGroupProps = PropsWithChildren<{
   isExpandable?: boolean,
   disabled?: boolean,
   onChange?: (value: boolean) => void,
-  className?: string
+  className?: string,
 }>
 
 /**

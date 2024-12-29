@@ -13,7 +13,7 @@ type NotFoundTranslation = {
   notFound: string,
   notFoundDescription1: string,
   notFoundDescription2: string,
-  homePage:string
+  homePage:string,
 }
 
 const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {

@@ -19,7 +19,7 @@ type PropertyEntryDisplayProps = {
   onChange: (property: AttachedProperty) => void,
   onEditComplete: (property: AttachedProperty) => void,
   onRemove?: (property: AttachedProperty) => void,
-  readOnly?: boolean
+  readOnly?: boolean,
 }
 
 /**

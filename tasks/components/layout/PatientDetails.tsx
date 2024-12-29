@@ -34,7 +34,7 @@ type PatientDetailTranslation = {
   dischargePatient: string,
   saved: string,
   unassign: string,
-  readmit: string
+  readmit: string,
 }
 
 const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
@@ -63,7 +63,7 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
 export type PatientDetailProps = {
   wardId: string,
   patient?: PatientDetailsDTO,
-  width?: number
+  width?: number,
 }
 
 /**

@@ -13,7 +13,7 @@ type MobileFeatureSectionTranslation = {
   title: string,
   description: string,
   tradmarkPlaystore: string,
-  trademarkAppstore: string
+  trademarkAppstore: string,
 }
 
 const defaultMobileFeatureSectionTranslation: Record<Languages, MobileFeatureSectionTranslation> = {

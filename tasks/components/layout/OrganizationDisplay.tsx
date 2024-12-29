@@ -14,7 +14,7 @@ import { OrganizationContext } from '@/pages/organizations'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
-  yourOrganizations: string
+  yourOrganizations: string,
 }
 
 const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisplayTranslation> = {
@@ -31,7 +31,7 @@ const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisp
 export type OrganizationDisplayProps = {
   selectedOrganizationId?: string,
   organizations?: OrganizationDTO[],
-  width?: number
+  width?: number,
 }
 
 /**

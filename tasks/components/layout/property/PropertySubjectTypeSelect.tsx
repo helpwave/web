@@ -6,7 +6,7 @@ import { Select } from '@helpwave/common/components/user-input/Select'
 import type { SubjectType } from '@helpwave/api-services/types/properties/property'
 import { subjectTypeList } from '@helpwave/api-services/types/properties/property'
 
-type PropertySubjectTypeSelectTranslation = {[key in SubjectType]: string}
+type PropertySubjectTypeSelectTranslation = { [key in SubjectType]: string }
 
 const defaultPropertySubjectTypeSelectTranslation: Record<Languages, PropertySubjectTypeSelectTranslation> = {
   en: {

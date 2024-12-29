@@ -8,12 +8,12 @@ export type SelectOption = {
   id: string,
   name: string,
   description?: string,
-  isCustom: boolean
+  isCustom: boolean,
 }
 
 export type SelectData = {
   isAllowingFreetext: boolean,
-  options: SelectOption[]
+  options: SelectOption[],
 }
 
 export type Property = {
@@ -25,7 +25,7 @@ export type Property = {
   isArchived: boolean,
   setId?: string,
   selectData?: SelectData,
-  alwaysIncludeForViewSource?: boolean
+  alwaysIncludeForViewSource?: boolean,
 }
 
 export const emptySelectOption: SelectOption = {

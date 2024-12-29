@@ -8,7 +8,7 @@ import { Header, type HeaderProps } from '@/components/Header'
 import { FeedbackButton } from '@/components/FeedbackButton'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
-  crumbs?: Crumb[]
+  crumbs?: Crumb[],
 }
 
 /**

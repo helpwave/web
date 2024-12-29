@@ -18,12 +18,12 @@ import { useEffect, useState } from 'react'
 type SelectDataUpdate = {
   create: number,
   update: (SelectOption & { index: number })[],
-  delete: { id: string, index: number }[]
+  delete: { id: string, index: number }[],
 }
 
 type PropertySelectOptionsUpdaterPropsTranslation = {
   newEntry: string,
-  values: string
+  values: string,
 }
 
 const defaultPropertySelectOptionsUpdaterPropsTranslation: Record<Languages, PropertySelectOptionsUpdaterPropsTranslation> = {
@@ -39,12 +39,12 @@ const defaultPropertySelectOptionsUpdaterPropsTranslation: Record<Languages, Pro
 
 type PropertySelectOptionsUpdaterProps = {
   value: SelectData,
-  onChange: (data: SelectData, update: SelectDataUpdate) => void
+  onChange: (data: SelectData, update: SelectDataUpdate) => void,
 }
 
 type PropertySelectOptionsUpdaterState = {
   data: SelectData,
-  update: SelectDataUpdate
+  update: SelectDataUpdate,
 }
 
 export const PropertySelectOptionsUpdater = ({
@@ -121,7 +121,7 @@ type PropertyDetailsFieldTranslation = {
   field: string,
   fieldType: string,
   allowCustomValues: string,
-  allowCustomValuesDescription: string
+  allowCustomValuesDescription: string,
 } & { [key in FieldType]: string }
 
 const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsFieldTranslation> = {
@@ -156,7 +156,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
 export type PropertyDetailsFieldProps = {
   value: PropertyFieldDetails,
   onChange: (value: PropertyFieldDetails, update?: SelectDataUpdate) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>
+  inputGroupProps?: Omit<InputGroupProps, 'title'>,
 }
 
 /**

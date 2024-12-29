@@ -2,11 +2,12 @@
   "name": "@helpwave/tasks",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . && tsc --noEmit",
     "generate": "node ../scripts/generate_boilerplate.js"
   },
   "dependencies": {
@@ -30,7 +31,7 @@
     "grpc-web": "1.5.0",
     "js-cookie": "3.0.5",
     "lucide-react": "0.468.0",
-    "next": "13.5.7",
+    "next": "15.1.3",
     "oauth4webapi": "2.17.0",
     "react": "18.3.1",
     "react-custom-scrollbars-2": "4.5.0",
@@ -44,7 +45,6 @@
   },
   "devDependencies": {
     "@helpwave/eslint-config": "workspace:*",
-    "@next/eslint-plugin-next": "14.2.20",
     "@types/js-cookie": "3.0.6",
     "@types/node": "20.17.10",
     "@types/react": "18.3.17",

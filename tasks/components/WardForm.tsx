@@ -12,7 +12,7 @@ type WardFormTranslation = {
   required: string,
   tooLong: (maxCharacters: number) => string,
   tooShort: (minCharacters: number) => string,
-  duplicateName: string
+  duplicateName: string,
 }
 
 const defaultWardFormTranslations: Record<Languages, WardFormTranslation> = {
@@ -37,13 +37,13 @@ const defaultWardFormTranslations: Record<Languages, WardFormTranslation> = {
 }
 
 type WardFormInfoDTO = {
-  name: string
+  name: string,
 }
 
 export type WardFormProps = {
   ward: WardFormInfoDTO,
   onChange: (organization: WardFormInfoDTO, isValid: boolean) => void,
-  isShowingErrorsDirectly?: boolean
+  isShowingErrorsDirectly?: boolean,
 }
 
 /**

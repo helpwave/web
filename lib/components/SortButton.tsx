@@ -6,7 +6,7 @@ import type { TableSortingType } from './Table'
 
 export type SortButtonProps = Omit<ButtonProps, 'onClick'> & {
   ascending?: TableSortingType,
-  onClick: (newTableSorting:TableSortingType) => void
+  onClick: (newTableSorting:TableSortingType) => void,
 }
 
 /**

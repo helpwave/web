@@ -10,7 +10,7 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
   value?: Date,
   onChange?: (date: Date) => void,
   onEditComplete?: (value: Date) => void,
-  type?: 'dateTime' | 'date'
+  type?: 'dateTime' | 'date',
 }
 
 /**

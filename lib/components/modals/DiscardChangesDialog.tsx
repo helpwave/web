@@ -10,7 +10,7 @@ type DiscardChangesDialogTranslation = {
   cancel: string,
   dontSave: string,
   title: string,
-  description: string
+  description: string,
 }
 
 const defaultDiscardChangesDialogTranslation = {
@@ -35,7 +35,7 @@ type DiscardChangesDialogProps = ModalProps & {
   requireAnswer?: boolean,
   onCancel: () => void,
   onSave: () => void,
-  onDontSave: () => void
+  onDontSave: () => void,
 }
 
 export const DiscardChangesDialog = ({

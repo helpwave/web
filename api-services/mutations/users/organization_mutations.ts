@@ -172,7 +172,7 @@ export const useOrganizationCreateMutation = () => {
       return { ...organization, id: res.getId() }
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     }
   })
 }
@@ -197,7 +197,7 @@ export const useOrganizationUpdateMutation = () => {
       return organization
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     }
   })
 }
@@ -219,7 +219,7 @@ export const useOrganizationDeleteMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     },
   })
 }
@@ -241,7 +241,7 @@ export const useInviteDeclineMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
   })
 }
@@ -263,7 +263,7 @@ export const useInviteRevokeMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
   })
 }
@@ -294,7 +294,7 @@ export const useInviteMemberMutation = (organizationId: string, callback: (invit
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     }
   })
 }
@@ -315,7 +315,7 @@ export const useInviteAcceptMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
   })
 }
@@ -338,7 +338,7 @@ export const useAddMemberMutation = (organizationId: string) => { // TODO: unuse
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     }
   })
 }
@@ -361,7 +361,7 @@ export const useRemoveMemberMutation = (organizationId: string) => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     }
   })
 }

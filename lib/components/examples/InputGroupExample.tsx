@@ -10,7 +10,7 @@ export type InputGroupExampleProps = Omit<InputGroupProps, 'inputs' | 'onChange'
 type InputType = {
   subject?: string,
   propertyName: string,
-  description: string
+  description: string,
 }
 
 /**

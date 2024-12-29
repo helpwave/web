@@ -8,7 +8,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type TalksTranslation = {
-  fusionOfHealthcareAndComputerScience: string
+  fusionOfHealthcareAndComputerScience: string,
 
 }
 

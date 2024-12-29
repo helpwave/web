@@ -4,7 +4,7 @@ import { tx } from '../twind'
 export type CircleProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   radius: number,
   color?: string, // Tailwind color
-  className?: string
+  className?: string,
 }
 
 export const Circle = ({

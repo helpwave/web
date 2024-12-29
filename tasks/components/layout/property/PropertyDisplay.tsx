@@ -25,7 +25,7 @@ type PropertyDisplayTranslation = {
   removeFilter: string,
   search: string,
   edit: string,
-  name: string
+  name: string,
 } & { [key in SubjectType | FieldType]: string }
 
 const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTranslation> = {
@@ -68,7 +68,7 @@ const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTransl
 }
 
 export type PropertyDisplayProps = {
-  searchValue?: string
+  searchValue?: string,
 }
 
 /**

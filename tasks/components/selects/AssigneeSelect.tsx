@@ -5,7 +5,7 @@ import { SearchableSelect } from '@helpwave/common/components/user-input/Searcha
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 
 export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {
-  organizationId: string
+  organizationId: string,
 }
 
 /**

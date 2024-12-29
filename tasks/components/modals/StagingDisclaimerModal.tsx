@@ -16,7 +16,7 @@ type StagingDisclaimerModalTranslation = {
   message: string,
   dismiss: string,
   imprint: string,
-  privacy: string
+  privacy: string,
 }
 
 const defaultStagingDisclaimerTranslation: Record<Languages, StagingDisclaimerModalTranslation> = {

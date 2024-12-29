@@ -83,15 +83,15 @@ const getAPIServiceConfig = () => {
   // Not using the index notation causes build errors
   const maybeConfig = configSchema.safeParse({
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OFFLINE_API: process.env['NEXT_PUBLIC_OFFLINE_API'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_REQUEST_LOGGING: process.env['NEXT_PUBLIC_REQUEST_LOGGING'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OAUTH_ISSUER_URL: process.env['NEXT_PUBLIC_OAUTH_ISSUER_URL'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OAUTH_REDIRECT_URI: process.env['NEXT_PUBLIC_OAUTH_REDIRECT_URI'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env['NEXT_PUBLIC_OAUTH_CLIENT_ID'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OAUTH_SCOPES: process.env['NEXT_PUBLIC_OAUTH_SCOPES'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_FAKE_TOKEN_ENABLE: process.env['NEXT_PUBLIC_FAKE_TOKEN_ENABLE'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_FAKE_TOKEN: process.env['NEXT_PUBLIC_FAKE_TOKEN'], // eslint-disable-line dot-notation
+    NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
+    NEXT_PUBLIC_OFFLINE_API: process.env['NEXT_PUBLIC_OFFLINE_API'],
+    NEXT_PUBLIC_REQUEST_LOGGING: process.env['NEXT_PUBLIC_REQUEST_LOGGING'],
+    NEXT_PUBLIC_OAUTH_ISSUER_URL: process.env['NEXT_PUBLIC_OAUTH_ISSUER_URL'],
+    NEXT_PUBLIC_OAUTH_REDIRECT_URI: process.env['NEXT_PUBLIC_OAUTH_REDIRECT_URI'],
+    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env['NEXT_PUBLIC_OAUTH_CLIENT_ID'],
+    NEXT_PUBLIC_OAUTH_SCOPES: process.env['NEXT_PUBLIC_OAUTH_SCOPES'],
+    NEXT_PUBLIC_FAKE_TOKEN_ENABLE: process.env['NEXT_PUBLIC_FAKE_TOKEN_ENABLE'],
+    NEXT_PUBLIC_FAKE_TOKEN: process.env['NEXT_PUBLIC_FAKE_TOKEN'],
   })
 
   if (!maybeConfig.success) {

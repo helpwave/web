@@ -7,7 +7,7 @@ import { Select } from './Select'
 import { Input } from './Input'
 
 export type SearchableSelectProps<T> = SelectProps<T> & {
-  searchMapping: (value: SelectOption<T>) => string[]
+  searchMapping: (value: SelectOption<T>) => string[],
 }
 
 /**

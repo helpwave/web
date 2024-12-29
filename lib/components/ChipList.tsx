@@ -10,7 +10,7 @@ type ChipVariant = 'normal' | 'fullyRounded'
 
 export type ChipProps = HTMLProps<HTMLDivElement> & PropsWithChildren< {
   color?: ChipColorTypes,
-  variant?: ChipVariant
+  variant?: ChipVariant,
 }>
 
 /**
@@ -48,7 +48,7 @@ export const Chip = ({
 
 export type ChipListProps = {
   list: ChipProps[],
-  className?: string
+  className?: string,
 }
 
 /**

@@ -33,7 +33,7 @@ export type InputProps = {
   onChangeEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
   className?: string,
   onEditCompleted?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
-  expanded?: boolean
+  expanded?: boolean,
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 /**
@@ -104,7 +104,7 @@ type UncontrolledInputProps = Omit<InputProps, 'value'> & {
   /**
    * @default ''
    */
-  defaultValue?: string
+  defaultValue?: string,
 }
 
 /**

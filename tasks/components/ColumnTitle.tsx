@@ -3,7 +3,7 @@ import { Span } from '@helpwave/common/components/Span'
 
 type ColumnTitleProps = {
   title: string,
-  subtitle?: string
+  subtitle?: string,
 }
 
 /**

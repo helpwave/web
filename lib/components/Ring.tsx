@@ -7,7 +7,7 @@ export type RingProps = {
   innerSize: number, // the size of the entire circle including the circleWidth
   width: number,
   color?: string, // Tailwind color
-  className?: string
+  className?: string,
 };
 
 export const Ring = ({
@@ -29,7 +29,7 @@ export const Ring = ({
 export type AnimatedRingProps = RingProps & {
   fillAnimationDuration?: number, // in seconds, 0 means no animation
   repeating?: boolean,
-  onAnimationFinished?: () => void
+  onAnimationFinished?: () => void,
 };
 
 export const AnimatedRing = ({
@@ -89,7 +89,7 @@ export const AnimatedRing = ({
 
 export type RingWaveProps = Omit<AnimatedRingProps, 'innerSize'> & {
   startInnerSize: number,
-  endInnerSize: number
+  endInnerSize: number,
 };
 
 export const RingWave = ({
@@ -160,7 +160,7 @@ export type RadialRingsProps = {
   waveBaseColor?: string,
   sizeCircle1?: number,
   sizeCircle2?: number,
-  sizeCircle3?: number
+  sizeCircle3?: number,
 };
 
 export const RadialRings = ({

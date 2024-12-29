@@ -4,7 +4,7 @@ import { Card, type CardProps } from '@helpwave/common/components/Card'
 import { Pencil } from 'lucide-react'
 
 export type EditCardProps = PropsWithChildren<CardProps & {
-  onEditClick?: () => void
+  onEditClick?: () => void,
 }>
 
 /**

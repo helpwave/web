@@ -19,7 +19,7 @@ type TimeDisplayTranslation = {
   september: string,
   october: string,
   november: string,
-  december: string
+  december: string,
 }
 
 const defaultTimeDisplayTranslations: Record<Languages, TimeDisplayTranslation> = {
@@ -67,7 +67,7 @@ type TimeDisplayMode = 'daysFromToday' | 'date'
 
 type TimeDisplayProps = {
   date: Date,
-  mode?: TimeDisplayMode
+  mode?: TimeDisplayMode,
 }
 
 /**
@@ -91,7 +91,7 @@ export const TimeDisplay = ({
   } else {
     displayString = isBefore ? translation.agoDays(differenceInDays) : translation.inDays(differenceInDays)
   }
-  const monthToTranslation: {[key: number]: string} = {
+  const monthToTranslation: { [key: number]: string } = {
     0: translation.january,
     1: translation.february,
     2: translation.march,

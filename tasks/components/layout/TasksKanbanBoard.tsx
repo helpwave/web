@@ -25,13 +25,13 @@ import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent 
 export type KanbanBoardObject = {
   draggedId?: string,
   searchValue: string,
-  overColumn?: TaskStatus
+  overColumn?: TaskStatus,
 }
 
 type KanbanBoardProps = {
   patientId: string,
   onEditTask: (task: TaskDTO) => void,
-  editedTaskId?: string
+  editedTaskId?: string,
 }
 
 /**

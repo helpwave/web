@@ -8,7 +8,7 @@ export type SpanType = LabelType | 'normal' | 'heading' | 'title' | 'subsectionT
   | 'formDescription' | 'modalTitle' | 'block'
 
 export type SpanProps = NativeProps<'span'> & {
-  type?: SpanType
+  type?: SpanType,
 }
 
 /**

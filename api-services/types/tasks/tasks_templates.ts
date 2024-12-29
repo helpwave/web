@@ -6,9 +6,9 @@ export type TaskTemplateDTO = {
   subtasks: {
     isDone: boolean,
     id: string,
-    name: string
+    name: string,
   }[],
-  isPublicVisible: boolean
+  isPublicVisible: boolean,
 }
 
 export const emptyTaskTemplate: TaskTemplateDTO = {
@@ -24,5 +24,5 @@ export type TaskTemplateFormType = {
   hasChanges: boolean,
   template: TaskTemplateDTO,
   wardId?: string,
-  deletedSubtaskIds?: string[]
+  deletedSubtaskIds?: string[],
 }

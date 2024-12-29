@@ -3,7 +3,7 @@ import type { SubTaskDTO } from '../../types/tasks/task'
 interface GRPCSubTask {
   getId: () => string,
   getName: () => string,
-  getDone: () => boolean
+  getDone: () => boolean,
 }
 
 export const GRPCMapper = {

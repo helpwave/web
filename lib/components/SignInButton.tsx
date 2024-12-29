@@ -6,7 +6,7 @@ import { Helpwave } from '../icons/Helpwave'
 import { tw, tx } from '../twind'
 
 type SignInButtonTranslation = {
-  signIn: string
+  signIn: string,
 }
 
 const defaultSignInButtonTranslations: Record<Languages, SignInButtonTranslation> = {
@@ -20,7 +20,7 @@ const defaultSignInButtonTranslations: Record<Languages, SignInButtonTranslation
 
 export type SignInButtonProps = {
   color?: 'dark' | 'light',
-  onClick?: () => void
+  onClick?: () => void,
 }
 
 /**

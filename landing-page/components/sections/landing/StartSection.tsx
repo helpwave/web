@@ -9,7 +9,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 
 type LandingPageTranslation = {
   title: string,
-  description: string
+  description: string,
 }
 
 const defaultLandingPageTranslation: Record<Languages, LandingPageTranslation> = {

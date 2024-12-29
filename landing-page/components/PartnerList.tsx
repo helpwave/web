@@ -5,12 +5,12 @@ import { Carousel } from '@helpwave/common/components/layout/Carousel'
 
 export type Partner = {
   name: string,
-  url: string
+  url: string,
 }
 
 export type PartnerListProps = {
   title: string,
-  partners: Partner[]
+  partners: Partner[],
 }
 
 /**

@@ -6,7 +6,7 @@ export type LabelProps = {
   /** The text for the label */
   name?: string,
   /** The styling for the label */
-  labelType?: LabelType
+  labelType?: LabelType,
 } & LabelHTMLAttributes<HTMLLabelElement>
 
 /**

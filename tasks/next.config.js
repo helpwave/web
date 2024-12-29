@@ -2,7 +2,6 @@
 const nextConfig = {
   distDir: 'build',
   reactStrictMode: true,
-  swcMinify: true,
   transpilePackages: ['@helpwave/common'],
   output: 'standalone',
   images: {
@@ -11,4 +10,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default nextConfig

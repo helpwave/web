@@ -9,6 +9,6 @@ declare namespace NodeJS {
     NEXT_PUBLIC_OAUTH_CLIENT_ID?: string,
     NEXT_PUBLIC_OAUTH_SCOPES?: string,
     NEXT_PUBLIC_FAKE_TOKEN_ENABLE?: string,
-    NEXT_PUBLIC_FAKE_TOKEN?: string
+    NEXT_PUBLIC_FAKE_TOKEN?: string,
   }
 }

@@ -16,7 +16,7 @@ import { SortButton } from '../SortButton'
 export type DataType = {
   id: string,
   name: string,
-  age: number
+  age: number,
 }
 
 export const exampleData: DataType[] = [

@@ -8,7 +8,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 
 type StoryHeaderTranslation = {
   foundingStory: string,
-  foundingStoryDescription: string
+  foundingStoryDescription: string,
 }
 
 const defaultStoryHeaderTranslation: Record<Languages, StoryHeaderTranslation> = {

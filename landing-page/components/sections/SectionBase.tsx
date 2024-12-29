@@ -7,7 +7,7 @@ type SectionBaseProps = PropsWithChildren & {
   useDefaultStyle?: boolean,
   backgroundColor?: BackgroundColor,
   outerClassName?: string,
-  className?: string
+  className?: string,
 }
 
 export const SectionBase = ({

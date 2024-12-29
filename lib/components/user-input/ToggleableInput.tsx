@@ -26,7 +26,7 @@ type InputProps = {
   initialState?: 'editing' | 'display',
   size?: number,
   disclaimer?: string,
-  onEditCompleted?: (text: string) => void
+  onEditCompleted?: (text: string) => void,
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 /**

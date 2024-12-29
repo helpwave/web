@@ -5,7 +5,7 @@ import { useTranslation } from '../hooks/useTranslation'
 import type { Languages } from '../hooks/useLanguage'
 
 type PaginationTranslation = {
-  of: string
+  of: string,
 }
 const defaultPaginationTranslations: Record<Languages, PaginationTranslation> = {
   en: {
@@ -19,7 +19,7 @@ const defaultPaginationTranslations: Record<Languages, PaginationTranslation> = 
 export type PaginationProps = {
   page: number, // starts with 0
   numberOfPages: number,
-  onPageChanged: (page: number) => void
+  onPageChanged: (page: number) => void,
 }
 
 /**

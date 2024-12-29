@@ -4,7 +4,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { getConfig } from '@/utils/config'
 
 type FeedbackButtonTranslation = {
-  text: string
+  text: string,
 }
 
 const defaultFeedbackButtonTranslation: Record<Languages, FeedbackButtonTranslation> = {

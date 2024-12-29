@@ -3,7 +3,7 @@ import { Avatar } from '@helpwave/common/components/Avatar'
 import type { User } from '@helpwave/api-services/authentication/useAuth'
 
 export type UserCardProps = {
-  user: User
+  user: User,
 }
 
 /**

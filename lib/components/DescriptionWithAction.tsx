@@ -14,7 +14,7 @@ export type DescriptionWithActionProps = {
   trailingButtonFunction?: () => void,
   className?: string,
   titleClassName?: string,
-  descriptionClassName?: string
+  descriptionClassName?: string,
 }
 
 /**

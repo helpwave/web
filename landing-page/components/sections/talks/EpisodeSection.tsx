@@ -9,7 +9,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type EpisodeSectionTranslation = {
-  allEpisodes: string
+  allEpisodes: string,
 }
 
 const defaultEpisodeTranslation: Record<Languages, EpisodeSectionTranslation> = {
@@ -21,7 +21,7 @@ const defaultEpisodeTranslation: Record<Languages, EpisodeSectionTranslation> = 
   }
 }
 
-const getEpisodes = async (): Promise<{id: string, title: string, description: string, date: Date, link: string, imageURL: string}[]> => {
+const getEpisodes = async (): Promise<{ id: string, title: string, description: string, date: Date, link: string, imageURL: string }[]> => {
   const podcastRSS = 'https://anchor.fm/s/e5155fa0/podcast/rss'
 
   const removeCDATA = (value: string | undefined): (string | undefined) => {

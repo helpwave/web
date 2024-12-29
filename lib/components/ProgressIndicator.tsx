@@ -14,7 +14,7 @@ export type ProgressIndicatorProps = {
     default start at 3 o'clock
     Given in degree
    */
-  rotation?: number
+  rotation?: number,
 }
 
 const sizeMapping = { small: 16, medium: 24, big: 48 }

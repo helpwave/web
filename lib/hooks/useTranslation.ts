@@ -3,7 +3,7 @@ import { useLanguage } from './useLanguage'
 
 type OverwriteTranslationType<Translation extends Record<string, unknown>> = {
   language?: Languages,
-  translation?: Partial<Record<Languages, Partial<Translation>>>
+  translation?: Partial<Record<Languages, Partial<Translation>>>,
 }
 
 /**
@@ -23,7 +23,7 @@ export type PropsForTranslation<
   Translation extends Record<string, unknown>,
   Props = Record<string, never>
 > = Props & {
-  overwriteTranslation?: OverwriteTranslationType<Translation>
+  overwriteTranslation?: OverwriteTranslationType<Translation>,
 };
 
 export const useTranslation = <Translation extends Record<string, unknown>>(

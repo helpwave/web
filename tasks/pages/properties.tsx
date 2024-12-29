@@ -13,7 +13,7 @@ import { PropertyDetails } from '@/components/layout/property/PropertyDetails'
 import { PropertyDisplay } from '@/components/layout/property/PropertyDisplay'
 
 type OrganizationsPageTranslation = {
-  properties: string
+  properties: string,
 }
 
 const defaultOrganizationsPageTranslation = {
@@ -27,7 +27,7 @@ const defaultOrganizationsPageTranslation = {
 
 export type PropertiesContextState = {
   propertyId?: string,
-  subjectType?: SubjectType
+  subjectType?: SubjectType,
 }
 
 export const emptyPropertiesContextState: PropertiesContextState = {
@@ -36,7 +36,7 @@ export const emptyPropertiesContextState: PropertiesContextState = {
 
 export type PropertiesContextType = {
   state: PropertiesContextState,
-  updateContext: (context: PropertiesContextState) => void
+  updateContext: (context: PropertiesContextState) => void,
 }
 
 export const PropertyContext = createContext<PropertiesContextType>({

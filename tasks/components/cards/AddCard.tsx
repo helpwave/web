@@ -4,7 +4,7 @@ import { Card, type CardProps } from '@helpwave/common/components/Card'
 import { Span } from '@helpwave/common/components/Span'
 
 export type AddCardProps = CardProps & {
-  text?: string
+  text?: string,
 }
 
 /**

@@ -4,7 +4,7 @@ import type { ConfirmDialogProps } from './ConfirmDialog'
 import { ConfirmDialog } from './ConfirmDialog'
 
 export type InputModalProps = ConfirmDialogProps & {
-  inputs: InputProps[]
+  inputs: InputProps[],
 }
 
 /**

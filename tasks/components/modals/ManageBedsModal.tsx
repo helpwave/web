@@ -24,7 +24,7 @@ type ManageBedsModalTranslation = {
   patient: string,
   remove: string,
   addBed: string,
-  close: string
+  close: string,
 }
 
 const defaultManageBedsModalTranslation: Record<Languages, ManageBedsModalTranslation> = {
@@ -52,7 +52,7 @@ const defaultManageBedsModalTranslation: Record<Languages, ManageBedsModalTransl
 
 export type ManageBedsModalProps = ModalProps & {
   wardId: string, // TODO remove later
-  roomId: string
+  roomId: string,
 }
 
 /**

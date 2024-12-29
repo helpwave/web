@@ -5,7 +5,7 @@ import { Helpwave } from '../icons/Helpwave'
 import { tx } from '../twind'
 
 type LoadingAnimationTranslation = {
-  loading: string
+  loading: string,
 }
 
 const defaultLoadingAnimationTranslation: Record<Languages, LoadingAnimationTranslation> = {
@@ -19,7 +19,7 @@ const defaultLoadingAnimationTranslation: Record<Languages, LoadingAnimationTran
 
 export type LoadingAnimationProps = {
   loadingText?: string,
-  classname?: string
+  classname?: string,
 }
 
 /**

@@ -7,11 +7,11 @@ export type OrganizationMinimalDTO = {
   email: string,
   isVerified: boolean,
   isPersonal: boolean,
-  avatarURL: string
+  avatarURL: string,
 }
 
 export type OrganizationDTO = OrganizationMinimalDTO & {
-  members: OrganizationMember[]
+  members: OrganizationMember[],
 }
 
 export const emptyOrganization: OrganizationDTO = {
@@ -26,11 +26,11 @@ export const emptyOrganization: OrganizationDTO = {
 }
 
 export type OrganizationWithMinimalMemberDTO = OrganizationMinimalDTO & {
-  members: OrganizationMemberMinimalDTO[]
+  members: OrganizationMemberMinimalDTO[],
 }
 
 export type OrganizationDisplayableDTO = {
   id: string,
   longName: string,
-  avatarURL: string
+  avatarURL: string,
 }

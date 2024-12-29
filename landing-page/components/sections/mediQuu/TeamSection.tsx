@@ -104,7 +104,7 @@ const contactsMediquu: (ProfileProps & { translatedInfo?: Record<Languages, stri
 
 type TeamSectionTranslation = {
   title: string,
-  subTitle: string
+  subTitle: string,
 }
 
 const defaultTeamSectionTranslation: Record<Languages, TeamSectionTranslation> = {

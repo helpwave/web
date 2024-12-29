@@ -3,13 +3,13 @@ import { useDraggable, type Active, type Over } from './typesafety'
 export type DraggableBuilderProps<DraggableData, DroppableData> = {
   isDragging: boolean,
   active: Active<DraggableData> | null,
-  over: Over<DroppableData> | null
+  over: Over<DroppableData> | null,
 }
 
 export type DraggableProps<DraggableData, DroppableData> = {
   children: ((draggableBuilderProps: DraggableBuilderProps<DraggableData, DroppableData>) => React.ReactNode | undefined),
   id: string,
-  data: DraggableData
+  data: DraggableData,
 }
 
 /**

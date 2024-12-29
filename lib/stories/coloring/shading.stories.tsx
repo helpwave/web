@@ -5,7 +5,7 @@ import { shadingColorValues } from '../../coloring/types'
 import { generateShadingColors } from '../../coloring/shading'
 
 type StripeProps = {
-  shading: Partial<ShadedColors>
+  shading: Partial<ShadedColors>,
 };
 
 const ColorStripe = ({ shading }: StripeProps) => {

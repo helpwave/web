@@ -4,7 +4,7 @@ import { Profile } from '@helpwave/common/components/Profile'
 
 export type TeamGroupProps = {
   name: string,
-  members: ProfileProps[]
+  members: ProfileProps[],
 }
 
 const TeamGroup = ({

@@ -9,13 +9,13 @@ type MenuProps<T> = PropsWithChildren<{
    */
   alignment?: 'tl' | 'tr' | 'bl' | 'br' | '_l' | '_r' | 't_' | 'b_',
   showOnHover?: boolean,
-  menuClassName?: string
+  menuClassName?: string,
 }>
 
 export type MenuItemProps = {
   onClick?: () => void,
   alignment?: 'left' | 'right',
-  className?: string
+  className?: string,
 }
 const MenuItem = ({
   children,

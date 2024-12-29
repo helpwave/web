@@ -10,7 +10,7 @@ type MediQuuBrandDescriptionTranslation = {
   aboutMediQuuTitle: string,
   aboutHelpwaveTitle: string,
   aboutMediQuuDescription: string,
-  aboutHelpwaveDescription: string
+  aboutHelpwaveDescription: string,
 }
 
 const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandDescriptionTranslation> = {

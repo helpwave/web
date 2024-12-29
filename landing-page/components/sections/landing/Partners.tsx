@@ -6,7 +6,7 @@ import type { Partner } from '@/components/PartnerList'
 import { PartnerList } from '@/components/PartnerList'
 
 type PartnerSectionTranslation = {
-  title: string
+  title: string,
 }
 
 const defaultPartnerSectionTranslation: Record<Languages, PartnerSectionTranslation> = {

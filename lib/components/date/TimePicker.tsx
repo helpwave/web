@@ -12,7 +12,7 @@ export type TimePickerProps = {
   is24HourFormat?: boolean,
   minuteIncrement?: MinuteIncrement,
   maxHeight?: number,
-  className?: string
+  className?: string,
 }
 
 export const TimePicker = ({

@@ -7,8 +7,8 @@ export type FooterLinkGroupProps = {
     name: string,
     link: string,
     onClick?: () => void,
-    openInCurrentTab?: boolean
-  }[]
+    openInCurrentTab?: boolean,
+  }[],
 }
 
 const FooterLinkGroup = ({

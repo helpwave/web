@@ -3,7 +3,7 @@ import type { TextPropertyProps } from '../../properties/TextProperty'
 import { TextProperty } from '../../properties/TextProperty'
 
 export type TextPropertyExampleProps = Omit<TextPropertyProps, 'onChange' | 'onRemove'> & {
-  readOnly: boolean
+  readOnly: boolean,
 }
 
 /**

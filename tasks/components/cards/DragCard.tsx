@@ -6,11 +6,11 @@ export type CardDragProperties = {
   isDragging?: boolean,
   isOver?: boolean,
   isDangerous?: boolean,
-  isInvalid?: boolean
+  isInvalid?: boolean,
 }
 
 export type DragCardProps = PropsWithChildren<CardProps & {
-  cardDragProperties?: CardDragProperties
+  cardDragProperties?: CardDragProperties,
 }>
 
 /**

@@ -9,7 +9,7 @@ import { getConfig } from '@/utils/config'
 type MobileInterceptorTranslation = {
   pleaseDownloadApp: string,
   playStore: string,
-  appStore: string
+  appStore: string,
 }
 
 const defaultMobileInterceptorTranslation = {

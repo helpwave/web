@@ -9,7 +9,7 @@ import { Button } from './Button'
 type StepperBarTranslation = {
   back: string,
   next: string,
-  confirm: string
+  confirm: string,
 }
 
 const defaultStepperBarTranslation: Record<Languages, StepperBarTranslation> = {
@@ -28,7 +28,7 @@ const defaultStepperBarTranslation: Record<Languages, StepperBarTranslation> = {
 export type StepperInformation = {
   step: number,
   lastStep: number,
-  seenSteps: Set<number>
+  seenSteps: Set<number>,
 }
 
 export type StepperBarProps = {
@@ -36,7 +36,7 @@ export type StepperBarProps = {
   onChange: (step: StepperInformation) => void,
   onFinish: () => void,
   showDots?: boolean,
-  className?: string
+  className?: string,
 }
 
 /**

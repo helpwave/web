@@ -5,8 +5,8 @@ import {
   CreateTaskTemplateSubTaskRequest,
   DeleteTaskTemplateRequest,
   DeleteTaskTemplateSubTaskRequest,
-  UpdateTaskTemplateRequest, UpdateTaskTemplateSubTaskRequest,
-  GetAllTaskTemplatesRequest
+  GetAllTaskTemplatesRequest, UpdateTaskTemplateRequest,
+  UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_template_svc_pb'
 import type { TaskTemplateDTO, TaskTemplateFormType } from '../../types/tasks/tasks_templates'
 import { APIServices } from '../../services'
@@ -47,7 +47,7 @@ export const useWardTaskTemplateQuery = (wardId?: string) => {
 type UseAllTaskTemplatesByCreatorProps = {
   createdBy?: string,
   onSuccess: (data: TaskTemplateDTO[]) => void,
-  type: QueryKey
+  type: QueryKey,
 }
 export const useAllTaskTemplatesByCreator = ({
   createdBy,
@@ -153,7 +153,7 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousTaskTemplates)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).catch(console.error)
     }
   })
 }
@@ -192,7 +192,7 @@ export const useCreateMutation = (wardId: string, queryKey: QueryKey, setTemplat
       return { previousTaskTemplate }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).catch(console.error)
     },
   })
 }
@@ -219,7 +219,7 @@ export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskT
       queryClient.setQueryData([queryKey], context === undefined ? [] : context.previousTaskTemplate)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] }).then()
+      queryClient.invalidateQueries({ queryKey: [queryKey] }).catch(console.error)
     },
   })
 }
@@ -231,12 +231,12 @@ export const useSubTaskTemplateDeleteMutation = (callback: () => void = noop) =>
       const deleteSubtaskTaskTemplate = new DeleteTaskTemplateSubTaskRequest()
       deleteSubtaskTaskTemplate.setId(subtaskId)
       await APIServices.taskTemplates.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
-      queryClient.refetchQueries(['personalTaskTemplates']).then()
+      queryClient.refetchQueries(['personalTaskTemplates']).catch(console.error)
       callback()
       return deleteSubtaskTaskTemplate.toObject()
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['personalTaskTemplates'] }).then()
+      queryClient.invalidateQueries({ queryKey: ['personalTaskTemplates'] }).catch(console.error)
     },
   })
 }
@@ -250,12 +250,12 @@ export const useSubTaskTemplateUpdateMutation = (callback: (subtask: SubTaskDTO)
       updateSubtaskTemplate.setSubtaskId(subtask.id)
       await APIServices.taskTemplates.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
       const newSubtask: SubTaskDTO = { ...subtask }
-      queryClient.refetchQueries(['wardTaskTemplates']).then()
+      queryClient.refetchQueries(['wardTaskTemplates']).catch(console.error)
       callback(newSubtask)
       return updateSubtaskTemplate.toObject()
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['personalTaskTemplates'] }).then()
+      queryClient.invalidateQueries({ queryKey: ['personalTaskTemplates'] }).catch(console.error)
     },
   })
 }
@@ -269,7 +269,7 @@ export const useSubTaskTemplateAddMutation = (taskTemplateId: string) => {
       createSubTaskTemplate.setTaskTemplateId(taskTemplateId)
       await APIServices.taskTemplates.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
 
-      queryClient.refetchQueries(['wardTaskTemplates']).then()
+      queryClient.refetchQueries(['wardTaskTemplates']).catch(console.error)
       return createSubTaskTemplate.toObject()
     },
   })

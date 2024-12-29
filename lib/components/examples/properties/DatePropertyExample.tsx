@@ -4,7 +4,7 @@ import { DateProperty } from '../../properties/DateProperty'
 import { noop } from '../../../util/noop'
 
 export type DatePropertyExampleProps = DatePropertyProps & {
-  readOnly: boolean
+  readOnly: boolean,
 }
 
 /**

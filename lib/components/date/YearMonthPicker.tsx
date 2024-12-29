@@ -15,7 +15,7 @@ export type YearMonthPickerProps = {
   onChange?: (date: Date) => void,
   className?: string,
   maxHeight?: number,
-  showValueOpen?: boolean
+  showValueOpen?: boolean,
 }
 export const YearMonthPicker = ({
   value = new Date(),

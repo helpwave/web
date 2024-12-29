@@ -10,7 +10,7 @@ export type ScrollPickerProps<T> = {
   mapping: (value: T) => string,
   selected?: T,
   onChange?: (value: T) => void,
-  disabled?: boolean
+  disabled?: boolean,
 }
 
 type AnimationData<T> = {
@@ -24,7 +24,7 @@ type AnimationData<T> = {
   velocity: number,
   animationVelocity: number,
   lastTimeStamp?: number,
-  lastScrollTimeStamp?: number
+  lastScrollTimeStamp?: number,
 }
 
 const up = 1

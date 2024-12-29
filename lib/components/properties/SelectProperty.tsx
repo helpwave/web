@@ -9,7 +9,7 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
 type SingleSelectPropertyTranslation = {
-  select: string
+  select: string,
 }
 
 const defaultSingleSelectPropertyTranslation: Record<Languages, SingleSelectPropertyTranslation> = {

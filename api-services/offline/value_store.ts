@@ -225,31 +225,31 @@ export type PatientValueStore = {
   name: string,
   notes: string,
   bedId?: string,
-  isDischarged: boolean
+  isDischarged: boolean,
 }
 
 export type TaskValueStore = Omit<TaskDTO, 'subtasks'> & {
   patientId: string,
-  creatorId: string
+  creatorId: string,
 }
 
 export type SubTaskValueStore = SubTaskDTO & {
-  taskId: string
+  taskId: string,
 }
 
 export type TaskTemplateValueStore = Omit<TaskTemplateDTO, 'subtasks'> & {
-  creatorId: string
+  creatorId: string,
 }
 
 export type TaskTemplateSubTaskValueStore = {
   id: string,
   taskTemplateId: string,
   name: string,
-  creatorId: string
+  creatorId: string,
 }
 
 export type UserValueStore = Omit<OrganizationMember, 'role'> & {
-  nickName: string
+  nickName: string,
 }
 
 export class OfflineValueStore {
@@ -267,7 +267,7 @@ export class OfflineValueStore {
   taskTemplates: TaskTemplateValueStore[] = []
   taskTemplateSubTasks: TaskTemplateSubTaskValueStore[] = []
 
-  // eslint-disable-next-line no-useless-constructor
+
   private constructor() {
   }
 

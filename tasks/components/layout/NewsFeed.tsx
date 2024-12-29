@@ -8,7 +8,7 @@ import { ColumnTitle } from '../ColumnTitle'
 
 type NewsFeedTranslation = {
   title: string,
-  noNews: string
+  noNews: string,
 }
 
 const defaultNewsFeedTranslations: Record<Languages, NewsFeedTranslation> = {
@@ -24,7 +24,7 @@ const defaultNewsFeedTranslations: Record<Languages, NewsFeedTranslation> = {
 
 export type NewsFeedProps = {
   localizedNews: LocalizedNews,
-  width?: number
+  width?: number,
 }
 
 /**

@@ -8,7 +8,7 @@ import { Pagination } from './Pagination'
 
 export type TableStatePagination = {
   currentPage: number,
-  entriesPerPage: number
+  entriesPerPage: number,
 }
 export const defaultTableStatePagination = {
   currentPage: 0,
@@ -19,7 +19,7 @@ export type TableStateSelection<T> = {
   currentSelection: T[],
   hasSelectedAll: boolean,
   hasSelectedSome: boolean,
-  hasSelectedNone: boolean
+  hasSelectedNone: boolean,
 }
 
 export const defaultTableStateSelection = {
@@ -38,8 +38,8 @@ export type TableState = {
     currentSelection: string[],
     hasSelectedAll: boolean,
     hasSelectedSome: boolean,
-    hasSelectedNone: boolean
-  }
+    hasSelectedNone: boolean,
+  },
 }
 
 type IdentifierMapping<T> = (dataObject: T) => string
@@ -172,7 +172,7 @@ export type TableProps<T> = {
   /**
    * Always go to the page of this element
    */
-  focusElement?: T
+  focusElement?: T,
 }
 
 /*  Possible extension for better customization

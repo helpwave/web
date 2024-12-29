@@ -10,7 +10,7 @@ type SubtaskTileTranslation = {
   subtasks: string,
   remove: string,
   addSubtask: string,
-  newSubtask: string
+  newSubtask: string,
 }
 
 const defaultSubtaskTileTranslation = {
@@ -25,7 +25,7 @@ const defaultSubtaskTileTranslation = {
 type SubtaskTileProps = {
   subtask: SubTaskDTO,
   onRemoveClick: () => void,
-  onChange: (subtask: SubTaskDTO) => void
+  onChange: (subtask: SubTaskDTO) => void,
 }
 
 /**

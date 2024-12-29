@@ -12,7 +12,7 @@ import { TasksDemoSection } from '@/components/sections/landing/TasksDemoSection
 import { StepsToDigitalizationSection } from '@/components/sections/landing/StepsToDigitalizationSection'
 
 type HomeTranslation = {
-  home: string
+  home: string,
 }
 
 const defaultHomeTranslation: Record<Languages, HomeTranslation> = {

@@ -7,7 +7,7 @@ type Size = 'small' | 'large'
 export type HelpwaveBadgeProps = {
   size?: Size,
   title?: string,
-  className?: string
+  className?: string,
 }
 
 /**

@@ -4,11 +4,11 @@ import { Span } from './Span'
 
 export type Crumb = {
   display: string,
-  link: string
+  link: string,
 }
 
 type BreadCrumbProps = {
-  crumbs: Crumb[]
+  crumbs: Crumb[],
 }
 
 /**

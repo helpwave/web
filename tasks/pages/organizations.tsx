@@ -10,7 +10,7 @@ import titleWrapper from '@/utils/titleWrapper'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type OrganizationsPageTranslation = {
-  organizations: string
+  organizations: string,
 }
 
 const defaultOrganizationsPageTranslation = {
@@ -23,7 +23,7 @@ const defaultOrganizationsPageTranslation = {
 }
 
 export type OrganizationContextState = {
-  organizationId: string
+  organizationId: string,
 }
 
 export const emptyOrganizationContextState: OrganizationContextState = {
@@ -32,7 +32,7 @@ export const emptyOrganizationContextState: OrganizationContextState = {
 
 export type OrganizationContextType = {
   state: OrganizationContextState,
-  updateContext: (context: OrganizationContextState) => void
+  updateContext: (context: OrganizationContextState) => void,
 }
 
 export const OrganizationContext = createContext<OrganizationContextType>({

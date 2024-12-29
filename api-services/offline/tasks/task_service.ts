@@ -2,26 +2,26 @@ import type { Metadata } from 'grpc-web'
 import { TaskServicePromiseClient } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_grpc_web_pb'
 import type {
   AssignTaskRequest,
+  CreateSubtaskRequest,
   CreateTaskRequest,
+  DeleteSubtaskRequest,
   GetAssignedTasksRequest,
   GetTaskRequest,
   GetTasksByPatientRequest,
   GetTasksByPatientSortedByStatusRequest,
-  UpdateTaskRequest,
   UnassignTaskRequest,
-  CreateSubtaskRequest,
   UpdateSubtaskRequest,
-  DeleteSubtaskRequest
+  UpdateTaskRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import {
-  CreateSubtaskResponse,
-  CreateTaskResponse, DeleteSubtaskResponse,
+  AssignTaskResponse,
+  CreateSubtaskResponse, CreateTaskResponse,
+  DeleteSubtaskResponse,
   GetAssignedTasksResponse,
   GetTaskResponse,
-  GetTasksByPatientResponse,
-  GetTasksByPatientSortedByStatusResponse, UnassignTaskResponse, UpdateSubtaskResponse,
-  UpdateTaskResponse,
-  AssignTaskResponse
+  GetTasksByPatientResponse, GetTasksByPatientSortedByStatusResponse, UnassignTaskResponse,
+  UpdateSubtaskResponse,
+  UpdateTaskResponse
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import type { SubTaskValueStore, TaskValueStore } from '../value_store'
 import type { SubTaskDTO, TaskStatus } from '../../types/tasks/task'

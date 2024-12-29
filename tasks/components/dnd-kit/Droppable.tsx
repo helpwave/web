@@ -3,13 +3,13 @@ import { useDroppable, type Active, type Over } from './typesafety'
 export type DroppableBuilderProps<DraggableData, DroppableData> = {
   isOver: boolean,
   active: Active<DraggableData> | null,
-  over: Over<DroppableData> | null
+  over: Over<DroppableData> | null,
 }
 
 export type DroppableProps<DraggableData, DroppableData> = {
   children: ((droppableBuilderProps: DroppableBuilderProps<DraggableData, DroppableData>) => React.ReactNode | undefined),
   id: string,
-  data: DroppableData
+  data: DroppableData,
 }
 
 /**

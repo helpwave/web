@@ -20,7 +20,7 @@ type ContactSectionTranslation = {
   message: string,
   send: string,
   thankYou: string,
-  error: string
+  error: string,
 }
 
 const defaultContactSectionTranslation: Record<Languages, ContactSectionTranslation> = {
@@ -50,7 +50,7 @@ const defaultContactSectionTranslation: Record<Languages, ContactSectionTranslat
 
 type Contact = {
   name: string,
-  email: string
+  email: string,
 }
 
 type ContactForm = {
@@ -59,7 +59,7 @@ type ContactForm = {
   email: string,
   message: string,
   hasSend: boolean,
-  hasError: boolean
+  hasError: boolean,
 }
 
 const sendContactFormToHubSpot = (form: ContactForm) => submitHubSpotForm(

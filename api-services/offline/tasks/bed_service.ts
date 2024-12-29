@@ -95,6 +95,9 @@ export class BedOfflineServicePromiseClient extends BedServicePromiseClient {
       .setBedsList(list)
   }
 
+  /**
+   * @deprecated The method should not be used anymore, use getBeds with the roomId as a parameter instead
+   */
   async getBedsByRoom(request: GetBedsByRoomRequest, _?: Metadata): Promise<GetBedsByRoomResponse> {
     const beds = BedOfflineService.findMany(request.getRoomId())
 

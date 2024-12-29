@@ -4,7 +4,6 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import { Chip } from '@helpwave/common/components/ChipList'
-import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { SectionBase } from '@/components/sections/SectionBase'
 
@@ -38,8 +37,8 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
     >
       <div className={tw('flex flex-col w-1/2 mobile:w-full gap-y-2')}>
         <Chip className={tw('!w-fit bg-gray-200 font-semibold px-4')}>{translation.ourVision}</Chip>
-        <h2><Span type="title" className={tw('!text-3xl')}>{translation.title}</Span></h2>
-        <Span className={tw('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
+        <h2 className={tw('textstyle-title-xl')}>{translation.title}</h2>
+        <span className={tw('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
       </div>
       <Image src={imageURL} alt="" width={0} height={0} className={tw('mobile:w-full w-1/2')}/>
     </SectionBase>

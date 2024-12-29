@@ -3,7 +3,6 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
-import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { SectionBase } from '@/components/sections/SectionBase'
 import { TasksPlaystoreBadge } from '@/components/TasksPlaystoreBadge'
@@ -43,8 +42,8 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
     >
       <div className={tw('flex flex-col gap-y-2 pb-16 desktop:w-3/5 justify-center')}>
         <div className={tw('flex flex-col gap-y-2 mobile:pb-0')}>
-          <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
-          <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
+          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
+          <span className={tw('textstyle-title-normal')}><MarkdownInterpreter text={translation.description}/></span>
         </div>
         <div
           // DO NOT CHANGE THE GAP. IT IS MANDATORY BY Apple
@@ -54,8 +53,8 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
           <TasksAppStoreBadge/>
         </div>
         <div className={tw('flex flex-col mt-6 gap-y-1')}>
-          <Span type="description" className={tw('!text-xs')}>{translation.tradmarkPlaystore}</Span>
-          <Span type="description" className={tw('!text-xs')}>{translation.trademarkAppstore}</Span>
+          <span className={tw('textstyle-description !text-xs')}>{translation.tradmarkPlaystore}</span>
+          <span className={tw('textstyle-description !text-xs')}>{translation.trademarkAppstore}</span>
         </div>
       </div>
       <div

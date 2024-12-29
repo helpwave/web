@@ -1,7 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
 
@@ -44,8 +43,8 @@ export const PatientDischargeModal = ({
     >
       {patient && (
         <>
-          <Span className={tw('mt-2')}>{`${translation.followingPatient}: `}</Span>
-          <Span className={tw('!font-medium')}>{patient.name}</Span>
+          <span className={tw('mt-2')}>{`${translation.followingPatient}: `}</span>
+          <span className={tw('font-medium')}>{patient.name}</span>
         </>
       )}
     </ConfirmDialog>

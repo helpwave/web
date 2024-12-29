@@ -4,7 +4,6 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ExpandableProps } from '../Expandable'
 import { Expandable } from '../Expandable'
 import { MarkdownInterpreter } from '../MarkdownInterpreter'
-import { Span } from '../Span'
 
 type ContentType = {
   type: 'markdown',
@@ -39,7 +38,7 @@ export const FAQSection = ({
         <Expandable
           key={id}
           {...restProps}
-          label={(<h3 id={id} className={tw('select-none')}><Span type="title">{title}</Span></h3>)}
+          label={(<h3 id={id} className={tw('textstyle-title-md select-none')}>{title}</h3>)}
           clickOnlyOnHeader={false}
           icon={(expanded) => expanded ?
               (<ChevronUp size={chevronSize} className={tw(`text-blue-600 min-w-[${chevronSize}px]`)}/>) :

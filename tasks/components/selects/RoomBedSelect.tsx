@@ -4,7 +4,6 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Select } from '@helpwave/common/components/user-input/Select'
-import { Span } from '@helpwave/common/components/Span'
 import { noop } from '@helpwave/common/util/noop'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Button } from '@helpwave/common/components/Button'
@@ -165,25 +164,25 @@ export const RoomBedSelect = ({
         )}
       </div>
       {touched && !isSubmitting && !isCreating && (
-        <Span className={tx({
+        <span className={tx({
           '!text-hw-negative-400': hasChanges,
           '!text-hw-positive-400': !hasChanges
         })}>
           {hasChanges ? translation.unsaved : translation.saved}
-        </Span>
+        </span>
       )}
       {touched && !isSubmitting && isCreating && (
-        <Span className={tx({
+        <span className={tx({
           '!text-hw-positive-400': currentSelection.roomId && currentSelection.bedId,
           '!text-hw-negative-400': !(currentSelection.roomId && currentSelection.bedId)
         })}>
           {currentSelection.roomId && currentSelection.bedId ? translation.valid : translation.invalid}
-        </Span>
+        </span>
       )}
       {isSubmitting && (
-        <Span>
+        <span>
           {`${translation.submitting}...`}
-        </Span>
+        </span>
       )}
     </div>
   )
@@ -193,8 +192,8 @@ export const RoomBedSelect = ({
         <table className={tw('min-w-[200px] border-spacing-y-2 border-separate')}>
           <thead>
             <tr>
-              <th><Span className={tw('flex flex-row justify-start')} type="tableHeader">{translation.room}</Span></th>
-              <th><Span className={tw('flex flex-row justify-start')} type="tableHeader">{translation.bed}</Span></th>
+              <th><span className={tw('textstyle-table-header flex flex-row justify-start')}>{translation.room}</span></th>
+              <th><span className={tw('textstyle-table-header flex flex-row justify-start')}>{translation.bed}</span></th>
             </tr>
           </thead>
           <tbody>
@@ -218,13 +217,13 @@ export const RoomBedSelect = ({
         <thead/>
         <tbody>
           <tr>
-            <td><Span type="tableHeader">{translation.room}</Span></td>
+            <td><span className={tw('textstyle-table-header')}>{translation.room}</span></td>
             <td>
               {roomSelect}
             </td>
           </tr>
           <tr>
-            <td><Span type="tableHeader">{translation.bed}</Span></td>
+            <td><span className={tw('textstyle-table-header')}>{translation.bed}</span></td>
             <td>
               {bedSelect}
             </td>

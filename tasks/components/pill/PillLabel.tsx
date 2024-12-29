@@ -1,7 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 
 type PillLabelTranslation = {
@@ -55,7 +54,7 @@ const PillLabel = ({
       <div className={tw(`flex flex-row items-center text-${state.colorLabel}-800`)}>
         <div className={tw(`rounded-full w-2 h-2 bg-${state.colorLabel}-400`)}/>
         <div className={tw('w-2')}/>
-        <Span>{translation.text}</Span>
+        <span>{translation.text}</span>
       </div>
       {count ?? '-'}
     </div>

@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { Span } from '@helpwave/common/components/Span'
 import { ChevronDown } from 'lucide-react'
 
 type KanbanHeaderTranslation = {
@@ -45,7 +44,7 @@ export const KanbanHeader = ({
   const translation = useTranslation(defaultKanbanHeaderTranslations, overwriteTranslation)
   return (
     <div className={tw('flex flex-row justify-between items-center')}>
-      <Span type="tableName">{translation.tasks}</Span>
+      <span className={tw('textstyle-table-name')}>{translation.tasks}</span>
       <div className={tw('flex flex-row gap-x-6')}>
         <div className={tw('flex flex-row gap-x-2 items-center hidden')}>
           {translation.status}

@@ -1,7 +1,6 @@
 import { type Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type RoadmapItem = {
@@ -85,14 +84,14 @@ export const RoadmapSection = () => {
   const translation = useTranslation(defaultRoadmapTranslation)
   return (
     <SectionBase backgroundColor="gray" className={tw('flex flex-col')}>
-      <Span type="title" className={tw('text-hw-secondary-400 !text-3xl mb-1')}>{translation.title}</Span>
-      <Span type="description" className={tw('mb-1')}>{translation.description}</Span>
+      <span className={tw('textstyle-title-lg text-hw-secondary-400 mb-1')}>{translation.title}</span>
+      <span className={tw('textstyle-description mb-1')}>{translation.description}</span>
       <div className={tw('mt-4 w-full flex flex-wrap justify-start gap-4')}>
         {translation.roadmap.map(value => (
           <div key={value.name} className={tw('w-full desktop:max-w-[300px] bg-white shadow-md rounded-lg p-5 hover:shadow-lg transition-shadow transition-1000')}>
-            <Span type="subsectionTitle" className={tw('block')}>{value.name}</Span>
-            <Span type="labelSmall" className={tw('block text-hw-secondary-400 mb-2')}>{value.start}</Span>
-            <Span type="normal" className={tw('text-gray-500')}>{value.description}</Span>
+            <span className={tw('textstyle-title-normal block')}>{value.name}</span>
+            <span className={tw('textstyle-label-sm block text-hw-secondary-400 mb-2')}>{value.start}</span>
+            <span className={tw('text-gray-500')}>{value.description}</span>
           </div>
         ))}
       </div>

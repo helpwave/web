@@ -3,7 +3,6 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
-import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { SectionBase } from '@/components/sections/SectionBase'
 
@@ -32,8 +31,8 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
     >
       <div className={tw('flex flex-col items-center flex-1')}>
         <div className={tw('flex flex-col gap-y-2 max-w-[600px]')}>
-          <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
-          <Span className={tw('font-space font-semibold !text-2xl')}><MarkdownInterpreter text={translation.description}/></Span>
+          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
+          <span className={tw('textstyle-title-lg')}><MarkdownInterpreter text={translation.description}/></span>
         </div>
       </div>
       <div className={tw('desktop:relative desktop:right-0 p-4 pr-0 mobile:pr-4 rounded-l-3xl mobile:rounded-3xl bg-white w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10 h-fit shadow-around-lg')}>

@@ -7,7 +7,6 @@ import { Select } from '@helpwave/common/components/user-input/Select'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import { Plus, X } from 'lucide-react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -63,7 +62,7 @@ export const PropertySelectOptionsUpdater = ({
   return (
     <div className={tw('flex flex-col mt-2 gap-y-1')}>
       <div className={tw('flex flex-row justify-between items-center')}>
-        <Span type="labelMedium">{translation.values}</Span>
+        <span className={tw('textstyle-label-md')}>{translation.values}</span>
         <Plus
           className={tw('text-white bg-hw-primary-400 hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
           size={20}
@@ -196,7 +195,7 @@ export const PropertyDetailsField = ({
       )}
       {isSelectType && (
         <Tile
-          title={{ value: translation.allowCustomValues, type: 'labelMedium' }}
+          title={{ value: translation.allowCustomValues, className: 'textstyle-label-md' }}
           description={{ value: translation.allowCustomValuesDescription }}
           suffix={(
             <Checkbox

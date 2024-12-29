@@ -1,7 +1,6 @@
 import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { Chip } from '@helpwave/common/components/ChipList'
 import { EditCard, type EditCardProps } from './EditCard'
 
@@ -52,7 +51,7 @@ export const TaskTemplateCard = ({
     >
       <div className={tw('overflow-hidden h-full')}>
         <div className={tw('flex flex-row items-start overflow-hidden gap-x-1')}>
-          <Span type="subsubsectionTitle" className={tw('!flex-1')}>{name}</Span>
+          <span className={tw('textstyle-title-sm')}>{name}</span>
           {typeForLabel && (
             <Chip
               color={typeForLabel === 'ward' ? 'hw-label-blue' : 'hw-label-pink'}
@@ -62,7 +61,7 @@ export const TaskTemplateCard = ({
             </Chip>
           )}
         </div>
-        <Span>{subtaskCount + ' ' + translation.subtask}</Span>
+        <span>{subtaskCount + ' ' + translation.subtask}</span>
       </div>
     </EditCard>
   )

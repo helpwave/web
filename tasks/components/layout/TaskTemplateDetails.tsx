@@ -5,7 +5,6 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { Span } from '@helpwave/common/components/Span'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { SubtaskView } from '../SubtaskView'
@@ -141,7 +140,7 @@ export const TaskTemplateDetails = ({
             maxLength={maxNameLength}
             className={tx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
           />
-          {isDisplayingNameError && <Span type="formError">{nameErrorMessage}</Span>}
+          {isDisplayingNameError && <span className={tw('textstyle-form-error')}>{nameErrorMessage}</span>}
         </div>
         <Textarea
           headline={translation.notes}

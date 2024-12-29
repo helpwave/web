@@ -4,7 +4,6 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Span } from '@helpwave/common/components/Span'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import {
   useWardCreateMutation,
@@ -144,7 +143,7 @@ export const WardDetail = ({
           />
         </div>
         {isCreatingNewWard ?
-          <Span>{translation.roomsNotOnCreate}</Span>
+          <span>{translation.roomsNotOnCreate}</span>
           : (
           <div className={tw('max-w-[600px] mt-6')}>
             <RoomList/>
@@ -165,8 +164,8 @@ export const WardDetail = ({
           )
         }
         <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
-          <Span type="subsectionTitle">{translation.dangerZone}</Span>
-          <Span type="description">{translation.dangerZoneText}</Span>
+          <span className={tw('textstyle-title-normal')}>{translation.dangerZone}</span>
+          <span className={tw('textstyle-description')}>{translation.dangerZoneText}</span>
           <Button
             onClick={() => setIsShowingConfirmDialog(true)}
             className={tw('px-0 font-bold text-left')}

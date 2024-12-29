@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
 import { RadialRings } from '@helpwave/common/components/Ring'
 import { useEffect, useState } from 'react'
-import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { NewsLetterFormType } from '@/components/NewsLetterForm'
@@ -93,8 +92,8 @@ const NewsLetter: NextPage = () => {
                   sizeCircle3={sizeCircle3}
                   waveWidth={waveWidth}
                 />
-                <Span className={tw(`absolute z-[100] top-1/2 left-[${sizeCircle2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}></Span>
-                <Span className={tw(`absolute z-[100] top-1/2 left-[${sizeCircle2 + (sizeCircle3 - sizeCircle2) / 2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}></Span>
+                <div className={tw(`absolute z-[100] top-1/2 left-[${sizeCircle2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}/>
+                <div className={tw(`absolute z-[100] top-1/2 left-[${sizeCircle2 + (sizeCircle3 - sizeCircle2) / 2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}/>
               </>
             )}
           </div>

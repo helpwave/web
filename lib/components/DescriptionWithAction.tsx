@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { Tag } from 'lucide-react'
 import { tx, tw } from '../twind'
 import { noop } from '../util/noop'
-import { Span } from './Span'
 import { Button } from './Button'
 
 export type DescriptionWithActionProps = {
@@ -49,8 +48,8 @@ export const DescriptionWithAction = ({
         </div>
       )}
       <div className={tw('flex flex-col')}>
-        <Span type="title" className={tx(titleClassName)}>{title}</Span>
-        <Span type="description" className={tx(descriptionClassName)}>{description}</Span>
+        <span className={tx('textstyle-description', titleClassName)}>{title}</span>
+        <span className={tx('textstyle-description', descriptionClassName)}>{description}</span>
       </div>
       {trailing}
       {!trailing && trailingButtonText && (

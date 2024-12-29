@@ -1,6 +1,5 @@
 import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
-import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import Image from 'next/image'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -89,9 +88,9 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
       >
         <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>
           <div className={tw('flex flex-col gap-y-2')}>
-            <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
-            <Span className={tw('font-space font-semibold')}><MarkdownInterpreter
-              text={translation.text}/></Span>
+            <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
+            <span className={tw('font-space font-semibold')}><MarkdownInterpreter
+              text={translation.text}/></span>
           </div>
         </div>
         <div
@@ -108,12 +107,12 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
       </SectionBase>
 
       <SectionBase backgroundColor="gray" className={tw('w-full')}>
-        <h2><Span type="subsectionTitle">Freepik</Span></h2>
+        <h2 className={tw('textstyle-title-normal')}>Freepik</h2>
         <div className={tw('flex grow flex-col items-center min-w-50 items-center gap-y-4')}>
           {
             freepikCredits.map((credit) => (
               <div className={tw('w-full')} key={credit.link}>
-                <Span type="normal">{credit.text}</Span>
+                <span>{credit.text}</span>
                 <Link href={credit.link} className={tw('underline block')} target="_blank">{credit.link}</Link>
               </div>
             ))
@@ -123,7 +122,7 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
       </SectionBase>
 
       <SectionBase backgroundColor="white" className={tw('flex flex-col gap-y-2 w-full')}>
-        <h2><Span type="title">{translation.flaticon}</Span></h2>
+        <h2 className={tw('textstyle-title-md')}>{translation.flaticon}</h2>
         {flaticonCredits.map(({ name, author, link }) => (
           <Link key={name + author} href={link} title={name} className={tw('underline')} target="_blank">
             {translation.createdBy(name, author)}

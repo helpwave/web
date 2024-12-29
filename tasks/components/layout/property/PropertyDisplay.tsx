@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useState } from 'react'
 import { Plus, Tag } from 'lucide-react'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -104,7 +103,7 @@ export const PropertyDisplay = ({
     <div className={tw('py-4 px-6 flex flex-col gap-y-4')}>
       <div className={tw('flex flex-row gap-x-1 items-center')}>
         <Tag className={tw('text-hw-primary-400')} size={20}/>
-        <Span type="heading">{translation.properties}</Span>
+        <span className={tw('textstyle-title-lg')}>{translation.properties}</span>
       </div>
       <div className={tw('flex flex-col gap-y-2')}>
         <div className={tw('flex flex-row justify-between')}>
@@ -140,7 +139,7 @@ export const PropertyDisplay = ({
           })}>
             <div className={tw('flex flex-row gap-x-2 items-center')}>
               <Plus/>
-              <Span>{translation.addProperty}</Span>
+              <span>{translation.addProperty}</span>
             </div>
           </Button>
         </div>
@@ -161,17 +160,17 @@ export const PropertyDisplay = ({
             />),
             (<div key="subject-type-cell" className={tw('flex flex-row gap-x-2')}>
               <SubjectTypeIcon subjectType={property.subjectType}/>
-              <Span>{translation[property.subjectType]}</Span>
+              <span>{translation[property.subjectType]}</span>
             </div>),
             (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
               <Button variant="text" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
-                <Span>{translation.edit}</Span>
+                <span>{translation.edit}</span>
               </Button>
             </div>)
           ]}
           header={[
-            <Span key="headerName" type="tableHeader">{translation.name}</Span>,
-            <Span key="headerSubjectType" type="tableHeader">{translation.subjectType}</Span>,
+            <span key="headerName" className={tw('textstyle-table-header')}>{translation.name}</span>,
+            <span key="headerSubjectType" className={tw('textstyle-table-header')}>{translation.subjectType}</span>,
             <></>
           ]}
         />

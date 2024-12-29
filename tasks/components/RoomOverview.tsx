@@ -1,5 +1,4 @@
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import { useContext, useEffect, useRef, useState } from 'react'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import type { BedMinimalDTO } from '@helpwave/api-services/types/tasks/bed'
@@ -44,7 +43,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
     <div className={tw('flex flex-col w-full')} ref={ref}>
       <div className={tw('flex flex-row items-center mb-1')}>
         <div className={tw('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <Span type="subsectionTitle">{room.name}</Span>
+        <span className={tw('textstyle-title-normal')}>{room.name}</span>
       </div>
       <div className={tw(`grid grid-cols-${columns} gap-4`)}>
         {room.beds.map((bed) => bed.patient && bed.patient?.id ?

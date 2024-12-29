@@ -3,7 +3,6 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { noop } from '@helpwave/common/util/noop'
 import { useAssignBedMutation, usePatientCreateMutation } from '@helpwave/api-services/mutations/tasks/patient_mutations'
@@ -79,7 +78,7 @@ export const AddPatientModal = ({
     >
       <div className={tw('flex flex-col gap-y-4 min-w-[300px]')}>
         <div className={tw('flex flex-col gap-y-1')}>
-          <Span type="labelMedium">{translation.name}</Span>
+          <span className={tw('textstyle-label-md')}>{translation.name}</span>
           <Input
             value={patientName}
             onChange={(text) => {
@@ -87,7 +86,7 @@ export const AddPatientModal = ({
               setPatientName(text)
             }}
           />
-          {isShowingError && <Span type="formError">{translation.minimumLength(minimumNameLength)}</Span>}
+          {isShowingError && <span className={tw('textstyle-form-error')}>{translation.minimumLength(minimumNameLength)}</span>}
         </div>
         <RoomBedSelect
           initialRoomAndBed={dropdownId}
@@ -95,7 +94,7 @@ export const AddPatientModal = ({
           onChange={(roomBedDropdownIds) => setDropdownId(roomBedDropdownIds)}
           isClearable={true}
         />
-        <Span className={tx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</Span>
+        <span className={tx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</span>
       </div>
     </ConfirmDialog>
   )

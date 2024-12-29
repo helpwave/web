@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useWardTaskTemplateQuery } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
@@ -59,7 +58,7 @@ export const TaskTemplateWardPreview = ({
       {taskTemplates && (
         <div className={tw('flex flex-col')}>
           <div className={tw('flex flex-row justify-between items-center mb-4')}>
-            <Span type="tableName">{translation.taskTemplates(taskTemplates.length)}</Span>
+            <span className={tw('textstyle-table-name')}>{translation.taskTemplates(taskTemplates.length)}</span>
             <Button
               className={tw('w-auto')}
               onClick={() => router.push(`/ward/${wardId}/templates`)}

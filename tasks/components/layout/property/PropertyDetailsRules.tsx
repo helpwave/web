@@ -56,7 +56,7 @@ export const PropertyDetailsRules = ({
   return (
     <InputGroup {...inputGroupProps} title={translation.rules}>
       <Tile
-        title={{ value: translation.alwaysVisible, type: 'labelMedium' }}
+        title={{ value: translation.alwaysVisible, className: 'textstyle-label-md' }}
         description={{ value: translation.alwaysVisibleDescription }}
         suffix={(
           <Checkbox

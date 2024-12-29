@@ -2,7 +2,6 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { Span } from '@helpwave/common/components/Span'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
@@ -157,7 +156,7 @@ export const OrganizationForm = ({
       loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[350px]') }}
       minimumLoadingDuration={200} // prevents errors flickering
     >
-      <Span type="subsectionTitle">{translation.general}</Span>
+      <span className={tw('textstyle-title-normal')}>{translation.general}</span>
       <div className={tw('mt-2 mb-1')}>
         <Input
           id="shortName"
@@ -169,9 +168,9 @@ export const OrganizationForm = ({
           maxLength={maxShortNameLength}
           className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <Span type="formError">{shortNameErrorMessage}</Span>}
+        {isDisplayingShortNameError && <span className={tw('textstyle-form-error')}>{shortNameErrorMessage}</span>}
       </div>
-      <Span type="formDescription">{translation.shortNameDescription}</Span>
+      <span className={tw('textstyle-form-description')}>{translation.shortNameDescription}</span>
       <div className={tw('mt-2 mb-1')}>
         <Input
           id="longName"
@@ -183,9 +182,9 @@ export const OrganizationForm = ({
           maxLength={maxLongNameLength}
           className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
-        {isDisplayingLongNameError && <Span type="formError">{longNameErrorMessage}</Span>}
+        {isDisplayingLongNameError && <span className={tw('textstyle-form-error')}>{longNameErrorMessage}</span>}
       </div>
-      <Span type="formDescription">{translation.longNameDescription}</Span>
+      <span className={tw('textstyle-form-description')}>{translation.longNameDescription}</span>
       <div className={tw('mt-2 mb-1')}>
         <div className={tw('flex flex-row items-end')}>
           <div className={tw('flex-1 mr-2')}>
@@ -203,12 +202,12 @@ export const OrganizationForm = ({
           </div>
           {
             !organizationForm.organization.isVerified &&
-            <Span className={tw('text-hw-negative-500 mb-3')}>{translation.notVerified}</Span>
+            <span className={tw('text-hw-negative-500 mb-3')}>{translation.notVerified}</span>
           }
         </div>
-        {isDisplayingEmailNameError && <Span type="formError">{emailErrorMessage}</Span>}
+        {isDisplayingEmailNameError && <span className={tw('textstyle-form-error')}>{emailErrorMessage}</span>}
       </div>
-      <Span type="formDescription">{translation.contactEmailDescription}</Span>
+      <span className={tw('textstyle-form-description')}>{translation.contactEmailDescription}</span>
     </LoadingAndErrorComponent>
   )
 }

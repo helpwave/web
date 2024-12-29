@@ -1,6 +1,6 @@
 import type { LabelHTMLAttributes } from 'react'
-import type { LabelType } from '../Span'
-import { Span } from '../Span'
+
+export type LabelType = 'labelSmall' | 'labelMedium' | 'labelBig'
 
 export type LabelProps = {
   /** The text for the label */
@@ -18,9 +18,15 @@ export const Label = ({
   labelType = 'labelSmall',
   ...props
 }: LabelProps) => {
+  const mapping:Record<LabelType, string> = {
+    labelSmall: 'textstyle-label-sm',
+    labelMedium: 'textstyle-label-md',
+    labelBig: 'textstyle-label-lg',
+  }
+
   return (
     <label {...props}>
-      {children ? children : (<Span type={labelType}>{name}</Span>)}
+      {children ? children : (<span className={mapping[labelType]}>{name}</span>)}
     </label>
   )
 }

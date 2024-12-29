@@ -1,7 +1,6 @@
 import { tw, tx } from '../twind'
 import type { AvatarProps, AvatarSize } from './Avatar'
 import { Avatar, avtarSizeMapping } from './Avatar'
-import { Span } from './Span'
 
 export type AvatarGroupProps = {
   avatars: Omit<AvatarProps, 'size'>[],
@@ -35,7 +34,7 @@ export const AvatarGroup = ({
         notDisplayedProfiles > 0 && (
           <div
             className={tx(`truncate ml-[${1 + diameter / 16}px] flex flex-row items-center text-[${diameter / 2}px]`)}>
-            <Span>+ {notDisplayedProfiles}</Span>
+            <span>+ {notDisplayedProfiles}</span>
           </div>
         )
       }

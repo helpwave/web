@@ -1,4 +1,5 @@
 export const textStyles: [string, string][] = [
+  ['textstyle-title-3xl', 'text-5xl font-space font-bold'],
   ['textstyle-title-2xl', 'text-4xl font-space font-bold'],
   ['textstyle-title-xl', 'text-3xl font-space font-bold'],
   ['textstyle-title-lg', 'text-2xl font-space font-bold'],

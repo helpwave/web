@@ -24,9 +24,9 @@ export const Tile = ({
     <div className={tx('flex flex-row gap-x-4 w-full items-center', className)}>
       {prefix}
       <div className={tw('flex flex-col w-full')}>
-        <span className={title.className}>{title.value}</span>
+        <span className={tx(title.className)}>{title.value}</span>
         {!!description &&
-          <span className={description.className ?? tw('textstyle-description')}>{description.value}</span>}
+          <span className={tx(description.className ?? "textstyle-description") }>{description.value}</span>}
       </div>
       {suffix}
     </div>

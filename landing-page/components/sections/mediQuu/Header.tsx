@@ -32,7 +32,7 @@ export const MediQuuHeaderSection = () => {
     <SectionBase backgroundColor="gray">
       <div className={tw('flex flex-row w-full gap-x-4 gap-y-8 mobile:!flex-col-reverse mobile:items-center')}>
         <div className={tw('flex flex-col gap-y-2 desktop:max-w-[50%]')}>
-          <span className={tw('textstyle-title-2xl')}>{translation.title}</span>
+          <span className={tw('textstyle-title-3xl')}>{translation.title}</span>
           <span className={tw('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></span>
         </div>
         <div className={tw('flex flex-row justify-center items-center grow')}>

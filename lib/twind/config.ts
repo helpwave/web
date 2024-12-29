@@ -123,9 +123,9 @@ export const colors: Record<AppColor, ShadedColors> = {
   'hw-label-blue': generateShadingColors({ 400: '#758ECE' }),
   'hw-label-pink': generateShadingColors({ 400: '#CE75A0' }),
   'hw-label-yellow': generateShadingColors({ 400: '#EA8E00' }),
-  'hw-male': generateShadingColors({ 400: '#2761EB' }),
-  'hw-female': generateShadingColors({ 400: '#EC666D' }),
-  'hw-diverse': generateShadingColors({ 400: '#BABABA' }),
+  'hw-male': generateShadingColors({ 50: '#F6FAFF', 100: '#CBE0FF', 200: '#CBE0FF', 400: '#2761EB' }),
+  'hw-female': generateShadingColors({ 50: '#FFF9F9', 100: '#FFDADD', 200: '#FFB8C3', 400: '#EC666D' }),
+  'hw-diverse': generateShadingColors({ 50: '#FBFBFB', 100: '#E4E4E4', 200: '#BABABA', 400: '#000000' }),
 } as const
 
 export const config = defineConfig({

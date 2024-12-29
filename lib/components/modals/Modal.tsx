@@ -5,6 +5,7 @@ import { tx, tw } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
+import { Tooltip } from '../Tooltip'
 import { ModalContext } from './ModalRegister'
 
 type ModalHeaderTranslation = {
@@ -55,10 +56,11 @@ export const ModalHeader = ({
           </span>
         )}
         {!!onCloseClick && (
-          <button className={tw('flex flex-row gap-x-2')} onClick={onCloseClick}>
-            <span className={tw('mobile:hidden')}>{translation.close}</span>
-            <X/>
-          </button>
+          <Tooltip tooltip={translation.close}>
+            <button className={tw('flex flex-row bg-gray-200 hover:bg-gray-300 rounded-md p-1')} onClick={onCloseClick}>
+              <X/>
+            </button>
+          </Tooltip>
         )}
       </div>
       {description ?? (<span className={tw('textstyle-description')}>{descriptionText}</span>)}

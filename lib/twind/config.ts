@@ -119,39 +119,45 @@ export const config = defineConfig({
       },
       screens: screenSizes,
       animation: {
-        'fade': 'fadeOut 3s ease-in-out',
+        'fade': 'fade-out 3s ease-in-out',
         'wave-big-left-up': 'bigLeftUp 1.7s ease-in 0s infinite normal',
         'wave-big-right-down': 'bigRightDown 1.7s ease-in 0s infinite reverse',
         'wave-small-left-up': 'smallLeftUp 1.7s ease-in 0s infinite normal',
         'wave-small-right-down': 'smallRightDown 1.7s ease-in 0s infinite reverse',
+        'tooltip-fade-in': 'fade-in 0.2s ease-in-out forwards',
+        'tooltip-fade-out': 'fade-in 0.2s ease-in-out forwards',
       },
       keyframes: {
-        fadeOut: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'fade-out': {
           '0%': { opacity: '100%' },
           '100%': { opacity: '0%' },
         },
-        bigLeftUp: {
+        'bigLeftUp': {
           '0%': { strokeDashoffset: '1000' },
           '25%': { strokeDashoffset: '1000' },
           '50%': { strokeDashoffset: '0' },
           '75%': { strokeDashoffset: '0' },
           '100%': { strokeDashoffset: '0' },
         },
-        bigRightDown: {
+        'bigRightDown': {
           '0%': { strokeDashoffset: '0' },
           '25%': { strokeDashoffset: '0' },
           '50%': { strokeDashoffset: '0' },
           '75%': { strokeDashoffset: '-1000' },
           '100%': { strokeDashoffset: '-1000' },
         },
-        smallLeftUp: {
+        'smallLeftUp': {
           '0%': { strokeDashoffset: '1000' },
           '25%': { strokeDashoffset: '1000' },
           '50%': { strokeDashoffset: '1000' },
           '75%': { strokeDashoffset: '0' },
           '100%': { strokeDashoffset: '0' },
         },
-        smallRightDown: {
+        'smallRightDown': {
           '0%': { strokeDashoffset: '0' },
           '25%': { strokeDashoffset: '0' },
           '50%': { strokeDashoffset: '-1000' },
@@ -170,6 +176,7 @@ export const config = defineConfig({
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms(), presetTypography()],
   rules: [
     ...textStyles,
+    ['animation-delay-', ({ $$ }) => ({ animationDelay: `${$$}ms` })]
   ]
 }) as unknown as TwindConfig // TODO: twind is being very dumb right here, not my fault
 

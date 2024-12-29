@@ -36,18 +36,18 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
 
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center items-center text-white')}
+      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center text-white')}
       backgroundColor="darkSecondary"
       outerClassName={tw('!pb-0')}
     >
-      <div className={tw('flex flex-col gap-y-2 pb-16 desktop:w-3/5')}>
-        <div className={tw('flex flex-col gap-y-2 mobile:pb-0 mobile:text-center')}>
+      <div className={tw('flex flex-col gap-y-2 pb-16 desktop:w-3/5 justify-center')}>
+        <div className={tw('flex flex-col gap-y-2 mobile:pb-0')}>
           <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
           <span className={tw('textstyle-title-normal')}><MarkdownInterpreter text={translation.description}/></span>
         </div>
         <div
           // DO NOT CHANGE THE GAP. IT IS MANDATORY BY Apple
-          className={tw('flex flex-wrap gap-x-8 gap-y-4 mt-6 mobile:justify-center')}
+          className={tw('flex flex-wrap gap-x-8 gap-y-4 mt-6')}
         >
           <TasksPlaystoreBadge/>
           <TasksAppStoreBadge/>
@@ -58,15 +58,14 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
         </div>
       </div>
       <div
-        // TODO fix image size
-        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full w-2/5 z-10 desktop:min-h-[400px]')}
+        className={tw('flex flex-col items-center justify-end rounded-l-3xl w-2/5 mobile:w-full tablet:min-w-[220px] z-10 max-h-[70vh] min-h-[100%] desktop:min-h-[400px]')}
       >
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={tw('w-fit max-h-[70vh] mobile:-translate-x-[6%]')}
+          className={tw('w-fit h-full max-h-[70vh] mobile:-translate-x-[6%]')}
         />
       </div>
     </SectionBase>

@@ -41,7 +41,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
         src={screenshotURL}
         width={0}
         height={0}
-        className={tx(`object-contain w-full desktop:w-1/2 desktop:scale-125 -rotate-12`)}
+        className={tx(`object-contain w-full desktop:min-w-[40%] desktop:scale-125 -rotate-12`)}
       />
       <div className={tw('flex flex-col gap-y-4')}>
         <Link href={demoURL} target="_blank">

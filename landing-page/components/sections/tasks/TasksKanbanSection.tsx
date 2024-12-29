@@ -46,7 +46,7 @@ export const TasksKanbanSection = ({ overwriteTranslation }: PropsForTranslation
         </div>
       </div>
       <div
-        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[50%] z-10')}
+        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-5/6 min-w-[50%] z-10')}
       >
         <Image
           src={imageUrl}

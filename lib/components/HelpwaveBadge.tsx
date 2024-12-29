@@ -1,4 +1,4 @@
-import {tw, tx} from '@twind/core'
+import { tw, tx } from '@twind/core'
 import { Helpwave } from '../icons/Helpwave'
 import { Tile } from './layout/Tile'
 

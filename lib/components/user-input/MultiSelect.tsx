@@ -100,7 +100,8 @@ export const MultiSelect = <T, >({
   return (
     <div className={tx(className)}>
       {label && (
-        <Label {...label} htmlFor={label.name} className={tx(' mb-1', label.className)} labelType={label.labelType ?? 'labelBig'}/>
+        <Label {...label} htmlFor={label.name} className={tx(' mb-1', label.className)}
+               labelType={label.labelType ?? 'labelBig'}/>
       )}
       <Menu<HTMLDivElement>
         alignment="t_"
@@ -129,25 +130,22 @@ export const MultiSelect = <T, >({
           </div>
         )}
         {filteredOptions.map((option, index) => (
-          <MenuItem key={`item${index}`}>
-            <div
-              className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis flex flex-row gap-x-2',
-                option.className, {
-                  'text-gray-300 cursor-not-allowed': !!option.disabled,
-                  'hover:bg-gray-100 cursor-pointer': !option.disabled,
-                })}
-              onClick={() => {
-                if (!option.disabled) {
-                  onChange(options.map(value => value.value === option.value ? ({
-                    ...option,
-                    selected: !value.selected
-                  }) : value))
-                }
-              }}
-            >
-              <Checkbox checked={option.selected} disabled={option.disabled}/>
-              {option.label}
-            </div>
+          <MenuItem
+            key={`item${index}`}
+            className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis flex flex-row gap-x-2', option.className)}
+            onClick={() => {
+              if (!option.disabled) {
+                onChange(options.map(value => value.value === option.value ? ({
+                  ...option,
+                  selected: !value.selected
+                }) : value))
+              }
+            }}
+            role="menuitemcheckbox"
+            isDisabled={option.disabled}
+          >
+            <Checkbox checked={option.selected} disabled={option.disabled}/>
+            {option.label}
           </MenuItem>
         ))}
       </Menu>

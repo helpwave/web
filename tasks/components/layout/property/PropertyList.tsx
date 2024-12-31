@@ -127,7 +127,7 @@ export const PropertyList = ({
                       addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
                       updateViewRulesMutation.mutate({ subjectId, appendToAlwaysInclude: [property.id] })
                     }}
-                    className={tw('rounded-md cursor-pointer')}
+                    className={tw('rounded-md')}
                   >
                     {property.name}
                   </MenuItem>

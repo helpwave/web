@@ -1,7 +1,7 @@
 import { Span } from '@helpwave/common/components/Span'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
-import { Menu as MenuIcon, X } from 'lucide-react'
+import { ChevronDown, Menu as MenuIcon, X } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
@@ -9,6 +9,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { Chip } from '@helpwave/common/components/ChipList'
+import { tx } from '@twind/core'
 
 const homeURL = '/'
 
@@ -107,11 +108,12 @@ const Header = () => {
 
   return (
     <>
-      <div className={tw('absolute flex flex-row justify-center top-0 w-screen z-[50] bg-hw-grayscale-50 mobile:px-6 tablet:px-12 desktop:px-24')}>
+      <div
+        className={tw('absolute flex flex-row justify-center top-0 w-screen z-[50] bg-hw-grayscale-50 mobile:px-6 tablet:px-12 desktop:px-24')}>
         <nav className={tw('flex pt-2 items-center justify-between w-full max-w-[1200px]')}>
           <Link href={homeURL} className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
-            <Helpwave />
-            <MarkdownInterpreter text={'\\helpwave'} />
+            <Helpwave/>
+            <MarkdownInterpreter text={'\\helpwave'}/>
           </Link>
           <div className={tw('mobile:hidden w-full')}>
             <div className={tw('flex flex-wrap items-center justify-end gap-x-6')}>
@@ -122,42 +124,33 @@ const Header = () => {
               }) => (
                 <div key={name}>
                   {subpage === undefined ? (
-                    <Link href={url}>
-                      <Span className={navigationItemStyle}>
-                        {translation[name]}
-                      </Span>
+                    <Link href={url} className={navigationItemStyle}>
+                      {translation[name]}
                     </Link>
                   ) : (
-                    <Menu<HTMLDivElement>
+                    <Menu<HTMLButtonElement>
                       alignment="tl"
                       trigger={(onClick, ref) => (
-                        <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
-                          <Span className={navigationItemStyle}>
-                            {translation[name]}
-                          </Span>
-                        </div>
+                        <button ref={ref} onClick={onClick} className={tx('flex flex-row gap-x-1/2 items-center', navigationItemStyle)}>
+                          {translation[name]}
+                          <ChevronDown size={24}/>
+                        </button>
                       )}
                       showOnHover={true}
                     >
-                      {subpage.map(({
-                        name: subPageName,
-                        url: subPageUrl,
-                        external: subPageExternal,
-                      }) =>
+                      {subpage.map(({ name: subPageName, url: subPageUrl, external: subPageExternal }) =>
                         (
-                        <Link key={subPageName} className={tw('cursor-pointer')} href={subPageExternal ? subPageUrl : url + subPageUrl}>
-                          <MenuItem alignment="left">
-                            <Span className={navigationItemStyle}>
+                          <Link key={subPageName} href={subPageExternal ? subPageUrl : url + subPageUrl}>
+                            <MenuItem alignment="left" role="none" className={tw(navigationItemStyle)}>
                               {translation[subPageName]}
-                            </Span>
-                          </MenuItem>
-                        </Link>
+                            </MenuItem>
+                          </Link>
                         ))}
                     </Menu>
                   )}
                 </div>
               ))}
-              <Link href="mailto:contact@helpwave.de">
+              <Link href="mailto:contact@helpwave.de" role="link">
                 <Chip
                   variant="fullyRounded"
                   color="black"
@@ -169,8 +162,8 @@ const Header = () => {
             </div>
           </div>
           <button onClick={() => setNavbarOpen(true)} className={tw('desktop:hidden tablet:hidden content-end')}
-            aria-controls="navbar" aria-expanded="false">
-            <MenuIcon size={32} />
+                  aria-controls="navbar" aria-expanded="false">
+            <MenuIcon size={32}/>
           </button>
         </nav>
       </div>
@@ -179,7 +172,7 @@ const Header = () => {
         <div className={tw('absolute w-screen h-screen z-[100] bg-hw-grayscale-50')}>
           <div className={tw('text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
             <button onClick={() => setNavbarOpen(false)} className={tw('mb-5')}>
-              <X size={64} />
+              <X size={64}/>
             </button>
 
             <div className={tw('w-full p-2')}>
@@ -204,10 +197,11 @@ const Header = () => {
                   </Link>
                 ) : (
                   <Menu<HTMLDivElement> alignment="tl" trigger={(onClick, ref) => (
-                    <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none')}>
+                    <div ref={ref} onClick={onClick} className={tw('cursor-pointer select-none flex flex-row gap-x-2 items-center')}>
                       <Span type="heading">
                         {translation[name]}
                       </Span>
+                      <ChevronDown size={32}/>
                     </div>
                   )}>
                     {subpage.map(({
@@ -216,14 +210,14 @@ const Header = () => {
                       external: subPageExternal
                     }) =>
                       (
-                      <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)}
-                        href={subPageExternal ? subPageUrl : url + subPageUrl}>
-                        <MenuItem alignment="left">
-                          <Span type="heading">
-                            {translation[subPageName]}
-                          </Span>
-                        </MenuItem>
-                      </Link>
+                        <Link key={subPageName} className={tw('cursor-pointer')} onClick={() => setNavbarOpen(false)}
+                              href={subPageExternal ? subPageUrl : url + subPageUrl}>
+                          <MenuItem alignment="left">
+                            <Span type="heading">
+                              {translation[subPageName]}
+                            </Span>
+                          </MenuItem>
+                        </Link>
                       ))}
                   </Menu>
                 )}

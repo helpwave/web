@@ -47,6 +47,20 @@ const teamData: Record<string, ProfileProps[]> = {
       ],
       imageClassName: 'w-[230px] h-[200px]'
     },
+    {
+      name: 'Ludwig Maidowski',
+      prefix: 'Dr. med., Dipl.-Jur.',
+      suffix: 'Maître en droit, Paris II',
+      role: 'Chief Legal Officer',
+      roleBadge: 'CLO',
+      tags: ['law', 'doctor', 'product'],
+      imageUrl: imageUrl('ludwig_maidowski'),
+      socials: [
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
+        { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
+      ],
+      imageClassName: 'w-[200px] h-[200px]'
+    },
   ],
   development: [
     {
@@ -101,19 +115,6 @@ const teamData: Record<string, ProfileProps[]> = {
     }
   ],
   medical: [
-    {
-      name: 'Ludwig Maidowski',
-      prefix: 'Dr. med., Dipl.-Jur.',
-      suffix: 'Maître en droit, Paris II',
-      role: 'medical professional & legal',
-      tags: ['law', 'doctor', 'product'],
-      imageUrl: imageUrl('ludwig_maidowski'),
-      socials: [
-        { type: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
-        { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
-      ],
-      imageClassName: 'w-[200px] h-[200px]'
-    },
     {
       name: 'Sophia Ehlers',
       role: 'medical professional',

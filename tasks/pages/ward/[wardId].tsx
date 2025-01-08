@@ -333,9 +333,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
                 <PatientCard
                   bedName={draggedPatient.bed.name}
                   patientName={draggedPatient.bed.patient.name}
-                  unscheduledTasks={draggedPatient.bed.patient.tasksUnscheduled}
-                  inProgressTasks={draggedPatient.bed.patient.tasksInProgress}
-                  doneTasks={draggedPatient.bed.patient.tasksDone}
+                  openTasks={draggedPatient.bed.patient.tasksUnscheduled}
                 />
               )
             )}

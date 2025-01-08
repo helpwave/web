@@ -23,7 +23,6 @@ import {
 } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import {
   useAssignTaskMutation,
-  useSubTaskAddMutation,
   useTaskCreateMutation,
   useTaskQuery,
   useTaskUpdateMutation,
@@ -304,13 +303,10 @@ export const TaskDetailView = ({
     status: initialStatus ?? 'todo'
   })
 
-  const addSubtaskMutation = useSubTaskAddMutation(taskId)
-
   const assignTaskToUserMutation = useAssignTaskMutation()
   const updateTaskMutation = useTaskUpdateMutation()
 
   const createTaskMutation = useTaskCreateMutation(newTask => {
-    newTask.subtasks.forEach(value => addSubtaskMutation.mutate({ ...value, taskId: newTask.id }))
     if (newTask.assignee) {
       assignTaskToUserMutation.mutate({ taskId: newTask.id, userId: newTask.assignee })
     }

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { tw } from '@helpwave/common/twind'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
@@ -52,7 +51,6 @@ export const UserMenu = ({
   const translation = useTranslation(defaultUserMenuTranslations, overwriteTranslation)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const { user, signOut } = useAuth()
-  const router = useRouter()
 
   if (!user) return null
 
@@ -75,27 +73,15 @@ export const UserMenu = ({
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
         </div>
       )}>
-        <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
-        <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem
-          alignment="left">{translation.language}</MenuItem></div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/templates')}>
-          <MenuItem alignment="left">{translation.taskTemplates}</MenuItem>
-        </div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/properties')}>
-          <MenuItem alignment="left">{translation.properties}</MenuItem>
-        </div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/organizations')}>
-          <MenuItem alignment="left">{translation.organizations}</MenuItem>
-        </div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/invitations')}>
-          <MenuItem alignment="left">{translation.invitations}</MenuItem>
-        </div>
-        <div
-          className={tw('cursor-pointer text-hw-negative-400 hover:text-hw-negative-500')}
-          onClick={() => signOut()}
-        >
-          <MenuItem alignment="left">{translation.signOut}</MenuItem>
-        </div>
+        <Link href={settingsURL} target="_blank"><MenuItem role="none">{translation.profile}</MenuItem></Link>
+        <MenuItem onClick={() => setLanguageModalOpen(true)}>{translation.language}</MenuItem>
+        <Link href="/templates"><MenuItem role="none">{translation.taskTemplates}</MenuItem></Link>
+        <Link href="/properties"><MenuItem role="none">{translation.properties}</MenuItem></Link>
+        <Link href="/organizations"><MenuItem role="none">{translation.organizations}</MenuItem></Link>
+        <Link href="/invitations"><MenuItem role="none">{translation.invitations}</MenuItem></Link>
+        <MenuItem className={tw('text-hw-negative-400 hover:text-hw-negative-500')} onClick={() => signOut()}>
+          {translation.signOut}
+        </MenuItem>
       </Menu>
     </div>
   )

@@ -15,7 +15,7 @@ type TasksDemoSectionTranslation = {
   feature1: string,
   feature2: string,
   feature3: string,
-  feature4: string
+  feature4: string,
 }
 
 const defaultTasksDemoSectionTranslation: Record<Languages, TasksDemoSectionTranslation> = {

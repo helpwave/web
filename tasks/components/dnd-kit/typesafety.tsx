@@ -10,18 +10,18 @@ import type {
 } from '@dnd-kit/core'
 
 export type UseDroppableArguments<DroppableData> = Omit<UseDroppableArgumentsUnsafeUnsafe, 'data'> & {
-  data: DroppableData
+  data: DroppableData,
 }
 
 export type UseDraggableArguments<DraggableData> = Omit<UseDraggableArgumentsUnsafe, 'data'> & {
-  data: DraggableData
+  data: DraggableData,
 }
 
 export type Active<DraggableData> = Omit<ActiveUnsafe, 'data'> & {
-  data: React.MutableRefObject<DraggableData | undefined>
+  data: React.MutableRefObject<DraggableData | undefined>,
 }
 export type Over<DroppableData> = Omit<OverUnsafe, 'data'> & {
-  data: React.MutableRefObject<DroppableData | undefined>
+  data: React.MutableRefObject<DroppableData | undefined>,
 }
 
 export type DragEvent<DraggableData, DroppableData> = {
@@ -29,7 +29,7 @@ export type DragEvent<DraggableData, DroppableData> = {
   active: Active<DraggableData>,
   collisions: Collision[] | null,
   delta: Translate,
-  over: Over<DroppableData> | null
+  over: Over<DroppableData> | null,
 }
 
 export type DragStartEvent<DraggableData, DroppableData> = Pick<DragEvent<DraggableData, DroppableData>, 'active'>
@@ -46,7 +46,7 @@ export type DndContextTypesafeProps<DraggableData, DroppableData> = Omit<
   onDragMove?(event: DragMoveEvent<DraggableData, DroppableData>): void,
   onDragOver?(event: DragOverEvent<DraggableData, DroppableData>): void,
   onDragEnd?(event: DragEndEvent<DraggableData, DroppableData>): void,
-  onDragCancel?(event: DragCancelEvent<DraggableData, DroppableData>): void
+  onDragCancel?(event: DragCancelEvent<DraggableData, DroppableData>): void,
 }
 
 export const DndContext = <DraggableData, DroppableData>(props: DndContextTypesafeProps<DraggableData, DroppableData>) => {
@@ -56,7 +56,7 @@ export const DndContext = <DraggableData, DroppableData>(props: DndContextTypesa
 
 type UseDraggableReturnValue<DraggableData, DroppableData> = Omit<ReturnType<typeof useDraggableUnsafe>, 'active' | 'over'> & {
   active: Active<DraggableData> | null,
-  over: Over<DroppableData> | null
+  over: Over<DroppableData> | null,
 }
 
 export const useDraggable = <DraggableData, DroppableData>(props: UseDraggableArguments<DraggableData>) =>
@@ -65,7 +65,7 @@ export const useDraggable = <DraggableData, DroppableData>(props: UseDraggableAr
 
 type UseDroppableReturnValue<DraggableData, DroppableData> = Omit<ReturnType<typeof useDroppableUnsafe>, 'active' | 'over'> & {
   active: Active<DraggableData> | null,
-  over: Over<DroppableData> | null
+  over: Over<DroppableData> | null,
 }
 
 export const useDroppable = <DraggableData, DroppableData>(props: UseDroppableArguments<DroppableData>) =>

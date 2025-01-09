@@ -5,7 +5,7 @@ import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 
 type ErrorComponentTranslation = {
-  errorOccurred: string
+  errorOccurred: string,
 }
 
 const defaultErrorComponentTranslation: Record<Languages, ErrorComponentTranslation> = {
@@ -19,7 +19,7 @@ const defaultErrorComponentTranslation: Record<Languages, ErrorComponentTranslat
 
 export type ErrorComponentProps = {
   errorText?: string,
-  classname?: string
+  classname?: string,
 }
 
 /**

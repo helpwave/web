@@ -1,4 +1,4 @@
-import { Preview } from '@storybook/react'
+import type { Preview } from '@storybook/react'
 import withNextApp from '../twind/next/app'
 import config from '../twind/config'
 import { Inter, Space_Grotesk } from 'next/font/google'

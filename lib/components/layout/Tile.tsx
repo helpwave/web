@@ -9,7 +9,7 @@ export type TileProps = {
   description?: { value: string, className?: string, type?: SpanType },
   prefix?: ReactNode,
   suffix?: ReactNode,
-  className?: string
+  className?: string,
 }
 
 /**
@@ -38,14 +38,14 @@ export const Tile = ({
 type ImageLocation = 'prefix' | 'suffix'
 type ImageSize = {
   width: number,
-  height: number
+  height: number,
 }
 
 export type TileWithImageProps = Omit<TileProps, 'suffix' | 'prefix'> & {
   url: string,
   imageLocation?: ImageLocation,
   imageSize?: ImageSize,
-  imageClassName?: string
+  imageClassName?: string,
 }
 
 /**

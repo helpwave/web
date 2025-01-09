@@ -6,7 +6,7 @@ import { Span } from './Span'
 export type AvatarGroupProps = {
   avatars: Omit<AvatarProps, 'size'>[],
   maxShownProfiles?: number,
-  size?: AvatarSize
+  size?: AvatarSize,
 }
 
 /**

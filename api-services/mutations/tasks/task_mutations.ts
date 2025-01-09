@@ -2,14 +2,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { noop } from '@helpwave/common/util/noop'
 import {
   AssignTaskRequest,
-  UnassignTaskRequest,
+  CreateSubtaskRequest,
   CreateTaskRequest,
-  GetTaskRequest,
-  UpdateTaskRequest,
-  UpdateSubtaskRequest,
   DeleteSubtaskRequest,
+  GetTaskRequest,
   GetTasksByPatientRequest,
-  CreateSubtaskRequest
+  UnassignTaskRequest,
+  UpdateSubtaskRequest,
+  UpdateTaskRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import type {
   CreateSubTaskDTO,
@@ -28,7 +28,7 @@ import { GRPCMapper } from './util'
 
 type TaskAssignmentRequestProps = {
   taskId: string,
-  userId: string
+  userId: string,
 }
 
 export const useTaskQuery = (taskId: string | undefined) => {
@@ -124,8 +124,8 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       return newTask
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks, QueryKeys.patients]).then()
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks, QueryKeys.patients]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
     }
   })
 }
@@ -148,8 +148,8 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       return updateTask.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).then()
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
     }
   })
 }
@@ -198,7 +198,7 @@ export const useSubTaskAddMutation = (taskId: string | undefined, callback: (sub
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }
@@ -226,7 +226,7 @@ export const useSubTaskUpdateMutation = (taskId?: string, callback: (subtask: Su
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }
@@ -244,7 +244,7 @@ export const useSubTaskDeleteMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }
@@ -269,7 +269,7 @@ export const useAssignTaskMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }
@@ -294,7 +294,7 @@ export const useUnassignTaskMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }

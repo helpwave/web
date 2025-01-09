@@ -21,7 +21,7 @@ import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type PersonalTaskTemplateTranslation = {
   taskTemplates: string,
-  personalTaskTemplates: string
+  personalTaskTemplates: string,
 }
 
 const defaultPersonalTaskTemplateTranslations = {
@@ -40,7 +40,7 @@ export type TaskTemplateFormType = {
   hasChanges: boolean,
   template: TaskTemplateDTO,
   wardId?: string,
-  deletedSubtaskIds?: string[]
+  deletedSubtaskIds?: string[],
 }
 
 export type TaskTemplateContextState = {
@@ -48,7 +48,7 @@ export type TaskTemplateContextState = {
   template: TaskTemplateDTO,
   hasChanges: boolean,
   wardId?: string,
-  deletedSubtaskIds?: string[]
+  deletedSubtaskIds?: string[],
 }
 
 export const emptyTaskTemplate: TaskTemplateDTO = {
@@ -61,7 +61,7 @@ export const emptyTaskTemplate: TaskTemplateDTO = {
 
 export type TaskTemplateContextType = {
   state: TaskTemplateFormType,
-  updateContext: (context: TaskTemplateContextState) => void
+  updateContext: (context: TaskTemplateContextState) => void,
 }
 
 export const taskTemplateContextState = {

@@ -9,7 +9,7 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
 type TextPropertyTranslation = {
-  value: string
+  value: string,
 }
 
 const defaultTextPropertyTranslation: Record<Languages, TextPropertyTranslation> = {
@@ -24,7 +24,7 @@ const defaultTextPropertyTranslation: Record<Languages, TextPropertyTranslation>
 export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
   value?: string,
   onChange?: (value: string) => void,
-  onEditComplete?: (value: string) => void
+  onEditComplete?: (value: string) => void,
 }
 
 /**

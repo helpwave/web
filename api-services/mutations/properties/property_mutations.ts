@@ -140,7 +140,7 @@ export const usePropertyCreateMutation = (callback: (property: Property) => void
       return newValue
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.properties]).then()
+      queryClient.invalidateQueries([QueryKeys.properties]).catch(console.error)
     }
   })
 }
@@ -187,7 +187,7 @@ export const usePropertyUpdateMutation = (callback: (property: Property) => void
       return property
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.properties]).then()
+      queryClient.invalidateQueries([QueryKeys.properties]).catch(console.error)
     }
   })
 }
@@ -196,7 +196,7 @@ type ChangeSelectOptions = {
   propertyId: string,
   add: SelectOption[],
   update: SelectOption[],
-  remove: string[]
+  remove: string[],
 }
 export const usePropertyChangeSelectOptionMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
@@ -235,7 +235,7 @@ export const usePropertyChangeSelectOptionMutation = (callback: () => void = noo
       callback()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.properties]).then()
+      queryClient.invalidateQueries([QueryKeys.properties]).catch(console.error)
     }
   })
 }

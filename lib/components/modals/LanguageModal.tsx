@@ -15,7 +15,7 @@ const languageDetails = {
 
 type LanguageModalTranslation = {
   message: string,
-  done: string
+  done: string,
 }
 
 const defaultConfirmDialogTranslation = {
@@ -30,7 +30,7 @@ const defaultConfirmDialogTranslation = {
 }
 
 type LanguageModalProps = ModalProps & {
-    onDone: () => void
+    onDone: () => void,
 }
 
 /**

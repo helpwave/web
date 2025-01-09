@@ -12,7 +12,7 @@ type SocialType = 'mail' | 'github' | 'linkedin' | 'website' | 'medium'
 export type SocialIconProps = {
   type: SocialType,
   url: string,
-  size?: number
+  size?: number,
 }
 
 /**
@@ -63,7 +63,7 @@ export type ProfileProps = HTMLAttributes<HTMLDivElement> & {
   tags?: string[],
   info?: string,
   socials?: SocialIconProps[],
-  imageClassName?: string
+  imageClassName?: string,
 }
 
 /**

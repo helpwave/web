@@ -1,22 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+  AssignBedRequest,
   CreatePatientRequest,
   DischargePatientRequest,
-  UpdatePatientRequest,
-  AssignBedRequest,
-  UnassignBedRequest,
-  ReadmitPatientRequest,
-  GetRecentPatientsRequest,
-  GetPatientDetailsRequest,
-  GetPatientsByWardRequest,
   GetPatientAssignmentByWardRequest,
-  GetPatientListRequest
+  GetPatientDetailsRequest,
+  GetPatientListRequest,
+  GetPatientsByWardRequest,
+  GetRecentPatientsRequest,
+  ReadmitPatientRequest,
+  UnassignBedRequest,
+  UpdatePatientRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_pb'
 import { noop } from '@helpwave/common/util/noop'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import type {
-  PatientDetailsDTO, PatientDTO,
+  PatientDTO, PatientDetailsDTO,
   PatientListDTO,
   PatientMinimalDTO,
   PatientWithBedIdDTO,
@@ -273,8 +273,8 @@ export const useAssignBedMutation = (callback: (bed: BedWithPatientId) => void =
       return bed
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.rooms]).then()
-      queryClient.refetchQueries([QueryKeys.patients]).then()
+      queryClient.refetchQueries([QueryKeys.rooms]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.patients]).catch(console.error)
     }
   })
 }
@@ -296,8 +296,8 @@ export const useUnassignMutation = (callback: () => void = noop) => {
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([QueryKeys.patients]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.patients]).catch(console.error)
     }
   })
 }
@@ -358,8 +358,8 @@ export const useReadmitPatientMutation = (callback: (patientId: string) => void 
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([QueryKeys.patients]).then()
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.patients]).catch(console.error)
     }
   })
 }

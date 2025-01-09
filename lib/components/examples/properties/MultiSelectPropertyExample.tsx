@@ -4,7 +4,7 @@ import type { MultiSelectPropertyProps } from '../../properties/MultiSelectPrope
 import { MultiSelectProperty } from '../../properties/MultiSelectProperty'
 
 export type MultiSelectPropertyExample = Omit<MultiSelectPropertyProps<string>, 'onChange' | 'onRemove' | 'search' | 'selectedDisplay' > & {
-  enableSearch: boolean
+  enableSearch: boolean,
 }
 
 /**

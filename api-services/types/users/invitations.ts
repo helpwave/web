@@ -6,14 +6,14 @@ export type InvitationWithOrganizationId = {
   id: string,
   email: string,
   organizationId: string,
-  state: InvitationState
+  state: InvitationState,
 }
 
 export type Invitation = {
   id: string,
   email: string,
   organization: OrganizationDisplayableDTO,
-  state: InvitationState
+  state: InvitationState,
 }
 
 export type InviteMemberType = { email: string, organizationId?: string }

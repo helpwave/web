@@ -6,7 +6,7 @@ import { Page } from '@/components/Page'
 import { StorySliderSection } from '@/components/sections/story/StoriesSliderSection'
 
 type StoryTranslation = {
-  title: string
+  title: string,
 }
 
 const defaultStoryTranslation: Record<Languages, StoryTranslation> = {

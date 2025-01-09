@@ -16,7 +16,7 @@ import { Label } from './Label'
 type MultiSelectTranslation = {
   select: string,
   search: string,
-  selected: string
+  selected: string,
 }
 
 const defaultMultiSelectTranslation: Record<Languages, MultiSelectTranslation> = {
@@ -38,12 +38,12 @@ export type MultiSelectOption<T> = {
   value: T,
   selected: boolean,
   disabled?: boolean,
-  className?: string
+  className?: string,
 }
 
 export type SearchProps<T> = {
   initialSearch?: string,
-  searchMapping: (value: MultiSelectOption<T>) => string[]
+  searchMapping: (value: MultiSelectOption<T>) => string[],
 }
 
 export type MultiSelectProps<T> = {
@@ -53,13 +53,13 @@ export type MultiSelectProps<T> = {
   disabled?: boolean,
   selectedDisplay?: (props: {
     items: MultiSelectOption<T>[],
-    disabled: boolean
+    disabled: boolean,
   }) => ReactNode,
   label?: LabelProps,
   hintText?: string,
   showDisabledOptions?: boolean,
   className?: string,
-  triggerClassName?: string
+  triggerClassName?: string,
 }
 
 /**

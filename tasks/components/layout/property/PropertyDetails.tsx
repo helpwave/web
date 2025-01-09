@@ -28,7 +28,7 @@ type PropertyDetailsTranslation = {
   archivePropertyDialogTitle: string,
   archivePropertyDialogDescription: string,
   createProperty: string,
-  newEntry: string
+  newEntry: string,
 }
 
 const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTranslation> = {

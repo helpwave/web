@@ -18,7 +18,7 @@ type UserMenuTranslation = {
   taskTemplates: string,
   invitations: string,
   organizations: string,
-  properties: string
+  properties: string,
 }
 
 const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {

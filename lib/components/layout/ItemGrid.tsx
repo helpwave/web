@@ -5,7 +5,7 @@ import { Check } from 'lucide-react'
 type ItemGridProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   children: ReactNode[],
   icon?: ReactNode,
-  columns?: number
+  columns?: number,
 }
 
 const defaultIcon = (

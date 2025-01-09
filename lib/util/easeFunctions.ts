@@ -3,7 +3,7 @@ import { clamp } from './math'
 export type EaseFunction = (t: number) => number
 
 export class EaseFunctions {
-  static cubicBezierGeneric(x1: number, y1: number, x2: number, y2: number): {x: EaseFunction, y: EaseFunction} {
+  static cubicBezierGeneric(x1: number, y1: number, x2: number, y2: number): { x: EaseFunction, y: EaseFunction } {
     // Calculate the x and y coordinates using the cubic Bézier formula
     const cx = 3 * x1
     const bx = 3 * (x2 - x1) - cx

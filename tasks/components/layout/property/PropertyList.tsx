@@ -27,7 +27,7 @@ import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
 
 type PropertyListTranslation = {
   properties: string,
-  addProperty: string
+  addProperty: string,
 }
 
 const defaultPropertyListTranslation: Record<Languages, PropertyListTranslation> = {
@@ -43,7 +43,7 @@ const defaultPropertyListTranslation: Record<Languages, PropertyListTranslation>
 
 export type PropertyListProps = {
   subjectId: string,
-  subjectType: SubjectType
+  subjectType: SubjectType,
 }
 
 /**

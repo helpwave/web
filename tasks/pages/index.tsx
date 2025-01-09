@@ -21,7 +21,7 @@ import { StagingDisclaimerModal } from '@/components/modals/StagingDisclaimerMod
 const config = getConfig()
 
 type DashboardTranslation = {
-  dashboard: string
+  dashboard: string,
 }
 
 const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
@@ -34,7 +34,7 @@ const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
 }
 
 type DashboardServerSideProps = {
-  jsonFeed: unknown
+  jsonFeed: unknown,
 }
 
 export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = async () => {

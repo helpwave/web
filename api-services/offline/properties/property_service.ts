@@ -1,12 +1,12 @@
 import { PropertyServicePromiseClient } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_grpc_web_pb'
 import type {
+  CreatePropertyRequest,
   GetPropertiesRequest,
-  GetPropertyRequest,
-  CreatePropertyRequest, UpdatePropertyRequest
+  GetPropertyRequest, UpdatePropertyRequest
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
 import {
-  GetPropertiesResponse, GetPropertyResponse
-  , CreatePropertyResponse
+  CreatePropertyResponse, GetPropertiesResponse
+  , GetPropertyResponse
   , UpdatePropertyResponse
 } from '@helpwave/proto-ts/services/property_svc/v1/property_svc_pb'
 import type { Metadata } from 'grpc-web'

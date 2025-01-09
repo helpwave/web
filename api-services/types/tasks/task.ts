@@ -1,11 +1,11 @@
 export type SubTaskDTO = {
   id: string,
   name: string,
-  isDone: boolean
+  isDone: boolean,
 }
 
 export type CreateSubTaskDTO = SubTaskDTO & {
-  taskId?: string
+  taskId?: string,
 }
 
 export type TaskStatus = 'done' | 'inProgress' | 'todo'
@@ -20,7 +20,7 @@ export type TaskDTO = {
   dueDate?: Date,
   createdAt?: Date,
   creatorId?: string,
-  isPublicVisible: boolean
+  isPublicVisible: boolean,
 }
 
 export const emptyTask: TaskDTO = {
@@ -35,7 +35,7 @@ export const emptyTask: TaskDTO = {
 export type TaskMinimalDTO = {
   id: string,
   name: string,
-  status: TaskStatus
+  status: TaskStatus,
 }
 
 export type SortedTasks = Record<TaskStatus, TaskDTO[]>

@@ -9,7 +9,7 @@ export type TeamMemberProps = {
   pictureURL: string | undefined,
   role: string,
   tags: string[],
-  socials: {name: string, url: string}[] | undefined
+  socials: { name: string, url: string }[] | undefined,
 }
 
 const TeamMember = ({

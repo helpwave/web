@@ -10,7 +10,7 @@ import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
 import { useUserQuery } from '@helpwave/api-services/mutations/users/user_mutations'
 
 type TaskCardTranslation = {
-  assigned: string
+  assigned: string,
 }
 
 const defaultTaskCardTranslations: Record<Languages, TaskCardTranslation> = {
@@ -23,7 +23,7 @@ const defaultTaskCardTranslations: Record<Languages, TaskCardTranslation> = {
 }
 
 export type TaskCardProps = CardProps & {
-  task: TaskDTO
+  task: TaskDTO,
 }
 
 /**

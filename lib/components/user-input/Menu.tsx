@@ -1,6 +1,7 @@
-import { useRef, useState, type PropsWithChildren, type ReactNode, type RefObject, useEffect } from 'react'
+import { useRef, type PropsWithChildren, type ReactNode, type RefObject } from 'react'
 import { tw, tx } from '../../twind'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
+import { useHoverState } from '../../hooks/useHoverState'
 
 type MenuProps<T> = PropsWithChildren<{
   trigger: (onClick: () => void, ref: RefObject<T>) => ReactNode,
@@ -9,13 +10,13 @@ type MenuProps<T> = PropsWithChildren<{
    */
   alignment?: 'tl' | 'tr' | 'bl' | 'br' | '_l' | '_r' | 't_' | 'b_',
   showOnHover?: boolean,
-  menuClassName?: string
+  menuClassName?: string,
 }>
 
 export type MenuItemProps = {
   onClick?: () => void,
   alignment?: 'left' | 'right',
-  className?: string
+  className?: string,
 }
 const MenuItem = ({
   children,
@@ -45,43 +46,18 @@ const Menu = <T extends HTMLElement>({
   showOnHover = false,
   menuClassName = '',
 }: MenuProps<T>) => {
-  const [open, setOpen] = useState(false)
-  const [timer, setTimer] = useState<NodeJS.Timeout>()
+  const { isHovered: isOpen, setIsHovered: setIsOpen, handlers } = useHoverState({ isDisabled: !showOnHover })
   const triggerRef = useRef<T>(null)
   const menuRef = useRef<HTMLDivElement>(null)
-  useOutsideClick([triggerRef, menuRef], () => setOpen(false))
-
-  const handleHover = () => {
-    if (showOnHover) {
-      clearTimeout(timer)
-      setOpen(true)
-    }
-  }
-
-  const handleLeaveHover = () => {
-    if (showOnHover) {
-      setTimer(setTimeout(() => {
-        setOpen(false)
-      }, 200))
-    }
-  }
-
-  useEffect(() => {
-    if (timer) {
-      return () => {
-        clearTimeout(timer)
-      }
-    }
-  })
+  useOutsideClick([triggerRef, menuRef], () => setIsOpen(false))
 
   return (
     <div
       className={tw('relative')}
-      onMouseOver={handleHover}
-      onMouseLeave={handleLeaveHover}
+      {...handlers}
     >
-      {trigger(() => setOpen(!open), triggerRef)}
-      {open ? (
+      {trigger(() => setIsOpen(!isOpen), triggerRef)}
+      {isOpen ? (
         <div ref={menuRef} onClick={e => e.stopPropagation()}
              className={tx('absolute top-full mt-1 py-2 w-60 rounded-lg bg-white ring-1 ring-slate-900/5 text-sm leading-6 font-semibold text-slate-700 shadow-md z-[1]', {
                '    top-[8px]': alignment[0] === 't',

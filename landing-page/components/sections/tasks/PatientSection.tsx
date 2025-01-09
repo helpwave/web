@@ -11,7 +11,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type PatientSectionTranslation = {
   title: string,
   description: string,
-  patients: string
+  patients: string,
 }
 
 const defaultPatientSectionTranslation: Record<Languages, PatientSectionTranslation> = {
@@ -33,18 +33,19 @@ export const PatientSection = ({ overwriteTranslation }: PropsForTranslation<Pat
 
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:!flex-wrap w-full gap-x-32 gap-y-8 justify-between mobile:justify-center items-center')}
+      outerClassName={tw('tablet:pb-0 desktop:pb-0')}
+      className={tw('flex flex-row mobile:!flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
       backgroundColor="gray"
     >
       <div
-        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full w-2/5 z-10')}
+        className={tw('flex flex-row items-end justify-center rounded-l-3xl mobile:w-full w-2/5 z-10 min-w-[250px]')}
       >
         <Image
           src={imageUrl}
           alt=""
-          width={0}
-          height={0}
-          className={tw('w-fit max-h-[70vh]')}
+          width={371}
+          height={649}
+          className={tw('max-h-[70vh]')}
         />
       </div>
       <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>

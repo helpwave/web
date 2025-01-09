@@ -10,7 +10,7 @@ import { Input } from './user-input/Input'
 
 type SearchableListTranslation = {
   search: string,
-  nothingFound: string
+  nothingFound: string,
 }
 
 const defaultSearchableListTranslation: Record<Languages, SearchableListTranslation> = {
@@ -29,7 +29,7 @@ export type SearchableListProps<T> = {
   initialSearch?: string,
   searchMapping: (value: T) => string[],
   itemMapper: (value: T) => ReactNode,
-  className?: string
+  className?: string,
 }
 
 /**

@@ -6,11 +6,10 @@ import { useTranslation } from '../hooks/useTranslation'
 import { Chip } from './ChipList'
 import { Span } from './Span'
 
-const textImageColor = ['primary', 'secondary', 'secondaryDark', 'red'] as const
-type TextImageColor = typeof textImageColor[number]
+type TextImageColor = 'primary'| 'secondary'| 'secondaryDark'| 'red'
 
 type TextImageTranslation = {
-  showMore: string
+  showMore: string,
 }
 
 const defaultTextImageTranslation: Record<Languages, TextImageTranslation> = {
@@ -30,7 +29,7 @@ export type TextImageProps = {
   color?: TextImageColor,
   badge?: string,
   contentClassName?: string,
-  className?: string
+  className?: string,
 }
 
 /**

@@ -4,7 +4,7 @@ import { Span } from '@helpwave/common/components/Span'
 
 type BedInRoomIndicatorTranslation = {
   bed: string,
-  in: string
+  in: string,
 }
 
 const defaultBedInRoomIndicatorTranslation = {
@@ -27,7 +27,7 @@ export type BedInRoomIndicatorProps = {
   /*
    Omitting the room name will hide the label above the indicator
    */
-  roomName?: string
+  roomName?: string,
 }
 
 /**

@@ -1,7 +1,7 @@
 export type FormField<T = string|number> = {
   objectTypeId: string,
   name: string,
-  value: T
+  value: T,
 }
 
 export const submitHubSpotForm = (portalId: string, formId: string, formFields: FormField[]) => {

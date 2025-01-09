@@ -6,7 +6,7 @@ import { PillLabelBox } from '../pill/PillLabelBox'
 import { EditCard, type EditCardProps } from './EditCard'
 
 export type WardCardProps = EditCardProps & {
-  ward: WardOverviewDTO
+  ward: WardOverviewDTO,
 }
 
 /**

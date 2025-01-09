@@ -18,7 +18,7 @@ type StorySliderSectionTranslation = {
   title3: string,
   description1: string,
   description2: string,
-  description3: string
+  description3: string,
 }
 
 const defaultStorySliderSectionTranslation: Record<Languages, StorySliderSectionTranslation> = {
@@ -94,7 +94,7 @@ export const StorySliderSection = () => {
 
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={tw('!px-0')}>
-      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} autoLoopingTimeOut={15000}>
+      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} autoLoopingTimeOut={15000} blurColor="hw-grayscale-50">
         {items.map((value, index) => (
           <div key={index} className={tw('px-[2.5%] h-full')}>
             <TextImage {...value} className={tw('h-full overflow-hidden')}/>

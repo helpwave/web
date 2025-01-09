@@ -13,7 +13,7 @@ type PropertyDetailsRulesTranslation = {
   importance: string,
   importanceDescription: string,
   alwaysVisible: string,
-  alwaysVisibleDescription: string
+  alwaysVisibleDescription: string,
 }
 
 const defaultPropertyDetailsRulesTranslation: Record<Languages, PropertyDetailsRulesTranslation> = {
@@ -39,7 +39,7 @@ export type PropertyDetailsRulesProps = {
   value: PropertyRules,
   onChange: (value: PropertyRules) => void,
   onEditComplete: (value: PropertyRules) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>
+  inputGroupProps?: Omit<InputGroupProps, 'title'>,
 }
 
 /**

@@ -70,9 +70,9 @@ export const useBedCreateMutation = () => {
       return { id: res.getId(), name: bed.name }
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.beds]).then()
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([QueryKeys.wards]).then()
+      queryClient.refetchQueries([QueryKeys.beds]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.wards]).catch(console.error)
     },
   })
 }
@@ -97,8 +97,8 @@ export const useBedUpdateMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries([APIServices.bed]).then()
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([APIServices.bed]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
     },
   })
 }
@@ -121,9 +121,9 @@ export const useBedDeleteMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries([APIServices.bed]).then()
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
-      queryClient.refetchQueries([QueryKeys.wards]).then()
+      queryClient.refetchQueries([APIServices.bed]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.wards]).catch(console.error)
     },
   })
 }

@@ -4,7 +4,7 @@ import { Tile } from '../layout/Tile'
 
 export type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix'> & {
   prefix: boolean,
-  suffix: boolean
+  suffix: boolean,
 }
 
 /**

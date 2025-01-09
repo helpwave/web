@@ -12,7 +12,7 @@ export type PageProps = HTMLAttributes<HTMLDivElement> & {
    * An addition to the page title used to differentiate subpages
    */
   pageTitleAddition: string | undefined,
-  outerClassName?: string
+  outerClassName?: string,
 }
 
 /**

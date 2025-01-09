@@ -16,7 +16,7 @@ export type TextareaProps = {
   onChange?: (text: string) => void,
   disclaimer?: string,
   onEditCompleted?: (text: string) => void,
-  defaultStyle?: boolean
+  defaultStyle?: boolean,
 } & Omit<TextareaHTMLAttributes<Element>, 'id' | 'onChange'>
 
 /**

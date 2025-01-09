@@ -20,7 +20,7 @@ import { ReSignInModal } from '@/components/modals/ReSignInModal'
 type UserInvitationListTranslation = {
   accept: string,
   decline: string,
-  organization: string
+  organization: string,
 }
 
 const defaultUserInvitationListTranslation: Record<Languages, UserInvitationListTranslation> = {

@@ -101,7 +101,7 @@ export const useWardUpdateMutation = (organisationId?: string, callback: (ward: 
       callback(ward)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.wards]).then()
+      queryClient.invalidateQueries([QueryKeys.wards]).catch(console.error)
     }
   })
 }
@@ -121,7 +121,7 @@ export const useWardCreateMutation = (organisationId?: string, callback: (ward: 
       callback(newWard)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.wards]).then()
+      queryClient.invalidateQueries([QueryKeys.wards]).catch(console.error)
     }
   })
 }
@@ -137,7 +137,7 @@ export const useWardDeleteMutation = (organisationId?: string, callback: () => v
       callback()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.wards]).then()
+      queryClient.invalidateQueries([QueryKeys.wards]).catch(console.error)
     }
   })
 }

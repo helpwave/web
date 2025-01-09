@@ -6,10 +6,11 @@ import { tx, tw } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
+import { Tooltip } from '../Tooltip'
 import { ModalContext } from './ModalRegister'
 
 type ModalHeaderTranslation = {
-  close: string
+  close: string,
 }
 
 const defaultModalHeaderTranslation: Record<Languages, ModalHeaderTranslation> = {
@@ -30,7 +31,7 @@ export type ModalHeaderProps = {
   /** The description of the Modal. If you want to only set the text use `descriptionText` instead */
   description?: ReactNode,
   /** The description text of the Modal. If you want to set a custom description use `description` instead */
-  descriptionText?: string
+  descriptionText?: string,
 }
 
 /**
@@ -56,10 +57,11 @@ export const ModalHeader = ({
           </Span>
         )}
         {!!onCloseClick && (
-          <button className={tw('flex flex-row gap-x-2')} onClick={onCloseClick}>
-            <Span className={tw('mobile:hidden')}>{translation.close}</Span>
-            <X/>
-          </button>
+          <Tooltip tooltip={translation.close}>
+            <button className={tw('flex flex-row bg-gray-200 hover:bg-gray-300 rounded-md p-1')} onClick={onCloseClick}>
+              <X/>
+            </button>
+          </Tooltip>
         )}
       </div>
       {description ?? (<Span type="description">{descriptionText}</Span>)}
@@ -74,7 +76,7 @@ export type ModalProps = {
   isOpen: boolean,
   onBackgroundClick?: MouseEventHandler<HTMLDivElement>,
   backgroundClassName?: string,
-  modalClassName?: string
+  modalClassName?: string,
 } & ModalHeaderProps
 
 /**

@@ -3,7 +3,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 
 type BedInRoomIndicatorTranslation = {
   bed: string,
-  in: string
+  in: string,
 }
 
 const defaultBedInRoomIndicatorTranslation = {
@@ -26,7 +26,7 @@ export type BedInRoomIndicatorProps = {
   /*
    Omitting the room name will hide the label above the indicator
    */
-  roomName?: string
+  roomName?: string,
 }
 
 /**

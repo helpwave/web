@@ -10,7 +10,7 @@ import { PropertyBase } from './PropertyBase'
 
 type CheckboxPropertyTranslation = {
   yes: string,
-  no: string
+  no: string,
 }
 
 const defaultCheckboxPropertyTranslation: Record<Languages, CheckboxPropertyTranslation> = {
@@ -26,7 +26,7 @@ const defaultCheckboxPropertyTranslation: Record<Languages, CheckboxPropertyTran
 
 export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'|'onRemove'> & {
   value?: boolean,
-  onChange?: (value: boolean) => void
+  onChange?: (value: boolean) => void,
 }
 
 /**

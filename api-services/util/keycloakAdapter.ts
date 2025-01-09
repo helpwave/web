@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-/* eslint-disable */
+
 
 /**
  * keycloakAdapter.ts is adopted from https://github.com/keycloak/keycloak/blob/cdfd46f19110061f7783161c389365c9da844955/js/libs/keycloak-js/src/keycloak.js#L1312

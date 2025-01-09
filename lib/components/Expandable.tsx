@@ -13,7 +13,7 @@ export type ExpandableProps = PropsWithChildren<{
    */
   clickOnlyOnHeader?: boolean,
   className?: string,
-  headerClassName?: string
+  headerClassName?: string,
 }>
 
 /**

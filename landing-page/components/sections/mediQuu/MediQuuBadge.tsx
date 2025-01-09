@@ -5,7 +5,7 @@ import { tw } from '@helpwave/common/twind'
 import Image from 'next/image'
 
 type MediQuuBadgeTranslation = {
-  previously: string
+  previously: string,
 }
 
 const defaultMediQuuBadgeTranslation: Record<Languages, MediQuuBadgeTranslation> = {

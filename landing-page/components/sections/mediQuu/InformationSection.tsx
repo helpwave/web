@@ -10,7 +10,7 @@ type MediQuuInformationTranslation = {
   title: string,
   subTitle1: string,
   subTitle2: string,
-  subTitle3: ReactNode
+  subTitle3: ReactNode,
 }
 
 const defaultMediQuuInformationTranslation: Record<Languages, MediQuuInformationTranslation> = {

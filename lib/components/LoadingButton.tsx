@@ -4,7 +4,7 @@ import type { ButtonProps } from './Button'
 import { Button } from './Button'
 
 type LoadingButtonProps = {
-  isLoading?: boolean
+  isLoading?: boolean,
 } & ButtonProps
 
 export const LoadingButton = ({ isLoading = false, ...rest }: LoadingButtonProps) => {

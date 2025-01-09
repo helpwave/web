@@ -8,7 +8,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 
 type MarketStatsItemProps = PropsWithChildren<{
   stat: string,
-  title: string
+  title: string,
 }>
 
 const MarketStatsItem = ({ children, stat, title }: MarketStatsItemProps) => {
@@ -26,7 +26,7 @@ type MarketStatsSectionTranslation = {
   marketPotential: string,
   hospitals: string,
   healthcareWorkers: string,
-  gdp: string
+  gdp: string,
 }
 
 const defaultExpansionTranslation: Record<Languages, MarketStatsSectionTranslation> = {

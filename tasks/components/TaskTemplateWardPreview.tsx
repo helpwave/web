@@ -11,7 +11,7 @@ import { OrganizationOverviewContext } from '@/pages/organizations/[organization
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
-  taskTemplates: (numberOfTemplates: number) => string
+  taskTemplates: (numberOfTemplates: number) => string,
 }
 
 const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateWardPreviewTranslation> = {
@@ -27,7 +27,7 @@ const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateW
 
 export type TaskTemplateWardPreviewProps = {
   wardId?: string,
-  columns?: number
+  columns?: number,
 }
 
 /**
@@ -73,7 +73,7 @@ export const TaskTemplateWardPreview = ({
                 name={taskTemplate.name}
                 subtaskCount={taskTemplate.subtasks.length}
                 onTileClick={() => {
-                  router.push(`/ward/${wardId}/templates?templateId=${taskTemplate.id}`).then()
+                  router.push(`/ward/${wardId}/templates?templateId=${taskTemplate.id}`).catch(console.error)
                 }}
               />
             ))}

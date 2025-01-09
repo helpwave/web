@@ -20,7 +20,7 @@ type OrganizationFormTranslation = {
   required: string,
   tooLong: (maxCharacters: number) => string,
   tooShort: (minCharacters: number) => string,
-  invalidEmail: string
+  invalidEmail: string,
 }
 
 const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTranslation> = {
@@ -58,14 +58,14 @@ const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTra
 export type OrganizationFormTouchedType = {
   shortName: boolean,
   longName: boolean,
-  email: boolean
+  email: boolean,
 }
 
 export type OrganizationFormType = {
   isValid: boolean,
   hasChanges: boolean,
   organization: OrganizationMinimalDTO,
-  touched: OrganizationFormTouchedType
+  touched: OrganizationFormTouchedType,
 }
 
 export const emptyOrganizationForm: OrganizationFormType = {
@@ -82,7 +82,7 @@ export const emptyOrganizationForm: OrganizationFormType = {
 // TODO make sure the Organization type only has the used values shortName, longName, email, isVerified
 export type OrganizationFormProps = {
   organizationForm: OrganizationFormType,
-  onChange: (organizationForm: OrganizationFormType, shouldUpdate: boolean) => void
+  onChange: (organizationForm: OrganizationFormType, shouldUpdate: boolean) => void,
 }
 
 /**

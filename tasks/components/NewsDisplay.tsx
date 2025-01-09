@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 export type NewsDisplayProps = {
   news: News,
-  titleOnTop?: boolean
+  titleOnTop?: boolean,
 }
 
 /**

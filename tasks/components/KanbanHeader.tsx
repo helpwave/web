@@ -8,7 +8,7 @@ type KanbanHeaderTranslation = {
   tasks: string,
   status: string,
   label: string,
-  search: string
+  search: string,
 }
 
 const defaultKanbanHeaderTranslations: Record<Languages, KanbanHeaderTranslation> = {
@@ -30,7 +30,7 @@ type KanbanHeaderProps = {
   sortingStatus?: string,
   sortingLabel?: string,
   searchValue: string,
-  onSearchChange: (search: string) => void
+  onSearchChange: (search: string) => void,
 }
 
 /**

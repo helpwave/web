@@ -5,19 +5,19 @@ type Config = {
   colors: {
     background: string, // hex
     grid: string, // hex
-    inactive: string // hex
+    inactive: string, // hex
   },
   title: string,
   quadrants: {
-    name: string
+    name: string,
   }[],
   rings: {
     name: string,
-    color: string // hex
+    color: string, // hex
   }[],
   print_layout: boolean,
   links_in_new_tabs: boolean,
-  zoomed_quadrant?: 0 | 1 | 2 | 3
+  zoomed_quadrant?: 0 | 1 | 2 | 3,
 }
 
 type Entry = {
@@ -26,7 +26,7 @@ type Entry = {
   active: boolean,
   quadrant: 0 | 1 | 2 | 3, // Clockwise, starts from bottom right
   ring: 0 | 1 | 2 | 3, // Starts from the inside
-  moved: -1 | 0 | 1 // -1: moved out, 0: not moved, 1: moved in
+  moved: -1 | 0 | 1, // -1: moved out, 0: not moved, 1: moved in
 }
 
 const helpwaveTechRadar = {
@@ -199,7 +199,7 @@ const helpwaveTechRadar = {
 type TechRadarProps = {
   date?: Date,
   config?: Config,
-  entries?: Entry[]
+  entries?: Entry[],
 }
 
 /**

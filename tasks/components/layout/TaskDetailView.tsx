@@ -54,7 +54,7 @@ type TaskDetailViewTranslation = {
   publish: string,
   publishTask: string,
   publishTaskDescription: string,
-  finish: string
+  finish: string,
 }
 
 const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
@@ -103,7 +103,7 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
 type TaskDetailViewSidebarProps = {
   task: TaskDTO,
   setTask: (task: TaskDTO) => void,
-  isCreating: boolean
+  isCreating: boolean,
 }
 
 const TaskDetailViewSidebar = ({
@@ -268,7 +268,7 @@ export type TaskDetailViewProps = {
   wardId: string,
   patientId: string,
   onClose: () => void,
-  initialStatus?: TaskStatus
+  initialStatus?: TaskStatus,
 }
 
 /**

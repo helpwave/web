@@ -8,7 +8,7 @@ type TaskTemplateCardTranslation = {
   subtask: string,
   edit: string,
   personal: string,
-  ward: string
+  ward: string,
 }
 
 const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTranslation> = {
@@ -29,7 +29,7 @@ const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTra
 export type TaskTemplateCardProps = EditCardProps & {
   name: string,
   subtaskCount: number,
-  typeForLabel?: 'ward' | 'personal'
+  typeForLabel?: 'ward' | 'personal',
 }
 
 /**

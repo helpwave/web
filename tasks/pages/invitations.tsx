@@ -7,7 +7,7 @@ import { UserInvitationList } from '@/components/UserInvitationList'
 import titleWrapper from '@/utils/titleWrapper'
 
 type InvitationsPageTranslation = {
-  invitations: string
+  invitations: string,
 }
 
 const defaultInvitationsPageTranslation: Record<Languages, InvitationsPageTranslation> = {

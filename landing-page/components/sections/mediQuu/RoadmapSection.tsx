@@ -6,13 +6,13 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type RoadmapItem = {
   name: string,
   start: string,
-  description: string
+  description: string,
 }
 
 type RoadmapTranslation = {
   title: string,
   description: string,
-  roadmap: RoadmapItem[]
+  roadmap: RoadmapItem[],
 }
 
 const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {

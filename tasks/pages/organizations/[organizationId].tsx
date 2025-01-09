@@ -12,7 +12,7 @@ import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardsPageTranslation = {
   wards: string,
-  organizations: string
+  organizations: string,
 }
 
 const defaultWardsPageTranslation = {
@@ -31,7 +31,7 @@ export type OrganizationOverviewContextState = {
    wardId === "" means creating a new ward
    */
   wardId: string,
-  organizationId: string
+  organizationId: string,
 }
 
 const emptyOrganizationOverviewContextState = {
@@ -41,7 +41,7 @@ const emptyOrganizationOverviewContextState = {
 
 export type OrganizationOverviewContextType = {
   state: OrganizationOverviewContextState,
-  updateContext: (context: OrganizationOverviewContextState) => void
+  updateContext: (context: OrganizationOverviewContextState) => void,
 }
 
 export const OrganizationOverviewContext = createContext<OrganizationOverviewContextType>({

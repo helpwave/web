@@ -14,7 +14,7 @@ type DashboardDisplayTranslation = {
   organizations: string,
   wards: string,
   recent: string,
-  showAllOrganizations: string
+  showAllOrganizations: string,
 }
 
 const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTranslation> = {
@@ -35,7 +35,7 @@ const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTra
 }
 
 export type DashboardDisplayProps = {
-  width?: number
+  width?: number,
 }
 
 /**

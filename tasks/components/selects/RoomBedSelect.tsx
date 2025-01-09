@@ -17,7 +17,7 @@ type RoomBedSelectTranslation = {
   room: string,
   bed: string,
   revert: string,
-  submitting: string
+  submitting: string,
 }
 
 const defaultRoomBedSelectTranslation: Record<Languages, RoomBedSelectTranslation> = {
@@ -49,7 +49,7 @@ export type RoomBedSelectIds = {
    * undefined value here means select a room and bed
    */
   roomId?: string,
-  bedId?: string
+  bedId?: string,
 }
 
 export type RoomBedSelectProps = {
@@ -60,7 +60,7 @@ export type RoomBedSelectProps = {
    */
   onChange?: (RoomBedSelectIds:RoomBedSelectIds) => void,
   isSubmitting?: boolean,
-  isClearable?: boolean
+  isClearable?: boolean,
 }
 
 /**

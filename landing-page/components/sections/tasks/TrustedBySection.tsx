@@ -8,7 +8,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 import type { Partner } from '@/components/PartnerList'
 
 type TrustedBySectionTranslation = {
-  title: string
+  title: string,
 }
 
 const defaultTrustedBySectionTranslation: Record<Languages, TrustedBySectionTranslation> = {

@@ -8,7 +8,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 
 type MediQuuHeaderTranslation = {
   title: string,
-  subTitle: string
+  subTitle: string,
 }
 
 const defaultMediQuuPageTranslation: Record<Languages, MediQuuHeaderTranslation> = {

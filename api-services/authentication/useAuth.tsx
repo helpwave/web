@@ -75,11 +75,11 @@ type AuthContextValue = {
   token?: string,
   organization?: {
     id: string,
-    name: string
+    name: string,
   },
   organizations: string[],
   signOut: () => void,
-  redirectUserToOrganizationSelection: () => void
+  redirectUserToOrganizationSelection: () => void,
 }
 
 const defaultAuthContextValue: AuthContextValue = {
@@ -108,7 +108,7 @@ export const useAuth = (): AuthContextValue => {
         }
         authContext.setUser(user)
       })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return authContext
 }

@@ -10,7 +10,7 @@ export type HeaderProps = {
   /**
    * @default true
    */
-  withIcon?: boolean
+  withIcon?: boolean,
 }
 
 /**

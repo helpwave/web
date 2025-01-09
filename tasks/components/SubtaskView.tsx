@@ -18,7 +18,7 @@ type SubtaskViewTranslation = {
   subtasks: string,
   remove: string,
   addSubtask: string,
-  newSubtask: string
+  newSubtask: string,
 }
 
 const defaultSubtaskViewTranslation: Record<Languages, SubtaskViewTranslation> = {
@@ -42,7 +42,7 @@ type SubtaskViewProps = {
   taskId?: string,
   createdBy?: string,
   taskTemplateId?: string,
-  onChange: (subtasks: SubTaskDTO[]) => void
+  onChange: (subtasks: SubTaskDTO[]) => void,
 }
 
 /**

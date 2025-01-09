@@ -8,7 +8,7 @@ import { EditCard, type EditCardProps } from './EditCard'
 
 type OrganizationCardTranslation = {
   member: string,
-  members: string
+  members: string,
 }
 
 const defaultOrganizationCardTranslation: Record<Languages, OrganizationCardTranslation> = {
@@ -24,7 +24,7 @@ const defaultOrganizationCardTranslation: Record<Languages, OrganizationCardTran
 
 export type OrganizationCardProps = EditCardProps & {
   maxShownWards?: number,
-  organization: OrganizationDTO
+  organization: OrganizationDTO,
 }
 
 /**

@@ -2,7 +2,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import type { PropsWithChildren } from 'react'
 
 type SortableProps = {
-  id: string
+  id: string,
 }
 
 /**

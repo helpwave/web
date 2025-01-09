@@ -11,7 +11,7 @@ import { TaskTemplateCard } from '../cards/TaskTemplateCard'
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,
   personalTaskTemplates: string,
-  wardTaskTemplates: string
+  wardTaskTemplates: string,
 }
 
 const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDisplayTranslation> = {
@@ -33,7 +33,7 @@ export type TaskTemplateDisplayProps = {
   onSelectChange: (taskTemplate: TaskTemplateDTO | undefined) => void,
   taskTemplates: TaskTemplateDTO[],
   variant: 'wardTemplates' | 'personalTemplates',
-  width?: number
+  width?: number,
 }
 
 /**
@@ -64,7 +64,7 @@ export const TaskTemplateDisplay = ({
         { (variant === 'wardTemplates' || wardId) && (
           <Button
             onClick={() => {
-              router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).then()
+              router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).catch(console.error)
             }}
             className={tw('flex flex-row gap-x-1 items-center w-auto')}
           >

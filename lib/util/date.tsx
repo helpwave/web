@@ -32,7 +32,7 @@ export type Duration = {
   hours?: number,
   minutes?: number,
   seconds?: number,
-  milliseconds?: number
+  milliseconds?: number,
 }
 
 export const changeDuration = (date: Date, duration: Duration, isAdding?: boolean): Date => {

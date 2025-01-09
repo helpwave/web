@@ -11,7 +11,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 
 type StartSectionTranslation = {
   title: string,
-  text: string
+  text: string,
 }
 
 const defaultStartSectionTranslation: Record<Languages, StartSectionTranslation> = {

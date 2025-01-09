@@ -3,11 +3,11 @@ import { tw, tx } from '../twind'
 
 export type Crumb = {
   display: string,
-  link: string
+  link: string,
 }
 
 type BreadCrumbProps = {
-  crumbs: Crumb[]
+  crumbs: Crumb[],
 }
 
 /**

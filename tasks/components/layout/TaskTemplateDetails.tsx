@@ -23,7 +23,7 @@ type TaskTemplateDetailsTranslation = {
   update: string,
   tooLong: (maxCharacters: number) => string,
   tooShort: (minCharacters: number) => string,
-  required: string
+  required: string,
 }
 
 const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDetailsTranslation> = {
@@ -61,7 +61,7 @@ export type TaskTemplateDetailsProps = {
   onCreate: (taskTemplate: TaskTemplateDTO) => void,
   onUpdate: (taskTemplate: TaskTemplateFormType) => void,
   onDelete: (taskTemplate: TaskTemplateDTO) => void,
-  width?: number
+  width?: number,
 }
 
 /**

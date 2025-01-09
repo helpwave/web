@@ -29,7 +29,7 @@ type OrganizationMemberListTranslation = {
   saveChanges: string,
   role: string,
   dangerZoneText: (single: boolean) => string,
-  deleteConfirmText: (single: boolean) => string
+  deleteConfirmText: (single: boolean) => string,
 }
 
 const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationMemberListTranslation> = {
@@ -61,12 +61,12 @@ const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationM
   }
 }
 
-type DeleteDialogState = {isShowing: boolean, member?: OrganizationMember}
+type DeleteDialogState = { isShowing: boolean, member?: OrganizationMember }
 const defaultDeleteDialogState: DeleteDialogState = { isShowing: false }
 
 export type OrganizationMemberListProps = {
   organizationId?: string,
-  members?: OrganizationMember[]
+  members?: OrganizationMember[],
 }
 
 /**

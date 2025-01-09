@@ -10,7 +10,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type TasksKanbanSectionTranslation = {
   title: string,
   description: string,
-  tasks: string
+  tasks: string,
 }
 
 const defaultTasksKanbanSectionTranslation: Record<Languages, TasksKanbanSectionTranslation> = {

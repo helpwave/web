@@ -8,7 +8,7 @@ import { TaskTemplateCard } from './cards/TaskTemplateCard'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
-  template: string
+  template: string,
 }
 
 const defaultTaskTemplateListColumnTranslation = {
@@ -22,13 +22,13 @@ const defaultTaskTemplateListColumnTranslation = {
   }
 }
 
-export type TaskTemplateDTOExtension = {taskTemplate: TaskTemplateDTO, type: 'personal' | 'ward'}
+export type TaskTemplateDTOExtension = { taskTemplate: TaskTemplateDTO, type: 'personal' | 'ward' }
 
 export type TaskTemplateListColumnProps = {
   templates: TaskTemplateDTOExtension[],
   activeId: string | undefined,
   onTileClick: (taskTemplate: TaskTemplateDTO) => void,
-  onColumnEditClick?: () => void
+  onColumnEditClick?: () => void,
 }
 
 /**

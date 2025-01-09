@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react'
 import { Card, type CardProps } from '@helpwave/common/components/Card'
 
 export type AddCardProps = CardProps & {
-  text?: string
+  text?: string,
 }
 
 /**

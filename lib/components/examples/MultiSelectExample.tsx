@@ -5,7 +5,7 @@ import { ChipList } from '../ChipList'
 
 type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'search' | 'selectedDisplay'> & {
   enableSearch: boolean,
-  useChipDisplay: boolean
+  useChipDisplay: boolean,
 }
 
 export const MultiSelectExample = ({

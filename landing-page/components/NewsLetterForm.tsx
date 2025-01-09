@@ -21,7 +21,7 @@ type NewsLetterFormTranslation = {
   callToAction: string,
   industryNames: (industry: Industry) => string,
   select: string,
-  thankYou: string
+  thankYou: string,
 }
 
 const defaultNewsLetterFormTranslation: Record<Languages, NewsLetterFormTranslation> = {
@@ -88,11 +88,11 @@ export type NewsLetterFormType = {
   lastname: string,
   email: string,
   company: string,
-  industry?: Industry
+  industry?: Industry,
 }
 
 export type NewsLetterFormProps = Partial<NewsLetterFormType> & {
-  onSubmit?: (formState: NewsLetterFormType) => Promise<void>
+  onSubmit?: (formState: NewsLetterFormType) => Promise<void>,
 }
 
 export const NewsLetterForm = ({

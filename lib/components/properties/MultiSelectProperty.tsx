@@ -10,7 +10,7 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
 type MultiSelectPropertyTranslation = {
-  select: string
+  select: string,
 }
 
 const defaultMultiSelectPropertyTranslation: Record<Languages, MultiSelectPropertyTranslation> = {

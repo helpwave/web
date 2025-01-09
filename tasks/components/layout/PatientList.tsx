@@ -39,7 +39,7 @@ type PatientListTranslation = {
   addPatient: string,
   search: string,
   bed: string,
-  otherWard: string
+  otherWard: string,
 }
 
 const defaultPatientListTranslations: Record<Languages, PatientListTranslation> = {
@@ -80,7 +80,7 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
 export type PatientListOpenedSectionsType = {
   active: boolean,
   unassigned: boolean,
-  discharged: boolean
+  discharged: boolean,
 }
 
 export const defaultPatientListOpenedSections: PatientListOpenedSectionsType = {
@@ -93,7 +93,7 @@ export type PatientListProps = {
   onDischarge?: (patient: PatientDTO) => void,
   wardId: string,
   initialOpenedSections?: PatientListOpenedSectionsType,
-  width?: number
+  width?: number,
 }
 
 /**

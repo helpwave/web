@@ -11,7 +11,7 @@ import { DragCard } from './cards/DragCard'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 
 export type RoomOverviewProps = {
-  room: RoomOverviewDTO
+  room: RoomOverviewDTO,
 }
 
 /**

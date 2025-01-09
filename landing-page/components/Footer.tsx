@@ -10,8 +10,7 @@ import pluginConfig from '../utils/CookieConsentConfig'
 import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
 
-const categories = ['socials', 'general', 'products', 'development'] as const
-type Categories = typeof categories[number]
+type Categories = 'socials'| 'general'| 'products'| 'development'
 type FooterTranslation = { [key in Categories]: string }
 
 const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
@@ -29,7 +28,7 @@ const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
   }
 }
 
-type LinkType = {name: string, link: string, openInCurrentTab?: boolean, onClick?: () => void}
+type LinkType = { name: string, link: string, openInCurrentTab?: boolean, onClick?: () => void }
 const linkGroups: Record<Categories, LinkType[]> = {
   socials: [
     { name: 'GitHub', link: 'https://github.com/helpwave/' },

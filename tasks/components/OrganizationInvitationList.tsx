@@ -20,7 +20,7 @@ type OrganizationInvitationListTranslation = {
   addAndNext: string,
   add: string,
   invitations: string,
-  inviteMember: string
+  inviteMember: string,
 }
 
 const defaultOrganizationInvitationListTranslation: Record<Languages, OrganizationInvitationListTranslation> = {
@@ -44,13 +44,13 @@ const defaultOrganizationInvitationListTranslation: Record<Languages, Organizati
 
 export type OrganizationInvitation = {
   id: string,
-  email: string
+  email: string,
 }
 
 export type OrganizationInvitationListProps = {
   organizationId: string,
   invitations?: OrganizationInvitation[],
-  onChange: (invites: OrganizationInvitation[]) => void
+  onChange: (invites: OrganizationInvitation[]) => void,
 }
 
 /**

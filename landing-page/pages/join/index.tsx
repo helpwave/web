@@ -42,7 +42,7 @@ const submitNewsLetterForm = (form: NewsLetterFormType) => submitHubSpotForm(
 )
 
 type NewsLetterTranslation = {
-  title: string
+  title: string,
 }
 
 const defaultNewsLetterTranslation: Record<Languages, NewsLetterTranslation> = {
@@ -56,7 +56,7 @@ const defaultNewsLetterTranslation: Record<Languages, NewsLetterTranslation> = {
 
 const NewsLetter: NextPage = () => {
   const translation = useTranslation(defaultNewsLetterTranslation)
-  const [{ width, height }, setSize] = useState<{width: number, height: number}>({ width: 0, height: 0 })
+  const [{ width, height }, setSize] = useState<{ width: number, height: number }>({ width: 0, height: 0 })
 
   useEffect(() => {
     setSize({ width: window.innerWidth, height: window.innerHeight })

@@ -10,7 +10,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type VisionSectionTranslation = {
   ourVision: string,
   title: string,
-  description: string
+  description: string,
 }
 
 const defaultVisionSectionTranslation: Record<Languages, VisionSectionTranslation> = {

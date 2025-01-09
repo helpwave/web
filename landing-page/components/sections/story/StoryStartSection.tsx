@@ -12,7 +12,7 @@ type StoryStartSectionTranslation = {
   tasksAndOpenInnovationTitle: string,
   tasksAndOpenInnovationText: string,
   futureTitle: string,
-  futureText: string
+  futureText: string,
 }
 
 const defaultStoryStartSectionTranslation: Record<Languages, StoryStartSectionTranslation> = {

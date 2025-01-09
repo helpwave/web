@@ -5,7 +5,7 @@ import { Avatar, avtarSizeMapping } from './Avatar'
 export type AvatarGroupProps = {
   avatars: Omit<AvatarProps, 'size'>[],
   maxShownProfiles?: number,
-  size?: AvatarSize
+  size?: AvatarSize,
 }
 
 /**

@@ -10,7 +10,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type TasksTemplatesSectionTranslation = {
   title: string,
   description: string,
-  taskTemplates: string
+  taskTemplates: string,
 }
 
 const defaultTasksTemplatesSectionTranslation: Record<Languages, TasksTemplatesSectionTranslation> = {

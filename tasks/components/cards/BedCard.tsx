@@ -5,7 +5,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { DragCard, type DragCardProps } from './DragCard'
 
 type BedCardTranslation = {
-  nobody: string
+  nobody: string,
 }
 
 const defaultBedCardTranslation: Record<Languages, BedCardTranslation> = {
@@ -18,7 +18,7 @@ const defaultBedCardTranslation: Record<Languages, BedCardTranslation> = {
 }
 
 export type BedCardProps = DragCardProps & {
-  bedName: string
+  bedName: string,
 }
 
 /**

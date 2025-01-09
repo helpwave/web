@@ -13,7 +13,7 @@ export type LoadingAndErrorComponentProps = PropsWithChildren<{
   /**
    * in milliseconds
    */
-  minimumLoadingDuration?: number
+  minimumLoadingDuration?: number,
 }>
 
 /**

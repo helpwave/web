@@ -25,7 +25,7 @@ export type ButtonProps = PropsWithChildren<{
    * Additional override for styling, this will get merged with the styles selected through variant and size.
    */
   className?: string,
-  onClick?: MouseEventHandler<HTMLButtonElement>
+  onClick?: MouseEventHandler<HTMLButtonElement>,
 }> & Omit<ButtonHTMLAttributes<Element>, 'onClick' | 'className'>
 
 /**

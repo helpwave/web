@@ -3,7 +3,7 @@ import type { CheckboxPropertyProps } from '../../properties/CheckboxProperty'
 import { CheckboxProperty } from '../../properties/CheckboxProperty'
 
 export type CheckboxPropertyExampleProps = Omit<CheckboxPropertyProps, 'onChange' | 'onRemove'> & {
-  readOnly: boolean
+  readOnly: boolean,
 }
 
 /**

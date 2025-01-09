@@ -5,7 +5,7 @@ import { noop } from '../../util/noop'
 export type ModalContextType = {
   register: string[],
   addToRegister: (id: string) => void,
-  removeFromRegister: (id: string) => void
+  removeFromRegister: (id: string) => void,
 }
 export const ModalContext = createContext<ModalContextType>({
   register: [],

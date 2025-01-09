@@ -14,7 +14,7 @@ import type { DayPickerProps } from './DayPicker'
 import { DayPicker } from './DayPicker'
 
 type DatePickerTranslation = {
-  today: string
+  today: string,
 }
 
 const defaultDatePickerTranslation: Record<Languages, DatePickerTranslation> = {
@@ -36,7 +36,7 @@ export type DatePickerProps = {
   onChange?: (date: Date) => void,
   dayPickerProps?: Omit<DayPickerProps, 'value' | 'onChange' | 'selected'>,
   yearMonthPickerProps?: Omit<YearMonthPickerProps, 'value' | 'onChange' | 'startYear' | 'endYear'>,
-  className?: string
+  className?: string,
 }
 
 /**

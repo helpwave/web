@@ -9,7 +9,7 @@ export type SelectOption<T> = {
   label: ReactNode,
   value: T,
   disabled?: boolean,
-  className?: string
+  className?: string,
 }
 
 export type SelectProps<T> = {
@@ -28,7 +28,7 @@ export type SelectProps<T> = {
    * The items will be at the start of the select and aren't selectable
    */
   additionalItems?: ReactNode[],
-  selectedDisplayOverwrite?: ReactNode
+  selectedDisplayOverwrite?: ReactNode,
 };
 
 /**

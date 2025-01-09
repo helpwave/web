@@ -4,7 +4,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 
 type PillLabelTranslation = {
-  text: string
+  text: string,
 }
 
 export type TaskStateInformation = { colorLabel: string, translation: Record<Languages, PillLabelTranslation> }
@@ -35,7 +35,7 @@ const TaskState: Record<TaskStatus, TaskStateInformation> = {
 
 export type PillLabelProps = {
   count?: number,
-  taskStatus?: TaskStatus
+  taskStatus?: TaskStatus,
 }
 
 /**

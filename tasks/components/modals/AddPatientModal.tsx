@@ -14,7 +14,7 @@ type AddPatientModalTranslation = {
   addPatient: string,
   name: string,
   minimumLength: (characters: number) => string,
-  noBedSelected: string
+  noBedSelected: string,
 }
 
 const defaultAddPatientModalTranslation: Record<Languages, AddPatientModalTranslation> = {
@@ -33,7 +33,7 @@ const defaultAddPatientModalTranslation: Record<Languages, AddPatientModalTransl
 }
 
 export type AddPatientModalProps = ConfirmDialogProps & {
-  wardId: string
+  wardId: string,
 }
 
 /**

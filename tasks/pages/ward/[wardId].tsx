@@ -32,7 +32,7 @@ type WardOverviewTranslation = {
   organization: string,
   ward: string,
   room: string,
-  addPatientDialogTitle: string
+  addPatientDialogTitle: string,
 }
 
 const defaultWardOverviewTranslation = {
@@ -64,7 +64,7 @@ export type WardOverviewContextState = {
   bedId?: string,
   roomId?: string,
   wardId: string,
-  organizationId?: string
+  organizationId?: string,
 }
 
 const emptyWardOverviewContextState = {
@@ -74,7 +74,7 @@ const emptyWardOverviewContextState = {
 
 export type WardOverviewContextType = {
   state: WardOverviewContextState,
-  updateContext: (context: WardOverviewContextState) => void
+  updateContext: (context: WardOverviewContextState) => void,
 }
 
 export const WardOverviewContext = createContext<WardOverviewContextType>({
@@ -87,7 +87,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
   // TODO: could we differentiate between the two using two different states?
   const [draggedPatient, setDraggedPatient] = useState<{
     patient?: PatientMinimalDTO,
-    bed?: BedWithPatientWithTasksNumberDTO
+    bed?: BedWithPatientWithTasksNumberDTO,
   }>()
   const wardId = useRouteParameters<'wardId'>().wardId
   const { data: ward, refetch } = useWardQuery(wardId)
@@ -188,7 +188,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
         // Moving on bed cards
         setDraggingRoomId(target.room.id)
         if ('discharged' in source && source.discharged) {
-          readmitAndAssignPatient(patientId, target.bed.id).then()
+          readmitAndAssignPatient(patientId, target.bed.id).catch(console.error)
         } else {
           assignBedMutation.mutate({
             id: target.bed.id,

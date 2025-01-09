@@ -10,7 +10,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type PropertiesSectionTranslation = {
   title: string,
   description: string,
-  properties: string
+  properties: string,
 }
 
 const defaultPropertiesSectionTranslation: Record<Languages, PropertiesSectionTranslation> = {

@@ -6,7 +6,7 @@ import { noop } from '../util/noop'
 export type CardProps = {
   isSelected?: boolean,
   onTileClick?: MouseEventHandler<HTMLDivElement> | undefined,
-  className?: Class[] | string
+  className?: Class[] | string,
 }
 
 /**

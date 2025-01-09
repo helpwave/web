@@ -6,7 +6,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 import type { Partner } from '@/components/PartnerList'
 
 type StoryInUseAtSectionTranslation = {
-  title: string
+  title: string,
 }
 
 const defaultStoryInUseAtSectionTranslation: Record<Languages, StoryInUseAtSectionTranslation> = {

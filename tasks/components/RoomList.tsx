@@ -36,7 +36,7 @@ type RoomListTranslation = {
   manageBeds: string,
   manage: string,
   dangerZoneText: (single: boolean) => string,
-  deleteConfirmText: (single: boolean) => string
+  deleteConfirmText: (single: boolean) => string,
 }
 
 const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
@@ -75,12 +75,12 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
 }
 
 export type RoomListRoomRepresentation = RoomMinimalDTO & {
-  bedCount: number
+  bedCount: number,
 }
 
 export type RoomListProps = {
   rooms?: RoomListRoomRepresentation[], // TODO replace with more optimized RoomDTO
-  roomsPerPage?: number
+  roomsPerPage?: number,
 }
 
 /**

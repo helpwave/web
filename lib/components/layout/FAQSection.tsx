@@ -7,21 +7,21 @@ import { MarkdownInterpreter } from '../MarkdownInterpreter'
 
 type ContentType = {
   type: 'markdown',
-  value: string
+  value: string,
 } | {
   type: 'custom',
-  value: ReactNode
+  value: ReactNode,
 }
 
 export type FAQItem = Pick<ExpandableProps, 'initialExpansion'| 'className'> & {
   id: string,
   title: string,
-  content: ContentType
+  content: ContentType,
 }
 
 export type FAQSectionProps = {
   entries: FAQItem[],
-  expandableClassName?: string
+  expandableClassName?: string,
 }
 
 /**

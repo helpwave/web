@@ -4,7 +4,7 @@ import { tx } from '@twind/core'
 export type PillLabelBoxProps = {
   unscheduled: number,
   inProgress: number,
-  done: number
+  done: number,
 }
 
 /**

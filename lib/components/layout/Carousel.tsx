@@ -42,12 +42,12 @@ type CarouselProps = {
   heights?: Partial<Heights>,
   blurColor?: string,
   itemWidths?: ItemWidths,
-  className?: string
+  className?: string,
 }
 
 type ItemType = {
   item: ReactNode,
-  index: number
+  index: number,
 }
 
 type CarouselAnimationState = {
@@ -59,20 +59,20 @@ type CarouselAnimationState = {
   startPosition: number,
   startTime?: number,
   lastUpdateTime?: number,
-  isAutoLooping: boolean
+  isAutoLooping: boolean,
 }
 
 type DragState = {
   startX: number,
   startTime: number,
   lastX: number,
-  startIndex: number
+  startIndex: number,
 }
 
 type CarouselInformation = {
   currentPosition: number,
   dragState?: DragState,
-  animationState?: CarouselAnimationState
+  animationState?: CarouselAnimationState,
 }
 
 export const Carousel = ({

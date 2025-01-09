@@ -11,7 +11,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type PatientSectionTranslation = {
   title: string,
   description: string,
-  patients: string
+  patients: string,
 }
 
 const defaultPatientSectionTranslation: Record<Languages, PatientSectionTranslation> = {

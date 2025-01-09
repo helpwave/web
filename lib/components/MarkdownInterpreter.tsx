@@ -1,7 +1,6 @@
 import { tw, tx } from '../twind'
 
-const astNodeModifierTypes = ['none', 'italic', 'bold', 'underline', 'font-space', 'primary', 'secondary', 'warn', 'positive', 'negative'] as const
-type ASTNodeModifierType = typeof astNodeModifierTypes[number]
+type ASTNodeModifierType = 'none'| 'italic'| 'bold'| 'underline'| 'font-space'| 'primary'| 'secondary'| 'warn'| 'positive'| 'negative'
 
 const astNodeInserterType = ['helpwave', 'newline'] as const
 type ASTNodeInserterType = typeof astNodeInserterType[number]
@@ -9,18 +8,18 @@ type ASTNodeDefaultType = 'text'
 
 type ASTNode = {
   type: ASTNodeModifierType,
-  children: ASTNode[]
+  children: ASTNode[],
 } | {
-  type: ASTNodeInserterType
+  type: ASTNodeInserterType,
 } | {
   type: ASTNodeDefaultType,
-  text: string
+  text: string,
 }
 
 export type ASTNodeInterpreterProps = {
   node: ASTNode,
   isRoot?: boolean,
-  className?: string
+  className?: string,
 }
 export const ASTNodeInterpreter = ({
   node,
@@ -256,7 +255,7 @@ const optimizeTree = (node: ASTNode) => {
 
 export type MarkdownInterpreterProps = {
   text: string,
-  className?: string
+  className?: string,
 }
 
 export const MarkdownInterpreter = ({ text, className }: MarkdownInterpreterProps) => {

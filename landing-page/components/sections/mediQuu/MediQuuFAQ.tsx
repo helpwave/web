@@ -8,7 +8,7 @@ import { SectionBase } from '@/components/sections/SectionBase'
 type MediQuuFAQTranslation = {
   title: string,
   subTitle: string,
-  faqs: { question: string, answer: string }[]
+  faqs: { question: string, answer: string }[],
 }
 
 const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {

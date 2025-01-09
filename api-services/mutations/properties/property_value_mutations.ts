@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AttachPropertyValueRequest,
   GetAttachedPropertyValuesRequest,
-  TaskPropertyMatcher,
-  PatientPropertyMatcher, GetAttachedPropertyValuesResponse
+  GetAttachedPropertyValuesResponse,
+  PatientPropertyMatcher, TaskPropertyMatcher
 } from '@helpwave/proto-ts/services/property_svc/v1/property_value_svc_pb'
 import {
   Date as ProtoDate
@@ -13,7 +13,7 @@ import { ArrayUtil } from '@helpwave/common/util/array'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import { QueryKeys } from '../query_keys'
-import type { SubjectType, FieldType } from '../../types/properties/property'
+import type { FieldType, SubjectType } from '../../types/properties/property'
 import type { AttachedProperty, DisplayableAttachedProperty } from '../../types/properties/attached_property'
 import { GRPCConverter } from '../../util/util'
 import type { Update } from '../../types/update'
@@ -85,7 +85,7 @@ export const usePropertyWithValueListQuery = (subjectId: string | undefined, sub
 }
 
 type AttachedPropertyMutationUpdate<T extends AttachedProperty> = Update<T> & {
-  fieldType: FieldType
+  fieldType: FieldType,
 }
 
 /**
@@ -160,7 +160,7 @@ export const useAttachPropertyMutation = <T extends AttachedProperty>(callback: 
       return newProperty
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries([QueryKeys.properties, QueryKeys.attachedProperties, data.subjectId]).then()
+      queryClient.invalidateQueries([QueryKeys.properties, QueryKeys.attachedProperties, data.subjectId]).catch(console.error)
     },
   })
 }

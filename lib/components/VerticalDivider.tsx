@@ -8,7 +8,7 @@ export type VerticalDividerProps = {
   height?: number,
   dashDistance?: number,
   dashWidth?: number,
-  color?: Color
+  color?: Color,
 }
 
 /**

@@ -11,7 +11,7 @@ import { Page } from '@/components/Page'
 type NotFoundTranslation = {
   notFound: string,
   description: string,
-  toHomePage: (link: ReactNode) => ReactNode
+  toHomePage: (link: ReactNode) => ReactNode,
 }
 
 const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {

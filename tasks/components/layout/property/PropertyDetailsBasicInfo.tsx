@@ -15,7 +15,7 @@ type PropertyDetailsBasicInfoTranslation = {
   subjectType: string,
   propertyName: string,
   description: string,
-  writeYourDescription: string
+  writeYourDescription: string,
 }
 
 const defaultPropertyDetailsBasicInfoTranslation: Record<Languages, PropertyDetailsBasicInfoTranslation> = {
@@ -39,7 +39,7 @@ export type PropertyDetailsBasicInfoProps = {
   value: PropertyBasicInfo,
   onChange: (value: PropertyBasicInfo) => void,
   onEditComplete: (value: PropertyBasicInfo) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>
+  inputGroupProps?: Omit<InputGroupProps, 'title'>,
 }
 
 /**

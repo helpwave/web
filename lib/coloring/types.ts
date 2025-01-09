@@ -11,5 +11,5 @@ export type Coloring = {
   color: AppColor,
   style?: ColoringStyle,
   mode?: ColorMode,
-  hover?: boolean
+  hover?: boolean,
 }

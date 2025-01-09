@@ -15,11 +15,20 @@ This repository is split up into multiple subprojects using [pnpm](https://pnpm.
 - library of helpwave (see [lib](/lib))
 
 ## Getting Started
-To get started you will have to in install [pnpm](https://pnpm.io). After that you
-can use the following commands to start one of our projects.
+
+### Prerequisites
+Before you can start you need to have these installed:
+- [Node.js](https://nodejs.org/)
+- [pnpm](https://pnpm.io/) (installation through npm `npm install -g pnpm`)
+
+### Setup
 ```shell
 pnpm install
-cd <project> # e.g. tasks, landing-page
+```
+
+### Usage
+```shell
+cd tasks # or any other page like e.g. landing-page
 pnpm run dev
 ```
 
@@ -42,7 +51,7 @@ pnpm run storybook
 This project is tested with [BrowserStack](https://www.browserstack.com).
 
 ## Linter
-Our projects use linting with `eslint` to create a uniform code style. The linter can used with:
+Our projects use linting with `eslint` to create a uniform code style. The linter can be used with:
 
 ```shell
 pnpm run --filter "@helpwave/*" lint
@@ -52,7 +61,7 @@ pnpm run --filter "@helpwave/*" lint
 pnpm run --filter "@helpwave/*" lint --fix
 ```
 
-It is configured in the [eslint-config](eslint-config/index.js).
+It's configuration and further explanation can be found in the [eslint-config](eslint-config/README.md).
 
 ## Scripts
 The list of all our scripts can be found [here](documentation/scripts.md).

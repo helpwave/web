@@ -8,7 +8,7 @@ type ReSignInModalTranslation = {
   pleaseReSignIn: string,
   description: string,
   yes: string,
-  no: string
+  no: string,
 }
 
 type ReSignInModalProps = Omit<ConfirmDialogProps, 'title'|'description'|'children'>

@@ -12,17 +12,16 @@ import { Chip } from '@helpwave/common/components/ChipList'
 
 const homeURL = '/'
 
-const linkNames = ['products', 'mediquu', 'story', 'support', 'team', 'talks', 'tasks', 'appzumdoc', 'netzmanager'] as const
-type LinkNames = typeof linkNames[number]
+type LinkNames = 'products'| 'mediquu'| 'story'| 'support'| 'team'| 'talks'| 'tasks'| 'appzumdoc'| 'netzmanager'
 
 type LinkType = {
   name: LinkNames,
   url: string,
-  external?: boolean
+  external?: boolean,
 }
 
 type SubLinkType = LinkType & {
-  subpage?: LinkType[]
+  subpage?: LinkType[],
 }
 
 const items: SubLinkType[] = [
@@ -69,7 +68,7 @@ const items: SubLinkType[] = [
 ]
 
 type HeaderTranslation = {
-  contact: string
+  contact: string,
 } & { [key in LinkNames]: string }
 
 const defaultHeaderTranslation: Record<Languages, HeaderTranslation> = {

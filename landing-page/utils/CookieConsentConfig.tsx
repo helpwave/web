@@ -61,9 +61,11 @@ const pluginConfig: CookieConsentConfig = {
           },
           onReject: async () => {
             // disable Google Analytics see https://developers.google.com/tag-platform/security/guides/consent
-            typeof gtag === 'function' && gtag('consent', 'update', {
-              analytics_storage: 'denied'
-            })
+            if (typeof gtag === 'function') {
+              gtag('consent', 'update', {
+                analytics_storage: 'denied'
+              })
+            }
           }
         },
       },

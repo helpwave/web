@@ -1,17 +1,17 @@
 export type WardMinimalDTO = {
   id: string,
-  name: string
+  name: string,
 }
 
 export type WardWithOrganizationIdDTO = WardMinimalDTO & {
-  organizationId: string
+  organizationId: string,
 }
 
 export type WardOverviewDTO = WardMinimalDTO & {
   bedCount: number,
   unscheduled: number,
   inProgress: number,
-  done: number
+  done: number,
 }
 
 export const emptyWardOverview: WardOverviewDTO = {
@@ -28,17 +28,17 @@ export type WardDetailDTO = WardMinimalDTO & {
     id: string,
     name: string,
     beds: {
-      id: string
-    }[]
+      id: string,
+    }[],
   }[],
   task_templates: {
     id: string,
     name: string,
     subtasks: {
       id: string,
-      name: string
-    }[]
-  }[]
+      name: string,
+    }[],
+  }[],
 }
 
 export const emptyWard: WardDetailDTO = {

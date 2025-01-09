@@ -6,7 +6,7 @@ type TaskStatusSelectTranslation = {
   unscheduled: string,
   inProgress: string,
   done: string,
-  status: string
+  status: string,
 }
 
 const defaultTaskStatusSelectTranslation = {
@@ -28,7 +28,7 @@ type TaskStatusSelectProps = Omit<SelectProps<TaskStatus>, 'options'> & {
   /**
    * All entries within this array will be removed as options
    */
-  removeOptions?: TaskStatus[]
+  removeOptions?: TaskStatus[],
 }
 
 /**
@@ -43,7 +43,7 @@ export const TaskStatusSelect = ({
   ...selectProps
 }: PropsForTranslation<TaskStatusSelectTranslation, TaskStatusSelectProps>) => {
   const translation = useTranslation(defaultTaskStatusSelectTranslation, overwriteTranslation)
-  const defaultOptions: {value: TaskStatus, label: string}[] = [
+  const defaultOptions: { value: TaskStatus, label: string }[] = [
     { value: 'todo', label: translation.unscheduled },
     { value: 'inProgress', label: translation.inProgress },
     { value: 'done', label: translation.done }

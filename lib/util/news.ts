@@ -7,7 +7,7 @@ export type News = {
   date: Date,
   description: (string | URL)[],
   externalResource?: URL,
-  keys: string[]
+  keys: string[],
 }
 
 export type LocalizedNews = Record<Languages, News[]>

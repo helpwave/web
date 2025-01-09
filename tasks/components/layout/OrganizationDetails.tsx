@@ -28,7 +28,7 @@ type OrganizationDetailTranslation = {
   deleteConfirmText: string,
   deleteOrganization: string,
   create: string,
-  update: string
+  update: string,
 }
 
 const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetailTranslation> = {
@@ -53,7 +53,7 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
 }
 
 export type OrganizationDetailProps = {
-  width?: number
+  width?: number,
 }
 
 /**

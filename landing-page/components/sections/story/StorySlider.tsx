@@ -16,7 +16,7 @@ type StoriesSliderSectionTranslation = {
   step2Title: string,
   step2Description: string,
   step3Title: string,
-  step3Description: string
+  step3Description: string,
 }
 
 const defaultStoriesSliderSectionTranslation: Record<Languages, StoriesSliderSectionTranslation> = {
@@ -45,7 +45,7 @@ const defaultStoriesSliderSectionTranslation: Record<Languages, StoriesSliderSec
  */
 export const StoriesSliderSection = () => {
   const translation = useTranslation(defaultStoriesSliderSectionTranslation)
-  const [modalValue, setModalValue] = useState<{titleText: string, description: string}>()
+  const [modalValue, setModalValue] = useState<{ titleText: string, description: string }>()
 
   const items: TextImageProps[] = [
     {

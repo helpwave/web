@@ -9,7 +9,7 @@ export const DEFAULT_LANGUAGE = 'en'
 
 export type LanguageContextValue = {
   language: Languages,
-  setLanguage: Dispatch<SetStateAction<Languages>>
+  setLanguage: Dispatch<SetStateAction<Languages>>,
 }
 
 export const LanguageContext = createContext<LanguageContextValue>({ language: DEFAULT_LANGUAGE, setLanguage: (v) => v })
@@ -26,7 +26,7 @@ export const useLocale = (overWriteLanguage?: Languages) => {
 }
 
 type ProvideLanguageProps = {
-  defaultLanguage?: Languages
+  defaultLanguage?: Languages,
 }
 
 export const ProvideLanguage = ({ defaultLanguage, children }: PropsWithChildren<ProvideLanguageProps>) => {

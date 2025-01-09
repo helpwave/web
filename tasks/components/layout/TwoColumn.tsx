@@ -8,12 +8,12 @@ import { tw, tx } from '@helpwave/common/twind'
  */
 type Constraint = {
   min: string,
-  max?: string
+  max?: string,
 }
 
 type ColumnConstraints = {
   left? : Constraint,
-  right?: Constraint
+  right?: Constraint,
 }
 
 const defaultConstraint = {
@@ -31,7 +31,7 @@ type TwoColumnProps = {
    */
   baseLayoutValue?: string,
   disableResize?: boolean,
-  constraints?: ColumnConstraints
+  constraints?: ColumnConstraints,
 }
 
 /**

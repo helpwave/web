@@ -41,7 +41,7 @@ type APIServicesType = {
   property: PropertyServicePromiseClient,
   propertyValues: PropertyValueServicePromiseClient,
   propertyViewSource: PropertyViewsServicePromiseClient,
-  updates: UpdatesServicePromiseClient
+  updates: UpdatesServicePromiseClient,
 }
 
 const offlineServices: APIServicesType = {

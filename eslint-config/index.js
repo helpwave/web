@@ -1,82 +1,105 @@
+import reactRecommendedEslint from 'eslint-plugin-react'
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import stylisticEslint from '@stylistic/eslint-plugin'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import customRules from './custom-rules/index.js'
+import nextConfig from  '@next/eslint-plugin-next'
+
 /** @type {import('eslint').Linter.Config} */
-module.exports = {
-  extends: [
-    'standard',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
-  ],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: '2020'
-  },
-  plugins: ['react', '@typescript-eslint'],
-  rules: {
-    'import/order': 'error',
-    'space-before-function-paren': 'off',
-    // the behaviour of ternary operators is often more clear than using '||', '&&' or '??'
-    'no-unneeded-ternary': 'off',
-    // This rule has a small problem: when using jsx it is pretty common to wrap the (true / false) expressions in parentheses and have the "?" or ":" on the same line.
-    // This isn't allowed with this rule as it would require an additional newline for "?" and ":".
-    // As the rule doesn't really enforce anything useful (a lot of bad styles are still allowed, but some good ones as well; no real way to filter further) disabling it doesn't hurt.
-    'multiline-ternary': 'off',
-    'no-use-before-define': 'off',
-    'quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
-    // this rule is utter trash
-    'n/no-callback-literal': 'off',
-    // This highly depends on the situation even when the same operators are used.
-    // For ternaries it should always be 'before' but override doesn't work with 'off'
-    // therefore turning it off altogether
-    'operator-linebreak': ['off'],
-    // basically allow dangling commas in situations where they might be useful
-    // for quickly lists of *things* (e.g. exports, arrays, objects) but disallow
-    // for unnecessary things (functions and imports)
-    'comma-dangle': ['error', {
-      functions: 'never',
-      imports: 'never',
-      exports: 'only-multiline',
-      arrays: 'only-multiline',
-      objects: 'only-multiline',
-    }],
-    // if a single key requires quotes better quote all keys
-    // it would be great if this was also optional additionally, meaning that
-    // if one key requires quotes all other keys *can* optionally be quoted as well
-    // but never otherwise
-    'quote-props': ['warn', 'consistent-as-needed'],
-    '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
-    '@typescript-eslint/no-use-before-define': ['error'],
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    // use commas in typescript types as they are closely related to object literals
-    '@typescript-eslint/member-delimiter-style': [
-      'warn',
-      {
-        multiline: {
-          delimiter: 'comma',
-          requireLast: false
-        },
-        singleline: {
-          delimiter: 'comma',
-          requireLast: false
+const recommended = [
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  reactRecommendedEslint.configs.flat.recommended,
+  customRules.configs.recommended,
+  {
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: '2020'
+      },
+    },
+    plugins: {
+      '@stylistic': stylisticEslint,
+      'react-hooks': reactHooksPlugin,
+    },
+    rules: {
+      ...reactHooksPlugin.configs.recommended.rules,
+      'custom-rules/no-empty-then': 'error',
+      'no-undef': 'off', // handled by typescript itself
+      'sort-imports': 'off',
+      'no-unneeded-ternary': 'off', // ternary operators are often more clear than '||', '&&' or '??'
+      'no-use-before-define': 'off',
+      'jsx-quotes': ['error', 'prefer-double'],
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
+      '@stylistic/object-curly-spacing': ['warn', 'always'],
+      'no-trailing-spaces': ['error'],
+      '@stylistic/comma-dangle': ['error', {
+        functions: 'never',
+        imports: 'never',
+        exports: 'only-multiline',
+        arrays: 'only-multiline',
+        objects: 'only-multiline',
+      }],
+      '@stylistic/quote-props': ['warn', 'consistent-as-needed'],
+      '@stylistic/member-delimiter-style': [
+        'warn',
+        {
+          multiline: {
+            delimiter: 'comma',
+            requireLast: true
+          },
+          singleline: {
+            delimiter: 'comma',
+            requireLast: false
+          },
+          multilineDetection: 'brackets'
         }
+      ],
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+      '@typescript-eslint/no-use-before-define': ['error'],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'ignore', propElementValues: 'always' }],
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react/jsx-wrap-multilines': ['error', {
+        declaration: 'parens-new-line',
+        assignment: 'parens-new-line',
+        return: 'parens-new-line',
+        arrow: 'parens-new-line',
+        condition: 'parens-new-line',
+        logical: 'parens-new-line',
+        prop: 'parens-new-line'
+      }],
+      //'custom-rules/no-empty-then': 'error',
+    },
+    settings: {
+      react: {
+        version: 'detect'
       }
-    ],
-    'jsx-quotes': ['error', 'prefer-double'],
-    'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'ignore', propElementValues: 'always' }],
-    'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'off',
-    'react/jsx-wrap-multilines': ['error', {
-      declaration: 'parens-new-line',
-      assignment: 'parens-new-line',
-      return: 'parens-new-line',
-      arrow: 'parens-new-line',
-      condition: 'parens-new-line',
-      logical: 'parens-new-line',
-      prop: 'parens-new-line'
-    }],
-  },
-  settings: {
-    react: {
-      version: 'detect'
     }
-  }
+  },
+]
+
+/** @type {import('eslint').Linter.Config} */
+const nextExtension = [
+  ...recommended,
+  {
+    ignores: ['build/**', '.next/*']
+  },
+  {
+    plugins: {
+      '@next/next': nextConfig,
+    },
+    rules: {
+      ...nextConfig.configs.recommended.rules,
+      ...nextConfig.configs['core-web-vitals'].rules,
+      '@next/next/no-duplicate-head': 'off', // This rule produces errors for
+    }
+  },
+]
+
+export default {
+  recommended,
+  nextExtension
 }

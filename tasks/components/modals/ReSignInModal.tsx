@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Span } from '@helpwave/common/components/Span'
 
 type ReSignInModalTranslation = {
   pleaseReSignIn: string,
@@ -47,7 +46,7 @@ export const ReSignInModal = ({ overwriteTranslation, titleText, ...modalProps }
       ]}
       {...modalProps}
     >
-      <Span>{translation.description}</Span>
+      <span>{translation.description}</span>
     </ConfirmDialog>
   )
 }

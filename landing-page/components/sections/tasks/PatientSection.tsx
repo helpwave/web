@@ -3,7 +3,6 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
-import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { TagIcon } from '@helpwave/common/icons/Tag'
 import { SectionBase } from '@/components/sections/SectionBase'
@@ -52,10 +51,10 @@ export const PatientSection = ({ overwriteTranslation }: PropsForTranslation<Pat
         <div className={tw('flex flex-col gap-y-2')}>
           <div className={tw('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
             <TagIcon/>
-            <Span className={tw('text-lg font-bold')}>{translation.patients}</Span>
+            <span className={tw('textstyle-title-normal')}>{translation.patients}</span>
           </div>
-          <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
-          <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
+          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
+          <span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
         </div>
       </div>
     </SectionBase>

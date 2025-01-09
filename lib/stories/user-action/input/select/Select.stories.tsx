@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { SelectExample } from '../../../../components/examples/SelectExample'
-import { Span } from '../../../../components/Span'
 
 const meta = {
   title: 'User-Action/Input/Select',
@@ -18,7 +17,7 @@ export const SelectVariations: Story = {
       { value: '1', label: 'Entry 1' },
       { value: '2', label: 'Entry 2', disabled: true },
       { value: '3', label: 'Entry 3' },
-      { value: '4', label: <Span className="!text-red-400">Custom styled</Span> },
+      { value: '4', label: <span className="!text-red-400">Custom styled</span> },
       { value: '5', label: 'Entry 5' },
       { value: '6', label: 'Entry 6', disabled: true }
     ],

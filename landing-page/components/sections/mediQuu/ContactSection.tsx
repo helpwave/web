@@ -2,7 +2,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { useState } from 'react'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -117,14 +116,14 @@ export const ContactSection = ({
   return (
     <SectionBase className={tw('flex desktop:flex-row desktop:justify-between mobile:flex-col w-full gap-8')} backgroundColor="gray">
       <div className={tw('flex flex-col gap-y-1 tablet:w-2/5 desktop:w-1/2')}>
-        <Span type="title" className={tw('text-hw-secondary-400 !text-3xl')}>{translation.contact}</Span>
-        <Span>{translation.contactDescription}</Span>
+        <span className={tw('textstyle-title-xl text-hw-secondary-400')}>{translation.contact}</span>
+        <span>{translation.contactDescription}</span>
         {contacts.length > 0 && (
           <div className={tw('flex flex-col gap-y-6 mt-6')}>
             {contacts.map((contact, index) => (
               <div key={index} className={tw('flex flex-col gap-y-1')}>
-                <Span className={tw('font-bold')}>{contact.name}</Span>
-                <Span>{contact.email}</Span>
+                <span className={tw('font-bold')}>{contact.name}</span>
+                <span>{contact.email}</span>
               </div>
             ))}
           </div>
@@ -151,7 +150,7 @@ export const ContactSection = ({
           placeholder={translation.message}
           onChange={message => setContactForm(prevState => ({ ...prevState, message, hasSend: false, hasError: false }))}
         />
-        {contactForm.hasError && (<Span className={tw('text-hw-negative-400 font-semibold my-1')}>{translation.error}</Span>)}
+        {contactForm.hasError && (<span className={tw('text-hw-negative-400 font-semibold my-1')}>{translation.error}</span>)}
         <LoadingButton
           color="hw-secondary"
           onClick={() => {
@@ -183,7 +182,7 @@ export const ContactSection = ({
         >
           {translation.send}
         </LoadingButton>
-        {contactForm.hasSend && (<Span className={tw('text-hw-secondary-400 font-bold text-xl text-center')}>{translation.thankYou}</Span>)}
+        {contactForm.hasSend && (<span className={tw('text-hw-secondary-400 font-bold text-xl text-center')}>{translation.thankYou}</span>)}
       </div>
     </SectionBase>
   )

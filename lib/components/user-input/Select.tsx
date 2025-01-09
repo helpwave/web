@@ -2,7 +2,6 @@ import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { tw, tx } from '../../twind'
-import { Span } from '../Span'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 
@@ -83,7 +82,7 @@ export const Select = <T, >({
               )}
               disabled={isDisabled}
             >
-              <Span>{selectedDisplayOverwrite ?? selectedOption?.label ?? hintText}</Span>
+              <span>{selectedDisplayOverwrite ?? selectedOption?.label ?? hintText}</span>
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items

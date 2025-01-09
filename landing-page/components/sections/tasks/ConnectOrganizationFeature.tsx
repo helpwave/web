@@ -3,7 +3,6 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
-import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { ItemGrid } from '@helpwave/common/components/layout/ItemGrid'
 import { SectionBase } from '@/components/sections/SectionBase'
@@ -58,10 +57,10 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
     >
       <div className={tw('flex flex-col items-center mobile:items-start flex-1 mobile:pr-6')}>
         <div className={tw('flex flex-col gap-y-2 max-w-[500px] mobile:max-w-full')}>
-          <h1><Span type="title" className={tw('!text-4xl')}>{translation.title}</Span></h1>
-          <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
+          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
+          <span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
           <ItemGrid className={tw('mt-2')}>
-            {features.map((feature, index) => (<Span key={index} className={featureStyle}>{feature}</Span>))}
+            {features.map((feature, index) => (<span key={index} className={featureStyle}>{feature}</span>))}
           </ItemGrid>
         </div>
       </div>

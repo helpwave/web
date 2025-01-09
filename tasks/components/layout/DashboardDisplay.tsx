@@ -2,7 +2,6 @@ import { tw, tx } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
-import { Span } from '@helpwave/common/components/Span'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { useRecentPatientsQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
@@ -63,13 +62,13 @@ export const DashboardDisplay = ({
   return (
     <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
       <InvitationBanner/>
-      <Span type="title">{translation.recent}</Span>
+      <span className={tw('textstyle-title-md')}>{translation.recent}</span>
       <LoadingAndErrorComponent
         isLoading={isLoadingPatients}
       >
         {patients && patients.length > 0 && (
           <>
-            <Span type="subsectionTitle">{translation.patients}</Span>
+            <span className={tw('textstyle-title-normal')}>{translation.patients}</span>
             <div className={tw(`grid grid-cols-${columns} gap-6`)}>
               {patients?.map(patient => (
                 <PatientCard
@@ -88,7 +87,7 @@ export const DashboardDisplay = ({
         <div className={tw('flex flex-col gap-y-1')}>
           {wards && wards.length > 0 && (
             <>
-              <Span type="subsectionTitle">{translation.wards}</Span>
+              <span className={tw('textstyle-title-normal')}>{translation.wards}</span>
               <div className={tw(`grid grid-cols-${columns} gap-6`)}>
                 {wards?.map(ward => (
                   <WardCard

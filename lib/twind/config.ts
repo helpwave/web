@@ -5,37 +5,8 @@ import presetTailwindForms from '@twind/preset-tailwind-forms'
 import presetTypography from '@twind/preset-typography'
 import { generateShadingColors } from '../coloring/shading'
 import type { ShadedColors } from '../coloring/types'
-
-// defaults otherwise provided by tailwind
-export const fontFamily = {
-  sans: [
-    'ui-sans-serif',
-    'system-ui',
-    '-apple-system',
-    'BlinkMacSystemFont',
-    '"Segoe UI"',
-    'Roboto',
-    '"Helvetica Neue"',
-    'Arial',
-    '"Noto Sans"',
-    'sans-serif',
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-    '"Noto Color Emoji"'
-  ],
-  serif: ['ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
-  mono: [
-    'ui-monospace',
-    'SFMono-Regular',
-    'Menlo',
-    'Monaco',
-    'Consolas',
-    '"Liberation Mono"',
-    '"Courier New"',
-    'monospace'
-  ]
-}
+import { fontFamily } from './typography'
+import { textStyles } from './textstyles'
 
 export type ScreenTypes = 'desktop' | 'tablet' | 'mobile'
 const screenSizes: Record<ScreenTypes, { min?: string, max?: string, raw?: string }> = {
@@ -199,11 +170,12 @@ export const config = defineConfig({
         'around-md': '0 5px 5px 0 rgba(0, 0, 0, 0.02), 0 -5px 5px 0 rgba(0, 0, 0, 0.02), 5px 0 5px 0 rgba(0, 0, 0, 0.02), -5px 0 5px 0 rgba(0, 0, 0, 0.02)',
         'around-lg': '0 10px 10px 0 rgba(0, 0, 0, 0.02), 0 -10px 10px 0 rgba(0, 0, 0, 0.02), 10px 0 10px 0 rgba(0, 0, 0, 0.02), -10px 0 10px 0 rgba(0, 0, 0, 0.02)',
         'around-xl': '0 20px 20px 0 rgba(0, 0, 0, 0.02), 0 -20px 20px 0 rgba(0, 0, 0, 0.02), 20px 0 20px 0 rgba(0, 0, 0, 0.02), -20px 0 20px 0 rgba(0, 0, 0, 0.02)',
-      }
-    }
+      },
+    },
   },
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms(), presetTypography()],
   rules: [
+    ...textStyles,
     ['animation-delay-', ({ $$ }) => ({ animationDelay: `${$$}ms` })]
   ]
 }) as unknown as TwindConfig // TODO: twind is being very dumb right here, not my fault

@@ -1,5 +1,4 @@
 import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
@@ -44,8 +43,8 @@ export const PatientCard = ({
   return (
     <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
       <div className={tw('flex flex-row justify-between')}>
-        <Span className={tw('whitespace-nowrap')} type="subsubsectionTitle">{bedName ?? translation.bedNotAssigned}</Span>
-        <Span className={tw('ml-2 truncate')}>{patientName}</Span>
+        <span className={tw('textstyle-title-sm whitespace-nowrap')} >{bedName ?? translation.bedNotAssigned}</span>
+        <span className={tw('ml-2 truncate')}>{patientName}</span>
       </div>
       <div className={tw('min-w-[150px] max-w-[200px] mt-1')}>
         <PillLabelsColumn

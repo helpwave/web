@@ -5,7 +5,6 @@ import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { Button } from '@helpwave/common/components/Button'
 import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
-import { Span } from '@helpwave/common/components/Span'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useRouter } from 'next/router'
@@ -151,7 +150,7 @@ const TaskDetailViewSidebar = ({
         descriptionText={translation.publishTaskDescription}
       />
       <div>
-        <label><Span type="labelMedium">{translation.assignee}</Span></label>
+        <label className={tw('textstyle-label-md')}>{translation.assignee}</label>
         <div className={tw('flex flex-row items-center gap-x-2')}>
           <AssigneeSelect
             organizationId={organization?.id ?? ''}
@@ -182,7 +181,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label><Span type="labelMedium">{translation.dueDate}</Span></label>
+        <label className={tw('textstyle-label-md')}>{translation.dueDate}</label>
         <div className={tw('flex flex-row items-center gap-x-2')}>
           <Input
             value={task.dueDate ? formatDate(task.dueDate) : ''}
@@ -212,7 +211,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label><Span type="labelMedium">{translation.status}</Span></label>
+        <label className={tw('textstyle-label-md')}>{translation.status}</label>
         <TaskStatusSelect
           value={task.status}
           removeOptions={isCreating ? ['done'] : []}
@@ -226,10 +225,10 @@ const TaskDetailViewSidebar = ({
         />
       </div>
       <div className={tw('select-none')}>
-        <label><Span type="labelMedium">{translation.visibility}</Span></label>
+        <label className={tw('textstyle-label-md')}>{translation.visibility}</label>
         {!isCreating ? (
           <div className={tw('flex flex-row justify-between items-center')}>
-            <Span>{task.isPublicVisible ? translation.public : translation.private}</Span>
+            <span>{task.isPublicVisible ? translation.public : translation.private}</span>
             {!task.isPublicVisible && !isCreating && (
               <Button
                 color="hw-neutral"
@@ -237,7 +236,7 @@ const TaskDetailViewSidebar = ({
                 className={tw('!py-1 !px-2')}
                 onClick={() => setIsShowingPublicDialog(true)}
               >
-                <Span>{translation.publish}</Span>
+                <span>{translation.publish}</span>
               </Button>
             )}
           </div>
@@ -253,7 +252,7 @@ const TaskDetailViewSidebar = ({
       </div>
       {task.createdAt && (
         <div className={tw('flex flex-col gap-y-1')}>
-          <Span type="labelMedium">{translation.creationTime}</Span>
+          <span className={tw('textstyle-label-md')}>{translation.creationTime}</span>
           <TimeDisplay date={new Date(task.createdAt)}/>
         </div>
       )}

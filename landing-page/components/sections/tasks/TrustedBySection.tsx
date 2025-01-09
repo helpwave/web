@@ -4,7 +4,6 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { VerticalDivider } from '@helpwave/common/components/VerticalDivider'
 import { DividerInserter } from '@helpwave/common/components/layout/DividerInserter'
 import Image from 'next/image'
-import { Span } from '@helpwave/common/components/Span'
 import { SectionBase } from '@/components/sections/SectionBase'
 import type { Partner } from '@/components/PartnerList'
 
@@ -33,7 +32,7 @@ const TrustedBySection = () => {
 
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 select-none justify-between items-center w-full')} backgroundColor="gray">
-      <Span type="title" className={tw('!text-2xl')}>{translation.title}</Span>
+      <span className={tw('textstyle-title-lg')}>{translation.title}</span>
       <DividerInserter
         className={tw('flex flex-row gap-x-6 items-center justify-center w-full')}
         divider={index => (<VerticalDivider key={index} height={128}/>)}

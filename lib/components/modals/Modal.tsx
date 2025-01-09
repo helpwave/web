@@ -1,7 +1,6 @@
 import { useContext, useEffect, type MouseEventHandler, type PropsWithChildren, type ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import { X } from 'lucide-react'
-import { Span } from '../Span'
 import { tx, tw } from '../../twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
@@ -50,11 +49,11 @@ export const ModalHeader = ({
     <div className={tw('flex flex-col')}>
       <div className={tw('flex flex-row justify-between items-start gap-x-8')}>
         {title ?? (
-          <Span type="modalTitle" className={tx({
+          <span className={tx('textstyle-title-normal', {
             'mb-1': description || descriptionText,
           })}>
             {titleText}
-          </Span>
+          </span>
         )}
         {!!onCloseClick && (
           <Tooltip tooltip={translation.close}>
@@ -64,7 +63,7 @@ export const ModalHeader = ({
           </Tooltip>
         )}
       </div>
-      {description ?? (<Span type="description">{descriptionText}</Span>)}
+      {description ?? (<span className={tw('textstyle-description')}>{descriptionText}</span>)}
     </div>
   )
 }

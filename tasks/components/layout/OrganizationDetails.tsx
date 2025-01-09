@@ -4,7 +4,6 @@ import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks
 import { useContext, useEffect, useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Span } from '@helpwave/common/components/Span'
 import {
   useInviteMemberMutation,
   useOrganizationCreateMutation,
@@ -201,8 +200,8 @@ export const OrganizationDetail = ({
           </Button>
         </div>
         <div className={tx('flex flex-col justify-start', { hidden: isCreatingNewOrganization })}>
-          <Span type="subsectionTitle">{translation.dangerZone}</Span>
-          <Span type="description">{translation.dangerZoneText}</Span>
+          <span className={tw('textstyle-title-normal')}>{translation.dangerZone}</span>
+          <span className={tw('textstyle-description')}>{translation.dangerZoneText}</span>
           <button
             onClick={() => setIsShowingConfirmDialog(true)}
             className={tw('text-hw-negative-400 font-bold text-left')}

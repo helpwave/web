@@ -3,7 +3,6 @@ import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { Span } from '@helpwave/common/components/Span'
 import { Button } from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
@@ -136,7 +135,7 @@ export const OrganizationInvitationList = ({
         ]}
       />
       <div className={tw('flex flex-row justify-between')}>
-        <Span type="tableName">{`${translation.invitations} (${usedInvitations.length})`}</Span>
+        <span className={tw('textstyle-table-name')}>{`${translation.invitations} (${usedInvitations.length})`}</span>
         <Button
           color="hw-positive"
           onClick={() => setInviteMemberModalEmail('')}
@@ -149,12 +148,12 @@ export const OrganizationInvitationList = ({
         stateManagement={[tableState, setTableState]}
         identifierMapping={idMapping}
         header={[
-          <Span key="organization" type="tableHeader">{translation.email}</Span>,
+          <span key="organization" className={tw('textstyle-table-header')}>{translation.email}</span>,
           <></>
         ]}
         rowMappingToCells={invite => [
           <div key="email" className={tw('flex flex-row justify-start gap-x-2')}>
-            <Span>{invite.email}</Span>
+            <span>{invite.email}</span>
           </div>,
           <div key="remove" className={tw('flex flex-row justify-end')}>
             <Button

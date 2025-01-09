@@ -1,7 +1,6 @@
 import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import type { TextImageProps } from '@helpwave/common/components/TextImage'
 import { TextImage } from '@helpwave/common/components/TextImage'
@@ -97,8 +96,8 @@ export const StepsToDigitalizationSection = () => {
   return (
     <SectionBase className={tw('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={tw('!px-0')}>
       <div className={tw('flex flex-col items-center text-center gap-y-2')}>
-        <h2><Span type="title" className={tw('!text-3xl')}><MarkdownInterpreter text={translation.title}/></Span></h2>
-        <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
+        <h2 className={tw('textstyle-title-xl')}><MarkdownInterpreter text={translation.title}/></h2>
+        <span className={tw('textstyle-title-sm')}><MarkdownInterpreter text={translation.description}/></span>
       </div>
       <Carousel hintNext={true} isLooping={true} isAutoLooping={true} heights={{ tablet: 300 }} blurColor="hw-grayscale-50">
         {items.map((value, index) => (

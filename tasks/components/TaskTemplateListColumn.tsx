@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { tw, tx } from '@helpwave/common/twind'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
 import { Edit } from 'lucide-react'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
@@ -53,9 +52,9 @@ export const TaskTemplateListColumn = ({
   return (
     <div className={tw('flex flex-col overflow-hidden h-full')}>
       <div className={tw('flex flex-row overflow-hidden')}>
-        <Span className={tw('text-2xl font-space font-bold mb-4 flex-1')}>
+        <span className={tw('textstyle-lg mb-4 flex-1')}>
           {translation.template}
-        </Span>
+        </span>
         {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
       </div>
       <div className={tw('overflow-hidden h-full')} ref={ref}>

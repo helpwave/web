@@ -1,12 +1,10 @@
 import type { ReactNode } from 'react'
 import Image from 'next/image'
 import { tw, tx } from '../../twind'
-import type { SpanType } from '../Span'
-import { Span } from '../Span'
 
 export type TileProps = {
-  title: { value: string, className?: string, type?: SpanType },
-  description?: { value: string, className?: string, type?: SpanType },
+  title: { value: string, className?: string },
+  description?: { value: string, className?: string},
   prefix?: ReactNode,
   suffix?: ReactNode,
   className?: string,
@@ -26,9 +24,9 @@ export const Tile = ({
     <div className={tx('flex flex-row gap-x-4 w-full items-center', className)}>
       {prefix}
       <div className={tw('flex flex-col w-full')}>
-        <Span className={title.className} type={title.type}>{title.value}</Span>
+        <span className={tx(title.className)}>{title.value}</span>
         {!!description &&
-          <Span type={description.type ?? 'description'} className={description.className}>{description.value}</Span>}
+          <span className={tx(description.className ?? 'textstyle-description') }>{description.value}</span>}
       </div>
       {suffix}
     </div>

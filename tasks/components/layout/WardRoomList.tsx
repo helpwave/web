@@ -4,7 +4,6 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Button } from '@helpwave/common/components/Button'
-import { Span } from '@helpwave/common/components/Span'
 import Link from 'next/link'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
@@ -76,7 +75,7 @@ export const WardRoomList = ({
          onClick={() => updateContext({ wardId: contextState.wardId })}
     >
       <div className={tw('flex flex-row justify-between items-center pb-4')}>
-        <Span type="title">{translation.roomOverview}</Span>
+        <span className={tw('textstyle-title-md')}>{translation.roomOverview}</span>
         <Button onClick={event => {
           event.stopPropagation()
           updateContext({ wardId: contextState.wardId })
@@ -96,7 +95,7 @@ export const WardRoomList = ({
             />
           )) : (
             <div className={tw('flex flex-col gap-y-2 items-center')}>
-              <Span>{translation.noRooms}</Span>
+              <span>{translation.noRooms}</span>
               <Link href={`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`}>
                 <Button>{translation.editWard}</Button>
               </Link>

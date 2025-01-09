@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import StoryHeader from '@/components/sections/story/StoryHeader'
 import { Page } from '@/components/Page'
-import { StorySliderSection } from '@/components/sections/landing/StoriesSliderSection'
+import { StorySliderSection } from '@/components/sections/story/StoriesSliderSection'
 
 type StoryTranslation = {
   title: string,

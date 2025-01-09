@@ -100,7 +100,7 @@ export const StepsToDigitalizationSection = () => {
         <h2><Span type="title" className={tw('!text-3xl')}><MarkdownInterpreter text={translation.title}/></Span></h2>
         <Span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></Span>
       </div>
-      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} heights={{ tablet: 300 }}>
+      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} heights={{ tablet: 300 }} blurColor="hw-grayscale-50">
         {items.map((value, index) => (
           <div key={index} className={tw('px-[2.5%] h-full')}>
             <TextImage {...value} className={tw('h-full overflow-hidden')}/>

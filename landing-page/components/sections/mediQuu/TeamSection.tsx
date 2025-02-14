@@ -12,25 +12,6 @@ const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 
 const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, string> })[] = [
   {
-    name: 'Christian Porschen',
-    prefix: 'Dr. med.',
-    role: 'Chief Medical Officer',
-    roleBadge: 'CMO',
-    imageUrl: imageUrl('christian_porschen'),
-    badge: (
-      <HelpwaveBadge
-        size="small"
-        className="bg-black !gap-x-1 !w-fit"
-      />
-    ),
-    socials: [
-      { type: 'linkedin', url: 'https://www.linkedin.com/in/cpors/' },
-      { type: 'mail', url: 'mailto:christian.porschen@helpwave.de' },
-      { type: 'github', url: 'https://github.com/aegis301' },
-    ],
-    imageClassName: '!w-[230px] !h-[200px]'
-  },
-  {
     name: 'Felix Evers',
     roleBadge: 'CEO',
     role: 'Chief Executive Officer',
@@ -50,10 +31,11 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
     imageClassName: '!w-[230px] !h-[200px]'
   },
   {
-    name: 'Max Schäfer',
-    roleBadge: 'CTO',
-    role: 'Chief Technology Officer',
-    imageUrl: imageUrl('max_schaefer'),
+    name: 'Christian Porschen',
+    prefix: 'Dr. med.',
+    role: 'Chief Medical Officer',
+    roleBadge: 'CMO',
+    imageUrl: imageUrl('christian_porschen'),
     badge: (
       <HelpwaveBadge
         size="small"
@@ -61,11 +43,25 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
       />
     ),
     socials: [
-      { type: 'linkedin', url: 'https://www.linkedin.com/in/maxrobinschaefer/' },
-      { type: 'mail', url: 'mailto:max.schaefer@helpwave.de' },
-      { type: 'github', url: 'https://github.com/MaxSchaefer' },
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/cpors/' },
+      { type: 'mail', url: 'mailto:christian.porschen@helpwave.de' },
+      { type: 'github', url: 'https://github.com/aegis301' },
     ],
     imageClassName: '!w-[230px] !h-[200px]'
+  },
+  {
+    name: 'Ludwig Maidowski',
+    prefix: 'Dr. med., Dipl.-Jur.',
+    suffix: 'Maître en droit, Paris II',
+    role: 'Chief Legal Officer',
+    roleBadge: 'CLO',
+    tags: ['law', 'doctor', 'product'],
+    imageUrl: imageUrl('ludwig_maidowski'),
+    socials: [
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
+      { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
+    ],
+    imageClassName: 'w-[200px] h-[200px]'
   },
 ]
 

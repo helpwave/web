@@ -7,19 +7,6 @@ const imageUrl = (key: string) => `https://cdn.helpwave.de/profile/${key}.png`
 const teamData: Record<string, ProfileProps[]> = {
   founders: [
     {
-      name: 'Max Schäfer',
-      roleBadge: 'CTO',
-      role: 'Chief Technology Officer',
-      imageUrl: imageUrl('max_schaefer'),
-      tags: ['development', 'cloud', 'scale'],
-      socials: [
-        { type: 'linkedin', url: 'https://www.linkedin.com/in/maxrobinschaefer/' },
-        { type: 'mail', url: 'mailto:max.schaefer@helpwave.de' },
-        { type: 'github', url: 'https://github.com/MaxSchaefer' },
-      ],
-      imageClassName: 'w-[230px] h-[200px]'
-    },
-    {
       name: 'Felix Evers',
       roleBadge: 'CEO',
       role: 'Chief Executive Officer',

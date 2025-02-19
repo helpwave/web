@@ -5,3 +5,4 @@ packages:
   - eslint-config
   - scripts
   - api-services
+  - customer

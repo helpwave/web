@@ -109,8 +109,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                   }
                 }}
               </Droppable>
-            )
-        )}
+            ))}
       </div>
     </div>
   )

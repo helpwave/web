@@ -266,8 +266,7 @@ export const Table = <T, >({
                       {value}
                     </div>
                   </th>
-              )
-              )}
+              ))}
             </tr>
             </thead>
             <tbody>

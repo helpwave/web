@@ -146,7 +146,8 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       const previousTaskTemplates = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
       queryClient.setQueryData<TaskTemplateDTO[]>(
         [queryKey],
-        (old) => old)
+        (old) => old
+)
       return { previousTaskTemplates }
     },
     onError: (_, newTodo, context) => {
@@ -212,7 +213,8 @@ export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskT
       const previousTaskTemplate = queryClient.getQueryData<TaskTemplateDTO[]>([queryKey])
       queryClient.setQueryData<TaskTemplateDTO[]>(
         [queryKey],
-        (old) => old)
+        (old) => old
+)
       return { previousTaskTemplate }
     },
     onError: (_, newTodo, context) => {

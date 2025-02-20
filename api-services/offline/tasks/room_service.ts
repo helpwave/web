@@ -81,8 +81,7 @@ export class RoomOfflineServicePromiseClient extends RoomServicePromiseClient {
       .setId(room.id)
       .setName(room.name)
       .setWardId(room.wardId)
-      .setBedsList([])
-    )
+      .setBedsList([]))
 
     return new GetRoomsResponse()
       .setRoomsList(list)
@@ -94,24 +93,23 @@ export class RoomOfflineServicePromiseClient extends RoomServicePromiseClient {
     const list = rooms.map(room => new GetRoomOverviewsByWardResponse.Room()
       .setId(room.id)
       .setName(room.name)
-      .setBedsList(BedOfflineService.findMany(room.id).map(bed => {
-        const patient = PatientOfflineService.findByBed(bed.id)
-        const tasks: TaskValueStore[] = patient ? TaskOfflineService.findTasks(patient.id) : []
-        return new GetRoomOverviewsByWardResponse.Room.Bed()
-          .setId(bed.id)
-          .setName(bed.name)
-          .setPatient(patient ?
-            new GetRoomOverviewsByWardResponse.Room.Bed.Patient()
-              .setId(patient.id)
-              .setHumanReadableIdentifier(patient.name)
-              .setTasksUnscheduled(tasks.filter(value => value.status === 'todo').length)
-              .setTasksInProgress(tasks.filter(value => value.status === 'inProgress').length)
-              .setTasksDone(tasks.filter(value => value.status === 'done').length)
-            : undefined
-          )
-      }
-      )) // TODO fix RoomOfflineService
-    )
+      .setBedsList(
+        BedOfflineService.findMany(room.id).map(bed => {
+          const patient = PatientOfflineService.findByBed(bed.id)
+          const tasks: TaskValueStore[] = patient ? TaskOfflineService.findTasks(patient.id) : []
+          return new GetRoomOverviewsByWardResponse.Room.Bed()
+            .setId(bed.id)
+            .setName(bed.name)
+            .setPatient(patient ?
+              new GetRoomOverviewsByWardResponse.Room.Bed.Patient()
+                .setId(patient.id)
+                .setHumanReadableIdentifier(patient.name)
+                .setTasksUnscheduled(tasks.filter(value => value.status === 'todo').length)
+                .setTasksInProgress(tasks.filter(value => value.status === 'inProgress').length)
+                .setTasksDone(tasks.filter(value => value.status === 'done').length)
+              : undefined)
+        })
+      ))// TODO fix RoomOfflineService
 
     return new GetRoomOverviewsByWardResponse()
       .setRoomsList(list)

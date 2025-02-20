@@ -7,7 +7,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "generate": "node ../scripts/generate_boilerplate.js",
-    "lint": "eslint . && tsc --noEmit"
+    "lint": "tsc --noEmit && eslint ."
   },
   "dependencies": {
     "@babel/core": "7.26.0",

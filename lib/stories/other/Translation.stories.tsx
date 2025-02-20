@@ -7,7 +7,7 @@ import { tw } from '../../twind'
 type TranslationExampleTranslation = {
   welcome: string,
   goodToSeeYou: string,
-  page: (page: number) => string
+  page: (page: number) => string,
 }
 
 const defaultTranslationExampleTranslations: Record<Languages, TranslationExampleTranslation> = {
@@ -24,7 +24,7 @@ const defaultTranslationExampleTranslations: Record<Languages, TranslationExampl
 }
 
 type TranslationExampleProps = {
-  name: string
+  name: string,
 }
 
 /**

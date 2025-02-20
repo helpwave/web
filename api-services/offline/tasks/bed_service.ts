@@ -88,8 +88,7 @@ export class BedOfflineServicePromiseClient extends BedServicePromiseClient {
     const list = beds.map(bed => new GetBedsResponse.Bed()
       .setId(bed.id)
       .setName(bed.name)
-      .setRoomId(bed.roomId)
-    )
+      .setRoomId(bed.roomId))
 
     return new GetBedsResponse()
       .setBedsList(list)
@@ -100,8 +99,7 @@ export class BedOfflineServicePromiseClient extends BedServicePromiseClient {
 
     const list = beds.map(bed => new GetBedsByRoomResponse.Bed()
       .setId(bed.id)
-      .setName(bed.name)
-    )
+      .setName(bed.name))
 
     return new GetBedsByRoomResponse()
       .setBedsList(list)

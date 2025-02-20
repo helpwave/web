@@ -4,7 +4,7 @@ import { tw, tx } from '../../twind'
 
 export type TileProps = {
   title: { value: string, className?: string },
-  description?: { value: string, className?: string},
+  description?: { value: string, className?: string },
   prefix?: ReactNode,
   suffix?: ReactNode,
   className?: string,
@@ -26,7 +26,7 @@ export const Tile = ({
       <div className={tw('flex flex-col w-full')}>
         <span className={tx(title.className)}>{title.value}</span>
         {!!description &&
-          <span className={tx(description.className ?? 'textstyle-description') }>{description.value}</span>}
+          <span className={tx(description.className ?? 'textstyle-description')}>{description.value}</span>}
       </div>
       {suffix}
     </div>

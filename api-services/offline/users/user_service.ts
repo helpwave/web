@@ -1,13 +1,11 @@
 import type { Metadata } from 'grpc-web'
 import { UserServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_grpc_web_pb'
 import type {
-  CreateUserRequest,
   ReadPublicProfileRequest,
   ReadSelfRequest
   , UpdateUserRequest
 } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_pb'
 import {
-  CreateUserResponse,
   ReadPublicProfileResponse,
   ReadSelfOrganization,
   ReadSelfResponse, UpdateUserResponse
@@ -88,20 +86,6 @@ export class UserOfflineServicePromiseClient extends UserServicePromiseClient {
       .setNickname(user.nickName)
       .setAvatarUrl(user.avatarURL)
       .setOrganizationsList(OrganizationOfflineService.findOrganizations().map(org => new ReadSelfOrganization().setId(org.id)))
-  }
-
-  async createUser(request: CreateUserRequest, _?: Metadata): Promise<CreateUserResponse> {
-    const newUser: UserValueStore = {
-      id: Math.random().toString(),
-      name: request.getName(),
-      nickName: request.getNickname(),
-      email: request.getEmail(),
-      avatarURL: 'https://helpwave.de/favicon.ico',
-    }
-
-    UserOfflineService.create(newUser)
-
-    return new CreateUserResponse().setId(newUser.id)
   }
 
   async updateUser(request: UpdateUserRequest, _?: Metadata): Promise<UpdateUserResponse> {

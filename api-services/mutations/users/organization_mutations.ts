@@ -5,7 +5,6 @@ import type {
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import {
   AcceptInvitationRequest,
-  AddMemberRequest,
   CreateOrganizationRequest,
   CreatePersonalOrganizationRequest,
   DeclineInvitationRequest,
@@ -317,29 +316,6 @@ export const useInviteAcceptMutation = () => {
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
-  })
-}
-
-export const useAddMemberMutation = (organizationId: string) => { // TODO: unused?
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (userId: string) => {
-      const req = new AddMemberRequest()
-      req.setId(organizationId)
-      req.setUserId(userId)
-
-      const res = await APIServices.organization.addMember(req, getAuthenticatedGrpcMetadata())
-      const obj = res.toObject() // TODO: what is the type of this?
-
-      if (!obj) {
-        throw new Error('DeclineInvitation failed')
-      }
-
-      return obj
-    },
-    onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
-    }
   })
 }
 

@@ -142,8 +142,7 @@ export const useAttachPropertyMutation = <T extends AttachedProperty>(callback: 
 
             req.setMultiSelectValue(new AttachPropertyValueRequest.MultiSelectValue()
               .setSelectValuesList(addIds)
-              .setRemoveSelectValuesList(deleteIds)
-            )
+              .setRemoveSelectValuesList(deleteIds))
           }
           break
         default:

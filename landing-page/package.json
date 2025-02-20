@@ -7,17 +7,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . && tsc --noEmit"
+    "lint": "tsc --noEmit && eslint ."
   },
   "dependencies": {
     "@helpwave/common": "workspace:*",
     "@radix-ui/react-checkbox": "1.1.3",
     "@tanstack/react-query": "4.36.1",
     "@twind/core": "1.1.3",
-    "@twind/preset-autoprefix": "1.0.7",
-    "@twind/preset-tailwind": "1.1.4",
-    "@twind/preset-tailwind-forms": "1.1.2",
-    "@twind/preset-typography": "1.0.7",
     "csstype": "3.1.3",
     "lucide-react": "0.468.0",
     "next": "15.1.3",

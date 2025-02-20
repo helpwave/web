@@ -92,8 +92,7 @@ export const PropertyList = ({
               onEditComplete={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
               onRemove={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
             />
-        )
-        )}
+        ))}
         <Menu<HTMLDivElement>
           trigger={(onClick, ref) => (
             <div

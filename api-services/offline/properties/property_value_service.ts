@@ -5,7 +5,7 @@ import {
   AttachPropertyValueRequest,
   AttachPropertyValueResponse,
   GetAttachedPropertyValuesRequest,
-  GetAttachedPropertyValuesResponse
+  GetAttachedPropertyValuesResponse, MultiSelectValue, SelectValueOption
 } from '@helpwave/proto-ts/services/property_svc/v1/property_value_svc_pb'
 import { Date as ProtoDate } from '@helpwave/proto-ts/services/property_svc/v1/types_pb'
 import type { Metadata } from 'grpc-web'
@@ -38,7 +38,8 @@ export class PropertyValueOfflineServicePromiseClient extends PropertyValueServi
 
     const values = valueStore.attachedProperties.filter(
       value => value.subjectId === subjectId
-        && valueStore.properties.find(property => property.id === value.propertyId)?.subjectType === subjectType)
+        && valueStore.properties.find(property => property.id === value.propertyId)?.subjectType === subjectType
+    )
 
     const valueList: GetAttachedPropertyValuesResponse.Value[] = values.map(value => {
       const attachedProperty = new GetAttachedPropertyValuesResponse.Value()
@@ -85,7 +86,7 @@ export class PropertyValueOfflineServicePromiseClient extends PropertyValueServi
         case 'singleSelect':
           if (propertyValue.singleSelectValue !== undefined) {
             attachedProperty.setSelectValue(
-              builder(new GetAttachedPropertyValuesResponse.Value.SelectValueOption(), value => {
+              builder(new SelectValueOption(), value => {
                 value.setId(propertyValue.singleSelectValue!.id)
                 value.setName(propertyValue.singleSelectValue!.name)
                 if (propertyValue.singleSelectValue!.description !== undefined) {
@@ -97,17 +98,16 @@ export class PropertyValueOfflineServicePromiseClient extends PropertyValueServi
           break
         case 'multiSelect':
           if (propertyValue.multiSelectValue !== undefined) {
-            attachedProperty.setMultiSelectValue(new GetAttachedPropertyValuesResponse.Value.MultiSelectValue()
+            attachedProperty.setMultiSelectValue(new MultiSelectValue()
               .setSelectValuesList(
-                propertyValue.multiSelectValue.map(selectValue => builder(new GetAttachedPropertyValuesResponse.Value.SelectValueOption(), value => {
+                propertyValue.multiSelectValue.map(selectValue => builder(new SelectValueOption(), value => {
                   value.setId(selectValue.id)
                   value.setName(selectValue.name)
                   if (selectValue.description !== undefined) {
                     value.setDescription(selectValue.description)
                   }
                 }))
-              )
-            )
+              ))
           }
           break
       }

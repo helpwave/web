@@ -6,7 +6,7 @@ const nextConfig = {
   output: 'standalone',
   images: {
     dangerouslyAllowSVG: true,
-    domains: ['cdn.helpwave.de', 'helpwave.de'],
+    domains: ['cdn.helpwave.de', 'customer.helpwave.de', 'helpwave.de'],
   },
 }
 

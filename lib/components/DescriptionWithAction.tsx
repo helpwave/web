@@ -32,12 +32,12 @@ export const DescriptionWithAction = ({
 }: DescriptionWithActionProps) => {
   let leading
   switch (leadingIcon) {
-    case 'label':
-      leading = <Tag className={tw('text-hw-primary-400')} size={16}/>
-      break
-    default:
-      leading = null
-      break
+  case 'label':
+    leading = <Tag className={tw('text-hw-primary-400')} size={16}/>
+    break
+  default:
+    leading = null
+    break
   }
 
   return (

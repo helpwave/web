@@ -29,7 +29,7 @@ export const VerticalDivider = ({
   return (
     <div className={tw(`w-[${width}px] h-[${height}px]`)}>
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} fill="none"
-           xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg">
         <line
           opacity="0.5"
           x1={width / 2}

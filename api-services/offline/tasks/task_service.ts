@@ -140,8 +140,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
     const list = SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTaskResponse.SubTask()
       .setId(subtask.id)
       .setName(subtask.name)
-      .setDone(subtask.isDone)
-    )
+      .setDone(subtask.isDone))
     const patient = PatientOfflineService.find(task.patientId)
     if (!patient) {
       throw Error(`FindTask: Could not find patient with id ${task.patientId} for task`)
@@ -177,14 +176,12 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTasksByPatientResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
-          .setDone(subtask.isDone)
-        ))
+          .setDone(subtask.isDone)))
       if (task.assignee) {
         res.setAssignedUserId(task.assignee)
       }
       return res
-    }
-    )
+    })
 
     return new GetTasksByPatientResponse().setTasksList(list)
   }
@@ -204,8 +201,7 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetTasksByPatientSortedByStatusResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
-          .setDone(subtask.isDone)
-        ))
+          .setDone(subtask.isDone)))
       if (task.assignee) {
         res.setAssignedUserId(task.assignee)
       }
@@ -240,14 +236,12 @@ export class TaskOfflineServicePromiseClient extends TaskServicePromiseClient {
         .setSubtasksList(SubTaskOfflineService.findSubTasks(task.id).map(subtask => new GetAssignedTasksResponse.Task.SubTask()
           .setId(subtask.id)
           .setName(subtask.name)
-          .setDone(subtask.isDone)
-        ))
+          .setDone(subtask.isDone)))
       if (task.assignee) {
         res.setAssignedUserId(task.assignee)
       }
       return res
-    }
-    )
+    })
     return new GetAssignedTasksResponse().setTasksList(list)
   }
 

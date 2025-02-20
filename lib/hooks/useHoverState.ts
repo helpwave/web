@@ -13,7 +13,7 @@ type UseHoverStateProps = {
    *
    * default: false
    */
-  isDisabled: boolean
+  isDisabled: boolean,
 }
 
 type UseHoverStateReturnType = {
@@ -30,8 +30,8 @@ type UseHoverStateReturnType = {
    */
   handlers: {
     onMouseEnter: () => void,
-    onMouseLeave: () => void
-  }
+    onMouseLeave: () => void,
+  },
 }
 
 const defaultUseHoverStateProps: UseHoverStateProps = {

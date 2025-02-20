@@ -44,8 +44,7 @@ export const useUpdatePropertyViewRuleRequest = (subjectType: SubjectType, wardI
         .setAppendToAlwaysIncludeList(update.appendToAlwaysInclude ?? [])
         .setRemoveFromAlwaysIncludeList(update.removeFromAlwaysInclude ?? [])
         .setAppendToDontAlwaysIncludeList(update.removeFromAlwaysInclude ?? [])
-        .setRemoveFromDontAlwaysIncludeList(update.removeFromDontAlwaysInclude ?? [])
-      )
+        .setRemoveFromDontAlwaysIncludeList(update.removeFromDontAlwaysInclude ?? []))
 
       await APIServices.propertyViewSource.updatePropertyViewRule(req, getAuthenticatedGrpcMetadata())
     },

@@ -74,7 +74,8 @@ export const YearMonthPicker = ({
                         return (
                           <div
                             key={month}
-                            className={tx('px-2 py-1 rounded-md border border-2 hover:bg-hw-primary-200 hover:border-hw-primary-400 flex-1 text-center cursor-pointer',
+                            className={tx(
+                              'px-2 py-1 rounded-md border border-2 hover:bg-hw-primary-200 hover:border-hw-primary-400 flex-1 text-center cursor-pointer',
                               {
                                 'bg-white border-transparent': !selectedMonth,
                                 'border-hw-primary-300 bg-hw-primary-100 hover:bg-hw-primary-200': selectedMonth

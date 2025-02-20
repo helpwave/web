@@ -1,7 +1,8 @@
 import { tw } from '@twind/core';
 import type { PropsWithChildren, ReactNode } from 'react';
 import { useState } from 'react';
-import { NavSidebar } from '@/components/layout/NavSidebar';
+import type { NavItem } from '@/components/layout/NavigationSidebar';
+import { NavigationSidebar } from '@/components/layout/NavigationSidebar';
 import type { HeaderProps } from '@/components/layout/Header';
 import { Header } from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -10,53 +11,64 @@ import { Helpwave } from '@helpwave/common/icons/Helpwave';
 import type { Languages } from '@helpwave/common/hooks/useLanguage';
 import { useTranslation } from '@helpwave/common/hooks/useTranslation';
 import { Menu } from 'lucide-react';
+import Head from 'next/head';
+import { MobileNavigationOverlay } from '@/components/layout/MobileNavigationOverlay';
 
-type PageTranslation = { customerPortal: string }
+type PageTranslation = { customer: string }
 
 const defaultPageTranslationTranslation: Record<Languages, PageTranslation> = {
   en: {
-    customerPortal: 'Customer Portal',
+    customer: 'customer',
   },
   de: {
-    customerPortal: 'Kunden Portal',
+    customer: 'customer',
   }
 }
 
 export type PageProps = PropsWithChildren<{
+  pageTitle: string,
   header?: HeaderProps,
   footer?: ReactNode,
 }>
+
+const navItems: NavItem = [
+  { name: { en: 'Dashboard', de: 'dashboard' }, url: '/' },
+  { name: { en: 'Products', de: 'Produkte' }, url: '/products' },
+  { name: { en: 'Bills', de: 'Rechnungen' }, url: '/bills' },
+  { name: { en: 'Contact Information', de: 'Kontakt Informationen' }, url: '/contact-info' },
+]
 
 /**
  * Component for a page
  */
 export const Page = ({
                        children,
+                       pageTitle,
                        header,
                        footer = (<Footer/>),
                      }: PageProps) => {
   const translation = useTranslation(defaultPageTranslationTranslation)
   const [isNavigationVisible, setIsNavigationVisible] = useState(false)
 
-  const sideNav = (
-    <NavSidebar
-      items={[
-        { name: { en: 'Dashboard', de: 'dashboard' }, url: '/' },
-        { name: { en: 'Products', de: 'Produkte' }, url: '/products' },
-        { name: { en: 'Bills', de: 'Rechnungen' }, url: '/bills' },
-        { name: { en: 'Contact Information', de: 'Kontakt Informationen' }, url: '/contact-info' },
-      ]}
-      onHideClick={() => setIsNavigationVisible(false)}
-    />
+  const mainContent = (
+    <div className={tw('flex flex-col w-full h-full overflow-y-scroll')}>
+      <main className={tw('flex flex-col min-h-[80vh]')}>
+        {children}
+      </main>
+      {footer}
+    </div>
   )
 
   return (
-    <div className={tw('relative flex flex-col w-screen h-screen')}>
+    <div className={tw('relative flex flex-col w-screen h-screen overflow-hidden')}>
+      <Head>
+        <title>{pageTitle}</title>
+      </Head>
       <Header
         leading={(
           <Link href="/" className={tw('flex flex-row gap-x-1 items-center text-2xl')}>
             <Helpwave/>
-            <span className={tw('font-space font-bold')}>{`helpwave ${translation.customerPortal}`}</span>
+            <span className={tw('font-space font-bold')}>{`helpwave ${translation.customer}`}</span>
           </Link>
         )}
         {...header}
@@ -70,17 +82,16 @@ export const Page = ({
         ),
         ]}
       />
-      {isNavigationVisible && (sideNav)}
-      <div className={tw('flex flex-row w-full grow mobile:hidden')}>
-        {sideNav}
-        <div className={tw('flex flex-col')}>
-          {children}
-        </div>
+      {isNavigationVisible && (
+        <MobileNavigationOverlay items={navItems} onCloseClick={() => setIsNavigationVisible(false)}/>
+      )}
+      <div className={tw('flex flex-row w-full h-full grow mobile:hidden')}>
+        {<NavigationSidebar items={navItems}/>}
+        {mainContent}
       </div>
-      <div className={tw('flex-col grow w-full @(hidden) mobile:flex')}>
-        {children}
+      <div className={tw('not-mobile:hidden w-full h-full')}>
+        {mainContent}
       </div>
-      {footer}
     </div>
   )
 }

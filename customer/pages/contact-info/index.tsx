@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page';
+import titleWrapper from '@/utils/titleWrapper';
 
 type ContactInfoTranslation = {
   contactInfo: string,
@@ -22,7 +23,7 @@ type ContactInfoServerSideProps = {
 
 const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactInfoServerSideProps>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultContactInfoTranslations, overwriteTranslation)
-  return (<Page>This is the {translation.contactInfo} page</Page>)
+  return (<Page pageTitle={titleWrapper(translation.contactInfo)}>This is the {translation.contactInfo} page</Page>)
 }
 
 export default ContactInfo

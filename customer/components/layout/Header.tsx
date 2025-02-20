@@ -14,7 +14,11 @@ export type HeaderProps = {
 export const Header = ({ leading, leftSide, rightSide, className }: HeaderProps) => {
   return (
     <div
-      className={tx('@(sticky top-0 flex flex-row items-center justify-between px-2 py-2 min-h-[64px] max-h-[64px] shadow-md)', className)}>
+      className={tx(
+        '@(sticky top-0 flex flex-row items-center justify-between px-2 py-2 min-h-[64px] max-h-[64px] shadow-md bg-white)',
+        className
+      )}
+    >
       <div className={tw('flex flex-row items-center gap-x-4')}>
         {leading}
         {leading && leftSide && (<div className={tw('h-8 w-[2px] rounded bg-gray-200')}/>)}

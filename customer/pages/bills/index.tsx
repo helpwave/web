@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page';
+import titleWrapper from '@/utils/titleWrapper';
 
 type BillsTranslation = {
   bills: string,
@@ -23,7 +24,7 @@ type BillsServerSideProps = {
 const Bills: NextPage<PropsForTranslation<BillsTranslation, BillsServerSideProps>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultBillsTranslations, overwriteTranslation)
   return (
-    <Page>
+    <Page pageTitle={titleWrapper(translation.bills)}>
       <div>This is the {translation.bills} page</div>
     </Page>
   )

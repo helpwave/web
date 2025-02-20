@@ -10,8 +10,8 @@ import { textStyles } from './textstyles'
 
 export type ScreenTypes = 'desktop' | 'tablet' | 'mobile'
 const screenSizes: Record<ScreenTypes, { min?: string, max?: string, raw?: string }> = {
-  mobile: { max: '768px' },
-  tablet: { min: '768px', max: '1024px' },
+  mobile: { max: '767px' },
+  tablet: { min: '768px', max: '1023px' },
   desktop: { min: '1024px' },
 }
 
@@ -117,7 +117,10 @@ export const config = defineConfig({
         sans: ['var(--font-inter)', ...fontFamily.sans],
         space: ['var(--font-space)', ...fontFamily.sans]
       },
-      screens: screenSizes,
+      screens: {
+        ...screenSizes,
+        'not-mobile': { min: screenSizes.tablet.min },
+      },
       animation: {
         'fade': 'fade-out 3s ease-in-out',
         'wave-big-left-up': 'bigLeftUp 1.7s ease-in 0s infinite normal',

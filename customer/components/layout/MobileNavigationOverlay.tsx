@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { noop } from '@helpwave/common/util/noop';
 import { ArrowRightIcon, X } from 'lucide-react';
 import { useTranslation } from '@helpwave/common/hooks/useTranslation';
+import type { NavItem } from '@/components/layout/NavigationSidebar';
 
 type MobileNavigationOverlayTranslation = { navigation: string }
 
@@ -16,12 +17,6 @@ const defaultMobileNavigationOverlayTranslation: Record<Languages, MobileNavigat
   de: {
     navigation: 'Navigation',
   }
-}
-
-export type NavItem = {
-  name: Record<Languages, string>,
-  url: string,
-  subItems?: NavItem[],
 }
 
 export type MobileNavigationOverlayProps = {

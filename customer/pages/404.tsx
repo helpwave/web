@@ -2,7 +2,6 @@ import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import Head from 'next/head'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -34,10 +33,7 @@ const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {
 const NotFound: NextPage = ({ overwriteTranslation }: PropsForTranslation<NotFoundTranslation>) => {
   const translation = useTranslation(defaultNotFoundTranslation, overwriteTranslation)
   return (
-    <Page>
-      <Head>
-        <title>{titleWrapper()}</title>
-      </Head>
+    <Page pageTitle={titleWrapper()}>
       <div className={tw('desktop:w-5/12 h-full desktop:mx-auto tablet:mx-16 mobile:mx-8 relative z-[1]')}>
         <div className={tw('absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center')}>
           <Helpwave className={tw('w-full left-1/2 pt-[100px]')} size={256} animate="bounce" />

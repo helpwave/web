@@ -56,9 +56,7 @@ export const AnimatedRing = ({
       onAnimationFinished()
       if (repeating) {
         setCurrentWidth(0)
-        requestAnimationFrame((newTimestamp) =>
-          animate(newTimestamp, newTimestamp)
-        )
+        requestAnimationFrame((newTimestamp) => animate(newTimestamp, newTimestamp))
       }
     }
   }, [milliseconds, onAnimationFinished, repeating, width])
@@ -121,9 +119,7 @@ export const RingWave = ({
       onAnimationFinished()
       if (repeating) {
         setCurrentInnerSize(startInnerSize)
-        requestAnimationFrame((newTimestamp) =>
-          animate(newTimestamp, newTimestamp)
-        )
+        requestAnimationFrame((newTimestamp) => animate(newTimestamp, newTimestamp))
       }
     }
   }, [distance, endInnerSize, milliseconds, onAnimationFinished, repeating, startInnerSize])

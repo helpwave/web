@@ -208,7 +208,8 @@ export const ScrollPicker = <T, >({
           {shownItems.map(({ name, index }, arrayIndex) => (
             <div
               key={index}
-              className={tx(`flex flex-col items-center justify-center flex max-h-[${itemHeight}px] h-[${itemHeight}px] rounded-md`,
+              className={tx(
+                `flex flex-col items-center justify-center flex max-h-[${itemHeight}px] h-[${itemHeight}px] rounded-md`,
                 {
                   'text-hw-primary-400 font-bold': currentIndex === index,
                   'cursor-pointer': !disabled,

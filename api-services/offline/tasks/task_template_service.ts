@@ -109,12 +109,12 @@ export class TaskTemplateOfflineServicePromiseClient extends TaskTemplateService
       .setDescription(taskTemplate.notes)
       .setIsPublic(taskTemplate.isPublicVisible)
       .setCreatedBy(taskTemplate.creatorId)
-      .setSubtasksList(this.findTaskTemplateSubTasks(taskTemplate.id).map(subtaskTemplate => new GetAllTaskTemplatesResponse.TaskTemplate.SubTask()
+      .setSubtasksList(this.findTaskTemplateSubTasks(taskTemplate.id).map(
+        subtaskTemplate => new GetAllTaskTemplatesResponse.TaskTemplate.SubTask()
         .setId(subtaskTemplate.id)
         .setName(subtaskTemplate.name)
         .setTaskTemplateId(taskTemplate.id)
-      ))
-    )
+      )))
 
     return new GetAllTaskTemplatesResponse().setTemplatesList(list)
   }

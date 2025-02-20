@@ -101,7 +101,8 @@ export const PropertySelectOptionsUpdater = ({
                 size={20}
                 onClick={() => {
                   const newList = data.options.filter((_, index1) => index1 !== index)
-                  onChange({ ...data, options: newList },
+                  onChange(
+                    { ...data, options: newList },
                     { ...update, delete: [...update.delete, { id: entry.id, index }] }
                   )
                 }}

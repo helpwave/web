@@ -2,8 +2,6 @@ import type { Metadata } from 'grpc-web'
 import { OrganizationServicePromiseClient } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_grpc_web_pb'
 import type {
   AcceptInvitationRequest,
-  AddMemberRequest,
-  AddMemberResponse,
   CreateOrganizationRequest,
   DeclineInvitationRequest,
   DeleteOrganizationRequest,
@@ -205,12 +203,6 @@ export class OrganizationOfflineServicePromiseClient extends OrganizationService
   async declineInvitation(__: DeclineInvitationRequest, _?: Metadata): Promise<DeclineInvitationResponse> {
     // TODO update this
     return new DeclineInvitationResponse()
-  }
-
-  async addMember(__: AddMemberRequest, _?: Metadata): Promise<AddMemberResponse> {
-    // TODO update this
-    throw Error('Not implemented')
-    // return new AddMemberResponse()
   }
 
   removeMember(__: RemoveMemberRequest, _?: Metadata): Promise<RemoveMemberResponse> {

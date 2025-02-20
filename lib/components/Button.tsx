@@ -44,24 +44,26 @@ const Button = ({
   <button
     onClick={disabled ? undefined : onClick}
     disabled={disabled}
-    className={tx('font-medium focus:outline-none', className, {
-      // disabled
-      'text-hw-disabled-text bg-hw-disabled hover:bg-hw-disabled focus:bg-hw-disabled': disabled && variant !== 'text',
-      'text-hw-disabled focus:ring-0': disabled && variant === 'text',
-    },
-    color !== 'none' ? {
-      [getColoring({
-        color,
-        hover: true,
-        style: variant
-      })]: !disabled && appColorNames.some(value => value === color),
-    } : {},
-    {
-      // {small, medium, large}
-      'py-1 px-2 rounded text-sm': size === 'small',
-      'py-2 px-4 rounded-md': size === 'medium',
-      'py-2 px-4 rounded-md text-lg': size === 'large'
-    })}
+    className={tx(
+      'font-medium focus:outline-none', className, {
+        // disabled
+        'text-hw-disabled-text bg-hw-disabled hover:bg-hw-disabled focus:bg-hw-disabled': disabled && variant !== 'text',
+        'text-hw-disabled focus:ring-0': disabled && variant === 'text',
+      },
+      color !== 'none' ? {
+        [getColoring({
+          color,
+          hover: true,
+          style: variant
+        })]: !disabled && appColorNames.some(value => value === color),
+      } : {},
+      {
+        // {small, medium, large}
+        'py-1 px-2 rounded text-sm': size === 'small',
+        'py-2 px-4 rounded-md': size === 'medium',
+        'py-2 px-4 rounded-md text-lg': size === 'large'
+      }
+    )}
     {...restProps}
   >
     {children}

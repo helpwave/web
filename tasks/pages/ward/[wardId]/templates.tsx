@@ -56,8 +56,7 @@ const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTrans
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
-    })
-  )
+    }))
 
   const updateMutation = useUpdateMutation('wardTaskTemplates', taskTemplate =>
     setContextState({
@@ -65,8 +64,7 @@ const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTrans
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
-    })
-  )
+    }))
 
   const deleteMutation = useDeleteMutation('wardTaskTemplates', taskTemplate =>
     setContextState({
@@ -74,8 +72,7 @@ const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTrans
       hasChanges: false,
       isValid: taskTemplate !== undefined,
       template: taskTemplate ?? emptyTaskTemplate
-    })
-  )
+    }))
 
   if (!contextState.hasChanges && templateId && !usedQueryParam) {
     const newSelected = data?.find(value => value.id === templateId) ?? emptyTaskTemplate

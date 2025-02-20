@@ -115,8 +115,7 @@ export class WardOfflineServicePromiseClient extends WardServicePromiseClient {
 
     const res = new GetWardsResponse()
     res.setWardsList(wards.map(value =>
-      new GetWardsResponse.Ward().setId(value.id).setName(value.name)
-    ))
+      new GetWardsResponse.Ward().setId(value.id).setName(value.name)))
 
     return res
   }
@@ -143,8 +142,7 @@ export class WardOfflineServicePromiseClient extends WardServicePromiseClient {
         .setTasksTodo(tasks.filter(task => task.status === 'todo').length)
         .setTasksInProgress(tasks.filter(task => task.status === 'inProgress').length)
         .setTasksDone(tasks.filter(task => task.status === 'done').length)
-    }
-    )
+    })
 
     return new GetWardOverviewsResponse().setWardsList(list)
   }
@@ -171,8 +169,7 @@ export class WardOfflineServicePromiseClient extends WardServicePromiseClient {
         .setTasksTodo(tasks.filter(task => task.status === 'todo').length)
         .setTasksInProgress(tasks.filter(task => task.status === 'inProgress').length)
         .setTasksDone(tasks.filter(task => task.status === 'done').length)
-    }
-    )
+    })
 
     return new GetRecentWardsResponse().setWardsList(list)
   }

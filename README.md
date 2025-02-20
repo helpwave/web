@@ -57,10 +57,6 @@ Our projects use linting with `eslint` to create a uniform code style. The linte
 pnpm run --filter "@helpwave/*" lint
 ```
 
-```shell
-pnpm run --filter "@helpwave/*" lint --fix
-```
-
 It's configuration and further explanation can be found in the [eslint-config](eslint-config/README.md).
 
 ## Scripts

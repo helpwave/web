@@ -4,7 +4,7 @@ import tseslint from 'typescript-eslint';
 import stylisticEslint from '@stylistic/eslint-plugin'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import customRules from './custom-rules/index.js'
-import nextConfig from  '@next/eslint-plugin-next'
+import nextConfig from '@next/eslint-plugin-next'
 
 /** @type {import('eslint').Linter.Config} */
 const recommended = [
@@ -33,6 +33,7 @@ const recommended = [
       'jsx-quotes': ['error', 'prefer-double'],
       '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
       '@stylistic/object-curly-spacing': ['warn', 'always'],
+      '@stylistic/function-paren-newline': ['warn', 'consistent'],
       'no-trailing-spaces': ['error'],
       '@stylistic/comma-dangle': ['error', {
         functions: 'never',

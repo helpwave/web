@@ -22,7 +22,7 @@ export type TooltipProps = PropsWithChildren<{
   containerClassName?: string,
   position?: Position,
   zIndex?: number,
-  offset?: number
+  offset?: number,
 }>
 
 /**

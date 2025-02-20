@@ -182,8 +182,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
         new GetPatientDetailsResponse.Task.SubTask()
           .setId(subTask.id)
           .setName(subTask.name)
-          .setDone(subTask.isDone)
-      )
+          .setDone(subTask.isDone))
       const res = new GetPatientDetailsResponse.Task()
         .setId(task.id)
         .setName(task.name)
@@ -247,8 +246,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
             new GetPatientDetailsResponse.Task.SubTask()
               .setId(subTask.id)
               .setName(subTask.name)
-              .setDone(subTask.isDone)
-          )
+              .setDone(subTask.isDone))
           const res = new GetPatientDetailsResponse.Task()
             .setId(task.id)
             .setName(task.name)
@@ -278,8 +276,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
             .setWardId(room.wardId)
             : undefined)
           .setTasksList(tasks)
-      }
-      )
+      })
     const unassigned = patients
       .filter(value => !value.bedId && !value.isDischarged)
       .map(patient => {
@@ -288,8 +285,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
             new GetPatientDetailsResponse.Task.SubTask()
               .setId(subTask.id)
               .setName(subTask.name)
-              .setDone(subTask.isDone)
-          )
+              .setDone(subTask.isDone))
           const res = new GetPatientDetailsResponse.Task()
             .setId(task.id)
             .setName(task.name)
@@ -309,8 +305,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
           .setHumanReadableIdentifier(patient.name)
           .setNotes(patient.notes)
           .setTasksList(tasks)
-      }
-      )
+      })
     const discharged = patients
       .filter(value => value.isDischarged)
       .map(patient => {
@@ -319,8 +314,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
             new GetPatientDetailsResponse.Task.SubTask()
               .setId(subTask.id)
               .setName(subTask.name)
-              .setDone(subTask.isDone)
-          )
+              .setDone(subTask.isDone))
           const res = new GetPatientDetailsResponse.Task()
             .setId(task.id)
             .setName(task.name)
@@ -339,8 +333,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
           .setHumanReadableIdentifier(patient.name)
           .setNotes(patient.notes)
           .setTasksList(tasks)
-      }
-      )
+      })
 
     return new GetPatientListResponse()
       .setActiveList(active)
@@ -389,8 +382,7 @@ export class PatientOfflineServicePromiseClient extends PatientServicePromiseCli
       .setId(patient.id)
       .setNotes(patient.notes)
       .setHumanReadableIdentifier(patient.name)
-      .setBedId(patient.bedId!)
-    )
+      .setBedId(patient.bedId!))
 
     return new GetPatientsByWardResponse()
       .setPatientsList(list)

@@ -85,7 +85,8 @@ export const MultiSelect = <T, >({
     filteredOptions = MultiSearchWithMapping<MultiSelectOption<T>>(
       searchText,
       filteredOptions,
-      value => search.searchMapping(value))
+      value => search.searchMapping(value)
+    )
   }
   if (!showDisabledOptions) {
     filteredOptions = filteredOptions.filter(value => !value.disabled)
@@ -110,8 +111,7 @@ export const MultiSelect = <T, >({
                    'hover:bg-gray-100': !disabled,
                    'bg-gray-100 cursor-not-allowed text-gray-500': disabled
                  },
-                 triggerClassName
-               )}
+                 triggerClassName)}
           >
             {selectedDisplay ? selectedDisplay({ items: options, disabled }) : menuButtonText}
           </div>

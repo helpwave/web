@@ -216,8 +216,7 @@ export const useSubTaskUpdateMutation = (taskId?: string, callback: (subtask: Su
         .setTaskId(taskId)
         .setSubtask(new UpdateSubtaskRequest.Subtask()
           .setName(subtask.name)
-          .setDone(subtask.isDone)
-        )
+          .setDone(subtask.isDone))
       await APIServices.task.updateSubtask(req, getAuthenticatedGrpcMetadata())
 
       const newSubtask: SubTaskDTO = { ...subtask }

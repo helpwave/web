@@ -31,7 +31,7 @@ export type PageProps = PropsWithChildren<{
   footer?: ReactNode,
 }>
 
-const navItems: NavItem = [
+const navItems: NavItem[] = [
   { name: { en: 'Dashboard', de: 'dashboard' }, url: '/' },
   { name: { en: 'Products', de: 'Produkte' }, url: '/products' },
   { name: { en: 'Bills', de: 'Rechnungen' }, url: '/bills' },

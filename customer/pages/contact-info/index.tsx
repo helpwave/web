@@ -70,12 +70,12 @@ type ContactInfoServerSideProps = {
 
 const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactInfoServerSideProps>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultContactInfoTranslations, overwriteTranslation)
-  const [currentData, setCurrentData] = useState<Customer>()
+  const [currentData, setcurrentData] = useState<Customer>()
   const { data, isError, isLoading } = useCustomerMyselfQuery()
   const customerUpdate = useCustomerUpdateMutation()
 
   useEffect(() => {
-    setCurrentData(data)
+    setcurrentData(data)
   }, [data])
 
   // TODO do input validation
@@ -83,87 +83,89 @@ const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactI
     <Page pageTitle={titleWrapper(translation.contactInfo)} mainContainerClassName={tw('min-h-[auto] pb-6')}>
       <Section titleText={translation.contactInfo}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
-          <div className={tw('flex flex-col gap-y-4 max-w-[700px]')}>
-            <Input
-              value={currentData?.name}
-              onChange={name => setCurrentData({ ...currentData, name })}
-              label={{ name: translation.name }}
-            />
-            <Input
-              value={currentData?.email}
-              onChange={email => setCurrentData({ ...currentData, email })}
-              label={{ name: translation.email }}
-            />
-            <Input
-              value={currentData?.phoneNumber}
-              onChange={phoneNumber => setCurrentData({ ...currentData, phoneNumber })}
-              label={{ name: translation.phone }}
-            />
-            <div className={tw('flex flex-col gap-y-4')}>
-              <h3 className={tw('font-space font-bold text-lg')}>{translation.address}</h3>
+          {!!currentData && (
+            <div className={tw('flex flex-col gap-y-4 max-w-[700px]')}>
               <Input
-                value={currentData?.address.country}
-                onChange={country => setCurrentData({ ...currentData, address: { ...currentData.address, country } })}
-                label={{ name: translation.country }}
+                value={currentData.name}
+                onChange={name => setcurrentData({ ...currentData, name })}
+                label={{ name: translation.name }}
               />
-              <div className={tw('flex flex-row gap-x-2')}>
-                <Input
-                  value={currentData?.address.city}
-                  onChange={city => setCurrentData({ ...currentData, address: { ...currentData.address, city } })}
-                  label={{ name: translation.city }}
-                />
-                <Input
-                  value={currentData?.address.postalCode}
-                  onChange={postalCode => setCurrentData({
-                    ...currentData,
-                    address: { ...currentData.address, postalCode }
-                  })}
-                  label={{ name: translation.postalCode }}
-                  containerClassName={tw('max-w-[180px]')}
-                />
-              </div>
-              <div className={tw('flex flex-row gap-x-2')}>
-                <Input
-                  value={currentData?.address.street}
-                  onChange={street => setCurrentData({
-                    ...currentData,
-                    address: { ...currentData.address, street }
-                  })}
-                  label={{ name: translation.street }}
-                />
-                <Input
-                  value={currentData?.address.houseNumber}
-                  onChange={houseNumber => setCurrentData({
-                    ...currentData,
-                    address: { ...currentData.address, houseNumber }
-                  })}
-                  label={{ name: translation.houseNumber }}
-                  containerClassName={tw('max-w-[180px]')}
-                />
-                <Input
-                  value={currentData?.address.houseNumberAdditional}
-                  onChange={houseNumberAdditional => setCurrentData({
-                    ...currentData,
-                    address: { ...currentData.address, houseNumberAdditional }
-                  })}
-                  label={{ name: translation.houseNumberAdditional }}
-                  containerClassName={tw('max-w-[180px]')}
-                />
-              </div>
+              <Input
+                value={currentData.email}
+                onChange={email => setcurrentData({ ...currentData, email })}
+                label={{ name: translation.email }}
+              />
+              <Input
+                value={currentData.phoneNumber ?? ''}
+                onChange={phoneNumber => setcurrentData({ ...currentData, phoneNumber })}
+                label={{ name: translation.phone }}
+              />
               <div className={tw('flex flex-col gap-y-4')}>
-                <h3 className={tw('font-space font-bold text-lg')}>{translation.additionalInformation}</h3>
+                <h3 className={tw('font-space font-bold text-lg')}>{translation.address}</h3>
                 <Input
-                  value={currentData?.websiteURL}
-                  onChange={websiteURL => setCurrentData({ ...currentData, websiteURL })}
-                  label={{ name: translation.websiteUrl }}
+                  value={currentData.address.country ?? ''}
+                  onChange={country => setcurrentData({ ...currentData, address: { ...currentData.address, country } })}
+                  label={{ name: translation.country }}
                 />
+                <div className={tw('flex flex-row gap-x-2')}>
+                  <Input
+                    value={currentData.address.city ?? ''}
+                    onChange={city => setcurrentData({ ...currentData, address: { ...currentData.address, city } })}
+                    label={{ name: translation.city }}
+                  />
+                  <Input
+                    value={currentData.address.postalCode ?? ''}
+                    onChange={postalCode => setcurrentData({
+                      ...currentData,
+                      address: { ...currentData.address, postalCode }
+                    })}
+                    label={{ name: translation.postalCode }}
+                    containerClassName={tw('max-w-[180px]')}
+                  />
+                </div>
+                <div className={tw('flex flex-row gap-x-2')}>
+                  <Input
+                    value={currentData.address.street ?? ''}
+                    onChange={street => setcurrentData({
+                      ...currentData,
+                      address: { ...currentData.address, street }
+                    })}
+                    label={{ name: translation.street }}
+                  />
+                  <Input
+                    value={currentData.address.houseNumber ?? ''}
+                    onChange={houseNumber => setcurrentData({
+                      ...currentData,
+                      address: { ...currentData.address, houseNumber }
+                    })}
+                    label={{ name: translation.houseNumber }}
+                    containerClassName={tw('max-w-[180px]')}
+                  />
+                  <Input
+                    value={currentData.address.houseNumberAdditional ?? ''}
+                    onChange={houseNumberAdditional => setcurrentData({
+                      ...currentData,
+                      address: { ...currentData.address, houseNumberAdditional }
+                    })}
+                    label={{ name: translation.houseNumberAdditional }}
+                    containerClassName={tw('max-w-[180px]')}
+                  />
+                </div>
+                <div className={tw('flex flex-col gap-y-4')}>
+                  <h3 className={tw('font-space font-bold text-lg')}>{translation.additionalInformation}</h3>
+                  <Input
+                    value={currentData.websiteURL ?? ''}
+                    onChange={websiteURL => setcurrentData({ ...currentData, websiteURL })}
+                    label={{ name: translation.websiteUrl }}
+                  />
+                </div>
+              </div>
+
+              <div className={tw('flex flex-row justify-end')}>
+                <Button onClick={() => customerUpdate.mutate(currentData)}>{translation.save}</Button>
               </div>
             </div>
-
-            <div className={tw('flex flex-row justify-end')}>
-              <Button onClick={() => customerUpdate.mutate(currentData!)}>{translation.save}</Button>
-            </div>
-          </div>
+          )}
         </LoadingAndErrorComponent>
       </Section>
     </Page>

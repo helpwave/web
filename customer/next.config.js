@@ -3,7 +3,7 @@ const nextConfig = {
   distDir: 'build',
   reactStrictMode: true,
   transpilePackages: ['@helpwave/common'],
-  output: 'standalone',
+  output: 'export',
   images: {
     dangerouslyAllowSVG: true,
     domains: ['cdn.helpwave.de', 'customer.helpwave.de', 'helpwave.de'],

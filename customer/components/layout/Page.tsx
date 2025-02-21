@@ -1,18 +1,18 @@
-import { tw, tx } from '@twind/core';
-import type { PropsWithChildren, ReactNode } from 'react';
-import { useState } from 'react';
-import type { NavItem } from '@/components/layout/NavigationSidebar';
-import { NavigationSidebar } from '@/components/layout/NavigationSidebar';
-import type { HeaderProps } from '@/components/layout/Header';
-import { Header } from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import Link from 'next/link';
-import { Helpwave } from '@helpwave/common/icons/Helpwave';
-import type { Languages } from '@helpwave/common/hooks/useLanguage';
-import { useTranslation } from '@helpwave/common/hooks/useTranslation';
-import { Menu } from 'lucide-react';
-import Head from 'next/head';
-import { MobileNavigationOverlay } from '@/components/layout/MobileNavigationOverlay';
+import { tw, tx } from '@twind/core'
+import type { PropsWithChildren, ReactNode } from 'react'
+import { useState } from 'react'
+import type { NavItem } from '@/components/layout/NavigationSidebar'
+import { NavigationSidebar } from '@/components/layout/NavigationSidebar'
+import type { HeaderProps } from '@/components/layout/Header'
+import { Header } from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
+import Link from 'next/link'
+import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Menu } from 'lucide-react'
+import Head from 'next/head'
+import { MobileNavigationOverlay } from '@/components/layout/MobileNavigationOverlay'
 
 type PageTranslation = { customer: string }
 
@@ -35,7 +35,7 @@ export type PageProps = PropsWithChildren<{
 const navItems: NavItem[] = [
   { name: { en: 'Dashboard', de: 'dashboard' }, url: '/' },
   { name: { en: 'Products', de: 'Produkte' }, url: '/products' },
-  { name: { en: 'Bills', de: 'Rechnungen' }, url: '/bills' },
+  { name: { en: 'Invoices', de: 'Rechnungen' }, url: '/invoices' },
   { name: { en: 'Contact Information', de: 'Kontakt Informationen' }, url: '/contact-info' },
 ]
 

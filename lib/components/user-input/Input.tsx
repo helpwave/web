@@ -34,6 +34,7 @@ export type InputProps = {
   className?: string,
   onEditCompleted?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
   expanded?: boolean,
+  containerClassName?: string,
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
 /**
@@ -42,18 +43,19 @@ export type InputProps = {
  * Its state is managed must be managed by the parent
  */
 const ControlledInput = ({
-  id,
-  type = 'text',
-  value,
-  label,
-  onChange = noop,
-  onChangeEvent = noop,
-  className = '',
-  onEditCompleted,
-  expanded = true,
-  onBlur,
-  ...restProps
-}: InputProps) => {
+                           id,
+                           type = 'text',
+                           value,
+                           label,
+                           onChange = noop,
+                           onChangeEvent = noop,
+                           className = '',
+                           onEditCompleted,
+                           expanded = true,
+                           onBlur,
+                           containerClassName,
+                           ...restProps
+                         }: InputProps) => {
   const {
     restartTimer,
     clearUpdateTimer
@@ -66,7 +68,7 @@ const ControlledInput = ({
     }
   }, [restProps.autoFocus])
   return (
-    <div className={tx({ 'w-full': expanded })}>
+    <div className={tx({ 'w-full': expanded }, containerClassName)}>
       {label && <Label {...label} htmlFor={id} className={tx('mb-1', label.className)}/>}
       <input
         ref={ref}
@@ -113,10 +115,10 @@ type UncontrolledInputProps = Omit<InputProps, 'value'> & {
  * Its state is managed by the component itself
  */
 const UncontrolledInput = ({
-  defaultValue = '',
-  onChange = noop,
-  ...props
-}: UncontrolledInputProps) => {
+                             defaultValue = '',
+                             onChange = noop,
+                             ...props
+                           }: UncontrolledInputProps) => {
   const [value, setValue] = useState(defaultValue)
 
   const handleChange = (text: string, event: ChangeEvent<HTMLInputElement>) => {

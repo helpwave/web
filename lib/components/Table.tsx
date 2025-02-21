@@ -69,8 +69,15 @@ export const updatePagination = (pagination: TableStatePagination, dataLength: n
 export const addElementToTable = <T, >(tableState: TableState, data: T[], dataObject: T, identifierMapping: IdentifierMapping<T>) => {
   return {
     ...tableState,
-    pagination: tableState.pagination ? { ...tableState.pagination, currentPage: pageForItem(data, dataObject, tableState.pagination.entriesPerPage, identifierMapping) } : undefined,
-    selection: tableState.selection ? { ...tableState.selection, hasSelectedAll: false, hasSelectedSome: tableState.selection.hasSelectedAll || tableState.selection.hasSelectedSome } : undefined
+    pagination: tableState.pagination ? {
+      ...tableState.pagination,
+      currentPage: pageForItem(data, dataObject, tableState.pagination.entriesPerPage, identifierMapping)
+    } : undefined,
+    selection: tableState.selection ? {
+      ...tableState.selection,
+      hasSelectedAll: false,
+      hasSelectedSome: tableState.selection.hasSelectedAll || tableState.selection.hasSelectedSome
+    } : undefined
   }
 }
 
@@ -151,7 +158,7 @@ const changeTableSelectionAll = <T, >(tableState: TableState, data: T[], identif
 }
 
 export type TableSortingType = 'ascending' | 'descending'
-export type TableSortingFunctionType<T> = (t1:T, t2:T)=> number
+export type TableSortingFunctionType<T> = (t1: T, t2: T) => number
 
 export type TableProps<T> = {
   data: T[],
@@ -173,6 +180,7 @@ export type TableProps<T> = {
    * Always go to the page of this element
    */
   focusElement?: T,
+  className?: string,
 }
 
 /*  Possible extension for better customization
@@ -186,14 +194,15 @@ export type TableProps<T> = {
  * The state must be handled and saved with the updateTableState method
  */
 export const Table = <T, >({
-  data,
-  stateManagement = [{}, noop],
-  identifierMapping,
-  header,
-  rowMappingToCells,
-  sorting,
-  focusElement
-}: TableProps<T>) => {
+                             data,
+                             stateManagement = [{}, noop],
+                             identifierMapping,
+                             header,
+                             rowMappingToCells,
+                             sorting,
+                             focusElement,
+                             className
+                           }: TableProps<T>) => {
   const sortedData = [...data]
   if (sorting) {
     const [sortingFunction, sortingType] = sorting
@@ -237,16 +246,31 @@ export const Table = <T, >({
   const [scrollbarsAutoHeightMin, setScrollbarsAutoHeightMin] = useState(0)
   const tableRef = useRef<HTMLTableElement>(null)
 
-  useEffect(() => {
+  const calculateHeight = () => {
     if (tableRef.current) {
       const tableHeight = tableRef.current.offsetHeight
       const offset = 25
       setScrollbarsAutoHeightMin(tableHeight + offset)
     }
+  }
+
+  useEffect(() => {
+    calculateHeight()
+
+    // New function to unbind properly
+    const handleResize = () => {
+      calculateHeight()
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [data, currentPage])
 
   return (
-    <div className={tw('flex flex-col gap-y-4 overflow-hidden')}>
+    <div className={tx('@(flex flex-col gap-y-4 overflow-hidden)', className)}>
       <div>
         <Scrollbars autoHeight autoHeightMin={scrollbarsAutoHeightMin}>
           <table ref={tableRef} className={tw('w-full mb-[12px]')}>
@@ -261,11 +285,11 @@ export const Table = <T, >({
                 </th>
               )}
               {header && header.map((value, index) => (
-                  <th key={`tableHeader${index}`} className={headerPaddingHead}>
-                    <div className={tw('flex flex-row justify-start px-2')}>
-                      {value}
-                    </div>
-                  </th>
+                <th key={`tableHeader${index}`} className={headerPaddingHead}>
+                  <div className={tw('flex flex-row justify-start px-2')}>
+                    {value}
+                  </div>
+                </th>
               ))}
             </tr>
             </thead>
@@ -282,7 +306,11 @@ export const Table = <T, >({
                     />
                   </td>
                 )}
-                {rowMappingToCells(value).map((value1, index) => <td key={index} className={tx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>{value1}</td>)}
+                {rowMappingToCells(value).map((value1, index) => (
+                  <td key={index} className={tx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
+                    {value1}
+                  </td>
+                ))}
               </tr>
             ))}
             </tbody>
@@ -290,9 +318,12 @@ export const Table = <T, >({
         </Scrollbars>
       </div>
       <div className={tw('flex flex-row justify-center')}>
-        {tableState.pagination &&
-          <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({ ...tableState, pagination: { entriesPerPage, currentPage: page } })}/>
-        }
+        {tableState.pagination && (
+          <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({
+            ...tableState,
+            pagination: { entriesPerPage, currentPage: page }
+          })}/>
+        )}
       </div>
     </div>
   )

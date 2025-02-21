@@ -37,8 +37,7 @@ const Products: NextPage<PropsForTranslation<ProductsTranslation, ProductsServer
   const { data, isError, isLoading } = useProductsQuery()
   return (
     <Page pageTitle={titleWrapper(translation.products)}>
-      <Section>
-        <h2 className={tw('font-bold font-space text-3xl')}>{translation.products}</h2>
+      <Section titleText={translation.products}>
         {isError && (<span className={tw('There was an Error')}></span>)}
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (

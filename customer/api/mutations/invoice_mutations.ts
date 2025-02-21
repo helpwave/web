@@ -13,40 +13,46 @@ export const useInvoiceQuery = () => {
           name: 'helpwave tasks February',
           creationDate: new Date(2025, 2, 1),
           paymentDate: new Date(2025, 2, 11),
-          customerUUID: 'customer'
+          customerUUID: 'customer',
+          status: 'payed'
         },
         {
           uuid: '2',
           name: 'helpwave tasks March',
           creationDate: new Date(2025, 3, 1),
-          paymentDate: new Date(2025, 2, 11),
-          customerUUID: 'customer'
+          paymentDate: new Date(2025, 3, 11),
+          customerUUID: 'customer',
+          status: 'payed'
         },
         {
           uuid: '3',
           name: 'helpwave tasks April',
           creationDate: new Date(2025, 4, 1),
-          paymentDate: new Date(2025, 2, 11),
-          customerUUID: 'customer'
+          paymentDate: new Date(2025, 4, 11),
+          customerUUID: 'customer',
+          status: 'payed'
         },
         {
           uuid: '4',
           name: 'helpwave tasks May',
           creationDate: new Date(2025, 5, 1),
-          paymentDate: new Date(2025, 2, 11),
-          customerUUID: 'customer'
+          paymentDate: new Date(2025, 5, 11),
+          customerUUID: 'customer',
+          status: 'pending'
         },
         {
           uuid: '5',
           name: 'helpwave tasks June',
           creationDate: new Date(2025, 6, 1),
-          customerUUID: 'customer'
+          customerUUID: 'customer',
+          status: 'notPayed'
         },
         {
           uuid: '6',
           name: 'helpwave tasks July',
           creationDate: new Date(2025, 7, 1),
-          customerUUID: 'customer'
+          customerUUID: 'customer',
+          status: 'notPayed'
         }
       ]
       return invoices

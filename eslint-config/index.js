@@ -1,6 +1,6 @@
 import reactRecommendedEslint from 'eslint-plugin-react'
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import eslint from '@eslint/js'
+import tseslint from 'typescript-eslint'
 import stylisticEslint from '@stylistic/eslint-plugin'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import customRules from './custom-rules/index.js'
@@ -30,6 +30,7 @@ const recommended = [
       'sort-imports': 'off',
       'no-unneeded-ternary': 'off', // ternary operators are often more clear than '||', '&&' or '??'
       'no-use-before-define': 'off',
+      'semi': ['warn', 'never'],
       'jsx-quotes': ['error', 'prefer-double'],
       '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
       '@stylistic/object-curly-spacing': ['warn', 'always'],

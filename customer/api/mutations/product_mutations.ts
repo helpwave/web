@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { QueryKeys } from '../query_keys'
 import type { Product } from '@/api/dataclasses/product';
+import { QueryKeys } from '@/api/mutations/query_keys';
 
 export const useProductsQuery = () => {
   return useQuery({

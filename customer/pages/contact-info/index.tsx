@@ -161,7 +161,7 @@ const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactI
             </div>
 
             <div className={tw('flex flex-row justify-end')}>
-              <Button onClick={() => customerUpdate.mutate(currentData)}>{translation.save}</Button>
+              <Button onClick={() => customerUpdate.mutate(currentData!)}>{translation.save}</Button>
             </div>
           </div>
         </LoadingAndErrorComponent>

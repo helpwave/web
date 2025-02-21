@@ -179,7 +179,8 @@ export const config = defineConfig({
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms(), presetTypography()],
   rules: [
     ...textStyles,
-    ['animation-delay-', ({ $$ }) => ({ animationDelay: `${$$}ms` })]
+    ['animation-delay-', ({ $$ }) => ({ animationDelay: `${$$}ms` })],
+    ['section-padding', 'mobile:(px-6 py-3) tablet:(px-8 py-4) desktop:(px-12 py-6)']
   ]
 }) as unknown as TwindConfig // TODO: twind is being very dumb right here, not my fault
 

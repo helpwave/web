@@ -23,7 +23,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
   const router = useRouter()
 
   return (
-    <nav className={tx('@(flex flex-col h-full bg-gray-200 min-w-[200px] max-w-[200px] overflow-y-auto)', className)}>
+    <nav className={tx('@(flex flex-col h-full bg-gray-100 min-w-[200px] max-w-[200px] overflow-y-auto)', className)}>
       {items.map((item, i) => (
         <Link
           href={item.url}

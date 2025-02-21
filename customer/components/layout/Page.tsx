@@ -1,4 +1,4 @@
-import { tw } from '@twind/core';
+import { tw, tx } from '@twind/core';
 import type { PropsWithChildren, ReactNode } from 'react';
 import { useState } from 'react';
 import type { NavItem } from '@/components/layout/NavigationSidebar';
@@ -29,6 +29,7 @@ export type PageProps = PropsWithChildren<{
   pageTitle: string,
   header?: HeaderProps,
   footer?: ReactNode,
+  mainContainerClassName?: string,
 }>
 
 const navItems: NavItem[] = [
@@ -46,13 +47,14 @@ export const Page = ({
                        pageTitle,
                        header,
                        footer = (<Footer/>),
+                       mainContainerClassName,
                      }: PageProps) => {
   const translation = useTranslation(defaultPageTranslationTranslation)
   const [isNavigationVisible, setIsNavigationVisible] = useState(false)
 
   const mainContent = (
     <div className={tw('flex flex-col w-full h-full overflow-y-scroll')}>
-      <main className={tw('flex flex-col min-h-[80vh]')}>
+      <main className={tx('@(flex flex-col min-h-[80vh] max-h-[1200px] gap-y-6)', mainContainerClassName)}>
         {children}
       </main>
       {footer}
@@ -74,8 +76,8 @@ export const Page = ({
         {...header}
         rightSide={[...header?.rightSide ?? [], (
           // TODO do aria here
-          <button key="navOpen">
-            <Menu className={tw('hidden mobile:block')} onClick={() => {
+          <button key="navOpen" className={tw('not-mobile:hidden')}>
+            <Menu onClick={() => {
               setIsNavigationVisible(true)
             }}/>
           </button>

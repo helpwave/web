@@ -54,7 +54,7 @@ export const Page = ({
 
   const mainContent = (
     <div className={tw('flex flex-col w-full h-full overflow-y-scroll')}>
-      <main className={tx('@(flex flex-col min-h-[80vh] max-h-[1200px] gap-y-6)', mainContainerClassName)}>
+      <main className={tx('@(flex flex-col max-h-[1200px] gap-y-6)', mainContainerClassName)}>
         {children}
       </main>
       {footer}

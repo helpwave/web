@@ -1,7 +1,7 @@
-import type { Address } from '@/api/dataclasses/address';
-import type { ActiveProduct } from '@/api/dataclasses/active_product';
+import type { Address } from '@/api/dataclasses/address'
+import type { BookedProduct } from '@/api/dataclasses/booked_product'
 
-export type CustomerProductExtension = { products: ActiveProduct[] }
+export type CustomerProductExtension = { products: BookedProduct[] }
 
 export type Customer = {
   uuid: string,

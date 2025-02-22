@@ -38,7 +38,7 @@ const Button = ({
   variant = 'background',
   size = 'medium',
   onClick,
-  className = undefined,
+  className,
   ...restProps
 }: ButtonProps) => (
   <button
@@ -59,9 +59,9 @@ const Button = ({
       } : {},
       {
         // {small, medium, large}
-        'py-1 px-2 rounded text-sm': size === 'small',
-        'py-2 px-4 rounded-md': size === 'medium',
-        'py-2 px-4 rounded-md text-lg': size === 'large'
+        '@(py-1 px-2 rounded text-sm)': size === 'small',
+        '@(py-2 px-4 rounded-md)': size === 'medium',
+        '@(py-2 px-4 rounded-md text-lg)': size === 'large'
       }
     )}
     {...restProps}

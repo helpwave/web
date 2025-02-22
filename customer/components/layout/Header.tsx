@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { tw, tx } from '@twind/core';
+import type { ReactNode } from 'react'
+import { tw, tx } from '@twind/core'
 
 export type HeaderProps = {
   leading?: ReactNode,

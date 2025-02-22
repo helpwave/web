@@ -1,6 +1,8 @@
 import type { Languages } from './useLanguage'
 import { useLanguage } from './useLanguage'
 
+export type Translation<T> = Record<Languages, T>
+
 type OverwriteTranslationType<Translation extends Record<string, unknown>> = {
   language?: Languages,
   translation?: Partial<Record<Languages, Partial<Translation>>>,

@@ -36,7 +36,7 @@ const Products: NextPage<PropsForTranslation<ProductsTranslation, ProductsServer
   const translation = useTranslation(defaultProductsTranslations, overwriteTranslation)
   const { data, isError, isLoading } = useProductsQuery()
   return (
-    <Page pageTitle={titleWrapper(translation.products)}>
+    <Page pageTitle={titleWrapper(translation.products)} mainContainerClassName={tw('min-h-[80vh]')}>
       <Section titleText={translation.products}>
         {isError && (<span className={tw('There was an Error')}></span>)}
         {!isError && isLoading && (<LoadingAnimation/>)}

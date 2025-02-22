@@ -60,7 +60,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
 
   return (
     <Page pageTitle={titleWrapper(translation.invoices)}>
-      <Section>
+      <Section titleText={translation.invoices}>
         {isError && (<span className={tw('There was an Error')}></span>)}
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (

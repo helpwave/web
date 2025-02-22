@@ -4,4 +4,5 @@ export type Address = {
   houseNumberAdditional: string,
   city: string,
   postalCode: string,
+  country: string,
 }

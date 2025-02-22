@@ -88,7 +88,6 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
       <Modal
         id="invoice-detail-modal"
         modalClassName="min-w-[600px]"
-
         isOpen={!!detailModalObject}
         titleText={`${translation.details}: ${detailModalObject?.name}`}
         onCloseClick={() => setDetailModalId(undefined)}
@@ -111,7 +110,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
           />
         )}
       </Modal>
-      <Section>
+      <Section titleText={translation.invoices}>
         {(isError || !hasNecessaryExtensions) && (<span className={tw('There was an Error')}></span>)}
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (

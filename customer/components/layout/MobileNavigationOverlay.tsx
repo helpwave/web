@@ -36,7 +36,8 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
   const router = useRouter()
 
   return (
-    <nav className={tx('@(flex flex-col bg-gray-200 h-full w-full top-0 absolute px-8 py-6 gap-y-4 items-center z-[100] not-mobile:hidden)', className)}>
+    <nav
+      className={tx('@(flex flex-col bg-gray-200 h-full w-full top-0 absolute px-8 py-6 gap-y-4 items-center z-[100] not-mobile:hidden)', className)}>
       <div className={tw('flex flex-row w-full items-center justify-between mb-2')}>
         <h2 className={tw('font-bold font-space text-2xl')}>{translation.navigation}</h2>
         <button className={tw('rounded-md bg-gray-300 hover:bg-gray-400 p-1')} onClick={onCloseClick}>
@@ -52,7 +53,10 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
             { 'bg-hw-primary-500/30': router.pathname === item.url, 'bg-white': router.pathname !== item.url }
           )}
         >
-          {item.name[language]}
+          <div className={tw('flex flex-row gap-x-2 items-center')}>
+            {item.icon}
+            {item.name[language]}
+          </div>
           <ArrowRightIcon size={24}/>
         </Link>
       ))}

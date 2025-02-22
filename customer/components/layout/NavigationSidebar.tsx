@@ -38,7 +38,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
       <LanguageModal
         id="language-modal"
         isOpen={isLanguageModalOpen}
-        onClose={() => setIsLanguageModalOpen(false)}
+        onCloseClick={() => setIsLanguageModalOpen(false)}
         onBackgroundClick={() => setIsLanguageModalOpen(false)}
         onDone={() => setIsLanguageModalOpen(false)}
       />

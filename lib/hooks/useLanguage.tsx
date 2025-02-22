@@ -4,6 +4,10 @@ import useLocalStorage from './useLocalStorage'
 
 export const languages = ['en', 'de'] as const
 export type Languages = typeof languages[number]
+export const languagesLocalNames: Record<Languages, string> = {
+  en: 'English',
+  de: 'Deutsch',
+}
 
 export const DEFAULT_LANGUAGE = 'en'
 

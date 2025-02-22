@@ -20,12 +20,12 @@ export const getColoring = ({
   }
   const colorValue = colorStyleMapping[style]
   const hoverMapping: Record<ColoringStyle, string> = {
-    'background': ` hover:bg-${color}-${modeShifted(500)}`,
+    'background': `hover:bg-${color}-${modeShifted(500)}`,
     'tonal': `bg-${color}-${modeShifted(400)}/40 text-${color}-${modeShifted(800)}`,
     'tonal-opaque': `bg-${color}-${modeShifted(250)} text-${color}-${modeShifted(800)}`,
-    'text': ` hover:text-${color}-${modeShifted(500)}`,
-    'text-border': ` hover:text-${color}-${modeShifted(500)} hover:border-${color}-${modeShifted(500)}`
+    'text': `hover:text-${color}-${modeShifted(500)}`,
+    'text-border': `hover:text-${color}-${modeShifted(500)} hover:border-${color}-${modeShifted(500)}`
   }
   const hoverValue = hover ? hoverMapping[style] : ''
-  return colorValue + hoverValue
+  return `@(${colorValue} ${hoverValue})`
 }

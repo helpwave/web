@@ -37,13 +37,13 @@ export type ModalHeaderProps = {
  * A default Header to be used by modals to have a uniform design
  */
 export const ModalHeader = ({
-  overwriteTranslation,
-  onCloseClick,
-  title,
-  titleText = '',
-  description,
-  descriptionText = ''
-}: PropsForTranslation<ModalHeaderTranslation, ModalHeaderProps>) => {
+                              overwriteTranslation,
+                              onCloseClick,
+                              title,
+                              titleText = '',
+                              description,
+                              descriptionText = ''
+                            }: PropsForTranslation<ModalHeaderTranslation, ModalHeaderProps>) => {
   const translation = useTranslation(defaultModalHeaderTranslation, overwriteTranslation)
   return (
     <div className={tw('flex flex-col')}>
@@ -76,6 +76,7 @@ export type ModalProps = {
   onBackgroundClick?: MouseEventHandler<HTMLDivElement>,
   backgroundClassName?: string,
   modalClassName?: string,
+  containerClassName?: string,
 } & ModalHeaderProps
 
 /**
@@ -86,14 +87,15 @@ export type ModalProps = {
  * DO NOT Conditionally render this always use the isOpen to ensure that the ModalRegister is working properly
  */
 export const Modal = ({
-  children,
-  id,
-  isOpen,
-  onBackgroundClick,
-  backgroundClassName = '',
-  modalClassName = '',
-  ...modalHeaderProps
-}: PropsWithChildren<ModalProps>) => {
+                        children,
+                        id,
+                        isOpen,
+                        onBackgroundClick,
+                        backgroundClassName = '',
+                        modalClassName = '',
+                        containerClassName = '',
+                        ...modalHeaderProps
+                      }: PropsWithChildren<ModalProps>) => {
   const modalRoot = typeof window !== 'undefined' ? document.getElementById(modalRootName) : null
   const {
     register,
@@ -119,7 +121,7 @@ export const Modal = ({
   const isSecondLast = register.length < 2 || register[register.length - 2] === id
 
   return ReactDOM.createPortal(
-    <div className={tx('fixed inset-0 overflow-y-auto z-[99]')} id={id}>
+    <div className={tx('@(fixed inset-0 overflow-y-auto z-[99])', containerClassName)} id={id}>
       {isLast && (
         <div
           className={tx('fixed inset-0 h-screen w-screen', backgroundClassName, {

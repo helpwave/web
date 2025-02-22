@@ -12,7 +12,9 @@ import type { Customer } from '@/api/dataclasses/customer'
 import { tw } from '@twind/core'
 import { Button } from '@helpwave/common/components/Button'
 
-type ContactInfoTranslation = {
+type SettingsTranslation = {
+  settings: string,
+  settingsDescription: string,
   contactInfo: string,
   additionalInformation: string,
   name: string,
@@ -29,8 +31,10 @@ type ContactInfoTranslation = {
   save: string,
 }
 
-const defaultContactInfoTranslations: Record<Languages, ContactInfoTranslation> = {
+const defaultSettingsTranslations: Record<Languages, SettingsTranslation> = {
   en: {
+    settings: 'Settings',
+    settingsDescription: 'Here you can change the settings and information of your organization.',
     contactInfo: 'Contact Information',
     additionalInformation: 'Additional Information',
     name: 'Name',
@@ -40,13 +44,15 @@ const defaultContactInfoTranslations: Record<Languages, ContactInfoTranslation> 
     address: 'Address',
     street: 'Street',
     houseNumber: 'Housenumber',
-    houseNumberAdditional: 'Housenumber Addition',
+    houseNumberAdditional: 'Addition',
     postalCode: 'Postal code',
     city: 'City',
     country: 'Country',
     save: 'Save'
   },
   de: {
+    settings: 'Einstellungen',
+    settingsDescription: 'Hier kannst du die Einstellungen und Informationen deiner Organization ändern.',
     contactInfo: 'Kontakt Informationen',
     additionalInformation: 'Zusätzliche Informationen',
     name: 'Name',
@@ -56,7 +62,7 @@ const defaultContactInfoTranslations: Record<Languages, ContactInfoTranslation> 
     address: 'Adresse',
     street: 'Straße',
     houseNumber: 'Hausnummer',
-    houseNumberAdditional: 'Hausnummer Zusatz',
+    houseNumberAdditional: 'Zusatz',
     postalCode: 'Postleitzahl',
     city: 'Stadt',
     country: 'Land',
@@ -64,12 +70,12 @@ const defaultContactInfoTranslations: Record<Languages, ContactInfoTranslation> 
   }
 }
 
-type ContactInfoServerSideProps = {
+type SettingsServerSideProps = {
   jsonFeed: unknown,
 }
 
-const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactInfoServerSideProps>> = ({ overwriteTranslation }) => {
-  const translation = useTranslation(defaultContactInfoTranslations, overwriteTranslation)
+const Settings: NextPage<PropsForTranslation<SettingsTranslation, SettingsServerSideProps>> = ({ overwriteTranslation }) => {
+  const translation = useTranslation(defaultSettingsTranslations, overwriteTranslation)
   const [currentData, setcurrentData] = useState<Customer>()
   const { data, isError, isLoading } = useCustomerMyselfQuery()
   const customerUpdate = useCustomerUpdateMutation()
@@ -80,11 +86,13 @@ const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactI
 
   // TODO do input validation
   return (
-    <Page pageTitle={titleWrapper(translation.contactInfo)} mainContainerClassName={tw('min-h-[auto] pb-6')}>
-      <Section titleText={translation.contactInfo}>
+    <Page pageTitle={titleWrapper(translation.settings)} mainContainerClassName={tw('min-h-[auto] pb-6')}>
+      <Section titleText={translation.settings}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
           {!!currentData && (
-            <div className={tw('flex flex-col gap-y-4 max-w-[700px]')}>
+            <div className={tw('flex flex-col gap-y-1 max-w-[700px]')}>
+              <span>{translation.settingsDescription}</span>
+              <h3 className={tw('font-space font-bold text-2xl')}>{translation.contactInfo}</h3>
               <Input
                 value={currentData.name}
                 onChange={name => setcurrentData({ ...currentData, name })}
@@ -100,14 +108,14 @@ const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactI
                 onChange={phoneNumber => setcurrentData({ ...currentData, phoneNumber })}
                 label={{ name: translation.phone }}
               />
-              <div className={tw('flex flex-col gap-y-4')}>
-                <h3 className={tw('font-space font-bold text-lg')}>{translation.address}</h3>
+              <div className={tw('flex flex-col gap-y-1')}>
+                <h4 className={tw('font-space font-bold text-lg')}>{translation.address}</h4>
                 <Input
                   value={currentData.address.country ?? ''}
                   onChange={country => setcurrentData({ ...currentData, address: { ...currentData.address, country } })}
                   label={{ name: translation.country }}
                 />
-                <div className={tw('flex flex-row gap-x-2')}>
+                <div className={tw('flex flex-row gap-x-1')}>
                   <Input
                     value={currentData.address.city ?? ''}
                     onChange={city => setcurrentData({ ...currentData, address: { ...currentData.address, city } })}
@@ -123,7 +131,7 @@ const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactI
                     containerClassName={tw('max-w-[180px]')}
                   />
                 </div>
-                <div className={tw('flex flex-row gap-x-2')}>
+                <div className={tw('flex flex-row gap-x-1')}>
                   <Input
                     value={currentData.address.street ?? ''}
                     onChange={street => setcurrentData({
@@ -151,8 +159,8 @@ const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactI
                     containerClassName={tw('max-w-[180px]')}
                   />
                 </div>
-                <div className={tw('flex flex-col gap-y-4')}>
-                  <h3 className={tw('font-space font-bold text-lg')}>{translation.additionalInformation}</h3>
+                <div className={tw('flex flex-col gap-y-1')}>
+                  <h4 className={tw('font-space font-bold text-lg')}>{translation.additionalInformation}</h4>
                   <Input
                     value={currentData.websiteURL ?? ''}
                     onChange={websiteURL => setcurrentData({ ...currentData, websiteURL })}
@@ -172,4 +180,4 @@ const ContactInfo: NextPage<PropsForTranslation<ContactInfoTranslation, ContactI
   )
 }
 
-export default ContactInfo
+export default Settings

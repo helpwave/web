@@ -1,12 +1,12 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage';
-import { useLanguage } from '@helpwave/common/hooks/useLanguage';
-import { tw, tx } from '@twind/core';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { noop } from '@helpwave/common/util/noop';
-import { ArrowRightIcon, X } from 'lucide-react';
-import { useTranslation } from '@helpwave/common/hooks/useTranslation';
-import type { NavItem } from '@/components/layout/NavigationSidebar';
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useLanguage } from '@helpwave/common/hooks/useLanguage'
+import { tw, tx } from '@twind/core'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { noop } from '@helpwave/common/util/noop'
+import { ArrowRightIcon, X } from 'lucide-react'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { NavItem } from '@/components/layout/NavigationSidebar'
 
 type MobileNavigationOverlayTranslation = { navigation: string }
 

@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Page } from '@/components/layout/Page';
-import titleWrapper from '@/utils/titleWrapper';
+import { Page } from '@/components/layout/Page'
+import titleWrapper from '@/utils/titleWrapper'
 
 type DashboardTranslation = {
   dashboard: string,

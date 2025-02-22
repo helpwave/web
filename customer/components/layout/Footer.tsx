@@ -8,7 +8,7 @@ import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
-import pluginConfig from '@/utils/CookieConsentConfig';
+import pluginConfig from '@/utils/CookieConsentConfig'
 
 type Categories = 'socials' | 'general' | 'products' | 'development'
 type FooterTranslation = { [key in Categories]: string }

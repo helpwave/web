@@ -1,8 +1,8 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage';
-import { useLanguage } from '@helpwave/common/hooks/useLanguage';
-import { tx } from '@twind/core';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useLanguage } from '@helpwave/common/hooks/useLanguage'
+import { tx } from '@twind/core'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 export type NavItem = {
   name: Record<Languages, string>,

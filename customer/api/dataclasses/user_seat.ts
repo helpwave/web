@@ -1,7 +1,24 @@
+import type { Translation } from '@helpwave/common/hooks/useTranslation'
+
+export const userRoles = ['admin' , 'user'] as const
+
 /**
  * Defines the possible roles a user can have.
  */
-export type UserRole = 'admin' | 'user';
+export type UserRole = typeof userRoles[number]
+
+export type UserRoleTranslation = Record<UserRole, string>
+
+export const defaultUserRoleTranslation: Translation<UserRoleTranslation> = {
+  en: {
+    user: 'User',
+    admin: 'Admin'
+  },
+  de: {
+    user: 'Nutzer',
+    admin: 'Admin'
+  }
+}
 
 /**
  * Represents a user seat in the system.

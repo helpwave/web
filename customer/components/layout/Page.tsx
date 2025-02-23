@@ -53,7 +53,7 @@ export const Page = ({
   const [isNavigationVisible, setIsNavigationVisible] = useState(false)
 
   const mainContent = (
-    <div className={tw('flex flex-col w-full h-full overflow-y-scroll')}>
+    <div className={tw('flex flex-col justify-between w-full h-full overflow-y-scroll')}>
       <main className={tx('@(flex flex-col max-w-[1200px] gap-y-6)', mainContainerClassName)}>
         {children}
       </main>
@@ -62,7 +62,7 @@ export const Page = ({
   )
 
   return (
-    <div className={tw('relative flex flex-col w-screen h-screen overflow-hidden')}>
+    <div className={tw('relative not-mobile:(grid grid-rows-[auto_1fr]) mobile:(flex flex-col) w-screen h-screen overflow-hidden')}>
       <Head>
         <title>{pageTitle}</title>
       </Head>
@@ -87,11 +87,11 @@ export const Page = ({
       {isNavigationVisible && (
         <MobileNavigationOverlay items={navItems} onCloseClick={() => setIsNavigationVisible(false)}/>
       )}
-      <div className={tw('flex flex-row w-full h-full grow mobile:hidden')}>
+      <div className={tw('flex flex-row grow mobile:hidden overflow-hidden')}>
         {<NavigationSidebar items={navItems}/>}
         {mainContent}
       </div>
-      <div className={tw('not-mobile:hidden w-full h-full')}>
+      <div className={tw('flex flex-col h-full w-full not-mobile:hidden')}>
         {mainContent}
       </div>
     </div>

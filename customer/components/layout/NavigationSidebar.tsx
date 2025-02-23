@@ -1,9 +1,14 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { languagesLocalNames } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import { tx } from '@twind/core'
+import { tw, tx } from '@twind/core'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { useState } from 'react'
+import { Avatar } from '@helpwave/common/components/Avatar'
+import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
+import { ArrowRightLeft } from 'lucide-react'
 
 export type NavItem = {
   name: Record<Languages, string>,
@@ -22,25 +27,49 @@ export type NavSidebarProps = {
  */
 export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
   const { language } = useLanguage()
+  const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false)
   const router = useRouter()
 
   const width = 250
 
   return (
-    <nav className={tx(`@(flex flex-col h-full bg-gray-100 min-w-[${width}px] max-w-[${width}px] overflow-y-auto)`, className)}>
-      {items.map((item, i) => (
-        <Link
-          href={item.url}
-          key={i}
-          className={tx(
-            'px-4 py-2 hover:bg-hw-primary-500/40 flex flex-row gap-x-2 items-center',
-            { 'bg-hw-primary-500/30': router.pathname == item.url }
-          )}
+    <div
+      className={tx(`@(flex flex-col justify-between grow bg-gray-200 min-w-[${width}px] max-w-[${width}px])`, className)}>
+      <LanguageModal
+        id="language-modal"
+        isOpen={isLanguageModalOpen}
+        onCloseClick={() => setIsLanguageModalOpen(false)}
+        onBackgroundClick={() => setIsLanguageModalOpen(false)}
+        onDone={() => setIsLanguageModalOpen(false)}
+      />
+      <nav className={tw('@(flex flex-col overflow-y-auto)')}>
+        {items.map((item, i) => (
+          <Link
+            href={item.url}
+            key={i}
+            className={tx(
+              'px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40 flex flex-row gap-x-2 items-center',
+              { 'bg-hw-primary-500/30': router.pathname == item.url }
+            )}
+          >
+            {item.icon}
+            {item.name[language]}
+          </Link>
+        ))}
+      </nav>
+      <div className={tw('flex flex-col')}>
+        <button
+          className={tw('flex flex-row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40')}
+          onClick={() => setIsLanguageModalOpen(true)}
         >
-          {item.icon}
-          {item.name[language]}
-        </Link>
-      ))}
-    </nav>
+          {languagesLocalNames[language]}
+          <ArrowRightLeft size={24}/>
+        </button>
+        <button className={tw('flex flex-row gap-x-2 items-center p-4 bg-gray-50 hover:bg-hw-primary-500/40')}>
+          <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
+          {'Max Mustermann'}
+        </button>
+      </div>
+    </div>
   )
 }

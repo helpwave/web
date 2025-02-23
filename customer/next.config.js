@@ -7,6 +7,7 @@ const nextConfig = {
   images: {
     dangerouslyAllowSVG: true,
     domains: ['cdn.helpwave.de', 'customer.helpwave.de', 'helpwave.de'],
+    unoptimized: true,
   },
 }
 

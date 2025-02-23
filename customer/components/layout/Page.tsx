@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { GaugeIcon, Menu, Package, Receipt, Settings } from 'lucide-react'
+import { GaugeIcon, Menu, Package, Receipt, Settings, UsersIcon } from 'lucide-react'
 import Head from 'next/head'
 import { MobileNavigationOverlay } from '@/components/layout/MobileNavigationOverlay'
 
@@ -34,6 +34,7 @@ export type PageProps = PropsWithChildren<{
 
 const navItems: NavItem[] = [
   { name: { en: 'Dashboard', de: 'dashboard' }, url: '/', icon: (<GaugeIcon size={24}/>) },
+  { name: { en: 'Team', de: 'Team' }, url: '/team', icon: (<UsersIcon size={24}/>) },
   { name: { en: 'Products', de: 'Produkte' }, url: '/products', icon: (<Package size={24}/>)  },
   { name: { en: 'Invoices', de: 'Rechnungen' }, url: '/invoices', icon: (<Receipt size={24}/>) },
   { name: { en: 'Settings', de: 'Einstellungen' }, url: '/settings', icon: (<Settings size={24}/>) },

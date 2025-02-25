@@ -9,6 +9,10 @@ import { useState } from 'react'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import { ArrowRightLeft } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
+import { Button } from '@helpwave/common/components/Button'
+import type { Translation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
 export type NavItem = {
   name: Record<Languages, string>,
@@ -22,6 +26,19 @@ export type NavSidebarProps = {
   className?: string,
 }
 
+type NavigationSidebarTranslation = {
+  logout: string,
+}
+
+const defaultNavigationSidebarTranslation: Translation<NavigationSidebarTranslation> = {
+  en: {
+    logout: 'Logout'
+  },
+  de: {
+    logout: 'Logout'
+  },
+}
+
 /**
  * A navigation sidebar component
  */
@@ -29,6 +46,8 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
   const { language } = useLanguage()
   const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false)
   const router = useRouter()
+  const translation = useTranslation(defaultNavigationSidebarTranslation)
+  const { identity, logout } = useAuth()
 
   const width = 250
 
@@ -65,10 +84,13 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
           {languagesLocalNames[language]}
           <ArrowRightLeft size={24}/>
         </button>
-        <button className={tw('flex flex-row gap-x-2 items-center p-4 bg-gray-50 hover:bg-hw-primary-500/40')}>
-          <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
-          {'Max Mustermann'}
-        </button>
+        <div className={tw('flex flex-col p-4 gap-y-4 bg-gray-50')}>
+          <div className={tw('flex flex-row gap-x-2 items-center')}>
+            <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
+            {identity?.name}
+          </div>
+          <Button onClick={logout} color="hw-negative">{translation.logout}</Button>
+        </div>
       </div>
     </div>
   )

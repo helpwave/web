@@ -29,13 +29,14 @@ export type PageProps = PropsWithChildren<{
   pageTitle: string,
   header?: HeaderProps,
   footer?: ReactNode,
+  isHidingSidebar?: boolean,
   mainContainerClassName?: string,
 }>
 
 const navItems: NavItem[] = [
   { name: { en: 'Dashboard', de: 'dashboard' }, url: '/', icon: (<GaugeIcon size={24}/>) },
   { name: { en: 'Team', de: 'Team' }, url: '/team', icon: (<UsersIcon size={24}/>) },
-  { name: { en: 'Products', de: 'Produkte' }, url: '/products', icon: (<Package size={24}/>)  },
+  { name: { en: 'Products', de: 'Produkte' }, url: '/products', icon: (<Package size={24}/>) },
   { name: { en: 'Invoices', de: 'Rechnungen' }, url: '/invoices', icon: (<Receipt size={24}/>) },
   { name: { en: 'Settings', de: 'Einstellungen' }, url: '/settings', icon: (<Settings size={24}/>) },
 ]
@@ -48,13 +49,14 @@ export const Page = ({
                        pageTitle,
                        header,
                        footer = (<Footer/>),
+                       isHidingSidebar = false,
                        mainContainerClassName,
                      }: PageProps) => {
   const translation = useTranslation(defaultPageTranslationTranslation)
   const [isNavigationVisible, setIsNavigationVisible] = useState(false)
 
   const mainContent = (
-    <div className={tw('flex flex-col justify-between w-full h-full overflow-y-scroll')}>
+    <div className={tw('flex flex-col items-center justify-between w-full h-full overflow-y-scroll')}>
       <main className={tx('@(flex flex-col max-w-[1200px] gap-y-6)', mainContainerClassName)}>
         {children}
       </main>
@@ -63,7 +65,8 @@ export const Page = ({
   )
 
   return (
-    <div className={tw('relative not-mobile:(grid grid-rows-[auto_1fr]) mobile:(flex flex-col) w-screen h-screen overflow-hidden')}>
+    <div
+      className={tw('relative not-mobile:(grid grid-rows-[auto_1fr]) mobile:(flex flex-col) w-screen h-screen overflow-hidden')}>
       <Head>
         <title>{pageTitle}</title>
       </Head>
@@ -75,21 +78,21 @@ export const Page = ({
           </Link>
         )}
         {...header}
-        rightSide={[...header?.rightSide ?? [], (
+        rightSide={[...header?.rightSide ?? [], (!isHidingSidebar && (
           // TODO do aria here
           <button key="navOpen" className={tw('not-mobile:hidden')}>
             <Menu onClick={() => {
               setIsNavigationVisible(true)
             }}/>
           </button>
-        ),
+        )),
         ]}
       />
-      {isNavigationVisible && (
+      {isNavigationVisible && !isHidingSidebar && (
         <MobileNavigationOverlay items={navItems} onCloseClick={() => setIsNavigationVisible(false)}/>
       )}
       <div className={tw('flex flex-row grow mobile:hidden overflow-hidden')}>
-        {<NavigationSidebar items={navItems}/>}
+        {!isHidingSidebar && (<NavigationSidebar items={navItems}/>)}
         {mainContent}
       </div>
       <div className={tw('flex flex-col h-full w-full not-mobile:hidden')}>

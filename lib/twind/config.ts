@@ -3,10 +3,9 @@ import presetAutoprefix from '@twind/preset-autoprefix'
 import presetTailwind from '@twind/preset-tailwind'
 import presetTailwindForms from '@twind/preset-tailwind-forms'
 import presetTypography from '@twind/preset-typography'
-import { generateShadingColors } from '../coloring/shading'
-import type { ShadedColors } from '../coloring/types'
 import { fontFamily } from './typography'
 import { textStyles } from './textstyles'
+import { StylingVariables } from './style-variables'
 
 export type ScreenTypes = 'desktop' | 'tablet' | 'mobile'
 const screenSizes: Record<ScreenTypes, { min?: string, max?: string, raw?: string }> = {
@@ -15,92 +14,14 @@ const screenSizes: Record<ScreenTypes, { min?: string, max?: string, raw?: strin
   desktop: { min: '1024px' },
 }
 
-// TODO consider renaming
-export const genderColorNames = ['hw-male', 'hw-female', 'hw-diverse'] as const
-export type GenderColors = typeof genderColorNames[number]
-
-export const appColorNames = [
-  'hw-primary',
-  'hw-secondary',
-  'hw-tertiary',
-  'hw-positive',
-  'hw-negative',
-  'hw-neutral',
-  'hw-warn',
-  'hw-grayscale',
-  'hw-label-1',
-  'hw-label-2',
-  'hw-label-3',
-  'hw-label-blue',
-  'hw-label-pink',
-  'hw-label-yellow',
-  ...genderColorNames
-] as const
-export type AppColor = typeof appColorNames[number]
-
-export const colors: Record<AppColor, ShadedColors> = {
-  'hw-primary': generateShadingColors({
-    100: '#F5E2FD',
-    200: '#EFD5FB',
-    300: '#CDAFEF',
-    400: '#AA96DF',
-    500: '#B275CE',
-    600: '#8E75CE',
-    700: '#694BB4',
-    800: '#8070A9',
-    900: '#5D4D80',
-  }),
-  'hw-secondary': generateShadingColors({
-    200: '#93a4bf',
-    300: '#7290c2',
-    400: '#3272DF',
-    500: '#2758ab',
-    800: '#11243E',
-  }),
-  'hw-tertiary': generateShadingColors({ 400: '#50687C' }),
-  'hw-positive': generateShadingColors({
-    200: '#CEFDDB',
-    300: '#BCF5CB',
-    400: '#7DED99',
-    500: '#69D384',
-    600: '#52BC6D',
-    700: '#479E66',
-    800: '#4D8466',
-  }),
-  'hw-negative': generateShadingColors({
-    200: '#FCD4D9',
-    300: '#F8B0BF',
-    400: '#E890A0',
-    500: '#D77585',
-    600: '#A97070',
-    700: '#A54F5C',
-    800: '#804D4D',
-  }),
-  'hw-warn': generateShadingColors({
-    100: '#FCF1DE',
-    200: '#FEEACB',
-    300: '#FAB060',
-    400: '#EA9E40',
-    500: '#D77E30',
-    600: '#C48435',
-    700: '#AD6915',
-    800: '#996628',
-  }),
-  'hw-grayscale': generateShadingColors({}),
-  'hw-neutral': generateShadingColors({}),
-  'hw-label-1': generateShadingColors({ 100: '#FEE0DD', 400: '#D67268' }),
-  'hw-label-2': generateShadingColors({ 100: '#FEEACB', 400: '#C79345' }),
-  'hw-label-3': generateShadingColors({ 100: '#E2E9DB', 400: '#7A977E' }),
-  'hw-label-blue': generateShadingColors({ 400: '#758ECE' }),
-  'hw-label-pink': generateShadingColors({ 400: '#CE75A0' }),
-  'hw-label-yellow': generateShadingColors({ 400: '#EA8E00' }),
-  'hw-male': generateShadingColors({ 400: '#2761EB' }),
-  'hw-female': generateShadingColors({ 400: '#EC666D' }),
-  'hw-diverse': generateShadingColors({ 400: '#BABABA' }),
-} as const
+const colors: { [key: string]: string } = StylingVariables.colors.reduce((previousValue, currentValue) => ({ ...previousValue, [currentValue.name]: currentValue.value }), {})
 
 export const config = defineConfig({
   theme: {
+    // remove all tailwind preset colors
+    colors: {
+      ...colors
+    },
     extend: {
       colors: {
         ...colors,

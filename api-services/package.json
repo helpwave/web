@@ -10,7 +10,7 @@
     "@helpwave/common": "workspace:*",
     "@helpwave/proto-ts": "0.64.0-89e2023.0",
     "@tanstack/react-query": "4.36.1",
-    "@tanstack/react-query-devtools": "5.62.7",
+    "@tanstack/react-query-devtools": "5.66.11",
     "@types/google-protobuf": "3.15.12",
     "cookies-next": "2.1.2",
     "google-protobuf": "3.21.4",
@@ -18,14 +18,14 @@
     "keycloak-js": "25.0.6",
     "oauth4webapi": "2.17.0",
     "react": "18.3.1",
-    "rxjs": "7.8.1",
-    "typescript": "5.7.2",
-    "zod": "3.24.1"
+    "rxjs": "7.8.2",
+    "typescript": "5.8.2",
+    "zod": "3.24.2"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "workspace:*",
     "@types/js-cookie": "3.0.6",
-    "@types/node": "20.17.10",
-    "@types/react": "18.3.17"
+    "@types/node": "20.17.22",
+    "@types/react": "18.3.18"
   }
 }

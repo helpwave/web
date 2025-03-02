@@ -1,4 +1,3 @@
-import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
@@ -6,8 +5,6 @@ import titleWrapper from '@/utils/titleWrapper'
 import { tw } from '@twind/core'
 import { useState } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
-import { useCustomerCreateMutation } from '@/api/mutations/customer_mutations'
-import { useOrganization } from '@/hooks/useOrganization'
 import { Section } from '@/components/layout/Section'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
 
@@ -27,7 +24,11 @@ const defaultCreateOrganizationTranslations: Record<Languages, CreateOrganizatio
   }
 }
 
-const CreateOrganization: NextPage<PropsForTranslation<CreateOrganizationTranslation>> = ({ overwriteTranslation }) => {
+type CreateOrganizationPageProps = {
+  createOrganization: (organization: Customer) => Promise<boolean>,
+}
+
+export const CreateOrganizationPage = ({ createOrganization, overwriteTranslation }: PropsForTranslation<CreateOrganizationTranslation, CreateOrganizationPageProps>) => {
   const translation = useTranslation(defaultCreateOrganizationTranslations, overwriteTranslation)
   const [data, setData] = useState<Customer>({
     uuid: '',
@@ -45,13 +46,12 @@ const CreateOrganization: NextPage<PropsForTranslation<CreateOrganizationTransla
     websiteURL: '',
     phoneNumber: '',
   })
-  const createMutation = useCustomerCreateMutation()
-  const { reload } = useOrganization()
 
   return (
     <Page
       pageTitle={titleWrapper(translation.createOrganization)}
       mainContainerClassName={tw('min-h-[90vh] max-w-[700px]')}
+      contentAndFooterClassName={tw('items-center')}
       isHidingSidebar={true}
     >
       <Section>
@@ -60,15 +60,9 @@ const CreateOrganization: NextPage<PropsForTranslation<CreateOrganizationTransla
         <ContactInformationForm
           value={data}
           onChange={setData}
-          onSubmit={async () => {
-            createMutation.mutate(data)
-            // TODO we have to wait here, ensure it this works or try changing the organization context to do that
-            reload()
-          }}
+          onSubmit={() => {createOrganization(data).catch(console.error)}}
         />
       </Section>
     </Page>
   )
 }
-
-export default CreateOrganization

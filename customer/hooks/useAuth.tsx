@@ -2,8 +2,11 @@
 
 import type { PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
+import { tw } from '@twind/core'
+import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import type { LoginData } from '@/components/pages/login'
+import { LoginPage } from '@/components/pages/login'
 
 type Identity = {
   token: string,
@@ -11,54 +14,65 @@ type Identity = {
 }
 
 type AuthContextType = {
-  isAuthenticated: boolean,
-  identity?: Identity,
-  login: (email: string, password: string) => void,
+  identity: Identity,
   logout: () => void,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+type AuthState = {
+  identity?: Identity,
+  isLoading: boolean,
+}
+
 const cookieName = 'authToken'
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [identity, setIdentity] = useState<Identity>()
-  const [redirect, setRedirect] = useState<string>('/')
-  const router = useRouter()
+  const [{ isLoading, identity }, setAuthState] = useState<AuthState>({ isLoading: true })
 
-  const checkAndHandleCookie = () => {
+  const checkIdentity = () => {
+    setAuthState({ isLoading: true })
     const token = Cookies.get(cookieName)
     const newAuthState = !!token
     if (newAuthState) {
-      // TODO change to parsing later
       const identity: Identity = { token: 'test-token', name: 'Max Mustermann' }
-      setIdentity(identity)
-      router.push(redirect).catch(console.error) // TODO use a redirect here
+      setAuthState({ identity, isLoading: false })
     } else {
-      setIdentity(undefined)
-      setRedirect(router.pathname)
-      router.push('/login').catch(console.error)
+      setAuthState({ isLoading: false })
     }
   }
 
   // Check authentication state on first load
   useEffect(() => {
-    checkAndHandleCookie()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    checkIdentity()
+  }, [])
 
-  const login = (email: string, _: string) => {
+  const login = async (_: LoginData) => {
     // TODO do real login
-    Cookies.set(cookieName, email, { expires: 1 })
-    checkAndHandleCookie()
+    Cookies.set(cookieName, 'testdata', { expires: 1 })
+    checkIdentity()
+    return true
   }
 
   const logout = () => {
     Cookies.remove(cookieName)
-    checkAndHandleCookie()
+    checkIdentity()
+  }
+
+  if (!identity && isLoading) {
+    return (
+      <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
+        <LoadingAnimation loadingText="Logging in..."/>
+      </div>
+    )
+  }
+
+  if (!identity) {
+    return (<LoginPage login={login} />)
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!identity, identity, login, logout }}>
+    <AuthContext.Provider value={{ identity, logout }}>
       {children}
     </AuthContext.Provider>
   )

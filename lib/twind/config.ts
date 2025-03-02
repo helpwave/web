@@ -14,26 +14,13 @@ const screenSizes: Record<ScreenTypes, { min?: string, max?: string, raw?: strin
   desktop: { min: '1024px' },
 }
 
-const colors: { [key: string]: string } = StylingVariables.colors.reduce((previousValue, currentValue) => ({ ...previousValue, [currentValue.name]: currentValue.value }), {})
-
 export const config = defineConfig({
   theme: {
     // remove all tailwind preset colors
     colors: {
-      ...colors
+      ...StylingVariables.colors
     },
     extend: {
-      colors: {
-        ...colors,
-        'hw-disabled': '#BBBBBB',
-        'hw-disabled-text': '#555555',
-        'hw-pool': {
-          // TODO: there should be more of these and potentially more shades for each one of them
-          red: '#AD5461',
-          green: '#7DED99',
-          orange: '#FF9933'
-        },
-      },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],
         space: ['var(--font-space)', ...fontFamily.sans]

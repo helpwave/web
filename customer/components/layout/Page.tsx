@@ -31,6 +31,7 @@ export type PageProps = PropsWithChildren<{
   footer?: ReactNode,
   isHidingSidebar?: boolean,
   mainContainerClassName?: string,
+  contentAndFooterClassName?: string,
 }>
 
 const navItems: NavItem[] = [
@@ -51,12 +52,13 @@ export const Page = ({
                        footer = (<Footer/>),
                        isHidingSidebar = false,
                        mainContainerClassName,
+                       contentAndFooterClassName,
                      }: PageProps) => {
   const translation = useTranslation(defaultPageTranslationTranslation)
   const [isNavigationVisible, setIsNavigationVisible] = useState(false)
 
   const mainContent = (
-    <div className={tw('flex flex-col items-center justify-between w-full h-full overflow-y-scroll')}>
+    <div className={tx('flex flex-col justify-between w-full h-full overflow-y-scroll', contentAndFooterClassName)}>
       <main className={tx('@(flex flex-col max-w-[1200px] gap-y-6)', mainContainerClassName)}>
         {children}
       </main>

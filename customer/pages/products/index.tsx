@@ -7,7 +7,7 @@ import { useProductsQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
-import type {  ProductPlanTranslation } from '@/api/dataclasses/product'
+import type { ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
 import { useCustomerProductsQuery } from '@/api/mutations/customer_product_mutations'
 import { Button } from '@helpwave/common/components/Button'
@@ -19,6 +19,7 @@ import { Table } from '@helpwave/common/components/Table'
 import { useCustomerMyselfQuery } from '@/api/mutations/customer_mutations'
 import { ContractsAPI } from '@/api/services/contract'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
+import Link from 'next/link'
 
 type ProductsTranslation = {
   products: string,
@@ -272,31 +273,32 @@ const ProductsContract = ({
           <div key={booking.productUUID} className={tw('flex flex-col gap-y-2')}>
             <h4 className={tw('font-space text-lg font-semibold')}>{booking.product!.name}</h4>
             {booking.contracts.map(contract => (
-              <Checkbox
-                key={contract.uuid}
-                checked={contract.lastAccepted !== undefined}
-                onChange={() => {
-                  setCartProducts(prevState => prevState.map(value => {
-                    if (value.productUUID !== booking.productUUID) {
-                      return value
-                    }
-                    return {
-                      ...value,
-                      contracts: value.contracts.map(valueContract => {
-                        if (valueContract.uuid === contract.uuid) {
-                          return {
-                            ...valueContract,
-                            lastAccepted: contract.lastAccepted !== undefined ? undefined : new Date()
+              <div key={contract.uuid} className={tw('flex flex-row gap-x-2')}>
+                <Checkbox
+                  checked={contract.lastAccepted !== undefined}
+                  onChange={() => {
+                    setCartProducts(prevState => prevState.map(value => {
+                      if (value.productUUID !== booking.productUUID) {
+                        return value
+                      }
+                      return {
+                        ...value,
+                        contracts: value.contracts.map(valueContract => {
+                          if (valueContract.uuid === contract.uuid) {
+                            return {
+                              ...valueContract,
+                              lastAccepted: contract.lastAccepted !== undefined ? undefined : new Date()
+                            }
                           }
-                        }
-                        return valueContract
-                      })
-                    }
-                  }))
-                }}
-                label={{ name: contract.name }}
-                containerClassName={tw('justify-start')}
-              />
+                          return valueContract
+                        })
+                      }
+                    }))
+                  }}
+                  containerClassName={tw('justify-start')}
+                />
+                <Link href={contract.url} target="_blank" className={tw('font-bold text-lg font-semibold')}>{contract.name}</Link>
+              </div>
             ))}
           </div>
         ))}

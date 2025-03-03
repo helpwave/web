@@ -3,5 +3,6 @@ export type Contract = {
   version: string,
   name: string,
   contractId: string,
+  url: string,
   lastAccepted?: Date,
 }

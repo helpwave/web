@@ -7,18 +7,21 @@ export const exampleContracts: Contract[] = [
     name: 'Contract 1',
     version: 'v1-2211',
     contractId: 'agb',
+    url: 'https://cdn.helpwave.de/privacy.html',
   },
   {
     uuid: '2',
     name: 'Contract 2',
     version: 'v2-7110',
     contractId: 'agb',
+    url: 'https://cdn.helpwave.de/privacy.html',
   },
   {
     uuid: '3',
     name: 'Contract 3',
     version: 'v1-9811',
     contractId: 'agb',
+    url: 'https://cdn.helpwave.de/privacy.html',
   }
 ]
 

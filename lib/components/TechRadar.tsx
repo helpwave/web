@@ -130,13 +130,6 @@ const helpwaveTechRadar = {
       moved: 0,
     },
     {
-      label: 'Fly.io',
-      active: true,
-      quadrant: 2,
-      ring: 0,
-      moved: 0,
-    },
-    {
       label: 'Kubernetes',
       active: true,
       quadrant: 2,

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { ModalRegister } from '../modals/ModalRegister'
 import { ConfirmDialog } from '../modals/ConfirmDialog'
-import { Button } from '../Button'
-import { tw } from '../../twind'
+import { SolidButton } from '../Button'
+import { tw } from '@helpwave/color-themes/twind'
 import { modalRootName } from '../modals/Modal'
 
 /**
@@ -24,7 +24,7 @@ export const StackingModals = () => {
         modalClassName={tw('!bg-yellow-200 min-h-[300px]')}
       >
         {'I\'m Modal 1'}
-        <Button onClick={() => setModal2(true)}>Open Modal 2</Button>
+        <SolidButton onClick={() => setModal2(true)}>Open Modal 2</SolidButton>
       </ConfirmDialog>
       <ConfirmDialog
         id="2"
@@ -36,7 +36,7 @@ export const StackingModals = () => {
       >
         {'The next layer of Modals!'}
         {'This is Modal 2'}
-        <Button onClick={() => setModal3(true)}>Open Modal 3</Button>
+        <SolidButton onClick={() => setModal3(true)}>Open Modal 3</SolidButton>
       </ConfirmDialog>
       <ConfirmDialog
         id="3"
@@ -48,7 +48,7 @@ export const StackingModals = () => {
         This is Modal 3!
       </ConfirmDialog>
       <div className={tw('flex flex-row items-center justify-center min-h-[400px]')} id={modalRootName}>
-        <Button onClick={() => setModal1(true)}>Open Modal 1</Button>
+        <SolidButton onClick={() => setModal1(true)}>Open Modal 1</SolidButton>
       </div>
     </ModalRegister>
   )

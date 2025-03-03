@@ -1,73 +1,197 @@
-import type { PropsWithChildren, ButtonHTMLAttributes, MouseEventHandler } from 'react'
-import { tx } from '../twind'
-import { getColoring } from '../coloring/util'
-import type { AppColor } from '../twind/config'
-import { appColorNames } from '../twind/config'
-import type { ColoringStyle } from '../coloring/types'
+import type { PropsWithChildren, ButtonHTMLAttributes, ReactNode } from 'react'
+import { tx } from '@helpwave/color-themes/twind'
+import type {
+  OutlineButtonColor,
+  SolidButtonColor,
+  TextButtonColor
+} from '@helpwave/color-themes/twind/theme-variables'
 
-export type ButtonColorType = AppColor | 'none'
+type ButtonSizes = 'small' | 'medium' | 'large'
 
+/**
+ * The shard properties between all button types
+ */
 export type ButtonProps = PropsWithChildren<{
-  /**
-   * Color variant of the button
-   * @default 'primary' // as in the primary accent color
-   */
-  color?: ButtonColorType,
-  /**
-   * @default 'background'
-   */
-  variant?: ColoringStyle,
   /**
    * @default 'medium'
    */
-  size?: 'small' | 'medium' | 'large',
-  /**
-   * Additional override for styling, this will get merged with the styles selected through variant and size.
-   */
-  className?: string,
-  onClick?: MouseEventHandler<HTMLButtonElement>,
-}> & Omit<ButtonHTMLAttributes<Element>, 'onClick' | 'className'>
+  size?: ButtonSizes,
+}> & ButtonHTMLAttributes<Element>
+
+const sizePaddings: Record<ButtonSizes, string> = {
+  small: '@(py-1 px-[10px] rounded text-sm)',
+  medium: '@(py-2 px-3 rounded-md)',
+  large: '@(py-[10px] px-4 rounded-md text-lg)'
+}
+
+type ButtonWithIconsProps = ButtonProps & {
+  startIcon?: ReactNode,
+  endIcon?: ReactNode,
+}
+
+export type SolidButtonProps = ButtonWithIconsProps & {
+  color?: SolidButtonColor,
+}
+
+export type OutlineButtonProps = ButtonWithIconsProps & {
+  color?: OutlineButtonColor,
+}
+
+export type TextButtonProps = ButtonWithIconsProps & {
+  color?: TextButtonColor,
+}
 
 /**
- * A button with different styling options determined by the color, variant and size options
+ * A button with a solid background and different sizes
  */
-const Button = ({
-  children,
-  disabled = false,
-  color = 'hw-primary',
-  variant = 'background',
-  size = 'medium',
-  onClick,
-  className,
-  ...restProps
-}: ButtonProps) => (
+const SolidButton = ({
+                       children,
+                       disabled = false,
+                       color = 'primary',
+                       size = 'medium',
+                       startIcon,
+                       endIcon,
+                       onClick,
+                       className,
+                       ...restProps
+                     }: SolidButtonProps) => (
   <button
     onClick={disabled ? undefined : onClick}
     disabled={disabled}
     className={tx(
-      'font-medium focus:outline-none', className, {
+      '@(flex flex-row gap-x-2 font-medium focus:outline-none)', className, {
         // disabled
-        'text-hw-disabled-text bg-hw-disabled hover:bg-hw-disabled focus:bg-hw-disabled': disabled && variant !== 'text',
-        'text-hw-disabled focus:ring-0': disabled && variant === 'text',
+        '@(text-disabled-text bg-disabled-background)': disabled,
       },
-      color !== 'none' ? {
-        [getColoring({
-          color,
-          hover: true,
-          style: variant
-        })]: !disabled && appColorNames.some(value => value === color),
-      } : {},
-      {
-        // {small, medium, large}
-        '@(py-1 px-2 rounded text-sm)': size === 'small',
-        '@(py-2 px-4 rounded-md)': size === 'medium',
-        '@(py-2 px-4 rounded-md text-lg)': size === 'large'
-      }
+      sizePaddings[size],
+      `@(bg-button-solid-${color}-background text-button-solid-${color}-text)`
     )}
     {...restProps}
   >
+    {startIcon && (
+      <span
+        className={tx({
+          [`@(text-button-solid-${color}-icon)`]: !disabled,
+          [`@(text-disabled-icon)`]: !disabled
+        })}
+      >
+        {startIcon}
+      </span>
+    )}
     {children}
+    {endIcon && (
+      <span
+        className={tx({
+          [`@(text-button-solid-${color}-icon)`]: !disabled,
+          [`@(text-disabled-icon)`]: !disabled
+        })}
+      >
+        {endIcon}
+      </span>
+    )}
   </button>
 )
 
-export { Button }
+/**
+ * A button with an outline border and different sizes
+ */
+const OutlineButton = ({
+                         children,
+                         disabled = false,
+                         color = 'primary',
+                         size = 'medium',
+                         startIcon,
+                         endIcon,
+                         onClick,
+                         className,
+                         ...restProps
+                       }: OutlineButtonProps) => (
+  <button
+    onClick={disabled ? undefined : onClick}
+    disabled={disabled}
+    className={tx(
+      '@(flex flex-row gap-x-2 font-medium bg-transparent outline-none border-2)', className, {
+        // disabled
+        '@(text-disabled-text border-disabled-outline)': disabled,
+      },
+      sizePaddings[size],
+      `@(border-button-outline-${color}-outline text-button-outline-${color}-text)`
+    )}
+    {...restProps}
+  >
+    {startIcon && (
+      <span
+        className={tx({
+          [`@(text-button-outline-${color}-icon)`]: !disabled,
+          [`@(text-disabled-icon)`]: !disabled
+        })}
+      >
+        {startIcon}
+      </span>
+    )}
+    {children}
+    {endIcon && (
+      <span
+        className={tx({
+          [`@(text-button-outline-${color}-icon)`]: !disabled,
+          [`@(text-disabled-icon)`]: !disabled
+        })}
+      >
+        {endIcon}
+      </span>
+    )}
+  </button>
+)
+
+/**
+ * A text that is a button that can have different sizes
+ */
+const TextButton = ({
+                      children,
+                      disabled = false,
+                      color = 'neutral',
+                      size = 'medium',
+                      startIcon,
+                      endIcon,
+                      onClick,
+                      className,
+                      ...restProps
+                    }: TextButtonProps) => (
+  <button
+    onClick={disabled ? undefined : onClick}
+    disabled={disabled}
+    className={tx(
+      '@(flex flex-row gap-x-2 font-medium bg-transparent outline-none)', className, {
+        // disabled
+        '@(text-disabled-text)': disabled,
+      },
+      sizePaddings[size],
+      `@(text-button-text-${color}-text)`
+    )}
+    {...restProps}
+  >
+    {startIcon && (
+      <span
+        className={tx({
+          [`@(text-button-text-${color}-icon)`]: !disabled,
+          [`@(text-disabled-icon)`]: !disabled
+        })}
+      >
+        {startIcon}
+      </span>
+    )}
+    {children}
+    {endIcon && (
+      <span
+        className={tx({
+          [`@(text-button-text-${color}-icon)`]: !disabled,
+          [`@(text-disabled-icon)`]: !disabled
+        })}
+      >
+        {endIcon}
+      </span>
+    )}
+  </button>
+)
+
+export { SolidButton, OutlineButton, TextButton }

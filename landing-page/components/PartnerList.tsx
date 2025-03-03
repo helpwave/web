@@ -1,4 +1,4 @@
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import Image from 'next/image'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
 

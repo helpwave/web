@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { tx } from '@twind/core'
-import { tw } from '../../twind'
+import { tx } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { noop } from '../../util/noop'
 import { getNeighbours, range } from '../../util/array'
 import { clamp } from '../../util/math'

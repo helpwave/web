@@ -1,6 +1,6 @@
 import type { ImageProps } from 'next/image'
 import Image from 'next/image'
-import { tx } from '@twind/core'
+import { tx } from '@helpwave/color-themes/twind'
 
 export type TagProps = Omit<ImageProps, 'src'|'alt'>
 

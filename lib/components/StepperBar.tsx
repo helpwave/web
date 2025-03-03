@@ -1,10 +1,10 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import { tw, tx } from '../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import { range } from '../util/array'
-import { Button } from './Button'
+import { SolidButton } from './Button'
 
 type StepperBarTranslation = {
   back: string,
@@ -64,7 +64,7 @@ export const StepperBar = ({
       className={tx('sticky flex flex-row p-2 border-2 justify-between rounded-lg shadow-lg', className)}
     >
       <div className={tw('flex flex-[2] justify-start')}>
-        <Button
+        <SolidButton
           disabled={step === 0}
           onClick={() => {
             update(step - 1)
@@ -73,7 +73,7 @@ export const StepperBar = ({
         >
           <ChevronLeft size={14}/>
           {translation.back}
-        </Button>
+        </SolidButton>
       </div>
       <div className={tw('flex flex-row flex-[5] gap-x-2 justify-center items-center')}>
         {showDots && dots.map((value, index) => {
@@ -97,18 +97,18 @@ export const StepperBar = ({
       </div>
       {step !== lastStep && (
         <div className={tw('flex flex-[2] justify-end')}>
-          <Button
+          <SolidButton
             onClick={() => update(step + 1)}
             className={tw('flex flex-row gap-x-1 items-center justify-center')}
           >
             {translation.next}
             <ChevronRight size={14}/>
-          </Button>
+          </SolidButton>
         </div>
       )}
       {step === lastStep && (
         <div className={tw('flex flex-[2] justify-end')}>
-          <Button
+          <SolidButton
             // TODO check form validity
             disabled={false}
             onClick={onFinish}
@@ -116,7 +116,7 @@ export const StepperBar = ({
           >
             <Check size={14}/>
             {translation.confirm}
-          </Button>
+          </SolidButton>
         </div>
       )}
     </div>

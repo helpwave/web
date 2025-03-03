@@ -5,7 +5,7 @@ import presetTailwindForms from '@twind/preset-tailwind-forms'
 import presetTypography from '@twind/preset-typography'
 import { fontFamily } from './typography'
 import { textStyles } from './textstyles'
-import { StylingVariables } from './style-variables'
+import { ThemeVariables } from './theme-variables'
 
 export type ScreenTypes = 'desktop' | 'tablet' | 'mobile'
 const screenSizes: Record<ScreenTypes, { min?: string, max?: string, raw?: string }> = {
@@ -17,10 +17,11 @@ const screenSizes: Record<ScreenTypes, { min?: string, max?: string, raw?: strin
 export const config = defineConfig({
   theme: {
     // remove all tailwind preset colors
-    colors: {
-      ...StylingVariables.colors
-    },
+    colors: {},
     extend: {
+      colors: {
+        ...Object.fromEntries(Object.entries(ThemeVariables.themes.light).map(([key, _]) => [key, `var(--${key})`]))
+      },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],
         space: ['var(--font-space)', ...fontFamily.sans]

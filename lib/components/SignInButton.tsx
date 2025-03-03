@@ -1,9 +1,9 @@
-import { noop } from '@twind/core'
+import { noop } from '@helpwave/color-themes/twind'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import { Helpwave } from '../icons/Helpwave'
-import { tw, tx } from '../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 
 type SignInButtonTranslation = {
   signIn: string,

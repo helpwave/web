@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import type { News } from '@helpwave/common/util/news'
 import Image from 'next/image'

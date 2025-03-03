@@ -1,8 +1,8 @@
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -162,7 +162,7 @@ const TaskDetailViewSidebar = ({
               }
             }}
           />
-          <Button
+          <SolidButton
             onClick={() => {
               setTask({ ...task, assignee: undefined })
               if (!isCreating && task.assignee) {
@@ -177,7 +177,7 @@ const TaskDetailViewSidebar = ({
             disabled={!task.assignee}
           >
             <X size={24}/>
-          </Button>
+          </SolidButton>
         </div>
       </div>
       <div>
@@ -230,14 +230,14 @@ const TaskDetailViewSidebar = ({
           <div className={tw('flex flex-row justify-between items-center')}>
             <span>{task.isPublicVisible ? translation.public : translation.private}</span>
             {!task.isPublicVisible && !isCreating && (
-              <Button
+              <SolidButton
                 color="hw-neutral"
                 variant="text-border"
                 className={tw('!py-1 !px-2')}
                 onClick={() => setIsShowingPublicDialog(true)}
               >
                 <span>{translation.publish}</span>
-              </Button>
+              </SolidButton>
             )}
           </div>
         ) : null}
@@ -348,28 +348,28 @@ export const TaskDetailView = ({
       {!isCreating ?
           (
           <>
-            <Button
+            <SolidButton
               color="hw-negative"
               disabled={true} // TODO reenable when backend allows it
               onClick={() => setIsShowingDeleteDialog(true)}
             >
               {translation.delete}
-            </Button>
+            </SolidButton>
             {task.status !== 'done' && (
-              <Button color="hw-positive" onClick={() => {
+              <SolidButton color="hw-positive" onClick={() => {
                 updateTaskMutation.mutate({ ...task, status: 'done' })
                 onClose()
               }}>
                 {translation.finish}
-              </Button>
+              </SolidButton>
             )}
           </>
           )
         :
           (
-          <Button onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
+          <SolidButton onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
             {translation.create}
-          </Button>
+          </SolidButton>
           )
       }
     </div>

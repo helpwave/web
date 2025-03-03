@@ -1,4 +1,4 @@
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import { colors } from '../twind/config'
 
 type Color = 'primary' | 'black'

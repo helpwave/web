@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { tx } from '@twind/core'
+import { tx } from '@helpwave/color-themes/twind'
 
 export type DividerInserterProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   children: ReactNode[],

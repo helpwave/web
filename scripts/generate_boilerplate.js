@@ -24,14 +24,14 @@ program
   .argument('[Name]', 'The path or name of the component')
   .action((path, options) => {
     if (!path || options.help) {
-      program.help();
-      process.exit(1);
+      program.help()
+      process.exit(1)
     }
   })
   .parse()
 
-const options = program.opts();
-const args = program.args;
+const options = program.opts()
+const args = program.args
 
 if(options.debug){
   console.log('options', options)
@@ -40,16 +40,16 @@ if(options.debug){
 }
 
 
-const filePathInput = args[0] + (args[0].endsWith('.tsx') || args[0].endsWith('.ts') ? '' : '.tsx');
+const filePathInput = args[0] + (args[0].endsWith('.tsx') || args[0].endsWith('.ts') ? '' : '.tsx')
 let cwd = process.env.INIT_CWD ?? process.cwd()
-let filePath = path.resolve(cwd, filePathInput);
+let filePath = path.resolve(cwd, filePathInput)
 const dir = path.dirname(filePath)
 const componentName = capitalize(removeNonAlphanumeric(path.parse(filePathInput).name))
 const fileName = `${componentName}.${options.fileType}`
 filePath = path.resolve(dir, fileName)
 
 const imports = {
-  standard: `import { tw } from '@helpwave/common/twind'`,
+  standard: `import { tw } from '@helpwave/color-themes/twind'`,
   translation: `import type { Languages } from '@helpwave/common/hooks/useLanguage'\n` +
     `import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'`
 }

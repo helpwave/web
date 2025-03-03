@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SectionBase } from '@/components/sections/SectionBase'

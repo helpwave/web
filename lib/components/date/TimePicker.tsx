@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
 import { closestMatch, range } from '../../util/array'
-import { tw, tx } from '../../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 
 type MinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 

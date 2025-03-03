@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Search } from 'lucide-react'
-import { tw } from '../../twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import type { SelectOption, SelectProps } from './Select'
 import { Select } from './Select'

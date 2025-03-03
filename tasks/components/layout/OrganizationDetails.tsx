@@ -1,8 +1,8 @@
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import {
   useInviteMemberMutation,
@@ -192,12 +192,12 @@ export const OrganizationDetail = ({
           organizationId={contextState.organizationId}
         />
         <div className={tw('flex flex-row justify-end')}>
-          <Button
+          <SolidButton
             className={tw('w-auto')}
             onClick={() => isCreatingNewOrganization ? createOrganization(organizationForm.organization) : updateOrganization(organizationForm.organization)}
             disabled={!organizationForm.isValid}>
             {isCreatingNewOrganization ? translation.create : translation.update}
-          </Button>
+          </SolidButton>
         </div>
         <div className={tx('flex flex-col justify-start', { hidden: isCreatingNewOrganization })}>
           <span className={tw('textstyle-title-normal')}>{translation.dangerZone}</span>

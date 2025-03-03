@@ -1,9 +1,9 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useWardTaskTemplateQuery } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
@@ -59,12 +59,12 @@ export const TaskTemplateWardPreview = ({
         <div className={tw('flex flex-col')}>
           <div className={tw('flex flex-row justify-between items-center mb-4')}>
             <span className={tw('textstyle-table-name')}>{translation.taskTemplates(taskTemplates.length)}</span>
-            <Button
+            <SolidButton
               className={tw('w-auto')}
               onClick={() => router.push(`/ward/${wardId}/templates`)}
             >
               {translation.showAllTaskTemplates}
-            </Button>
+            </SolidButton>
           </div>
           <div className={tw(`grid grid-cols-${columns} gap-4`)}>
             {taskTemplates.map((taskTemplate, index) => (

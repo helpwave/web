@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Plus } from 'lucide-react'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 import {
@@ -93,7 +93,7 @@ export const SubtaskView = ({
     <div className={tw('flex flex-col gap-y-2')}>
       <div className={tw('flex flex-row items-center justify-between')}>
         <span className={tw('textstyle-title-normal')}>{translation.subtasks}</span>
-        <Button
+        <SolidButton
           onClick={() => {
             const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
             onChange([...subtasks, newSubtask])
@@ -107,7 +107,7 @@ export const SubtaskView = ({
             <Plus size={18}/>
             <span>{translation.addSubtask}</span>
           </div>
-        </Button>
+        </SolidButton>
       </div>
       <div className={tw('max-h-[500px] overflow-hidden')}>
         <Scrollbars autoHide={true} ref={scrollableRef} className={tw('h-screen')} style={{ minHeight: 250 }}>

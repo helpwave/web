@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import {
@@ -150,11 +150,11 @@ export const WardDetail = ({
           </div>
             )}
         <div className={tw('flex flex-row justify-end mt-6')}>
-          <Button
+          <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
             disabled={!filledRequired}>
             {isCreatingNewWard ? translation.create : translation.update}
-          </Button>
+          </SolidButton>
         </div>
         {newWard.id !== '' &&
           (
@@ -166,14 +166,14 @@ export const WardDetail = ({
         <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
           <span className={tw('textstyle-title-normal')}>{translation.dangerZone}</span>
           <span className={tw('textstyle-description')}>{translation.dangerZoneText}</span>
-          <Button
+          <SolidButton
             onClick={() => setIsShowingConfirmDialog(true)}
             className={tw('px-0 font-bold text-left')}
             color="hw-negative"
             variant="text"
           >
             {translation.deleteWard}
-          </Button>
+          </SolidButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

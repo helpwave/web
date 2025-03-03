@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from 'react'
 import { useState } from 'react'
 import { LanguageModal } from '../modals/LanguageModal'
-import { tw } from '../../twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '../../hooks/useLanguage'
-import { Button } from '../Button'
+import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 
@@ -35,13 +35,13 @@ export const LanguageHeader = ({
         onBackgroundClick={() => setIsOpen(false)}
       />
       <div className={tw('flex flex-row h-8 w-full py-2 mb-2 justify-end items-center')}>
-        <Button
+        <SolidButton
           variant="text-border"
           onClick={() => setIsOpen(true)}
           className={tw('!py-[2px] !px-1')}
         >
           {translation.languages}
-        </Button>
+        </SolidButton>
       </div>
       {children}
     </>

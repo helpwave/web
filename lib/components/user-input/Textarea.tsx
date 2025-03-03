@@ -1,6 +1,6 @@
 import type { TextareaHTMLAttributes } from 'react'
 import { useState } from 'react'
-import { tw, tx } from '../../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Undo2, X } from 'lucide-react'
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { noop } from '@helpwave/common/util/noop'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { usePatientAssignmentByWardQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 
 type RoomBedSelectTranslation = {
@@ -127,7 +127,7 @@ export const RoomBedSelect = ({
     <div className={tw('flex flex-row justify-between items-center gap-x-4')}>
       <div>
         {isShowingRevert && (
-          <Button
+          <SolidButton
             onClick={() => {
               if (hasChanges) {
                 setCurrentSelection({ ...initialRoomAndBed })
@@ -141,10 +141,10 @@ export const RoomBedSelect = ({
               {translation.revert}
               <Undo2 size={16}/>
             </div>
-          </Button>
+          </SolidButton>
         )}
         {isShowingClear && (
-          <Button
+          <SolidButton
             onClick={() => {
               setCurrentSelection({
                 bedId: undefined,
@@ -160,7 +160,7 @@ export const RoomBedSelect = ({
               {translation.revert}
               <X size={16}/>
             </div>
-          </Button>
+          </SolidButton>
         )}
       </div>
       {touched && !isSubmitting && !isCreating && (

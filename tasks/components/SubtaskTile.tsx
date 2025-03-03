@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 
 type SubtaskTileTranslation = {
@@ -81,7 +81,7 @@ export const SubtaskTile = ({
         minLength={minTaskNameLength}
         maxLength={maxTaskNameLength}
       />
-      <Button
+      <SolidButton
         className={tw('ml-4')}
         onClick={onRemoveClick}
         aria-label={translation.remove}
@@ -89,7 +89,7 @@ export const SubtaskTile = ({
         color="hw-negative"
       >
         {translation.remove}
-      </Button>
+      </SolidButton>
     </div>
   )
 }

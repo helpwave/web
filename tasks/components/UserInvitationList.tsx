@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import {
@@ -88,20 +88,20 @@ export const UserInvitationList = ({
                 <Avatar avatarUrl={invite.organization.id} alt=""/>
                 <span>{invite.organization.longName}</span>
               </div>,
-              <Button
+              <SolidButton
                 key="accept"
                 color="hw-positive"
                 onClick={() => acceptInvite(invite.id)}
               >
                 {translation.accept}
-              </Button>,
-              <Button
+              </SolidButton>,
+              <SolidButton
                 key="decline"
                 color="hw-negative"
                 onClick={() => declineInviteMutation.mutate(invite.id)}
               >
                 {translation.decline}
-              </Button>
+              </SolidButton>
             ]}
           />
         )}

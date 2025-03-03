@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { tx } from '../twind'
+import { tx } from '@helpwave/color-themes/twind'
 
 export const avtarSizeList = ['tiny', 'small', 'medium', 'large'] as const
 export type AvatarSize = typeof avtarSizeList[number]
@@ -27,7 +27,7 @@ const Avatar = ({ avatarUrl, alt, size = 'medium', className = '' }: AvatarProps
   return (
     // TODO transparent or white background later
     <div
-      className={tx(`rounded-full bg-hw-primary-400 h-[${usedSize}px] w-[${usedSize}px] min-h-[${usedSize}px] min-w-[${usedSize}px]`, className)}>
+      className={tx(`@(rounded-full bg-hw-primary-400 h-[${usedSize}px] w-[${usedSize}px] min-h-[${usedSize}px] min-w-[${usedSize}px])`, className)}>
       <Image
         className={tx(
           'rounded-full border border-slate-200 group-hover:border-indigo-200 flex justify-evenly items-center',

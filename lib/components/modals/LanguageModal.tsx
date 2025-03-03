@@ -1,11 +1,11 @@
 import { type PropsWithChildren } from 'react'
-import { tw } from '../../twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user-input/Select'
 import type { Languages } from '../../hooks/useLanguage'
 import { useLanguage } from '../../hooks/useLanguage'
-import { Button } from '../Button'
+import { SolidButton } from '../Button'
 import { Modal, type ModalProps } from './Modal'
 
 const languageDetails = {
@@ -67,9 +67,9 @@ export const LanguageModal = ({
             onChange={(language: string) => setLanguage(language as Languages)}
           />
           <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-            <Button autoFocus color="hw-positive" onClick={onDone}>
+            <SolidButton autoFocus color="hw-positive" onClick={onDone}>
               {translation.done}
-            </Button>
+            </SolidButton>
           </div>
       </div>
     </Modal>

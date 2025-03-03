@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { tw, tx } from '../../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '../../hooks/useLanguage'
-import { Button } from '../Button'
+import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 
@@ -69,7 +69,7 @@ export const PropertyBase = ({
           <div className={tw('text-hw-warn-600 pr-4')}><AlertTriangle size={24}/></div>
         )}
         {onRemove && (
-          <Button
+          <SolidButton
             onClick={onRemove}
             color="hw-negative"
             variant="text"
@@ -77,7 +77,7 @@ export const PropertyBase = ({
             disabled={!hasValue || readOnly}
           >
             {translation.remove}
-          </Button>
+          </SolidButton>
         )}
       </div>
     </div>

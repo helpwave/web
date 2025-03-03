@@ -3,10 +3,10 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { useAuth } from '@/hooks/useAuth'
 
 type LoginTranslation = {
@@ -68,9 +68,9 @@ const Login: NextPage<PropsForTranslation<LoginTranslation, LoginServerSideProps
           type="password"
           onChange={password => setLoginData({ ...loginData, password })}
         />
-        <Button onClick={() => {login(loginData.email, loginData.password)}}>{translation.signIn}</Button>
+        <SolidButton onClick={() => {login(loginData.email, loginData.password)}}>{translation.signIn}</SolidButton>
 
-        <Button onClick={() => {}} className={tw('mt-6')}>{translation.register}</Button>
+        <SolidButton onClick={() => {}} className={tw('mt-6')}>{translation.register}</SolidButton>
       </div>
     </Page>
   )

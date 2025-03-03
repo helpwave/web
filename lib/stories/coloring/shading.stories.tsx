@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import type { ShadedColors } from '../../coloring/types'
 import { shadingColorValues } from '../../coloring/types'
 import { generateShadingColors } from '../../coloring/shading'

@@ -1,8 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { forwardRef, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { tw } from '@twind/core'
-import { tx } from '../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 
 export type ExpandableProps = PropsWithChildren<{
   label: ReactNode,

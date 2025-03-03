@@ -5,8 +5,8 @@ import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
 import { addDuration, subtractDuration } from '../../util/date'
-import { tw, tx } from '../../twind'
-import { Button } from '../Button'
+import { tw, tx } from '@helpwave/color-themes/twind'
+import { SolidButton } from '../Button'
 import { useLocale } from '../../hooks/useLanguage'
 import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
@@ -116,7 +116,7 @@ export const DatePicker = ({
             }}
           />
           <div className={tw('mt-1')}>
-            <Button
+            <SolidButton
               variant="text"
               onClick={() => {
                 const newDate = new Date()
@@ -126,7 +126,7 @@ export const DatePicker = ({
               className={tw('!p-0')}
             >
               {translation.today}
-            </Button>
+            </SolidButton>
           </div>
         </div>
       )}

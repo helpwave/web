@@ -1,4 +1,8 @@
-const colors: Record<string, string> = {
+import { invertRGB } from '../util/invert-rgb'
+
+export type ThemeType = 'light' | 'inverted';
+
+const lightModeColors: Record<string, string> = {
   'white': '#FFFFFFFF',
   'black': '#000000FF',
   'gray-25': '#F8F8F8FF',
@@ -74,6 +78,10 @@ const colors: Record<string, string> = {
   'divider': '#E6E6E6FF',
   'outline': '#E6E6E6FF',
   'outline-variant': '#CCCCCCFF',
+  'disabled-background': '#BBBBBBFF',
+  'disabled-text': '#555555FF',
+  'disabled-icon': '#555555FF',
+  'disabled-outline': '#555555FF',
   'button-solid-primary-background': '#694BB4FF',
   'button-solid-primary-text': '#FFFFFFFF',
   'button-solid-primary-icon': '#FFFFFFFF',
@@ -103,7 +111,19 @@ const colors: Record<string, string> = {
   'tag-dark-text': '#FFFFFFFF',
   'tag-dark-icon': '#FFFFFFFF',
   'tabel-header-background': '#F6FAFFFF',
+  'text-image-primary-background': '#694BB4FF',
+  'text-image-primary-text': '#FFFFFFFF',
+  'text-image-secondary-background': '#3171DEFF',
+  'text-image-secondary-text': '#FFFFFFFF',
+  'text-image-dark-background': '#11243EFF',
+  'text-image-dark-text': '#FFFFFFFF',
 }
+
+export type SolidButtonColor = 'primary' | 'secondary' | 'tertiary' | 'positive' | 'warning'
+export type OutlineButtonColor = 'primary'
+export type TextButtonColor = 'negative' | 'neutral'
+export type ChipColor = 'default' | 'dark'
+export type TextImageColor = 'primary'| 'secondary'| 'dark'
 
 const numbers: Record<string, number> = {
   'radius-xxxs': 2,
@@ -127,4 +147,9 @@ const booleans: Record<string, boolean> = {}
 
 const strings: Record<string, string> = {}
 
-export const StylingVariables = { colors, numbers, booleans, strings }
+const themes: Record<ThemeType, Record<string, string>> = {
+  light: lightModeColors,
+  inverted: Object.fromEntries(Object.entries(lightModeColors).map(([key, value]) => [key, invertRGB(value)]))
+}
+
+export const ThemeVariables = { themes, numbers, booleans, strings }

@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -187,7 +187,7 @@ export const PatientList = ({
       <div className={tw('flex flex-row gap-x-2 items-center')}>
         <span className={tw('textstyle-title-normal pr-4')}>{translation.patients}</span>
         <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
-        <Button
+        <SolidButton
           className={tw('whitespace-nowrap')}
           color="hw-positive"
           onClick={() => {
@@ -195,7 +195,7 @@ export const PatientList = ({
           }}
         >
           {translation.addPatient}
-        </Button>
+        </SolidButton>
       </div>
       <LoadingAndErrorComponent
         hasError={isError || !data}
@@ -233,12 +233,12 @@ export const PatientList = ({
                         <Chip color="hw-label-blue" variant="fullyRounded">
                           {activeLabelText(patient)}
                         </Chip>
-                        <Button color="hw-negative" variant="text" onClick={event => {
+                        <SolidButton color="hw-negative" variant="text" onClick={event => {
                           event.stopPropagation()
                           setDischargingPatient(patient)
                         }}>
                           {translation.discharge}
-                        </Button>
+                        </SolidButton>
                       </div>
                     </div>
                   )}
@@ -280,12 +280,12 @@ export const PatientList = ({
                             <Chip color="hw-label-yellow" variant="fullyRounded">
                               {`${translation.unassigned}`}
                             </Chip>
-                            <Button color="hw-negative" variant="text" onClick={event => {
+                            <SolidButton color="hw-negative" variant="text" onClick={event => {
                               event.stopPropagation()
                               setDischargingPatient(patient)
                             }}>
                               {translation.discharge}
-                            </Button>
+                            </SolidButton>
                           </div>
                         </div>
                       )}
@@ -322,13 +322,13 @@ export const PatientList = ({
                         >
                           <span className={tw('textstyle-title-sm')}>{patient.name}</span>
                           <div className={tw('flex flex-row gap-x-4')}>
-                            <Button variant="text" onClick={event => {
+                            <SolidButton variant="text" onClick={event => {
                               event.stopPropagation()
                               readmitPatientMutation.mutate(patient.id)
                             }}>
                               {translation.readmit}
-                            </Button>
-                            <Button
+                            </SolidButton>
+                            <SolidButton
                               color="hw-negative"
                               variant="text" onClick={event => {
                                 event.stopPropagation()
@@ -338,7 +338,7 @@ export const PatientList = ({
                               disabled={true}
                             >
                               {translation.delete}
-                            </Button>
+                            </SolidButton>
                           </div>
                         </div>
                       )}

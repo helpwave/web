@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
-import { tw, tx } from '../../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
 import { addDuration, subtractDuration } from '../../util/date'
-import { Button } from '../Button'
+import { SolidButton } from '../Button'
 import type { TimePickerProps } from '../date/TimePicker'
 import { TimePicker } from '../date/TimePicker'
 import type { DatePickerProps } from '../date/DatePicker'
@@ -142,13 +142,13 @@ export const DateTimePicker = ({
       </div>
       <div className={tw('flex flex-row justify-end')}>
         <div className={tw('flex flex-row gap-x-2 mt-1')}>
-          <Button size="medium" color="hw-negative" onClick={onRemove}>{translation.clear}</Button>
-          <Button
+          <SolidButton size="medium" color="hw-negative" onClick={onRemove}>{translation.clear}</SolidButton>
+          <SolidButton
             size="medium"
             onClick={() => onFinish(value)}
           >
             {translation.change}
-          </Button>
+          </SolidButton>
         </div>
       </div>
     </div>

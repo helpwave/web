@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 
 export type HeaderProps = {

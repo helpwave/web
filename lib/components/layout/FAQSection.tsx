@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ExpandableProps } from '../Expandable'
 import { Expandable } from '../Expandable'

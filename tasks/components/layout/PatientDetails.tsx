@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
@@ -223,22 +223,22 @@ export const PatientDetail = ({
           {!newPatient.discharged ?
               (
               <>
-                <Button color="hw-warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
+                <SolidButton color="hw-warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
                   {translation.unassign}
-                </Button>
-                <Button color="hw-negative" onClick={() => setIsShowingDischargeDialog(true)} >
+                </SolidButton>
+                <SolidButton color="hw-negative" onClick={() => setIsShowingDischargeDialog(true)} >
                   {translation.dischargePatient}
-                </Button>
+                </SolidButton>
               </>
               ) : (
-              <Button color="hw-positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
+              <SolidButton color="hw-positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
                 {translation.readmit}
-              </Button>
+              </SolidButton>
               )}
-          <Button color="hw-primary" onClick={() => {
+          <SolidButton color="hw-primary" onClick={() => {
             clearUpdateTimer(true)
             updateMutation.mutate(newPatient)
-          }}>{translation.saveChanges}</Button>
+          }}>{translation.saveChanges}</SolidButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

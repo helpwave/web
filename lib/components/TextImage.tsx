@@ -1,11 +1,11 @@
-import { tw, tx } from '@twind/core'
-import { colors } from '../twind/config'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import { Chip } from './ChipList'
+import type { TextImageColor } from '@helpwave/color-themes/twind/theme-variables'
+import { ThemeVariables } from '@helpwave/color-themes/twind/theme-variables'
 
-type TextImageColor = 'primary'| 'secondary'| 'secondaryDark'| 'red'
 
 type TextImageTranslation = {
   showMore: string,
@@ -48,14 +48,13 @@ export const TextImage = ({
   const translation = useTranslation(defaultTextImageTranslation, overwriteTranslation)
 
   const colorMapping: Record<TextImageColor, string> = {
-    primary: colors['hw-primary'][600],
-    secondary: colors['hw-secondary'][400],
-    secondaryDark: colors['hw-secondary'][800],
-    red: colors['hw-negative'][700]
+    primary: ThemeVariables.themes.light['text-image-primary-background']!,
+    secondary: ThemeVariables.themes.light['text-image-secondary-background']!,
+    dark: ThemeVariables.themes.light['text-image-dark-background']!,
   }
 
   const withTransparency = (color: string, transparency: string) => {
-    return color.padEnd(9, transparency)
+    return color.slice(0, 7) + transparency
   }
 
   return (
@@ -72,8 +71,8 @@ export const TextImage = ({
         }}
       >
         {badge && (
-          <Chip variant="fullyRounded" className={tw(`!bg-white !text-[${colorMapping[color]}] mb-2 !px-4`)}>
-            <span className={tw('text-lg')}>{badge}</span>
+          <Chip variant="fullyRounded" className={tw(`bg-white text-image-${color}-text mb-2 !px-4`)}>
+            <span className={tw(`text-lg text-text-image-${color}-background`)}>{badge}</span>
           </Chip>
         )}
         <div className={tw('flex flex-col gap-y-1 text-white overflow-hidden')}>

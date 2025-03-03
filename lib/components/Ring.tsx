@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { tw, tx } from '../twind'
 import { noop } from '../util/noop'
 import { Circle } from './Circle'
+import { tx } from '@helpwave/color-themes/twind'
 
 export type RingProps = {
   innerSize: number, // the size of the entire circle including the circleWidth

@@ -9,7 +9,7 @@ import {
   type DropAnimation
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { SortedTasks, TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'

@@ -1,5 +1,5 @@
 import type { StoryFn } from '@storybook/react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import { FAQSection } from '../../components/layout/FAQSection'
 import { Helpwave } from '../../icons/Helpwave'
 

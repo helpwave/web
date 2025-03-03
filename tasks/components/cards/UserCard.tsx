@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import type { User } from '@helpwave/api-services/authentication/useAuth'
 

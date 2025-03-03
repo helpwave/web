@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import {
   defaultTableStatePagination,
@@ -139,12 +139,12 @@ export const OrganizationMemberList = ({
           <span className={tw('textstyle-table-name')}>{translation.members + ` (${usedMembers.length})`}</span>
           <div className={tw('flex flex-row gap-x-2')}>
             {tableState.selection && tableState.selection.currentSelection.length > 0 && (
-              <Button
+              <SolidButton
                 onClick={() => setDeleteDialogState({ isShowing: true })}
                 color="hw-negative"
               >
                 {translation.removeSelection}
-              </Button>
+              </SolidButton>
             )}
           </div>
         </div>
@@ -179,14 +179,14 @@ export const OrganizationMemberList = ({
               </button>
             </div>,
             <div key="remove" className={tw('flex flex-row justify-end')}>
-              <Button
+              <SolidButton
                 onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
                 color="hw-negative"
                 variant="text"
                 // disabled={orgMember.role === Role.admin}
               >
                 {translation.remove}
-              </Button>
+              </SolidButton>
             </div>
           ]}
          identifierMapping={idMapping}

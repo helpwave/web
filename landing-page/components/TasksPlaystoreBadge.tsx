@@ -1,7 +1,7 @@
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import Link from 'next/link'
-import { tx } from '@twind/core'
+import { tx } from '@helpwave/color-themes/twind'
 
 /**
  * WHEN USING MAKE THE NECESSARY ATTRIBUTION TO GOOGLE

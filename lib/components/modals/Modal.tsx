@@ -1,7 +1,7 @@
 import { useContext, useEffect, type MouseEventHandler, type PropsWithChildren, type ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import { X } from 'lucide-react'
-import { tx, tw } from '../../twind'
+import { tx, tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'

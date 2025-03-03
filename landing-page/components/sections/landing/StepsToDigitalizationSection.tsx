@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
@@ -85,7 +85,7 @@ export const StepsToDigitalizationSection = () => {
       description: translation.step3Description,
       // make attribution https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm#fromView=search&page=1&position=45&uuid=12db1ee2-bec5-40ce-a317-5d240ad56f12
       imageUrl: 'https://cdn.helpwave.de/landing_page/dashboard.jpg',
-      color: 'secondaryDark',
+      color: 'dark',
       onShowMoreClicked: () => setModalValue({
         titleText: translation.step3Title,
         description: translation.step3Description

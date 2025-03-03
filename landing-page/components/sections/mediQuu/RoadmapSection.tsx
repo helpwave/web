@@ -1,6 +1,6 @@
 import { type Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type RoadmapItem = {

@@ -1,9 +1,9 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import {
   defaultTableStatePagination,
@@ -184,16 +184,16 @@ export const RoomList = ({
           <span className={tw('textstyle-table-name')}>{translation.rooms + ` (${usedRooms.length})`}</span>
           <div className={tw('flex flex-row gap-x-2')}>
             {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
-              <Button
+              <SolidButton
                 onClick={() => setDeletionConfirmDialogElement('')}
                 color="hw-negative"
               >
                 {translation.removeSelection}
-              </Button>
+              </SolidButton>
             )}
-            <Button onClick={addRoom} color="hw-positive">
+            <SolidButton onClick={addRoom} color="hw-positive">
               {translation.addRoom}
-            </Button>
+            </SolidButton>
           </div>
         </div>
         <Table
@@ -239,22 +239,22 @@ export const RoomList = ({
               <span>{room.bedCount}</span>
             </div>,
             <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
-              <Button
+              <SolidButton
                 onClick={() => setManagedRoom(room.id)}
                 variant="text"
                 color="hw-neutral"
               >
                 {translation.manage}
-              </Button>
+              </SolidButton>
             </div>,
             <div key="remove" className={tw('flex flex-row justify-end')}>
-              <Button
+              <SolidButton
                 onClick={() => setDeletionConfirmDialogElement(room.id)}
                 color="hw-negative"
                 variant="text"
               >
                 {translation.remove}
-              </Button>
+              </SolidButton>
             </div>
           ]}
         />

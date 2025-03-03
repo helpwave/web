@@ -5,10 +5,10 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { Section } from '@/components/layout/Section'
 import { useInvoiceQuery } from '@/api/mutations/invoice_mutations'
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { Table } from '@helpwave/common/components/Table'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { InvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import { defaultInvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import { useState } from 'react'
@@ -139,10 +139,10 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                 (
                   <div key={dataObject.uuid + '-details'} className={tw('flex flex-col')}>
                     <span>{translation.products(dataObject.products!.length)}</span>
-                    <Button size="small" onClick={() => setDetailModalId(dataObject.uuid)} className={tw('flex flex-row items-center gap-x-1 p-0')} variant="text">
+                    <SolidButton size="small" onClick={() => setDetailModalId(dataObject.uuid)} className={tw('flex flex-row items-center gap-x-1 p-0')} variant="text">
                       {translation.show}
                       <ChevronRight size={16}/>
-                    </Button>
+                    </SolidButton>
                   </div>
                 ),
                 (
@@ -163,9 +163,9 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                   </span>
                 ),
                 (
-                  <Button key={dataObject.uuid + '-pay'} disabled={!!dataObject.paymentDate}>
+                  <SolidButton key={dataObject.uuid + '-pay'} disabled={!!dataObject.paymentDate}>
                     {translation.payNow}
-                  </Button>
+                  </SolidButton>
                 )
               ]}
             />

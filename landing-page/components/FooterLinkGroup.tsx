@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import Link from 'next/link'
 
 export type FooterLinkGroupProps = {

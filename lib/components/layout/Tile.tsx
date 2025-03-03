@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Image from 'next/image'
-import { tw, tx } from '../../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 
 export type TileProps = {
   title: { value: string, className?: string },

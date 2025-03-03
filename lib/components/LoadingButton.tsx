@@ -1,7 +1,7 @@
-import { tx } from '../twind'
+import { tx } from '@helpwave/color-themes/twind'
 import { Helpwave } from '../icons/Helpwave'
 import type { ButtonProps } from './Button'
-import { Button } from './Button'
+import { SolidButton } from './Button'
 
 type LoadingButtonProps = {
   isLoading?: boolean,
@@ -18,7 +18,7 @@ export const LoadingButton = ({ isLoading = false, ...rest }: LoadingButtonProps
           </div>
         )
       }
-      <Button {...rest} disabled={rest.disabled || isLoading}/>
+      <SolidButton {...rest} disabled={rest.disabled || isLoading}/>
     </div>
   )
 }

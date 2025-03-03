@@ -6,3 +6,4 @@ packages:
   - scripts
   - api-services
   - customer
+  - color-themes

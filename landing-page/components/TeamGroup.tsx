@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { ProfileProps } from '@helpwave/common/components/Profile'
 import { Profile } from '@helpwave/common/components/Profile'
 

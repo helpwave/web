@@ -1,5 +1,5 @@
 import type { SVGProps } from 'react'
-import { tx } from '../twind'
+import { tx } from '@helpwave/color-themes/twind'
 
 export type HelpwaveProps = SVGProps<SVGSVGElement> & {
   color?: string,

@@ -1,5 +1,5 @@
 import { useRef, type PropsWithChildren, type ReactNode, type RefObject } from 'react'
-import { tw, tx } from '../../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useHoverState } from '../../hooks/useHoverState'
 

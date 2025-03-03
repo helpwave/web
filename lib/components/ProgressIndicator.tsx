@@ -1,4 +1,4 @@
-import { tw } from '../twind'
+import { tw } from '@helpwave/color-themes/twind'
 
 export type ProgressIndicatorProps = {
   /*

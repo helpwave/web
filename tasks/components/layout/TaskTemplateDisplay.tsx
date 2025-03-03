@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { LucideArrowLeftRight } from 'lucide-react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
@@ -62,7 +62,7 @@ export const TaskTemplateDisplay = ({
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
         </span>
         { (variant === 'wardTemplates' || wardId) && (
-          <Button
+          <SolidButton
             onClick={() => {
               router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).catch(console.error)
             }}
@@ -70,7 +70,7 @@ export const TaskTemplateDisplay = ({
           >
             <LucideArrowLeftRight/>
             {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}
-          </Button>
+          </SolidButton>
         )}
       </div>
       {/* TODO replace onClick function to something different */}

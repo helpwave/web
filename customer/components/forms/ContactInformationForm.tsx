@@ -1,9 +1,9 @@
 import type { Customer } from '@/api/dataclasses/customer'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 
 type ContactInformationTranslation = {
   contactInfo: string,
@@ -146,7 +146,7 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
       </div>
 
       <div className={tw('flex flex-row justify-end')}>
-        <Button onClick={() => onSubmit(value)}>{translation.save}</Button>
+        <SolidButton onClick={() => onSubmit(value)}>{translation.save}</SolidButton>
       </div>
     </form>
   )

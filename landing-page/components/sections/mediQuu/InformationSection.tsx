@@ -1,6 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import Image from 'next/image'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import type { ReactNode } from 'react'

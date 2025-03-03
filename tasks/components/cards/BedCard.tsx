@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'

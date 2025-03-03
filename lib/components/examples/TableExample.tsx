@@ -7,9 +7,9 @@ import {
   removeFromTableSelection,
   Table
 } from '../Table'
-import { tw } from '../../twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { Input } from '../user-input/Input'
-import { Button } from '../Button'
+import { SolidButton } from '../Button'
 import { SortButton } from '../SortButton'
 
 export type DataType = {
@@ -80,7 +80,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
             setData(data.map(value => value.id === dataObject.id ? { ...dataObject, age: parseInt(text) } : value))
             setSorting(undefined)
           }} />,
-          <Button
+          <SolidButton
             key="delete"
             onClick={() => {
               const newData = data.filter(value => value.id !== dataObject.id)
@@ -89,7 +89,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
             }}
             variant="text"
             color="hw-negative"
-          >Delete</Button>
+          >Delete</SolidButton>
         ]}
         header={[
           <SortButton
@@ -126,7 +126,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
         ]}
       />
       <div className={tw('flex flex-row gap-x-2')}>
-        <Button
+        <SolidButton
           className={tw('w-auto')}
           onClick={() => {
             const newData = {
@@ -141,8 +141,8 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
           }}
         >
           {'Add Data'}
-        </Button>
-        <Button
+        </SolidButton>
+        <SolidButton
           color="hw-negative"
           className={tw('w-auto')}
           onClick={() => {
@@ -153,7 +153,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
           }}
         >
           {'Remove all selected'}
-        </Button>
+        </SolidButton>
       </div>
     </div>
   )

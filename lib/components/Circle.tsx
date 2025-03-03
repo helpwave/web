@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { tx } from '../twind'
+import { tx } from '@helpwave/color-themes/twind'
 
 export type CircleProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   radius: number,
@@ -9,14 +9,14 @@ export type CircleProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 
 export const Circle = ({
   radius = 20,
-  color = 'hw-primary-400',
+  color = 'primary-400',
   className = '',
   ...restProps
 }: CircleProps) => {
   const size = radius * 2
   return (
     <div
-      className={tx(`w-[${size}px] h-[${size}px] rounded-full bg-${color}`, className)}
+      className={tx(`@(w-[${size}px] h-[${size}px] rounded-full bg-${color})`, className)}
       {...restProps}
     />
   )

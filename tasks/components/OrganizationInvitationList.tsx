@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -136,12 +136,12 @@ export const OrganizationInvitationList = ({
       />
       <div className={tw('flex flex-row justify-between')}>
         <span className={tw('textstyle-table-name')}>{`${translation.invitations} (${usedInvitations.length})`}</span>
-        <Button
+        <SolidButton
           color="hw-positive"
           onClick={() => setInviteMemberModalEmail('')}
         >
           {translation.inviteMember}
-        </Button>
+        </SolidButton>
       </div>
       <Table
         data={usedInvitations}
@@ -156,7 +156,7 @@ export const OrganizationInvitationList = ({
             <span>{invite.email}</span>
           </div>,
           <div key="remove" className={tw('flex flex-row justify-end')}>
-            <Button
+            <SolidButton
               color="hw-negative"
               variant="text"
               onClick={() => {
@@ -167,7 +167,7 @@ export const OrganizationInvitationList = ({
               }}
             >
               {translation.remove}
-            </Button>
+            </SolidButton>
           </div>
         ]}
       />

@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { tw, tx } from '../../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 

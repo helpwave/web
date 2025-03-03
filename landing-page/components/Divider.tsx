@@ -1,4 +1,4 @@
-import { tx } from '@helpwave/common/twind'
+import { tx } from '@helpwave/color-themes/twind'
 
 export type DividerProps = {
   rotate?: number,

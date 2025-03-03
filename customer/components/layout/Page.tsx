@@ -1,4 +1,4 @@
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { PropsWithChildren, ReactNode } from 'react'
 import { useState } from 'react'
 import type { NavItem } from '@/components/layout/NavigationSidebar'

@@ -1,9 +1,9 @@
 import { useContext, useEffect } from 'react'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import Link from 'next/link'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
@@ -76,12 +76,12 @@ export const WardRoomList = ({
     >
       <div className={tw('flex flex-row justify-between items-center pb-4')}>
         <span className={tw('textstyle-title-md')}>{translation.roomOverview}</span>
-        <Button onClick={event => {
+        <SolidButton onClick={event => {
           event.stopPropagation()
           updateContext({ wardId: contextState.wardId })
         }}>
           {translation.showPatientList}
-        </Button>
+        </SolidButton>
       </div>
       <LoadingAndErrorComponent
         isLoading={isLoading}
@@ -97,7 +97,7 @@ export const WardRoomList = ({
             <div className={tw('flex flex-col gap-y-2 items-center')}>
               <span>{translation.noRooms}</span>
               <Link href={`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`}>
-                <Button>{translation.editWard}</Button>
+                <SolidButton>{translation.editWard}</SolidButton>
               </Link>
             </div>
           )}

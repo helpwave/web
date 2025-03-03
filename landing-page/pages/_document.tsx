@@ -1,5 +1,5 @@
-import { config } from '@helpwave/common/twind/config'
-import withNextDocument from '@helpwave/common/twind/next/document'
+import { config } from '@helpwave/color-themes/twind/config'
+import withNextDocument from '@helpwave/color-themes/twind/next/document'
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document {

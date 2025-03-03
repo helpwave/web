@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { tw, tx } from '../../twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { noop } from '../../util/noop'
 import { Checkbox } from '../user-input/Checkbox'
 import type { Languages } from '../../hooks/useLanguage'

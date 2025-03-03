@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
-import { tw } from '../twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { ButtonProps } from './Button'
-import { Button } from './Button'
+import { SolidButton } from './Button'
 import type { TableSortingType } from './Table'
 
 export type SortButtonProps = Omit<ButtonProps, 'onClick'> & {
@@ -21,7 +21,7 @@ export const SortButton = ({
   ...buttonProps
 }: SortButtonProps) => {
   return (
-    <Button
+    <SolidButton
       color={color}
       variant={variant}
       onClick={() => onClick(ascending === 'descending' ? 'ascending' : 'descending')}
@@ -31,6 +31,6 @@ export const SortButton = ({
         {children}
         {ascending === 'ascending' ? <ChevronUp/> : (!ascending ? <ChevronsUpDown/> : <ChevronDown/>)}
       </div>
-    </Button>
+    </SolidButton>
   )
 }

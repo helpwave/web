@@ -1,5 +1,5 @@
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import Head from 'next/head'

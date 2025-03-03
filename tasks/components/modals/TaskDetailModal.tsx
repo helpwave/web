@@ -1,4 +1,4 @@
-import { tx } from '@helpwave/common/twind'
+import { tx } from '@helpwave/color-themes/twind'
 import { Modal, type ModalProps, type ModalHeaderProps } from '@helpwave/common/components/modals/Modal'
 import type { TaskDetailViewProps } from '@/components/layout/TaskDetailView'
 import { TaskDetailView } from '@/components/layout/TaskDetailView'

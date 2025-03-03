@@ -1,5 +1,5 @@
 import { Binary } from 'lucide-react'
-import { tx } from '../../twind'
+import { tx } from '@helpwave/color-themes/twind'
 import { noop } from '../../util/noop'
 import { Input } from '../user-input/Input'
 import type { Languages } from '../../hooks/useLanguage'

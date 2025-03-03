@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { NextPage } from 'next'
 import { RadialRings } from '@helpwave/common/components/Ring'
 import { useEffect, useState } from 'react'

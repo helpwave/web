@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -172,15 +172,15 @@ export const TaskTemplateDetails = ({
           'justify-end': isCreatingNewTemplate,
         })}
       >
-        <Button
+        <SolidButton
           className={tw('w-auto')}
           onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state)}
           disabled={!context.state.isValid}
         >
           {isCreatingNewTemplate ? translation.create : translation.update}
-        </Button>
+        </SolidButton>
         { !isCreatingNewTemplate &&
-          (<Button variant="text" color="hw-negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</Button>)
+          (<SolidButton variant="text" color="hw-negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</SolidButton>)
         }
       </div>
     </div>

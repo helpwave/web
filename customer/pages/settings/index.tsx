@@ -8,7 +8,7 @@ import { useCustomerMyselfQuery, useCustomerUpdateMutation } from '@/api/mutatio
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useEffect, useState } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
 
 type SettingsTranslation = {

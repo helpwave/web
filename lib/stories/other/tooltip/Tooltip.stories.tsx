@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import type { TooltipProps } from '../../../components/Tooltip'
 import { Tooltip } from '../../../components/Tooltip'
 

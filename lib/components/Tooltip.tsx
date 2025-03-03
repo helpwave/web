@@ -1,5 +1,5 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { tx } from '@twind/core'
+import { tx } from '@helpwave/color-themes/twind'
 import { useHoverState } from '../hooks/useHoverState'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'

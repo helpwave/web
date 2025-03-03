@@ -1,9 +1,9 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { StepperInformation } from '@helpwave/common/components/StepperBar'
 import { StepperBar } from '@helpwave/common/components/StepperBar'
@@ -108,13 +108,13 @@ export const PropertyDetails = ({
       <div className={tw('top-0 flex flex-row justify-between items-center')}>
         <span className={tw('textstyle-title-lg')}>{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
         {!isCreatingNewProperty && (
-          <Button
+          <SolidButton
             variant="text"
             color="hw-negative"
             onClick={() => setArchiveConfirm(true)}
           >
             {translation.archiveProperty}
-          </Button>
+          </SolidButton>
         )}
       </div>
       <LoadingAndErrorComponent

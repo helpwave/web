@@ -1,7 +1,7 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { languagesLocalNames } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import { tw, tx } from '@twind/core'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
@@ -10,7 +10,7 @@ import { Avatar } from '@helpwave/common/components/Avatar'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import { ArrowRightLeft } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 
@@ -89,7 +89,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
             <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
             {identity?.name}
           </div>
-          <Button onClick={logout} color="hw-negative">{translation.logout}</Button>
+          <SolidButton onClick={logout} color="hw-negative">{translation.logout}</SolidButton>
         </div>
       </div>
     </div>

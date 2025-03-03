@@ -1,8 +1,8 @@
-import { tw, tx } from '@helpwave/common/twind'
+import { tw, tx } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Modal, type ModalProps } from '@helpwave/common/components/modals/Modal'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { defaultTableStatePagination, Table, updatePagination, type TableState } from '@helpwave/common/components/Table'
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -105,7 +105,7 @@ export const ManageBedsModal = ({
           <>
             <div className={tw('flex flex-row justify-between items-end mb-2 mt-4')}>
               <span className={tw('textstyle-table-name')}>{`${translation.beds} (${beds.length})`}</span>
-              <Button color="hw-positive" onClick={addBed}>{translation.addBed}</Button>
+              <SolidButton color="hw-positive" onClick={addBed}>{translation.addBed}</SolidButton>
             </div>
             <Table
               data={beds}
@@ -131,7 +131,7 @@ export const ManageBedsModal = ({
                   <span>{bed.patient ? bed.patient.name : '-'}</span>
                 </div>,
                 <div key="remove" className={tw('flex flex-row justify-end')}>
-                  <Button
+                  <SolidButton
                     disabled={!!bed.patient}
                     onClick={() => {
                       deleteBedMutation.mutate(bed.id)
@@ -141,7 +141,7 @@ export const ManageBedsModal = ({
                     variant="text"
                   >
                     {translation.remove}
-                  </Button>
+                  </SolidButton>
                 </div>
               ]}
             />

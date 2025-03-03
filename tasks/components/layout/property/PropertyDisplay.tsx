@@ -1,11 +1,11 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { Plus, Tag } from 'lucide-react'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { MultiSubjectSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { Table } from '@helpwave/common/components/Table'
 import { Tile } from '@helpwave/common/components/layout/Tile'
@@ -121,7 +121,7 @@ export const PropertyDisplay = ({
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation.subjectType}
             />
-            <Button
+            <SolidButton
               className={tw('w-full !px-0')}
               variant="text"
               color="hw-negative"
@@ -131,9 +131,9 @@ export const PropertyDisplay = ({
               }}
             >
               {translation.removeFilter}
-            </Button>
+            </SolidButton>
           </div>
-          <Button onClick={() => updateContext({
+          <SolidButton onClick={() => updateContext({
             ...contextState,
             propertyId: undefined
           })}>
@@ -141,7 +141,7 @@ export const PropertyDisplay = ({
               <Plus/>
               <span>{translation.addProperty}</span>
             </div>
-          </Button>
+          </SolidButton>
         </div>
       </div>
       <LoadingAndErrorComponent
@@ -163,9 +163,9 @@ export const PropertyDisplay = ({
               <span>{translation[property.subjectType]}</span>
             </div>),
             (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
-              <Button variant="text" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
+              <SolidButton variant="text" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
                 <span>{translation.edit}</span>
-              </Button>
+              </SolidButton>
             </div>)
           ]}
           header={[

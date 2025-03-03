@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { ModalProps } from '@helpwave/common/components/modals/Modal'
@@ -6,7 +6,7 @@ import { Modal } from '@helpwave/common/components/modals/Modal'
 import type { SelectOption } from '@helpwave/common/components/user-input/Select'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { useMemo, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationSwitchModalTranslation = {
@@ -62,9 +62,9 @@ export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneTo
           onChange={setOrganization}
         />
         <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-          <Button autoFocus color="hw-positive" disabled={!organization} onClick={onDone}>
+          <SolidButton autoFocus color="hw-positive" disabled={!organization} onClick={onDone}>
             {translation.ok}
-          </Button>
+          </SolidButton>
         </div>
       </div>
     </Modal>

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { tw } from '@twind/core'
+import { tw } from '@helpwave/color-themes/twind'
 import { Profile } from '../../components/Profile'
 import { Helpwave } from '../../icons/Helpwave'
 import { MarkdownInterpreter } from '../../components/MarkdownInterpreter'

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
-import { tw } from '../../twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { ButtonColorType } from '../Button'
-import { Button } from '../Button'
+import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Modal, type ModalProps } from './Modal'
@@ -74,32 +74,32 @@ export const ConfirmDialog = ({
       {children}
       <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
         {onCancel && (
-          <Button
+          <SolidButton
             color={buttonOverwrites?.[0].color ?? 'hw-neutral'}
             onClick={onCancel}
             disabled={buttonOverwrites?.[0].disabled ?? false}
           >
             {buttonOverwrites?.[0].text ?? translation.cancel}
-          </Button>
+          </SolidButton>
         )}
         {onDecline && (
-          <Button
+          <SolidButton
             color={buttonOverwrites?.[1].color ?? 'hw-negative'}
             onClick={onDecline}
 
             disabled={buttonOverwrites?.[1].disabled ?? false}
           >
             {buttonOverwrites?.[1].text ?? translation.decline}
-          </Button>
+          </SolidButton>
         )}
-        <Button
+        <SolidButton
           autoFocus
           color={buttonOverwrites?.[2].color ?? mapping[confirmType]}
           onClick={onConfirm}
           disabled={buttonOverwrites?.[2].disabled ?? false}
         >
           {buttonOverwrites?.[2].text ?? translation.confirm}
-        </Button>
+        </SolidButton>
       </div>
     </Modal>
   )

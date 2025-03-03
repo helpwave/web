@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { tx } from '@twind/core'
+import { tx } from '@helpwave/color-themes/twind'
 import Head from 'next/head'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'

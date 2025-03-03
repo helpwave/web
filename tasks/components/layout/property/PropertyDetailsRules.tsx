@@ -5,7 +5,7 @@ import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Property } from '@helpwave/api-services/types/properties/property'
 
 type PropertyDetailsRulesTranslation = {

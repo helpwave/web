@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import { Tag } from 'lucide-react'
-import { tx, tw } from '../twind'
+import { tx, tw } from '@helpwave/color-themes/twind'
 import { noop } from '../util/noop'
-import { Button } from './Button'
+import { SolidButton } from './Button'
 
 export type DescriptionWithActionProps = {
   title: string,
@@ -54,9 +54,9 @@ export const DescriptionWithAction = ({
       {trailing}
       {!trailing && trailingButtonText && (
         <div className={tw('flex flex-row items-center desktop:justify-end mobile:justify-center grow')}>
-          <Button onClick={trailingButtonFunction} className={tw('whitespace-nowrap')}>
+          <SolidButton onClick={trailingButtonFunction} className={tw('whitespace-nowrap')}>
             {trailingButtonText}
-          </Button>
+          </SolidButton>
         </div>
       )}
     </div>

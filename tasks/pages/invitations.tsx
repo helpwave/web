@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind'
+import { tw } from '@helpwave/color-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'

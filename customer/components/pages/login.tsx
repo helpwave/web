@@ -1,4 +1,3 @@
-import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
@@ -7,7 +6,6 @@ import { tw } from '@twind/core'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { useState } from 'react'
 import { Button } from '@helpwave/common/components/Button'
-import { useAuth } from '@/hooks/useAuth'
 
 type LoginTranslation = {
   login: string,
@@ -34,24 +32,24 @@ const defaultLoginTranslations: Record<Languages, LoginTranslation> = {
   }
 }
 
-type LoginData = {
+export type LoginData = {
   email: string,
   password: string,
 }
 
-type LoginServerSideProps = {
-  jsonFeed: unknown,
+type LoginPageProps = {
+  login: (data: LoginData) => Promise<boolean>,
 }
 
-const Login: NextPage<PropsForTranslation<LoginTranslation, LoginServerSideProps>> = ({ overwriteTranslation }) => {
+export const LoginPage = ({ login, overwriteTranslation }: PropsForTranslation<LoginTranslation, LoginPageProps>) => {
   const translation = useTranslation(defaultLoginTranslations, overwriteTranslation)
   const [loginData, setLoginData] = useState<LoginData>({ email: '', password: '' })
-  const { login } = useAuth()
 
   return (
     <Page
       pageTitle={titleWrapper(translation.login)}
       mainContainerClassName={tw('items-center justify-center min-h-[90vh]')}
+      contentAndFooterClassName={tw('items-center')}
       isHidingSidebar={true}
     >
       <div className={tw('flex flex-col bg-gray-100 max-w-[300px] p-8 gap-y-2 rounded-lg shadow-lg')}>
@@ -68,12 +66,13 @@ const Login: NextPage<PropsForTranslation<LoginTranslation, LoginServerSideProps
           type="password"
           onChange={password => setLoginData({ ...loginData, password })}
         />
-        <Button onClick={() => {login(loginData.email, loginData.password)}}>{translation.signIn}</Button>
+        <Button onClick={() => {
+          login(loginData)
+        }}>{translation.signIn}</Button>
 
-        <Button onClick={() => {}} className={tw('mt-6')}>{translation.register}</Button>
+        <Button onClick={() => {
+        }} className={tw('mt-6')}>{translation.register}</Button>
       </div>
     </Page>
   )
 }
-
-export default Login

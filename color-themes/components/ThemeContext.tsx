@@ -2,7 +2,6 @@ import type { ReactNode, Dispatch, SetStateAction } from 'react'
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { ThemeType } from '../twind/theme-variables'
 import { ThemeVariables } from '../twind/theme-variables'
-import { css } from '@twind/core'
 
 type ThemeContextType = {
   theme: ThemeType,

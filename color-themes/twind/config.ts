@@ -20,7 +20,8 @@ export const config = defineConfig({
     colors: {},
     extend: {
       colors: {
-        ...Object.fromEntries(Object.entries(ThemeVariables.themes.light).map(([key, _]) => [key, `var(--${key})`]))
+        ...ThemeVariables.themes.light
+        //...Object.fromEntries(Object.entries(ThemeVariables.themes.light).map(([key, _]) => [key, `var(--${key})`]))
       },
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],

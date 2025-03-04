@@ -10,7 +10,6 @@ import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import withNextApp from '@helpwave/color-themes/twind/next/app'
 import config from '@helpwave/color-themes/twind/config'
-import { ThemeProvider } from '@helpwave/color-themes/components/ThemeContext'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -38,18 +37,16 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}</style>
       </Head>
-      <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <ProvideLanguage defaultLanguage={defaultLanguage}>
-            <ModalRegister>
-              <div className={tw('font-sans')} id={modalRootName}>
-                <Component {...pageProps} />
-                <Toaster/>
-              </div>
-            </ModalRegister>
-          </ProvideLanguage>
-        </QueryClientProvider>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ProvideLanguage defaultLanguage={defaultLanguage}>
+          <ModalRegister>
+            <div className={tw('font-sans')} id={modalRootName}>
+              <Component {...pageProps} />
+              <Toaster/>
+            </div>
+          </ModalRegister>
+        </ProvideLanguage>
+      </QueryClientProvider>
     </>
   )
 }

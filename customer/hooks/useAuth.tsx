@@ -1,63 +1,67 @@
 'use client' // Ensures this runs only on the client-side
 
 import type { PropsWithChildren } from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
+import { useEffect } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
-import type { LoginData } from '@/components/pages/login'
 import { LoginPage } from '@/components/pages/login'
-
-type Identity = {
-  token: string,
-  name: string,
-}
+import { handleCallback, login, logout, restoreSession } from '@/api/auth/authService'
+import type { User } from 'oidc-client-ts'
+import { useSearchParams } from 'next/navigation'
 
 type AuthContextType = {
-  identity: Identity,
+  identity: User,
   logout: () => void,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 type AuthState = {
-  identity?: Identity,
+  identity?: User,
   isLoading: boolean,
 }
 
-const cookieName = 'authToken'
-
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [{ isLoading, identity }, setAuthState] = useState<AuthState>({ isLoading: true })
+  const searchParams = useSearchParams()
 
-  const checkIdentity = () => {
-    setAuthState({ isLoading: true })
-    const token = Cookies.get(cookieName)
-    const newAuthState = !!token
-    if (newAuthState) {
-      const identity: Identity = { token: 'test-token', name: 'Max Mustermann' }
-      setAuthState({ identity, isLoading: false })
-    } else {
-      setAuthState({ isLoading: false })
-    }
-  }
-
-  // Check authentication state on first load
   useEffect(() => {
-    checkIdentity()
+    restoreSession().then(identity => {
+      setAuthState({
+        identity,
+        isLoading: false,
+      })
+    })
   }, [])
 
-  const login = async (_: LoginData) => {
-    // TODO do real login
-    Cookies.set(cookieName, 'testdata', { expires: 1 })
-    checkIdentity()
-    return true
-  }
+  useEffect(() => {
+    const checkAuthCallback = async () => {
+      // Check if the URL contains OIDC callback params
+      if (searchParams.get('code') &&  searchParams.get('state')) {
+        console.log('Processing OIDC callback...')
+        try {
+          const user = await handleCallback()
+          // Remove the 'state' and 'code' parameters from url
+          const currentUrl = new URL(window.location.href)
+          const searchParams = currentUrl.searchParams
+          searchParams.delete('state')
+          searchParams.delete('code')
+          searchParams.delete('session_state')
+          searchParams.delete('iss')
+          window.history.replaceState({}, '', currentUrl.toString())
+          setAuthState({
+            identity: user,
+            isLoading: false,
+          })
+        } catch (error) {
+          console.error('OIDC callback error:', error)
+        }
+      }
+    }
 
-  const logout = () => {
-    Cookies.remove(cookieName)
-    checkIdentity()
-  }
+    checkAuthCallback().catch(console.error)
+  }, [searchParams])
 
   if (!identity && isLoading) {
     return (
@@ -68,7 +72,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }
 
   if (!identity) {
-    return (<LoginPage login={login} />)
+    return (
+      <LoginPage login={async () => {
+        await login()
+        return true
+      }}/>
+    )
   }
 
   return (

@@ -92,6 +92,9 @@ importers:
       next:
         specifier: 15.1.3
         version: 15.1.3(react-dom@18.3.1)(react@18.3.1)
+      oidc-client-ts:
+        specifier: ^3.1.0
+        version: 3.1.0
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -10162,6 +10165,13 @@ packages:
   /objectorarray@1.0.5:
     resolution: {integrity: sha512-eJJDYkhJFFbBBAxeh8xW+weHlkI28n2ZdQV/J/DNfWfSKlGEf2xcfAbZTv3riEXHAhL9SVOTs2pRmXiSTf78xg==}
     dev: true
+
+  /oidc-client-ts@3.1.0:
+    resolution: {integrity: sha512-IDopEXjiwjkmJLYZo6BTlvwOtnlSniWZkKZoXforC/oLZHC9wkIxd25Kwtmo5yKFMMVcsp3JY6bhcNJqdYk8+g==}
+    engines: {node: '>=18'}
+    dependencies:
+      jwt-decode: 4.0.0
+    dev: false
 
   /on-finished@2.4.1:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}

@@ -57,6 +57,12 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
     roleBadge: 'CLO',
     tags: ['law', 'doctor', 'product'],
     imageUrl: imageUrl('ludwig_maidowski'),
+    badge: (
+      <HelpwaveBadge
+        size="small"
+        className="bg-black !gap-x-1 !w-fit"
+      />
+    ),
     socials: [
       { type: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
       { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },

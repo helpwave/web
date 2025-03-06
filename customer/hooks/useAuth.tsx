@@ -87,11 +87,16 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   )
 }
 
+
 // Custom hook for using AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
   }
-  return context
+  const authHeader = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${context.identity.access_token}`,
+  }
+  return { ...context, authHeader }
 }

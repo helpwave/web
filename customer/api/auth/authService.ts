@@ -14,6 +14,10 @@ const userManager = new UserManager({
   // userStore: userStore, // TODO Consider persisting user data across sessions
 })
 
+export const signUp = () => {
+  return userManager.signinRedirect()
+}
+
 export const login = () => {
   return userManager.signinRedirect()
 }

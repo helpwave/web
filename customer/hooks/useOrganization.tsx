@@ -7,6 +7,7 @@ import { CustomerAPI } from '@/api/services/customer'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { CreateOrganizationPage } from '@/components/pages/create-organization'
+import { useCustomerCreateMutation } from '@/api/mutations/customer_mutations'
 
 type Organization = Customer
 
@@ -28,6 +29,8 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
     organization,
     isLoading
   }, setOrganizationProviderState] = useState<OrganizationProviderState>({ isLoading: true })
+
+  const createOrganizationMutation = useCustomerCreateMutation()
 
   const checkOrganization = useCallback(async () => {
     setOrganizationProviderState({ isLoading: true })
@@ -54,7 +57,7 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
   if (!organization) {
     return (
       <CreateOrganizationPage  createOrganization={async (data) => {
-        await CustomerAPI.create(data)
+        await createOrganizationMutation.mutate(data)
         await checkOrganization()
         return true
       }}

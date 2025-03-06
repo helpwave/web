@@ -18,14 +18,14 @@ const defaultLoginTranslations: Record<Languages, LoginTranslation> = {
     login: 'Login',
     email: 'Email',
     password: 'Password',
-    signIn: 'Sign In with helpwave account',
+    signIn: 'helpwave Sign In',
     register: 'Register',
   },
   de: {
     login: 'Login',
     email: 'Email',
     password: 'Passwort',
-    signIn: 'Einloggen mit helpwave Account',
+    signIn: 'helpwave Login',
     register: 'Registrieren',
   }
 }

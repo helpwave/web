@@ -44,10 +44,10 @@ const AuthCallback: NextPage<PropsForTranslation<AuthCallbackTranslation, AuthCa
           const defaultRedirect = '/'
           if (!isValidRedirect) {
             console.warn(`Redirect URL is invalid, redirecting to default route ${defaultRedirect}`)
-            await router.push(redirect)
-          } else {
-            console.info(`Redirecting to ${defaultRedirect}`)
             await router.push(defaultRedirect)
+          } else {
+            console.info(`Redirecting to ${redirect ?? defaultRedirect}`)
+            await router.push(redirect ?? defaultRedirect)
           }
         } catch (error) {
           console.error('OIDC callback error:', error)

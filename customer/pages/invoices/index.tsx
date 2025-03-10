@@ -16,6 +16,8 @@ import { Modal } from '@helpwave/common/components/modals/Modal'
 import type { ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
 import { ChevronRight } from 'lucide-react'
+import { withAuth } from '@/hooks/useAuth'
+import { withOrganization } from '@/hooks/useOrganization'
 
 type InvoicesTranslation = {
   invoices: string,
@@ -176,4 +178,4 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
   )
 }
 
-export default Invoices
+export default withAuth(withOrganization(Invoices))

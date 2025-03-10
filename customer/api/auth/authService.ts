@@ -18,8 +18,8 @@ export const signUp = () => {
   return userManager.signinRedirect()
 }
 
-export const login = () => {
-  return userManager.signinRedirect()
+export const login = (redirectURI?: string) => {
+  return userManager.signinRedirect({ redirect_uri: redirectURI })
 }
 
 export const handleCallback = async () => {

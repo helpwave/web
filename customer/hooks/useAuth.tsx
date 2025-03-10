@@ -1,14 +1,14 @@
 'use client' // Ensures this runs only on the client-side
 
-import type { PropsWithChildren } from 'react'
+import type { ComponentType, PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 import { createContext, useContext, useState } from 'react'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { LoginPage } from '@/components/pages/login'
-import { handleCallback, login, logout, restoreSession } from '@/api/auth/authService'
+import { login, logout, restoreSession } from '@/api/auth/authService'
 import type { User } from 'oidc-client-ts'
-import { useSearchParams } from 'next/navigation'
+import { REDIRECT_URI } from '@/api/auth/config'
 
 type AuthContextType = {
   identity: User,
@@ -24,7 +24,6 @@ type AuthState = {
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [{ isLoading, identity }, setAuthState] = useState<AuthState>({ isLoading: true })
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     restoreSession().then(identity => {
@@ -34,34 +33,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       })
     })
   }, [])
-
-  useEffect(() => {
-    const checkAuthCallback = async () => {
-      // Check if the URL contains OIDC callback params
-      if (searchParams.get('code') &&  searchParams.get('state')) {
-        console.log('Processing OIDC callback...')
-        try {
-          const user = await handleCallback()
-          // Remove the 'state' and 'code' parameters from url
-          const currentUrl = new URL(window.location.href)
-          const searchParams = currentUrl.searchParams
-          searchParams.delete('state')
-          searchParams.delete('code')
-          searchParams.delete('session_state')
-          searchParams.delete('iss')
-          window.history.replaceState({}, '', currentUrl.toString())
-          setAuthState({
-            identity: user,
-            isLoading: false,
-          })
-        } catch (error) {
-          console.error('OIDC callback error:', error)
-        }
-      }
-    }
-
-    checkAuthCallback().catch(console.error)
-  }, [searchParams])
 
   if (!identity && isLoading) {
     return (
@@ -74,7 +45,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   if (!identity) {
     return (
       <LoginPage login={async () => {
-        await login()
+        await login(REDIRECT_URI + `?redirect_uri=${encodeURIComponent(window.location.href)}`)
         return true
       }}/>
     )
@@ -85,6 +56,17 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       {children}
     </AuthContext.Provider>
   )
+}
+
+export const withAuth = <P extends object>(Component: ComponentType<P>) => {
+  const WrappedComponent = (props: P) => (
+    <AuthProvider>
+      <Component {...props} />
+    </AuthProvider>
+  )
+  WrappedComponent.displayName = `withAuth(${Component.displayName || Component.name || 'Component'})`
+
+  return WrappedComponent
 }
 
 

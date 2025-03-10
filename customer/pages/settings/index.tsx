@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
 import { tw } from '@twind/core'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
+import { withAuth } from '@/hooks/useAuth'
+import { withOrganization } from '@/hooks/useOrganization'
 
 type SettingsTranslation = {
   settings: string,
@@ -94,4 +96,4 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
   )
 }
 
-export default Settings
+export default withAuth(withOrganization(Settings))

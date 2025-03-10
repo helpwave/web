@@ -9,8 +9,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import titleWrapper from '@/utils/titleWrapper'
-import { AuthProvider } from '@/hooks/useAuth'
-import { OrganizationProvider } from '@/hooks/useOrganization'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,13 +37,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <ModalRegister>
-          <AuthProvider>
-            <OrganizationProvider>
-              <div className={tw('font-sans')} id={modalRootName}>
-                <Component {...pageProps} />
-              </div>
-            </OrganizationProvider>
-          </AuthProvider>
+          <div className={tw('font-sans')} id={modalRootName}>
+            <Component {...pageProps} />
+          </div>
         </ModalRegister>
       </QueryClientProvider>
     </ProvideLanguage>

@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react'
+import type { ComponentType, PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 import { useCallback } from 'react'
 import { createContext, useContext, useState } from 'react'
@@ -70,6 +70,17 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
       {children}
     </OrganizationContext.Provider>
   )
+}
+
+export const withOrganization = <P extends object>(Component: ComponentType<P>) => {
+  const WrappedComponent = (props: P) => (
+    <OrganizationProvider>
+      <Component {...props} />
+    </OrganizationProvider>
+  )
+  WrappedComponent.displayName = `withOrganization(${Component.displayName || Component.name || 'Component'})`
+
+  return WrappedComponent
 }
 
 // Custom hook for using OrganizationContext

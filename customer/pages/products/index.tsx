@@ -20,6 +20,8 @@ import { useCustomerMyselfQuery } from '@/api/mutations/customer_mutations'
 import { ContractsAPI } from '@/api/services/contract'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import Link from 'next/link'
+import { withAuth } from '@/hooks/useAuth'
+import { withOrganization } from '@/hooks/useOrganization'
 
 type ProductsTranslation = {
   products: string,
@@ -369,4 +371,4 @@ const Products: NextPage<PropsForTranslation<ProductsTranslation>> = ({ overwrit
   )
 }
 
-export default Products
+export default withAuth(withOrganization(Products))

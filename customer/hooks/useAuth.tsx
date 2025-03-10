@@ -1,63 +1,38 @@
 'use client' // Ensures this runs only on the client-side
 
-import type { PropsWithChildren } from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
+import type { ComponentType, PropsWithChildren } from 'react'
+import { useEffect } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
-import type { LoginData } from '@/components/pages/login'
 import { LoginPage } from '@/components/pages/login'
-
-type Identity = {
-  token: string,
-  name: string,
-}
+import { login, logout, restoreSession } from '@/api/auth/authService'
+import type { User } from 'oidc-client-ts'
+import { REDIRECT_URI } from '@/api/auth/config'
 
 type AuthContextType = {
-  identity: Identity,
+  identity: User,
   logout: () => void,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 type AuthState = {
-  identity?: Identity,
+  identity?: User,
   isLoading: boolean,
 }
-
-const cookieName = 'authToken'
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [{ isLoading, identity }, setAuthState] = useState<AuthState>({ isLoading: true })
 
-  const checkIdentity = () => {
-    setAuthState({ isLoading: true })
-    const token = Cookies.get(cookieName)
-    const newAuthState = !!token
-    if (newAuthState) {
-      const identity: Identity = { token: 'test-token', name: 'Max Mustermann' }
-      setAuthState({ identity, isLoading: false })
-    } else {
-      setAuthState({ isLoading: false })
-    }
-  }
-
-  // Check authentication state on first load
   useEffect(() => {
-    checkIdentity()
+    restoreSession().then(identity => {
+      setAuthState({
+        identity,
+        isLoading: false,
+      })
+    })
   }, [])
-
-  const login = async (_: LoginData) => {
-    // TODO do real login
-    Cookies.set(cookieName, 'testdata', { expires: 1 })
-    checkIdentity()
-    return true
-  }
-
-  const logout = () => {
-    Cookies.remove(cookieName)
-    checkIdentity()
-  }
 
   if (!identity && isLoading) {
     return (
@@ -68,7 +43,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }
 
   if (!identity) {
-    return (<LoginPage login={login} />)
+    return (
+      <LoginPage login={async () => {
+        await login(REDIRECT_URI + `?redirect_uri=${encodeURIComponent(window.location.href)}`)
+        return true
+      }}/>
+    )
   }
 
   return (
@@ -78,11 +58,27 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   )
 }
 
+export const withAuth = <P extends object>(Component: ComponentType<P>) => {
+  const WrappedComponent = (props: P) => (
+    <AuthProvider>
+      <Component {...props} />
+    </AuthProvider>
+  )
+  WrappedComponent.displayName = `withAuth(${Component.displayName || Component.name || 'Component'})`
+
+  return WrappedComponent
+}
+
+
 // Custom hook for using AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
   }
-  return context
+  const authHeader = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${context.identity.access_token}`,
+  }
+  return { ...context, authHeader }
 }

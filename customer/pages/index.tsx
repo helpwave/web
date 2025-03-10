@@ -3,6 +3,8 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
+import { withOrganization } from '@/hooks/useOrganization'
+import { withAuth } from '@/hooks/useAuth'
 
 type DashboardTranslation = {
   dashboard: string,
@@ -24,10 +26,10 @@ type DashboardServerSideProps = {
 const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
   return (
-    <Page pageTitle={titleWrapper('Dashboard')}>
+    <Page pageTitle={titleWrapper(translation.dashboard)}>
       <div>This is the {translation.dashboard} page</div>
     </Page>
   )
 }
 
-export default Dashboard
+export default withAuth(withOrganization(Dashboard))

@@ -87,7 +87,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
         <div className={tw('flex flex-col p-4 gap-y-4 bg-gray-50')}>
           <div className={tw('flex flex-row gap-x-2 items-center')}>
             <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
-            {identity?.name}
+            {identity?.profile?.name}
           </div>
           <Button onClick={logout} color="hw-negative">{translation.logout}</Button>
         </div>

@@ -39,6 +39,7 @@ type ProductsTranslation = {
   plan: string,
   back: string,
   pay: string,
+  plans: string,
 } & ProductPlanTranslation
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
@@ -58,7 +59,8 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     actions: 'Actions',
     plan: 'Plan',
     back: 'Back',
-    pay: 'Pay'
+    pay: 'Pay',
+    plans: 'Plans'
   },
   de: {
     ...defaultProductPlanTranslation.de,
@@ -76,7 +78,8 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     actions: 'Aktionen',
     plan: 'Plan',
     back: 'Zurück',
-    pay: 'Bezahlen'
+    pay: 'Bezahlen',
+    plans: 'Pläne'
   }
 }
 
@@ -130,10 +133,13 @@ const ProductsShopping = ({
                   className={tw('flex flex-col gap-y-2 min-w-[200px] max-w-[200px] bg-hw-primary-300 px-4 py-2 rounded-md')}
                 >
                   <h4 className={tw('font-bold font-space text-xl')}>{product.name}</h4>
-                  <div className={tw('flex flex-row justify-between')}>
-                    <span className={tw('font-semibold text-lg')}>{`${product.price}€`}</span>
-                    {translation[product.plan]}
-                  </div>
+                  <span className={tw('font-semibold text-lg')}>{translation.plans}</span>
+                  {product.plan.map(plan => (
+                    <div key={plan.uuid} className={tw('flex flex-row justify-between')}>
+                      <span className={tw('font-semibold text-lg')}>{`${plan.costEuro}€`}</span>
+                      {translation[plan.type]}
+                    </div>
+                  ))}
                   <Button
                     variant="text"
                     className={tw('p-0 flex flex-row items-center gap-x-1 text-hw-primary-700 hover:text-hw-primary-800')}

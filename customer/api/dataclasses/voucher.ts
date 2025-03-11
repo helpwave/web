@@ -1,4 +1,8 @@
 export type Voucher = {
-  code: string,
-  note: string,
+  uuid: string,
+  description: string,
+  productPlanUUID: string,
+  discountPercentage?: number,
+  discountFixedAmount?: number,
+  valid: boolean,
 }

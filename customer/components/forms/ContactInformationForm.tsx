@@ -1,4 +1,4 @@
-import type { Customer } from '@/api/dataclasses/customer'
+import type { CustomerCreate } from '@/api/dataclasses/customer'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw, tx } from '@twind/core'
@@ -58,16 +58,23 @@ const defaultContactInformationTranslation: Translation<ContactInformationTransl
 }
 
 type ContactInformationFormProps = {
-  value: Customer,
-  onChange: (customer: Customer) => void,
-  onSubmit: (customer: Customer) => void,
+  value: CustomerCreate,
+  onChange: (customer: CustomerCreate) => void,
+  onSubmit: (customer: CustomerCreate) => void,
   className?: string,
 }
 
 export const ContactInformationForm = ({ value, onChange, onSubmit, className }: ContactInformationFormProps) => {
   const translation = useTranslation(defaultContactInformationTranslation)
   return (
-    <form className={tx('@(flex flex-col gap-y-1 max-w-[700px])', className)}>
+    <form
+      id="organization-form"
+      onSubmit={(event) => {
+        onSubmit(value)
+        event.preventDefault()
+      }}
+      className={tx('@(flex flex-col gap-y-1 max-w-[700px])', className)}
+    >
       <h3 className={tw('font-space font-bold text-2xl')}>{translation.contactInfo}</h3>
       <Input
         value={value.name}
@@ -79,58 +86,48 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
         onChange={email => onChange({ ...value, email })}
         label={{ name: translation.email }}
       />
+      {/*
       <Input
         value={value.phoneNumber ?? ''}
-        onChange={phoneNumber => onChange({ ...value, phoneNumber })}
-        label={{ name: translation.phone }}
+        onChange={phoneNumber => onChange({...value, phoneNumber})}
+        label={{name: translation.phone}}
       />
+      */}
       <div className={tw('flex flex-col gap-y-1')}>
         <h4 className={tw('font-space font-bold text-lg')}>{translation.address}</h4>
         <Input
-          value={value.address.country ?? ''}
-          onChange={country => onChange({ ...value, address: { ...value.address, country } })}
+          value={value.country ?? ''}
+          onChange={country => onChange({ ...value, country })}
           label={{ name: translation.country }}
         />
         <div className={tw('flex flex-row gap-x-1')}>
           <Input
-            value={value.address.city ?? ''}
-            onChange={city => onChange({ ...value, address: { ...value.address, city } })}
+            value={value.city ?? ''}
+            onChange={city => onChange({ ...value, city })}
             label={{ name: translation.city }}
           />
           <Input
-            value={value.address.postalCode ?? ''}
-            onChange={postalCode => onChange({
-              ...value,
-              address: { ...value.address, postalCode }
-            })}
+            value={value.postalCode ?? ''}
+            onChange={postalCode => onChange({ ...value, postalCode })}
             label={{ name: translation.postalCode }}
             containerClassName={tw('max-w-[180px]')}
           />
         </div>
         <div className={tw('flex flex-row gap-x-1')}>
           <Input
-            value={value.address.street ?? ''}
-            onChange={street => onChange({
-              ...value,
-              address: { ...value.address, street }
-            })}
+            value={value.address ?? ''}
+            onChange={address => onChange({ ...value, address })}
             label={{ name: translation.street }}
           />
           <Input
-            value={value.address.houseNumber ?? ''}
-            onChange={houseNumber => onChange({
-              ...value,
-              address: { ...value.address, houseNumber }
-            })}
+            value={value.houseNumber?.toString() ?? ''}
+            onChange={houseNumber => onChange({ ...value, houseNumber: parseInt(houseNumber) })}
             label={{ name: translation.houseNumber }}
             containerClassName={tw('max-w-[180px]')}
           />
           <Input
-            value={value.address.houseNumberAdditional ?? ''}
-            onChange={houseNumberAdditional => onChange({
-              ...value,
-              address: { ...value.address, houseNumberAdditional }
-            })}
+            value={value.careOf ?? ''}
+            onChange={careOf => onChange({ ...value, careOf })}
             label={{ name: translation.houseNumberAdditional }}
             containerClassName={tw('max-w-[180px]')}
           />
@@ -146,7 +143,7 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
       </div>
 
       <div className={tw('flex flex-row justify-end')}>
-        <Button onClick={() => onSubmit(value)}>{translation.save}</Button>
+        <Button type="submit">{translation.save}</Button>
       </div>
     </form>
   )

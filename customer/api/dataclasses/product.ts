@@ -1,8 +1,8 @@
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 
-export type ProductPlan = 'monthly' | 'yearly' | 'once';
+export type ProductPlanType = 'monthly' | 'yearly' | 'once';
 
-export type ProductPlanTranslation = Record<ProductPlan, string>
+export type ProductPlanTranslation = Record<ProductPlanType, string>
 
 export const defaultProductPlanTranslation: Translation<ProductPlanTranslation> = {
   en: {
@@ -17,9 +17,20 @@ export const defaultProductPlanTranslation: Translation<ProductPlanTranslation> 
   }
 }
 
+export type ProductPlan = {
+  uuid: string,
+  type: ProductPlanType,
+  costEuro: number,
+  seatBased: boolean,
+  createdAt: Date,
+  updatedAt: Date,
+}
+
 export type Product = {
   uuid: string,
   name: string,
-  price: number,
-  plan: ProductPlan,
+  description: string,
+  plan: ProductPlan[],
+  createdAt: Date,
+  updatedAt: Date,
 }

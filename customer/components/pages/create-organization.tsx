@@ -4,7 +4,7 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { tw } from '@twind/core'
 import { useState } from 'react'
-import type { Customer } from '@/api/dataclasses/customer'
+import type { CustomerCreate } from '@/api/dataclasses/customer'
 import { Section } from '@/components/layout/Section'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
 
@@ -25,26 +25,24 @@ const defaultCreateOrganizationTranslations: Record<Languages, CreateOrganizatio
 }
 
 type CreateOrganizationPageProps = {
-  createOrganization: (organization: Customer) => Promise<boolean>,
+  createOrganization: (organization: CustomerCreate) => Promise<boolean>,
 }
 
-export const CreateOrganizationPage = ({ createOrganization, overwriteTranslation }: PropsForTranslation<CreateOrganizationTranslation, CreateOrganizationPageProps>) => {
+export const CreateOrganizationPage = ({
+                                         createOrganization,
+                                         overwriteTranslation
+                                       }: PropsForTranslation<CreateOrganizationTranslation, CreateOrganizationPageProps>) => {
   const translation = useTranslation(defaultCreateOrganizationTranslations, overwriteTranslation)
-  const [data, setData] = useState<Customer>({
-    uuid: '',
+  const [data, setData] = useState<CustomerCreate>({
     name: '',
     email: '',
-    address: {
-      country: '',
-      city: '',
-      postalCode: '',
-      street: '',
-      houseNumber: '',
-      houseNumberAdditional: ''
-    },
-    creationDate: new Date(),
+    address: '',
+    country: '',
+    city: '',
+    postalCode: '',
+    houseNumber: 4,
+    careOf: '',
     websiteURL: '',
-    phoneNumber: '',
   })
 
   return (
@@ -60,7 +58,9 @@ export const CreateOrganizationPage = ({ createOrganization, overwriteTranslatio
         <ContactInformationForm
           value={data}
           onChange={setData}
-          onSubmit={() => {createOrganization(data).catch(console.error)}}
+          onSubmit={() => {
+            createOrganization(data).catch(console.error)
+          }}
         />
       </Section>
     </Page>

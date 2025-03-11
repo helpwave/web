@@ -113,6 +113,9 @@ importers:
       vanilla-cookieconsent:
         specifier: 3.0.1
         version: 3.0.1
+      zod:
+        specifier: 3.24.1
+        version: 3.24.1
     devDependencies:
       '@helpwave/eslint-config':
         specifier: workspace:*

@@ -1,58 +1,34 @@
 // TODO delete later
-import type { Customer } from '@/api/dataclasses/customer'
-
-let customerData: Customer | undefined = undefined
-
-/*
-  {
-  uuid: 'customer',
-  name: 'Beispiel Krankenhaus',
-  address: {
-    city: 'Aachen',
-    postalCode: '52062',
-    street: 'Test Street',
-    houseNumber: '42',
-    houseNumberAdditional: '',
-    country: 'Germany'
-  },
-  email: 'test@helpwave.de',
-  creationDate: new Date(2025, 1, 1),
-  phoneNumber: '+49 123 456789',
-  websiteURL: 'https://helpwave.de',
-}
-*/
+import type { Customer, CustomerCreate } from '@/api/dataclasses/customer'
+import { CustomerHelpers } from '@/api/dataclasses/customer'
+import { API_URL } from '@/api/config'
 
 export const CustomerAPI = {
-  getMyself: async () => {
-    return customerData
-  },
-  create: async (customer: Customer) => {
-    // TODO do request here
-    if (!customerData) {
-      customerData = { ...customer, uuid: Date().toString() }
-    } else {
-      throw 'Organization already exists'
+  getMyself: async (headers?: HeadersInit): Promise<Customer | null> => {
+    const data = await fetch(`${API_URL}/customer/`, { method: 'GET', headers: headers })
+    if(data.status === 404) {
+      return null
     }
-    return customerData
-  },
-  update: async (customer: Customer) => {
-    // TODO do request here
-
-    if (customer.uuid === customerData?.uuid) {
-      customerData = customer
+    if(data.status === 200) {
+      return CustomerHelpers.fromJson(await data.json())
     }
-
-    return customer
+    throw data
   },
-  delete: async (_: string) => {
-    // TODO do request here
-
-    if (customerData) {
-      customerData = undefined
-    }else {
-      throw 'You can only delete an already existing customer'
-    }
-
-    return true
+  create: async (customer: CustomerCreate, headers?: HeadersInit): Promise<Customer> => {
+    console.log('json', CustomerHelpers.toJsonCreate(customer))
+    const data = await fetch(`${API_URL}/customer/`, {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify(CustomerHelpers.toJsonCreate(customer)),
+    })
+    return CustomerHelpers.fromJson(await data.json())
+  },
+  update: async (customer: Customer, headers?: HeadersInit) => {
+    const data = await fetch(`${API_URL}/customer/`, {
+      method: 'PUT',
+      headers: headers,
+      body: JSON.stringify(CustomerHelpers.toJson(customer)),
+    })
+    return CustomerHelpers.fromJson(await data.json())
   },
 }

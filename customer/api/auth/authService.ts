@@ -1,6 +1,6 @@
 'use client'
 
-import { CLIENT_ID, OIDC_PROVIDER, POST_LOGOUT_REDIRECT_URI, REDIRECT_URI } from '@/api/auth/config'
+import { CLIENT_ID, OIDC_PROVIDER, POST_LOGOUT_REDIRECT_URI, REDIRECT_URI } from '@/api/config'
 import type { User } from 'oidc-client-ts'
 import { UserManager } from 'oidc-client-ts'
 
@@ -58,7 +58,6 @@ export const restoreSession = async (): Promise<User | undefined> => {
   return user
 }
 
-userManager.events.addAccessTokenExpiring(async () => {
-  console.log('Token expiring, refreshing...')
-  await renewToken()
-})
+export const onTokenExpiringCallback = (callback: () => void) => {
+  userManager.events.addAccessTokenExpiring(callback)
+}

@@ -9,7 +9,7 @@ import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import type { ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
-import { useCustomerProductsQuery } from '@/api/mutations/customer_product_mutations'
+import { useCustomerProductsSelfQuery } from '@/api/mutations/customer_product_mutations'
 import { Button } from '@helpwave/common/components/Button'
 import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingCart } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
@@ -103,7 +103,7 @@ const ProductsShopping = ({
     data: bookedProducts,
     isError: bookedProductsError,
     isLoading: bookedProductsLoading
-  } = useCustomerProductsQuery()
+  } = useCustomerProductsSelfQuery()
   const { data: products, isError: productsError, isLoading: productsLoading } = useProductsQuery()
 
   const isError = bookedProductsError || productsError || customerError

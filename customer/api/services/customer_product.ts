@@ -1,24 +1,48 @@
-import type { CustomerProduct } from '@/api/dataclasses/customer_product'
-
-const customerProductsData: CustomerProduct[] = [
-  {
-    uuid: '1',
-    customerUUID: 'customer',
-    productUUID: '1',
-    startDate: new Date(2025, 1, 1),
-    status: 'booked',
-    contracts: []
-  }
-]
+import type { CustomerProduct, CustomerProductCreate } from '@/api/dataclasses/customer_product'
+import { CustomerProductsHelper } from '@/api/dataclasses/customer_product'
+import { API_URL } from '@/api/config'
 
 export const CustomerProductsAPI = {
-  getMany: async () => {
-    return customerProductsData
+  create: async (customerProduct: CustomerProductCreate, headers: HeadersInit): Promise<CustomerProduct> => {
+    const response = await fetch(`${API_URL}/customers/product/`, {
+      method: 'POST',
+      headers: { ...headers,'Content-Type': 'application/json' },
+      body: JSON.stringify(CustomerProductsHelper.toJsonCreate(customerProduct))
+    })
+    if(response.ok) {
+      return CustomerProductsHelper.fromJson(await response.json())
+    }
+    throw response
   },
-  buy: async (_: CustomerProduct) => {
-    // TODO
+  get: async (id: string, headers: HeadersInit) => {
+    const response = await fetch(`${API_URL}/customers/product/${id}/`, {
+      method: 'GET',
+      headers,
+    })
+    if(response.ok) {
+      return CustomerProductsHelper.fromJson(await response.json())
+    }
+    throw response
   },
-  update: async (_: CustomerProduct) => {
-    // TODO
+  delete: async (id: string, headers: HeadersInit) => {
+    const response = await fetch(`${API_URL}/customers/product/${id}`, {
+      method: 'Delete',
+      headers: { ...headers,'Content-Type': 'application/json' },
+    })
+    if(response.ok) {
+      return true
+    }
+    throw response
+  },
+  getAllForCustomer: async (headers: HeadersInit) => {
+    const response = await fetch(`${API_URL}/customers/product/self/`, {
+      method: 'GET',
+      headers,
+    })
+    if(response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (await response.json() as any[]).map(value => CustomerProductsHelper.fromJson(value))
+    }
+    throw response
   },
 }

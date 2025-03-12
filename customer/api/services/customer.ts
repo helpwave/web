@@ -4,31 +4,36 @@ import { CustomerHelpers } from '@/api/dataclasses/customer'
 import { API_URL } from '@/api/config'
 
 export const CustomerAPI = {
-  getMyself: async (headers?: HeadersInit): Promise<Customer | null> => {
-    const data = await fetch(`${API_URL}/customer/`, { method: 'GET', headers: headers })
-    if(data.status === 404) {
+  getMyself: async (headers: HeadersInit): Promise<Customer | null> => {
+    const response = await fetch(`${API_URL}/customer/`, { method: 'GET', headers: headers })
+    if(response.status === 404) {
       return null
     }
-    if(data.status === 200) {
-      return CustomerHelpers.fromJson(await data.json())
+    if(response.ok) {
+      return CustomerHelpers.fromJson(await response.json())
     }
-    throw data
+    throw response
   },
-  create: async (customer: CustomerCreate, headers?: HeadersInit): Promise<Customer> => {
-    console.log('json', CustomerHelpers.toJsonCreate(customer))
-    const data = await fetch(`${API_URL}/customer/`, {
+  create: async (customer: CustomerCreate, headers: HeadersInit): Promise<Customer> => {
+    const response = await fetch(`${API_URL}/customer/`, {
       method: 'POST',
       headers: { ...headers, 'Content-Type': 'application/json' },
       body: JSON.stringify(CustomerHelpers.toJsonCreate(customer)),
     })
-    return CustomerHelpers.fromJson(await data.json())
+    if(response.ok) {
+      return CustomerHelpers.fromJson(await response.json())
+    }
+    throw response
   },
-  update: async (customer: Customer, headers?: HeadersInit) => {
-    const data = await fetch(`${API_URL}/customer/`, {
+  update: async (customer: Customer, headers: HeadersInit) => {
+    const response = await fetch(`${API_URL}/customer/`, {
       method: 'PUT',
       headers: headers,
       body: JSON.stringify(CustomerHelpers.toJson(customer)),
     })
-    return CustomerHelpers.fromJson(await data.json())
+    if(response.ok) {
+      return CustomerHelpers.fromJson(await response.json())
+    }
+    throw response
   },
 }

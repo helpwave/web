@@ -6,6 +6,7 @@ import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { CreateOrganizationPage } from '@/components/pages/create-organization'
 import { useCustomerMyselfQuery } from '@/api/mutations/customer_mutations'
 import { CustomerAPI } from '@/api/services/customer'
+import { useAuth } from '@/hooks/useAuth'
 
 type Organization = Customer
 
@@ -19,6 +20,7 @@ const OrganizationContext = createContext<OrganizationContextType | undefined>(u
 
 export const OrganizationProvider = ({ children }: PropsWithChildren) => {
   const { isLoading, isError, data: organization, refetch } = useCustomerMyselfQuery()
+  const { authHeader } = useAuth()
 
   if (!organization && isLoading) {
     return (
@@ -28,7 +30,7 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
     )
   }
 
-  if(isError) {
+  if (isError) {
     return (
       <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
         <span className={tw('text-hw-negative-400')}>An Error occurred</span>
@@ -39,10 +41,16 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
   if (!organization) {
     return (
       <CreateOrganizationPage createOrganization={async (data) => {
-        console.log(await CustomerAPI.create(data))
-
-        //refetch().catch(console.error)
-        return true
+        try {
+          // TODO fix this
+          // We cannot use a mutation because we would trigger a rerender and delete the form information
+          await CustomerAPI.create(data, authHeader)
+          refetch().catch(console.error)
+          return true
+        } catch (error) {
+          console.error(error)
+          return false
+        }
       }}
       />
     )

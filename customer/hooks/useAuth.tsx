@@ -6,9 +6,9 @@ import { createContext, useContext, useState } from 'react'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { LoginPage } from '@/components/pages/login'
-import { login, logout, restoreSession } from '@/api/auth/authService'
+import { login, logout, onTokenExpiringCallback, renewToken, restoreSession } from '@/api/auth/authService'
 import type { User } from 'oidc-client-ts'
-import { REDIRECT_URI } from '@/api/auth/config'
+import { REDIRECT_URI } from '@/api/config'
 
 type AuthContextType = {
   identity: User,
@@ -29,6 +29,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     restoreSession().then(identity => {
       setAuthState({
         identity,
+        isLoading: false,
+      })
+    })
+    onTokenExpiringCallback(async () => {
+      console.log('Token expiring, refreshing...')
+      const identity = await renewToken()
+      setAuthState({
+        identity: identity ?? undefined,
         isLoading: false,
       })
     })
@@ -77,8 +85,7 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   const authHeader = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${context.identity.access_token}`,
+    Authorization: `Bearer ${context.identity.access_token}`,
   }
   return { ...context, authHeader }
 }

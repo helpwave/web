@@ -1,0 +1,146 @@
+import type { NextPage } from 'next'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Page } from '@/components/layout/Page'
+import titleWrapper from '@/utils/titleWrapper'
+import { useProductsAllQuery } from '@/api/mutations/product_mutations'
+import { Section } from '@/components/layout/Section'
+import { tw } from '@twind/core'
+import type { ProductPlanTranslation } from '@/api/dataclasses/product'
+import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
+import { Button } from '@helpwave/common/components/Button'
+import { ChevronLeft, Coins } from 'lucide-react'
+import { Table } from '@helpwave/common/components/Table'
+import { withAuth } from '@/hooks/useAuth'
+import { withOrganization } from '@/hooks/useOrganization'
+import { useCart } from '@/hooks/useCart'
+import { withCart } from '@/hocs/withCart'
+import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+
+type CartOverviewTranslation = {
+  products: string,
+  toCheckOut: string,
+  error: string,
+  details: string,
+  addToCart: string,
+  removeFromCart: string,
+  alreadyBought: string,
+  overview: string,
+  name: string,
+  price: string,
+  contract: string,
+  actions: string,
+  plan: string,
+  back: string,
+  pay: string,
+  plans: string,
+} & ProductPlanTranslation
+
+const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation> = {
+  en: {
+    ...defaultProductPlanTranslation.en,
+    products: 'Products',
+    toCheckOut: 'Go to Checkout',
+    error: 'There was an error',
+    details: 'Details',
+    addToCart: 'Add to Cart',
+    removeFromCart: 'Remove',
+    alreadyBought: 'Already Bought',
+    overview: 'Cart Overview',
+    name: 'Name',
+    price: 'Price',
+    contract: 'Contract',
+    actions: 'Actions',
+    plan: 'Plan',
+    abort: 'Back',
+    pay: 'Pay',
+    plans: 'Plans'
+  },
+  de: {
+    ...defaultProductPlanTranslation.de,
+    products: 'Produkte',
+    toCheckOut: 'Zur Kasse',
+    error: 'Es gab einen Fehler',
+    details: 'Details',
+    addToCart: 'Hinzufügen',
+    removeFromCart: 'Entfernen',
+    alreadyBought: 'Bereits Gekauft',
+    overview: 'Warenkorb Übersicht',
+    name: 'Name',
+    price: 'Preis',
+    contract: 'Vertrag',
+    actions: 'Aktionen',
+    plan: 'Plan',
+    abort: 'Zurück',
+    pay: 'Bezahlen',
+    plans: 'Pläne'
+  }
+}
+
+
+const CartOverview: NextPage = () => {
+  const translation = useTranslation(defaultCartOverviewTranslations)
+  const router = useRouter()
+  const { cart, removeItem } = useCart()
+  const { data: products, isError, isLoading } = useProductsAllQuery()
+
+  return (
+    <Page pageTitle={titleWrapper(translation.overview)}>
+      <Section titleText={translation.overview}>
+        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
+          {products && (
+            <Table
+              data={cart}
+              identifierMapping={dataObject => dataObject.id}
+              rowMappingToCells={dataObject => {
+                const product = products.find(value => value.uuid === dataObject.id)
+                const plan = product?.plan.find(value => value.type === dataObject.plan)
+                // TODO handle not found errors here
+                return [
+                  <span key={dataObject.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
+                  <span key={dataObject.id + 'price'}>{(plan?.costEuro ?? '-') + '€'}</span>,
+                  <span key={dataObject.id + 'plan'}>{translation[plan?.type ?? 'monthly']}</span>,
+                  <Button
+                    variant="text"
+                    key={dataObject.id + 'action'}
+                    color="hw-negative"
+                    onClick={() => removeItem(dataObject.id)}
+                  >
+                    {translation.removeFromCart}
+                  </Button>,
+                ]
+              }}
+              header={[
+                <span key="name">{translation.name}</span>,
+                <span key="price">{translation.price}</span>,
+                <span key="plan">{translation.plan}</span>,
+                <span key="actions">{translation.actions}</span>,
+              ]}
+            />
+          )}
+        </LoadingAndErrorComponent>
+      </Section>
+      <Section className={tw('flex flex-row justify-between')}>
+        <Button
+          className={tw('flex flex-row items-center gap-x-2')}
+          onClick={() => router.push('/products/shop')}
+          >
+          <ChevronLeft size={20}/>
+          {`${translation.abort}`}
+        </Button>
+        <Button
+          className={tw('flex flex-row items-center gap-x-2')}
+          onClick={() => router.push('/products/pay')}
+          disabled={cart.length === 0}
+        >
+          <Coins size={20}/>
+          {`${translation.pay}`}
+        </Button>
+      </Section>
+    </Page>
+  )
+}
+
+export default withAuth(withOrganization(withCart(CartOverview)))

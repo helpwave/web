@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { useProductsQuery } from '@/api/mutations/product_mutations'
+import { useProductQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
@@ -58,7 +58,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     contract: 'Contract',
     actions: 'Actions',
     plan: 'Plan',
-    back: 'Back',
+    abort: 'Back',
     pay: 'Pay',
     plans: 'Plans'
   },
@@ -77,7 +77,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     contract: 'Vertrag',
     actions: 'Aktionen',
     plan: 'Plan',
-    back: 'Zurück',
+    abort: 'Zurück',
     pay: 'Bezahlen',
     plans: 'Pläne'
   }
@@ -104,7 +104,7 @@ const ProductsShopping = ({
     isError: bookedProductsError,
     isLoading: bookedProductsLoading
   } = useCustomerProductsSelfQuery()
-  const { data: products, isError: productsError, isLoading: productsLoading } = useProductsQuery()
+  const { data: products, isError: productsError, isLoading: productsLoading } = useProductQuery()
 
   const isError = bookedProductsError || productsError || customerError
   const isLoading = bookedProductsLoading || productsLoading || customerLoading
@@ -242,7 +242,7 @@ const ProductsOverview = ({
           onClick={onBackClick}
         >
           <ChevronLeft/>
-          {translation.back}
+          {translation.abort}
         </Button>
         <Button
           className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
@@ -316,7 +316,7 @@ const ProductsContract = ({
             onClick={onBackClick}
           >
             <ChevronLeft/>
-            {translation.back}
+            {translation.abort}
           </Button>
           <Button
             className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
@@ -369,7 +369,7 @@ const Products: NextPage<PropsForTranslation<ProductsTranslation>> = ({ overwrit
             onClick={() => setStep('contracts')}
           >
             <ChevronLeft/>
-            {translation.back}
+            {translation.abort}
           </Button>
         </Section>
       )}

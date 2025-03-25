@@ -37,7 +37,7 @@ export type PageProps = PropsWithChildren<{
 const navItems: NavItem[] = [
   { name: { en: 'Dashboard', de: 'dashboard' }, url: '/', icon: (<GaugeIcon size={24}/>) },
   { name: { en: 'Team', de: 'Team' }, url: '/team', icon: (<UsersIcon size={24}/>) },
-  { name: { en: 'Products', de: 'Produkte' }, url: '/products', icon: (<Package size={24}/>) },
+  { name: { en: 'Products', de: 'Produkte' }, url: '/products/shop', icon: (<Package size={24}/>) },
   { name: { en: 'Invoices', de: 'Rechnungen' }, url: '/invoices', icon: (<Receipt size={24}/>) },
   { name: { en: 'Settings', de: 'Einstellungen' }, url: '/settings', icon: (<Settings size={24}/>) },
 ]

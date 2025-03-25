@@ -4,7 +4,7 @@ import { API_URL } from '@/api/config'
 
 export const CustomerProductsAPI = {
   create: async (customerProduct: CustomerProductCreate, headers: HeadersInit): Promise<CustomerProduct> => {
-    const response = await fetch(`${API_URL}/customers/product/`, {
+    const response = await fetch(`${API_URL}/customer/product/`, {
       method: 'POST',
       headers: { ...headers,'Content-Type': 'application/json' },
       body: JSON.stringify(CustomerProductsHelper.toJsonCreate(customerProduct))
@@ -15,7 +15,7 @@ export const CustomerProductsAPI = {
     throw response
   },
   get: async (id: string, headers: HeadersInit) => {
-    const response = await fetch(`${API_URL}/customers/product/${id}/`, {
+    const response = await fetch(`${API_URL}/customer/product/${id}/`, {
       method: 'GET',
       headers,
     })
@@ -25,7 +25,7 @@ export const CustomerProductsAPI = {
     throw response
   },
   delete: async (id: string, headers: HeadersInit) => {
-    const response = await fetch(`${API_URL}/customers/product/${id}`, {
+    const response = await fetch(`${API_URL}/customer/product/${id}`, {
       method: 'Delete',
       headers: { ...headers,'Content-Type': 'application/json' },
     })
@@ -35,7 +35,7 @@ export const CustomerProductsAPI = {
     throw response
   },
   getAllForCustomer: async (headers: HeadersInit) => {
-    const response = await fetch(`${API_URL}/customers/product/self/`, {
+    const response = await fetch(`${API_URL}/customer/product/self/`, {
       method: 'GET',
       headers,
     })

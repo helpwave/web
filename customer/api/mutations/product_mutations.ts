@@ -13,7 +13,7 @@ export const useProductsAllQuery = () => {
   })
 }
 
-export const useProductsQuery = (id?: string) => {
+export const useProductQuery = (id?: string) => {
   const { authHeader } = useAuth()
   return useQuery({
     queryKey: [QueryKeys.product, id],

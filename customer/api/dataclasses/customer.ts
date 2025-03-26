@@ -6,7 +6,7 @@ export interface CustomerCreate {
   /** The street of the address */
   address?: string,
   /** The house number of the address */
-  houseNumber?: number,
+  houseNumber?: string,
   /** The addition to the address of the person taking care of receiving mails */
   careOf?: string,
   /** The postal code of the address */
@@ -27,7 +27,7 @@ export interface Customer {
   /** The street of the address */
   address?: string,
   /** The house number of the address */
-  houseNumber?: number,
+  houseNumber?: string,
   /** The addition to the address of the person taking care of receiving mails */
   careOf?: string,
   /** The postal code of the address */
@@ -51,7 +51,7 @@ const fromJson = (json: any): Customer => {
     email: json.email,
     websiteURL: json.website_url,
     address: json.address,
-    houseNumber: json.house_number ? parseInt(json.house_number, 10) : undefined,
+    houseNumber: json.house_number,
     careOf: json.care_of,
     postalCode: json.postal_code,
     city: json.city,
@@ -72,7 +72,7 @@ const toJson = (customer: Customer): Record<string, any> => {
     email: customer.email,
     website_url: customer.websiteURL,
     address: customer.address,
-    house_number: customer.houseNumber?.toString(),
+    house_number: customer.houseNumber,
     care_of: customer.careOf,
     postal_code: customer.postalCode,
     city: customer.city,
@@ -83,13 +83,13 @@ const toJson = (customer: Customer): Record<string, any> => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const toJsonCreate = (customer: CustomerCreate): Record<string, any> => {
+const toJsonUpdate = (customer: Customer): Record<string, any> => {
   return {
     name: customer.name,
     email: customer.email,
     website_url: customer.websiteURL,
     address: customer.address,
-    house_number: customer.houseNumber?.toString(),
+    house_number: customer.houseNumber,
     care_of: customer.careOf,
     postal_code: customer.postalCode,
     city: customer.city,
@@ -97,5 +97,20 @@ const toJsonCreate = (customer: CustomerCreate): Record<string, any> => {
   }
 }
 
-export const CustomerHelpers = { fromJson, toJson, toJsonCreate }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const toJsonCreate = (customer: CustomerCreate): Record<string, any> => {
+  return {
+    name: customer.name,
+    email: customer.email,
+    website_url: customer.websiteURL,
+    address: customer.address,
+    house_number: customer.houseNumber,
+    care_of: customer.careOf,
+    postal_code: customer.postalCode,
+    city: customer.city,
+    country: customer.country,
+  }
+}
+
+export const CustomerHelpers = { fromJson, toJson, toJsonUpdate, toJsonCreate }
 

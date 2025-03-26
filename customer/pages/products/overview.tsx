@@ -16,66 +16,41 @@ import { withOrganization } from '@/hooks/useOrganization'
 import { useCart } from '@/hooks/useCart'
 import { withCart } from '@/hocs/withCart'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 type CartOverviewTranslation = {
-  products: string,
-  toCheckOut: string,
-  error: string,
-  details: string,
-  addToCart: string,
   removeFromCart: string,
-  alreadyBought: string,
   overview: string,
   name: string,
   price: string,
-  contract: string,
   actions: string,
   plan: string,
   back: string,
   pay: string,
-  plans: string,
 } & ProductPlanTranslation
 
 const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation> = {
   en: {
     ...defaultProductPlanTranslation.en,
-    products: 'Products',
-    toCheckOut: 'Go to Checkout',
-    error: 'There was an error',
-    details: 'Details',
-    addToCart: 'Add to Cart',
     removeFromCart: 'Remove',
-    alreadyBought: 'Already Bought',
     overview: 'Cart Overview',
     name: 'Name',
     price: 'Price',
-    contract: 'Contract',
     actions: 'Actions',
     plan: 'Plan',
-    abort: 'Back',
+    back: 'Back',
     pay: 'Pay',
-    plans: 'Plans'
   },
   de: {
     ...defaultProductPlanTranslation.de,
-    products: 'Produkte',
-    toCheckOut: 'Zur Kasse',
-    error: 'Es gab einen Fehler',
-    details: 'Details',
-    addToCart: 'Hinzufügen',
     removeFromCart: 'Entfernen',
-    alreadyBought: 'Bereits Gekauft',
     overview: 'Warenkorb Übersicht',
     name: 'Name',
     price: 'Preis',
-    contract: 'Vertrag',
     actions: 'Aktionen',
     plan: 'Plan',
-    abort: 'Zurück',
+    back: 'Zurück',
     pay: 'Bezahlen',
-    plans: 'Pläne'
   }
 }
 
@@ -128,7 +103,7 @@ const CartOverview: NextPage = () => {
           onClick={() => router.push('/products/shop')}
           >
           <ChevronLeft size={20}/>
-          {`${translation.abort}`}
+          {`${translation.back}`}
         </Button>
         <Button
           className={tw('flex flex-row items-center gap-x-2')}

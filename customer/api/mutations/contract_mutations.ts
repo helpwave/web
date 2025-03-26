@@ -27,3 +27,14 @@ export const useContractsQuery = () => {
   })
 }
 
+export const useContractsForProductsQuery = (productIds: string[]) => {
+  const { authHeader } = useAuth()
+  return useQuery({
+    queryKey: [QueryKeys.contract, ...productIds],
+    queryFn: async () => {
+      return await ContractsAPI.getAllByProductIds(productIds, authHeader)
+    },
+  })
+}
+
+

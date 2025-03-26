@@ -58,7 +58,7 @@ const AuthCallback: NextPage<PropsForTranslation<AuthCallbackTranslation, AuthCa
     }
 
     checkAuthCallback().catch(console.error)
-  }, [searchParams])
+  }, [searchParams]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Page pageTitle={titleWrapper(translation.callback)} isHidingSidebar={true}/>

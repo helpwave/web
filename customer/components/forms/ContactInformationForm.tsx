@@ -121,7 +121,7 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
           />
           <Input
             value={value.houseNumber?.toString() ?? ''}
-            onChange={houseNumber => onChange({ ...value, houseNumber: parseInt(houseNumber) })}
+            onChange={houseNumber => onChange({ ...value, houseNumber })}
             label={{ name: translation.houseNumber }}
             containerClassName={tw('max-w-[180px]')}
           />

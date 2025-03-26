@@ -40,7 +40,7 @@ export const CreateOrganizationPage = ({
     country: '',
     city: '',
     postalCode: '',
-    houseNumber: 4,
+    houseNumber: '',
     careOf: '',
     websiteURL: '',
   })

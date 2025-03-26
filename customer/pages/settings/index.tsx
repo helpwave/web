@@ -78,8 +78,10 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
   const customerUpdate = useCustomerUpdateMutation()
 
   useEffect(() => {
-    setCurrentData(data)
-  }, [data])
+    if (data && !isError) {
+      setCurrentData(data)
+    }
+  }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // TODO do input validation
   return (
@@ -88,7 +90,11 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
         <span>{translation.settingsDescription}</span>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
           {!!currentData && (
-            <ContactInformationForm value={currentData} onChange={setCurrentData} onSubmit={customerUpdate.mutate}/>
+            <ContactInformationForm
+              value={currentData}
+              onChange={customer => setCurrentData({ ...currentData, ...customer })}
+              onSubmit={customer => customerUpdate.mutate({ ...currentData, ...customer })}
+            />
           )}
         </LoadingAndErrorComponent>
       </Section>

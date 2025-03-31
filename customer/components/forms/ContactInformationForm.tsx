@@ -15,7 +15,7 @@ type ContactInformationTranslation = {
   address: string,
   street: string,
   houseNumber: string,
-  houseNumberAdditional: string,
+  careOf: string,
   postalCode: string,
   city: string,
   country: string,
@@ -33,7 +33,7 @@ const defaultContactInformationTranslation: Translation<ContactInformationTransl
     address: 'Address',
     street: 'Street',
     houseNumber: 'Housenumber',
-    houseNumberAdditional: 'Addition',
+    careOf: 'c/o addition',
     postalCode: 'Postal code',
     city: 'City',
     country: 'Country',
@@ -49,7 +49,7 @@ const defaultContactInformationTranslation: Translation<ContactInformationTransl
     address: 'Adresse',
     street: 'Straße',
     houseNumber: 'Hausnummer',
-    houseNumberAdditional: 'Zusatz',
+    careOf: 'c/o Zusatz',
     postalCode: 'Postleitzahl',
     city: 'Stadt',
     country: 'Land',
@@ -125,13 +125,12 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
             label={{ name: translation.houseNumber }}
             containerClassName={tw('max-w-[180px]')}
           />
-          <Input
-            value={value.careOf ?? ''}
-            onChange={careOf => onChange({ ...value, careOf })}
-            label={{ name: translation.houseNumberAdditional }}
-            containerClassName={tw('max-w-[180px]')}
-          />
         </div>
+        <Input
+          value={value.careOf ?? ''}
+          onChange={careOf => onChange({ ...value, careOf })}
+          label={{ name: translation.careOf }}
+        />
         <div className={tw('flex flex-col gap-y-1')}>
           <h4 className={tw('font-space font-bold text-lg')}>{translation.additionalInformation}</h4>
           <Input
@@ -141,7 +140,6 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
           />
         </div>
       </div>
-
       <div className={tw('flex flex-row justify-end')}>
         <Button type="submit">{translation.save}</Button>
       </div>

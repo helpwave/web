@@ -59,7 +59,7 @@ export const Page = ({
 
   const mainContent = (
     <div className={tx('flex flex-col justify-between w-full h-full overflow-y-scroll', contentAndFooterClassName)}>
-      <main className={tx('@(flex flex-col max-w-[1200px] gap-y-6)', mainContainerClassName)}>
+      <main className={tx('@(flex flex-col gap-y-6)', mainContainerClassName)}>
         {children}
       </main>
       {footer}

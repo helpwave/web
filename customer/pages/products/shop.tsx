@@ -9,7 +9,7 @@ import type { ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
 import { useCustomerProductsSelfQuery } from '@/api/mutations/customer_product_mutations'
 import { Button } from '@helpwave/common/components/Button'
-import { ChevronRight, Minus, Plus, ShoppingCart } from 'lucide-react'
+import { ArrowRightLeft, ChevronRight, Minus, Plus, ShoppingCart } from 'lucide-react'
 import { withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 import { withCart } from '@/hocs/withCart'
@@ -34,6 +34,7 @@ type ProductsTranslation = {
   back: string,
   pay: string,
   plans: string,
+  change: string,
 } & ProductPlanTranslation
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
@@ -53,7 +54,8 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     plan: 'Plan',
     back: 'Back',
     pay: 'Pay',
-    plans: 'Plans'
+    plans: 'Plans',
+    change: 'Change'
   },
   de: {
     ...defaultProductPlanTranslation.de,
@@ -71,13 +73,14 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     plan: 'Plan',
     back: 'Zurück',
     pay: 'Bezahlen',
-    plans: 'Pläne'
+    plans: 'Pläne',
+    change: 'Wechseln'
   }
 }
 
 const ProductShop: NextPage = () => {
   const translation = useTranslation(defaultProductsTranslations)
-  const { cart, addItem, removeItem } = useCart()
+  const { cart, addItem, removeItem, updateItem } = useCart()
   const {
     data: bookedProducts,
     isError: bookedProductsError,
@@ -107,53 +110,62 @@ const ProductShop: NextPage = () => {
         {isError && (<span>{translation.error}</span>)}
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (
-          <div className={tw('flex flex-wrap gap-x-8 gap-y-12')}>
+          <div className={tw('flex flex-col gap-x-8 gap-y-12')}>
             {products.map((product, index) => {
               const isBookedAlready = bookedProducts.findIndex(value => value.productUUID === product.uuid) !== -1
-              const isInCart = cart.findIndex(value => value.id === product.uuid) !== -1
+              const cartItem = cart.find(value => value.id === product.uuid)
+              const isInCart = !!cartItem
               return (
                 <div
                   key={index}
-                  className={tw('flex flex-col gap-y-2 min-w-[200px] max-w-[200px] bg-hw-primary-300 px-4 py-2 rounded-md')}
+                  className={tw('flex flex-col gap-y-2 bg-hw-primary-300 px-4 py-2 rounded-md')}
                 >
-                  <h4 className={tw('font-bold font-space text-xl')}>{product.name}</h4>
-                  <span className={tw('font-semibold text-lg')}>{translation.plans}</span>
-                  {product.plan.map(plan => (
-                    <div key={plan.uuid} className={tw('flex flex-row justify-between')}>
-                      <span className={tw('font-semibold text-lg')}>{`${plan.costEuro}€`}</span>
-                      {translation[plan.type]}
-                    </div>
-                  ))}
-                  <Button
-                    variant="text"
-                    className={tw('p-0 flex flex-row items-center gap-x-1 text-hw-primary-700 hover:text-hw-primary-800')}
-                    onClick={() => {
-                      // TODO show modal here
-                    }}
-                  >
-                    {translation.details}
-                    <ChevronRight size={16}/>
-                  </Button>
-                  <div className={tw('flex flex-row justify-end items-end h-full')}>
-                    {isBookedAlready && (
-                      <span className={tw('py-2')}>{translation.alreadyBought}</span>
-                    )}
-                    {!isBookedAlready && (
-                      <Button
-                        className={tw('flex flex-row items-center gap-x-2 w-[160px]')}
-                        onClick={async () => {
-                          if (isInCart) {
-                            removeItem(product.uuid)
-                          } else {
-                            // Differentiate between plans here
-                            addItem({ id: product.uuid, quantity: 1, plan: product.plan[0]!.type })
-                          }
-                        }}
-                      >
-                        {isInCart ? <Minus size={20}/> : <Plus size={20}/>}
-                        {isInCart ? translation.removeFromCart : translation.addToCart}
-                      </Button>
-                    )}
+                  <div className={tw('flex flex-row justify-between')}>
+                    <h4 className={tw('font-bold font-space text-2xl')}>{product.name}</h4>
+                    <Button
+                      variant="text"
+                      className={tw('p-0 flex flex-row items-center gap-x-1 text-hw-primary-700 hover:text-hw-primary-800')}
+                      onClick={() => {
+                        // TODO show modal here
+                      }}
+                    >
+                      {translation.details}
+                      <ChevronRight size={16}/>
+                    </Button>
+                  </div>
+                  <div className={tw('flex flex-row justify-between gap-x-4')}>
+                    {product.plan.map(plan => {
+                      const isPlanInCart = cartItem?.plan === plan.type
+                      return (
+                        <div key={plan.uuid} className={tw('flex flex-col gap-y-2 bg-white rounded-lg  px-4 py-2')}>
+                          <span className={tw('font-space font-bold text-xl')}>{translation[plan.type]}</span>
+                          <span className={tw('font-semibold text-lg')}>{`${plan.costEuro}€`}</span>
+                          {isBookedAlready && (
+                            <span className={tw('py-2')}>{translation.alreadyBought}</span>
+                          )}
+                          {!isBookedAlready && (
+                            <Button
+                              className={tw('flex flex-row items-center gap-x-2 w-[160px]')}
+                              onClick={async () => {
+                                if (isInCart) {
+                                  if (isPlanInCart) {
+                                    removeItem(product.uuid)
+                                  } else {
+                                    updateItem({ ...cartItem, plan: plan.type })
+                                  }
+                                } else {
+                                  // Differentiate between plans here
+                                  addItem({ id: product.uuid, quantity: 1, plan: plan.type })
+                                }
+                              }}
+                            >
+                              {isInCart ? (!isPlanInCart ? <ArrowRightLeft size={20}/>: <Minus size={20}/>) : <Plus size={20}/>}
+                              {isInCart ? (!isPlanInCart ? translation.change : translation.removeFromCart) : translation.addToCart}
+                            </Button>
+                          )}
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               )

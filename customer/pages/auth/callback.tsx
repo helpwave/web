@@ -71,12 +71,12 @@ const AuthCallback: NextPage<PropsForTranslation<AuthCallbackTranslation, AuthCa
 
   return (
     <Page pageTitle={titleWrapper(translation.callback)} isHidingSidebar={true}>
-      {hasError && (
-        <Section>
+      <Section>
+        {hasError && (
           <span className={tw('text-hw-negative-400')}>{translation.authenticationFailure}</span>
-          <Button onClick={() => router.push('/')}>{translation.home}</Button>
-        </Section>
-      )}
+        )}
+        <Button onClick={() => router.push('/')}>{translation.home}</Button>
+      </Section>
     </Page>
   )
 }

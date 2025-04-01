@@ -135,7 +135,7 @@ const ProductShop: NextPage = () => {
                   </div>
                   <div className={tw('flex flex-row justify-between gap-x-4')}>
                     {product.plan.map(plan => {
-                      const isPlanInCart = cartItem?.plan === plan.type
+                      const isPlanInCart = cartItem?.plan.uuid === plan.uuid
                       return (
                         <div key={plan.uuid} className={tw('flex flex-col gap-y-2 bg-white rounded-lg  px-4 py-2')}>
                           <span className={tw('font-space font-bold text-xl')}>{translation[plan.type]}</span>
@@ -151,11 +151,11 @@ const ProductShop: NextPage = () => {
                                   if (isPlanInCart) {
                                     removeItem(product.uuid)
                                   } else {
-                                    updateItem({ ...cartItem, plan: plan.type })
+                                    updateItem({ ...cartItem, plan: { uuid: plan.uuid, type: plan.type } })
                                   }
                                 } else {
                                   // Differentiate between plans here
-                                  addItem({ id: product.uuid, quantity: 1, plan: plan.type })
+                                  addItem({ id: product.uuid, quantity: 1, plan:  { uuid: plan.uuid, type: plan.type } })
                                 }
                               }}
                             >

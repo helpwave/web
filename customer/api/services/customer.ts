@@ -26,7 +26,6 @@ export const CustomerAPI = {
     throw response
   },
   update: async (customer: Customer, headers: HeadersInit) => {
-    console.log(JSON.stringify(CustomerHelpers.toJsonUpdate(customer)))
     const response = await fetch(`${API_URL}/customer/`, {
       method: 'PUT',
       headers: { ...headers, 'Content-Type': 'application/json' },

@@ -46,7 +46,6 @@ export const ContractsAPI = {
       for (const id of productIds) {
         result[id] = contracts.slice(0, 2)
       }
-      console.log(contracts, result)
       return result
     }
     throw response

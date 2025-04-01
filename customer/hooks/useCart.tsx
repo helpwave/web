@@ -6,7 +6,10 @@ import type { ProductPlanType } from '@/api/dataclasses/product'
 export type CartItem = {
   id: string,
   quantity: number,
-  plan: ProductPlanType,
+  plan: {
+    uuid: string,
+    type: ProductPlanType,
+  },
 }
 
 export type CartContextType = {

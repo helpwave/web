@@ -26,7 +26,7 @@ type CartOverviewTranslation = {
   actions: string,
   plan: string,
   back: string,
-  pay: string,
+  checkout: string,
 } & ProductPlanTranslation
 
 const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation> = {
@@ -39,7 +39,7 @@ const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation
     actions: 'Actions',
     plan: 'Plan',
     back: 'Back',
-    pay: 'Pay',
+    checkout: 'Checkout',
   },
   de: {
     ...defaultProductPlanTranslation.de,
@@ -50,7 +50,7 @@ const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation
     actions: 'Aktionen',
     plan: 'Plan',
     back: 'Zurück',
-    pay: 'Bezahlen',
+    checkout: 'Zur Kasse gehen',
   }
 }
 
@@ -71,7 +71,7 @@ const CartOverview: NextPage = () => {
               identifierMapping={dataObject => dataObject.id}
               rowMappingToCells={dataObject => {
                 const product = products.find(value => value.uuid === dataObject.id)
-                const plan = product?.plan.find(value => value.type === dataObject.plan)
+                const plan = product?.plan.find(value => value.uuid === dataObject.plan.uuid)
                 // TODO handle not found errors here
                 return [
                   <span key={dataObject.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
@@ -111,7 +111,7 @@ const CartOverview: NextPage = () => {
           disabled={cart.length === 0}
         >
           <Coins size={20}/>
-          {`${translation.pay}`}
+          {`${translation.checkout}`}
         </Button>
       </Section>
     </Page>

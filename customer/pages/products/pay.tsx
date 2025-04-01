@@ -13,13 +13,14 @@ import { ChevronLeft, Coins } from 'lucide-react'
 import { useState } from 'react'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import Link from 'next/link'
-import { withAuth } from '@/hooks/useAuth'
+import { useAuth, withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 import { withCart } from '@/hocs/withCart'
 import { useCart } from '@/hooks/useCart'
 import { useContractsForProductsQuery } from '@/api/mutations/contract_mutations'
 import { useRouter } from 'next/router'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { ProductAPI } from '@/api/services/product'
 
 type ProductsTranslation = {
   checkout: string,
@@ -39,7 +40,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     price: 'Price',
     termsAndConditions: 'Terms and Conditions',
     cancel: 'Cancel',
-    pay: 'Pay',
+    pay: 'Book for a Fee',
     total: 'Total',
   },
   de: {
@@ -49,7 +50,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     price: 'Preis',
     termsAndConditions: 'Nutzungsvereinbarung und -konditionen',
     cancel: 'Abbrechen',
-    pay: 'Bezahlen',
+    pay: 'Kostenpflichtig Buchen',
     total: 'Total',
   }
 }
@@ -59,6 +60,7 @@ type ContractAcceptedType = Record<string, Record<string, boolean>>
 const Payment: NextPage = () => {
   const translation = useTranslation(defaultProductsTranslations)
   const router = useRouter()
+  const { authHeader } = useAuth()
   const { cart } = useCart()
   const {
     data: contracts,
@@ -91,7 +93,7 @@ const Payment: NextPage = () => {
               <tbody>
               {cart.map(dataObject => {
                 const product: Product = products.find(value => value.uuid === dataObject.id)!
-                const plan = product.plan.find(value => value.type === dataObject.plan)!
+                const plan = product.plan.find(value => value.uuid === dataObject.plan.uuid)!
                 return (
                   <tr key={dataObject.id}>
                     <td key={`${dataObject.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
@@ -101,7 +103,8 @@ const Payment: NextPage = () => {
               })}
               <tr>
                 <td className={tw('border-t-2')}><span className={tw('font-semibold')}>{translation.total}</span></td>
-                <td className={tw('border-t-2')}><span className={tw('font-semibold float-right')}>{`${totalSum}€`}</span></td>
+                <td className={tw('border-t-2')}><span
+                  className={tw('font-semibold float-right')}>{`${totalSum}€`}</span></td>
               </tr>
               </tbody>
             </table>
@@ -164,7 +167,16 @@ const Payment: NextPage = () => {
                   className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
                   disabled={!allContractsAccepted}
                   type="submit"
-                  onClick={() => {
+                  onClick={async () => {
+                    for (const value of cart) {
+                      await ProductAPI.book({
+                        uuid: value.id,
+                        plan_id: value.plan.uuid,
+                        accepted_contracts: Object.keys(acceptedContracts[value.id] ?? {}),
+                        vouchers: undefined,
+                      }, authHeader)
+                    }
+                    router.push('/invoices').catch(console.error)
                   }}
                 >
                   <Coins/>

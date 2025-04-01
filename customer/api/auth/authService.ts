@@ -38,6 +38,10 @@ export const renewToken = async () => {
   return await userManager.signinSilent()
 }
 
+export const removeUser = async () => {
+  return await userManager.removeUser()
+}
+
 export const restoreSession = async (): Promise<User | undefined> => {
   if (typeof window === 'undefined') return // Prevent SSR access
   const user = await userManager.getUser()

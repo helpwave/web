@@ -6,7 +6,7 @@ import { createContext, useContext, useState } from 'react'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { LoginPage } from '@/components/pages/login'
-import { login, logout, onTokenExpiringCallback, renewToken, restoreSession } from '@/api/auth/authService'
+import { login, logout, onTokenExpiringCallback, removeUser, renewToken, restoreSession } from '@/api/auth/authService'
 import type { User } from 'oidc-client-ts'
 import { REDIRECT_URI } from '@/api/config'
 
@@ -27,18 +27,25 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     restoreSession().then(identity => {
-      setAuthState({
-        identity,
-        isLoading: false,
-      })
-    })
-    onTokenExpiringCallback(async () => {
-      console.log('Token expiring, refreshing...')
-      const identity = await renewToken()
-      setAuthState({
-        identity: identity ?? undefined,
-        isLoading: false,
-      })
+      if(identity) {
+        setAuthState({
+          identity,
+          isLoading: false,
+        })
+        onTokenExpiringCallback(async () => {
+          console.log('Token expiring, refreshing...')
+          const identity = await renewToken()
+          setAuthState({
+            identity: identity ?? undefined,
+            isLoading: false,
+          })
+        })
+      } else {
+        login(REDIRECT_URI + `?redirect_uri=${encodeURIComponent(window.location.href)}`).catch(console.error)
+      }
+    }).catch(async () => {
+      await removeUser()
+      await login(REDIRECT_URI + `?redirect_uri=${encodeURIComponent(window.location.href)}`)
     })
   }, [])
 

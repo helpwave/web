@@ -4,11 +4,18 @@ import { CustomerHelpers } from '@/api/dataclasses/customer'
 import { API_URL } from '@/api/config'
 
 export const CustomerAPI = {
+  checkSelf: async (headers: HeadersInit): Promise<boolean> => {
+    const response = await fetch(`${API_URL}/customer/check`, { method: 'GET', headers: headers })
+    if(response.ok) {
+      return await response.json() as boolean
+    }
+    throw response
+  },
   getMyself: async (headers: HeadersInit): Promise<Customer | null> => {
-    const response = await fetch(`${API_URL}/customer/`, { method: 'GET', headers: headers })
-    if(response.status === 404) {
+    if(!await CustomerAPI.checkSelf(headers)){
       return null
     }
+    const response = await fetch(`${API_URL}/customer/`, { method: 'GET', headers: headers })
     if(response.ok) {
       return CustomerHelpers.fromJson(await response.json())
     }

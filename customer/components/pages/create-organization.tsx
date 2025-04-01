@@ -36,6 +36,7 @@ export const CreateOrganizationPage = ({
   const [data, setData] = useState<CustomerCreate>({
     name: '',
     email: '',
+    phoneNumber: '',
     address: '',
     country: '',
     city: '',

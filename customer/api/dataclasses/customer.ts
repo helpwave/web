@@ -1,6 +1,7 @@
 export interface CustomerCreate {
   name: string,
   email: string,
+  phoneNumber: string,
   /** Optional Website URL */
   websiteURL?: string,
   /** The street of the address */
@@ -21,7 +22,7 @@ export interface Customer {
   uuid: string,
   name: string,
   email: string,
-  //phoneNumber: string,
+  phoneNumber: string,
   /** Optional Website URL */
   websiteURL?: string,
   /** The street of the address */
@@ -49,6 +50,7 @@ const fromJson = (json: any): Customer => {
     uuid: json.uuid,
     name: json.name,
     email: json.email,
+    phoneNumber: json.phone_number,
     websiteURL: json.website_url,
     address: json.address,
     houseNumber: json.house_number,
@@ -70,6 +72,7 @@ const toJson = (customer: Customer): Record<string, any> => {
     uuid: customer.uuid,
     name: customer.name,
     email: customer.email,
+    phone_number: customer.phoneNumber,
     website_url: customer.websiteURL,
     address: customer.address,
     house_number: customer.houseNumber,
@@ -87,6 +90,7 @@ const toJsonUpdate = (customer: Customer): Record<string, any> => {
   return {
     name: customer.name,
     email: customer.email,
+    phone_number: customer.phoneNumber,
     website_url: customer.websiteURL,
     address: customer.address,
     house_number: customer.houseNumber,
@@ -102,6 +106,7 @@ const toJsonCreate = (customer: CustomerCreate): Record<string, any> => {
   return {
     name: customer.name,
     email: customer.email,
+    phone_number: customer.phoneNumber,
     website_url: customer.websiteURL,
     address: customer.address,
     house_number: customer.houseNumber,

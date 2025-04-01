@@ -86,13 +86,11 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
         onChange={email => onChange({ ...value, email })}
         label={{ name: translation.email }}
       />
-      {/*
       <Input
-        value={value.phoneNumber ?? ''}
-        onChange={phoneNumber => onChange({...value, phoneNumber})}
-        label={{name: translation.phone}}
+        value={value.phoneNumber}
+        onChange={phoneNumber => onChange({ ...value, phoneNumber })}
+        label={{ name: translation.phone }}
       />
-      */}
       <div className={tw('flex flex-col gap-y-1')}>
         <h4 className={tw('font-space font-bold text-lg')}>{translation.address}</h4>
         <Input

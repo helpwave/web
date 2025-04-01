@@ -8,7 +8,9 @@ export const VoucherAPI = {
       headers,
     })
     if (response.ok) {
-      return VoucherHelpers.fromJson(await response.json())
+      const data = (await response.json())
+      data['code'] = id
+      return VoucherHelpers.fromJson(data)
     }
     throw response
   },

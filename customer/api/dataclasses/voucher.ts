@@ -1,5 +1,6 @@
 export type Voucher = {
   uuid: string,
+  code: string,
   description: string,
   productPlanUUID: string,
   discountPercentage?: number,
@@ -11,6 +12,7 @@ export type Voucher = {
 function fromJson(json: any): Voucher {
   return {
     uuid: json.uuid,
+    code: json.code,
     description: json.description,
     productPlanUUID: json.product_plan_uuid,
     discountPercentage: json.discount_percentage,

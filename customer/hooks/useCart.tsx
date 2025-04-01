@@ -2,10 +2,12 @@ import type { PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { noop } from '@helpwave/common/util/noop'
 import type { ProductPlanType } from '@/api/dataclasses/product'
+import type { Voucher } from '@/api/dataclasses/voucher'
 
 export type CartItem = {
   id: string,
   quantity: number,
+  voucher?: Voucher,
   plan: {
     uuid: string,
     type: ProductPlanType,

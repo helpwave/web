@@ -151,7 +151,7 @@ const ProductShop: NextPage = () => {
                                   if (isPlanInCart) {
                                     removeItem(product.uuid)
                                   } else {
-                                    updateItem({ ...cartItem, plan: { uuid: plan.uuid, type: plan.type } })
+                                    updateItem({ ...cartItem, plan: { uuid: plan.uuid, type: plan.type }, voucher: undefined })
                                   }
                                 } else {
                                   // Differentiate between plans here

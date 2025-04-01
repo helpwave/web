@@ -11,12 +11,18 @@ import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
 import { Button } from '@helpwave/common/components/Button'
 import { ChevronLeft, Coins } from 'lucide-react'
 import { Table } from '@helpwave/common/components/Table'
-import { withAuth } from '@/hooks/useAuth'
+import { useAuth, withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 import { useCart } from '@/hooks/useCart'
 import { withCart } from '@/hocs/withCart'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useRouter } from 'next/router'
+import { Modal } from '@helpwave/common/components/modals/Modal'
+import { useState } from 'react'
+import { Input } from '@helpwave/common/components/user-input/Input'
+import { VoucherAPI } from '@/api/services/voucher'
+import type { Voucher } from '@/api/dataclasses/voucher'
+import { Chip } from '@helpwave/common/components/ChipList'
 
 type CartOverviewTranslation = {
   removeFromCart: string,
@@ -27,6 +33,12 @@ type CartOverviewTranslation = {
   plan: string,
   back: string,
   checkout: string,
+  voucher: string,
+  checkAndRedeem: string,
+  redeemVoucher: string,
+  redeemVoucherFor: (name: string) => string,
+  code: string,
+  invalidCode: string,
 } & ProductPlanTranslation
 
 const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation> = {
@@ -40,6 +52,12 @@ const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation
     plan: 'Plan',
     back: 'Back',
     checkout: 'Checkout',
+    voucher: 'Voucher',
+    checkAndRedeem: 'Check and Redeem',
+    redeemVoucher: 'Redeem Voucher',
+    redeemVoucherFor: (name: string) => `Redeem Voucher for ${name}`,
+    code: 'Code',
+    invalidCode: 'The provided Code is not valid (for this product), please try a different one.',
   },
   de: {
     ...defaultProductPlanTranslation.de,
@@ -51,6 +69,12 @@ const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation
     plan: 'Plan',
     back: 'Zurück',
     checkout: 'Zur Kasse gehen',
+    voucher: 'Gutschein',
+    checkAndRedeem: 'Prüfen und Einlösen',
+    redeemVoucher: 'Gutschein einlösen',
+    redeemVoucherFor: (name: string) => `Gutschein einlösen für ${name}`,
+    code: 'Code',
+    invalidCode: 'Der eingegebenen Gutschein-Code ist nicht gültig (für dieses Produkt), versuchen Sie einen anderen.',
   }
 }
 
@@ -58,30 +82,87 @@ const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation
 const CartOverview: NextPage = () => {
   const translation = useTranslation(defaultCartOverviewTranslations)
   const router = useRouter()
-  const { cart, removeItem } = useCart()
+  const { authHeader } = useAuth()
+  const { cart, removeItem, updateItem } = useCart()
+  const [productVoucherModalId, setProductVoucherModalId] = useState<string>()
+  const [voucherCode, setVoucherCode] = useState<string>('')
+  const [redeemResponse, setRedeemResponse] = useState<string>()
   const { data: products, isError, isLoading } = useProductsAllQuery()
 
   return (
     <Page pageTitle={titleWrapper(translation.overview)}>
+      <Modal
+        id="voucher-modal"
+        isOpen={!!productVoucherModalId}
+        onCloseClick={() => setProductVoucherModalId(undefined)}
+        onBackgroundClick={() => setProductVoucherModalId(undefined)}
+        titleText={translation.redeemVoucherFor(products?.find(value => value.uuid === productVoucherModalId)?.name ?? '')}
+        modalClassName={tw('gap-y-6')}
+      >
+        <div className={tw('gap-y-2')}>
+          <Input
+            value={voucherCode}
+            autoFocus={true}
+            onChange={text => {
+              setVoucherCode(text)
+              setRedeemResponse(undefined)
+            }}
+            label={{ name: translation.code }}
+          />
+          {redeemResponse && <span className={tw('text-hw-negative-400')}>{redeemResponse}</span>}
+        </div>
+        <Button
+          disabled={!voucherCode}
+          onClick={async () => {
+            try {
+              const voucher: Voucher = await VoucherAPI.get(voucherCode, authHeader)
+              const cartItem = cart.find(value => value.id === productVoucherModalId)
+              if (!cartItem) {
+                return
+              }
+              updateItem({ ...cartItem, voucher: { ...voucher } })
+              setProductVoucherModalId(undefined)
+            } catch {
+              setRedeemResponse(translation.invalidCode)
+            }
+          }}
+        >
+          {translation.redeemVoucher}
+        </Button>
+      </Modal>
       <Section titleText={translation.overview}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
           {products && (
             <Table
               data={cart}
               identifierMapping={dataObject => dataObject.id}
-              rowMappingToCells={dataObject => {
-                const product = products.find(value => value.uuid === dataObject.id)
-                const plan = product?.plan.find(value => value.uuid === dataObject.plan.uuid)
+              rowMappingToCells={cartItem => {
+                const product = products.find(value => value.uuid === cartItem.id)
+                const plan = product?.plan.find(value => value.uuid === cartItem.plan.uuid)
+                const voucher = cartItem.voucher
+                // TODO let the backend provide this
+                console.log(cartItem.voucher)
+                const price = Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0).toFixed(2)
+
                 // TODO handle not found errors here
                 return [
-                  <span key={dataObject.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
-                  <span key={dataObject.id + 'price'}>{(plan?.costEuro ?? '-') + '€'}</span>,
-                  <span key={dataObject.id + 'plan'}>{translation[plan?.type ?? 'monthly']}</span>,
+                  <span key={cartItem.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
+                  <span key={cartItem.id + 'price'}>{`${price}€`}</span>,
+                  <span key={cartItem.id + 'plan'}>{translation[plan?.type ?? 'monthly']}</span>,
+                  !voucher ? (
+                    <Button
+                      variant="text"
+                      key={cartItem.id + 'voucher-redeem'}
+                      onClick={() => setProductVoucherModalId(cartItem.id)}
+                    >
+                      {translation.redeemVoucher}
+                    </Button>
+                  ) : (<Chip key={cartItem.id + 'voucher'} color="hw-primary">{voucher.code}</Chip>),
                   <Button
                     variant="text"
-                    key={dataObject.id + 'action'}
+                    key={cartItem.id + 'action'}
                     color="hw-negative"
-                    onClick={() => removeItem(dataObject.id)}
+                    onClick={() => removeItem(cartItem.id)}
                   >
                     {translation.removeFromCart}
                   </Button>,
@@ -91,6 +172,7 @@ const CartOverview: NextPage = () => {
                 <span key="name">{translation.name}</span>,
                 <span key="price">{translation.price}</span>,
                 <span key="plan">{translation.plan}</span>,
+                <span key="voucher">{translation.voucher}</span>,
                 <span key="actions">{translation.actions}</span>,
               ]}
             />
@@ -101,7 +183,7 @@ const CartOverview: NextPage = () => {
         <Button
           className={tw('flex flex-row items-center gap-x-2')}
           onClick={() => router.push('/products/shop')}
-          >
+        >
           <ChevronLeft size={20}/>
           {`${translation.back}`}
         </Button>

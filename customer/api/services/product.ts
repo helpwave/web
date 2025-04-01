@@ -4,7 +4,7 @@ import { ProductHelpers } from '@/api/dataclasses/product'
 export type BookProductType = {
   uuid: string,
   plan_id: string,
-  vouchers?: string,
+  voucher?: string,
   accepted_contracts: string[],
 }
 

@@ -76,7 +76,12 @@ const Payment: NextPage = () => {
 
   const allContractsAccepted = !!contracts && Object.keys(contracts).every(key => contracts[key]!.every(contract => acceptedContracts[key] ? (acceptedContracts[key][contract.uuid] ?? false) : false))
 
-  const totalSum = cart.map(cartItem => products?.find(product => product.uuid === cartItem.id)?.plan.find(plan => plan.type === plan.type)).reduce((previousValue, currentValue) => (currentValue?.costEuro ?? 0) + previousValue, 0)
+  const totalSum = cart.map(cartItem => {
+    const plan = products?.find(product => product.uuid === cartItem.id)?.plan.find(plan => plan.type === plan.type)
+    const voucher = cartItem.voucher
+    // TODO let the backend provide this
+    return Math.round(Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0) * 100) / 100
+  }).reduce((previousValue, currentValue) => (currentValue) + previousValue, 0)
 
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
@@ -91,20 +96,23 @@ const Payment: NextPage = () => {
               </tr>
               </thead>
               <tbody>
-              {cart.map(dataObject => {
-                const product: Product = products.find(value => value.uuid === dataObject.id)!
-                const plan = product.plan.find(value => value.uuid === dataObject.plan.uuid)!
+              {cart.map(cartItem => {
+                const product: Product = products.find(value => value.uuid === cartItem.id)!
+                const plan = product.plan.find(value => value.uuid === cartItem.plan.uuid)!
+                const voucher = cartItem.voucher
+                // TODO let the backend provide this
+                const price = Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0).toFixed(2)
                 return (
-                  <tr key={dataObject.id}>
-                    <td key={`${dataObject.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
-                    <td key={`${dataObject.id}+price`} className={tw('float-right')}>{`${plan.costEuro}€`}</td>
+                  <tr key={cartItem.id}>
+                    <td key={`${cartItem.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
+                    <td key={`${cartItem.id}+price`} className={tw('float-right')}>{`${price}€`}</td>
                   </tr>
                 )
               })}
               <tr>
                 <td className={tw('border-t-2')}><span className={tw('font-semibold')}>{translation.total}</span></td>
                 <td className={tw('border-t-2')}><span
-                  className={tw('font-semibold float-right')}>{`${totalSum}€`}</span></td>
+                  className={tw('font-semibold float-right')}>{`${totalSum.toFixed(2)}€`}</span></td>
               </tr>
               </tbody>
             </table>
@@ -173,7 +181,7 @@ const Payment: NextPage = () => {
                         uuid: value.id,
                         plan_id: value.plan.uuid,
                         accepted_contracts: Object.keys(acceptedContracts[value.id] ?? {}),
-                        vouchers: undefined,
+                        voucher: value.voucher?.uuid,
                       }, authHeader)
                     }
                     router.push('/invoices').catch(console.error)

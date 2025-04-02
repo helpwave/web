@@ -9,7 +9,7 @@ import { tw } from '@twind/core'
 import type { Product, ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
 import { Button } from '@helpwave/common/components/Button'
-import { ChevronLeft, Coins } from 'lucide-react'
+import { ChevronLeft, Coins, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import Link from 'next/link'
@@ -20,7 +20,7 @@ import { useCart } from '@/hooks/useCart'
 import { useContractsForProductsQuery } from '@/api/mutations/contract_mutations'
 import { useRouter } from 'next/router'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { ProductAPI } from '@/api/services/product'
+import { CustomerProductsAPI } from '@/api/services/customer_product'
 
 type ProductsTranslation = {
   checkout: string,
@@ -30,6 +30,8 @@ type ProductsTranslation = {
   cancel: string,
   pay: string,
   total: string,
+  lookAt: string,
+  acceptTerms: (name: string) => string,
 } & ProductPlanTranslation
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
@@ -42,6 +44,8 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     cancel: 'Cancel',
     pay: 'Book for a Fee',
     total: 'Total',
+    lookAt: 'Look at',
+    acceptTerms: (name: string) => `Hereby I accept the terms of use for ${name}.`,
   },
   de: {
     ...defaultProductPlanTranslation.de,
@@ -52,16 +56,18 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     cancel: 'Abbrechen',
     pay: 'Kostenpflichtig Buchen',
     total: 'Total',
+    lookAt: 'Anschauen',
+    acceptTerms: (name: string) => `Hiermit akzeptiere ich die Nutzungsbedingungen von ${name}`,
   }
 }
 
-type ContractAcceptedType = Record<string, Record<string, boolean>>
+type ContractAcceptedType = Record<string, boolean>
 
 const Payment: NextPage = () => {
   const translation = useTranslation(defaultProductsTranslations)
   const router = useRouter()
   const { authHeader } = useAuth()
-  const { cart } = useCart()
+  const { cart, clearCart } = useCart()
   const {
     data: contracts,
     isLoading: contractsLoading,
@@ -69,12 +75,11 @@ const Payment: NextPage = () => {
   } = useContractsForProductsQuery(cart.map(value => value.id))
   const [acceptedContracts, setAcceptedContracts] = useState<ContractAcceptedType>({})
   const { data: products, isLoading: productsLoading, isError: productsError } = useProductsAllQuery()
-  // const [voucher, setVoucher] = useState<string>('') // TODO add later
 
   const isError = contractsError || productsError
   const isLoading = contractsLoading || productsLoading
 
-  const allContractsAccepted = !!contracts && Object.keys(contracts).every(key => contracts[key]!.every(contract => acceptedContracts[key] ? (acceptedContracts[key][contract.uuid] ?? false) : false))
+  const allContractsAccepted = !!contracts && contracts.every(contract => acceptedContracts[contract.uuid])
 
   const totalSum = cart.map(cartItem => {
     const plan = products?.find(product => product.uuid === cartItem.id)?.plan.find(plan => plan.type === plan.type)
@@ -82,6 +87,8 @@ const Payment: NextPage = () => {
     // TODO let the backend provide this
     return Math.round(Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0) * 100) / 100
   }).reduce((previousValue, currentValue) => (currentValue) + previousValue, 0)
+
+  console.log(contracts)
 
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
@@ -120,45 +127,32 @@ const Payment: NextPage = () => {
           <h4 className={tw('font-bold text-xl')}>{translation.termsAndConditions}</h4>
           {products && contracts && (
             <form className={tw('flex flex-col gap-y-4')}>
-              {cart.map((item) => {
-                const product = products.find(value => value.uuid === item.id)
-                if (!product) {
-                  return null // TODO make this error visible to the user
-                }
-                const productContracts = contracts[product.uuid]
-                if (!productContracts) {
-                  return null // TODO make this error visible to the user
-                }
+              {contracts.map((contract) => {
+                const isAccepted = acceptedContracts[contract.uuid] ?? false
                 return (
-                  <div key={product.uuid} className={tw('flex flex-col gap-y-2')}>
-                    <h4 className={tw('font-space text-lg font-semibold')}>{product.name}</h4>
-                    {productContracts.map(contract => {
-                      const isAccepted = acceptedContracts[product.uuid] ? (acceptedContracts[product.uuid]![contract.uuid] ?? false) : false
-                      return (
-                        <div key={contract.uuid} className={tw('flex flex-row gap-x-2')}>
-                          <Checkbox
-                            checked={isAccepted}
-                            onChange={() => {
-                              setAcceptedContracts(prevState => ({
-                                ...prevState,
-                                [product.uuid]: {
-                                  ...prevState[product.uuid],
-                                  [contract.uuid]: !isAccepted,
-                                },
-                              }))
-                            }}
-                            containerClassName={tw('justify-start')}
-                          />
-                          {/* TODO url is optional consider changing it later*/}
-                          <Link
-                            href={contract.url!} target="_blank"
-                            className={tw('font-bold text-lg font-semibold')}
-                          >
-                            {contract.key}
-                          </Link>
-                        </div>
-                      )
-                    })}
+                  <div key={contract.uuid} className={tw('flex flex-row gap-x-2')}>
+                    <Checkbox
+                      checked={isAccepted}
+                      onChange={() => {
+                        setAcceptedContracts(prevState => ({
+                          ...prevState,
+                          [contract.uuid]: !isAccepted,
+                        }))
+                      }}
+                      containerClassName={tw('justify-start')}
+                    />
+                    <span className={tw('inline-flex gap-x-2')}>
+                      {translation.acceptTerms(`${contract.key}`)}
+                      <Link
+                        href={contract.url} target="_blank"
+                        className={tw('flex flex-row gap-x-0.5 items-center')}
+                      >
+                        <span>(</span>
+                        {`${translation.lookAt}`}
+                        <ExternalLink size={16}/>
+                        <span>)</span>
+                    </Link>
+                    </span>
                   </div>
                 )
               })}
@@ -175,16 +169,22 @@ const Payment: NextPage = () => {
                   className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
                   disabled={!allContractsAccepted}
                   type="submit"
-                  onClick={async () => {
-                    for (const value of cart) {
-                      await ProductAPI.book({
-                        uuid: value.id,
-                        plan_id: value.plan.uuid,
-                        accepted_contracts: Object.keys(acceptedContracts[value.id] ?? {}),
-                        voucher: value.voucher?.uuid,
-                      }, authHeader)
+                  onClick={async (event) => {
+                    event.preventDefault()
+                    try {
+                      for (const value of cart) {
+                        await CustomerProductsAPI.book({
+                          product_uuid: value.id,
+                          product_plan_uuid: value.plan.uuid,
+                          accepted_contracts: Object.keys(acceptedContracts),
+                          voucher_uuid: value.voucher?.uuid,
+                        }, authHeader)
+                      }
+                      clearCart()
+                      router.push('/invoices').catch(console.error)
+                    } catch (error) {
+                      console.error(error)
                     }
-                    router.push('/invoices').catch(console.error)
                   }}
                 >
                   <Coins/>

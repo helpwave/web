@@ -10,7 +10,7 @@ export interface Contract {
   /** The version of the contract */
   version: string,
   /** The URL at which the contract can be found as a file */
-  url?: string,
+  url: string,
   /** The creation day of the contract */
   createdAt: Date,
 }

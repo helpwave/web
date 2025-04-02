@@ -31,7 +31,7 @@ export const ProductAPI = {
     throw response
   },
   book: async (product: BookProductType, headers: HeadersInit) => {
-    const response = await fetch(`${API_URL}/product/`, {
+    const response = await fetch(`${API_URL}/customer/product/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' , ...headers },
       body: JSON.stringify(product)

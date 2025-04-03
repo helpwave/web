@@ -7,14 +7,14 @@ import { Section } from '@/components/layout/Section'
 import { tw, tx } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { Table } from '@helpwave/common/components/Table'
-import { Button } from '@helpwave/common/components/Button'
 import type { InvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import { defaultInvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import type { ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
-import { withAuth } from '@/hooks/useAuth'
+import {  withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 import { useMyInvoicesQuery } from '@/api/mutations/invoice_mutations'
+import EmbeddedCheckoutButton from '@/components/forms/StripeCheckOutForm'
 
 type InvoicesTranslation = {
   invoices: string,
@@ -97,36 +97,39 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                 (<span key="paymentDate">{translation.paymentDate}</span>),
                 (<span key="actions">{translation.actions}</span>),
               ]}
-              rowMappingToCells={dataObject => [
-                (<span key={dataObject.uuid + '-date'}>{dataObject.date.toDateString()}</span>),
-                (<span key={dataObject.uuid + '-name'}>{dataObject.uuid}</span>),
+              rowMappingToCells={invoice => [
+                (<span key={invoice.uuid + '-date'}>{invoice.date.toDateString()}</span>),
+                (<span key={invoice.uuid + '-name'}>{invoice.uuid}</span>),
                 (
-                  <span key={dataObject.uuid + '-price'} className={tw('font-semibold')}>
-                    {dataObject.totalAmount + '€'}
+                  <span key={invoice.uuid + '-price'} className={tw('font-semibold')}>
+                    {invoice.totalAmount + '€'}
                   </span>
                 ),
                 (
                   <span
-                    key={dataObject.uuid + '-payment-status'}
+                    key={invoice.uuid + '-payment-status'}
                     className={tx({
-                      'text-hw-negative-400': dataObject.status === 'overdue',
-                      'text-hw-warn-400': dataObject.status === 'pending',
-                      'text-hw-positive-400': dataObject.status === 'payed'
+                      'text-hw-negative-400': invoice.status === 'overdue',
+                      'text-hw-warn-400': invoice.status === 'pending',
+                      'text-hw-positive-400': invoice.status === 'payed'
                     })}
                   >
-                    {translation[dataObject.status]}
+                    {translation[invoice.status]}
                   </span>
                 ),
                 (
-                  <span key={dataObject.uuid + '-payment-date'}>
-                    {dataObject.date?.toDateString() ?? '-'}
+                  <span key={invoice.uuid + '-payment-date'}>
+                    {invoice.date?.toDateString() ?? '-'}
                   </span>
                 ),
-                dataObject.status === 'overdue' ?
+                invoice.status === 'overdue' || invoice.status === 'pending' ?
                   (
-                    <Button key={dataObject.uuid + '-pay'}>
+                    <EmbeddedCheckoutButton
+                      key={invoice.uuid + '-pay'}
+                      invoiceId={invoice.uuid}
+                    >
                       {translation.payNow}
-                    </Button>
+                    </EmbeddedCheckoutButton>
                   ) : (<div/>)
               ]}
             />

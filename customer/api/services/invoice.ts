@@ -12,7 +12,7 @@ export const InvoiceAPI = {
     throw response
   },
   pay: async (id: string, headers: HeadersInit): Promise<string> => {
-    const response = await fetch(`${API_URL}/customer/${id}`, {
+    const response = await fetch(`${API_URL}/invoice/pay/${id}/`, {
       method: 'POST',
       headers: { ...headers, 'Content-Type': 'application/json' },
     })

@@ -9,5 +9,6 @@ declare namespace NodeJS {
     NEXT_PUBLIC_CLIENT_ID: string,
     NEXT_PUBLIC_REDIRECT_URI: string,
     NEXT_PUBLIC_POST_LOGOUT_REDIRECT_URI: string,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: string,
   }
 }

@@ -12,6 +12,7 @@ import { Button } from '@helpwave/common/components/Button'
 import { STRIPE_PUBLISHABLE_KEY } from '@/api/config'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { tw } from '@twind/core'
 
 type EmbeddedCheckoutButtonTranslation = {
   cancel: string,
@@ -58,27 +59,23 @@ export default function EmbeddedCheckoutButton({ children, invoiceId }: Embedded
   }
 
   return (
-    <div id="checkout" className="my-4">
+    <div id="checkout">
       <Button onClick={handleCheckoutClick}>
         {children}
       </Button>
-      <dialog ref={modalRef} className="modal">
-        <div className="modal-box w-100 max-w-screen-2xl">
-          <h3 className="font-bold text-lg">{translation.checkout}</h3>
-          <div className="py-4">
-            {showCheckout && (
-              <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-                <EmbeddedCheckout/>
-              </EmbeddedCheckoutProvider>
-            )}
-          </div>
-          <div className="modal-action">
-            <form method="dialog">
-              <Button className="btn" onClick={handleCloseModal}>
-                {translation.cancel}
-              </Button>
-            </form>
-          </div>
+      <dialog ref={modalRef} className={tw('w-full h-full max-w-[90vw] max-h-[90vh] rounded-lg overflow-hidden')}>
+        <div className={tw('flex flex-col justify-between gap-y-4 w-full h-full overflow-auto')}>
+          <h3 className={tw('font-bold text-2xl')}>{translation.checkout}</h3>
+          {showCheckout && (
+            <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+              <EmbeddedCheckout/>
+            </EmbeddedCheckoutProvider>
+          )}
+          <form method="dialog">
+            <Button onClick={handleCloseModal}>
+              {translation.cancel}
+            </Button>
+          </form>
         </div>
       </dialog>
     </div>

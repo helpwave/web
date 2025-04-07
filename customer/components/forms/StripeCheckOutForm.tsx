@@ -24,7 +24,7 @@ const defaultEmbeddedCheckoutButtonTranslation: Translation<EmbeddedCheckoutButt
     cancel: 'Cancel',
     checkout: 'Check Out'
   },
-  en: {
+  de: {
     cancel: 'Abbrechen',
     checkout: 'Kasse'
   }

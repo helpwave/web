@@ -6,7 +6,7 @@ import {
   type HTMLInputTypeAttribute,
   type InputHTMLAttributes
 } from 'react'
-import { tx } from '@helpwave/color-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'

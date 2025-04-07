@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Undo2, X } from 'lucide-react'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Select } from '@helpwave/common/components/user-input/Select'

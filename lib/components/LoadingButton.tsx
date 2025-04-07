@@ -1,4 +1,4 @@
-import { tx } from '@helpwave/color-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 import { Helpwave } from '../icons/Helpwave'
 import type { ButtonProps } from './Button'
 import { SolidButton } from './Button'

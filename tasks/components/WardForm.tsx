@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'

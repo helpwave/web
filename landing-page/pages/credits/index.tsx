@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import type { NextPage } from 'next'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import Image from 'next/image'

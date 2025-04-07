@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 
 type ColumnTitleProps = {
   title: string,

@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import type { ButtonColorType } from '../Button'
 import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'

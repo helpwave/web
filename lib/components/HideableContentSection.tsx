@@ -1,6 +1,6 @@
 import { useState, type PropsWithChildren, type ReactNode } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 
 export type HideableContentSectionProps = PropsWithChildren & {
   initiallyOpen?: boolean,

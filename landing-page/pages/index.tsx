@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'

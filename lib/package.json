@@ -10,7 +10,7 @@
     "lint": "tsc --noEmit && eslint ."
   },
   "dependencies": {
-    "@helpwave/color-themes": "workspace:*",
+    "@helpwave/style-themes": "workspace:*",
     "@babel/core": "7.26.0",
     "@headlessui/react": "1.7.19",
     "@radix-ui/react-checkbox": "1.1.3",

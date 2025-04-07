@@ -2,7 +2,7 @@ import { AlertOctagon } from 'lucide-react'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 
 type ErrorComponentTranslation = {
   errorOccurred: string,

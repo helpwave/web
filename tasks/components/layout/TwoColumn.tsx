@@ -1,7 +1,7 @@
 import { createRef, useEffect, useState, type ReactNode } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 /**
  * Only px and %
  * e.g. 250px or 10%

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import type { Languages } from '../../hooks/useLanguage'
 import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'

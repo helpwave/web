@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useEffect, useRef, useState } from 'react'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { noop } from '../util/noop'
 import { Checkbox } from './user-input/Checkbox'
 import { Pagination } from './Pagination'

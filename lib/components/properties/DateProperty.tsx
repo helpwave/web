@@ -1,5 +1,5 @@
 import { CalendarDays } from 'lucide-react'
-import { tx } from '@helpwave/color-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 import { formatDate, formatDateTime } from '../../util/date'
 import { noop } from '../../util/noop'
 import { Input } from '../user-input/Input'

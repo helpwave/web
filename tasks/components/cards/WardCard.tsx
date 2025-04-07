@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { Bed } from 'lucide-react'
 import type { WardOverviewDTO } from '@helpwave/api-services/types/tasks/wards'
 import { PillLabelBox } from '../pill/PillLabelBox'

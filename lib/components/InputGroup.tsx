@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { tx, tw } from '@helpwave/color-themes/twind'
+import { tx, tw } from '@helpwave/style-themes/twind'
 import { noop } from '../util/noop'
 
 export type InputGroupProps = PropsWithChildren<{

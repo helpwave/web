@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import { useContext, useEffect, useRef, useState } from 'react'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import type { BedMinimalDTO } from '@helpwave/api-services/types/tasks/bed'

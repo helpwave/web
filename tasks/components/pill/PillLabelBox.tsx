@@ -1,5 +1,5 @@
-import { tw } from '@helpwave/color-themes/twind'
-import { tx } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 
 export type PillLabelBoxProps = {
   unscheduled: number,

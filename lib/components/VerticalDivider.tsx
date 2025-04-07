@@ -1,35 +1,25 @@
-import { tw } from '@helpwave/color-themes/twind'
-import { colors } from '../twind/config'
-
-type Color = 'primary' | 'black'
-
 export type VerticalDividerProps = {
   width?: number,
   height?: number,
   dashDistance?: number,
   dashWidth?: number,
-  color?: Color,
 }
 
 /**
  * A Component for creating a vertical Divider
  */
 export const VerticalDivider = ({
-  width = 1,
-  height = 100,
-  dashDistance = 4,
-  dashWidth = 0.5,
-  color = 'primary'
-}: VerticalDividerProps) => {
-  const colorString = {
-    primary: colors['hw-primary'][400],
-    black: '000000'
-  }[color]
+                                  width = 1,
+                                  height = 100,
+                                  dashDistance = 4,
+                                  dashWidth = 0.5,
+                                }: VerticalDividerProps) => {
+  const colorString = '000000'
 
   return (
-    <div className={tw(`w-[${width}px] h-[${height}px]`)}>
+    <div style={{ width: width + 'px', height: height + 'px' }}>
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} fill="none"
-        xmlns="http://www.w3.org/2000/svg">
+           xmlns="http://www.w3.org/2000/svg">
         <line
           opacity="0.5"
           x1={width / 2}

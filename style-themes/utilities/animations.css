@@ -1,0 +1,139 @@
+@layer utilities {
+  .animation-delay-0 {
+    animation-delay: 0ms;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .animation-delay-1000 {
+    animation-delay: 1000ms;
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes bigLeftUp {
+    0%, 25% {
+      stroke-dashoffset: 1000;
+    }
+    50%, 75%, 100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes bigRightDown {
+    0%, 25%, 50% {
+      stroke-dashoffset: 0;
+    }
+    75%, 100% {
+      stroke-dashoffset: -1000;
+    }
+  }
+
+  @keyframes smallLeftUp {
+    0%, 25%, 50% {
+      stroke-dashoffset: 1000;
+    }
+    75%, 100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes smallRightDown {
+    0%, 25% {
+      stroke-dashoffset: 0;
+    }
+    50%, 75%, 100% {
+      stroke-dashoffset: -1000;
+    }
+  }
+
+  .animate-fade {
+    animation: fade-out 3s ease-in-out;
+  }
+
+  .animate-wave-big-left-up {
+    animation: bigLeftUp 1.7s ease-in infinite normal;
+  }
+
+  .animate-wave-big-right-down {
+    animation: bigRightDown 1.7s ease-in infinite reverse;
+  }
+
+  .animate-wave-small-left-up {
+    animation: smallLeftUp 1.7s ease-in infinite normal;
+  }
+
+  .animate-wave-small-right-down {
+    animation: smallRightDown 1.7s ease-in infinite reverse;
+  }
+
+  .animate-tooltip-fade-in {
+    animation: fade-in 0.2s ease-in-out forwards;
+  }
+
+  .animate-tooltip-fade-out {
+    animation: fade-in 0.2s ease-in-out forwards;
+  }
+
+  .shadow-around {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.02),
+    0 -2px 2px 0 rgba(0, 0, 0, 0.02),
+    2px 0 2px 0 rgba(0, 0, 0, 0.02),
+    -2px 0 2px 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .shadow-around-md {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.02),
+    0 -5px 5px 0 rgba(0, 0, 0, 0.02),
+    5px 0 5px 0 rgba(0, 0, 0, 0.02),
+    -5px 0 5px 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .shadow-around-lg {
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.02),
+    0 -10px 10px 0 rgba(0, 0, 0, 0.02),
+    10px 0 10px 0 rgba(0, 0, 0, 0.02),
+    -10px 0 10px 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .shadow-around-xl {
+    box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.02),
+    0 -20px 20px 0 rgba(0, 0, 0, 0.02),
+    20px 0 20px 0 rgba(0, 0, 0, 0.02),
+    -20px 0 20px 0 rgba(0, 0, 0, 0.02);
+  }
+}

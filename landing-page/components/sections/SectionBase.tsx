@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { apply, tx } from '@helpwave/color-themes/twind'
+import { apply, tx } from '@helpwave/style-themes/twind'
 
 type BackgroundColor = 'white' | 'black' | 'gray' | 'darkSecondary' | 'darkPrimary'
 

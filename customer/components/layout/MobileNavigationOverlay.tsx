@@ -1,7 +1,7 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { languagesLocalNames } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { noop } from '@helpwave/common/util/noop'

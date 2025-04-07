@@ -1,5 +1,5 @@
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import { Menu as MenuIcon, X } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'

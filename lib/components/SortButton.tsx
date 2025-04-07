@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import type { ButtonProps } from './Button'
 import { SolidButton } from './Button'
 import type { TableSortingType } from './Table'

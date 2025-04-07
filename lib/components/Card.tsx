@@ -1,6 +1,6 @@
 import type { MouseEventHandler, PropsWithChildren } from 'react'
 import { noop } from '../util/noop'
-import { tx } from '@helpwave/color-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 
 export type CardProps = {
   isSelected?: boolean,

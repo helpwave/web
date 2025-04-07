@@ -1,0 +1,135 @@
+@import "variants.css";
+
+@layer base {
+  @variant dark {
+    --color-white: #FFFFFF;
+    --color-black: #000000;
+    --color-gray-25: #F8F8F8;
+    --color-gray-50: #F2F2F2;
+    --color-gray-100: #E6E6E6;
+    --color-gray-200: #CCCCCC;
+    --color-gray-300: #B3B3B3;
+    --color-gray-400: #999999;
+    --color-gray-500: #888888;
+    --color-gray-600: #666666;
+    --color-gray-700: #4D4D4D;
+    --color-gray-800: #333333;
+    --color-gray-900: #1A1A1A;
+    --color-gray-950: #0D0D0D;
+
+    --color-green-100: #D1EFD8;
+    --color-green-500: #69CB81;
+    --color-green-900: #2C5536;
+
+    --color-orange-100: #FBECD9;
+    --color-orange-200: #F7D8B3;
+    --color-orange-500: #EA9E40;
+
+    --color-purple-50: #EFE6FD;
+    --color-purple-100: #CEB0FA;
+    --color-purple-500: #694BB4;
+
+    --color-blue-50: #F6FAFF;
+    --color-blue-100: #D6E3F9;
+    --color-blue-200: #99B9EF;
+    --color-blue-500: #3272DF;
+    --color-blue-600: #285BB2;
+    --color-blue-800: #1A4080;
+
+    --color-red-50: #FFF9F9;
+    --color-red-100: #FBE0E2;
+    --color-red-200: #F7C2C5;
+    --color-red-300: #F4A3A7;
+    --color-red-400: #E3798A;
+    --color-red-500: #DC576D;
+    --color-red-900: #5C252E;
+
+    --color-primary: #694BB4;
+    --color-on-primary: #FFFFFF;
+    --color-secondary: #EFE6FD;
+    --color-on-secondary: #694BB4;
+    --color-warning: #EA9E40;
+    --color-on-warning: #FFFFFF;
+    --color-positive: #69CB81;
+    --color-on-positive: #FFFFFF;
+    --color-negative: #DC576D;
+    --color-on-negative: #FFFFFF;
+    --color-surface: #FFFFFF;
+    --color-on-surface: #1A1A1A;
+    --color-surface-variant: #F8F8F8;
+    --color-surface-warning: #FBECD9;
+    --color-highlight: #3272DF;
+    --color-background: #FFFFFF;
+    --color-on-background: #1A1A1A;
+
+    --color-female: #E3798A;
+    --color-female-outline: #F4A3A7;
+    --color-female-surface: #FBE0E2;
+    --color-female-background: #FFF9F9;
+
+    --color-male: #3272DF;
+    --color-male-outline: #99B9EF;
+    --color-male-surface: #D6E3F9;
+    --color-male-background: #F6FAFF;
+
+    --color-neutral: #4D4D4D;
+    --color-neutral-outline: #B3B3B3;
+    --color-neutral-surface: #E6E6E6;
+    --color-neutral-background: #F8F8F8;
+
+    --color-text-primary: #1A1A1A;
+    --color-text-secondary: #666666;
+    --color-text-tertiary: #B3B3B3;
+    --color-text-highlight: #3272DF;
+    --color-icon-primary: #1A1A1A;
+    --color-icon-secondary: #666666;
+    --color-icon-highlight: #3272DF;
+    --color-divider: #E6E6E6;
+    --color-outline: #E6E6E6;
+    --color-outline-variant: #CCCCCC;
+    --color-disabled-background: #BBBBBB;
+    --color-disabled-text: #555555;
+    --color-disabled-icon: #555555;
+    --color-disabled-outline: #555555;
+
+    --color-button-solid-primary-background: #694BB4;
+    --color-button-solid-primary-text: #FFFFFF;
+    --color-button-solid-primary-icon: #FFFFFF;
+    --color-button-solid-secondary-background: #EFE6FD;
+    --color-button-solid-secondary-text: #694BB4;
+    --color-button-solid-secondary-icon: #694BB4;
+    --color-button-solid-tertiary-background: #F2F2F2;
+    --color-button-solid-tertiary-icon: #888888;
+    --color-button-solid-tertiary-text: #888888;
+    --color-button-outline-primary-outline: #694BB4;
+    --color-button-outline-primary-icon: #694BB4;
+    --color-button-outline-primary-text: #694BB4;
+    --color-button-solid-positive-background: #69CB81;
+    --color-button-solid-positive-icon: #FFFFFF;
+    --color-button-solid-positive-text: #FFFFFF;
+    --color-button-solid-warning-background: #EA9E40;
+    --color-button-solid-warning-icon: #FFFFFF;
+    --color-button-solid-warning-text: #FFFFFF;
+
+    --color-button-text-neutral-text: #333333;
+    --color-button-text-neutral-icon: #333333;
+    --color-button-text-negative-text: #DC576D;
+    --color-button-text-negative-icon: #DC576D;
+
+    --color-tag-default-background: #F6FAFF;
+    --color-tag-default-text: #1A4080;
+    --color-tag-default-icon: #1A4080;
+    --color-tag-dark-background: #333333;
+    --color-tag-dark-text: #FFFFFF;
+    --color-tag-dark-icon: #FFFFFF;
+
+    --color-tabel-header-background: #F6FAFF;
+
+    --color-text-image-primary-background: #694BB4;
+    --color-text-image-primary-text: #FFFFFF;
+    --color-text-image-secondary-background: #3171DE;
+    --color-text-image-secondary-text: #FFFFFF;
+    --color-text-image-dark-background: #11243E;
+    --color-text-image-dark-text: #FFFFFF;
+  }
+}

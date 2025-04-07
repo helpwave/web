@@ -1,7 +1,7 @@
 import type { Customer } from '@/api/dataclasses/customer'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { SolidButton } from '@helpwave/common/components/Button'
 

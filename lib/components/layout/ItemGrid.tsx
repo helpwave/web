@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { Check } from 'lucide-react'
 
 type ItemGridProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {

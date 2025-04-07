@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'

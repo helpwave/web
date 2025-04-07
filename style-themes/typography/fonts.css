@@ -1,0 +1,10 @@
+@layer base {
+  :root {
+    --font-inter: 'Inter', sans-serif;
+    --font-space: 'Space Grotesk', sans-serif;
+  }
+
+  body {
+    font-family: var(--font-inter), sans-serif;
+  }
+}

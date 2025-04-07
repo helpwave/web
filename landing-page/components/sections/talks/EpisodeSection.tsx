@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'

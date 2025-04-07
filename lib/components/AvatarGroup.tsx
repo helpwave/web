@@ -1,6 +1,6 @@
 import type { AvatarProps, AvatarSize } from './Avatar'
 import { Avatar, avtarSizeMapping } from './Avatar'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 
 export type AvatarGroupProps = {
   avatars: Omit<AvatarProps, 'size'>[],

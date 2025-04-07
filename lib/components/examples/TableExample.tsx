@@ -7,7 +7,7 @@ import {
   removeFromTableSelection,
   Table
 } from '../Table'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import { Input } from '../user-input/Input'
 import { SolidButton } from '../Button'
 import { SortButton } from '../SortButton'

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { useState } from 'react'
 import { LanguageModal } from '../modals/LanguageModal'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import type { Languages } from '../../hooks/useLanguage'
 import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'

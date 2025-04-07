@@ -1,5 +1,5 @@
 import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import type { Languages } from '../hooks/useLanguage'

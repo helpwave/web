@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 
 export type Crumb = {
   display: string,

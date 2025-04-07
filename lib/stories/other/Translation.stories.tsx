@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 
 type TranslationExampleTranslation = {
   welcome: string,

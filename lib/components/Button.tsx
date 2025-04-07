@@ -1,10 +1,10 @@
 import type { PropsWithChildren, ButtonHTMLAttributes, ReactNode } from 'react'
-import { tx } from '@helpwave/color-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 import type {
   OutlineButtonColor,
   SolidButtonColor,
   TextButtonColor
-} from '@helpwave/color-themes/twind/theme-variables'
+} from '@helpwave/style-themes/twind/theme-variables'
 
 type ButtonSizes = 'small' | 'medium' | 'large'
 

@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'

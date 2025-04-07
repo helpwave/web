@@ -49,7 +49,7 @@ const fileName = `${componentName}.${options.fileType}`
 filePath = path.resolve(dir, fileName)
 
 const imports = {
-  standard: `import { tw } from '@helpwave/color-themes/twind'`,
+  standard: `import { tw } from '@helpwave/style-themes/twind'`,
   translation: `import type { Languages } from '@helpwave/common/hooks/useLanguage'\n` +
     `import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'`
 }

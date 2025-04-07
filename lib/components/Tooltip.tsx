@@ -1,6 +1,6 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { tx } from '@helpwave/color-themes/twind'
 import { useHoverState } from '../hooks/useHoverState'
+import { classCombiner } from '../util/classCombiner'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -61,10 +61,10 @@ export const Tooltip = ({
 
   const triangleSize = 6
   const triangleClasses = {
-    top: `top-full left-1/2 -translate-x-1/2 border-t-${borderColor} border-l-transparent border-r-transparent`,
-    bottom: `bottom-full left-1/2 -translate-x-1/2 border-b-${borderColor} border-l-transparent border-r-transparent`,
-    left: `left-full top-1/2 -translate-y-1/2 border-l-${borderColor} border-t-transparent border-b-transparent`,
-    right: `right-full top-1/2 -translate-y-1/2 border-r-${borderColor} border-t-transparent border-b-transparent`
+    top: `top-full left-1/2 -translate-x-1/2 border-t-gray-600 border-l-transparent border-r-transparent`,
+    bottom: `bottom-full left-1/2 -translate-x-1/2 border-b-gray-600 border-l-transparent border-r-transparent`,
+    left: `left-full top-1/2 -translate-y-1/2 border-l-gray-600 border-t-transparent border-b-transparent`,
+    right: `right-full top-1/2 -translate-y-1/2 border-r-gray-600 border-t-transparent border-b-transparent`
   }
 
   const triangleStyle: Record<Position, CSSProperties> = {
@@ -76,7 +76,7 @@ export const Tooltip = ({
 
   return (
     <div
-      className={tx(`relative inline-block`, containerClassName)}
+      className={classCombiner('relative inline-block', containerClassName)}
       {...handlers}
     >
       {children}

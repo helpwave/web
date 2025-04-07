@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+@import 'themes/variants.css';
+@import 'themes/base.css';
+@import 'themes/light-theme.css';
+@import 'themes/dark-theme.css';
+@import 'components/layout.css';
+@import 'components/texts.css';
+@import 'typography/fonts.css';
+@import 'utilities/animations.css';

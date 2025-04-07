@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import { Plus } from 'lucide-react'
 import { Card, type CardProps } from '@helpwave/common/components/Card'
 

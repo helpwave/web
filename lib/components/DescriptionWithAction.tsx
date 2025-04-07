@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Tag } from 'lucide-react'
-import { tx, tw } from '@helpwave/color-themes/twind'
+import { tx, tw } from '@helpwave/style-themes/twind'
 import { noop } from '../util/noop'
 import { SolidButton } from './Button'
 

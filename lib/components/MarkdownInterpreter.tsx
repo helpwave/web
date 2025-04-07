@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 
 type ASTNodeModifierType = 'none'| 'italic'| 'bold'| 'underline'| 'font-space'| 'primary'| 'secondary'| 'warn'| 'positive'| 'negative'
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ModalRegister } from '../modals/ModalRegister'
 import { ConfirmDialog } from '../modals/ConfirmDialog'
 import { SolidButton } from '../Button'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import { modalRootName } from '../modals/Modal'
 
 /**

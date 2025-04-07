@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { Card, type CardProps } from '@helpwave/common/components/Card'
 import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator'
 import { LockIcon } from 'lucide-react'

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { tx } from '@helpwave/color-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 
 export const avtarSizeList = ['tiny', 'small', 'medium', 'large'] as const
 export type AvatarSize = typeof avtarSizeList[number]

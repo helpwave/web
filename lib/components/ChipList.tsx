@@ -1,6 +1,6 @@
 import type { HTMLProps, PropsWithChildren, ReactNode } from 'react'
-import { tw, tx } from '@helpwave/color-themes/twind'
-import type { ChipColor } from '@helpwave/color-themes/twind/theme-variables'
+import { tw, tx } from '@helpwave/style-themes/twind'
+import type { ChipColor } from '@helpwave/style-themes/twind/theme-variables'
 
 type ChipVariant = 'normal' | 'fullyRounded'
 

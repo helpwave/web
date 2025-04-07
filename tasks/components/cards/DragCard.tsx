@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { tx } from '@helpwave/color-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 import { Card, type CardProps } from '@helpwave/common/components/Card'
 
 export type CardDragProperties = {

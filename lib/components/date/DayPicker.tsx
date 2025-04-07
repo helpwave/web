@@ -1,7 +1,7 @@
 import type { WeekDay } from '../../util/date'
 import { equalDate, getWeeksForCalenderMonth } from '../../util/date'
 import { noop } from '../../util/noop'
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { useLocale } from '../../hooks/useLanguage'
 
 export type DayPickerProps = {

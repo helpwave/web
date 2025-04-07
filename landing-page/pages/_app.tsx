@@ -1,5 +1,5 @@
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
-import { tw } from '@helpwave/color-themes/twind'
+import { tw } from '@helpwave/style-themes/twind'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
@@ -8,8 +8,8 @@ import { usePathname } from 'next/navigation'
 import { Toaster } from 'react-hot-toast'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
-import withNextApp from '@helpwave/color-themes/twind/next/app'
-import config from '@helpwave/color-themes/twind/config'
+import withNextApp from '@helpwave/style-themes/twind/next/app'
+import config from '@helpwave/style-themes/twind/config'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 

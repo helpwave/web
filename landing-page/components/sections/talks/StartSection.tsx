@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { Link as LinkIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'

@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/color-themes/twind'
+import { tw, tx } from '@helpwave/style-themes/twind'
 import { Helpwave } from '../icons/Helpwave'
 import { Tile } from './layout/Tile'
 

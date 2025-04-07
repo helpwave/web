@@ -2,7 +2,7 @@ import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import { Helpwave } from '../icons/Helpwave'
-import { tx } from '@helpwave/color-themes/twind'
+import { tx } from '@helpwave/style-themes/twind'
 
 type LoadingAnimationTranslation = {
   loading: string,

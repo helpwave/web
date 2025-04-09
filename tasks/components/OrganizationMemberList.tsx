@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -108,7 +108,7 @@ export const OrganizationMemberList = ({
   }
 
   return (
-    <div className={tw('flex flex-col')}>
+    <div className={clsx('flex flex-col')}>
       <ConfirmDialog
         id="organizationMemberList-DeleteDialog"
         title={translation.deleteConfirmText(hasSelectedMultiple)}
@@ -132,12 +132,12 @@ export const OrganizationMemberList = ({
       <LoadingAndErrorComponent
         hasError={(isError || !data) && !members}
         isLoading={!members && isLoading}
-        errorProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
-        loadingProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
+        errorProps={{ classname: clsx('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
+        loadingProps={{ classname: clsx('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
       >
-        <div className={tw('flex flex-row justify-between items-center mb-2')}>
-          <span className={tw('textstyle-table-name')}>{translation.members + ` (${usedMembers.length})`}</span>
-          <div className={tw('flex flex-row gap-x-2')}>
+        <div className={clsx('flex flex-row justify-between items-center mb-2')}>
+          <span className={clsx('textstyle-table-name')}>{translation.members + ` (${usedMembers.length})`}</span>
+          <div className={clsx('flex flex-row gap-x-2')}>
             {tableState.selection && tableState.selection.currentSelection.length > 0 && (
               <SolidButton
                 onClick={() => setDeleteDialogState({ isShowing: true })}
@@ -152,33 +152,33 @@ export const OrganizationMemberList = ({
           data={usedMembers}
           stateManagement={[tableState, setTableState]}
           header={[
-            <div key="member" className={tw('flex flex-row')}>
-              <span className={tw('textstyle-table-header')}>{translation.member}</span>
+            <div key="member" className={clsx('flex flex-row')}>
+              <span className={clsx('textstyle-table-header')}>{translation.member}</span>
             </div>,
-            <div key="role" className={tw('flex flex-row')}>
-              <span className={tw('textstyle-table-header')}>{translation.role}</span>
+            <div key="role" className={clsx('flex flex-row')}>
+              <span className={clsx('textstyle-table-header')}>{translation.role}</span>
             </div>,
             <></>
           ]}
           rowMappingToCells={orgMember => [
-            <div key="member" className={tw('flex flex-row items-center h-12 overflow-hidden max-w-[200px]')}>
+            <div key="member" className={clsx('flex flex-row items-center h-12 overflow-hidden max-w-[200px]')}>
               <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
-              <div className={tw('flex flex-col ml-2')}>
-                <span className={tw('font-bold truncate')}>{orgMember.name}</span>
+              <div className={clsx('flex flex-col ml-2')}>
+                <span className={clsx('font-bold truncate')}>{orgMember.name}</span>
                 <a href={`mailto:${orgMember.email}`}>
-                  <span className={tw('textstyle-description text-sm truncate')}>{orgMember.email}</span>
+                  <span className={clsx('textstyle-description text-sm truncate')}>{orgMember.email}</span>
                 </a>
               </div>
             </div>,
-            <div key="role" className={tw('flex flex-row items-center mr-2')}>
-              <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
+            <div key="role" className={clsx('flex flex-row items-center mr-2')}>
+              <button className={clsx('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
               }}>
-                <span className={tw(`font-semibold`)}>
+                <span className={clsx(`font-semibold`)}>
                   {'N.A.' /* translation.roleTypes[orgMember.role] */}
                 </span>
               </button>
             </div>,
-            <div key="remove" className={tw('flex flex-row justify-end')}>
+            <div key="remove" className={clsx('flex flex-row justify-end')}>
               <SolidButton
                 onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
                 color="hw-negative"

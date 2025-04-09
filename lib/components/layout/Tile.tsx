@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Image from 'next/image'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export type TileProps = {
   title: { value: string, className?: string },
@@ -21,12 +21,12 @@ export const Tile = ({
   className
 }: TileProps) => {
   return (
-    <div className={tx('flex flex-row gap-x-4 w-full items-center', className)}>
+    <div className={clsx('flex flex-row gap-x-4 w-full items-center', className)}>
       {prefix}
-      <div className={tw('flex flex-col w-full')}>
-        <span className={tx(title.className)}>{title.value}</span>
+      <div className={clsx('flex flex-col w-full')}>
+        <span className={clsx(title.className)}>{title.value}</span>
         {!!description &&
-          <span className={tx(description.className ?? 'textstyle-description')}>{description.value}</span>}
+          <span className={clsx(description.className ?? 'textstyle-description')}>{description.value}</span>}
       </div>
       {suffix}
     </div>
@@ -56,7 +56,7 @@ export const TileWithImage = ({
   imageClassName = '',
   ...tileProps
 }: TileWithImageProps) => {
-  const image = <Image src={url} alt="" {...imageSize} className={tx(imageClassName)}/>
+  const image = <Image src={url} alt="" {...imageSize} className={clsx(imageClassName)}/>
   return (
     <Tile
       {...tileProps}

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import React from 'react'
+import clsx from 'clsx'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '../../util/array'
@@ -7,23 +8,7 @@ import { clamp } from '../../util/math'
 import { EaseFunctions } from '../../util/easeFunctions'
 import type { Direction } from '../../util/loopingArray'
 import { LoopingArrayCalculator } from '../../util/loopingArray'
-import type { ScreenTypes } from '../../twind/config'
 
-type Heights = Record<ScreenTypes, number>
-
-const defaultHeights: Heights = {
-  desktop: 350,
-  tablet: 400,
-  mobile: 350,
-}
-
-type ItemWidths = Record<ScreenTypes, string | undefined>
-
-const defaultItemWidths: ItemWidths = {
-  desktop: '50%',
-  tablet: '70%',
-  mobile: '70%',
-}
 
 type CarouselProps = {
   children: ReactNode[],
@@ -39,9 +24,7 @@ type CarouselProps = {
    * Percentage that is allowed to be scrolled further
    */
   overScrollThreshold?: number,
-  heights?: Partial<Heights>,
   blurColor?: string,
-  itemWidths?: ItemWidths,
   className?: string,
 }
 
@@ -86,9 +69,7 @@ export const Carousel = ({
   arrows = false,
   dots = true,
   overScrollThreshold = 0.1,
-  heights = defaultHeights,
-  blurColor = 'white',
-  itemWidths = defaultItemWidths,
+  blurColor = 'from-white',
   className = ''
 }: CarouselProps) => {
   if (isAutoLooping && !isLooping) {
@@ -114,9 +95,6 @@ export const Carousel = ({
   const currentIndex = util.getCorrectedPosition(LoopingArrayCalculator.withoutOffset(currentPosition))
   animationTime = Math.max(200, animationTime) // in ms, must be > 0
   autoLoopAnimationTime = Math.max(200, autoLoopAnimationTime)
-
-  heights = { ...defaultHeights, ...heights }
-  itemWidths = { ...defaultItemWidths, ...itemWidths }
 
   const getStyleOffset = (index: number) => {
     const baseOffset = -50 + (index - currentPosition) * 100
@@ -279,7 +257,7 @@ export const Carousel = ({
     ]
   }
 
-  const height = `desktop:h-[${heights?.desktop}px] tablet:h-[${heights?.tablet}px] mobile:h-[${heights?.mobile}px]`
+  const height = `desktop:h-[350px] tablet:h-[350px] mobile:h-[350px]`
 
   const onDragStart = (x: number) => setCarouselInformation(prevState => ({
     ...prevState,
@@ -347,18 +325,18 @@ export const Carousel = ({
   }
 
   return (
-    <div className={tw('flex flex-col items-center w-full gap-y-2')}>
-      <div className={tx(`relative w-full overflow-hidden`, height, className)}>
+    <div className={clsx('flex flex-col items-center w-full gap-y-2')}>
+      <div className={clsx(`relative w-full overflow-hidden`, height, className)}>
         {arrows && (
           <>
             <div
-              className={tx('absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg cursor-pointer border-black border-2', { hidden: !canGoLeft() })}
+              className={clsx('absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg cursor-pointer border-black border-2', { hidden: !canGoLeft() })}
               onClick={() => left()}
             >
               <ChevronLeft size={32}/>
             </div>
             <div
-              className={tx('absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg cursor-pointer border-black border-2', { hidden: !canGoRight() })}
+              className={clsx('absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg cursor-pointer border-black border-2', { hidden: !canGoRight() })}
               onClick={() => right()}
             >
               <ChevronRight size={32}/>
@@ -366,15 +344,15 @@ export const Carousel = ({
           </>
         )}
         {hintNext ? (
-          <div className={tx(`relative flex flex-row`, height)}>
-            <div className={tw('relative flex flex-row w-full px-2 overflow-hidden')}>
+          <div className={clsx(`relative flex flex-row`, height)}>
+            <div className={clsx('relative flex flex-row w-full px-2 overflow-hidden')}>
               {items.map(({
                 item,
                 index
               }, listIndex) => (
                 <div
                   key={listIndex}
-                  className={tx(`absolute left-[50%] desktop:w-[${itemWidths?.desktop}] tablet:w-[${itemWidths?.tablet}] mobile:w-[${itemWidths?.mobile}] h-full overflow-hidden`, { '!cursor-grabbing': !!dragState })}
+                  className={clsx(`absolute left-[50%] desktop:w-[50%] tablet:w-[70%] mobile:w-[70%] h-full overflow-hidden`, { '!cursor-grabbing': !!dragState })}
                   style={{ translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
                   {...dragHandlers}
                   onClick={() => startAnimation(index)}
@@ -384,25 +362,25 @@ export const Carousel = ({
               ))}
             </div>
             <div
-              className={tw(`hidden pointer-events-none desktop:block absolute left-0 h-full w-[20%] bg-gradient-to-r from-${blurColor} to-transparent`)}
+              className={clsx(`hidden pointer-events-none desktop:block absolute left-0 h-full w-[20%] bg-gradient-to-r to-transparent`, blurColor)}
             />
             <div
-              className={tw(`hidden pointer-events-none desktop:block absolute right-0 h-full w-[20%] bg-gradient-to-l from-${blurColor} to-transparent`)}
+              className={clsx(`hidden pointer-events-none desktop:block absolute right-0 h-full w-[20%] bg-gradient-to-l to-transparent`, blurColor)}
             />
           </div>
         ) : (
-          <div className={tx('px-16 h-full', { '!cursor-grabbing': !!dragState })} {...dragHandlers}>
+          <div className={clsx('px-16 h-full', { '!cursor-grabbing': !!dragState })} {...dragHandlers}>
             {children[currentIndex]}
           </div>
         )}
       </div>
       {dots && (
         <div
-          className={tw('flex flex-row w-full items-center justify-center gap-x-2 my-2')}>
+          className={clsx('flex flex-row w-full items-center justify-center gap-x-2 my-2')}>
           {range(0, length - 1).map(index => (
             <div
               key={index}
-              className={tx('hover:!bg-hw-primary-300 cursor-pointer first:rounded-l-md last:rounded-r-md min-w-[32px] min-h-[12px]', {
+              className={clsx('hover:!bg-hw-primary-300 cursor-pointer first:rounded-l-md last:rounded-r-md min-w-[32px] min-h-[12px]', {
                 '!bg-gray-200': currentIndex !== index,
                 '!bg-hw-primary-300/80': currentIndex === index
               })}

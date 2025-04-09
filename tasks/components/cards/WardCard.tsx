@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Bed } from 'lucide-react'
 import type { WardOverviewDTO } from '@helpwave/api-services/types/tasks/wards'
 import { PillLabelBox } from '../pill/PillLabelBox'
@@ -17,12 +17,12 @@ export const WardCard = ({
   ...editCardProps
 }: WardCardProps) => {
   return (
-    <EditCard className={tx('group cursor-pointer', className)} {...editCardProps}>
-      <div className={tw('flex flex-col gap-y-2')}>
-        <div className={tw('flex flex-row w-full overflow-hidden')}>
-          <span className={tw('textstyle-title-sm flex-1 truncate')}>{ward.name}</span>
+    <EditCard className={clsx('group cursor-pointer', className)} {...editCardProps}>
+      <div className={clsx('flex flex-col gap-y-2')}>
+        <div className={clsx('flex flex-row w-full overflow-hidden')}>
+          <span className={clsx('textstyle-title-sm flex-1 truncate')}>{ward.name}</span>
         </div>
-        <div className={tw('flex flex-row gap-x-1')}>
+        <div className={clsx('flex flex-row gap-x-1')}>
           <Bed/>
           <span>{ward.bedCount}</span>
         </div>

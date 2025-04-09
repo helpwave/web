@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import { Select } from '@helpwave/common/components/user-input/Select'
@@ -89,18 +89,18 @@ const Footer = () => {
   }, [])
 
   return (
-    <div className={tw('w-screen bg-black text-white py-8 flex flex-col items-center justify-center')}>
-      <div className={tw('flex flex-wrap w-full max-w-[900px] mobile:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
+    <div className={clsx('w-screen bg-black text-white py-8 flex flex-col items-center justify-center')}>
+      <div className={clsx('flex flex-wrap w-full max-w-[900px] mobile:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
         {grouping.map((groups, index) => (
-          <div key={index} className={tw('flex flex-col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
+          <div key={index} className={clsx('flex flex-col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
             {groups.map((category) => (
               <FooterLinkGroup key={category} title={translation[category] } links={linkGroups[category]} />
             ))}
             {index === 2 && (
                 <Select<Languages>
-                  className={tw('w-fit')}
-                  textColor={tw('text-white bg-transparent')}
-                  hoverColor={tw('hover:text-white')}
+                  className={clsx('w-fit')}
+                  textColor={clsx('text-white bg-transparent')}
+                  hoverColor={clsx('hover:text-white')}
                   value={language}
                   onChange={(language) => setLanguage(language)}
                   options={[
@@ -113,9 +113,9 @@ const Footer = () => {
         ))}
       </div>
       <div
-        className={tw('flex flex-row justify-center w-full h-[128px] items-center justify-center mx-auto font-space')}>
+        className={clsx('flex flex-row justify-center w-full h-[128px] items-center justify-center mx-auto font-space')}>
         <Helpwave color="white" size={128}/>
-        <span className={tw('textstyle-title-normal')}>&copy; {year} helpwave</span>
+        <span className={clsx('textstyle-title-normal')}>&copy; {year} helpwave</span>
       </div>
     </div>
   )

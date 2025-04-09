@@ -1,6 +1,6 @@
 import type { SelectProps } from '@helpwave/common/components/user-input/Select'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { SearchableSelect } from '@helpwave/common/components/user-input/SearchableSelect'
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 
@@ -33,7 +33,7 @@ export const AssigneeSelect = ({
           label: value.name
         }))}
         isHidingCurrentValue={isHidingCurrentValue}
-        className={tx('w-full', className)}
+        className={clsx('w-full', className)}
         searchMapping={value => [value.value.id, value.value.email]}
         onChange={(user) => {
           onChange(user.id)

@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -91,7 +91,7 @@ export const PropertyDetails = ({
   const { step } = stepper
 
   return (
-    <div className={tw('py-4 px-6 flex flex-col gap-y-4 bg-gray-100 min-h-full')}>
+    <div className={clsx('py-4 px-6 flex flex-col gap-y-4 bg-gray-100 min-h-full')}>
       <ConfirmDialog
         id="confirmArchiveModal"
         isOpen={showArchiveConfirm}
@@ -105,8 +105,8 @@ export const PropertyDetails = ({
         onBackgroundClick={() => setArchiveConfirm(false)}
         confirmType="negative"
       />
-      <div className={tw('top-0 flex flex-row justify-between items-center')}>
-        <span className={tw('textstyle-title-lg')}>{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
+      <div className={clsx('top-0 flex flex-row justify-between items-center')}>
+        <span className={clsx('textstyle-title-lg')}>{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
         {!isCreatingNewProperty && (
           <SolidButton
             variant="text"
@@ -189,7 +189,7 @@ export const PropertyDetails = ({
             disabled: isCreatingNewProperty && step !== 1 && step !== lastStep
           }}
         />
-        <div className={tw('flex grow')}></div>
+        <div className={clsx('flex grow')}></div>
         {isCreatingNewProperty && (
           <StepperBar
             stepper={stepper}
@@ -197,7 +197,7 @@ export const PropertyDetails = ({
             onFinish={() => {
               propertyCreateMutation.mutate(value)
             }}
-            className={tw('sticky bottom-4 right-6 left-6 bg-white')}
+            className={clsx('sticky bottom-4 right-6 left-6 bg-white')}
           />
         )}
       </LoadingAndErrorComponent>

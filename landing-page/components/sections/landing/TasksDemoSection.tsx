@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
@@ -48,14 +48,14 @@ export const TasksDemoSection = () => {
   const imageURL = 'https://cdn.helpwave.de/products/tasks_preview.png'
   return (
     <SectionBase
-      className={tw('flex flex-col items-center gap-y-20 w-full')}
-      outerClassName={tw('pb-0')}
+      className={clsx('flex flex-col items-center gap-y-20 w-full')}
+      outerClassName={clsx('pb-0')}
     >
-      <div className={tw('flex flex-col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
-        <div className={tw('flex flex-col gap-y-4 desktop:max-w-[70%]')}>
-          <HelpwaveBadge className={tw('!text-hw-primary-800 !bg-hw-primary-200 !w-fit')} title={translation.helpwaveTasks}/>
-          <span className={tw('textstyle-title-lg')}>{translation.workflowManagement}</span>
-          <ItemGrid columns={1} className={tw('font-medium mt-2')}>
+      <div className={clsx('flex flex-col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
+        <div className={clsx('flex flex-col gap-y-4 desktop:max-w-[70%]')}>
+          <HelpwaveBadge className={clsx('!text-hw-primary-800 !bg-hw-primary-200 !w-fit')} title={translation.helpwaveTasks}/>
+          <span className={clsx('textstyle-title-lg')}>{translation.workflowManagement}</span>
+          <ItemGrid columns={1} className={clsx('font-medium mt-2')}>
             {translation.feature1}
             {translation.feature2}
             {translation.feature3}
@@ -64,7 +64,7 @@ export const TasksDemoSection = () => {
         </div>
         <Link
           href={demoURL}
-          className={tw('bg-white rounded-lg text-lg font-bold text-hw-secondary-800 h-min px-6 py-2')}
+          className={clsx('bg-white rounded-lg text-lg font-bold text-hw-secondary-800 h-min px-6 py-2')}
           style={{ textWrap: 'nowrap' }} // TODO does not seem supported by the current twind version (throws warnings for text-nowrap)
         >
           {translation.tryDemo}
@@ -73,7 +73,7 @@ export const TasksDemoSection = () => {
       <Image
         src={imageURL}
         alt=""
-        className={tw('w-full rounded-t-2xl max-w-[1000px]')}
+        className={clsx('w-full rounded-t-2xl max-w-[1000px]')}
         style={{ transform: 'scale(101.28051%, 102.6862%) translate(-0.640255%, -1.3431%)' }}
         width={2351}
         height={1246}

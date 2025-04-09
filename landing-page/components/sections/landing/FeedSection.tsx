@@ -1,8 +1,8 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 const FeedSection = () => {
   return (
-        <div className={tw('m-auto py-16 relative flex mobile:flex-wrap gap-16')}>
+        <div className={clsx('m-auto py-16 relative flex mobile:flex-wrap gap-16')}>
 
     </div>
   )

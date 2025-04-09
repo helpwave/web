@@ -1,4 +1,4 @@
-@import "variants.css";
+@import "./variants.css";
 
 @layer base {
   @variant dark {
@@ -110,6 +110,9 @@
     --color-button-solid-warning-background: #EA9E40;
     --color-button-solid-warning-icon: #FFFFFF;
     --color-button-solid-warning-text: #FFFFFF;
+    --color-button-solid-negative-background: #DC576D;
+    --color-button-solid-negative-icon: #FFFFFF;
+    --color-button-solid-negative-text: #FFFFFF;
 
     --color-button-text-neutral-text: #333333;
     --color-button-text-neutral-icon: #333333;

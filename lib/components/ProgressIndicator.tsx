@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export type ProgressIndicatorProps = {
   /*
@@ -36,12 +36,12 @@ export const ProgressIndicator = ({ progress, strokeWidth = 5, size = 'medium', 
     rotation += 360 * progress
   }
   return (
-    <svg className={tw(`h-[${currentSize}px] w-[${currentSize}px] transform rotate-[${rotation}deg]`)}>
+    <svg className={clsx(`h-[${currentSize}px] w-[${currentSize}px] transform rotate-[${rotation}deg]`)}>
       <circle cx={center} cy={center} r={radius} fill="transparent" strokeWidth={strokeWidth}
-        className={tw('stroke-hw-primary-400')}
+        className={clsx('stroke-hw-primary-400')}
       />
       <circle cx={center} cy={center} r={radius} fill="transparent" strokeWidth={strokeWidth}
-        strokeDasharray={arcLength} strokeDashoffset={arcOffset} className={tw('stroke-gray-300')}
+        strokeDasharray={arcLength} strokeDashoffset={arcOffset} className={clsx('stroke-gray-300')}
       />
     </svg>
   )

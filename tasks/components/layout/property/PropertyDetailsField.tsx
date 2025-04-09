@@ -6,7 +6,7 @@ import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -60,11 +60,11 @@ export const PropertySelectOptionsUpdater = ({
   }, [value])
 
   return (
-    <div className={tw('flex flex-col mt-2 gap-y-1')}>
-      <div className={tw('flex flex-row justify-between items-center')}>
-        <span className={tw('textstyle-label-md')}>{translation.values}</span>
+    <div className={clsx('flex flex-col mt-2 gap-y-1')}>
+      <div className={clsx('flex flex-row justify-between items-center')}>
+        <span className={clsx('textstyle-label-md')}>{translation.values}</span>
         <Plus
-          className={tw('text-white bg-hw-primary-400 hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
+          className={clsx('text-white bg-hw-primary-400 hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
           size={20}
           onClick={() => {
             onChange({ ...data }, { ...update, create: update.create + 1 })
@@ -72,9 +72,9 @@ export const PropertySelectOptionsUpdater = ({
         />
       </div>
       <Scrollbars autoHide autoHeight autoHeightMax={400}>
-        <div className={tw('flex flex-col gap-y-2 mr-3')}>
+        <div className={clsx('flex flex-col gap-y-2 mr-3')}>
           {data.options.map((entry, index) => (
-            <div key={index} className={tw('flex flex-row items-center justify-between gap-x-4')}>
+            <div key={index} className={clsx('flex flex-row items-center justify-between gap-x-4')}>
               <Input
                 value={entry.name ?? ''}
                 placeholder={`${translation.newEntry} ${index + 1}`}
@@ -97,7 +97,7 @@ export const PropertySelectOptionsUpdater = ({
                 }}
               />
               <X
-                className={tw('text-hw-negative-400 hover:text-hw-negative-600')}
+                className={clsx('text-hw-negative-400 hover:text-hw-negative-600')}
                 size={20}
                 onClick={() => {
                   const newList = data.options.filter((_, index1) => index1 !== index)
@@ -208,7 +208,7 @@ export const PropertyDetailsField = ({
               size={20}
             />
           )}
-          className={tw('mt-4')}
+          className={clsx('mt-4')}
         />
       )}
     </InputGroup>

@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -43,16 +43,16 @@ export const KanbanHeader = ({
 }: PropsForTranslation<KanbanHeaderTranslation, KanbanHeaderProps>) => {
   const translation = useTranslation(defaultKanbanHeaderTranslations, overwriteTranslation)
   return (
-    <div className={tw('flex flex-row justify-between items-center')}>
-      <span className={tw('textstyle-table-name')}>{translation.tasks}</span>
-      <div className={tw('flex flex-row gap-x-6')}>
-        <div className={tw('flex flex-row gap-x-2 items-center hidden')}>
+    <div className={clsx('flex flex-row justify-between items-center')}>
+      <span className={clsx('textstyle-table-name')}>{translation.tasks}</span>
+      <div className={clsx('flex flex-row gap-x-6')}>
+        <div className={clsx('flex flex-row gap-x-2 items-center hidden')}>
           {translation.status}
-          <ChevronDown className={tw('stroke-black')}/>
+          <ChevronDown className={clsx('stroke-black')}/>
         </div>
-        <div className={tw('flex flex-row gap-x-2 items-center hidden')}>
+        <div className={clsx('flex flex-row gap-x-2 items-center hidden')}>
           {translation.label}
-          <ChevronDown className={tw('stroke-black')}/>
+          <ChevronDown className={clsx('stroke-black')}/>
         </div>
         <Input id="search" value={searchValue} placeholder={translation.search} onChange={onSearchChange}/>
       </div>

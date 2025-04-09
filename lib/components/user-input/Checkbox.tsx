@@ -2,7 +2,7 @@ import { useState } from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { Check, Minus } from 'lucide-react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 
@@ -41,7 +41,7 @@ const ControlledCheckbox = ({
   const innerIconSize = usedSize - 4
 
   return (
-    <div className={tw('flex justify-center items-center space-x-2')}>
+    <div className={clsx('flex justify-center items-center space-x-2')}>
       <CheckboxPrimitive.Root
         onCheckedChange={checked => {
           if (onChangeTristate) {
@@ -54,7 +54,7 @@ const ControlledCheckbox = ({
         checked={checked}
         disabled={disabled}
         id={id}
-        className={tx(`w-[${usedSize}px] h-[${usedSize}px] flex items-center border border-2 border-gray-300 rounded outline-none focus:border-hw-primary-500`, {
+        className={clsx(`w-[${usedSize}px] h-[${usedSize}px] flex items-center border border-2 border-gray-300 rounded outline-none focus:border-hw-primary-500`, {
           'text-gray-400': disabled,
           'bg-hw-primary-300 border-hw-primary-500 hover:border-hw-primary-700 text-hw-primary-500': checked === true || checked === 'indeterminate',
           'bg-white hover:border-gray-400 focus:hover:border-hw-primary-700': !checked

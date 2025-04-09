@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export const avtarSizeList = ['tiny', 'small', 'medium', 'large'] as const
 export type AvatarSize = typeof avtarSizeList[number]
@@ -23,20 +23,33 @@ export type AvatarProps = {
 const Avatar = ({ avatarUrl, alt, size = 'medium', className = '' }: AvatarProps) => {
   // TODO remove later
   avatarUrl = 'https://cdn.helpwave.de/boringavatar.svg'
-  const usedSize = avtarSizeMapping[size]
+
+  const avtarSize = {
+    tiny: 24,
+    small: 32,
+    medium: 48,
+    large: 64,
+  }[size]
+
+  const style = {
+    width: avtarSize + 'px',
+    height: avtarSize + 'px',
+    maxWidth: avtarSize + 'px',
+    maxHeight: avtarSize + 'px',
+    minWidth: avtarSize + 'px',
+    minHeight: avtarSize + 'px',
+  }
+
   return (
     // TODO transparent or white background later
-    <div
-      className={tx(`@(rounded-full bg-hw-primary-400 h-[${usedSize}px] w-[${usedSize}px] min-h-[${usedSize}px] min-w-[${usedSize}px])`, className)}>
+    <div className={clsx(`rounded-full bg-primary`, className)} style={style}>
       <Image
-        className={tx(
-          'rounded-full border border-slate-200 group-hover:border-indigo-200 flex justify-evenly items-center',
-          `h-[${usedSize}px] w-[${usedSize}px] min-h-[${usedSize}px] min-w-[${usedSize}px]`
-        )}
+        className={clsx('rounded-full border border-gray-200')}
+        style={style}
         src={avatarUrl}
         alt={alt}
-        width={usedSize}
-        height={usedSize}
+        width={avtarSize}
+        height={avtarSize}
       />
     </div>
   )

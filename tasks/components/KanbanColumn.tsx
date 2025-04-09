@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useDroppable } from '@dnd-kit/core'
@@ -50,7 +50,7 @@ export const KanbanColumn = ({
 
   return (
     <div
-      className={tx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver },
+      className={clsx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver },
         'flex flex-col gap-y-4 border-2 border-dashed rounded-lg p-2')}
     >
       <PillLabel count={tasks.length} taskStatus={type}/>
@@ -77,7 +77,7 @@ export const KanbanColumn = ({
           status: type,
           dueDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
         })}
-        className={tw('flex flex-row ml-1 gap-x-1 text-gray-300')}
+        className={clsx('flex flex-row ml-1 gap-x-1 text-gray-300')}
       >
         <Plus/>
         {translation.addTask}

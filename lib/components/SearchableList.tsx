@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '../hooks/useLanguage'
 import { useTranslation } from '../hooks/useTranslation'
 import type { PropsForTranslation } from '../hooks/useTranslation'
@@ -51,19 +51,19 @@ export const SearchableList = <T, >({
   const filteredEntries = useMemo(() => MultiSearchWithMapping(search, list, searchMapping), [search, list, searchMapping])
 
   return (
-    <div className={tx('flex flex-col gap-y-2', className)}>
-      <div className={tw('flex flex-row justify-between gap-x-2 items-center')}>
-        <div className={tw('flex-1')}>
+    <div className={clsx('flex flex-col gap-y-2', className)}>
+      <div className={clsx('flex flex-row justify-between gap-x-2 items-center')}>
+        <div className={clsx('flex-1')}>
           <Input value={search} onChange={setSearch} placeholder={translation.search}/>
         </div>
         <Search size={20}/>
       </div>
       {filteredEntries.length > 0 && (
-        <div className={tx('flex flex-col gap-y-1')}>
+        <div className={clsx('flex flex-col gap-y-1')}>
           {filteredEntries.map(itemMapper)}
         </div>
       )}
-      {!filteredEntries.length && <div className={tw('flex flex-row justify-center')}>{translation.nothingFound}</div>}
+      {!filteredEntries.length && <div className={clsx('flex flex-row justify-center')}>{translation.nothingFound}</div>}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -103,8 +103,8 @@ export const OrganizationForm = ({
   const maxLongNameLength = 64
   const maxMailLength = 320
 
-  const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
-  const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
+  const inputErrorClasses = clsx('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
+  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateShortName(organization: OrganizationMinimalDTO) {
     const shortName = organization.shortName.trim()
@@ -153,11 +153,11 @@ export const OrganizationForm = ({
   return (
     <LoadingAndErrorComponent
       isLoading={!organizationForm}
-      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[350px]') }}
+      loadingProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[350px]') }}
       minimumLoadingDuration={200} // prevents errors flickering
     >
-      <span className={tw('textstyle-title-normal')}>{translation.general}</span>
-      <div className={tw('mt-2 mb-1')}>
+      <span className={clsx('textstyle-title-normal')}>{translation.general}</span>
+      <div className={clsx('mt-2 mb-1')}>
         <Input
           id="shortName"
           value={organizationForm.organization.shortName}
@@ -166,12 +166,12 @@ export const OrganizationForm = ({
           onChange={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, false, { ...organizationForm.touched })}
           onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, true, { ...organizationForm.touched, shortName: true })}
           maxLength={maxShortNameLength}
-          className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
+          className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <span className={tw('textstyle-form-error')}>{shortNameErrorMessage}</span>}
+        {isDisplayingShortNameError && <span className={clsx('textstyle-form-error')}>{shortNameErrorMessage}</span>}
       </div>
-      <span className={tw('textstyle-form-description')}>{translation.shortNameDescription}</span>
-      <div className={tw('mt-2 mb-1')}>
+      <span className={clsx('textstyle-form-description')}>{translation.shortNameDescription}</span>
+      <div className={clsx('mt-2 mb-1')}>
         <Input
           id="longName"
           value={organizationForm.organization.longName}
@@ -180,14 +180,14 @@ export const OrganizationForm = ({
           onChange={text => triggerOnChange({ ...organizationForm.organization, longName: text }, false, { ...organizationForm.touched })}
           onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, longName: text }, true, { ...organizationForm.touched, longName: true })}
           maxLength={maxLongNameLength}
-          className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
+          className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
-        {isDisplayingLongNameError && <span className={tw('textstyle-form-error')}>{longNameErrorMessage}</span>}
+        {isDisplayingLongNameError && <span className={clsx('textstyle-form-error')}>{longNameErrorMessage}</span>}
       </div>
-      <span className={tw('textstyle-form-description')}>{translation.longNameDescription}</span>
-      <div className={tw('mt-2 mb-1')}>
-        <div className={tw('flex flex-row items-end')}>
-          <div className={tw('flex-1 mr-2')}>
+      <span className={clsx('textstyle-form-description')}>{translation.longNameDescription}</span>
+      <div className={clsx('mt-2 mb-1')}>
+        <div className={clsx('flex flex-row items-end')}>
+          <div className={clsx('flex-1 mr-2')}>
             <Input
               id="email"
               value={organizationForm.organization.email}
@@ -197,17 +197,17 @@ export const OrganizationForm = ({
               onChange={text => triggerOnChange({ ...organizationForm.organization, email: text }, false, { ...organizationForm.touched })}
               onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, email: text }, true, { ...organizationForm.touched, email: true })}
               maxLength={maxMailLength}
-              className={tx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
+              className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
             />
           </div>
           {
             !organizationForm.organization.isVerified &&
-            <span className={tw('text-hw-negative-500 mb-3')}>{translation.notVerified}</span>
+            <span className={clsx('text-hw-negative-500 mb-3')}>{translation.notVerified}</span>
           }
         </div>
-        {isDisplayingEmailNameError && <span className={tw('textstyle-form-error')}>{emailErrorMessage}</span>}
+        {isDisplayingEmailNameError && <span className={clsx('textstyle-form-error')}>{emailErrorMessage}</span>}
       </div>
-      <span className={tw('textstyle-form-description')}>{translation.contactEmailDescription}</span>
+      <span className={clsx('textstyle-form-description')}>{translation.contactEmailDescription}</span>
     </LoadingAndErrorComponent>
   )
 }

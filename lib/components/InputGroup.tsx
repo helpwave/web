@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { tx, tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { noop } from '../util/noop'
 
 export type InputGroupProps = PropsWithChildren<{
@@ -32,9 +32,9 @@ export const InputGroup = ({
   }, [expanded])
 
   return (
-    <div className={tx('p-4 flex flex-col gap-y-4 bg-white rounded-xl', className)}>
+    <div className={clsx('p-4 flex flex-col gap-y-4 bg-white rounded-xl', className)}>
       <div
-        className={tx('flex flex-row justify-between items-center', {
+        className={clsx('flex flex-row justify-between items-center', {
           'cursor-pointer': isExpandable && !disabled,
           'cursor-not-allowed': disabled,
         },
@@ -51,19 +51,19 @@ export const InputGroup = ({
           setIsExpanded(updatedIsExpanded)
         }}
       >
-        <span className={tw('textstyle-title-md')}>{title}</span>
-        <div className={tx('rounded-full text-white w-6 h-6', {
+        <span className={clsx('textstyle-title-md')}>{title}</span>
+        <div className={clsx('rounded-full text-white w-6 h-6', {
           'bg-hw-primary-400': (isExpandable && !disabled) || expanded,
           'bg-hw-primary-200': disabled,
         })}>
           {isExpanded
-            ? <ChevronUp className={tw('-translate-y-[1px]')} size={24}/>
-            : <ChevronDown className={tw('translate-y-[1px]')} size={24}/>
+            ? <ChevronUp className={clsx('-translate-y-[1px]')} size={24}/>
+            : <ChevronDown className={clsx('translate-y-[1px]')} size={24}/>
           }
         </div>
       </div>
       {isExpanded && (
-        <div className={tx('flex flex-col gap-y-2 h-full')}>
+        <div className={clsx('flex flex-col gap-y-2 h-full')}>
           {children}
         </div>
       )}

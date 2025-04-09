@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Plus } from 'lucide-react'
 import { Card, type CardProps } from '@helpwave/common/components/Card'
 
@@ -15,7 +15,7 @@ export const AddCard = ({
 }: AddCardProps) => {
   return (
     <Card {...cardProps}>
-      <div className={tw('flex flex-row justify-center items-center gap-x-1 text-gray-400 h-full')}>
+      <div className={clsx('flex flex-row justify-center items-center gap-x-1 text-gray-400 h-full')}>
         <Plus/>
         {text && <span>{text}</span>}
       </div>

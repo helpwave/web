@@ -1,6 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import Image from 'next/image'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
@@ -30,17 +30,17 @@ export const MediQuuHeaderSection = () => {
   const translation = useTranslation(defaultMediQuuPageTranslation)
   return (
     <SectionBase backgroundColor="gray">
-      <div className={tw('flex flex-row w-full gap-x-4 gap-y-8 mobile:!flex-col-reverse mobile:items-center')}>
-        <div className={tw('flex flex-col gap-y-2 desktop:max-w-[50%]')}>
-          <span className={tw('textstyle-title-3xl')}>{translation.title}</span>
-          <span className={tw('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></span>
+      <div className={clsx('flex flex-row w-full gap-x-4 gap-y-8 mobile:!flex-col-reverse mobile:items-center')}>
+        <div className={clsx('flex flex-col gap-y-2 desktop:max-w-[50%]')}>
+          <span className={clsx('textstyle-title-3xl')}>{translation.title}</span>
+          <span className={clsx('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></span>
         </div>
-        <div className={tw('flex flex-row justify-center items-center grow')}>
-          <div className={tw('flex flex-col gap-y-4 min-w-[350px] max-w-[350px]')}>
-            <div className={tw('bg-white rounded-md px-6 py-4 !gap-x-2 !w-fit shadow-md')}>
+        <div className={clsx('flex flex-row justify-center items-center grow')}>
+          <div className={clsx('flex flex-col gap-y-4 min-w-[350px] max-w-[350px]')}>
+            <div className={clsx('bg-white rounded-md px-6 py-4 !gap-x-2 !w-fit shadow-md')}>
               <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={140} height={64}/>
             </div>
-            <div className={tw('flex flex-row justify-end')}>
+            <div className={clsx('flex flex-row justify-end')}>
               <HelpwaveBadge
                 size="large"
                 className="bg-hw-secondary-800 !gap-x-2 !w-fit shadow-md py-4 px-6"

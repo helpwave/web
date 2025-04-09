@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { noop } from '../util/noop'
 import { Circle } from './Circle'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export type RingProps = {
   innerSize: number, // the size of the entire circle including the circleWidth
@@ -18,7 +18,7 @@ export const Ring = ({
 }: RingProps) => {
   return (
     <div
-      className={tx(
+      className={clsx(
         `w-[${innerSize}px] h-[${innerSize}px] bg-transparent rounded-full outline outline-[${width}px] outline-${color}`,
         className
       )}
@@ -69,7 +69,7 @@ export const AnimatedRing = ({
 
   return (
     <div
-      className={tx(
+      className={clsx(
         `w-[${innerSize + 2 * width}px] h-[${
           innerSize + 2 * width
         }px] flex flex-row items-center justify-center`
@@ -132,7 +132,7 @@ export const RingWave = ({
 
   return (
     <div
-      className={tx(
+      className={clsx(
         `w-[${endInnerSize + 2 * width}px] h-[${
           endInnerSize + 2 * width
         }px] flex flex-row items-center justify-center`
@@ -173,11 +173,11 @@ export const RadialRings = ({
   const size = sizeCircle3
 
   return (
-    <div className={tw(`relative w-[${sizeCircle3}px] h-[${sizeCircle3}px]`)}>
+    <div className={clsx(`relative w-[${sizeCircle3}px] h-[${sizeCircle3}px]`)}>
       <Circle
         radius={sizeCircle1 / 2}
         color={color1}
-        className={tw(
+        className={clsx(
           `absolute z-[10] left-[${size / 2}px] top-[${
             size / 2
           }px] -translate-y-1/2 -translate-x-1/2`
@@ -192,7 +192,7 @@ export const RadialRings = ({
             currentRing === 0 ? setCurrentRing(1) : null
           }
           repeating={true}
-          className={tx(
+          className={clsx(
             { 'opacity-5': currentRing !== 0 },
             `absolute z-[9] left-[${size / 2}px] top-[${
               size / 2
@@ -207,7 +207,7 @@ export const RadialRings = ({
           width={waveWidth}
           color={waveBaseColor}
           repeating={true}
-          className={tx(
+          className={clsx(
             `absolute z-[9] left-[${size / 2}px] top-[${
               size / 2
             }px] -translate-y-1/2 -translate-x-1/2 opacity-5`
@@ -217,7 +217,7 @@ export const RadialRings = ({
       <Circle
         radius={sizeCircle2 / 2}
         color={color2}
-        className={tx(
+        className={clsx(
           { 'opacity-20': currentRing < 1 },
           `absolute z-[8] left-[${size / 2}px] top-[${
             size / 2
@@ -233,7 +233,7 @@ export const RadialRings = ({
             currentRing === 1 ? setCurrentRing(2) : null
           }
           repeating={true}
-          className={tx(
+          className={clsx(
             `absolute z-[7] left-[${size / 2}px] top-[${
               size / 2
             }px] -translate-y-1/2 -translate-x-1/2`
@@ -247,7 +247,7 @@ export const RadialRings = ({
           width={waveWidth}
           color={waveBaseColor}
           repeating={true}
-          className={tx(
+          className={clsx(
             `absolute z-[7] left-[${size / 2}px] top-[${
               size / 2
             }px] -translate-y-1/2 -translate-x-1/2 opacity-5`
@@ -257,7 +257,7 @@ export const RadialRings = ({
       <Circle
         radius={sizeCircle3 / 2}
         color={color3}
-        className={tx(
+        className={clsx(
           { 'opacity-20': currentRing < 2 },
           `absolute z-[6] left-[${size / 2}px] top-[${
             size / 2

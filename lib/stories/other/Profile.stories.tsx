@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Profile } from '../../components/Profile'
 import { Helpwave } from '../../icons/Helpwave'
 import { MarkdownInterpreter } from '../../components/MarkdownInterpreter'
@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const ProfileVariation: Story = {
   render: (args) => {
-    return (<div className={tw('bg-gray-200 p-4')}><Profile {...args}/></div>)
+    return (<div className={clsx('bg-gray-200 p-4')}><Profile {...args}/></div>)
   },
   args: {
     name: 'Helpwave Member',
@@ -23,7 +23,7 @@ export const ProfileVariation: Story = {
     roleBadge: 'CEO',
     imageUrl: 'https://cdn.helpwave.de/boringavatar.svg',
     badge: (
-      <Chip className={tw('flex flex-row gap-x-2 items-center justify-center')} color="black">
+      <Chip className={clsx('flex flex-row gap-x-2 items-center justify-center')} color="dark">
         <Helpwave size={24}/>
         <MarkdownInterpreter text={'\\helpwave'}/>
       </Chip>

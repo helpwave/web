@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -51,14 +51,14 @@ export const WardDisplay = ({
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / 250), 1)
 
   return (
-    <div className={tw('py-4 px-6')}>
+    <div className={clsx('py-4 px-6')}>
       <ColumnTitle title={translation.wards}/>
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
       >
         {wards && (
-          <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+          <div className={clsx(`grid grid-cols-${columns} gap-6`)}>
             {wards.map(ward => (
               <WardCard
                 key={ward.id}
@@ -74,7 +74,7 @@ export const WardDisplay = ({
               />
             ))}
             <AddCard
-              className={tw('min-h-[76px]')}
+              className={clsx('min-h-[76px]')}
               text={translation.addWard}
               onTileClick={() => context.updateContext({
                 ...context.state,

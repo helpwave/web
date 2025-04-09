@@ -1,6 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { FAQSection } from '@helpwave/common/components/layout/FAQSection'
 import { SectionBase } from '@/components/sections/SectionBase'
 
@@ -93,10 +93,10 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
 export const MediQuuFAQSection = () => {
   const translation = useTranslation(defaultMediQuuFAQTranslation)
   return (
-    <SectionBase backgroundColor="gray" className={tw('flex flex-col w-full')}>
-      <span className={tw('textstyle-title-xl text-hw-secondary-400 mb-1')}>{translation.title}</span>
+    <SectionBase backgroundColor="gray" className={clsx('flex flex-col w-full')}>
+      <span className={clsx('textstyle-title-xl text-hw-secondary-400 mb-1')}>{translation.title}</span>
       <span>{translation.subTitle}</span>
-      <div className={tw('flex flex-col gap-y-4 mt-8')}>
+      <div className={clsx('flex flex-col gap-y-4 mt-8')}>
         <FAQSection
           entries={translation.faqs.map((faq, index) => ({
             id: `faq${index}`,
@@ -106,7 +106,7 @@ export const MediQuuFAQSection = () => {
               value: faq.answer
             }
           }))}
-          expandableClassName={tw('!py-4 !px-6')}
+          expandableClassName={clsx('!py-4 !px-6')}
         />
       </div>
     </SectionBase>

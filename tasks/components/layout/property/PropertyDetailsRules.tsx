@@ -5,7 +5,7 @@ import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Property } from '@helpwave/api-services/types/properties/property'
 
 type PropertyDetailsRulesTranslation = {
@@ -69,7 +69,7 @@ export const PropertyDetailsRules = ({
             size={20}
           />
         )}
-        className={tw('mt-4')}
+        className={clsx('mt-4')}
       />
     </InputGroup>
   )

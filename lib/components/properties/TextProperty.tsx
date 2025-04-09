@@ -1,5 +1,5 @@
 import { Text } from 'lucide-react'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -50,10 +50,10 @@ export const TextProperty = ({
       icon={<Text size={16} />}
       input={({ softRequired }) => (
         <div
-          className={tx('flex flex-row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
+          className={clsx('flex flex-row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <Textarea
-            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
+            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
             rows={5}
             defaultStyle={false}
             value={value ?? ''}

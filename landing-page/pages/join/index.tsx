@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { NextPage } from 'next'
 import { RadialRings } from '@helpwave/common/components/Ring'
 import { useEffect, useState } from 'react'
@@ -80,10 +80,10 @@ const NewsLetter: NextPage = () => {
   const waveWidth = (sizeCircle2 - sizeCircle1) / 20
 
   return (
-    <Page className={tw('w-screen h-screen relative z-0')} pageTitleAddition={translation.title}>
-      <SectionBase className={tw('h-screen z-[1] w-full !max-w-full')} outerClassName={tw('!p-0')}>
-        <div className={tw('relative h-full overflow-hidden')}>
-          <div className={tw(`absolute left-0 top-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2`)}>
+    <Page className={clsx('w-screen h-screen relative z-0')} pageTitleAddition={translation.title}>
+      <SectionBase className={clsx('h-screen z-[1] w-full !max-w-full')} outerClassName={clsx('!p-0')}>
+        <div className={clsx('relative h-full overflow-hidden')}>
+          <div className={clsx(`absolute left-0 top-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2`)}>
             {width !== 0 && height !== 0 && (
               <>
                 <RadialRings
@@ -92,12 +92,12 @@ const NewsLetter: NextPage = () => {
                   sizeCircle3={sizeCircle3}
                   waveWidth={waveWidth}
                 />
-                <div className={tw(`absolute z-[100] top-1/2 left-[${sizeCircle2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}/>
-                <div className={tw(`absolute z-[100] top-1/2 left-[${sizeCircle2 + (sizeCircle3 - sizeCircle2) / 2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}/>
+                <div className={clsx(`absolute z-[100] top-1/2 left-[${sizeCircle2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}/>
+                <div className={clsx(`absolute z-[100] top-1/2 left-[${sizeCircle2 + (sizeCircle3 - sizeCircle2) / 2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}/>
               </>
             )}
           </div>
-          <div className={tw('absolute top-1/2 -translate-y-1/2 desktop:right-[15%] tablet:right-[15%]  mobile:right-1/2 mobile:translate-x-1/2 desktop:w-[500px] mobile:w-4/5 mobile:max-w-[340px]')}>
+          <div className={clsx('absolute top-1/2 -translate-y-1/2 desktop:right-[15%] tablet:right-[15%]  mobile:right-1/2 mobile:translate-x-1/2 desktop:w-[500px] mobile:w-4/5 mobile:max-w-[340px]')}>
             <NewsLetterForm
               onSubmit={async (form) => {
                 await submitNewsLetterForm(form)

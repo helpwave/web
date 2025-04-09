@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -139,7 +139,7 @@ export const PatientList = ({
   const filteredDischarged = !data ? [] : SimpleSearchWithMapping(search, data.discharged, value => value.name)
 
   return (
-    <div className={tw('relative flex flex-col py-4 px-6')}>
+    <div className={clsx('relative flex flex-col py-4 px-6')}>
       <ConfirmDialog
         id="patientList-DeleteDialog"
         isOpen={!!deletePatient}
@@ -184,11 +184,11 @@ export const PatientList = ({
         onBackgroundClick={() => setIsShowingAddPatientModal(0)}
         wardId={context.wardId}
       />
-      <div className={tw('flex flex-row gap-x-2 items-center')}>
-        <span className={tw('textstyle-title-normal pr-4')}>{translation.patients}</span>
-        <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
+      <div className={clsx('flex flex-row gap-x-2 items-center')}>
+        <span className={clsx('textstyle-title-normal pr-4')}>{translation.patients}</span>
+        <Input placeholder={translation.search} value={search} onChange={setSearch} className={clsx('h-9')}/>
         <SolidButton
-          className={tw('whitespace-nowrap')}
+          className={clsx('whitespace-nowrap')}
           color="hw-positive"
           onClick={() => {
             setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
@@ -200,15 +200,15 @@ export const PatientList = ({
       <LoadingAndErrorComponent
         hasError={isError || !data}
         isLoading={isLoading}
-        errorProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
-        loadingProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
+        errorProps={{ classname: clsx('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
+        loadingProps={{ classname: clsx('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
       >
-        <div className={tw('flex flex-col gap-y-4 mb-8')}>
-          <div className={tx('p-2 border-2 border-transparent rounded-xl')}>
+        <div className={clsx('flex flex-col gap-y-4 mb-8')}>
+          <div className={clsx('p-2 border-2 border-transparent rounded-xl')}>
             <HideableContentSection
               initiallyOpen={initialOpenedSections?.active}
               disabled={filteredActive.length <= 0}
-              header={<span className={tw('textstyle-accent')}>{`${translation.active} (${filteredActive.length})`}</span>}
+              header={<span className={clsx('textstyle-accent')}>{`${translation.active} (${filteredActive.length})`}</span>}
             >
               {filteredActive.map(patient => (
                 <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
@@ -220,7 +220,7 @@ export const PatientList = ({
                 }}>
                   {() => (
                     <div
-                      className={tw('flex flex-row pt-2 border-b-2 justify-between items-center cursor-pointer')}
+                      className={clsx('flex flex-row pt-2 border-b-2 justify-between items-center cursor-pointer')}
                       onClick={() => updateContext({
                         ...context,
                         patientId: patient.id,
@@ -228,8 +228,8 @@ export const PatientList = ({
                         bedId: patient.bed.id
                       })}
                     >
-                      <span className={tw('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
-                      <div className={tw('flex flex-row flex-1 justify-between items-center')}>
+                      <span className={clsx('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
+                      <div className={clsx('flex flex-row flex-1 justify-between items-center')}>
                         <Chip color="hw-label-blue" variant="fullyRounded">
                           {activeLabelText(patient)}
                         </Chip>
@@ -248,7 +248,7 @@ export const PatientList = ({
           </div>
           <Droppable id="patientListUnassigned" data={{ patientListSection: 'unassigned' }}>
             {({ isOver }) => (
-              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
+              <div className={clsx('p-2 border-2 border-dashed rounded-xl', {
                 'border-hw-primary-700': isOver,
                 'border-transparent': !isOver
               })}>
@@ -256,7 +256,7 @@ export const PatientList = ({
                   initiallyOpen={initialOpenedSections?.unassigned}
                   disabled={filteredUnassigned.length <= 0}
                   header={(
-                    <span className={tw('textstyle-accent text-hw-label-yellow-400')}>
+                    <span className={clsx('textstyle-accent text-hw-label-yellow-400')}>
                       {`${translation.unassigned} (${filteredUnassigned.length})`}
                     </span>
                   )}
@@ -269,14 +269,14 @@ export const PatientList = ({
                       {() => (
                         <div
                           key={patient.id}
-                          className={tw('flex flex-row pt-2 border-b-2 items-center cursor-pointer')}
+                          className={clsx('flex flex-row pt-2 border-b-2 items-center cursor-pointer')}
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
                           })}
                         >
-                          <span className={tw('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
-                          <div className={tw('flex flex-row flex-1 justify-between items-center')}>
+                          <span className={clsx('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
+                          <div className={clsx('flex flex-row flex-1 justify-between items-center')}>
                             <Chip color="hw-label-yellow" variant="fullyRounded">
                               {`${translation.unassigned}`}
                             </Chip>
@@ -297,14 +297,14 @@ export const PatientList = ({
           </Droppable>
           <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
             {({ isOver }) => (
-              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
+              <div className={clsx('p-2 border-2 border-dashed rounded-xl', {
                 'border-hw-primary-700': isOver,
                 'border-transparent': !isOver
               })}>
                 <HideableContentSection
                   initiallyOpen={initialOpenedSections?.discharged}
                   disabled={filteredDischarged.length <= 0}
-                  header={<span className={tw('textstyle-accent')}>{`${translation.discharged} (${filteredDischarged.length})`}</span>}
+                  header={<span className={clsx('textstyle-accent')}>{`${translation.discharged} (${filteredDischarged.length})`}</span>}
                 >
                   {filteredDischarged.map(patient => (
                     <Draggable id={patient.id} key={patient.id} data={{
@@ -314,14 +314,14 @@ export const PatientList = ({
                       {() => (
                         <div
                           key={patient.id}
-                          className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
+                          className={clsx('flex flex-row pt-2 border-b-2 justify-between items-center')}
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
                           })}
                         >
-                          <span className={tw('textstyle-title-sm')}>{patient.name}</span>
-                          <div className={tw('flex flex-row gap-x-4')}>
+                          <span className={clsx('textstyle-title-sm')}>{patient.name}</span>
+                          <div className={clsx('flex flex-row gap-x-4')}>
                             <SolidButton variant="text" onClick={event => {
                               event.stopPropagation()
                               readmitPatientMutation.mutate(patient.id)

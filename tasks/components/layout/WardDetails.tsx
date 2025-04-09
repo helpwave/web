@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -106,12 +106,12 @@ export const WardDetail = ({
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
 
   return (
-    <div className={tw('flex flex-col py-4 px-6')}>
+    <div className={clsx('flex flex-col py-4 px-6')}>
       <LoadingAndErrorComponent
         isLoading={!isCreatingNewWard && ((isLoading && !ward) || !newWard.id)}
         hasError={isError && !isCreatingNewWard && !ward}
-        loadingProps={{ classname: tw('!h-full') }}
-        errorProps={{ classname: tw('!h-full') }}
+        loadingProps={{ classname: clsx('!h-full') }}
+        errorProps={{ classname: clsx('!h-full') }}
       >
         <ConfirmDialog
           id="WardDetail-DeleteDialog"
@@ -131,7 +131,7 @@ export const WardDetail = ({
           title={isCreatingNewWard ? translation.createWard : translation.updateWard}
           subtitle={isCreatingNewWard ? translation.createWardSubtitle : translation.updateWardSubtitle}
         />
-        <div className={tw('max-w-[400px]')}>
+        <div className={clsx('max-w-[400px]')}>
           <WardForm
             key={newWard.id}
             ward={newWard}
@@ -145,11 +145,11 @@ export const WardDetail = ({
         {isCreatingNewWard ?
           <span>{translation.roomsNotOnCreate}</span>
           : (
-          <div className={tw('max-w-[600px] mt-6')}>
+          <div className={clsx('max-w-[600px] mt-6')}>
             <RoomList/>
           </div>
             )}
-        <div className={tw('flex flex-row justify-end mt-6')}>
+        <div className={clsx('flex flex-row justify-end mt-6')}>
           <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
             disabled={!filledRequired}>
@@ -158,17 +158,17 @@ export const WardDetail = ({
         </div>
         {newWard.id !== '' &&
           (
-            <div className={tw('mt-6')}>
+            <div className={clsx('mt-6')}>
               <TaskTemplateWardPreview wardId={newWard.id} columns={columns}/>
             </div>
           )
         }
-        <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
-          <span className={tw('textstyle-title-normal')}>{translation.dangerZone}</span>
-          <span className={tw('textstyle-description')}>{translation.dangerZoneText}</span>
+        <div className={clsx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
+          <span className={clsx('textstyle-title-normal')}>{translation.dangerZone}</span>
+          <span className={clsx('textstyle-description')}>{translation.dangerZoneText}</span>
           <SolidButton
             onClick={() => setIsShowingConfirmDialog(true)}
-            className={tw('px-0 font-bold text-left')}
+            className={clsx('px-0 font-bold text-left')}
             color="hw-negative"
             variant="text"
           >

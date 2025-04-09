@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
@@ -88,12 +88,12 @@ export const OrganizationInvitationList = ({
     <LoadingAndErrorComponent
       isLoading={isLoading && !!context.state.organizationId}
       hasError={isError && !!context.state.organizationId}
-      errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
-      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
+      errorProps={{ classname: clsx('border-2 border-gray-500 rounded-xl') }}
+      loadingProps={{ classname: clsx('border-2 border-gray-500 rounded-xl') }}
     >
       <InputModal
         id="inviteMemberModal"
-        modalClassName={tw('min-w-[400px]')}
+        modalClassName={clsx('min-w-[400px]')}
         isOpen={isShowingInviteMemberModal}
         onBackgroundClick={() => setInviteMemberModalEmail(undefined)}
         onConfirm={() => {
@@ -134,8 +134,8 @@ export const OrganizationInvitationList = ({
           { disabled: !isValidEmail, color: 'hw-primary', text: translation.add }
         ]}
       />
-      <div className={tw('flex flex-row justify-between')}>
-        <span className={tw('textstyle-table-name')}>{`${translation.invitations} (${usedInvitations.length})`}</span>
+      <div className={clsx('flex flex-row justify-between')}>
+        <span className={clsx('textstyle-table-name')}>{`${translation.invitations} (${usedInvitations.length})`}</span>
         <SolidButton
           color="hw-positive"
           onClick={() => setInviteMemberModalEmail('')}
@@ -148,14 +148,14 @@ export const OrganizationInvitationList = ({
         stateManagement={[tableState, setTableState]}
         identifierMapping={idMapping}
         header={[
-          <span key="organization" className={tw('textstyle-table-header')}>{translation.email}</span>,
+          <span key="organization" className={clsx('textstyle-table-header')}>{translation.email}</span>,
           <></>
         ]}
         rowMappingToCells={invite => [
-          <div key="email" className={tw('flex flex-row justify-start gap-x-2')}>
+          <div key="email" className={clsx('flex flex-row justify-start gap-x-2')}>
             <span>{invite.email}</span>
           </div>,
-          <div key="remove" className={tw('flex flex-row justify-end')}>
+          <div key="remove" className={clsx('flex flex-row justify-end')}>
             <SolidButton
               color="hw-negative"
               variant="text"

@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
@@ -130,7 +130,7 @@ const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForT
         <title>{titleWrapper(translation.personalTaskTemplates)}</title>
       </Head>
       <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
-        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError || !data} loadingProps={{ classname: tw('!h-full') }} errorProps={{ classname: tw('!h-full') }}>
+        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError || !data} loadingProps={{ classname: clsx('!h-full') }} errorProps={{ classname: clsx('!h-full') }}>
           <TwoColumn
             disableResize={false}
             left={width => (

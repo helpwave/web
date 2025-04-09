@@ -2,7 +2,7 @@ import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { isMobile } from 'react-device-detect'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import withNextApp from '@helpwave/common/twind/next/app'
 import { config } from '@helpwave/common/twind/config'
@@ -48,7 +48,7 @@ function MyApp({
             </Head>
             <QueryClientProvider client={queryClient}>
               <ModalRegister>
-                <div className={tw('font-sans')} id={modalRootName}>
+                <div className={clsx('font-sans')} id={modalRootName}>
                   <Component {...pageProps} />
                 </div>
               </ModalRegister>

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -82,8 +82,8 @@ export const TaskTemplateDetails = ({
     name: !isCreatingNewTemplate
   })
 
-  const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
-  const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
+  const inputErrorClasses = clsx('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
+  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   const minNameLength = 2
   const maxNameLength = 32
@@ -103,7 +103,7 @@ export const TaskTemplateDetails = ({
   const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
 
   return (
-    <div className={tw('flex flex-col py-4 px-6')}>
+    <div className={clsx('flex flex-col py-4 px-6')}>
       <ConfirmDialog
         id="TaskTemplateDetails-DeleteDialog"
         titleText={translation.deleteConfirmText}
@@ -121,7 +121,7 @@ export const TaskTemplateDetails = ({
         title={isCreatingNewTemplate ? translation.createTaskTemplate : translation.updateTaskTemplate}
         subtitle={!isCreatingNewTemplate ? translation.updateTaskTemplateDescription : undefined}
       />
-      <div className={tw(' flex flex-col gap-y-4 max-w-[400px] mb-4')}>
+      <div className={clsx(' flex flex-col gap-y-4 max-w-[400px] mb-4')}>
         <div>
           <Input
             id="name"
@@ -138,9 +138,9 @@ export const TaskTemplateDetails = ({
               })
             }}
             maxLength={maxNameLength}
-            className={tx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
+            className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
           />
-          {isDisplayingNameError && <span className={tw('textstyle-form-error')}>{nameErrorMessage}</span>}
+          {isDisplayingNameError && <span className={clsx('textstyle-form-error')}>{nameErrorMessage}</span>}
         </div>
         <Textarea
           headline={translation.notes}
@@ -166,14 +166,14 @@ export const TaskTemplateDetails = ({
           deletedSubtaskIds: context.state.deletedSubtaskIds
         })}
       />
-      <div className={tx('flex flex-row mt-12',
+      <div className={clsx('flex flex-row mt-12',
         {
           'justify-between': !isCreatingNewTemplate,
           'justify-end': isCreatingNewTemplate,
         })}
       >
         <SolidButton
-          className={tw('w-auto')}
+          className={clsx('w-auto')}
           onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state)}
           disabled={!context.state.isValid}
         >

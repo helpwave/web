@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { LucideArrowLeftRight } from 'lucide-react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -55,10 +55,10 @@ export const TaskTemplateDisplay = ({
 
   const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
   return (
-    <div className={tw('py-4 px-6')}>
+    <div className={clsx('py-4 px-6')}>
       <div className={
-        tw('flex flex-row items-center justify-between mb-4')}>
-        <span className={tw('textstyle-title-normal')}>
+        clsx('flex flex-row items-center justify-between mb-4')}>
+        <span className={clsx('textstyle-title-normal')}>
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
         </span>
         { (variant === 'wardTemplates' || wardId) && (
@@ -66,7 +66,7 @@ export const TaskTemplateDisplay = ({
             onClick={() => {
               router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).catch(console.error)
             }}
-            className={tw('flex flex-row gap-x-1 items-center w-auto')}
+            className={clsx('flex flex-row gap-x-1 items-center w-auto')}
           >
             <LucideArrowLeftRight/>
             {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}
@@ -74,7 +74,7 @@ export const TaskTemplateDisplay = ({
         )}
       </div>
       {/* TODO replace onClick function to something different */}
-      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+      <div className={clsx(`grid grid-cols-${columns} gap-6`)}>
         {taskTemplates.map(taskTemplate => (
           <TaskTemplateCard
             key={taskTemplate.id}

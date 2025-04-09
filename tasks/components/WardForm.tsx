@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -60,8 +60,8 @@ export const WardForm = ({
   const minWardNameLength = 2
   const maxWardNameLength = 32
 
-  const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
-  const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
+  const inputErrorClasses = clsx('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
+  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateName(ward: WardFormInfoDTO) {
     const wardName = ward.name.trim()
@@ -85,16 +85,16 @@ export const WardForm = ({
 
   return (
     <form>
-      <div className={tw('mt-2 mb-1')}>
+      <div className={clsx('mt-2 mb-1')}>
         <Input id="name" value={ward.name} label={{ name: translation.name }}
                onBlur={() => setTouched({ ...touched, name: true })}
                onChange={text => triggerOnChange({ ...ward, name: text })}
                maxLength={maxWardNameLength}
-               className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
+               className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <span className={tw('textstyle-form-error')}>{nameErrorMessage}</span>}
+        {isDisplayingShortNameError && <span className={clsx('textstyle-form-error')}>{nameErrorMessage}</span>}
       </div>
-      <span className={tw('textstyle-form-description')}>{translation.nameDescription}</span>
+      <span className={clsx('textstyle-form-description')}>{translation.nameDescription}</span>
     </form>
   )
 }

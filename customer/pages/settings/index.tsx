@@ -8,7 +8,7 @@ import { useCustomerMyselfQuery, useCustomerUpdateMutation } from '@/api/mutatio
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useEffect, useState } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
 
 type SettingsTranslation = {
@@ -81,7 +81,7 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
 
   // TODO do input validation
   return (
-    <Page pageTitle={titleWrapper(translation.settings)} mainContainerClassName={tw('min-h-[auto] pb-6')}>
+    <Page pageTitle={titleWrapper(translation.settings)} mainContainerClassName={clsx('min-h-[auto] pb-6')}>
       <Section titleText={translation.settings}>
         <span>{translation.settingsDescription}</span>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>

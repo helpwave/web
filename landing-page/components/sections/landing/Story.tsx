@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -16,13 +16,13 @@ const StoryBlock = ({
   content,
 }: StoryBlockProps) => {
   return (
-    <div className={tw('w-2/3 mobile:w-full tablet:w-full')}>
-      <div className={tw('flex flex-col items-start')}>
-        {pill && <h4 className={tw('text-sm text-green-600 bg-green-100 px-3 py-0.5 font-semibold tracking-widest rounded-lg')}>{pill}</h4>}
+    <div className={clsx('w-2/3 mobile:w-full tablet:w-full')}>
+      <div className={clsx('flex flex-col items-start')}>
+        {pill && <h4 className={clsx('text-sm text-green-600 bg-green-100 px-3 py-0.5 font-semibold tracking-widest rounded-lg')}>{pill}</h4>}
       </div>
-      <h2 className={tw('pt-4 text-4xl font-space font-bold')}>{header}</h2>
+      <h2 className={clsx('pt-4 text-4xl font-space font-bold')}>{header}</h2>
       <br />
-      <p className={tw('text-md')}>
+      <p className={clsx('text-md')}>
         {content}
       </p>
     </div>
@@ -85,7 +85,7 @@ const defaultStoryTranslation: Record<Languages, StoryTranslation> = {
 const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTranslation>) => {
   const translation = useTranslation(defaultStoryTranslation, overwriteTranslation)
   return (
-    <SectionBase className={tw('flex tablet:flex-wrap mobile:flex-wrap w-full relative gap-16')} backgroundColor="gray">
+    <SectionBase className={clsx('flex tablet:flex-wrap mobile:flex-wrap w-full relative gap-16')} backgroundColor="gray">
       <StoryBlock
         pill={translation.innovation}
         header={translation.innovationHeader}

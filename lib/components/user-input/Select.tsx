@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 
@@ -64,15 +64,15 @@ export const Select = <T, >({
   }
 
   return (
-    <div className={tx(className)}>
+    <div className={clsx(className)}>
       {label && (
-        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={tx('mb-1', label.className)}/>
+        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
       )}
-      <Menu as="div" className={tw('relative text-gray-700')}>
+      <Menu as="div" className={clsx('relative text-gray-700')}>
         {({ open }) => (
           <>
             <Menu.Button
-              className={tx(
+              className={clsx(
                 'inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium bg-white',
                 textColor,
                 {
@@ -87,11 +87,11 @@ export const Select = <T, >({
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items
-              className={tw('absolute w-full z-10 rounded-b-lg bg-white shadow-lg max-h-[500px] overflow-y-auto')}
+              className={clsx('absolute w-full z-10 rounded-b-lg bg-white shadow-lg max-h-[500px] overflow-y-auto')}
             >
               {(additionalItems ?? []).map((item, index) => (
                 <div key={`additionalItems${index}`}
-                     className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
+                     className={clsx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
                        'border-b-0 rounded-b-lg': filteredOptions.length === 0 && index === (additionalItems?.length ?? 1) - 1,
                      })}
                 >
@@ -102,7 +102,7 @@ export const Select = <T, >({
                 <Menu.Item key={`item${index}`}>
                   {
                     <div
-                      className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0 cursor-pointer',
+                      className={clsx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0 cursor-pointer',
                         option.className, {
                           'bg-gray-100': option.value === value,
                           'bg-gray-50': index % 2 === 1,

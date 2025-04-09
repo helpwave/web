@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -31,16 +31,16 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
   const imageURL = 'https://cdn.helpwave.de/landing_page/process.png'
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:flex-col-reverse gap-8 items-center justify-center w-full')}
-      outerClassName={tw('py-24')}
+      className={clsx('flex flex-row mobile:flex-col-reverse gap-8 items-center justify-center w-full')}
+      outerClassName={clsx('py-24')}
       backgroundColor="white"
     >
-      <div className={tw('flex flex-col w-1/2 mobile:w-full gap-y-2')}>
-        <Chip className={tw('!w-fit bg-gray-200 font-semibold px-4')}>{translation.ourVision}</Chip>
-        <h2 className={tw('textstyle-title-xl')}>{translation.title}</h2>
-        <span className={tw('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
+      <div className={clsx('flex flex-col w-1/2 mobile:w-full gap-y-2')}>
+        <Chip className={clsx('!w-fit bg-gray-200 font-semibold px-4')}>{translation.ourVision}</Chip>
+        <h2 className={clsx('textstyle-title-xl')}>{translation.title}</h2>
+        <span className={clsx('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
       </div>
-      <Image src={imageURL} alt="" width={0} height={0} className={tw('mobile:w-full w-1/2')}/>
+      <Image src={imageURL} alt="" width={0} height={0} className={clsx('mobile:w-full w-1/2')}/>
     </SectionBase>
   )
 }

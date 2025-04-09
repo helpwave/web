@@ -1,10 +1,10 @@
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
-import { tw } from '@helpwave/style-themes/twind'
-import type { ButtonProps } from './Button'
-import { SolidButton } from './Button'
+import clsx from 'clsx'
+import type { TextButtonProps } from './Button'
+import { TextButton } from './Button'
 import type { TableSortingType } from './Table'
 
-export type SortButtonProps = Omit<ButtonProps, 'onClick'> & {
+export type SortButtonProps = Omit<TextButtonProps, 'onClick'> & {
   ascending?: TableSortingType,
   onClick: (newTableSorting:TableSortingType) => void,
 }
@@ -15,22 +15,20 @@ export type SortButtonProps = Omit<ButtonProps, 'onClick'> & {
 export const SortButton = ({
   children,
   ascending,
-  color = 'none',
-  variant = 'text',
+  color,
   onClick,
   ...buttonProps
 }: SortButtonProps) => {
   return (
-    <SolidButton
+    <TextButton
       color={color}
-      variant={variant}
       onClick={() => onClick(ascending === 'descending' ? 'ascending' : 'descending')}
       {...buttonProps}
     >
-      <div className={tw('flex flex-row gap-x-2')}>
+      <div className={clsx('flex flex-row gap-x-2')}>
         {children}
         {ascending === 'ascending' ? <ChevronUp/> : (!ascending ? <ChevronsUpDown/> : <ChevronDown/>)}
       </div>
-    </SolidButton>
+    </TextButton>
   )
 }

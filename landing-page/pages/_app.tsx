@@ -1,22 +1,12 @@
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
-import { tw } from '@helpwave/style-themes/twind'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
-import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import Head from 'next/head'
 import { usePathname } from 'next/navigation'
 import { Toaster } from 'react-hot-toast'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
-import withNextApp from '@helpwave/style-themes/twind/next/app'
-import config from '@helpwave/style-themes/twind/config'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-
-const spaceGrotesk = SpaceGrotesk({
-  subsets: ['latin'],
-  variable: '--font-space-grotesk'
-})
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
@@ -30,17 +20,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>helpwave</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1"/>
-        <style>{`
-          :root {
-            --font-inter: ${inter.style.fontFamily};
-            --font-space: ${spaceGrotesk.style.fontFamily};
-          }
-        `}</style>
       </Head>
       <QueryClientProvider client={queryClient}>
         <ProvideLanguage defaultLanguage={defaultLanguage}>
           <ModalRegister>
-            <div className={tw('font-sans')} id={modalRootName}>
+            <div className="font-sans" id={modalRootName}>
               <Component {...pageProps} />
               <Toaster/>
             </div>
@@ -51,4 +35,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default withNextApp(config, MyApp)
+export default MyApp

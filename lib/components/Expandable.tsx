@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { forwardRef, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export type ExpandableProps = PropsWithChildren<{
   label: ReactNode,
@@ -28,23 +28,23 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
   headerClassName = ''
 }, ref) => {
   const [expanded, setExpanded] = useState(initialExpansion)
-  icon ??= expanded1 => expanded1 ? <ChevronUp size={16} className={tw('min-w-[16px]')}/> : <ChevronDown size={16} className={tw('min-w-[16px]')}/>
+  icon ??= expanded1 => expanded1 ? <ChevronUp size={16} className={clsx('min-w-[16px]')}/> : <ChevronDown size={16} className={clsx('min-w-[16px]')}/>
 
   return (
     <div
       ref={ref}
-      className={tx('flex flex-col', { 'cursor-pointer': !clickOnlyOnHeader }, className)}
+      className={clsx('flex flex-col', { 'cursor-pointer': !clickOnlyOnHeader }, className)}
       onClick={() => !clickOnlyOnHeader && setExpanded(!expanded)}
     >
       <div
-        className={tx('flex flex-row justify-between items-center cursor-pointer gap-x-2', headerClassName)}
+        className={clsx('flex flex-row justify-between items-center cursor-pointer gap-x-2', headerClassName)}
         onClick={() => clickOnlyOnHeader && setExpanded(!expanded)}
       >
         {label}
         {icon(expanded)}
       </div>
       {expanded && (
-        <div className={tx('flex flex-col')}>
+        <div className={clsx('flex flex-col')}>
           {children}
         </div>
       )}

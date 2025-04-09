@@ -1,5 +1,5 @@
 import { Binary } from 'lucide-react'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { noop } from '../../util/noop'
 import { Input } from '../user-input/Input'
 import type { Languages } from '../../hooks/useLanguage'
@@ -52,11 +52,11 @@ export const NumberProperty = ({
       icon={<Binary size={16}/>}
       input={({ softRequired }) => (
         <div
-          className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
+          className={clsx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <Input
             expanded={false}
-            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
+            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
             value={value?.toString() ?? ''}
             type="number"
             readOnly={readOnly}
@@ -78,7 +78,7 @@ export const NumberProperty = ({
               }
             }}
           />
-          {suffix && <span className={tx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</span>}
+          {suffix && <span className={clsx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</span>}
         </div>
       )}
     />

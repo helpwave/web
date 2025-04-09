@@ -1,5 +1,5 @@
 import type { StoryFn } from '@storybook/react'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { FAQSection } from '../../components/layout/FAQSection'
 import { Helpwave } from '../../icons/Helpwave'
 
@@ -11,7 +11,7 @@ const meta = {
 export default meta
 
 export const FAQSectionVariation: StoryFn = () => (
-  <div className={tw('bg-gray-100 p-4')}>
+  <div className={clsx('bg-gray-100 p-4')}>
     <FAQSection
       entries={[
         { id: 'question1', title: 'A Very Good Question?', content: { type: 'markdown', value: '\\negative{NO.}' } },
@@ -41,7 +41,7 @@ export const FAQSectionVariation: StoryFn = () => (
           title: 'What does the helpwave logo look like?',
           content: {
             type: 'custom',
-            value: (<div className={tw('flex flex-row justify-center')}><Helpwave/></div>)
+            value: (<div className={clsx('flex flex-row justify-center')}><Helpwave/></div>)
           }
         },
       ]}

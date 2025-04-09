@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { useState } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
 import { useCustomerCreateMutation } from '@/api/mutations/customer_mutations'
@@ -51,12 +51,12 @@ const CreateOrganization: NextPage<PropsForTranslation<CreateOrganizationTransla
   return (
     <Page
       pageTitle={titleWrapper(translation.createOrganization)}
-      mainContainerClassName={tw('min-h-[90vh] max-w-[700px]')}
+      mainContainerClassName={clsx('min-h-[90vh] max-w-[700px]')}
       isHidingSidebar={true}
     >
       <Section>
-        <h2 className={tw('font-space text-3xl font-bold')}>{translation.createOrganization}</h2>
-        <span className={tw('text-gray-500')}>{translation.createOrganizationDescription}</span>
+        <h2 className={clsx('font-space text-3xl font-bold')}>{translation.createOrganization}</h2>
+        <span className={clsx('text-gray-500')}>{translation.createOrganizationDescription}</span>
         <ContactInformationForm
           value={data}
           onChange={setData}

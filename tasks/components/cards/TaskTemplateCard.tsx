@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Chip } from '@helpwave/common/components/ChipList'
@@ -46,12 +46,12 @@ export const TaskTemplateCard = ({
   const translation = useTranslation(defaultTaskTemplateCardTranslations, overwriteTranslation)
   return (
     <EditCard
-      className={tx('group flex flex-col bg-white', className)}
+      className={clsx('group flex flex-col bg-white', className)}
       {...editCardProps}
     >
-      <div className={tw('overflow-hidden h-full')}>
-        <div className={tw('flex flex-row items-start overflow-hidden gap-x-1')}>
-          <span className={tw('textstyle-title-sm')}>{name}</span>
+      <div className={clsx('overflow-hidden h-full')}>
+        <div className={clsx('flex flex-row items-start overflow-hidden gap-x-1')}>
+          <span className={clsx('textstyle-title-sm')}>{name}</span>
           {typeForLabel && (
             <Chip
               color={typeForLabel === 'ward' ? 'hw-label-blue' : 'hw-label-pink'}

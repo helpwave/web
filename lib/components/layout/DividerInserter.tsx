@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export type DividerInserterProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   children: ReactNode[],
@@ -30,7 +30,7 @@ export const DividerInserter = ({
   }
 
   return (
-    <div className={tx(className)} {...restProps}>
+    <div className={clsx(className)} {...restProps}>
       {nodes}
     </div>
   )

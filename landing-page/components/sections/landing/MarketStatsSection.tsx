@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -13,10 +13,10 @@ type MarketStatsItemProps = PropsWithChildren<{
 
 const MarketStatsItem = ({ children, stat, title }: MarketStatsItemProps) => {
   return (
-    <div className={tw('flex flex-col items-center')}>
+    <div className={clsx('flex flex-col items-center')}>
       {children}
-      <span className={tw('text-3xl mobile:text-xl mt-2 mobile:font-semibold')}>{stat}</span>
-      <h4><span className={tw('textstyle-description text-xl mobile:!text-base')}>{title}</span></h4>
+      <span className={clsx('text-3xl mobile:text-xl mt-2 mobile:font-semibold')}>{stat}</span>
+      <h4><span className={clsx('textstyle-description text-xl mobile:!text-base')}>{title}</span></h4>
     </div>
   )
 }
@@ -49,23 +49,23 @@ const defaultExpansionTranslation: Record<Languages, MarketStatsSectionTranslati
 const MarketStatsSection = ({ overwriteTranslation }: PropsForTranslation<MarketStatsSectionTranslation>) => {
   const translation = useTranslation(defaultExpansionTranslation, overwriteTranslation)
   return (
-    <SectionBase backgroundColor="darkSecondary" className={tw('flex flex-col text-white pb-24 font-space')}>
-      <h1 className={tw('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>
-      <span className={tw('text-center textstyle-description')}>{translation.marketPotential}</span>
-      <div className={tw('mt-8 w-full flex flex-wrap gap-y-16 gap-x-32 justify-evenly items-center')}>
+    <SectionBase backgroundColor="darkSecondary" className={clsx('flex flex-col text-white pb-24 font-space')}>
+      <h1 className={clsx('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>
+      <span className={clsx('text-center textstyle-description')}>{translation.marketPotential}</span>
+      <div className={clsx('mt-8 w-full flex flex-wrap gap-y-16 gap-x-32 justify-evenly items-center')}>
         <MarketStatsItem stat="1.800" title={translation.hospitals}>
           {/* Image needs attribution to https://www.flaticon.com/free-icon/hospital_3809392?term=hospital&page=1&position=8&origin=search&related_id=3809392 */}
-          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/hospital.png" className={tw('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px] p-[5%]')}/>
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/hospital.png" className={clsx('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px] p-[5%]')}/>
         </MarketStatsItem>
 
         <MarketStatsItem stat="1.000.000" title={translation.healthcareWorkers}>
           {/* Image needs attribution to https://www.flaticon.com/free-icon/hospital_3809392?term=hospital&page=1&position=8&origin=search&related_id=3809392 */}
-          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/doctors.png" className={tw('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px]')}/>
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/doctors.png" className={clsx('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px]')}/>
         </MarketStatsItem>
 
         <MarketStatsItem stat="12,1%" title={translation.gdp}>
           {/* Image needs attribution to https://www.freepik.com/icon/donut-chart_483638 */}
-          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/pie_chart.png" className={tw('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px]')}/>
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/pie_chart.png" className={clsx('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px]')}/>
         </MarketStatsItem>
       </div>
     </SectionBase>

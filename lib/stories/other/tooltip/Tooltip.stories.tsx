@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { TooltipProps } from '../../../components/Tooltip'
 import { Tooltip } from '../../../components/Tooltip'
 
@@ -7,7 +7,7 @@ type TooltipExampleProps = Omit<TooltipProps, 'children' | 'tooltip'> & { toolti
 
 const TooltipExample = ({ tooltipText, ...props } : TooltipExampleProps) => {
   return (
-    <Tooltip tooltip={tooltipText} {...props}><span className={tw('bg-hw-primary-400 text-white px-2 py-1 rounded-lg')}>Hover over me</span></Tooltip>
+    <Tooltip tooltip={tooltipText} {...props}><span className={clsx('bg-hw-primary-400 text-white px-2 py-1 rounded-lg')}>Hover over me</span></Tooltip>
   )
 }
 
@@ -25,7 +25,6 @@ export const TooltipExampleStory: Story = {
     animationDelay: 700,
     position: 'bottom',
     zIndex: 10,
-    offset: 6,
     containerClassName: '',
     tooltipClassName: ''
   },

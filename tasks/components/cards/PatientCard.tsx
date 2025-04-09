@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
@@ -42,11 +42,11 @@ export const PatientCard = ({
   const translation = useTranslation(defaultPatientCardTranslations, overwriteTranslation)
   return (
     <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
-      <div className={tw('flex flex-row justify-between')}>
-        <span className={tw('textstyle-title-sm whitespace-nowrap')} >{bedName ?? translation.bedNotAssigned}</span>
-        <span className={tw('ml-2 truncate')}>{patientName}</span>
+      <div className={clsx('flex flex-row justify-between')}>
+        <span className={clsx('textstyle-title-sm whitespace-nowrap')} >{bedName ?? translation.bedNotAssigned}</span>
+        <span className={clsx('ml-2 truncate')}>{patientName}</span>
       </div>
-      <div className={tw('min-w-[150px] max-w-[200px] mt-1')}>
+      <div className={clsx('min-w-[150px] max-w-[200px] mt-1')}>
         <PillLabelsColumn
           doneCount={doneTasks}
           inProgressCount={inProgressTasks}

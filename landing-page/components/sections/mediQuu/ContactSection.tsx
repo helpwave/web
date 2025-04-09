@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -114,22 +114,22 @@ export const ContactSection = ({
   const isValid = !!contactForm.firstname && !!contactForm.lastname && validateEmail(contactForm.email) && !!contactForm.message
 
   return (
-    <SectionBase className={tw('flex desktop:flex-row desktop:justify-between mobile:flex-col w-full gap-8')} backgroundColor="gray">
-      <div className={tw('flex flex-col gap-y-1 tablet:w-2/5 desktop:w-1/2')}>
-        <span className={tw('textstyle-title-xl text-hw-secondary-400')}>{translation.contact}</span>
+    <SectionBase className={clsx('flex desktop:flex-row desktop:justify-between mobile:flex-col w-full gap-8')} backgroundColor="gray">
+      <div className={clsx('flex flex-col gap-y-1 tablet:w-2/5 desktop:w-1/2')}>
+        <span className={clsx('textstyle-title-xl text-hw-secondary-400')}>{translation.contact}</span>
         <span>{translation.contactDescription}</span>
         {contacts.length > 0 && (
-          <div className={tw('flex flex-col gap-y-6 mt-6')}>
+          <div className={clsx('flex flex-col gap-y-6 mt-6')}>
             {contacts.map((contact, index) => (
-              <div key={index} className={tw('flex flex-col gap-y-1')}>
-                <span className={tw('font-bold')}>{contact.name}</span>
+              <div key={index} className={clsx('flex flex-col gap-y-1')}>
+                <span className={clsx('font-bold')}>{contact.name}</span>
                 <span>{contact.email}</span>
               </div>
             ))}
           </div>
         )}
       </div>
-      <div className={tw('flex flex-col gap-y-2 tablet:w-3/5 desktop:w-1/2')}>
+      <div className={clsx('flex flex-col gap-y-2 tablet:w-3/5 desktop:w-1/2')}>
         <Input
           value={contactForm.firstname}
           placeholder={translation.firstname}
@@ -150,7 +150,7 @@ export const ContactSection = ({
           placeholder={translation.message}
           onChange={message => setContactForm(prevState => ({ ...prevState, message, hasSend: false, hasError: false }))}
         />
-        {contactForm.hasError && (<span className={tw('text-hw-negative-400 font-semibold my-1')}>{translation.error}</span>)}
+        {contactForm.hasError && (<span className={clsx('text-hw-negative-400 font-semibold my-1')}>{translation.error}</span>)}
         <LoadingButton
           color="hw-secondary"
           onClick={() => {
@@ -177,12 +177,12 @@ export const ContactSection = ({
             }
           }}
           disabled={!isValid}
-          className={tw('py-4 w-full')}
+          className={clsx('py-4 w-full')}
           isLoading={isSending}
         >
           {translation.send}
         </LoadingButton>
-        {contactForm.hasSend && (<span className={tw('text-hw-secondary-400 font-bold text-xl text-center')}>{translation.thankYou}</span>)}
+        {contactForm.hasSend && (<span className={clsx('text-hw-secondary-400 font-bold text-xl text-center')}>{translation.thankYou}</span>)}
       </div>
     </SectionBase>
   )

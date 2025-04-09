@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Github, Globe, Linkedin, Mail } from 'lucide-react'
@@ -41,7 +41,7 @@ const SocialIcon = ({ type, url, size = 24 }: SocialIconProps) => {
   }
   return (
     <Link href={url} target="_blank">
-      <Chip color="black" className="!p-2">
+      <Chip color="dark" className="!p-2">
         {icon}
       </Chip>
     </Link>
@@ -86,31 +86,31 @@ export const Profile = ({
   return (
     <div
       {...divProps}
-      className={tx(`flex flex-col items-center text-center rounded-3xl p-3 pb-4 bg-white w-min shadow-around-lg`, className)}
+      className={clsx(`flex flex-col items-center text-center rounded-3xl p-3 pb-4 bg-white w-min shadow-around-lg`, className)}
     >
-      <div className={tw('relative mb-6')}>
-        <div className={tx('relative rounded-xl flex flex-row items-center justify-center overflow-hidden', imageClassName)}>
-          <Image src={imageUrl} alt="" className={tx('z-[2] object-cover', imageClassName)} width={0} height={0} style={{ width: 'auto', height: 'auto' }}/>
+      <div className={clsx('relative mb-6')}>
+        <div className={clsx('relative rounded-xl flex flex-row items-center justify-center overflow-hidden', imageClassName)}>
+          <Image src={imageUrl} alt="" className={clsx('z-[2] object-cover', imageClassName)} width={0} height={0} style={{ width: 'auto', height: 'auto' }}/>
         </div>
-        <div className={tw('absolute top-[6px] left-[6px] z-[3]')}>{badge}</div>
+        <div className={clsx('absolute top-[6px] left-[6px] z-[3]')}>{badge}</div>
         {roleBadge && (
-          <div className={tw('absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2/3 z-[4]')}>
-            <Chip color="black" className={tw('font-bold px-3')}>{roleBadge}</Chip>
+          <div className={clsx('absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2/3 z-[4]')}>
+            <Chip color="dark" className={clsx('font-bold px-3')}>{roleBadge}</Chip>
           </div>
         )}
       </div>
-      {prefix && <span className={tw('font-semibold')}>{prefix}</span>}
-      <h2 id={name} className={tw('textstyle-title-md')}>{name}</h2>
-      {suffix && <span className={tw('text-sm mb-1')}>{suffix}</span>}
-      {role && <span className={tw('font-space font-bold text-sm')}>{role}</span>}
+      {prefix && <span className={clsx('font-semibold')}>{prefix}</span>}
+      <h2 id={name} className={clsx('textstyle-title-md')}>{name}</h2>
+      {suffix && <span className={clsx('text-sm mb-1')}>{suffix}</span>}
+      {role && <span className={clsx('font-space font-bold text-sm')}>{role}</span>}
       {tags && (
-        <div className={tw('flex flex-wrap mx-4 mt-2 gap-x-2 justify-center')}>
-          {tags.map((tag, index) => <span key={index} className={tw('textstyle-description text-sm')}>{`#${tag}`}</span>)}
+        <div className={clsx('flex flex-wrap mx-4 mt-2 gap-x-2 justify-center')}>
+          {tags.map((tag, index) => <span key={index} className={clsx('textstyle-description text-sm')}>{`#${tag}`}</span>)}
         </div>
       )}
-      {info && <span className={tw('mt-2 text-sm')}>{info}</span>}
+      {info && <span className={clsx('mt-2 text-sm')}>{info}</span>}
       {socials && (
-        <div className={tw('flex flex-wrap flex-grow items-end justify-center gap-x-4 gap-y-2 mt-4')}>
+        <div className={clsx('flex flex-wrap flex-grow items-end justify-center gap-x-4 gap-y-2 mt-4')}>
           {socials.map((socialIconProps, index) => (
             <SocialIcon key={index} {...socialIconProps} size={socialIconProps.size ?? 20}/>
           ))}

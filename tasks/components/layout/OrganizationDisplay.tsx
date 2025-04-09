@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
@@ -57,9 +57,9 @@ export const OrganizationDisplay = ({
 
   const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
-    <div className={tw('py-4 px-6')}>
+    <div className={clsx('py-4 px-6')}>
       <ColumnTitle title={translation.yourOrganizations}/>
-      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+      <div className={clsx(`grid grid-cols-${columns} gap-6`)}>
         {usedOrganizations.map(organization => (
           <OrganizationCard
             key={organization.id}
@@ -75,7 +75,7 @@ export const OrganizationDisplay = ({
           text={translation.addOrganization}
           onTileClick={() => context.updateContext({ ...context.state, organizationId: '' })}
           isSelected={usedSelectedId === ''}
-          className={tw('h-full')}
+          className={clsx('h-full')}
         />
       </div>
     </div>

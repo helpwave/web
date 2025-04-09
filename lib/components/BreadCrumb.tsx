@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export type Crumb = {
   display: string,
@@ -19,13 +19,13 @@ type BreadCrumbProps = {
  */
 export const BreadCrumb = ({ crumbs, linkClassName, containerClassName }: BreadCrumbProps) => {
   return (
-    <div className={tx('@(flex flex-row)', containerClassName)}>
+    <div className={clsx('@(flex flex-row)', containerClassName)}>
       {crumbs.map((crumb, index) => (
         <div key={index}>
-          <Link href={crumb.link} className={tx(linkClassName, { '@(text-gray-500 hover:text-black)': index !== crumbs.length - 1 })}>
+          <Link href={crumb.link} className={clsx(linkClassName, { '@(text-gray-500 hover:text-black)': index !== crumbs.length - 1 })}>
             {crumb.display}
           </Link>
-          {index !== crumbs.length - 1 && <span className={tw('px-2 text-gray-500')}>/</span>}
+          {index !== crumbs.length - 1 && <span className={clsx('px-2 text-gray-500')}>/</span>}
         </div>
       ))}
     </div>

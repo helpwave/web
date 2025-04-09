@@ -1,7 +1,7 @@
 import type { WeekDay } from '../../util/date'
 import { equalDate, getWeeksForCalenderMonth } from '../../util/date'
 import { noop } from '../../util/noop'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { useLocale } from '../../hooks/useLanguage'
 
 export type DayPickerProps = {
@@ -29,23 +29,23 @@ export const DayPicker = ({
   const weeks = getWeeksForCalenderMonth(value, weekStart)
 
   return (
-    <div className={tx('flex flex-col gap-y-1 min-w-[220px] select-none', className)}>
-      <div className={tw('flex flex-row text-center')}>
+    <div className={clsx('flex flex-col gap-y-1 min-w-[220px] select-none', className)}>
+      <div className={clsx('flex flex-row text-center')}>
         {weeks[0]!.map((weekDay, index) => (
-          <div key={index} className={tw('flex-1 font-semibold')}>
+          <div key={index} className={clsx('flex-1 font-semibold')}>
             {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} className={tw('flex flex-row text-center gap-x-2')}>
+        <div key={index} className={clsx('flex flex-row text-center gap-x-2')}>
           {week.map((date) => {
             const isSelected = !!selected && equalDate(selected, date)
             const isToday = equalDate(new Date(), date)
             return (
               <div
                 key={date.getDate()}
-                className={tx(
+                className={clsx(
                   'flex-1 cursor-pointer rounded-md hover:bg-hw-primary-200 border border-2 hover:border-hw-primary-400',
                   {
                     'text-gray-400': date.getMonth() !== month,

@@ -1,6 +1,4 @@
-@import "variants.css";
-
-@layer base {
+@theme {
   --color-white: #FFFFFF;
   --color-black: #000000;
   --color-gray-25: #F8F8F8;
@@ -109,6 +107,9 @@
   --color-button-solid-warning-background: #EA9E40;
   --color-button-solid-warning-icon: #FFFFFF;
   --color-button-solid-warning-text: #FFFFFF;
+  --color-button-solid-negative-background: #DC576D;
+  --color-button-solid-negative-icon: #FFFFFF;
+  --color-button-solid-negative-text: #FFFFFF;
 
   --color-button-text-neutral-text: #333333;
   --color-button-text-neutral-icon: #333333;

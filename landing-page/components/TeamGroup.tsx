@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { ProfileProps } from '@helpwave/common/components/Profile'
 import { Profile } from '@helpwave/common/components/Profile'
 
@@ -12,8 +12,8 @@ const TeamGroup = ({
   members,
 }: TeamGroupProps) => {
   return (
-    <div className={tw('mb-8 flex flex-wrap text-center justify-center gap-8')}>
-      <h2 className={tw('w-full text-6xl underline my-8')}>{name}</h2>
+    <div className={clsx('mb-8 flex flex-wrap text-center justify-center gap-8')}>
+      <h2 className={clsx('w-full text-6xl underline my-8')}>{name}</h2>
       {members.map(member => (
         <Profile key={member.name} {...member}/>
       ))}

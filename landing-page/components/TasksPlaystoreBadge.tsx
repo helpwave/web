@@ -1,7 +1,7 @@
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import Link from 'next/link'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 /**
  * WHEN USING MAKE THE NECESSARY ATTRIBUTION TO GOOGLE
@@ -27,7 +27,7 @@ export const TasksPlaystoreBadge = () => {
   }[language]
   return (
     <Link href={linkURL} target="_blank">
-      <Image alt={alt} src={imageURL} height={0} width={0} className={tx('w-full min-h-[54px] max-h-[54px] min-w-[182px] max-w-[182px]')}/>
+      <Image alt={alt} src={imageURL} height={0} width={0} className={clsx('w-full min-h-[54px] max-h-[54px] min-w-[182px] max-w-[182px]')}/>
     </Link>
   )
 }

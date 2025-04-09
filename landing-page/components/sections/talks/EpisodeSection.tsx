@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
@@ -67,17 +67,17 @@ const EpisodeSection = ({ overwriteTranslation }: PropsForTranslation<EpisodeSec
 
   return (
     <SectionBase>
-      <div className={tw('flex-wrap gap-16 w-full justify-center')}>
-        <h1 className={tw('font-space text-5xl overline')}>{translation.allEpisodes}</h1>
+      <div className={clsx('flex-wrap gap-16 w-full justify-center')}>
+        <h1 className={clsx('font-space text-5xl overline')}>{translation.allEpisodes}</h1>
         {isLoading ? (<LoadingAnimation />) : data?.map(episode => (
           <Link key={episode.id} href={episode.link} target="_blank">
-            <div className={tw('w-full shadow-sm hover:border-solid hover:border-hw-pool-orange rounded-md transition-all duration-500 border-dashed border-2 p-8 my-8 flex gap-16 bg-white')}>
-              <div className={tw('w-3/4 mobile:!w-full')}>
-                <h4 className={tw('font-space text-2xl font-bold')}>{episode.title}</h4>
-                <p className={tw('text-gray-600 text-justify')}>published on {episode.date.toLocaleDateString('de-DE')}</p>
-                <p className={tw('text-gray-900 text-justify')}>{episode.description}</p>
+            <div className={clsx('w-full shadow-sm hover:border-solid hover:border-hw-pool-orange rounded-md transition-all duration-500 border-dashed border-2 p-8 my-8 flex gap-16 bg-white')}>
+              <div className={clsx('w-3/4 mobile:!w-full')}>
+                <h4 className={clsx('font-space text-2xl font-bold')}>{episode.title}</h4>
+                <p className={clsx('text-gray-600 text-justify')}>published on {episode.date.toLocaleDateString('de-DE')}</p>
+                <p className={clsx('text-gray-900 text-justify')}>{episode.description}</p>
               </div>
-              <Image alt="Episode Thumbnail" src={episode.imageURL} style={{ objectFit: 'cover' }} width={size} height={size} className={tw('mobile:hidden transition-all duration-500 shadow-md hover:shadow-2xl w-1/4 h-auto m-auto')}/>
+              <Image alt="Episode Thumbnail" src={episode.imageURL} style={{ objectFit: 'cover' }} width={size} height={size} className={clsx('mobile:hidden transition-all duration-500 shadow-md hover:shadow-2xl w-1/4 h-auto m-auto')}/>
             </div>
           </Link>
         ))}

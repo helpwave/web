@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
 import { closestMatch, range } from '../../util/array'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 type MinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 
@@ -81,7 +81,7 @@ export const TimePicker = ({
 
   const closestMinute = closestMatch(minutes, (item1, item2) => Math.abs(item1 - time.getMinutes()) < Math.abs(item2 - time.getMinutes()))
 
-  const style = (selected: boolean) => tx('px-2 py-1 cursor-pointer hover:bg-hw-primary-200 border border-2 rounded-md hover:border-hw-primary-400 text-center mr-3',
+  const style = (selected: boolean) => clsx('px-2 py-1 cursor-pointer hover:bg-hw-primary-200 border border-2 rounded-md hover:border-hw-primary-400 text-center mr-3',
     { 'bg-hw-primary-100 border-hw-primary-300': selected, 'border-transparent': !selected })
 
   const onChangeWrapper = (transformer: (newDate: Date) => void) => {
@@ -91,9 +91,9 @@ export const TimePicker = ({
   }
 
   return (
-    <div className={tx('flex flex-row gap-x-2 w-fit min-w-[150px] select-none', className)}>
+    <div className={clsx('flex flex-row gap-x-2 w-fit min-w-[150px] select-none', className)}>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={tw('flex flex-col gap-y-1 h-full')}>
+        <div className={clsx('flex flex-col gap-y-1 h-full')}>
           {hours.map(hour => {
             const currentHour = hour === time.getHours() - (!is24HourFormat && isPM ? 12 : 0)
             return (
@@ -110,7 +110,7 @@ export const TimePicker = ({
         </div>
       </Scrollbars>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={tw('flex flex-col gap-y-1 h-full')}>
+        <div className={clsx('flex flex-col gap-y-1 h-full')}>
           {minutes.map(minute => {
             const currentMinute = minute === closestMinute
             return (
@@ -127,7 +127,7 @@ export const TimePicker = ({
         </div>
       </Scrollbars>
       {!is24HourFormat && (
-        <div className={tw('flex flex-col gap-y-1')}>
+        <div className={clsx('flex flex-col gap-y-1')}>
           <div
             className={style(!isPM)}
             onClick={() => onChangeWrapper(newDate => isPM && newDate.setHours(newDate.getHours() - 12))}

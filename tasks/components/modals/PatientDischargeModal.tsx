@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -43,8 +43,8 @@ export const PatientDischargeModal = ({
     >
       {patient && (
         <>
-          <span className={tw('mt-2')}>{`${translation.followingPatient}: `}</span>
-          <span className={tw('font-medium')}>{patient.name}</span>
+          <span className={clsx('mt-2')}>{`${translation.followingPatient}: `}</span>
+          <span className={clsx('font-medium')}>{patient.name}</span>
         </>
       )}
     </ConfirmDialog>

@@ -1,4 +1,7 @@
-import type { StorybookConfig } from '@storybook/nextjs';
+// .storybook/main.ts
+import type { StorybookConfig } from '@storybook/nextjs'
+import * as path from 'node:path'
+
 const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -10,8 +13,27 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {},
   },
-  docs: {
-    autodocs: 'tag',
+  docs: {},
+  typescript: {
+    reactDocgen: 'react-docgen-typescript'
   },
-};
-export default config;
+  core: {
+    disableTelemetry: true,
+  },
+  webpackFinal: async (config) => {
+    console.log('Webpack config:', config)
+
+    config.module?.rules?.push({
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader', 'postcss-loader'],
+      include: [
+        path.resolve(__dirname, '../stories'),
+        path.resolve(__dirname, '../node_modules/@helpwave/style-themes'),
+      ],
+    })
+
+    return config
+  },
+}
+
+export default config

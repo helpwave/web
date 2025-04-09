@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { PropertyBase } from '../../../components/properties/PropertyBase'
 
 const meta = {
@@ -17,7 +17,7 @@ export const PropertyBaseVariation: Story = {
     hasValue: true,
     input: ({ softRequired, hasValue }) => (
       <div
-        className={tx('flex flex-row grow py-2 px-4', { 'text-hw-warn-600': softRequired && !hasValue })}
+        className={clsx('flex flex-row grow py-2 px-4', { 'text-hw-warn-600': softRequired && !hasValue })}
       >
         Value
       </div>

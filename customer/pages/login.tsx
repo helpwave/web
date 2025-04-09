@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { useState } from 'react'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -51,11 +51,11 @@ const Login: NextPage<PropsForTranslation<LoginTranslation, LoginServerSideProps
   return (
     <Page
       pageTitle={titleWrapper(translation.login)}
-      mainContainerClassName={tw('items-center justify-center min-h-[90vh]')}
+      mainContainerClassName={clsx('items-center justify-center min-h-[90vh]')}
       isHidingSidebar={true}
     >
-      <div className={tw('flex flex-col bg-gray-100 max-w-[300px] p-8 gap-y-2 rounded-lg shadow-lg')}>
-        <h2 className={tw('font-bold font-inter text-2xl')}>{translation.login}</h2>
+      <div className={clsx('flex flex-col bg-gray-100 max-w-[300px] p-8 gap-y-2 rounded-lg shadow-lg')}>
+        <h2 className={clsx('font-bold font-inter text-2xl')}>{translation.login}</h2>
         <Input
           label={{ name: translation.email }}
           value={loginData.email}
@@ -70,7 +70,7 @@ const Login: NextPage<PropsForTranslation<LoginTranslation, LoginServerSideProps
         />
         <SolidButton onClick={() => {login(loginData.email, loginData.password)}}>{translation.signIn}</SolidButton>
 
-        <SolidButton onClick={() => {}} className={tw('mt-6')}>{translation.register}</SolidButton>
+        <SolidButton onClick={() => {}} className={clsx('mt-6')}>{translation.register}</SolidButton>
       </div>
     </Page>
   )

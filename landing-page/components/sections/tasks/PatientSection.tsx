@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -32,29 +32,29 @@ export const PatientSection = ({ overwriteTranslation }: PropsForTranslation<Pat
 
   return (
     <SectionBase
-      outerClassName={tw('tablet:pb-0 desktop:pb-0')}
-      className={tw('flex flex-row mobile:!flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
+      outerClassName={clsx('tablet:pb-0 desktop:pb-0')}
+      className={clsx('flex flex-row mobile:!flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
       backgroundColor="gray"
     >
       <div
-        className={tw('flex flex-row items-end justify-center rounded-l-3xl mobile:w-full w-2/5 z-10 min-w-[250px]')}
+        className={clsx('flex flex-row items-end justify-center rounded-l-3xl mobile:w-full w-2/5 z-10 min-w-[250px]')}
       >
         <Image
           src={imageUrl}
           alt=""
           width={371}
           height={649}
-          className={tw('max-h-[70vh]')}
+          className={clsx('max-h-[70vh]')}
         />
       </div>
-      <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>
-        <div className={tw('flex flex-col gap-y-2')}>
-          <div className={tw('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
+      <div className={clsx('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>
+        <div className={clsx('flex flex-col gap-y-2')}>
+          <div className={clsx('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
             <TagIcon/>
-            <span className={tw('textstyle-title-normal')}>{translation.patients}</span>
+            <span className={clsx('textstyle-title-normal')}>{translation.patients}</span>
           </div>
-          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
-          <span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
+          <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
+          <span className={clsx('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
         </div>
       </div>
     </SectionBase>

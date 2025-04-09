@@ -1,6 +1,6 @@
 import { useState, type PropsWithChildren, type ReactNode } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export type HideableContentSectionProps = PropsWithChildren & {
   initiallyOpen?: boolean,
@@ -19,9 +19,9 @@ export const HideableContentSection = ({
 }: HideableContentSectionProps) => {
   const [open, setOpen] = useState(initiallyOpen)
   return (
-    <div className={tw('flex flex-col gap-y-2')}>
+    <div className={clsx('flex flex-col gap-y-2')}>
       <div
-        className={tx('flex flex-row justify-between items-center', { 'cursor-pointer': !disabled })}
+        className={clsx('flex flex-row justify-between items-center', { 'cursor-pointer': !disabled })}
         onClick={() => {
           if (!disabled) {
             setOpen(!open)

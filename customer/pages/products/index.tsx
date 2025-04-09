@@ -5,7 +5,7 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { useProductsQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import type { ProductPlan } from '@/api/dataclasses/product'
 
@@ -36,17 +36,17 @@ const Products: NextPage<PropsForTranslation<ProductsTranslation, ProductsServer
   const translation = useTranslation(defaultProductsTranslations, overwriteTranslation)
   const { data, isError, isLoading } = useProductsQuery()
   return (
-    <Page pageTitle={titleWrapper(translation.products)} mainContainerClassName={tw('min-h-[80vh]')}>
+    <Page pageTitle={titleWrapper(translation.products)} mainContainerClassName={clsx('min-h-[80vh]')}>
       <Section titleText={translation.products}>
-        {isError && (<span className={tw('There was an Error')}></span>)}
+        {isError && (<span className={clsx('There was an Error')}></span>)}
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (
-          <div className={tw('flex flex-wrap gap-x-8 gap-y-12')}>
+          <div className={clsx('flex flex-wrap gap-x-8 gap-y-12')}>
             {data.map((product, index) => (
-              <div key={index} className={tw('flex flex-col gap-y-2 min-w-[200px] max-w-[200px] bg-hw-primary-500 text-white px-4 py-2 rounded-md')}>
-                <h4 className={tw('font-bold font-space text-xl')}>{product.name}</h4>
-                <div className={tw('flex flex-row justify-between')}>
-                  <span className={tw('font-semibold text-lg')}>{`${product.price}€`}</span>
+              <div key={index} className={clsx('flex flex-col gap-y-2 min-w-[200px] max-w-[200px] bg-hw-primary-500 text-white px-4 py-2 rounded-md')}>
+                <h4 className={clsx('font-bold font-space text-xl')}>{product.name}</h4>
+                <div className={clsx('flex flex-row justify-between')}>
+                  <span className={clsx('font-semibold text-lg')}>{`${product.price}€`}</span>
                   {translation[product.plan]}
                 </div>
               </div>

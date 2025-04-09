@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -47,32 +47,32 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
 
   const features = [translation.feature1, translation.feature2, translation.feature3,
     translation.feature4, translation.feature5, translation.feature6]
-  const featureStyle = tw('font-semibold')
+  const featureStyle = clsx('font-semibold')
 
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-end items-center')}
+      className={clsx('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-end items-center')}
       backgroundColor="gray"
-      outerClassName={tw('!pr-0')}
+      outerClassName={clsx('!pr-0')}
     >
-      <div className={tw('flex flex-col items-center mobile:items-start flex-1 mobile:pr-6')}>
-        <div className={tw('flex flex-col gap-y-2 max-w-[500px] mobile:max-w-full')}>
-          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
-          <span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
-          <ItemGrid className={tw('mt-2')}>
+      <div className={clsx('flex flex-col items-center mobile:items-start flex-1 mobile:pr-6')}>
+        <div className={clsx('flex flex-col gap-y-2 max-w-[500px] mobile:max-w-full')}>
+          <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
+          <span className={clsx('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
+          <ItemGrid className={clsx('mt-2')}>
             {features.map((feature, index) => (<span key={index} className={featureStyle}>{feature}</span>))}
           </ItemGrid>
         </div>
       </div>
       <div
         // TODO fix image size and add dashed lines
-        className={tw('relative right-0 rounded-l-3xl w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10')}>
+        className={clsx('relative right-0 rounded-l-3xl w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10')}>
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={tw('w-full object-cover ')}
+          className={clsx('w-full object-cover ')}
         />
       </div>
     </SectionBase>

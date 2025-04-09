@@ -1,6 +1,6 @@
 import type { MouseEventHandler, PropsWithChildren } from 'react'
 import { noop } from '../util/noop'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 export type CardProps = {
   isSelected?: boolean,
@@ -19,7 +19,7 @@ export const Card = ({
 }: PropsWithChildren<CardProps>) => {
   return (
     <div onClick={onTileClick}
-      className={tx(
+      className={clsx(
         '@(rounded-md py-2 px-4 border border-2 w-full bg-white hover:border-hw-primary-800 cursor-pointer)',
         { '@(border-hw-primary-700)': isSelected },
         className

@@ -1,3 +1,5 @@
+@import '../themes/fonts.css';
+
 @layer components {
   .textstyle-title-3xl {
     @apply text-5xl font-space font-bold;
@@ -60,7 +62,7 @@
   }
 
   .textstyle-form-error {
-    @apply text-hw-negative-500 text-sm;
+    @apply text-negative text-sm;
   }
 
   .textstyle-form-description {

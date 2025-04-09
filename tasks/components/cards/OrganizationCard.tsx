@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Mail } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -40,19 +40,19 @@ export const OrganizationCard = ({
 
   return (
     <EditCard {...editCardProps}>
-      <div className={tw('flex flex-col gap-y-2 overflow-hidden')}>
-        <div className={tw('flex flex-row gap-x-1 font-bold font-space overflow-hidden')}>
-          <span className={tw('truncate flex-1')}>
+      <div className={clsx('flex flex-col gap-y-2 overflow-hidden')}>
+        <div className={clsx('flex flex-row gap-x-1 font-bold font-space overflow-hidden')}>
+          <span className={clsx('truncate flex-1')}>
             {`${organization.longName}`}
           </span>
           <span>{`(${organization.shortName})`}</span>
         </div>
-        <div className={tw('flex flex-row items-center overflow-hidden gap-x-2')}>
+        <div className={clsx('flex flex-row items-center overflow-hidden gap-x-2')}>
           <Mail/>
-          <span className={tw('w-full truncate text-sm')}>{organization.email}</span>
+          <span className={clsx('w-full truncate text-sm')}>{organization.email}</span>
         </div>
-        <div className={tw('flex flex-row justify-between')}>
-          <div className={tw('text-left my-1 font-semibold text-gray-600 text-sm truncate')}>
+        <div className={clsx('flex flex-row justify-between')}>
+          <div className={clsx('text-left my-1 font-semibold text-gray-600 text-sm truncate')}>
             {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation.members : translation.member}`}
           </div>
           <AvatarGroup avatars={organization.members.map(user => ({ avatarUrl: user.avatarURL, alt: user.name }))}/>

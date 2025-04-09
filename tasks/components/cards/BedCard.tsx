@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -37,12 +37,12 @@ export const BedCard = ({
   const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
   return (
     (
-      <DragCard onTileClick={onTileClick} isSelected={isSelected} className={tx('min-h-[148px] flex flex-col', className)} {...restCardProps}>
-        <div className={tw('flex flex-row justify-between')}>
-          <span className={tw('textstyle-title-sm')}>{bedName}</span>
+      <DragCard onTileClick={onTileClick} isSelected={isSelected} className={clsx('min-h-[148px] flex flex-col', className)} {...restCardProps}>
+        <div className={clsx('flex flex-row justify-between')}>
+          <span className={clsx('textstyle-title-sm')}>{bedName}</span>
           <span>{translation.nobody}</span>
         </div>
-        <div className={tw('flex flex-1 justify-center items-center')}>
+        <div className={clsx('flex flex-1 justify-center items-center')}>
           <Plus/>
         </div>
       </DragCard>

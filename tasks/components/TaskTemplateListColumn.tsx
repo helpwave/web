@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Edit } from 'lucide-react'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
@@ -50,17 +50,17 @@ export const TaskTemplateListColumn = ({
   }, [ref.current?.clientHeight])
 
   return (
-    <div className={tw('flex flex-col overflow-hidden h-full')}>
-      <div className={tw('flex flex-row overflow-hidden')}>
-        <span className={tw('textstyle-lg mb-4 flex-1')}>
+    <div className={clsx('flex flex-col overflow-hidden h-full')}>
+      <div className={clsx('flex flex-row overflow-hidden')}>
+        <span className={clsx('textstyle-lg mb-4 flex-1')}>
           {translation.template}
         </span>
         {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
       </div>
-      <div className={tw('overflow-hidden h-full')} ref={ref}>
+      <div className={clsx('overflow-hidden h-full')} ref={ref}>
         <div>
           <Scrollbars autoHeight autoHeightMin={height} autoHide >
-            <div className={tw('flex flex-col gap-y-2 pr-3')}>
+            <div className={clsx('flex flex-col gap-y-2 pr-3')}>
               {templates.map((taskTemplateExtension, index) => (
                 <TaskTemplateCard
                   key={taskTemplateExtension.taskTemplate.id}
@@ -68,7 +68,7 @@ export const TaskTemplateListColumn = ({
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
                   isSelected={activeId === taskTemplateExtension.taskTemplate.id}
                   onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
-                  className={tx('border-2 border-gray-300 !pr-2', { 'mb-2': index === templates.length - 1 })}
+                  className={clsx('border-2 border-gray-300 !pr-2', { 'mb-2': index === templates.length - 1 })}
                   typeForLabel={taskTemplateExtension.type}
                 />
               ))}

@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -100,14 +100,14 @@ export const PropertyDisplay = ({
   })
 
   return (
-    <div className={tw('py-4 px-6 flex flex-col gap-y-4')}>
-      <div className={tw('flex flex-row gap-x-1 items-center')}>
-        <Tag className={tw('text-hw-primary-400')} size={20}/>
-        <span className={tw('textstyle-title-lg')}>{translation.properties}</span>
+    <div className={clsx('py-4 px-6 flex flex-col gap-y-4')}>
+      <div className={clsx('flex flex-row gap-x-1 items-center')}>
+        <Tag className={clsx('text-hw-primary-400')} size={20}/>
+        <span className={clsx('textstyle-title-lg')}>{translation.properties}</span>
       </div>
-      <div className={tw('flex flex-col gap-y-2')}>
-        <div className={tw('flex flex-row justify-between')}>
-          <div className={tw('flex flex-row gap-x-2')}>
+      <div className={clsx('flex flex-col gap-y-2')}>
+        <div className={clsx('flex flex-row justify-between')}>
+          <div className={clsx('flex flex-row gap-x-2')}>
             <Input
               // TODO Search Icon
               value={search}
@@ -116,13 +116,13 @@ export const PropertyDisplay = ({
               placeholder={translation.search}
             />
             <PropertySubjectTypeSelect
-              className={tw('w-full')}
+              className={clsx('w-full')}
               value={contextState.subjectType}
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation.subjectType}
             />
             <SolidButton
-              className={tw('w-full !px-0')}
+              className={clsx('w-full !px-0')}
               variant="text"
               color="hw-negative"
               onClick={() => {
@@ -137,7 +137,7 @@ export const PropertyDisplay = ({
             ...contextState,
             propertyId: undefined
           })}>
-            <div className={tw('flex flex-row gap-x-2 items-center')}>
+            <div className={clsx('flex flex-row gap-x-2 items-center')}>
               <Plus/>
               <span>{translation.addProperty}</span>
             </div>
@@ -147,7 +147,7 @@ export const PropertyDisplay = ({
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: tw('min-h-[300px] border-2 border-black rounded-xl') }}
+        loadingProps={{ classname: clsx('min-h-[300px] border-2 border-black rounded-xl') }}
       >
         <Table
           data={filteredProperties}
@@ -158,19 +158,19 @@ export const PropertyDisplay = ({
               title={{ value: property.name }}
               description={{ value: translation[property.fieldType] }}
             />),
-            (<div key="subject-type-cell" className={tw('flex flex-row gap-x-2')}>
+            (<div key="subject-type-cell" className={clsx('flex flex-row gap-x-2')}>
               <SubjectTypeIcon subjectType={property.subjectType}/>
               <span>{translation[property.subjectType]}</span>
             </div>),
-            (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
+            (<div key="edit-button-cell" className={clsx('flex flex-row justify-end')}>
               <SolidButton variant="text" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
                 <span>{translation.edit}</span>
               </SolidButton>
             </div>)
           ]}
           header={[
-            <span key="headerName" className={tw('textstyle-table-header')}>{translation.name}</span>,
-            <span key="headerSubjectType" className={tw('textstyle-table-header')}>{translation.subjectType}</span>,
+            <span key="headerName" className={clsx('textstyle-table-header')}>{translation.name}</span>,
+            <span key="headerSubjectType" className={clsx('textstyle-table-header')}>{translation.subjectType}</span>,
             <></>
           ]}
         />

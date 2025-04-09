@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -56,14 +56,14 @@ export const DiscardChangesDialog = ({
       {...modalProps}
     >
       {children}
-      <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-        <SolidButton color="hw-positive" onClick={onSave}>
+      <div className={clsx('flex flex-row mt-3 gap-x-4 justify-end')}>
+        <SolidButton color="positive" onClick={onSave}>
           {translation.save}
         </SolidButton>
-        <SolidButton color="hw-negative" onClick={onDontSave}>
+        <SolidButton color="negative" onClick={onDontSave}>
           {translation.dontSave}
         </SolidButton>
-        <SolidButton autoFocus color="hw-neutral" onClick={onCancel}>
+        <SolidButton autoFocus color="primary" onClick={onCancel}>
           {translation.cancel}
         </SolidButton>
       </div>

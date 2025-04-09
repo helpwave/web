@@ -1,19 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SolidButton } from '../../../components/Button'
+import { TextButton } from '../../../components/Button'
 
 const meta = {
   title: 'User-Action/Button',
-  component: SolidButton,
-} satisfies Meta<typeof SolidButton>
+  component: TextButton,
+} satisfies Meta<typeof TextButton>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const ButtonVariation: Story = {
+export const TextButtonVariation: Story = {
   args: {
     children: 'Test',
-    color: 'hw-primary',
-    variant: 'background',
+    color: 'negative',
     size: 'medium',
     disabled: false,
     className: 'rounded',

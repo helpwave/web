@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { ModalProps } from '@helpwave/common/components/modals/Modal'
@@ -54,14 +54,14 @@ export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneTo
       titleText={translation.switchOrganization}
       {...modalProps}
     >
-      <div className={tw('w-[320px]')}>
+      <div className={clsx('w-[320px]')}>
         <Select
-          className={tw('mt-2')}
+          className={clsx('mt-2')}
           value={organization}
           options={organizationOptions}
           onChange={setOrganization}
         />
-        <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
+        <div className={clsx('flex flex-row mt-3 gap-x-4 justify-end')}>
           <SolidButton autoFocus color="hw-positive" disabled={!organization} onClick={onDone}>
             {translation.ok}
           </SolidButton>

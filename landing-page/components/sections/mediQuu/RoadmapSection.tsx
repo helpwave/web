@@ -1,6 +1,6 @@
 import { type Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type RoadmapItem = {
@@ -83,15 +83,15 @@ const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {
 export const RoadmapSection = () => {
   const translation = useTranslation(defaultRoadmapTranslation)
   return (
-    <SectionBase backgroundColor="gray" className={tw('flex flex-col')}>
-      <span className={tw('textstyle-title-lg text-hw-secondary-400 mb-1')}>{translation.title}</span>
-      <span className={tw('textstyle-description mb-1')}>{translation.description}</span>
-      <div className={tw('mt-4 w-full flex flex-wrap justify-start gap-4')}>
+    <SectionBase backgroundColor="gray" className={clsx('flex flex-col')}>
+      <span className={clsx('textstyle-title-lg text-hw-secondary-400 mb-1')}>{translation.title}</span>
+      <span className={clsx('textstyle-description mb-1')}>{translation.description}</span>
+      <div className={clsx('mt-4 w-full flex flex-wrap justify-start gap-4')}>
         {translation.roadmap.map(value => (
-          <div key={value.name} className={tw('w-full desktop:max-w-[300px] bg-white shadow-md rounded-lg p-5 hover:shadow-lg transition-shadow transition-1000')}>
-            <span className={tw('textstyle-title-normal block')}>{value.name}</span>
-            <span className={tw('textstyle-label-sm block text-hw-secondary-400 mb-2')}>{value.start}</span>
-            <span className={tw('text-gray-500')}>{value.description}</span>
+          <div key={value.name} className={clsx('w-full desktop:max-w-[300px] bg-white shadow-md rounded-lg p-5 hover:shadow-lg transition-shadow transition-1000')}>
+            <span className={clsx('textstyle-title-normal block')}>{value.name}</span>
+            <span className={clsx('textstyle-label-sm block text-hw-secondary-400 mb-2')}>{value.start}</span>
+            <span className={clsx('text-gray-500')}>{value.description}</span>
           </div>
         ))}
       </div>

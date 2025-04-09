@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 
 type ASTNodeModifierType = 'none'| 'italic'| 'bold'| 'underline'| 'font-space'| 'primary'| 'secondary'| 'warn'| 'positive'| 'negative'
 
@@ -30,11 +30,11 @@ export const ASTNodeInterpreter = ({
     case 'newline':
       return <br />
     case 'text':
-      return isRoot ? <span className={tx(className)}>{node.text}</span> : node.text
+      return isRoot ? <span className={clsx(className)}>{node.text}</span> : node.text
     case 'helpwave':
-      return (<span className={tw('font-bold font-space no-underline')}>helpwave</span>)
+      return (<span className={clsx('font-bold font-space no-underline')}>helpwave</span>)
     case 'none':
-      return isRoot ? <span className={tx(className)}>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</span> :
+      return isRoot ? <span className={clsx(className)}>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</span> :
         <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
     case 'bold':
       return <b>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</b>
@@ -44,42 +44,42 @@ export const ASTNodeInterpreter = ({
       return (<u>{node.children.map((value, index) => (<ASTNodeInterpreter key={index} node={value}/>))}</u>)
     case 'font-space':
       return (
-        <span className={tw('font-space')}>{node.children.map((value, index) => (
+        <span className={clsx('font-space')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter key={index}
                               node={value}/>
         ))}</span>
       )
     case 'primary':
       return (
-        <span className={tw('text-hw-primary-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-hw-primary-400')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
       )
     case 'secondary':
       return (
-        <span className={tw('text-hw-secondary-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-hw-secondary-400')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
       )
     case 'warn':
       return (
-        <span className={tw('text-hw-warn-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-hw-warn-400')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
       )
     case 'positive':
       return (
-        <span className={tw('text-hw-positive-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-hw-positive-400')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
       )
     case 'negative':
       return (
-        <span className={tw('text-hw-negative-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-hw-negative-400')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>

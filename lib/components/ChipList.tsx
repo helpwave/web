@@ -1,7 +1,7 @@
 import type { HTMLProps, PropsWithChildren, ReactNode } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
-import type { ChipColor } from '@helpwave/style-themes/twind/theme-variables'
+import clsx from 'clsx'
 
+export type ChipColor = 'default' | 'dark'
 type ChipVariant = 'normal' | 'fullyRounded'
 
 export type ChipProps = HTMLProps<HTMLDivElement> & PropsWithChildren<{
@@ -16,16 +16,27 @@ export type ChipProps = HTMLProps<HTMLDivElement> & PropsWithChildren<{
 export const Chip = ({
                        children,
                        trailingIcon,
-                       color,
+                       color = 'default',
                        variant = 'normal',
                        className = '',
                        ...restProps
                      }: ChipProps) => {
+  const colorMapping: string = {
+    default: 'text-tag-default-text bg-tag-default-background',
+    dark: 'text-tag-dark-text bg-tag-dark-background',
+  }[color]
+
+  const colorMappingIcon: string = {
+    default: 'text-tag-default-icon',
+    dark: 'text-tag-dark-icon',
+  }[color]
+
   return (
     <div
       {...restProps}
-      className={tx(
-        `@(flex flex-row gap-x-2 w-fit px-2 py-1 text-tag-${color}-text bg-tag-${color}-background)`,
+      className={clsx(
+        `flex flex-row gap-x-2 w-fit px-2 py-1`,
+        colorMapping,
         {
           '@(rounded-md)': variant === 'normal',
           '@(rounded-full text-xs font-bold)': variant === 'fullyRounded',
@@ -34,7 +45,7 @@ export const Chip = ({
       )}
     >
       {children}
-      {trailingIcon && (<span className={tw(`@(text-tag-${color}-icon)`)}>{trailingIcon}</span>)}
+      {trailingIcon && (<span className={colorMappingIcon}>{trailingIcon}</span>)}
     </div>
   )
 }
@@ -52,7 +63,7 @@ export const ChipList = ({
                            className = ''
                          }: ChipListProps) => {
   return (
-    <div className={tx('@(flex flex-wrap gap-x-4 gap-y-2)', className)}>
+    <div className={clsx('flex flex-wrap gap-x-4 gap-y-2', className)}>
       {list.map((value, index) => (
         <Chip
           key={index}

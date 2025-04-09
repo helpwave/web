@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -52,16 +52,16 @@ const ReachoutSection = ({ overwriteTranslation }: PropsForTranslation<ReachoutS
   const translation = useTranslation(defaultReachoutSectionTranslation, overwriteTranslation)
 
   return (
-    <SectionBase className={tw('text-xl desktop:text-center')}>
-      <h2 className={tw('font-space text-4xl font-bold')}>{translation.medicalHeroTitle}</h2>
-      <h3 className={tw('font-sans text-xl font-medium mt-2 mb-2 text-gray-600')}>
+    <SectionBase className={clsx('text-xl desktop:text-center')}>
+      <h2 className={clsx('font-space text-4xl font-bold')}>{translation.medicalHeroTitle}</h2>
+      <h3 className={clsx('font-sans text-xl font-medium mt-2 mb-2 text-gray-600')}>
         <MarkdownInterpreter text={translation.medicalHeroSubtitle}/>
       </h3>
-      <p className={tw('mb-5')}>
+      <p className={clsx('mb-5')}>
         <MarkdownInterpreter text={translation.medicalHeroText}/>
       </p>
-      <h2 className={tw('font-space text-4xl font-bold')}>{translation.hospitalManagerTitle}</h2>
-      <h3 className={tw('font-sans text-xl font-medium mt-2 mb-2 text-gray-600')}>
+      <h2 className={clsx('font-space text-4xl font-bold')}>{translation.hospitalManagerTitle}</h2>
+      <h3 className={clsx('font-sans text-xl font-medium mt-2 mb-2 text-gray-600')}>
         <MarkdownInterpreter text={translation.hospitalManagerSubtitle}/>
       </h3>
       <p>

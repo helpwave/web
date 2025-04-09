@@ -5,7 +5,7 @@ import { useTranslation } from '../../hooks/useTranslation'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import type { Languages } from '../../hooks/useLanguage'
 import { MultiSearchWithMapping } from '../../util/simpleSearch'
-import { tx, tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Menu, MenuItem } from './Menu'
 import { Input } from './Input'
 import { Checkbox } from './Checkbox'
@@ -98,15 +98,15 @@ export const MultiSelect = <T, >({
     : <span>{`${selectedItems.length} ${translation.selected}`}</span>
 
   return (
-    <div className={tx(className)}>
+    <div className={clsx(className)}>
       {label && (
-        <Label {...label} htmlFor={label.name} className={tx(' mb-1', label.className)} labelType={label.labelType ?? 'labelBig'}/>
+        <Label {...label} htmlFor={label.name} className={clsx(' mb-1', label.className)} labelType={label.labelType ?? 'labelBig'}/>
       )}
       <Menu<HTMLDivElement>
         alignment="t_"
         trigger={(onClick, ref) => (
           <div ref={ref} onClick={disabled ? undefined : onClick}
-               className={tx('inline-flex w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium cursor-pointer',
+               className={clsx('inline-flex w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium cursor-pointer',
                  {
                    'hover:bg-gray-100': !disabled,
                    'bg-gray-100 cursor-not-allowed text-gray-500': disabled
@@ -116,13 +116,13 @@ export const MultiSelect = <T, >({
             {selectedDisplay ? selectedDisplay({ items: options, disabled }) : menuButtonText}
           </div>
         )}
-        menuClassName={tx(
+        menuClassName={clsx(
           '!rounded-lg !shadow-lg !max-h-[500px] !min-w-[400px] !max-w-[70vh] !overflow-y-auto !border !border-2',
           { '!py-0': !enableSearch, '!pb-0': enableSearch }
         )}
       >
         {enableSearch && (
-          <div key="selectSearch" className={tw('flex flex-row gap-x-2 items-center px-4 py-2')}>
+          <div key="selectSearch" className={clsx('flex flex-row gap-x-2 items-center px-4 py-2')}>
             <Input autoFocus={true} value={searchText} onChange={setSearchText}/>
             <Search/>
           </div>
@@ -130,7 +130,7 @@ export const MultiSelect = <T, >({
         {filteredOptions.map((option, index) => (
           <MenuItem key={`item${index}`}>
             <div
-              className={tx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis flex flex-row gap-x-2',
+              className={clsx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis flex flex-row gap-x-2',
                 option.className, {
                   'text-gray-300 cursor-not-allowed': !!option.disabled,
                   'hover:bg-gray-100 cursor-pointer': !option.disabled,

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
 import { equalSizeGroups, range } from '../../util/array'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Expandable } from '../Expandable'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
 import { useLocale } from '../../hooks/useLanguage'
@@ -49,23 +49,23 @@ export const YearMonthPicker = ({
   const years = range(startYear.getFullYear(), endYear.getFullYear())
 
   return (
-    <div className={tx('flex flex-col select-none', className)}>
+    <div className={clsx('flex flex-col select-none', className)}>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={tw('flex flex-col gap-y-1 mr-3')}>
+        <div className={clsx('flex flex-col gap-y-1 mr-3')}>
           {years.map(year => {
             const selectedYear = value.getFullYear() === year
             return (
               <Expandable
                 key={year}
                 ref={(value.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
-                label={<span className={tx({ '!text-hw-primary-400 font-bold': selectedYear })}>{year}</span>}
-                className={tw('gap-y-2 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-sm')}
-                headerClassName={tw('px-2 py-1 rounded-lg bg-gray-100 hover:bg-hw-primary-200')}
+                label={<span className={clsx({ '!text-hw-primary-400 font-bold': selectedYear })}>{year}</span>}
+                className={clsx('gap-y-2 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-sm')}
+                headerClassName={clsx('px-2 py-1 rounded-lg bg-gray-100 hover:bg-hw-primary-200')}
                 initialExpansion={showValueOpen && selectedYear}
               >
-                <div className={tw('flex flex-col gap-y-1 px-2 pb-2')}>
+                <div className={clsx('flex flex-col gap-y-1 px-2 pb-2')}>
                   {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
-                    <div key={index} className={tw('flex flex-row gap-x-2')}>
+                    <div key={index} className={clsx('flex flex-row gap-x-2')}>
                       {monthList.map(month => {
                         const newDate = new Date(value)
                         const monthIndex = monthsList.indexOf(month)
@@ -74,7 +74,7 @@ export const YearMonthPicker = ({
                         return (
                           <div
                             key={month}
-                            className={tx(
+                            className={clsx(
                               'px-2 py-1 rounded-md border border-2 hover:bg-hw-primary-200 hover:border-hw-primary-400 flex-1 text-center cursor-pointer',
                               {
                                 'bg-white border-transparent': !selectedMonth,

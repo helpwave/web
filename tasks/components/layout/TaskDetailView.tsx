@@ -1,5 +1,5 @@
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -130,7 +130,7 @@ const TaskDetailViewSidebar = ({
   }
 
   return (
-    <div className={tw('flex flex-col min-w-[250px] gap-y-4')}>
+    <div className={clsx('flex flex-col min-w-[250px] gap-y-4')}>
       <ConfirmDialog
         id="TaskDetailView-PublishDialog"
         isOpen={isShowingPublicDialog}
@@ -150,8 +150,8 @@ const TaskDetailViewSidebar = ({
         descriptionText={translation.publishTaskDescription}
       />
       <div>
-        <label className={tw('textstyle-label-md')}>{translation.assignee}</label>
-        <div className={tw('flex flex-row items-center gap-x-2')}>
+        <label className={clsx('textstyle-label-md')}>{translation.assignee}</label>
+        <div className={clsx('flex flex-row items-center gap-x-2')}>
           <AssigneeSelect
             organizationId={organization?.id ?? ''}
             value={task.assignee}
@@ -181,8 +181,8 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label className={tw('textstyle-label-md')}>{translation.dueDate}</label>
-        <div className={tw('flex flex-row items-center gap-x-2')}>
+        <label className={clsx('textstyle-label-md')}>{translation.dueDate}</label>
+        <div className={clsx('flex flex-row items-center gap-x-2')}>
           <Input
             value={task.dueDate ? formatDate(task.dueDate) : ''}
             type="datetime-local"
@@ -211,7 +211,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label className={tw('textstyle-label-md')}>{translation.status}</label>
+        <label className={clsx('textstyle-label-md')}>{translation.status}</label>
         <TaskStatusSelect
           value={task.status}
           removeOptions={isCreating ? ['done'] : []}
@@ -224,16 +224,16 @@ const TaskDetailViewSidebar = ({
           }}
         />
       </div>
-      <div className={tw('select-none')}>
-        <label className={tw('textstyle-label-md')}>{translation.visibility}</label>
+      <div className={clsx('select-none')}>
+        <label className={clsx('textstyle-label-md')}>{translation.visibility}</label>
         {!isCreating ? (
-          <div className={tw('flex flex-row justify-between items-center')}>
+          <div className={clsx('flex flex-row justify-between items-center')}>
             <span>{task.isPublicVisible ? translation.public : translation.private}</span>
             {!task.isPublicVisible && !isCreating && (
               <SolidButton
                 color="hw-neutral"
                 variant="text-border"
-                className={tw('!py-1 !px-2')}
+                className={clsx('!py-1 !px-2')}
                 onClick={() => setIsShowingPublicDialog(true)}
               >
                 <span>{translation.publish}</span>
@@ -251,8 +251,8 @@ const TaskDetailViewSidebar = ({
         )}
       </div>
       {task.createdAt && (
-        <div className={tw('flex flex-col gap-y-1')}>
-          <span className={tw('textstyle-label-md')}>{translation.creationTime}</span>
+        <div className={clsx('flex flex-col gap-y-1')}>
+          <span className={clsx('textstyle-label-md')}>{translation.creationTime}</span>
           <TimeDisplay date={new Date(task.createdAt)}/>
         </div>
       )}
@@ -344,7 +344,7 @@ export const TaskDetailView = ({
   }
 
   const buttons = (
-    <div className={tw('flex flex-row justify-end gap-x-8')}>
+    <div className={clsx('flex flex-row justify-end gap-x-8')}>
       {!isCreating ?
           (
           <>
@@ -376,7 +376,7 @@ export const TaskDetailView = ({
   )
 
   const tasksDetails = (
-    <div className={tx('flex flex-col', {
+    <div className={clsx('flex flex-col', {
       'pl-6': isCreating,
       'px-2': !isCreating
     })}>
@@ -389,7 +389,7 @@ export const TaskDetailView = ({
             value={task.name}
             onChange={(name) => setTask({ ...task, name })}
             onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, name: text })}
-            labelClassName={tw('text-2xl font-bold')}
+            labelClassName={clsx('text-2xl font-bold')}
             minLength={minTaskNameLength}
             maxLength={maxTaskNameLength}
             size={24}
@@ -397,9 +397,9 @@ export const TaskDetailView = ({
         )}
         onCloseClick={onClose}
       />
-      <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
-        <div className={tw('flex flex-col gap-y-8 w-[60%] min-w-[500px]')}>
-          <div className={tw('min-h-[25%]')}>
+      <div className={clsx('flex flex-row flex-1 gap-x-8 mt-3')}>
+        <div className={clsx('flex flex-col gap-y-8 w-[60%] min-w-[500px]')}>
+          <div className={clsx('min-h-[25%]')}>
             <Textarea
               headline={translation.notes}
               value={task.notes}
@@ -431,7 +431,7 @@ export const TaskDetailView = ({
 
   const templateSidebar = (
     <div
-      className={tw('fixed flex flex-col w-[250px] -translate-x-[250px] -translate-y-4 overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full')}
+      className={clsx('fixed flex flex-col w-[250px] -translate-x-[250px] -translate-y-4 overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full')}
     >
       {personalTaskTemplatesData && wardTaskTemplatesData && (
         <TaskTemplateListColumn
@@ -468,10 +468,10 @@ export const TaskDetailView = ({
       <LoadingAndErrorComponent
         isLoading={(isLoading || !data) && !isCreating}
         hasError={isError}
-        loadingProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
-        errorProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
+        loadingProps={{ classname: clsx('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
+        errorProps={{ classname: clsx('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
       >
-        <div className={tx('relative flex flex-row')}>
+        <div className={clsx('relative flex flex-row')}>
           {isCreating && templateSidebar}
           {tasksDetails}
         </div>

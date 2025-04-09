@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
-import { tw } from '@helpwave/style-themes/twind'
-import type { ButtonColorType } from '../Button'
+import clsx from 'clsx'
+import type { SolidButtonColor } from '../Button'
 import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -29,7 +29,7 @@ const defaultConfirmDialogTranslation = {
 
 export type ButtonOverwriteType = {
   text?: string,
-  color?: ButtonColorType,
+  color?: SolidButtonColor,
   disabled?: boolean,
 }
 
@@ -63,19 +63,19 @@ export const ConfirmDialog = ({
 }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
 
-  const mapping: Record<ConfirmDialogType, ButtonColorType> = {
-    neutral: 'hw-neutral',
-    negative: 'hw-negative',
-    positive: 'hw-positive'
+  const mapping: Record<ConfirmDialogType, SolidButtonColor> = {
+    neutral: 'primary',
+    negative: 'negative',
+    positive: 'positive'
   }
 
   return (
     <Modal {...restProps}>
       {children}
-      <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
+      <div className={clsx('flex flex-row mt-3 gap-x-4 justify-end')}>
         {onCancel && (
           <SolidButton
-            color={buttonOverwrites?.[0].color ?? 'hw-neutral'}
+            color={buttonOverwrites?.[0].color ?? 'primary'}
             onClick={onCancel}
             disabled={buttonOverwrites?.[0].disabled ?? false}
           >
@@ -84,7 +84,7 @@ export const ConfirmDialog = ({
         )}
         {onDecline && (
           <SolidButton
-            color={buttonOverwrites?.[1].color ?? 'hw-negative'}
+            color={buttonOverwrites?.[1].color ?? 'negative'}
             onClick={onDecline}
 
             disabled={buttonOverwrites?.[1].disabled ?? false}

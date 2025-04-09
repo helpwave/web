@@ -1,10 +1,9 @@
 import type { PropsWithChildren, ButtonHTMLAttributes, ReactNode } from 'react'
-import { tx } from '@helpwave/style-themes/twind'
-import type {
-  OutlineButtonColor,
-  SolidButtonColor,
-  TextButtonColor
-} from '@helpwave/style-themes/twind/theme-variables'
+import clsx from 'clsx'
+
+export type SolidButtonColor = 'primary' | 'secondary' | 'tertiary' | 'positive' | 'warning'| 'negative'
+export type OutlineButtonColor = 'primary'
+export type TextButtonColor = 'negative' | 'neutral'
 
 type ButtonSizes = 'small' | 'medium' | 'large'
 
@@ -19,9 +18,9 @@ export type ButtonProps = PropsWithChildren<{
 }> & ButtonHTMLAttributes<Element>
 
 const sizePaddings: Record<ButtonSizes, string> = {
-  small: '@(py-1 px-[10px] rounded text-sm)',
-  medium: '@(py-2 px-3 rounded-md)',
-  large: '@(py-[10px] px-4 rounded-md text-lg)'
+  small: 'btn-sm',
+  medium: 'btn-md',
+  large: 'btn-lg'
 }
 
 type ButtonWithIconsProps = ButtonProps & {
@@ -54,43 +53,63 @@ const SolidButton = ({
                        onClick,
                        className,
                        ...restProps
-                     }: SolidButtonProps) => (
-  <button
-    onClick={disabled ? undefined : onClick}
-    disabled={disabled}
-    className={tx(
-      '@(flex flex-row gap-x-2 font-medium focus:outline-none)', className, {
-        // disabled
-        '@(text-disabled-text bg-disabled-background)': disabled,
-      },
-      sizePaddings[size],
-      `@(bg-button-solid-${color}-background text-button-solid-${color}-text)`
-    )}
-    {...restProps}
-  >
-    {startIcon && (
-      <span
-        className={tx({
-          [`@(text-button-solid-${color}-icon)`]: !disabled,
-          [`@(text-disabled-icon)`]: !disabled
-        })}
-      >
+                     }: SolidButtonProps) => {
+  const colorClasses = {
+    primary: 'bg-button-solid-primary-background text-button-solid-primary-text',
+    secondary: 'bg-button-solid-secondary-background text-button-solid-secondary-text',
+    tertiary: 'bg-button-solid-tertiary-background text-button-solid-tertiary-text',
+    positive: 'bg-button-solid-positive-background text-button-solid-positive-text',
+    warning: 'bg-button-solid-warning-background text-button-solid-warning-text',
+    negative: 'bg-button-solid-negative-background text-button-solid-negative-text',
+  }[color]
+
+  const iconColorClasses = {
+    primary: 'text-button-solid-primary-icon',
+    secondary: 'text-button-solid-secondary-icon',
+    tertiary: 'text-button-solid-tertiary-icon',
+    positive: 'text-button-solid-positive-icon',
+    warning: 'text-button-solid-warning-icon',
+    negative: 'text-button-solid-negative-icon',
+  }[color]
+
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      className={clsx(
+        className,
+        {
+          'text-disabled-text bg-disabled-background': disabled,
+          [clsx(colorClasses, 'hover:brightness-90')]: !disabled
+        },
+        sizePaddings[size]
+      )}
+      {...restProps}
+    >
+      {startIcon && (
+        <span
+          className={clsx({
+            [iconColorClasses]: !disabled,
+            [`text-disabled-icon`]: disabled
+          })}
+        >
         {startIcon}
       </span>
-    )}
-    {children}
-    {endIcon && (
-      <span
-        className={tx({
-          [`@(text-button-solid-${color}-icon)`]: !disabled,
-          [`@(text-disabled-icon)`]: !disabled
-        })}
-      >
+      )}
+      {children}
+      {endIcon && (
+        <span
+          className={clsx({
+            [iconColorClasses]: !disabled,
+            [`text-disabled-icon`]: disabled
+          })}
+        >
         {endIcon}
       </span>
-    )}
-  </button>
-)
+      )}
+    </button>
+  )
+}
 
 /**
  * A button with an outline border and different sizes
@@ -105,43 +124,51 @@ const OutlineButton = ({
                          onClick,
                          className,
                          ...restProps
-                       }: OutlineButtonProps) => (
-  <button
-    onClick={disabled ? undefined : onClick}
-    disabled={disabled}
-    className={tx(
-      '@(flex flex-row gap-x-2 font-medium bg-transparent outline-none border-2)', className, {
-        // disabled
-        '@(text-disabled-text border-disabled-outline)': disabled,
-      },
-      sizePaddings[size],
-      `@(border-button-outline-${color}-outline text-button-outline-${color}-text)`
-    )}
-    {...restProps}
-  >
-    {startIcon && (
-      <span
-        className={tx({
-          [`@(text-button-outline-${color}-icon)`]: !disabled,
-          [`@(text-disabled-icon)`]: !disabled
-        })}
-      >
+                       }: OutlineButtonProps) => {
+  const colorClasses = {
+    primary: 'bg-transparent border-2 border-button-outline-primary-text text-button-outline-primary-text',
+  }[color]
+
+  const iconColorClasses = {
+    primary: 'text-button-outline-primary-icon',
+  }[color]
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      className={clsx(
+        className, {
+          'text-disabled-text border-disabled-outline)': disabled,
+          [clsx(colorClasses, 'hover:brightness-80')]: !disabled,
+        },
+        sizePaddings[size]
+      )}
+      {...restProps}
+    >
+      {startIcon && (
+        <span
+          className={clsx({
+            [iconColorClasses]: !disabled,
+            [`text-disabled-icon`]: disabled
+          })}
+        >
         {startIcon}
       </span>
-    )}
-    {children}
-    {endIcon && (
-      <span
-        className={tx({
-          [`@(text-button-outline-${color}-icon)`]: !disabled,
-          [`@(text-disabled-icon)`]: !disabled
-        })}
-      >
+      )}
+      {children}
+      {endIcon && (
+        <span
+          className={clsx({
+            [iconColorClasses]: !disabled,
+            [`text-disabled-icon`]: disabled
+          })}
+        >
         {endIcon}
       </span>
-    )}
-  </button>
-)
+      )}
+    </button>
+  )
+}
 
 /**
  * A text that is a button that can have different sizes
@@ -156,42 +183,52 @@ const TextButton = ({
                       onClick,
                       className,
                       ...restProps
-                    }: TextButtonProps) => (
-  <button
-    onClick={disabled ? undefined : onClick}
-    disabled={disabled}
-    className={tx(
-      '@(flex flex-row gap-x-2 font-medium bg-transparent outline-none)', className, {
-        // disabled
-        '@(text-disabled-text)': disabled,
-      },
-      sizePaddings[size],
-      `@(text-button-text-${color}-text)`
-    )}
-    {...restProps}
-  >
-    {startIcon && (
-      <span
-        className={tx({
-          [`@(text-button-text-${color}-icon)`]: !disabled,
-          [`@(text-disabled-icon)`]: !disabled
-        })}
-      >
+                    }: TextButtonProps) => {
+  const colorClasses = {
+    negative: 'bg-transparent text-button-text-negative-text',
+    neutral: 'bg-transparent text-button-text-neutral-text',
+  }[color]
+
+  const iconColorClasses = {
+    negative: 'text-button-text-negative-icon',
+    neutral: 'text-button-text-neutral-icon',
+  }[color]
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      className={clsx(
+        className, {
+          'text-disabled-text': disabled,
+          [clsx(colorClasses, 'hover:brightness-70')]: !disabled,
+        },
+        sizePaddings[size]
+      )}
+      {...restProps}
+    >
+      {startIcon && (
+        <span
+          className={clsx({
+            [iconColorClasses]: !disabled,
+            [`text-disabled-icon`]: disabled
+          })}
+        >
         {startIcon}
       </span>
-    )}
-    {children}
-    {endIcon && (
-      <span
-        className={tx({
-          [`@(text-button-text-${color}-icon)`]: !disabled,
-          [`@(text-disabled-icon)`]: !disabled
-        })}
-      >
+      )}
+      {children}
+      {endIcon && (
+        <span
+          className={clsx({
+            [iconColorClasses]: !disabled,
+            [`text-disabled-icon`]: disabled
+          })}
+        >
         {endIcon}
       </span>
-    )}
-  </button>
-)
+      )}
+    </button>
+  )
+}
 
 export { SolidButton, OutlineButton, TextButton }

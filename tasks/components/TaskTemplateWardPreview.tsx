@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -52,21 +52,21 @@ export const TaskTemplateWardPreview = ({
     <LoadingAndErrorComponent
       isLoading={isLoading || !context.state.wardId}
       hasError={isError}
-      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-      errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+      loadingProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+      errorProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
     >
       {taskTemplates && (
-        <div className={tw('flex flex-col')}>
-          <div className={tw('flex flex-row justify-between items-center mb-4')}>
-            <span className={tw('textstyle-table-name')}>{translation.taskTemplates(taskTemplates.length)}</span>
+        <div className={clsx('flex flex-col')}>
+          <div className={clsx('flex flex-row justify-between items-center mb-4')}>
+            <span className={clsx('textstyle-table-name')}>{translation.taskTemplates(taskTemplates.length)}</span>
             <SolidButton
-              className={tw('w-auto')}
+              className={clsx('w-auto')}
               onClick={() => router.push(`/ward/${wardId}/templates`)}
             >
               {translation.showAllTaskTemplates}
             </SolidButton>
           </div>
-          <div className={tw(`grid grid-cols-${columns} gap-4`)}>
+          <div className={clsx(`grid grid-cols-${columns} gap-4`)}>
             {taskTemplates.map((taskTemplate, index) => (
               <TaskTemplateCard
                 key={index}

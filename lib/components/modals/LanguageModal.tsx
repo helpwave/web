@@ -1,5 +1,5 @@
 import { type PropsWithChildren } from 'react'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user-input/Select'
@@ -59,15 +59,15 @@ export const LanguageModal = ({
       }}
       {...modalProps}
     >
-      <div className={tw('w-[320px]')}>
+      <div className={clsx('w-[320px]')}>
         <Select
-            className={tw('mt-2')}
+            className={clsx('mt-2')}
             value={language}
             options={Object.entries(languageDetails).map(([tag, name]) => ({ label: name, value: tag }))}
             onChange={(language: string) => setLanguage(language as Languages)}
           />
-          <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-            <SolidButton autoFocus color="hw-positive" onClick={onDone}>
+          <div className={clsx('flex flex-row mt-3 gap-x-4 justify-end')}>
+            <SolidButton autoFocus color="positive" onClick={onDone}>
               {translation.done}
             </SolidButton>
           </div>

@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { noop } from '../../util/noop'
 import { Checkbox } from '../user-input/Checkbox'
 import type { Languages } from '../../hooks/useLanguage'
@@ -49,7 +49,7 @@ export const CheckboxProperty = ({
       icon={<Check size={16}/>}
       input={() => (
         <div
-          className={tx('flex flex-row py-2 px-4 gap-x-2')}
+          className={clsx('flex flex-row py-2 px-4 gap-x-2')}
         >
           <Checkbox
             // TODO make bigger as in #904
@@ -57,7 +57,7 @@ export const CheckboxProperty = ({
             disabled={readOnly}
             onChange={onChange}
           />
-          <span className={tw('font-semibold select-none cursor-pointer')} onClick={() => onChange(!value)}>
+          <span className={clsx('font-semibold select-none cursor-pointer')} onClick={() => onChange(!value)}>
             {`${translation.yes}/${translation.no}`}
           </span>
         </div>

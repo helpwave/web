@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import type { News } from '@helpwave/common/util/news'
 import Image from 'next/image'
@@ -14,29 +14,29 @@ export type NewsDisplayProps = {
  */
 export const NewsDisplay = ({ news, titleOnTop = true }: NewsDisplayProps) => {
   const content = (
-    <div className={tx('flex grow', { 'flex-col gap-y-2': titleOnTop, 'flex-row gap-x-2': !titleOnTop })}>
-      <div className={tx('flex gap-x-2', {
+    <div className={clsx('flex grow', { 'flex-col gap-y-2': titleOnTop, 'flex-row gap-x-2': !titleOnTop })}>
+      <div className={clsx('flex gap-x-2', {
         'flex-col w-1/3': !titleOnTop,
         'flex-row-reverse items-center justify-between': titleOnTop
       })}>
-        <div className={tw('min-w-[100px]')}>
+        <div className={clsx('min-w-[100px]')}>
           <TimeDisplay date={news.date} mode="date"/>
         </div>
-        <span className={tw('textstyle-title-md text-hw-primary-700')}>{news.title}</span>
+        <span className={clsx('textstyle-title-md text-hw-primary-700')}>{news.title}</span>
       </div>
-      <div className={tw('flex flex-col gap-y-2 flex-1')}>
+      <div className={clsx('flex flex-col gap-y-2 flex-1')}>
         {news.description.map((value, index) => value instanceof URL ? (
             <Image
               key={index}
               src={value.href}
               alt=""
-              className={tw('h-auto w-full rounded-xl')}
+              className={clsx('h-auto w-full rounded-xl')}
               width={1000}
               height={1000}
             />
         )
           :
-          <span key={index} className={tw('font-medium')}>{value}</span>)
+          <span key={index} className={clsx('font-medium')}>{value}</span>)
         }
       </div>
     </div>
@@ -45,8 +45,8 @@ export const NewsDisplay = ({ news, titleOnTop = true }: NewsDisplayProps) => {
 
   return news.externalResource !== undefined ? (
     <Link target="_blank" href={news.externalResource}
-          className={tw(tileStyle)}>
+          className={clsx(tileStyle)}>
       {content}
     </Link>
-  ) : <div className={tw(tileStyle)}>{content}</div>
+  ) : <div className={clsx(tileStyle)}>{content}</div>
 }

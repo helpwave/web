@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
@@ -49,11 +49,11 @@ const PillLabel = ({
   const state = TaskState[taskStatus]
   const translation = useTranslation(state.translation, overwriteTranslation)
   return (
-    <div className={tw(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center
+    <div className={clsx(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center
        bg-${state.colorLabel}-100 text-${state.colorLabel}-800 text-sm`)}>
-      <div className={tw(`flex flex-row items-center text-${state.colorLabel}-800`)}>
-        <div className={tw(`rounded-full w-2 h-2 bg-${state.colorLabel}-400`)}/>
-        <div className={tw('w-2')}/>
+      <div className={clsx(`flex flex-row items-center text-${state.colorLabel}-800`)}>
+        <div className={clsx(`rounded-full w-2 h-2 bg-${state.colorLabel}-400`)}/>
+        <div className={clsx('w-2')}/>
         <span>{translation.text}</span>
       </div>
       {count ?? '-'}

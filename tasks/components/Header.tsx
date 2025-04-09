@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 
 export type HeaderProps = {
@@ -24,29 +24,29 @@ export type HeaderProps = {
  */
 const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: HeaderProps) => {
   return (
-    <div className={tw('h-16 py-4 relative flex items-center justify-between border-b border-slate-900/10')}>
-      <div className={tw('flex gap-4 w-full justify-between mx-4')}>
-        <div className={tw('w-full relative flex items-center align-center')}>
+    <div className={clsx('h-16 py-4 relative flex items-center justify-between border-b border-slate-900/10')}>
+      <div className={clsx('flex gap-4 w-full justify-between mx-4')}>
+        <div className={clsx('w-full relative flex items-center align-center')}>
           {withIcon && (
-            <div className={tw('relative flex gap-2 align-center')}>
+            <div className={clsx('relative flex gap-2 align-center')}>
               <Link href="/">
                 <Helpwave size={52} />
               </Link>
             </div>
           )}
-          {title && <span className={tw('textstyle-title-md')}>{title}</span>}
+          {title && <span className={clsx('textstyle-title-md')}>{title}</span>}
           {leftSide?.filter(value => value !== undefined).map((value, index) => (
-            <div key={'leftAction' + index} className={tw('flex flex-row items-center')}>
-              {(index !== 0 || title || withIcon) && <div className={tw('bg-gray-300 rounded h-8 w-0.5 mx-4')}/>}
+            <div key={'leftAction' + index} className={clsx('flex flex-row items-center')}>
+              {(index !== 0 || title || withIcon) && <div className={clsx('bg-gray-300 rounded h-8 w-0.5 mx-4')}/>}
               {value}
             </div>
           ))}
         </div>
-        <div className={tw('w-full flex items-center justify-end')}>
+        <div className={clsx('w-full flex items-center justify-end')}>
           {rightSide?.filter(value => value !== undefined).map((value, index) => (
-            <div key={'rightAction' + index} className={tw('flex flex-row items-center')}>
+            <div key={'rightAction' + index} className={clsx('flex flex-row items-center')}>
               {value}
-              {index !== rightSide?.length - 1 && <div className={tw('bg-gray-300 rounded h-8 w-0.5 mx-3')}/>}
+              {index !== rightSide?.length - 1 && <div className={clsx('bg-gray-300 rounded h-8 w-0.5 mx-3')}/>}
             </div>
           ))}
         </div>

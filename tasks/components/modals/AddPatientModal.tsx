@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -76,9 +76,9 @@ export const AddPatientModal = ({
       buttonOverwrites={[{}, {}, { disabled: !validPatientName }]}
       {...modalProps}
     >
-      <div className={tw('flex flex-col gap-y-4 min-w-[300px]')}>
-        <div className={tw('flex flex-col gap-y-1')}>
-          <span className={tw('textstyle-label-md')}>{translation.name}</span>
+      <div className={clsx('flex flex-col gap-y-4 min-w-[300px]')}>
+        <div className={clsx('flex flex-col gap-y-1')}>
+          <span className={clsx('textstyle-label-md')}>{translation.name}</span>
           <Input
             value={patientName}
             onChange={(text) => {
@@ -86,7 +86,7 @@ export const AddPatientModal = ({
               setPatientName(text)
             }}
           />
-          {isShowingError && <span className={tw('textstyle-form-error')}>{translation.minimumLength(minimumNameLength)}</span>}
+          {isShowingError && <span className={clsx('textstyle-form-error')}>{translation.minimumLength(minimumNameLength)}</span>}
         </div>
         <RoomBedSelect
           initialRoomAndBed={dropdownId}
@@ -94,7 +94,7 @@ export const AddPatientModal = ({
           onChange={(roomBedDropdownIds) => setDropdownId(roomBedDropdownIds)}
           isClearable={true}
         />
-        <span className={tx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</span>
+        <span className={clsx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</span>
       </div>
     </ConfirmDialog>
   )

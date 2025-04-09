@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Image from 'next/image'
@@ -29,9 +29,9 @@ const StoryInUseAtSection = () => {
   const translation = useTranslation(defaultStoryInUseAtSectionTranslation)
 
   return (
-    <SectionBase className={tw('flex flex-col gap-16 select-none justify-center items-center w-full')}>
-      <span className={tw('textstyle-title-xl')}>{translation.title}</span>
-      <div className={tw('flex flex-row justify-center')}>
+    <SectionBase className={clsx('flex flex-col gap-16 select-none justify-center items-center w-full')}>
+      <span className={clsx('textstyle-title-xl')}>{translation.title}</span>
+      <div className={clsx('flex flex-row justify-center')}>
         {images.map(partner => (
           <Image
             key={partner.name}
@@ -39,7 +39,7 @@ const StoryInUseAtSection = () => {
             height={0}
             src={partner.url}
             alt={partner.name}
-            className={tw('w-auto max-h-[120px]')}
+            className={clsx('w-auto max-h-[120px]')}
           />
         ))}
       </div>

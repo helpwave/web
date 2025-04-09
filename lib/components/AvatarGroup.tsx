@@ -1,6 +1,5 @@
 import type { AvatarProps, AvatarSize } from './Avatar'
 import { Avatar, avtarSizeMapping } from './Avatar'
-import { tw, tx } from '@helpwave/style-themes/twind'
 
 export type AvatarGroupProps = {
   avatars: Omit<AvatarProps, 'size'>[],
@@ -12,20 +11,24 @@ export type AvatarGroupProps = {
  * A component for showing a group of Avatar's
  */
 export const AvatarGroup = ({
-  avatars,
-  maxShownProfiles = 5,
-  size = 'tiny'
-}: AvatarGroupProps) => {
+                              avatars,
+                              maxShownProfiles = 5,
+                              size = 'tiny'
+                            }: AvatarGroupProps) => {
   const displayedProfiles = avatars.length < maxShownProfiles ? avatars : avatars.slice(0, maxShownProfiles)
   const diameter = avtarSizeMapping[size]
   const stackingOverlap = 0.5 // given as a percentage
   const notDisplayedProfiles = avatars.length - maxShownProfiles
   const avatarGroupWidth = diameter * (stackingOverlap * (displayedProfiles.length - 1) + 1)
   return (
-    <div className={tw(`h-[${diameter}px] flex flex-row relative`)}>
-      <div className={tw(`w-[${avatarGroupWidth}px]`)}>
+    <div className="flex flex-row relative" style={{ height: diameter + 'px' }}>
+      <div style={{ width: avatarGroupWidth + 'px' }}>
         {displayedProfiles.map((avatar, index) => (
-          <div key={index} className={tx(`absolute left-[${(index * diameter * stackingOverlap)}px] z-[${maxShownProfiles - index}]`)}>
+          <div
+            key={index}
+            className="absolute"
+            style={{ left: (index * diameter * stackingOverlap) + 'px', zIndex: maxShownProfiles - index }}
+          >
             <Avatar avatarUrl={avatar.avatarUrl} alt={avatar.alt} size={size}/>
           </div>
         ))}
@@ -33,7 +36,9 @@ export const AvatarGroup = ({
       {
         notDisplayedProfiles > 0 && (
           <div
-            className={tx(`truncate ml-[${1 + diameter / 16}px] flex flex-row items-center text-[${diameter / 2}px]`)}>
+            className="truncate flex flex-row items-center"
+            style={{ fontSize: (diameter / 2) + 'px', marginLeft: (1 + diameter / 16) + 'px' }}
+          >
             <span>+ {notDisplayedProfiles}</span>
           </div>
         )

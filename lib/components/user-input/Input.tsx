@@ -6,7 +6,7 @@ import {
   type HTMLInputTypeAttribute,
   type InputHTMLAttributes
 } from 'react'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
@@ -68,14 +68,14 @@ const ControlledInput = ({
     }
   }, [restProps.autoFocus])
   return (
-    <div className={tx({ 'w-full': expanded }, containerClassName)}>
-      {label && <Label {...label} htmlFor={id} className={tx('mb-1', label.className)}/>}
+    <div className={clsx({ 'w-full': expanded }, containerClassName)}>
+      {label && <Label {...label} htmlFor={id} className={clsx('mb-1', label.className)}/>}
       <input
         ref={ref}
         value={value}
         id={id}
         type={type}
-        className={tx('block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500', className)}
+        className={clsx('block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500', className)}
         onBlur={event => {
           if (onBlur) {
             onBlur(event)

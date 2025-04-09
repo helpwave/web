@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Tag } from 'lucide-react'
-import { tx, tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { noop } from '../util/noop'
 import { SolidButton } from './Button'
 
@@ -33,7 +33,7 @@ export const DescriptionWithAction = ({
   let leading
   switch (leadingIcon) {
   case 'label':
-    leading = <Tag className={tw('text-hw-primary-400')} size={16}/>
+    leading = <Tag className={clsx('text-hw-primary-400')} size={16}/>
     break
   default:
     leading = null
@@ -41,20 +41,20 @@ export const DescriptionWithAction = ({
   }
 
   return (
-    <div className={tx('rounded-lg bg-white flex desktop:flex-row desktop:gap-x-1 mobile:gap-y-1 mobile:flex-col py-2 px-4', className)}>
+    <div className={clsx('rounded-lg bg-white flex desktop:flex-row desktop:gap-x-1 mobile:gap-y-1 mobile:flex-col py-2 px-4', className)}>
       {leading && (
-        <div className={tw('w-4 h-4 mt-[6px]')}>
+        <div className={clsx('w-4 h-4 mt-[6px]')}>
           {leading}
         </div>
       )}
-      <div className={tw('flex flex-col')}>
-        <span className={tx('textstyle-description', titleClassName)}>{title}</span>
-        <span className={tx('textstyle-description', descriptionClassName)}>{description}</span>
+      <div className={clsx('flex flex-col')}>
+        <span className={clsx('textstyle-description', titleClassName)}>{title}</span>
+        <span className={clsx('textstyle-description', descriptionClassName)}>{description}</span>
       </div>
       {trailing}
       {!trailing && trailingButtonText && (
-        <div className={tw('flex flex-row items-center desktop:justify-end mobile:justify-center grow')}>
-          <SolidButton onClick={trailingButtonFunction} className={tw('whitespace-nowrap')}>
+        <div className={clsx('flex flex-row items-center desktop:justify-end mobile:justify-center grow')}>
+          <SolidButton onClick={trailingButtonFunction} className={clsx('whitespace-nowrap')}>
             {trailingButtonText}
           </SolidButton>
         </div>

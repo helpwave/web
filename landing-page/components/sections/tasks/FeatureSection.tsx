@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import Image from 'next/image'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -21,20 +21,20 @@ const FeatureItem = ({
   reverse = false
 }: FeatureItemProps) => {
   return (
-    <div className={tx('flex mobile:flex-col-reverse items-center gap-x-4 gap-y-6 desktop:!gap-x-8 justify-between', {
+    <div className={clsx('flex mobile:flex-col-reverse items-center gap-x-4 gap-y-6 desktop:!gap-x-8 justify-between', {
       'flex-row-reverse': reverse,
       'flex-row': !reverse
     })}>
-      <div className={tw('w-1/2 mobile:!w-full')}>
+      <div className={clsx('w-1/2 mobile:!w-full')}>
         <Image alt="Screenshots" src={imageUrl} style={{ objectFit: 'contain' }} width={size} height={size}
-               className={tx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md`)}/>
+               className={clsx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md`)}/>
       </div>
 
-      <div className={tw('flex flex-col w-1/3 mobile:!w-full')}>
-        <span className={tw('textstyle-title-2xl')}>
+      <div className={clsx('flex flex-col w-1/3 mobile:!w-full')}>
+        <span className={clsx('textstyle-title-2xl')}>
           {title}
         </span>
-        <span className={tw('textstyle-description text-gray-600')}>
+        <span className={clsx('textstyle-description text-gray-600')}>
           {description}
         </span>
       </div>
@@ -78,7 +78,7 @@ const FeatureSection = ({ overwriteTranslation }: PropsForTranslation<FeatureSec
   const size = 1024
 
   return (
-    <SectionBase className={tw('flex flex-col gap-y-12')}>
+    <SectionBase className={clsx('flex flex-col gap-y-12')}>
       <FeatureItem
         imageUrl={screenshotTemplates}
         size={size}

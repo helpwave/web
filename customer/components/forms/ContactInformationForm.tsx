@@ -1,7 +1,7 @@
 import type { Customer } from '@/api/dataclasses/customer'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { SolidButton } from '@helpwave/common/components/Button'
 
@@ -67,8 +67,8 @@ type ContactInformationFormProps = {
 export const ContactInformationForm = ({ value, onChange, onSubmit, className }: ContactInformationFormProps) => {
   const translation = useTranslation(defaultContactInformationTranslation)
   return (
-    <form className={tx('@(flex flex-col gap-y-1 max-w-[700px])', className)}>
-      <h3 className={tw('font-space font-bold text-2xl')}>{translation.contactInfo}</h3>
+    <form className={clsx('@(flex flex-col gap-y-1 max-w-[700px])', className)}>
+      <h3 className={clsx('font-space font-bold text-2xl')}>{translation.contactInfo}</h3>
       <Input
         value={value.name}
         onChange={name => onChange({ ...value, name })}
@@ -84,14 +84,14 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
         onChange={phoneNumber => onChange({ ...value, phoneNumber })}
         label={{ name: translation.phone }}
       />
-      <div className={tw('flex flex-col gap-y-1')}>
-        <h4 className={tw('font-space font-bold text-lg')}>{translation.address}</h4>
+      <div className={clsx('flex flex-col gap-y-1')}>
+        <h4 className={clsx('font-space font-bold text-lg')}>{translation.address}</h4>
         <Input
           value={value.address.country ?? ''}
           onChange={country => onChange({ ...value, address: { ...value.address, country } })}
           label={{ name: translation.country }}
         />
-        <div className={tw('flex flex-row gap-x-1')}>
+        <div className={clsx('flex flex-row gap-x-1')}>
           <Input
             value={value.address.city ?? ''}
             onChange={city => onChange({ ...value, address: { ...value.address, city } })}
@@ -104,10 +104,10 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
               address: { ...value.address, postalCode }
             })}
             label={{ name: translation.postalCode }}
-            containerClassName={tw('max-w-[180px]')}
+            containerClassName={clsx('max-w-[180px]')}
           />
         </div>
-        <div className={tw('flex flex-row gap-x-1')}>
+        <div className={clsx('flex flex-row gap-x-1')}>
           <Input
             value={value.address.street ?? ''}
             onChange={street => onChange({
@@ -123,7 +123,7 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
               address: { ...value.address, houseNumber }
             })}
             label={{ name: translation.houseNumber }}
-            containerClassName={tw('max-w-[180px]')}
+            containerClassName={clsx('max-w-[180px]')}
           />
           <Input
             value={value.address.houseNumberAdditional ?? ''}
@@ -132,11 +132,11 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
               address: { ...value.address, houseNumberAdditional }
             })}
             label={{ name: translation.houseNumberAdditional }}
-            containerClassName={tw('max-w-[180px]')}
+            containerClassName={clsx('max-w-[180px]')}
           />
         </div>
-        <div className={tw('flex flex-col gap-y-1')}>
-          <h4 className={tw('font-space font-bold text-lg')}>{translation.additionalInformation}</h4>
+        <div className={clsx('flex flex-col gap-y-1')}>
+          <h4 className={clsx('font-space font-bold text-lg')}>{translation.additionalInformation}</h4>
           <Input
             value={value.websiteURL ?? ''}
             onChange={websiteURL => onChange({ ...value, websiteURL })}
@@ -145,7 +145,7 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
         </div>
       </div>
 
-      <div className={tw('flex flex-row justify-end')}>
+      <div className={clsx('flex flex-row justify-end')}>
         <SolidButton onClick={() => onSubmit(value)}>{translation.save}</SolidButton>
       </div>
     </form>

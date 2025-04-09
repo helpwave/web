@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Modal, type ModalProps } from '@helpwave/common/components/modals/Modal'
@@ -92,19 +92,19 @@ export const ManageBedsModal = ({
   return (
     <Modal
       titleText={titleText ?? (room ? `${translation.manageBedsIn} ${room.name}` : '')}
-      modalClassName={tx('min-w-[600px]', modalClassName)}
+      modalClassName={clsx('min-w-[600px]', modalClassName)}
       {...modalProps}
     >
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}
-        loadingProps={{ classname: tw('!h-full min-h-[400px]') }}
-        errorProps={{ classname: tw('!h-full min-h-[400px]') }}
+        loadingProps={{ classname: clsx('!h-full min-h-[400px]') }}
+        errorProps={{ classname: clsx('!h-full min-h-[400px]') }}
       >
         {room && beds && (
           <>
-            <div className={tw('flex flex-row justify-between items-end mb-2 mt-4')}>
-              <span className={tw('textstyle-table-name')}>{`${translation.beds} (${beds.length})`}</span>
+            <div className={clsx('flex flex-row justify-between items-end mb-2 mt-4')}>
+              <span className={clsx('textstyle-table-name')}>{`${translation.beds} (${beds.length})`}</span>
               <SolidButton color="hw-positive" onClick={addBed}>{translation.addBed}</SolidButton>
             </div>
             <Table
@@ -112,12 +112,12 @@ export const ManageBedsModal = ({
               stateManagement={[tableState, setTableState]}
               identifierMapping={identifierMapping}
               header={[
-                <span key="name" className={tw('textstyle-table-header')}>{translation.name}</span>,
-                <span key="patient" className={tw('textstyle-table-header')}>{translation.patient}</span>,
+                <span key="name" className={clsx('textstyle-table-header')}>{translation.name}</span>,
+                <span key="patient" className={clsx('textstyle-table-header')}>{translation.patient}</span>,
                 <></>
               ]}
               rowMappingToCells={bed => [
-                <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
+                <div key="name" className={clsx('flex flex-row items-center w-10/12 min-w-[50px]')}>
                   <Input
                     value={bed.name}
                     maxLength={maxBedNameLength}
@@ -127,10 +127,10 @@ export const ManageBedsModal = ({
                     onEditCompleted={(text) => updateBedMutation.mutate({ id: bed.id, name: text, roomId: room.id })}
                   />
                 </div>,
-                <div key="patient" className={tw('w-20')}>
+                <div key="patient" className={clsx('w-20')}>
                   <span>{bed.patient ? bed.patient.name : '-'}</span>
                 </div>,
-                <div key="remove" className={tw('flex flex-row justify-end')}>
+                <div key="remove" className={clsx('flex flex-row justify-end')}>
                   <SolidButton
                     disabled={!!bed.patient}
                     onClick={() => {

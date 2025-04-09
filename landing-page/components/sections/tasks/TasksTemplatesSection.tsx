@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -32,29 +32,29 @@ export const TasksTemplatesSection = ({ overwriteTranslation }: PropsForTranslat
 
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-4 justify-between mobile:justify-center items-center text-white')}
+      className={clsx('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-4 justify-between mobile:justify-center items-center text-white')}
       backgroundColor="darkSecondary"
-      outerClassName={tw('py-24')}
+      outerClassName={clsx('py-24')}
     >
-      <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0 overflow-hidden break-words')}>
-        <div className={tw('flex flex-col gap-y-2')}>
-          <div className={tw('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
+      <div className={clsx('flex flex-col gap-y-2 pb-16 mobile:pb-0 overflow-hidden break-words')}>
+        <div className={clsx('flex flex-col gap-y-2')}>
+          <div className={clsx('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
             <TagIcon/>
-            <span className={tw('textstyle-title-normal')}>{translation.taskTemplates}</span>
+            <span className={clsx('textstyle-title-normal')}>{translation.taskTemplates}</span>
           </div>
-          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
-          <span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
+          <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
+          <span className={clsx('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
         </div>
       </div>
       <div
-        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[50%] z-10 desktop:scale-125')}
+        className={clsx('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[50%] z-10 desktop:scale-125')}
       >
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={tw('w-fit desktop:max-h-[70vh]')}
+          className={clsx('w-fit desktop:max-h-[70vh]')}
         />
       </div>
     </SectionBase>

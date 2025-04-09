@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { tx } from '@helpwave/style-themes/twind'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { noop } from '../../util/noop'
 import { getNeighbours, range } from '../../util/array'
 import { clamp } from '../../util/math'
@@ -189,7 +188,7 @@ export const ScrollPicker = <T, >({
 
   return (
     <div
-      className={tw('relative overflow-hidden')}
+      className={clsx('relative overflow-hidden')}
       style={{ height: containerHeight }}
       onWheel={event => {
         if (event.deltaY !== 0) {
@@ -199,16 +198,16 @@ export const ScrollPicker = <T, >({
         }
       }}
     >
-      <div className={tw(`absolute flex top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2`)}>
-        <div className={tw(`absolute z-[1] flex top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 h-[${itemHeight}px] w-full min-w-[40px] border border-y-2 border-x-0 border-[#00000033]`)}/>
+      <div className={clsx(`absolute flex top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2`)}>
+        <div className={clsx(`absolute z-[1] flex top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 h-[${itemHeight}px] w-full min-w-[40px] border border-y-2 border-x-0 border-[#00000033]`)}/>
         <div
-          className={tw(`flex flex-col gap-y-[${distance}px] select-none`)}
+          className={clsx(`flex flex-col gap-y-[${distance}px] select-none`)}
           style={{ transform: `translateY(${-transition * (distance + itemHeight)}px)` }}
         >
           {shownItems.map(({ name, index }, arrayIndex) => (
             <div
               key={index}
-              className={tx(
+              className={clsx(
                 `flex flex-col items-center justify-center flex max-h-[${itemHeight}px] h-[${itemHeight}px] rounded-md`,
                 {
                   'text-hw-primary-400 font-bold': currentIndex === index,

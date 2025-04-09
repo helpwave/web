@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -71,11 +71,11 @@ export const WardRoomList = ({
   }, [observeAttribute, refetch])
 
   return (
-    <div className={tw('flex flex-col px-6 py-4')}
+    <div className={clsx('flex flex-col px-6 py-4')}
          onClick={() => updateContext({ wardId: contextState.wardId })}
     >
-      <div className={tw('flex flex-row justify-between items-center pb-4')}>
-        <span className={tw('textstyle-title-md')}>{translation.roomOverview}</span>
+      <div className={clsx('flex flex-row justify-between items-center pb-4')}>
+        <span className={clsx('textstyle-title-md')}>{translation.roomOverview}</span>
         <SolidButton onClick={event => {
           event.stopPropagation()
           updateContext({ wardId: contextState.wardId })
@@ -94,7 +94,7 @@ export const WardRoomList = ({
               room={room}
             />
           )) : (
-            <div className={tw('flex flex-col gap-y-2 items-center')}>
+            <div className={clsx('flex flex-col gap-y-2 items-center')}>
               <span>{translation.noRooms}</span>
               <Link href={`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`}>
                 <SolidButton>{translation.editWard}</SolidButton>

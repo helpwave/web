@@ -1,5 +1,5 @@
 import { List } from 'lucide-react'
-import { tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -54,11 +54,11 @@ export const MultiSelectProperty = <T, >({
       icon={<List size={16}/>}
       input={({ softRequired }) => (
         <div
-          className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
+          className={clsx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <MultiSelect
             {...multiSelectProps}
-            className={tx('w-full', { 'bg-hw-warn-200': softRequired && !hasValue })}
+            className={clsx('w-full', { 'bg-hw-warn-200': softRequired && !hasValue })}
             triggerClassName={triggerClassName}
             selectedDisplay={({ items }) => {
               const selected = items.filter(value => value.selected)

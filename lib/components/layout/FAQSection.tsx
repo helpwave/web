@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ExpandableProps } from '../Expandable'
 import { Expandable } from '../Expandable'
@@ -33,20 +33,20 @@ export const FAQSection = ({
 }: FAQSectionProps) => {
   const chevronSize = 28
   return (
-    <div className={tw('flex flex-col gap-y-4')}>
+    <div className={clsx('flex flex-col gap-y-4')}>
       {entries.map(({ id, title, content, ...restProps }) => (
         <Expandable
           key={id}
           {...restProps}
-          label={(<h3 id={id} className={tw('textstyle-title-md select-none')}>{title}</h3>)}
+          label={(<h3 id={id} className={clsx('textstyle-title-md select-none')}>{title}</h3>)}
           clickOnlyOnHeader={false}
           icon={(expanded) => expanded ?
-              (<ChevronUp size={chevronSize} className={tw(`text-blue-600 min-w-[${chevronSize}px]`)}/>) :
-              (<ChevronDown size={chevronSize} className={tw(`text-blue-600 min-w-[${chevronSize}px]`)}/>)
+              (<ChevronUp size={chevronSize} className={clsx(`text-blue-600 min-w-[${chevronSize}px]`)}/>) :
+              (<ChevronDown size={chevronSize} className={clsx(`text-blue-600 min-w-[${chevronSize}px]`)}/>)
           }
-          className={tx('bg-white rounded-xl px-4 py-2', expandableClassName)}
+          className={clsx('bg-white rounded-xl px-4 py-2', expandableClassName)}
         >
-          <div className={tw('mt-2')}>
+          <div className={clsx('mt-2')}>
             {content.type === 'markdown' ? (<MarkdownInterpreter text={content.value}/>) : content.value}
           </div>
         </Expandable>

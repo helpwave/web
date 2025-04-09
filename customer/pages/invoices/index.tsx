@@ -5,7 +5,7 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { Section } from '@/components/layout/Section'
 import { useInvoiceQuery } from '@/api/mutations/invoice_mutations'
-import { tw, tx } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { Table } from '@helpwave/common/components/Table'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -98,32 +98,32 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
             data={detailModalObject!.products!}
             identifierMapping={dataObject => dataObject.uuid}
             rowMappingToCells={dataObject => [
-              (<span key={dataObject.name + '-name'} className={tw('semi-bold')}>{dataObject.name}</span>),
+              (<span key={dataObject.name + '-name'} className={clsx('semi-bold')}>{dataObject.name}</span>),
               (<span key={dataObject.name + '-price'}>{dataObject.price.toFixed(2) + '€'}</span>),
               (<span key={dataObject.plan + '-plan'}>{translation[dataObject.plan]}</span>),
             ]}
             header={[
               (<span key="name">{translation.name}</span>),
-              (<span key="price" className={tw('text-right')}>{translation.price}</span>),
+              (<span key="price" className={clsx('text-right')}>{translation.price}</span>),
               (<span key="-plan">{translation.plan}</span>),
             ]}
           />
         )}
       </Modal>
       <Section titleText={translation.invoices}>
-        {(isError || !hasNecessaryExtensions) && (<span className={tw('There was an Error')}></span>)}
+        {(isError || !hasNecessaryExtensions) && (<span className={clsx('There was an Error')}></span>)}
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (
-          <div className={tw('flex flex-wrap gap-x-8 gap-y-12')}>
+          <div className={clsx('flex flex-wrap gap-x-8 gap-y-12')}>
             <Table
-              className={tw('w-full h-full')}
+              className={clsx('w-full h-full')}
               data={data}
               identifierMapping={dataObject => dataObject.uuid}
               header={[
                 (<span key="date">{translation.date}</span>),
                 (<span key="name">{translation.name}</span>),
                 (<span key="price">{translation.price}</span>),
-                (<span key="details" className={tw('min-w-[120px] text-left')}>{translation.details}</span>),
+                (<span key="details" className={clsx('min-w-[120px] text-left')}>{translation.details}</span>),
                 (<span key="paymentStatus">{translation.paymentStatus}</span>),
                 (<span key="paymentDate">{translation.paymentDate}</span>),
                 (<span key="actions">{translation.actions}</span>),
@@ -132,14 +132,14 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                 (<span key={dataObject.uuid + '-date'}>{dataObject.date.toDateString()}</span>),
                 (<span key={dataObject.uuid + '-name'}>{dataObject.name}</span>),
                 (
-                  <span key={dataObject.uuid + '-price'} className={tw('font-semibold')}>
+                  <span key={dataObject.uuid + '-price'} className={clsx('font-semibold')}>
                     {dataObject.products!.reduce((sum, product) => sum + product.price, 0).toFixed(2) + '€'}
                   </span>
                 ),
                 (
-                  <div key={dataObject.uuid + '-details'} className={tw('flex flex-col')}>
+                  <div key={dataObject.uuid + '-details'} className={clsx('flex flex-col')}>
                     <span>{translation.products(dataObject.products!.length)}</span>
-                    <SolidButton size="small" onClick={() => setDetailModalId(dataObject.uuid)} className={tw('flex flex-row items-center gap-x-1 p-0')} variant="text">
+                    <SolidButton size="small" onClick={() => setDetailModalId(dataObject.uuid)} className={clsx('flex flex-row items-center gap-x-1 p-0')} variant="text">
                       {translation.show}
                       <ChevronRight size={16}/>
                     </SolidButton>
@@ -148,7 +148,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                 (
                   <span
                     key={dataObject.uuid + '-payment-status'}
-                    className={tx({
+                    className={clsx({
                       'text-hw-negative-400': dataObject.status === 'notPayed',
                       'text-hw-warn-400': dataObject.status === 'pending' || dataObject.status === 'overdue',
                       'text-hw-positive-400': dataObject.status === 'payed'

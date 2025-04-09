@@ -1,4 +1,4 @@
-import { tw } from '@helpwave/style-themes/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
@@ -94,15 +94,15 @@ export const StepsToDigitalizationSection = () => {
   ]
 
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={tw('!px-0')}>
-      <div className={tw('flex flex-col items-center text-center gap-y-2')}>
-        <h2 className={tw('textstyle-title-xl')}><MarkdownInterpreter text={translation.title}/></h2>
-        <span className={tw('textstyle-title-sm')}><MarkdownInterpreter text={translation.description}/></span>
+    <SectionBase className={clsx('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
+      <div className={clsx('flex flex-col items-center text-center gap-y-2')}>
+        <h2 className={clsx('textstyle-title-xl')}><MarkdownInterpreter text={translation.title}/></h2>
+        <span className={clsx('textstyle-title-sm')}><MarkdownInterpreter text={translation.description}/></span>
       </div>
-      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} heights={{ tablet: 300 }} blurColor="hw-grayscale-50">
+      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} heights={{ tablet: 300 }} blurColor="from-gray-50">
         {items.map((value, index) => (
-          <div key={index} className={tw('px-[2.5%] h-full')}>
-            <TextImage {...value} className={tw('h-full overflow-hidden')}/>
+          <div key={index} className={clsx('px-[2.5%] h-full')}>
+            <TextImage {...value} className={clsx('h-full overflow-hidden')}/>
           </div>
         ))}
       </Carousel>
@@ -117,7 +117,7 @@ export const StepsToDigitalizationSection = () => {
         )}
         onBackgroundClick={() => setModalValue(undefined)}
         onCloseClick={() => setModalValue(undefined)}
-        modalClassName={tw('max-w-[600px] mobile:max-w-[90%] w-full')}
+        modalClassName={clsx('max-w-[600px] mobile:max-w-[90%] w-full')}
       />
     </SectionBase>
   )

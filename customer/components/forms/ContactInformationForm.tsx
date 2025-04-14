@@ -2,14 +2,15 @@ import type { CustomerCreate } from '@/api/dataclasses/customer'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { tw, tx } from '@twind/core'
-import { Input } from '@helpwave/common/components/user-input/Input'
+import { FormInput } from '@helpwave/common/components/user-input/Input'
 import { Button } from '@helpwave/common/components/Button'
+import { useForm } from 'react-hook-form'
 
 type ContactInformationTranslation = {
   contactInfo: string,
   additionalInformation: string,
   name: string,
-  websiteUrl: string,
+  websiteURL: string,
   email: string,
   phone: string,
   address: string,
@@ -20,6 +21,17 @@ type ContactInformationTranslation = {
   city: string,
   country: string,
   save: string,
+
+  // Validation messages
+  fieldRequired: string,
+  fieldRequiredShort: string,
+  emailInvalid: string,
+  phoneInvalid: string,
+  addressRequired: string,
+  houseNumberRequired: string,
+  houseNumberInvalid: string,
+  postalCodeInvalid: string,
+  websiteInvalid: string,
 }
 
 const defaultContactInformationTranslation: Translation<ContactInformationTranslation> = {
@@ -27,7 +39,7 @@ const defaultContactInformationTranslation: Translation<ContactInformationTransl
     contactInfo: 'Contact Information',
     additionalInformation: 'Additional Information',
     name: 'Name',
-    websiteUrl: 'Website URL',
+    websiteURL: 'Website URL',
     email: 'Email',
     phone: 'Phonenumber',
     address: 'Address',
@@ -37,13 +49,22 @@ const defaultContactInformationTranslation: Translation<ContactInformationTransl
     postalCode: 'Postal code',
     city: 'City',
     country: 'Country',
-    save: 'Save'
+    save: 'Save',
+    fieldRequired: 'This field is required and cannot be empty',
+    fieldRequiredShort: 'required',
+    emailInvalid: 'Enter a valid email address',
+    phoneInvalid: 'Enter a valid phone number',
+    addressRequired: 'Address is required',
+    houseNumberRequired: 'House number is required',
+    houseNumberInvalid: 'Invalid house number format',
+    postalCodeInvalid: 'Invalid postal code',
+    websiteInvalid: 'Invalid website URL',
   },
   de: {
     contactInfo: 'Kontakt Informationen',
     additionalInformation: 'Zusätzliche Informationen',
     name: 'Name',
-    websiteUrl: 'Website URL',
+    websiteURL: 'Website URL',
     email: 'Email',
     phone: 'Telefonnummer',
     address: 'Adresse',
@@ -53,91 +74,172 @@ const defaultContactInformationTranslation: Translation<ContactInformationTransl
     postalCode: 'Postleitzahl',
     city: 'Stadt',
     country: 'Land',
-    save: 'Speichern'
-  }
+    save: 'Speichern',
+    fieldRequired: 'Dieses Feld kann nicht leer sein.',
+    fieldRequiredShort: 'notwendig',
+    emailInvalid: 'Gültige E-Mail-Adresse eingeben',
+    phoneInvalid: 'Gültige Telefonnummer eingeben',
+    addressRequired: 'Adresse ist erforderlich',
+    houseNumberRequired: 'Hausnummer ist erforderlich',
+    houseNumberInvalid: 'Ungültiges Hausnummernformat',
+    postalCodeInvalid: 'Ungültige Postleitzahl',
+    websiteInvalid: 'Ungültige Website-URL',
+  },
 }
 
 type ContactInformationFormProps = {
-  value: CustomerCreate,
-  onChange: (customer: CustomerCreate) => void,
+  initialValue: CustomerCreate,
   onSubmit: (customer: CustomerCreate) => void,
   className?: string,
 }
 
-export const ContactInformationForm = ({ value, onChange, onSubmit, className }: ContactInformationFormProps) => {
+export const ContactInformationForm = ({ initialValue, onSubmit, className }: ContactInformationFormProps) => {
   const translation = useTranslation(defaultContactInformationTranslation)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CustomerCreate>({ defaultValues: initialValue })
+
+  // TODO show response on error or success
+
   return (
     <form
       id="organization-form"
-      onSubmit={(event) => {
-        onSubmit(value)
-        event.preventDefault()
-      }}
+      onSubmit={handleSubmit((data, event) => {
+        onSubmit(data)
+        event?.preventDefault()
+      })}
       className={tx('@(flex flex-col gap-y-1 max-w-[700px])', className)}
     >
       <h3 className={tw('font-space font-bold text-2xl')}>{translation.contactInfo}</h3>
-      <Input
-        value={value.name}
-        onChange={name => onChange({ ...value, name })}
-        label={{ name: translation.name }}
+
+      <FormInput
+        id="name"
+        autoComplete="name"
+        required={true}
+        {...register('name', { required: translation.fieldRequired })}
+        labelText={translation.name}
+        errorText={errors.name?.message}
       />
-      <Input
-        value={value.email}
-        onChange={email => onChange({ ...value, email })}
-        label={{ name: translation.email }}
+
+      <FormInput
+        id="email"
+        autoComplete="email"
+        required={true}
+        {...register('email', {
+          required: translation.fieldRequired,
+          pattern: {
+            value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+            message: translation.emailInvalid,
+          },
+        })}
+        labelText={translation.email}
+        errorText={errors.email?.message}
       />
-      <Input
-        value={value.phoneNumber}
-        onChange={phoneNumber => onChange({ ...value, phoneNumber })}
-        label={{ name: translation.phone }}
+
+      <FormInput
+        id="phoneNumber"
+        autoComplete="tel"
+        {...register('phoneNumber', {
+          pattern: {
+            value: /^\+?[0-9\s\-()]{7,15}$/,
+            message: translation.phoneInvalid,
+          },
+        })}
+        labelText={translation.phone}
+        errorText={errors.phoneNumber?.message}
       />
-      <div className={tw('flex flex-col gap-y-1')}>
+
+      <div className={tw('flex flex-col gap-y-2')}>
         <h4 className={tw('font-space font-bold text-lg')}>{translation.address}</h4>
-        <Input
-          value={value.country ?? ''}
-          onChange={country => onChange({ ...value, country })}
-          label={{ name: translation.country }}
-        />
+
         <div className={tw('flex flex-row gap-x-1')}>
-          <Input
-            value={value.city ?? ''}
-            onChange={city => onChange({ ...value, city })}
-            label={{ name: translation.city }}
+          <FormInput
+            id="address"
+            required={true}
+            autoComplete="street-address"
+            {...register('address', { required: translation.fieldRequired })}
+            labelText={translation.address}
+            errorText={errors.address?.message}
+            containerClassName={tw('w-full')}
           />
-          <Input
-            value={value.postalCode ?? ''}
-            onChange={postalCode => onChange({ ...value, postalCode })}
-            label={{ name: translation.postalCode }}
+          <FormInput
+            id="houseNumber"
+            required={true}
+            {...register('houseNumber', {
+              required: translation.fieldRequiredShort,
+              pattern: {
+                value: /^[0-9]{1,6}([A-Za-z]|-[0-9]{1,3}|\/[0-9]{1,3})?$/,
+                message: translation.houseNumberInvalid,
+              },
+            })}
+            labelText={translation.houseNumber}
+            errorText={errors.houseNumber?.message}
             containerClassName={tw('max-w-[180px]')}
           />
         </div>
+
+        <FormInput
+          id="careOf"
+          {...register('careOf')}
+          labelText={translation.careOf}
+          errorText={errors.careOf?.message}
+        />
+
         <div className={tw('flex flex-row gap-x-1')}>
-          <Input
-            value={value.address ?? ''}
-            onChange={address => onChange({ ...value, address })}
-            label={{ name: translation.street }}
+          <FormInput
+            id="city"
+            required={true}
+            autoComplete="address-level1"
+            {...register('city', { required: translation.fieldRequired })}
+            labelText={translation.city}
+            errorText={errors.city?.message}
+            containerClassName={tw('w-full')}
           />
-          <Input
-            value={value.houseNumber?.toString() ?? ''}
-            onChange={houseNumber => onChange({ ...value, houseNumber })}
-            label={{ name: translation.houseNumber }}
+          <FormInput
+            id="postalCode"
+            required={true}
+            autoComplete="postal-code"
+            {...register('postalCode', {
+              required: translation.fieldRequiredShort,
+              pattern: {
+                value: /^[A-Za-z0-9\- ]{3,10}$/,
+                message: translation.postalCodeInvalid,
+              },
+            })}
+            labelText={translation.postalCode}
+            errorText={errors.postalCode?.message}
             containerClassName={tw('max-w-[180px]')}
           />
         </div>
-        <Input
-          value={value.careOf ?? ''}
-          onChange={careOf => onChange({ ...value, careOf })}
-          label={{ name: translation.careOf }}
+
+        <FormInput
+          id="country"
+          required={true}
+          autoComplete="country"
+          {...register('country', { required: translation.fieldRequired })}
+          labelText={translation.country}
+          errorText={errors.country?.message}
         />
+
         <div className={tw('flex flex-col gap-y-1')}>
           <h4 className={tw('font-space font-bold text-lg')}>{translation.additionalInformation}</h4>
-          <Input
-            value={value.websiteURL ?? ''}
-            onChange={websiteURL => onChange({ ...value, websiteURL })}
-            label={{ name: translation.websiteUrl }}
+          <FormInput
+            id="websiteURL"
+            autoComplete="url"
+            {...register('websiteURL', {
+              pattern: {
+                value: /^https?:\/\/[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+(?::[0-9]+)?(?:\/\S*)?$/,
+                message: translation.websiteInvalid,
+              },
+            })}
+            labelText={translation.websiteURL}
+            errorText={errors.websiteURL?.message}
           />
         </div>
       </div>
+
       <div className={tw('flex flex-row justify-end')}>
         <Button type="submit">{translation.save}</Button>
       </div>

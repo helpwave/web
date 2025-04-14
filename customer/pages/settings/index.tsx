@@ -91,8 +91,7 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
           {!!currentData && (
             <ContactInformationForm
-              value={currentData}
-              onChange={customer => setCurrentData({ ...currentData, ...customer })}
+              initialValue={currentData}
               onSubmit={customer => customerUpdate.mutate({ ...currentData, ...customer })}
             />
           )}

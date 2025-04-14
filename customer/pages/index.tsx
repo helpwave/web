@@ -5,6 +5,8 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { withOrganization } from '@/hooks/useOrganization'
 import { withAuth } from '@/hooks/useAuth'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 type DashboardTranslation = {
   dashboard: string,
@@ -25,6 +27,12 @@ type DashboardServerSideProps = {
 
 const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
+  const router = useRouter()
+
+ useEffect(() => {
+   router.push('/products/shop').catch(console.error)
+ }, [])
+
   return (
     <Page pageTitle={titleWrapper(translation.dashboard)}>
       <div>This is the {translation.dashboard} page</div>

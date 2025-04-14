@@ -3,7 +3,6 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { tw } from '@twind/core'
-import { useState } from 'react'
 import type { CustomerCreate } from '@/api/dataclasses/customer'
 import { Section } from '@/components/layout/Section'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
@@ -33,18 +32,6 @@ export const CreateOrganizationPage = ({
                                          overwriteTranslation
                                        }: PropsForTranslation<CreateOrganizationTranslation, CreateOrganizationPageProps>) => {
   const translation = useTranslation(defaultCreateOrganizationTranslations, overwriteTranslation)
-  const [data, setData] = useState<CustomerCreate>({
-    name: '',
-    email: '',
-    phoneNumber: '',
-    address: '',
-    country: '',
-    city: '',
-    postalCode: '',
-    houseNumber: '',
-    careOf: '',
-    websiteURL: '',
-  })
 
   return (
     <Page
@@ -57,9 +44,19 @@ export const CreateOrganizationPage = ({
         <h2 className={tw('font-space text-3xl font-bold')}>{translation.createOrganization}</h2>
         <span className={tw('text-gray-500')}>{translation.createOrganizationDescription}</span>
         <ContactInformationForm
-          value={data}
-          onChange={setData}
-          onSubmit={() => {
+          initialValue={{
+            name: '',
+            email: '',
+            phoneNumber: '',
+            address: '',
+            country: '',
+            city: '',
+            postalCode: '',
+            houseNumber: '',
+            careOf: '',
+            websiteURL: '',
+          }}
+          onSubmit={(data) => {
             createOrganization(data).catch(console.error)
           }}
         />

@@ -24,6 +24,7 @@
     "react": "18.3.1",
     "react-custom-scrollbars-2": "4.5.0",
     "react-dom": "18.3.1",
+    "react-hook-form": "^7.55.0",
     "react-hot-toast": "2.4.1",
     "react-intersection-observer": "9.14.0",
     "vanilla-cookieconsent": "3.0.1"

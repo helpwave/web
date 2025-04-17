@@ -30,7 +30,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   const router = useRouter()
 
  useEffect(() => {
-   router.push('/products/shop').catch(console.error)
+   router.push('/products').catch(console.error)
  }, [])
 
   return (

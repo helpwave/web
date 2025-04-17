@@ -110,10 +110,9 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
         onSubmit(data)
         event?.preventDefault()
       })}
-      className={tx('@(flex flex-col gap-y-1 max-w-[700px])', className)}
+      className={tx('flex flex-col gap-y-2 max-w-[700px]', className)}
     >
       <h3 className={tw('font-space font-bold text-2xl')}>{translation.contactInfo}</h3>
-
       <FormInput
         id="name"
         autoComplete="name"
@@ -137,7 +136,6 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
         labelText={translation.email}
         errorText={errors.email?.message}
       />
-
       <FormInput
         id="phoneNumber"
         autoComplete="tel"
@@ -150,97 +148,92 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
         labelText={translation.phone}
         errorText={errors.phoneNumber?.message}
       />
+      <h4 className={tw('font-space font-bold text-lg mt-2')}>{translation.address}</h4>
 
-      <div className={tw('flex flex-col gap-y-2')}>
-        <h4 className={tw('font-space font-bold text-lg')}>{translation.address}</h4>
-
-        <div className={tw('flex flex-row gap-x-1')}>
-          <FormInput
-            id="address"
-            required={true}
-            autoComplete="street-address"
-            {...register('address', { required: translation.fieldRequired })}
-            labelText={translation.address}
-            errorText={errors.address?.message}
-            containerClassName={tw('w-full')}
-          />
-          <FormInput
-            id="houseNumber"
-            required={true}
-            {...register('houseNumber', {
-              required: translation.fieldRequiredShort,
-              pattern: {
-                value: /^[0-9]{1,6}([A-Za-z]|-[0-9]{1,3}|\/[0-9]{1,3})?$/,
-                message: translation.houseNumberInvalid,
-              },
-            })}
-            labelText={translation.houseNumber}
-            errorText={errors.houseNumber?.message}
-            containerClassName={tw('max-w-[180px]')}
-          />
-        </div>
-
+      <div className={tw('flex flex-row gap-x-2')}>
         <FormInput
-          id="careOf"
-          {...register('careOf')}
-          labelText={translation.careOf}
-          errorText={errors.careOf?.message}
-        />
-
-        <div className={tw('flex flex-row gap-x-1')}>
-          <FormInput
-            id="city"
-            required={true}
-            autoComplete="address-level1"
-            {...register('city', { required: translation.fieldRequired })}
-            labelText={translation.city}
-            errorText={errors.city?.message}
-            containerClassName={tw('w-full')}
-          />
-          <FormInput
-            id="postalCode"
-            required={true}
-            autoComplete="postal-code"
-            {...register('postalCode', {
-              required: translation.fieldRequiredShort,
-              pattern: {
-                value: /^[A-Za-z0-9\- ]{3,10}$/,
-                message: translation.postalCodeInvalid,
-              },
-            })}
-            labelText={translation.postalCode}
-            errorText={errors.postalCode?.message}
-            containerClassName={tw('max-w-[180px]')}
-          />
-        </div>
-
-        <FormInput
-          id="country"
+          id="address"
+          autoComplete="street-address"
           required={true}
-          autoComplete="country"
-          {...register('country', { required: translation.fieldRequired })}
-          labelText={translation.country}
-          errorText={errors.country?.message}
+          {...register('address', { required: translation.fieldRequired })}
+          labelText={translation.address}
+          errorText={errors.address?.message}
+          containerClassName={tw('w-full')}
         />
-
-        <div className={tw('flex flex-col gap-y-1')}>
-          <h4 className={tw('font-space font-bold text-lg')}>{translation.additionalInformation}</h4>
-          <FormInput
-            id="websiteURL"
-            autoComplete="url"
-            {...register('websiteURL', {
-              pattern: {
-                value: /^https?:\/\/[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+(?::[0-9]+)?(?:\/\S*)?$/,
-                message: translation.websiteInvalid,
-              },
-            })}
-            labelText={translation.websiteURL}
-            errorText={errors.websiteURL?.message}
-          />
-        </div>
+        <FormInput
+          id="houseNumber"
+          required={true}
+          {...register('houseNumber', {
+            required: translation.fieldRequiredShort,
+            pattern: {
+              value: /^[0-9]{1,6}([A-Za-z]|-[0-9]{1,3}|\/[0-9]{1,3})?$/,
+              message: translation.houseNumberInvalid,
+            },
+          })}
+          labelText={translation.houseNumber}
+          errorText={errors.houseNumber?.message}
+          containerClassName={tw('max-w-[180px]')}
+        />
       </div>
 
-      <div className={tw('flex flex-row justify-end')}>
+      <FormInput
+        id="careOf"
+        {...register('careOf')}
+        labelText={translation.careOf}
+        errorText={errors.careOf?.message}
+      />
+
+      <div className={tw('flex flex-row gap-x-2')}>
+        <FormInput
+          id="city"
+          autoComplete="address-level1"
+          required={true}
+          {...register('city', { required: translation.fieldRequired })}
+          labelText={translation.city}
+          errorText={errors.city?.message}
+          containerClassName={tw('w-full')}
+        />
+        <FormInput
+          id="postalCode"
+          autoComplete="postal-code"
+          required={true}
+          {...register('postalCode', {
+            required: translation.fieldRequiredShort,
+            pattern: {
+              value: /^[A-Za-z0-9\- ]{3,10}$/,
+              message: translation.postalCodeInvalid,
+            },
+          })}
+          labelText={translation.postalCode}
+          errorText={errors.postalCode?.message}
+          containerClassName={tw('max-w-[180px]')}
+        />
+      </div>
+
+      <FormInput
+        id="country"
+        autoComplete="country"
+        required={true}
+        {...register('country', { required: translation.fieldRequired })}
+        labelText={translation.country}
+        errorText={errors.country?.message}
+      />
+
+      <h4 className={tw('font-space font-bold text-lg mt-2')}>{translation.additionalInformation}</h4>
+      <FormInput
+        id="websiteURL"
+        autoComplete="url"
+        {...register('websiteURL', {
+          pattern: {
+            value: /^https?:\/\/[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+(?::[0-9]+)?(?:\/\S*)?$/,
+            message: translation.websiteInvalid,
+          },
+        })}
+        labelText={translation.websiteURL}
+        errorText={errors.websiteURL?.message}
+      />
+
+      <div className={tw('flex flex-row justify-end mt-2')}>
         <Button type="submit">{translation.save}</Button>
       </div>
     </form>

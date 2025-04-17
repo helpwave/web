@@ -9,8 +9,8 @@ import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { Table } from '@helpwave/common/components/Table'
 import type { InvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import { defaultInvoiceStatusTranslation } from '@/api/dataclasses/invoice'
-import type { ProductPlanTranslation } from '@/api/dataclasses/product'
-import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
+import type { ProductPlanTypeTranslation } from '@/api/dataclasses/product'
+import { defaultProductPlanTypeTranslation } from '@/api/dataclasses/product'
 import {  withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 import { useMyInvoicesQuery } from '@/api/mutations/invoice_mutations'
@@ -30,12 +30,12 @@ type InvoicesTranslation = {
   show: string,
   products: (amount: number) => string,
   plan: string,
-} & InvoiceStatusTranslation & ProductPlanTranslation
+} & InvoiceStatusTranslation & ProductPlanTypeTranslation
 
 const defaultInvoicesTranslations: Record<Languages, InvoicesTranslation> = {
   en: {
     ...defaultInvoiceStatusTranslation.en,
-    ...defaultProductPlanTranslation.en,
+    ...defaultProductPlanTypeTranslation.en,
     payNow: 'Pay Now',
     invoices: 'Invoices',
     invoiceNumber: 'Invoice Number',
@@ -52,7 +52,7 @@ const defaultInvoicesTranslations: Record<Languages, InvoicesTranslation> = {
   },
   de: {
     ...defaultInvoiceStatusTranslation.de,
-    ...defaultProductPlanTranslation.de,
+    ...defaultProductPlanTypeTranslation.de,
     invoices: 'Rechnungen',
     payNow: 'Jetzt Zahlen',
     invoiceNumber: 'Rechnungsnummer',

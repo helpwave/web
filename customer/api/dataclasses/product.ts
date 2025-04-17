@@ -1,19 +1,52 @@
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 
-export type ProductPlanType = 'monthly' | 'yearly' | 'once';
+export type ProductPlanType = 'once' | 'recurring' | 'lifetime' | 'trial';
 
-export type ProductPlanTranslation = Record<ProductPlanType, string>
+export type ProductPlanTypeTranslation = Record<ProductPlanType, string>
+
+export const defaultProductPlanTypeTranslation: Translation<ProductPlanTypeTranslation> = {
+  en: {
+    once: 'Once',
+    recurring: 'Recurring',
+    lifetime: 'Lifetime',
+    trial: 'Trial',
+  },
+  de: {
+    once: 'Einmalig',
+    recurring: 'Wiederholend',
+    lifetime: 'Lebenszeit',
+    trial: 'Testphase',
+  }
+}
+
+export type ProductPlanTranslation = { productPlan: (plan: ProductPlan) => string }
 
 export const defaultProductPlanTranslation: Translation<ProductPlanTranslation> = {
   en: {
-    yearly: 'Yearly',
-    once: 'Once',
-    monthly: 'Monthly'
+    productPlan: value => {
+      if(value.type !== 'recurring') {
+        return defaultProductPlanTypeTranslation.en[value.type]
+      }
+      if(value.recurringMonth === 1) {
+        return 'Monthly'
+      } else if (value.recurringMonth === 12) {
+        return 'Yearly'
+      }
+      return `Every ${value} Months`
+    }
   },
   de: {
-    yearly: 'Jährlich',
-    once: 'Einmalig',
-    monthly: 'Monatlich'
+    productPlan: value => {
+      if(value.type !== 'recurring') {
+        return defaultProductPlanTypeTranslation.de[value.type]
+      }
+      if(value.recurringMonth === 1) {
+        return 'Monatlich'
+      } else if (value.recurringMonth === 12) {
+        return 'Jährlich'
+      }
+      return `Alle ${value} Monate`
+    }
   }
 }
 
@@ -21,6 +54,7 @@ export type ProductPlan = {
   uuid: string,
   type: ProductPlanType,
   costEuro: number,
+  recurringMonth: number,
   seatBased: boolean,
   createdAt: Date,
   updatedAt: Date,
@@ -47,6 +81,7 @@ function fromJson(json: any): Product {
       type: plan.type,
       costEuro: plan.cost_euro,
       seatBased: plan.seat_based,
+      recurringMonth: plan.recurring_month,
       createdAt: new Date(plan.created_at),
       updatedAt: new Date(plan.updated_at),
     })),

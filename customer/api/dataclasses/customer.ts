@@ -1,3 +1,5 @@
+import { formatString } from '@/api/util'
+
 export interface CustomerCreate {
   name: string,
   email: string,
@@ -5,38 +7,38 @@ export interface CustomerCreate {
   /** Optional Website URL */
   websiteURL?: string,
   /** The street of the address */
-  address?: string,
+  address: string,
   /** The house number of the address */
-  houseNumber?: string,
+  houseNumber: string,
   /** The addition to the address of the person taking care of receiving mails */
   careOf?: string,
   /** The postal code of the address */
-  postalCode?: string,
+  postalCode: string,
   /** The city of the address */
-  city?: string,
+  city: string,
   /** The country of the address */
-  country?: string,
+  country: string,
 }
 
 export interface Customer {
   uuid: string,
   name: string,
   email: string,
-  phoneNumber: string,
+  phoneNumber?: string,
   /** Optional Website URL */
   websiteURL?: string,
   /** The street of the address */
-  address?: string,
+  address: string,
   /** The house number of the address */
-  houseNumber?: string,
+  houseNumber: string,
   /** The addition to the address of the person taking care of receiving mails */
   careOf?: string,
   /** The postal code of the address */
-  postalCode?: string,
+  postalCode: string,
   /** The city of the address */
-  city?: string,
+  city: string,
   /** The country of the address */
-  country?: string,
+  country: string,
   createdAt: Date,
   updatedAt: Date,
 }
@@ -90,14 +92,14 @@ const toJsonUpdate = (customer: Customer): Record<string, any> => {
   return {
     name: customer.name,
     email: customer.email,
-    phone_number: customer.phoneNumber,
-    website_url: customer.websiteURL,
-    address: customer.address,
-    house_number: customer.houseNumber,
-    care_of: customer.careOf,
-    postal_code: customer.postalCode,
-    city: customer.city,
-    country: customer.country,
+    phone_number: formatString(customer.phoneNumber),
+    website_url: formatString(customer.websiteURL),
+    address: formatString(customer.address),
+    house_number: formatString(customer.houseNumber),
+    care_of: formatString(customer.careOf),
+    postal_code: formatString(customer.postalCode),
+    city: formatString(customer.city),
+    country: formatString(customer.country),
   }
 }
 
@@ -106,14 +108,14 @@ const toJsonCreate = (customer: CustomerCreate): Record<string, any> => {
   return {
     name: customer.name,
     email: customer.email,
-    phone_number: customer.phoneNumber,
-    website_url: customer.websiteURL,
-    address: customer.address,
-    house_number: customer.houseNumber,
-    care_of: customer.careOf,
-    postal_code: customer.postalCode,
-    city: customer.city,
-    country: customer.country,
+    phone_number: formatString(customer.phoneNumber),
+    website_url: formatString(customer.websiteURL),
+    address: formatString(customer.address),
+    house_number: formatString(customer.houseNumber),
+    care_of: formatString(customer.careOf),
+    postal_code: formatString(customer.postalCode),
+    city: formatString(customer.city),
+    country: formatString(customer.country),
   }
 }
 

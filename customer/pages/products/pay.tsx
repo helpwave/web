@@ -6,8 +6,8 @@ import titleWrapper from '@/utils/titleWrapper'
 import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
 import { tw } from '@twind/core'
-import type { Product, ProductPlanTranslation } from '@/api/dataclasses/product'
-import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
+import type { Product, ProductPlanTypeTranslation } from '@/api/dataclasses/product'
+import { defaultProductPlanTypeTranslation } from '@/api/dataclasses/product'
 import { Button } from '@helpwave/common/components/Button'
 import { ChevronLeft, Coins, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
@@ -32,11 +32,11 @@ type ProductsTranslation = {
   total: string,
   lookAt: string,
   acceptTerms: (name: string) => string,
-} & ProductPlanTranslation
+} & ProductPlanTypeTranslation
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
   en: {
-    ...defaultProductPlanTranslation.en,
+    ...defaultProductPlanTypeTranslation.en,
     checkout: 'Checkout',
     name: 'Name',
     price: 'Price',
@@ -48,7 +48,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     acceptTerms: (name: string) => `Hereby I accept the terms of use for ${name}.`,
   },
   de: {
-    ...defaultProductPlanTranslation.de,
+    ...defaultProductPlanTypeTranslation.de,
     checkout: 'Kasse',
     name: 'Name',
     price: 'Preis',

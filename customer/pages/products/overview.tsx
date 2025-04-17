@@ -6,8 +6,11 @@ import titleWrapper from '@/utils/titleWrapper'
 import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
 import { tw } from '@twind/core'
-import type { ProductPlanTranslation } from '@/api/dataclasses/product'
-import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
+import type {
+  ProductPlanTranslation } from '@/api/dataclasses/product'
+import {
+  defaultProductPlanTranslation
+} from '@/api/dataclasses/product'
 import { Button } from '@helpwave/common/components/Button'
 import { ChevronLeft, Coins } from 'lucide-react'
 import { Table } from '@helpwave/common/components/Table'
@@ -141,14 +144,17 @@ const CartOverview: NextPage = () => {
                 const plan = product?.plan.find(value => value.uuid === cartItem.plan.uuid)
                 const voucher = cartItem.voucher
                 // TODO let the backend provide this
-                console.log(cartItem.voucher)
                 const price = Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0).toFixed(2)
+
+                if(!plan) {
+                  return
+                }
 
                 // TODO handle not found errors here
                 return [
                   <span key={cartItem.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
                   <span key={cartItem.id + 'price'}>{`${price}€`}</span>,
-                  <span key={cartItem.id + 'plan'}>{translation[plan?.type ?? 'monthly']}</span>,
+                  <span key={cartItem.id + 'plan'}>{translation.productPlan(plan)}</span>,
                   !voucher ? (
                     <Button
                       variant="text"

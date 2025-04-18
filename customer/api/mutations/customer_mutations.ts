@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/api/mutations/query_keys'
-import type { Customer } from '@/api/dataclasses/customer'
+import type { Customer, CustomerCreate } from '@/api/dataclasses/customer'
 import { CustomerAPI } from '@/api/services/customer'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -18,7 +18,7 @@ export const useCustomerCreateMutation = () => {
   const queryClient = useQueryClient()
   const { authHeader } = useAuth()
   return useMutation({
-    mutationFn: async (customer: Customer) => {
+    mutationFn: async (customer: CustomerCreate) => {
       return await CustomerAPI.create(customer, authHeader)
     },
     onSuccess: () => {

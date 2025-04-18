@@ -48,7 +48,7 @@ export const CustomerProductsAPI = {
     })
     if (response.ok) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (await response.json() as any[]).map(value => CustomerProductsHelper.fromJson(value))
+      return (await response.json() as any[]).map(value => CustomerProductsHelper.fromJsonResolvedCustomerProduct(value))
     }
     throw response
   },

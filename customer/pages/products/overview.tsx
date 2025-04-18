@@ -146,15 +146,11 @@ const CartOverview: NextPage = () => {
                 // TODO let the backend provide this
                 const price = Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0).toFixed(2)
 
-                if(!plan) {
-                  return
-                }
-
                 // TODO handle not found errors here
                 return [
                   <span key={cartItem.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
                   <span key={cartItem.id + 'price'}>{`${price}€`}</span>,
-                  <span key={cartItem.id + 'plan'}>{translation.productPlan(plan)}</span>,
+                  <span key={cartItem.id + 'plan'}>{plan ? translation.productPlan(plan) : ''}</span>,
                   !voucher ? (
                     <Button
                       variant="text"

@@ -70,6 +70,19 @@ export type Product = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fromJsonProductPlan(json: any): ProductPlan {
+  return {
+      uuid: json.uuid,
+      type: json.type,
+      costEuro: json.cost_euro,
+      seatBased: json.seat_based,
+      recurringMonth: json.recurring_month,
+      createdAt: new Date(json.created_at),
+      updatedAt: new Date(json.updated_at),
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromJson(json: any): Product {
   return {
     uuid: json.uuid,
@@ -90,4 +103,4 @@ function fromJson(json: any): Product {
   }
 }
 
-export const ProductHelpers = { fromJson }
+export const ProductHelpers = { fromJson, fromJsonProductPlan }

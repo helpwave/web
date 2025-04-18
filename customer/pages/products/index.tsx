@@ -74,17 +74,13 @@ const ProductsPage: NextPage = () => {
         {!isError && !isLoading && products && bookedProducts && (
           <div className={tw('grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12')}>
             {bookedProducts.map((bookedProduct, index) => {
-              const product = products.find(value => value.uuid === bookedProduct.productUUID)
-              const productPlan = product?.plan.find(value => value.uuid === bookedProduct.productPlanUUID)
-              if (!product || !productPlan) return null
-
               return (
                 <div
                   key={index}
                   className={tw('flex flex-col gap-y-2 bg-gray-200 px-4 py-2 rounded-md')}
                 >
-                  <h4 className={tw('font-bold font-space text-2xl')}>{product.name}</h4>
-                  <span>{ `${translation.productPlan(productPlan)} (${productPlan.costEuro}€)`}</span>
+                  <h4 className={tw('font-bold font-space text-2xl')}>{bookedProduct.product.name}</h4>
+                  <span>{ `${translation.productPlan(bookedProduct.productPlan)} (${bookedProduct.productPlan.costEuro}€)`}</span>
                   <div className={tw('flex flex-row gap-x-4')}>
                     <Button color="hw-negative" className={tw('!w-fit')}>{translation.cancel}</Button>
                     <Button className={tw('!w-fit')}>{translation.change}</Button>

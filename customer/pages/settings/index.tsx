@@ -6,8 +6,6 @@ import titleWrapper from '@/utils/titleWrapper'
 import { Section } from '@/components/layout/Section'
 import { useCustomerMyselfQuery, useCustomerUpdateMutation } from '@/api/mutations/customer_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { useEffect, useState } from 'react'
-import type { Customer } from '@/api/dataclasses/customer'
 import { tw } from '@twind/core'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
 import { withAuth } from '@/hooks/useAuth'
@@ -73,15 +71,8 @@ const defaultSettingsTranslations: Record<Languages, SettingsTranslation> = {
 
 const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultSettingsTranslations, overwriteTranslation)
-  const [currentData, setCurrentData] = useState<Customer>()
   const { data, isError, isLoading } = useCustomerMyselfQuery()
   const customerUpdate = useCustomerUpdateMutation()
-
-  useEffect(() => {
-    if (data && !isError) {
-      setCurrentData(data)
-    }
-  }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // TODO do input validation
   return (
@@ -89,10 +80,10 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
       <Section titleText={translation.settings}>
         <span>{translation.settingsDescription}</span>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
-          {!!currentData && (
+          {!!data && (
             <ContactInformationForm
-              initialValue={currentData}
-              onSubmit={customer => customerUpdate.mutate({ ...currentData, ...customer })}
+              initialValue={data}
+              onSubmit={customer => customerUpdate.mutate({ ...data, ...customer })}
             />
           )}
         </LoadingAndErrorComponent>

@@ -1,3 +1,6 @@
+import type { Product, ProductPlan } from '@/api/dataclasses/product'
+import { ProductHelpers } from '@/api/dataclasses/product'
+
 export interface CustomerProduct {
   /** The identifier of the booking
    *
@@ -33,6 +36,30 @@ export interface CustomerProductCreate {
   voucherUUID?: string,
 }
 
+export interface ResolvedCustomerProduct {
+  /** The identifier of the booking
+   *
+   *  undefined if creating
+   */
+  uuid: string,
+  /** The identifier of the customer that booked the product */
+  customerUUID: string,
+  /** The number of seats allocated */
+  seats?: number,
+  /** The date from which the booking starts */
+  startDate: Date,
+  /** The date on which the next payment is due */
+  nextPaymentDate?: Date,
+  /** The date from the booking ends */
+  cancellationDate?: Date,
+  /** The identifier of the voucher used to book the product */
+  voucherUUID?: string,
+  createdAt: Date,
+  updatedAt: Date,
+  product: Product,
+  productPlan: ProductPlan,
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fromJson(json: any): CustomerProduct {
   return {
@@ -47,6 +74,23 @@ function fromJson(json: any): CustomerProduct {
     voucherUUID: json.voucher_uuid,
     createdAt: new Date(json.created_at),
     updatedAt: new Date(json.updated_at),
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fromJsonResolvedCustomerProduct(json: any): ResolvedCustomerProduct {
+  return {
+    uuid: json.uuid,
+    customerUUID: json.customer_uuid,
+    seats: json.seats,
+    startDate: new Date(json.start_date),
+    nextPaymentDate: json.next_payment_date ? new Date(json.next_payment_date) : undefined,
+    cancellationDate: json.cancellation_date ? new Date(json.cancellation_date) : undefined,
+    voucherUUID: json.voucher_uuid,
+    createdAt: new Date(json.created_at),
+    updatedAt: new Date(json.updated_at),
+    productPlan: ProductHelpers.fromJsonProductPlan(json.product_plan),
+    product: ProductHelpers.fromJson(json.product)
   }
 }
 
@@ -76,4 +120,4 @@ function toJsonCreate(customerProduct: CustomerProductCreate): any {
   }
 }
 
-export const CustomerProductsHelper = { toJson, toJsonCreate, fromJson }
+export const CustomerProductsHelper = { toJson, toJsonCreate, fromJson, fromJsonResolvedCustomerProduct }

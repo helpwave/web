@@ -64,8 +64,6 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     error: 'Es gab einen Fehler',
     details: 'Details',
     book: 'Buchen',
-    removeFromCart: 'Entfernen',
-    alreadyBought: 'Bereits Gekauft',
     name: 'Name',
     price: 'Preis',
     contract: 'Vertrag',
@@ -100,7 +98,7 @@ const ProductShop: NextPage = () => {
         {!isError && !isLoading && (
           <div className={tw('flex flex-col gap-x-8 gap-y-12')}>
             {products.map((product, index) => {
-              const isBookedAlready = bookedProducts.findIndex(value => value.productUUID === product.uuid) !== -1
+              const isBookedAlready = bookedProducts.findIndex(value => value.product.uuid === product.uuid) !== -1
               if (isBookedAlready) {
                 return null
               }

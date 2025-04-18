@@ -3,7 +3,7 @@ import { formatString } from '@/api/util'
 export interface CustomerCreate {
   name: string,
   email: string,
-  phoneNumber: string,
+  phoneNumber?: string,
   /** Optional Website URL */
   websiteURL?: string,
   /** The street of the address */

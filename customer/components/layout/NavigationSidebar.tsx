@@ -53,7 +53,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
 
   return (
     <div
-      className={tx(`@(flex flex-col justify-between grow bg-gray-200 min-w-[${width}px] max-w-[${width}px])`, className)}>
+      className={tx(`@(flex flex-col justify-between grow shadow-xl bg-gray-50 min-w-[${width}px] max-w-[${width}px])`, className)}>
       <LanguageModal
         id="language-modal"
         isOpen={isLanguageModalOpen}
@@ -67,8 +67,8 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
             href={item.url}
             key={i}
             className={tx(
-              'px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40 flex flex-row gap-x-2 items-center',
-              { 'bg-hw-primary-500/30': router.pathname == item.url }
+              'px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40 flex flex-row gap-x-2 px-4 items-center',
+              { 'bg-gray-200': router.pathname == item.url }
             )}
           >
             {item.icon}

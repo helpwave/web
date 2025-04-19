@@ -5,7 +5,6 @@ import type { NavItem } from '@/components/layout/NavigationSidebar'
 import { NavigationSidebar } from '@/components/layout/NavigationSidebar'
 import type { HeaderProps } from '@/components/layout/Header'
 import { Header } from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -49,7 +48,7 @@ export const Page = ({
                        children,
                        pageTitle,
                        header,
-                       footer = (<Footer/>),
+                       footer = (<></>),
                        isHidingSidebar = false,
                        mainContainerClassName,
                        contentAndFooterClassName,

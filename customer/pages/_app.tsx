@@ -33,6 +33,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               --font-inter: ${inter.style.fontFamily};
               --font-space: ${spaceGrotesk.style.fontFamily};
             }
+            dialog::backdrop {
+              background-color: rgba(0, 0, 0, 0.7);
+            }
             `}</style>
       </Head>
       <QueryClientProvider client={queryClient}>

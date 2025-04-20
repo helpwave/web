@@ -13,6 +13,16 @@ export const useProductsAllQuery = () => {
   })
 }
 
+export const useProductsAvailableQuery = () => {
+  const { authHeader } = useAuth()
+  return useQuery({
+    queryKey: [QueryKeys.product, 'available'],
+    queryFn: async () => {
+      return await ProductAPI.getAvailable(authHeader)
+    },
+  })
+}
+
 export const useProductQuery = (id?: string) => {
   const { authHeader } = useAuth()
   return useQuery({

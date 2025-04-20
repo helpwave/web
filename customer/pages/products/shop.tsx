@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useProductsAllQuery } from '@/api/mutations/product_mutations'
+import { useProductsAvailableQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
@@ -11,7 +11,6 @@ import type {
 import {
   defaultProductPlanTranslation
 } from '@/api/dataclasses/product'
-import { useCustomerProductsSelfQuery } from '@/api/mutations/customer_product_mutations'
 import { Button } from '@helpwave/common/components/Button'
 import { ChevronRight } from 'lucide-react'
 import { withAuth } from '@/hooks/useAuth'
@@ -82,16 +81,8 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
 const ProductShop: NextPage = () => {
   const translation = useTranslation(defaultProductsTranslations)
   const { addItem, clearCart } = useCart()
-  const {
-    data: bookedProducts,
-    isError: bookedProductsError,
-    isLoading: bookedProductsLoading
-  } = useCustomerProductsSelfQuery()
-  const { data: products, isError: productsError, isLoading: productsLoading } = useProductsAllQuery()
+  const { data: products, isError, isLoading } = useProductsAvailableQuery()
   const router = useRouter()
-
-  const isError = bookedProductsError || productsError
-  const isLoading = bookedProductsLoading || productsLoading
 
   return (
     <Page pageTitle={titleWrapper(translation.bookProduct)} mainContainerClassName={tw('min-h-[80vh]')}>
@@ -100,14 +91,9 @@ const ProductShop: NextPage = () => {
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (
           <div className={tw('flex flex-col gap-x-8 gap-y-12')}>
-            {products.filter(product => bookedProducts.findIndex(value => value.product.uuid === product.uuid) === -1) .length == 0 ?
+            {products.length == 0 ?
               (<span>{translation.noProducts}</span>) :
               products.map((product, index) => {
-                const isBookedAlready = bookedProducts.findIndex(value => value.product.uuid === product.uuid) !== -1
-                if (isBookedAlready) {
-                  return null
-                }
-
                 return (
                   <div
                     key={index}
@@ -129,28 +115,29 @@ const ProductShop: NextPage = () => {
                     <div className={tw('flex flex-row gap-x-4')}>
                       {product.plan.map(plan => {
                         return (
-                          <div key={plan.uuid} className={tw('flex flex-col gap-y-2 bg-white rounded-lg  px-4 py-2')}>
+                          <div key={plan.uuid} className={tw('flex flex-col gap-y-6 bg-white rounded-lg px-4 py-2')}>
                             <span className={tw('font-space font-bold text-xl')}>{translation.productPlan(plan)}</span>
-                            <span className={tw('font-semibold text-lg')}>{`${plan.costEuro}€`}</span>
-                            {!isBookedAlready && (
-                              <Button
-                                className={tw('flex flex-row items-center gap-x-2 w-[160px]')}
-                                onClick={async () => {
-                                  clearCart()
-                                  addItem({ id: product.uuid, quantity: 1, plan: { uuid: plan.uuid, type: plan.type } })
-                                  router.push('/products/overview').catch(console.error)
-                                }}
-                              >
-                                {translation.book}
-                              </Button>
-                            )}
+                            <span className={tw('flex flex-row gap-x-1 justify-center font-semibold text-lg')}>
+                              {`€`}
+                              <span className={tw('text-3xl')}>{plan.costEuro}</span>
+                            </span>
+                            <Button
+                              className={tw('flex flex-row items-center justify-center gap-x-2 w-[160px]')}
+                              onClick={async () => {
+                                clearCart()
+                                addItem({ id: product.uuid, quantity: 1, plan: { uuid: plan.uuid, type: plan.type } })
+                                router.push('/products/overview').catch(console.error)
+                              }}
+                            >
+                              {translation.book}
+                            </Button>
                           </div>
                         )
                       })}
                     </div>
                   </div>
                 )
-            })}
+              })}
           </div>
         )}
       </Section>

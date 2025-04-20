@@ -21,6 +21,7 @@ import { useContractsForProductsQuery } from '@/api/mutations/contract_mutations
 import { useRouter } from 'next/router'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { CustomerProductsAPI } from '@/api/services/customer_product'
+import { useCustomerProductsCalculateQuery } from '@/api/mutations/customer_product_mutations'
 
 type ProductsTranslation = {
   checkout: string,
@@ -75,26 +76,26 @@ const Payment: NextPage = () => {
   } = useContractsForProductsQuery(cart.map(value => value.id))
   const [acceptedContracts, setAcceptedContracts] = useState<ContractAcceptedType>({})
   const { data: products, isLoading: productsLoading, isError: productsError } = useProductsAllQuery()
+  const {
+    data: prices,
+    isError: pricesError,
+    isLoading: pricesLoading
+  } = useCustomerProductsCalculateQuery(cart.map(item => ({
+    productUuid: item.id,
+    productPlanUuid: item.plan.uuid,
+    voucherUuid: item.voucher?.uuid
+  })))
 
-  const isError = contractsError || productsError
-  const isLoading = contractsLoading || productsLoading
+  const isError = contractsError || productsError || pricesError
+  const isLoading = contractsLoading || productsLoading || pricesLoading
 
   const allContractsAccepted = !!contracts && contracts.every(contract => acceptedContracts[contract.uuid])
-
-  const totalSum = cart.map(cartItem => {
-    const plan = products?.find(product => product.uuid === cartItem.id)?.plan.find(plan => plan.type === plan.type)
-    const voucher = cartItem.voucher
-    // TODO let the backend provide this
-    return Math.round(Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0) * 100) / 100
-  }).reduce((previousValue, currentValue) => (currentValue) + previousValue, 0)
-
-  console.log(contracts)
 
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
       <Section titleText={translation.checkout}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
-          {products && (
+          {products && prices && (
             <table>
               <thead>
               <tr className={tw('font-bold')}>
@@ -106,9 +107,10 @@ const Payment: NextPage = () => {
               {cart.map(cartItem => {
                 const product: Product = products.find(value => value.uuid === cartItem.id)!
                 const plan = product.plan.find(value => value.uuid === cartItem.plan.uuid)!
-                const voucher = cartItem.voucher
-                // TODO let the backend provide this
-                const price = Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0).toFixed(2)
+                if (!product && !plan) {
+                  return []
+                }
+                const price = prices.products[product.uuid]!.finalPrice.toFixed(2)
                 return (
                   <tr key={cartItem.id}>
                     <td key={`${cartItem.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
@@ -119,7 +121,7 @@ const Payment: NextPage = () => {
               <tr>
                 <td className={tw('border-t-2')}><span className={tw('font-semibold')}>{translation.total}</span></td>
                 <td className={tw('border-t-2')}><span
-                  className={tw('font-semibold float-right')}>{`${totalSum.toFixed(2)}€`}</span></td>
+                  className={tw('font-semibold float-right')}>{`${prices.finalPrice.toFixed(2)}€`}</span></td>
               </tr>
               </tbody>
             </table>

@@ -5,7 +5,7 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { tw } from '@twind/core'
+import { tw, tx } from '@twind/core'
 import type {
   ProductPlanTranslation } from '@/api/dataclasses/product'
 import {
@@ -26,6 +26,7 @@ import { Input } from '@helpwave/common/components/user-input/Input'
 import { VoucherAPI } from '@/api/services/voucher'
 import type { Voucher } from '@/api/dataclasses/voucher'
 import { Chip } from '@helpwave/common/components/ChipList'
+import { useCustomerProductsCalculateQuery } from '@/api/mutations/customer_product_mutations'
 
 type CartOverviewTranslation = {
   removeFromCart: string,
@@ -90,7 +91,15 @@ const CartOverview: NextPage = () => {
   const [productVoucherModalId, setProductVoucherModalId] = useState<string>()
   const [voucherCode, setVoucherCode] = useState<string>('')
   const [redeemResponse, setRedeemResponse] = useState<string>()
-  const { data: products, isError, isLoading } = useProductsAllQuery()
+  const { data: products, isError: productsError, isLoading: productsLoading } = useProductsAllQuery()
+  const { data: prices, isError: pricesError, isLoading: pricesLoading } = useCustomerProductsCalculateQuery(cart.map(item => ({
+    productUuid: item.id,
+    productPlanUuid: item.plan.uuid,
+    voucherUuid: item.voucher?.uuid
+  })))
+
+  const isError = pricesError || productsError
+  const isLoading = pricesLoading || productsLoading || Object.keys(prices?.products ?? {}).length === 0
 
   return (
     <Page pageTitle={titleWrapper(translation.overview)}>
@@ -135,7 +144,7 @@ const CartOverview: NextPage = () => {
       </Modal>
       <Section titleText={translation.overview}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
-          {products && (
+          {products && prices && (
             <Table
               data={cart}
               identifierMapping={dataObject => dataObject.id}
@@ -143,13 +152,18 @@ const CartOverview: NextPage = () => {
                 const product = products.find(value => value.uuid === cartItem.id)
                 const plan = product?.plan.find(value => value.uuid === cartItem.plan.uuid)
                 const voucher = cartItem.voucher
-                // TODO let the backend provide this
-                const price = Math.max((plan?.costEuro ?? 0) * (1 - (voucher?.discountPercentage ?? 0)) - (voucher?.discountFixedAmount ?? 0), 0).toFixed(2)
+
+                if(!product || !plan){
+                  return []
+                }
+                const priceResult = prices.products[product.uuid]!
 
                 // TODO handle not found errors here
                 return [
                   <span key={cartItem.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
-                  <span key={cartItem.id + 'price'}>{`${price}€`}</span>,
+                  <span key={cartItem.id + 'price'} className={tx({ 'text-hw-primary-500': priceResult.saving !== 0 })}>
+                    {`${priceResult.finalPrice}€`}
+                  </span>,
                   <span key={cartItem.id + 'plan'}>{plan ? translation.productPlan(plan) : ''}</span>,
                   !voucher ? (
                     <Button

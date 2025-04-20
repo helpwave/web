@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/api/mutations/query_keys'
+import type { PriceCalculationProps } from '@/api/services/customer_product'
 import { CustomerProductsAPI } from '@/api/services/customer_product'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -9,6 +10,16 @@ export const useCustomerProductsSelfQuery = () => {
     queryKey: [QueryKeys.customerProduct, 'self'],
     queryFn: async () => {
       return await CustomerProductsAPI.getAllForCustomer(authHeader)
+    },
+  })
+}
+
+export const useCustomerProductsCalculateQuery = (priceCalculationProps: PriceCalculationProps[]) => {
+  const { authHeader } = useAuth()
+  return useQuery({
+    queryKey: [QueryKeys.customerProduct, ...priceCalculationProps.map(value => value.productUuid)],
+    queryFn: async () => {
+      return await CustomerProductsAPI.calculatePrices(priceCalculationProps, authHeader)
     },
   })
 }

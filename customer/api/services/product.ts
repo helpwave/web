@@ -23,4 +23,15 @@ export const ProductAPI = {
     }
     throw response
   },
+  getAvailable: async (headers: HeadersInit) => {
+    const response = await fetch(`${API_URL}/product/available/`, {
+      method: 'GET',
+      headers,
+    })
+    if (response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (await response.json() as any[]).map(value => ProductHelpers.fromJson(value))
+    }
+    throw response
+  },
 }

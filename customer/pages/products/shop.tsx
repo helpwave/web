@@ -37,6 +37,7 @@ type ProductsTranslation = {
   pay: string,
   plans: string,
   change: string,
+  noProducts: string,
 } & ProductPlanTranslation
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
@@ -55,7 +56,8 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     back: 'Back',
     pay: 'Pay',
     plans: 'Plans',
-    change: 'Change'
+    change: 'Change',
+    noProducts: 'No Products found.'
   },
   de: {
     ...defaultProductPlanTranslation.de,
@@ -72,7 +74,8 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     back: 'Zurück',
     pay: 'Bezahlen',
     plans: 'Pläne',
-    change: 'Wechseln'
+    change: 'Wechseln',
+    noProducts: 'Keine Produkte gefunden.'
   }
 }
 
@@ -97,54 +100,56 @@ const ProductShop: NextPage = () => {
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (
           <div className={tw('flex flex-col gap-x-8 gap-y-12')}>
-            {products.map((product, index) => {
-              const isBookedAlready = bookedProducts.findIndex(value => value.product.uuid === product.uuid) !== -1
-              if (isBookedAlready) {
-                return null
-              }
+            {products.filter(product => bookedProducts.findIndex(value => value.product.uuid === product.uuid) === -1) .length == 0 ?
+              (<span>{translation.noProducts}</span>) :
+              products.map((product, index) => {
+                const isBookedAlready = bookedProducts.findIndex(value => value.product.uuid === product.uuid) !== -1
+                if (isBookedAlready) {
+                  return null
+                }
 
-              return (
-                <div
-                  key={index}
-                  className={tw('flex flex-col gap-y-2 bg-hw-primary-300 px-4 py-2 rounded-md')}
-                >
-                  <div className={tw('flex flex-row justify-between')}>
-                    <h4 className={tw('font-bold font-space text-2xl')}>{product.name}</h4>
-                    <Button
-                      variant="text"
-                      className={tw('p-0 flex flex-row items-center gap-x-1 text-hw-primary-700 hover:text-hw-primary-800')}
-                      onClick={() => {
-                        // TODO show modal here
-                      }}
-                    >
-                      {translation.details}
-                      <ChevronRight size={16}/>
-                    </Button>
+                return (
+                  <div
+                    key={index}
+                    className={tw('flex flex-col gap-y-2 bg-hw-primary-300 px-4 py-2 rounded-md')}
+                  >
+                    <div className={tw('flex flex-row justify-between')}>
+                      <h4 className={tw('font-bold font-space text-2xl')}>{product.name}</h4>
+                      <Button
+                        variant="text"
+                        className={tw('p-0 flex flex-row items-center gap-x-1 text-hw-primary-700 hover:text-hw-primary-800')}
+                        onClick={() => {
+                          // TODO show modal here
+                        }}
+                      >
+                        {translation.details}
+                        <ChevronRight size={16}/>
+                      </Button>
+                    </div>
+                    <div className={tw('flex flex-row gap-x-4')}>
+                      {product.plan.map(plan => {
+                        return (
+                          <div key={plan.uuid} className={tw('flex flex-col gap-y-2 bg-white rounded-lg  px-4 py-2')}>
+                            <span className={tw('font-space font-bold text-xl')}>{translation.productPlan(plan)}</span>
+                            <span className={tw('font-semibold text-lg')}>{`${plan.costEuro}€`}</span>
+                            {!isBookedAlready && (
+                              <Button
+                                className={tw('flex flex-row items-center gap-x-2 w-[160px]')}
+                                onClick={async () => {
+                                  clearCart()
+                                  addItem({ id: product.uuid, quantity: 1, plan: { uuid: plan.uuid, type: plan.type } })
+                                  router.push('/products/overview').catch(console.error)
+                                }}
+                              >
+                                {translation.book}
+                              </Button>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
                   </div>
-                  <div className={tw('flex flex-row gap-x-4')}>
-                    {product.plan.map(plan => {
-                      return (
-                        <div key={plan.uuid} className={tw('flex flex-col gap-y-2 bg-white rounded-lg  px-4 py-2')}>
-                          <span className={tw('font-space font-bold text-xl')}>{translation.productPlan(plan)}</span>
-                          <span className={tw('font-semibold text-lg')}>{`${plan.costEuro}€`}</span>
-                          {!isBookedAlready && (
-                            <Button
-                              className={tw('flex flex-row items-center gap-x-2 w-[160px]')}
-                              onClick={async () => {
-                                clearCart()
-                                addItem({ id: product.uuid, quantity: 1, plan: { uuid: plan.uuid, type: plan.type } })
-                                router.push('/products/overview').catch(console.error)
-                              }}
-                            >
-                              {translation.book}
-                            </Button>
-                          )}
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )
+                )
             })}
           </div>
         )}

@@ -1,17 +1,17 @@
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 
-export type InvoiceStatus = 'payed' | 'pending' | 'overdue'
+export type InvoiceStatus = 'paid' | 'pending' | 'overdue'
 
 export type InvoiceStatusTranslation = Record<InvoiceStatus, string>
 
 export const defaultInvoiceStatusTranslation: Translation<InvoiceStatusTranslation> = {
   en: {
-    payed: 'Payed',
+    paid: 'Paid',
     pending: 'Pending',
     overdue: 'Overdue',
   },
   de: {
-    payed: 'Bezahlt',
+    paid: 'Bezahlt',
     pending: 'In Arbeit',
     overdue: 'Überfällig',
   }
@@ -22,6 +22,8 @@ export type Invoice = {
   uuid: string,
   /** The status of the Invoice */
   status: InvoiceStatus,
+  /** The optional title of the Invoice */
+  title: string,
   /** The date when the Invoice should be paid issued */
   date: Date,
   /** The total amount to pay */
@@ -37,6 +39,7 @@ export function fromJson(json: any): Invoice {
   return {
     uuid: json.uuid,
     status: json.status,
+    title: json.title,
     date: new Date(json.date),
     totalAmount: json.total_amount,
     createdAt: json.created_at ? new Date(json.created_at) : undefined,

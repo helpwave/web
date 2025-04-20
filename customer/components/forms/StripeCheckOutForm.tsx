@@ -64,7 +64,7 @@ export default function EmbeddedCheckoutButton({ children, invoiceId }: Embedded
 
   return (
     <div id="checkout">
-      <Button onClick={handleCheckoutClick}>
+      <Button variant="text-border" onClick={handleCheckoutClick}>
         {children}
       </Button>
       <dialog ref={modalRef} className={tw('w-full h-full max-w-[90vw] max-h-[90vh] rounded-lg overflow-hidden')}>

@@ -81,8 +81,8 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
 
   function formatDate(date: Date) {
     const languageToLocaleMapping = {
-      'de': 'de-DE',
-      'en': 'en-US',
+      de: 'de-DE',
+      en: 'en-US',
     }
 
     const locale = languageToLocaleMapping[language.language] || 'en-US'

@@ -99,7 +99,7 @@ export const CustomerProductsAPI = {
     })
     if (response.ok) {
       const json = await response.json() as CartPriceCalculationBackendResponseType
-      const products = {}
+      const products: Record<string, PriceCalculationResult> = {}
       for (const product of json.products) {
         products[product.product_uuid] = {
           finalPrice: product.calculation.final_price,

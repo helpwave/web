@@ -31,6 +31,7 @@ export const useContractsForProductsQuery = (productIds: string[]) => {
   const { authHeader } = useAuth()
   return useQuery({
     queryKey: [QueryKeys.contract, ...productIds],
+    enabled: productIds.length > 0,
     queryFn: async () => {
       return await ContractsAPI.getAllByProductIds(productIds, authHeader)
     },

@@ -113,16 +113,16 @@ const Payment: NextPage = () => {
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
       <Modal id="responseModalSuccess" isOpen={modalState === 'success'} titleText={translation.bookingSuccessful}
-        modalClassName={tw('min-h-[120px] p-8 justify-between')}>
+             modalClassName={tw('min-h-[120px] p-8 justify-between')}>
         <span className={tw('my-6')}>{translation.bookingSuccessfulDesc}</span>
         <Button onClick={() => router.push('/invoices').catch(console.error)}>{translation.toInvoices}</Button>
       </Modal>
       <Modal id="responseModalFailure" isOpen={modalState === 'failure'} titleText={translation.bookingFailure}
-        onCloseClick={() => setModalState('hidden')} onBackgroundClick={() => setModalState('hidden')}
-        modalClassName={tw('min-h-[120px] p-8 justify-between')}
+             onCloseClick={() => setModalState('hidden')} onBackgroundClick={() => setModalState('hidden')}
+             modalClassName={tw('min-h-[120px] p-8 justify-between')}
       >
         <span className={tw('inline-block')}>{translation.bookingFailureDesc} <Link href={`mailto:${supportMail}`}
-          className={tw('text-hw-primary-500')}>{supportMail}</Link></span>
+                                                                                    className={tw('text-hw-primary-500')}>{supportMail}</Link></span>
       </Modal>
 
       <Section titleText={translation.checkout}>
@@ -130,31 +130,31 @@ const Payment: NextPage = () => {
           {products && prices && (
             <table>
               <thead>
-                <tr className={tw('font-bold')}>
-                  <td>{translation.name}</td>
-                  <td>{translation.price}</td>
-                </tr>
+              <tr className={tw('font-bold')}>
+                <td>{translation.name}</td>
+                <td>{translation.price}</td>
+              </tr>
               </thead>
               <tbody>
-                {cart.map(cartItem => {
-                  const product: Product = products.find(value => value.uuid === cartItem.id)!
-                  const plan = product.plan.find(value => value.uuid === cartItem.plan.uuid)!
-                  if (!product && !plan) {
-                    return []
-                  }
-                  const price = prices.products[product.uuid]!.finalPrice.toFixed(2)
-                  return (
-                    <tr key={cartItem.id}>
-                      <td key={`${cartItem.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
-                      <td key={`${cartItem.id}+price`} className={tw('float-right')}>{`${price}€`}</td>
-                    </tr>
-                  )
-                })}
-                <tr>
-                  <td className={tw('border-t-2')}><span className={tw('font-semibold')}>{translation.total}</span></td>
-                  <td className={tw('border-t-2')}><span
-                    className={tw('font-semibold float-right')}>{`${prices.finalPrice.toFixed(2)}€`}</span></td>
-                </tr>
+              {cart.map(cartItem => {
+                const product: Product = products.find(value => value.uuid === cartItem.id)!
+                const plan = product.plan.find(value => value.uuid === cartItem.plan.uuid)!
+                if (!product && !plan) {
+                  return []
+                }
+                const price = prices.products[product.uuid]!.finalPrice.toFixed(2)
+                return (
+                  <tr key={cartItem.id}>
+                    <td key={`${cartItem.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
+                    <td key={`${cartItem.id}+price`} className={tw('float-right')}>{`${price}€`}</td>
+                  </tr>
+                )
+              })}
+              <tr>
+                <td className={tw('border-t-2')}><span className={tw('font-semibold')}>{translation.total}</span></td>
+                <td className={tw('border-t-2')}><span
+                  className={tw('font-semibold float-right')}>{`${prices.finalPrice.toFixed(2)}€`}</span></td>
+              </tr>
               </tbody>
             </table>
           )}
@@ -183,7 +183,7 @@ const Payment: NextPage = () => {
                       >
                         <span>(</span>
                         {`${translation.lookAt}`}
-                        <ExternalLink size={16} />
+                        <ExternalLink size={16}/>
                         <span>)</span>
                       </Link>
                     </span>
@@ -196,7 +196,7 @@ const Payment: NextPage = () => {
                   onClick={() => router.push('/products/overview')}
                   type="button"
                 >
-                  <ChevronLeft />
+                  <ChevronLeft/>
                   {translation.cancel}
                 </Button>
                 <Button
@@ -222,7 +222,7 @@ const Payment: NextPage = () => {
                     }
                   }}
                 >
-                  <Coins />
+                  <Coins/>
                   {translation.pay}
                 </Button>
               </div>

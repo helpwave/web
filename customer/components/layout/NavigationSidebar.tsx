@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@helpwave/common/components/Button'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { OIDC_PROVIDER } from '@/api/config'
 
 export type NavItem = {
   name: Record<Languages, string>,
@@ -85,10 +86,10 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
           <ArrowRightLeft size={24}/>
         </button>
         <div className={tw('flex flex-col p-4 gap-y-4 bg-gray-50')}>
-          <div className={tw('flex flex-row gap-x-2 items-center')}>
+          <Link href={OIDC_PROVIDER + '/account'} target="_blank" className={tw('flex flex-row gap-x-2 items-center')}>
             <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
             {identity?.profile?.name}
-          </div>
+          </Link>
           <Button onClick={logout} color="hw-negative">{translation.logout}</Button>
         </div>
       </div>

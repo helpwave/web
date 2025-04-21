@@ -19,7 +19,7 @@ export const useCustomerProductsCalculateQuery = (priceCalculationProps: PriceCa
   return useQuery({
     queryKey: [QueryKeys.customerProduct, ...priceCalculationProps.map(value => value.productUuid)],
     queryFn: async () => {
-      return await CustomerProductsAPI.calculatePrices(priceCalculationProps, authHeader)
+      return await CustomerProductsAPI.calculatePrice(priceCalculationProps, authHeader)
     },
   })
 }

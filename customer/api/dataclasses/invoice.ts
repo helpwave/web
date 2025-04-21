@@ -39,7 +39,7 @@ export function fromJson(json: any): Invoice {
   return {
     uuid: json.uuid,
     status: json.status,
-    title: json.title,
+    title: json.title ?? '',
     date: new Date(json.date),
     totalAmount: json.total_amount,
     createdAt: json.created_at ? new Date(json.created_at) : undefined,

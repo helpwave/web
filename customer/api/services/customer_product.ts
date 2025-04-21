@@ -28,15 +28,20 @@ export type CartPriceCalculationResult = {
   products: Record<string, PriceCalculationResult>,
 }
 
-const PriceCalculationResultHelpers = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fromJson: (data: any): PriceCalculationResult => {
-    return {
-      finalPrice: data.final_price,
-      beforePrice: data.before_price,
-      saving: data.saving,
-    }
-  }
+type CartPriceCalculationBackendResponseType = {
+  overall: {
+    final_price: number,
+    before_price: number,
+    saving: number,
+  },
+  products: {
+    product_uuid: string,
+    calculation: {
+      final_price: number,
+      before_price: number,
+      saving: number,
+    },
+  }[],
 }
 
 export const CustomerProductsAPI = {
@@ -82,36 +87,33 @@ export const CustomerProductsAPI = {
     }
     throw response
   },
-  calculatePrice: async (product: PriceCalculationProps, headers: HeadersInit): Promise<PriceCalculationResult> => {
+  calculatePrice: async (productList: PriceCalculationProps[], headers: HeadersInit): Promise<CartPriceCalculationResult> => {
     const response = await fetch(`${API_URL}/customer/product/calculate/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...headers },
-      body: JSON.stringify({
+      body: JSON.stringify(productList.map(product => ({
         product_uuid: product.productUuid,
         product_plan_uuid: product.productPlanUuid,
         voucher_uuid: product.voucherUuid ?? null
-      })
+      })))
     })
     if (response.ok) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return PriceCalculationResultHelpers.fromJson(await response.json() as any)
+      const json = await response.json() as CartPriceCalculationBackendResponseType
+      const products = {}
+      for (const product of json.products) {
+        products[product.product_uuid] = {
+          finalPrice: product.calculation.final_price,
+          beforePrice: product.calculation.before_price,
+          saving: product.calculation.saving,
+        }
+      }
+      return {
+        finalPrice: json.overall.final_price,
+        beforePrice: json.overall.before_price,
+        saving: json.overall.saving,
+        products,
+      }
     }
     throw response
-  },
-  calculatePrices: async (products: PriceCalculationProps[], headers: HeadersInit): Promise<CartPriceCalculationResult> => {
-    const prices: CartPriceCalculationResult = {
-      finalPrice: 0,
-      beforePrice: 0,
-      saving: 0,
-      products: {},
-    }
-    for (const product of products) {
-      const productPrice = await CustomerProductsAPI.calculatePrice(product, headers)
-      prices.products[product.productUuid] = productPrice
-      prices.beforePrice += productPrice.beforePrice
-      prices.finalPrice += productPrice.finalPrice
-      prices.saving += productPrice.saving
-    }
-    return prices
   },
 }

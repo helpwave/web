@@ -76,7 +76,7 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
 
   // TODO do input validation
   return (
-    <Page pageTitle={titleWrapper(translation.settings)} mainContainerClassName={tw('min-h-[auto] pb-6')}>
+    <Page pageTitle={titleWrapper(translation.settings)} mainContainerClassName={tw('pb-6')}>
       <Section titleText={translation.settings}>
         <span>{translation.settingsDescription}</span>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>

@@ -22,6 +22,7 @@ import { useRouter } from 'next/router'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { CustomerProductsAPI } from '@/api/services/customer_product'
 import { useCustomerProductsCalculateQuery } from '@/api/mutations/customer_product_mutations'
+import { Modal } from '@helpwave/common/components/modals/Modal'
 
 type ProductsTranslation = {
   checkout: string,
@@ -33,6 +34,11 @@ type ProductsTranslation = {
   total: string,
   lookAt: string,
   acceptTerms: (name: string) => string,
+  bookingSuccessful: string,
+  bookingSuccessfulDesc: string,
+  bookingFailure: string,
+  bookingFailureDesc: string,
+  toInvoices: string,
 } & ProductPlanTypeTranslation
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
@@ -47,6 +53,11 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     total: 'Total',
     lookAt: 'Look at',
     acceptTerms: (name: string) => `Hereby I accept the terms of use for ${name}.`,
+    bookingSuccessful: 'Booking successful',
+    bookingSuccessfulDesc: 'You will have access to your product shortly.',
+    bookingFailure: 'Booking failed',
+    bookingFailureDesc: 'Try again or contact our support at:',
+    toInvoices: 'Invoices',
   },
   de: {
     ...defaultProductPlanTypeTranslation.de,
@@ -59,16 +70,24 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     total: 'Total',
     lookAt: 'Anschauen',
     acceptTerms: (name: string) => `Hiermit akzeptiere ich die Nutzungsbedingungen von ${name}`,
+    bookingSuccessful: 'Buchung erfolgreich',
+    bookingSuccessfulDesc: 'In kürze erhalten sie zu dem Produkt.',
+    bookingFailure: 'Buchung fehlgeschlagen',
+    bookingFailureDesc: 'Versuchen sie es erneut oder kontaktieren sie unseren Support unter:',
+    toInvoices: 'Rechnungen',
   }
 }
 
 type ContractAcceptedType = Record<string, boolean>
+type ResponseModalState = 'failure' | 'success' | 'hidden'
+const supportMail = 'support@helpwave.de'
 
 const Payment: NextPage = () => {
   const translation = useTranslation(defaultProductsTranslations)
   const router = useRouter()
   const { authHeader } = useAuth()
   const { cart, clearCart } = useCart()
+  const [modalState, setModalState] = useState<ResponseModalState>('hidden')
   const {
     data: contracts,
     isLoading: contractsLoading,
@@ -93,6 +112,19 @@ const Payment: NextPage = () => {
 
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
+      <Modal id="responseModalSuccess" isOpen={modalState === 'success'} titleText={translation.bookingSuccessful}
+             modalClassName={tw('min-h-[120px] justify-between')}>
+        <span>{translation.bookingSuccessfulDesc}</span>
+        <Button onClick={() => router.push('/invoices').catch(console.error)}>{translation.toInvoices}</Button>
+      </Modal>
+      <Modal id="responseModalFailure" isOpen={modalState === 'failure'} titleText={translation.bookingFailure}
+             onCloseClick={() => setModalState('hidden')} onBackgroundClick={() => setModalState('hidden')}
+             modalClassName={tw('min-h-[120px] justify-between')}
+      >
+        <span className={tw('inline-block')}>{translation.bookingFailureDesc} <Link href={`mailto:${supportMail}`}
+                                                                                    className={tw('text-hw-primary-500')}>{supportMail}</Link></span>
+      </Modal>
+
       <Section titleText={translation.checkout}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
           {products && prices && (
@@ -183,8 +215,9 @@ const Payment: NextPage = () => {
                         }, authHeader)
                       }
                       clearCart()
-                      router.push('/invoices').catch(console.error)
+                      setModalState('success')
                     } catch (error) {
+                      setModalState('failure')
                       console.error(error)
                     }
                   }}

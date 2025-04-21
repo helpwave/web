@@ -11,15 +11,20 @@ import type { NavItem } from '@/components/layout/NavigationSidebar'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import { useState } from 'react'
+import { Button } from '@helpwave/common/components/Button'
+import { logout } from '@/api/auth/authService'
 
-type MobileNavigationOverlayTranslation = { navigation: string }
+type MobileNavigationOverlayTranslation = { navigation: string, logout: string }
 
 const defaultMobileNavigationOverlayTranslation: Record<Languages, MobileNavigationOverlayTranslation> = {
   en: {
     navigation: 'Navigation',
+    logout: 'Logout'
+
   },
   de: {
     navigation: 'Navigation',
+    logout: 'Logout',
   }
 }
 
@@ -83,10 +88,12 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
           {languagesLocalNames[language]}
           <ArrowRightLeft size={24}/>
         </button>
-        <button className={tw('flex flex-row w-full gap-x-2 items-center p-4 bg-white bg-gray-100 hover:bg-hw-primary-500/40 font-semibold rounded-md')}>
+        <button
+          className={tw('flex flex-row w-full gap-x-2 items-center p-4 bg-white bg-gray-100 hover:bg-hw-primary-500/40 font-semibold rounded-md')}>
           <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
           {'Max Mustermann'}
         </button>
+        <Button onClick={logout} color="hw-negative">{translation.logout}</Button>
       </div>
     </div>
   )

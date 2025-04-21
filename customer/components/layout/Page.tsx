@@ -57,7 +57,7 @@ export const Page = ({
   const [isNavigationVisible, setIsNavigationVisible] = useState(false)
 
   const mainContent = (
-    <div className={tx('flex flex-col justify-between w-full h-full overflow-y-scroll', contentAndFooterClassName)}>
+    <div className={tx('flex flex-col justify-between w-full h-full overflow-y-auto', contentAndFooterClassName)}>
       <main className={tx('@(flex flex-col gap-y-6)', mainContainerClassName)}>
         {children}
       </main>
@@ -96,7 +96,7 @@ export const Page = ({
         {!isHidingSidebar && (<NavigationSidebar items={navItems}/>)}
         {mainContent}
       </div>
-      <div className={tw('flex flex-col h-full w-full not-mobile:hidden')}>
+      <div className={tw('flex flex-col grow w-full not-mobile:hidden overflow-hidden')}>
         {mainContent}
       </div>
     </div>

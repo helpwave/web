@@ -6,7 +6,6 @@ import titleWrapper from '@/utils/titleWrapper'
 import { Section } from '@/components/layout/Section'
 import { useCustomerMyselfQuery, useCustomerUpdateMutation } from '@/api/mutations/customer_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { tw } from '@twind/core'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
 import { withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
@@ -76,7 +75,7 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
 
   // TODO do input validation
   return (
-    <Page pageTitle={titleWrapper(translation.settings)} mainContainerClassName={tw('pb-6')}>
+    <Page pageTitle={titleWrapper(translation.settings)}>
       <Section titleText={translation.settings}>
         <span>{translation.settingsDescription}</span>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>

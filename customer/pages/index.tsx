@@ -29,9 +29,9 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
   const router = useRouter()
 
- useEffect(() => {
-   router.push('/products').catch(console.error)
- }, [])
+  useEffect(() => {
+    router.push('/products').catch(console.error)
+  }, [router])
 
   return (
     <Page pageTitle={titleWrapper(translation.dashboard)}>

@@ -70,7 +70,7 @@ const CheckoutReturn = () => {
     }
 
     fetchSession().catch(console.error)
-  }, [searchParams])
+  }, [router, searchParams])
 
   let message: ReactNode = null
   if (error) {

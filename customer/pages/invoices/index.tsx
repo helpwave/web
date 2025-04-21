@@ -12,7 +12,7 @@ import type { InvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import { defaultInvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import type { ProductPlanTypeTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTypeTranslation } from '@/api/dataclasses/product'
-import {  withAuth } from '@/hooks/useAuth'
+import { withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 import { useMyInvoicesQuery } from '@/api/mutations/invoice_mutations'
 import EmbeddedCheckoutButton from '@/components/forms/StripeCheckOutForm'
@@ -79,7 +79,11 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
   const { isError, isLoading, data } = useMyInvoicesQuery()
   const language = useLanguage()
 
-  function formatDate(date: Date) {
+  function formatDate(date?: Date) {
+    if (date == null || date == undefined) {
+      return null
+    }
+
     const languageToLocaleMapping = {
       de: 'de-DE',
       en: 'en-US',
@@ -110,7 +114,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
     <Page pageTitle={titleWrapper(translation.invoices)}>
       <Section titleText={translation.invoices}>
         {(isError) && (<span className={tw('There was an Error')}></span>)}
-        {!isError && isLoading && (<LoadingAnimation/>)}
+        {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && (
           <div className={tw('flex flex-wrap gap-x-8 gap-y-12')}>
             <Table
@@ -147,7 +151,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                 ),
                 (
                   <span key={invoice.uuid + '-payment-date'}>
-                    {formatDate(invoice.date) ?? '-'}
+                    {invoice.status === 'paid' && invoice.createdAt != undefined ? formatDate(invoice.updatedAt) : '-'}
                   </span>
                 ),
                 invoice.status === 'overdue' || invoice.status === 'pending' ?

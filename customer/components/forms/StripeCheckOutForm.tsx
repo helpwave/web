@@ -48,7 +48,7 @@ export default function EmbeddedCheckoutButton({ children, invoiceId }: Embedded
     const locale = language.language
 
     return InvoiceAPI.pay(invoiceId, locale, authHeader)
-  }, [language.language])
+  }, [language.language, authHeader, invoiceId])
 
   const options = { fetchClientSecret }
 
@@ -72,7 +72,7 @@ export default function EmbeddedCheckoutButton({ children, invoiceId }: Embedded
           <h3 className={tw('font-bold text-2xl')}>{translation.checkout}</h3>
           {showCheckout && (
             <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-              <EmbeddedCheckout/>
+              <EmbeddedCheckout />
             </EmbeddedCheckoutProvider>
           )}
           <form method="dialog">

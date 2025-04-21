@@ -1,6 +1,5 @@
 import { CustomerProductsHelper } from '@/api/dataclasses/customer_product'
 import { API_URL } from '@/api/config'
-import { ProductHelpers } from '@/api/dataclasses/product'
 
 export type BookProductType = {
   product_uuid: string,
@@ -52,7 +51,7 @@ export const CustomerProductsAPI = {
       body: JSON.stringify(product)
     })
     if (response.ok) {
-      return ProductHelpers.fromJson(await response.json())
+      return CustomerProductsHelper.fromJson(await response.json())
     }
     throw response
   },

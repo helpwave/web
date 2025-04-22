@@ -27,9 +27,14 @@ import type {
   ResolvedCustomerProduct
 } from '@/api/dataclasses/customer_product'
 import {
+  CustomerProductStatusCancelable,
+  CustomerProductStatusPlannedCancellation
+} from '@/api/dataclasses/customer_product'
+import {
   defaultCustomerProductStatusTranslation
 } from '@/api/dataclasses/customer_product'
 import { ContractList } from '@/components/ContractList'
+import { defaultLocaleFormatters } from '@/utils/locale'
 
 type ProductsTranslation = {
   bookProduct: string,
@@ -45,7 +50,10 @@ type ProductsTranslation = {
   lookAt: string,
   cancelSubscription: string,
   cancelSubscriptionDescription: string,
+  endsAt: string,
 } & ProductPlanTranslation
+
+
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
   en: {
@@ -63,6 +71,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     lookAt: 'Look at',
     cancelSubscription: 'Cancel',
     cancelSubscriptionDescription: 'This will permantly cancel your subscription and you will be required to book the product again.',
+    endsAt: 'Ends at',
   },
   de: {
     ...defaultProductPlanTranslation.de,
@@ -74,11 +83,12 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     contract: 'Vertrag',
     contracts: 'Verträge',
     manage: 'Verwalten',
-    cancel: 'Cancel',
+    cancel: 'Kündigen',
     noContracts: 'Keine Verträge',
     lookAt: 'Anzeigen',
     cancelSubscription: 'Abonement aufheben',
     cancelSubscriptionDescription: 'Das Produkt wird permanent deaboniert und sie müssen zur erneuten Nutzung dieses erneut buchen.',
+    endsAt: 'Endet am',
   }
 }
 
@@ -112,6 +122,7 @@ const ProductsPage: NextPage = () => {
   const [customerProductModalValue, setCustomerProductModalValue] = useState<ResolvedCustomerProduct>()
   const [cancelDialogId, setCancelDialogId] = useState<string>()
   const cancelMutation = useCustomerProductDeleteMutation()
+  const localeTranslation = useTranslation(defaultLocaleFormatters)
 
   const isError = bookedProductsError || productsError
   const isLoading = bookedProductsLoading || productsLoading
@@ -129,8 +140,8 @@ const ProductsPage: NextPage = () => {
         <span>{customerProductModalValue?.product.description}</span>
         <ContractList
           productIds={customerProductModalValue ? [customerProductModalValue.product.uuid] : []}></ContractList>
-        <Button color="hw-negative" className={tw('!w-fit')}
-                onClick={() => setCancelDialogId(customerProductModalValue?.uuid)}>
+        <Button color="hw-negative" className={tw('!w-fit')} disabled={!CustomerProductStatusCancelable.includes(customerProductModalValue?.status || 'active')}
+          onClick={() => setCancelDialogId(customerProductModalValue?.uuid)}>
           {translation.cancel}
         </Button>
       </Modal>
@@ -151,26 +162,27 @@ const ProductsPage: NextPage = () => {
 
       <Section titleText={translation.myProducts}>
         {isError && (<span>{translation.error}</span>)}
-        {!isError && isLoading && (<LoadingAnimation/>)}
+        {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && products && bookedProducts && (
           <div className={tw('grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12')}>
             {bookedProducts.map((bookedProduct, index) => {
               return (
                 <div
                   key={index}
-                  className={tw('flex flex-col justify-between gap-y-2 bg-gray-100 px-4 py-2 rounded-md')}
+                  className={tw('flex flex-col border-4 justify-between gap-y-2 bg-gray-100 px-8 py-4 rounded-md')}
                 >
                   <div className={tw('flex flex-col gap-y-2')}>
                     <div className={tw('flex flex-row gap-x-2 justify-between')}>
                       <h4 className={tw('font-bold font-space text-2xl')}>{bookedProduct.product.name}</h4>
-                      <CustomerProductStatusDisplay customerProductStatus={bookedProduct.status}/>
+                      <CustomerProductStatusDisplay customerProductStatus={bookedProduct.status} />
                     </div>
                     <span>{bookedProduct.product.description}</span>
-                    <span>{`${translation.productPlan(bookedProduct.productPlan)} (${bookedProduct.productPlan.costEuro}€)`}</span>
+                    <span>{`${translation.productPlan(bookedProduct.productPlan)} (${localeTranslation.formatMoney(bookedProduct.productPlan.costEuro)})`}</span>
+                    {bookedProduct.cancellationDate && CustomerProductStatusPlannedCancellation.includes(bookedProduct.status) ? <span>{translation.endsAt} {localeTranslation.formatDate(bookedProduct.cancellationDate)}</span> : <></>}
                   </div>
                   <div className={tw('flex flex-row justify-end gap-x-4')}>
                     <Button className={tw('!w-fit')}
-                            onClick={() => setCustomerProductModalValue(bookedProduct)}>{translation.manage}</Button>
+                      onClick={() => setCustomerProductModalValue(bookedProduct)}>{translation.manage}</Button>
                   </div>
                 </div>
               )
@@ -180,7 +192,7 @@ const ProductsPage: NextPage = () => {
               onClick={() => router.push('/products/shop').catch(console.error)}
               className={tw('flex flex-row justify-center items-center h-full min-h-[200px] w-full gap-x-2 border-4 border-dashed border-gray-200 hover:brightness-90 px-4 py-2 rounded-md')}
             >
-              <Plus size={32}/>
+              <Plus size={32} />
               <h4 className={tw('font-bold text-lg')}>{translation.bookProduct}</h4>
             </button>
           </div>

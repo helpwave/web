@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { useLanguage, type Languages } from '@helpwave/common/hooks/useLanguage'
+import { type Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -16,6 +16,7 @@ import { withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 import { useMyInvoicesQuery } from '@/api/mutations/invoice_mutations'
 import EmbeddedCheckoutButton from '@/components/forms/StripeCheckOutForm'
+import { defaultLocaleFormatters } from '@/utils/locale'
 
 type InvoicesTranslation = {
   invoices: string,
@@ -103,39 +104,9 @@ const PaymentDisplay = ({ amount }: PaymentDisplayProps) => {
 
 const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServerSideProps>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultInvoicesTranslations, overwriteTranslation)
+  const localeTranslation = useTranslation(defaultLocaleFormatters)
+
   const { isError, isLoading, data } = useMyInvoicesQuery()
-  const language = useLanguage()
-
-  function formatDate(date?: Date) {
-    if (date == null || date == undefined) {
-      return null
-    }
-
-    const languageToLocaleMapping = {
-      de: 'de-DE',
-      en: 'en-US',
-    }
-
-    const locale = languageToLocaleMapping[language.language] || 'en-US'
-
-
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: locale === 'en-US'
-    }
-
-    let formatted = date.toLocaleString(locale, options)
-
-    if (locale === 'de-DE') {
-      formatted = formatted.replace(/(\d{2}:\d{2})$/, '$1 Uhr')
-    }
-
-    return formatted
-  }
 
   return (
     <Page pageTitle={titleWrapper(translation.invoices)}>
@@ -144,78 +115,78 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
           <h2 className={tw('font-bold font-space text-3xl')}>{translation.invoices}</h2>
           {!isError && !isLoading && data && (
             <PaymentDisplay
-              amount={data.filter(value => value.status !== 'paid').reduce((previousValue, currentValue) => previousValue + currentValue.totalAmount, 0)}/>
+              amount={data.filter(value => value.status !== 'paid').reduce((previousValue, currentValue) => previousValue + currentValue.totalAmount, 0)} />
           )}
         </div>
         {(isError) && (<span className={tw('There was an Error')}></span>)}
-        {!isError && isLoading && (<LoadingAnimation/>)}
+        {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && data.length > 0 ? (
-            <div className={tw('flex flex-wrap gap-x-8 gap-y-12')}>
-              <Table
-                className={tw('w-full h-full')}
-                data={data}
-                identifierMapping={dataObject => dataObject.uuid}
-                header={[
-                  (<span key="date">{translation.date}</span>),
-                  (<span key="name">{translation.title}</span>),
-                  (<span key="price">{translation.price}</span>),
-                  (<span key="paymentStatus">{translation.paymentStatus}</span>),
-                  (<span key="paymentDate">{translation.paymentDate}</span>),
-                  (<span key="actions">{translation.actions}</span>),
-                ]}
-                rowMappingToCells={invoice => [
-                  (<span key={invoice.uuid + '-date'}>{formatDate(invoice.date)}</span>),
-                  (<span key={invoice.uuid + '-name'}>{invoice.title}</span>),
-                  (
-                    <span key={invoice.uuid + '-price'} className={tw('font-semibold')}>
-                    {invoice.totalAmount + '€'}
+          <div className={tw('flex flex-wrap gap-x-8 gap-y-12')}>
+            <Table
+              className={tw('w-full h-full')}
+              data={data}
+              identifierMapping={dataObject => dataObject.uuid}
+              header={[
+                (<span key="date">{translation.date}</span>),
+                (<span key="name">{translation.title}</span>),
+                (<span key="price">{translation.price}</span>),
+                (<span key="paymentStatus">{translation.paymentStatus}</span>),
+                (<span key="paymentDate">{translation.paymentDate}</span>),
+                (<span key="actions">{translation.actions}</span>),
+              ]}
+              rowMappingToCells={invoice => [
+                (<span key={invoice.uuid + '-date'}>{localeTranslation.formatDate(invoice.date)}</span>),
+                (<span key={invoice.uuid + '-name'}>{invoice.title}</span>),
+                (
+                  <span key={invoice.uuid + '-price'} className={tw('font-semibold')}>
+                    {localeTranslation.formatMoney(invoice.totalAmount)}
                   </span>
-                  ),
-                  (
-                    <span
-                      key={invoice.uuid + '-payment-status'}
-                      className={tx('w-full px-4 py-2 rounded-full',{
-                        'bg-hw-negative-500 text-white': invoice.status === 'overdue',
-                        'bg-hw-warn-500 text-white': invoice.status === 'pending',
-                        'bg-hw-positive-500 text-white': invoice.status === 'paid'
-                      })}
-                    >
+                ),
+                (
+                  <span
+                    key={invoice.uuid + '-payment-status'}
+                    className={tx('w-full px-4 py-2 rounded-full', {
+                      'bg-hw-negative-500 text-white': invoice.status === 'overdue',
+                      'bg-hw-warn-500 text-white': invoice.status === 'pending',
+                      'bg-hw-positive-500 text-white': invoice.status === 'paid'
+                    })}
+                  >
                     {translation[invoice.status]}
                   </span>
-                  ),
-                  (
-                    <span key={invoice.uuid + '-payment-date'}>
-                    {invoice.status === 'paid' && invoice.createdAt != undefined ? formatDate(invoice.updatedAt) : '-'}
+                ),
+                (
+                  <span key={invoice.uuid + '-payment-date'}>
+                    {invoice.status === 'paid' && invoice.createdAt != undefined ? localeTranslation.formatDate(invoice.updatedAt) : '-'}
                   </span>
-                  ),
-                  invoice.status === 'overdue' || invoice.status === 'pending' ?
-                    (
-                      <EmbeddedCheckoutButton
-                        key={invoice.uuid + '-pay'}
-                        invoiceId={invoice.uuid}
-                      >
-                        {translation.payNow}
-                      </EmbeddedCheckoutButton>
-                    ) : (
-                      invoice.status !== 'paid' ?
-                        (
-                          <Button
-                            disabled={true}
-                            variant="text-border"
-                            className={tw('mr-2')}>
-                            {translation[invoice.status]}
-                          </Button>
-                        ) :
-                        (
-                          <Button>
-                            PDF
-                          </Button>
-                        )
-                    )
-                ]}
-              />
-            </div>
-          ) :
+                ),
+                invoice.status === 'overdue' || invoice.status === 'pending' ?
+                  (
+                    <EmbeddedCheckoutButton
+                      key={invoice.uuid + '-pay'}
+                      invoiceId={invoice.uuid}
+                    >
+                      {translation.payNow}
+                    </EmbeddedCheckoutButton>
+                  ) : (
+                    invoice.status !== 'paid' ?
+                      (
+                        <Button
+                          disabled={true}
+                          variant="text-border"
+                          className={tw('mr-2')}>
+                          {translation[invoice.status]}
+                        </Button>
+                      ) :
+                      (
+                        <Button>
+                          PDF
+                        </Button>
+                      )
+                  )
+              ]}
+            />
+          </div>
+        ) :
           (
             <div className={tw('flex flex-row justify-center w-full text-gray-400')}>{translation.noInvoices}</div>
           )}

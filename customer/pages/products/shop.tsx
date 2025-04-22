@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { useState } from 'react'
 import { ContractList } from '@/components/ContractList'
+import { defaultLocaleFormatters } from '@/utils/locale'
 
 type ProductsTranslation = {
   bookProduct: string,
@@ -97,6 +98,7 @@ const ProductShop: NextPage = () => {
   const { data: products, isError, isLoading } = useProductsAvailableQuery()
   const router = useRouter()
   const [productModalProductValue, setProductModalProductValue] = useState<Product>()
+  const localeTranslation = useTranslation(defaultLocaleFormatters)
 
   return (
     <Page pageTitle={titleWrapper(translation.bookProduct)} mainContainerClassName={tw('min-h-[80vh]')}>
@@ -114,7 +116,7 @@ const ProductShop: NextPage = () => {
 
       <Section titleText={translation.bookProduct}>
         {isError && (<span>{translation.error}</span>)}
-        {!isError && isLoading && (<LoadingAnimation/>)}
+        {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && (
           <div className={tw('flex flex-col gap-x-8 gap-y-12')}>
             {products.length == 0 ?
@@ -135,7 +137,7 @@ const ProductShop: NextPage = () => {
                         }}
                       >
                         {translation.details}
-                        <ChevronRight size={16}/>
+                        <ChevronRight size={16} />
                       </Button>
                     </div>
                     <div className={tw('flex flex-row gap-x-4')}>
@@ -144,8 +146,7 @@ const ProductShop: NextPage = () => {
                           <div key={plan.uuid} className={tw('flex flex-col gap-y-6 bg-white rounded-lg px-4 py-2')}>
                             <span className={tw('font-space font-bold text-xl')}>{translation.productPlan(plan)}</span>
                             <span className={tw('flex flex-row gap-x-1 justify-center font-semibold text-lg')}>
-                              {`€`}
-                              <span className={tw('text-3xl')}>{plan.costEuro}</span>
+                              <span className={tw('text-3xl')}>{localeTranslation.formatMoney(plan.costEuro)}</span>
                             </span>
                             <Button
                               className={tw('flex flex-row items-center justify-center gap-x-2 w-[160px]')}

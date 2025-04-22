@@ -12,9 +12,12 @@ export type CustomerProductStatus =
   | 'expired'
   | 'refunded'
 
+export const CustomerProductStatusCancelable: CustomerProductStatus[] = ['trialing', 'active', 'activation', 'payment']
+export const CustomerProductStatusPlannedCancellation: CustomerProductStatus[] = ['scheduled', 'canceled', 'expired', 'refunded']
+
 export type CustomerProductStatusTranslation = Record<CustomerProductStatus, string>
 
-export const defaultCustomerProductStatusTranslation : Translation<CustomerProductStatusTranslation> = {
+export const defaultCustomerProductStatusTranslation: Translation<CustomerProductStatusTranslation> = {
   en: {
     trialing: 'Trialing',
     active: 'Active',

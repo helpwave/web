@@ -23,6 +23,7 @@ import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAnd
 import { CustomerProductsAPI } from '@/api/services/customer_product'
 import { useCustomerProductsCalculateQuery } from '@/api/mutations/customer_product_mutations'
 import { Modal } from '@helpwave/common/components/modals/Modal'
+import { defaultLocaleFormatters } from '@/utils/locale'
 
 type ProductsTranslation = {
   checkout: string,
@@ -112,11 +113,12 @@ const Payment: NextPage = () => {
   const isLoading = contractsLoading || productsLoading || pricesLoading
 
   const allContractsAccepted = !!contracts && contracts.every(contract => acceptedContracts[contract.uuid])
+  const localeTranslation = useTranslation(defaultLocaleFormatters)
 
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
       <Modal id="responseModalSuccess" isOpen={modalState === 'success'} titleText={translation.bookingSuccessful}
-             modalClassName={tw('min-h-[120px] justify-between')}>
+        modalClassName={tw('min-h-[120px] justify-between')}>
         <span>{translation.bookingSuccessfulDesc}</span>
         <Button
           onClick={() => router.push('/invoices').catch(console.error)}
@@ -126,13 +128,13 @@ const Payment: NextPage = () => {
         </Button>
       </Modal>
       <Modal id="responseModalFailure" isOpen={modalState === 'failure'} titleText={translation.bookingFailure}
-             onCloseClick={() => setModalState('hidden')} onBackgroundClick={() => setModalState('hidden')}
-             modalClassName={tw('min-h-[120px] justify-between gap-y-4 !bg-hw-negative-300')}
+        onCloseClick={() => setModalState('hidden')} onBackgroundClick={() => setModalState('hidden')}
+        modalClassName={tw('min-h-[120px] justify-between gap-y-4 !bg-hw-negative-300')}
       >
         <div className={tw('flex flex-col gap-y-1')}>
           <span>{translation.bookingFailureDesc}</span>
           <Link href={`mailto:${supportMail}`}
-                className={tw('text-hw-primary-700')}>{supportMail}</Link>
+            className={tw('text-hw-primary-700')}>{supportMail}</Link>
         </div>
       </Modal>
 
@@ -141,31 +143,31 @@ const Payment: NextPage = () => {
           {products && prices && (
             <table>
               <thead>
-              <tr className={tw('font-bold')}>
-                <td>{translation.name}</td>
-                <td>{translation.price}</td>
-              </tr>
+                <tr className={tw('font-bold')}>
+                  <td>{translation.name}</td>
+                  <td>{translation.price}</td>
+                </tr>
               </thead>
               <tbody>
-              {cart.map(cartItem => {
-                const product: Product = products.find(value => value.uuid === cartItem.id)!
-                const plan = product.plan.find(value => value.uuid === cartItem.plan.uuid)!
-                if (!product && !plan) {
-                  return []
-                }
-                const price = prices.products[product.uuid]!.finalPrice.toFixed(2)
-                return (
-                  <tr key={cartItem.id}>
-                    <td key={`${cartItem.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
-                    <td key={`${cartItem.id}+price`} className={tw('float-right')}>{`${price}€`}</td>
-                  </tr>
-                )
-              })}
-              <tr>
-                <td className={tw('border-t-2')}><span className={tw('font-semibold')}>{translation.total}</span></td>
-                <td className={tw('border-t-2')}><span
-                  className={tw('font-semibold float-right')}>{`${prices.finalPrice.toFixed(2)}€`}</span></td>
-              </tr>
+                {cart.map(cartItem => {
+                  const product: Product = products.find(value => value.uuid === cartItem.id)!
+                  const plan = product.plan.find(value => value.uuid === cartItem.plan.uuid)!
+                  if (!product && !plan) {
+                    return []
+                  }
+                  const price = prices.products[product.uuid]!.finalPrice
+                  return (
+                    <tr key={cartItem.id}>
+                      <td key={`${cartItem.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
+                      <td key={`${cartItem.id}+price`} className={tw('float-right')}>{localeTranslation.formatMoney(price)}</td>
+                    </tr>
+                  )
+                })}
+                <tr>
+                  <td className={tw('border-t-2')}><span className={tw('font-semibold')}>{translation.total}</span></td>
+                  <td className={tw('border-t-2')}><span
+                    className={tw('font-semibold float-right')}>{localeTranslation.formatMoney(prices.finalPrice)}</span></td>
+                </tr>
               </tbody>
             </table>
           )}
@@ -195,7 +197,7 @@ const Payment: NextPage = () => {
                         (
                         <span className={tw('inline-flex flex-row gap-x-0.5 items-center')}>
                           {`${translation.show}`}
-                          <ExternalLink size={16}/>
+                          <ExternalLink size={16} />
                         </span>
                         )
                       </Link>
@@ -209,7 +211,7 @@ const Payment: NextPage = () => {
                   onClick={() => router.push('/products/overview')}
                   type="button"
                 >
-                  <ChevronLeft/>
+                  <ChevronLeft />
                   {translation.cancel}
                 </Button>
                 <Button
@@ -235,7 +237,7 @@ const Payment: NextPage = () => {
                     }
                   }}
                 >
-                  <Coins/>
+                  <Coins />
                   {translation.pay}
                 </Button>
               </div>

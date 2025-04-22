@@ -28,6 +28,7 @@ import { VoucherAPI } from '@/api/services/voucher'
 import type { Voucher } from '@/api/dataclasses/voucher'
 import { Chip } from '@helpwave/common/components/ChipList'
 import { useCustomerProductsCalculateQuery } from '@/api/mutations/customer_product_mutations'
+import { defaultLocaleFormatters } from '@/utils/locale'
 import { ProductAPI } from '@/api/services/product'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 
@@ -123,6 +124,7 @@ const CartOverview: NextPage = () => {
     voucherUuid: item.voucher?.uuid
   })))
 
+  const localeTranslation = useTranslation(defaultLocaleFormatters)
   useEffect(() => {
     refetch().catch(console.error)
   }, [cart])
@@ -250,7 +252,7 @@ const CartOverview: NextPage = () => {
                 return [
                   <span key={cartItem.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
                   <span key={cartItem.id + 'price'} className={tx({ 'text-hw-primary-500': priceResult.saving !== 0 })}>
-                    {`${priceResult.finalPrice}€`}
+                    {localeTranslation.formatMoney(priceResult.finalPrice)}
                   </span>,
                   <span key={cartItem.id + 'plan'}>{plan ? translation.productPlan(plan) : ''}</span>,
                   !voucher ? (
@@ -288,7 +290,7 @@ const CartOverview: NextPage = () => {
           className={tw('flex flex-row items-center gap-x-2')}
           onClick={() => router.push('/products/shop')}
         >
-          <ChevronLeft size={20}/>
+          <ChevronLeft size={20} />
           {`${translation.back}`}
         </Button>
         <Button
@@ -296,7 +298,7 @@ const CartOverview: NextPage = () => {
           onClick={() => router.push('/products/pay')}
           disabled={cart.length === 0}
         >
-          <Coins size={20}/>
+          <Coins size={20} />
           {`${translation.checkout}`}
         </Button>
       </Section>

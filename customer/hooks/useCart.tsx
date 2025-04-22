@@ -15,6 +15,7 @@ export type CartItem = {
 }
 
 export type CartContextType = {
+  isLoading: boolean,
   cart: CartItem[],
   addItem: (item: CartItem) => void,
   updateItem: (item: CartItem) => void,
@@ -23,11 +24,12 @@ export type CartContextType = {
 }
 
 const CartContext = createContext<CartContextType>({
+  isLoading: true,
   cart: [],
   addItem: noop,
   clearCart: noop,
   removeItem: noop,
-  updateItem: noop
+  updateItem: noop,
 })
 
 
@@ -71,19 +73,20 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
 
   // Remove item from cart
   const removeItem = (id: string) => {
-    setCart(cart.filter((item) => item.id !== id))
+    setCart((prevState) => prevState.filter((item) => item.id !== id))
   }
 
   // Update
   const updateItem = (update: CartItem) => {
-    setCart(cart.map((item) => (item.id ===  update.id? update : item)))
+    setCart(prevState => prevState.map((item) => (item.id ===  update.id? update : item)))
   }
 
   // Clear cart
-  const clearCart = () => setCart([])
+  const clearCart = () => setCart(() => [])
 
   return (
-    <CartContext.Provider value={{ cart, addItem, removeItem, updateItem, clearCart }}>
+    <CartContext.Provider
+      value={{ cart, addItem, removeItem, updateItem, clearCart, isLoading }}>
       {children}
     </CartContext.Provider>
   )

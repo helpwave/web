@@ -5,12 +5,11 @@ import type { NavItem } from '@/components/layout/NavigationSidebar'
 import { NavigationSidebar } from '@/components/layout/NavigationSidebar'
 import type { HeaderProps } from '@/components/layout/Header'
 import { Header } from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { GaugeIcon, Menu, Package, Receipt, Settings, UsersIcon } from 'lucide-react'
+import { Menu, MessageCircleQuestionIcon, Package, Receipt, Section, Settings } from 'lucide-react'
 import Head from 'next/head'
 import { MobileNavigationOverlay } from '@/components/layout/MobileNavigationOverlay'
 
@@ -35,11 +34,23 @@ export type PageProps = PropsWithChildren<{
 }>
 
 const navItems: NavItem[] = [
-  { name: { en: 'Dashboard', de: 'dashboard' }, url: '/', icon: (<GaugeIcon size={24}/>) },
-  { name: { en: 'Team', de: 'Team' }, url: '/team', icon: (<UsersIcon size={24}/>) },
+  // { name: { en: 'Dashboard', de: 'Dashboard' }, url: '/', icon: (<GaugeIcon size={24}/>) },
+  // { name: { en: 'Team', de: 'Team' }, url: '/team', icon: (<UsersIcon size={24}/>) },
   { name: { en: 'Products', de: 'Produkte' }, url: '/products', icon: (<Package size={24}/>) },
   { name: { en: 'Invoices', de: 'Rechnungen' }, url: '/invoices', icon: (<Receipt size={24}/>) },
   { name: { en: 'Settings', de: 'Einstellungen' }, url: '/settings', icon: (<Settings size={24}/>) },
+  {
+    name: { en: 'Imprint', de: 'Impressum' },
+    url: 'https://cdn.helpwave.de/imprint.html',
+    isExternal: true,
+    icon: (<Section size={24}/>)
+  },
+  {
+    name: { en: 'Support', de: 'Support' },
+    url: 'mailto:contact@helpwave.de',
+    isExternal: true,
+    icon: (<MessageCircleQuestionIcon size={24}/>)
+  },
 ]
 
 /**
@@ -49,7 +60,7 @@ export const Page = ({
                        children,
                        pageTitle,
                        header,
-                       footer = (<Footer/>),
+                       footer = (<></>),
                        isHidingSidebar = false,
                        mainContainerClassName,
                        contentAndFooterClassName,
@@ -58,8 +69,8 @@ export const Page = ({
   const [isNavigationVisible, setIsNavigationVisible] = useState(false)
 
   const mainContent = (
-    <div className={tx('flex flex-col justify-between w-full h-full overflow-y-scroll', contentAndFooterClassName)}>
-      <main className={tx('@(flex flex-col max-w-[1200px] gap-y-6)', mainContainerClassName)}>
+    <div className={tx('flex flex-col justify-between w-full h-full overflow-y-auto', contentAndFooterClassName)}>
+      <main className={tx('@(flex flex-col gap-y-6)', mainContainerClassName)}>
         {children}
       </main>
       {footer}
@@ -97,7 +108,7 @@ export const Page = ({
         {!isHidingSidebar && (<NavigationSidebar items={navItems}/>)}
         {mainContent}
       </div>
-      <div className={tw('flex flex-col h-full w-full not-mobile:hidden')}>
+      <div className={tw('flex flex-col grow w-full not-mobile:hidden overflow-hidden')}>
         {mainContent}
       </div>
     </div>

@@ -1,13 +1,12 @@
 import type { ComponentType, PropsWithChildren } from 'react'
-import { useEffect } from 'react'
-import { useCallback } from 'react'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
-import { CustomerAPI } from '@/api/services/customer'
 import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { CreateOrganizationPage } from '@/components/pages/create-organization'
-import { useCustomerCreateMutation } from '@/api/mutations/customer_mutations'
+import { useCustomerMyselfQuery } from '@/api/mutations/customer_mutations'
+import { CustomerAPI } from '@/api/services/customer'
+import { useAuth } from '@/hooks/useAuth'
 
 type Organization = Customer
 
@@ -19,32 +18,9 @@ type OrganizationContextType = {
 
 const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined)
 
-type OrganizationProviderState = {
-  isLoading: boolean,
-  organization?: Organization,
-}
-
 export const OrganizationProvider = ({ children }: PropsWithChildren) => {
-  const [{
-    organization,
-    isLoading
-  }, setOrganizationProviderState] = useState<OrganizationProviderState>({ isLoading: true })
-
-  const createOrganizationMutation = useCustomerCreateMutation()
-
-  const checkOrganization = useCallback(async () => {
-    setOrganizationProviderState({ isLoading: true })
-    const organization: Organization | undefined = await CustomerAPI.getMyself()
-    setOrganizationProviderState({ organization, isLoading: false })
-  }, [])
-
-  useEffect(() => {
-    checkOrganization()
-  }, [])
-
-  const reload = useCallback(async () => {
-    await checkOrganization()
-  }, [checkOrganization])
+  const { isLoading, isError, data: organization, refetch } = useCustomerMyselfQuery()
+  const { authHeader } = useAuth()
 
   if (!organization && isLoading) {
     return (
@@ -54,19 +30,34 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
     )
   }
 
+  if (isError) {
+    return (
+      <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
+        <span className={tw('text-hw-negative-400')}>An Error occurred</span>
+      </div>
+    )
+  }
+
   if (!organization) {
     return (
-      <CreateOrganizationPage  createOrganization={async (data) => {
-        await createOrganizationMutation.mutate(data)
-        await checkOrganization()
-        return true
+      <CreateOrganizationPage createOrganization={async (data) => {
+        try {
+          // TODO fix this
+          // We cannot use a mutation because we would trigger a rerender and delete the form information
+          await CustomerAPI.create(data, authHeader)
+          refetch().catch(console.error)
+          return true
+        } catch (error) {
+          console.error(error)
+          return false
+        }
       }}
       />
     )
   }
 
   return (
-    <OrganizationContext.Provider value={{ hasOrganization: !!organization, organization, reload }}>
+    <OrganizationContext.Provider value={{ hasOrganization: !!organization, organization, reload: refetch }}>
       {children}
     </OrganizationContext.Provider>
   )

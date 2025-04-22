@@ -74,6 +74,12 @@ importers:
       '@radix-ui/react-checkbox':
         specifier: 1.1.3
         version: 1.1.3(@types/react-dom@18.3.5)(@types/react@18.3.17)(react-dom@18.3.1)(react@18.3.1)
+      '@stripe/react-stripe-js':
+        specifier: ^3.6.0
+        version: 3.6.0(@stripe/stripe-js@7.0.0)(react-dom@18.3.1)(react@18.3.1)
+      '@stripe/stripe-js':
+        specifier: ^7.0.0
+        version: 7.0.0
       '@tanstack/react-query':
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.3.1)(react@18.3.1)
@@ -104,6 +110,9 @@ importers:
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.55.0
+        version: 7.55.0(react@18.3.1)
       react-hot-toast:
         specifier: 2.4.1
         version: 2.4.1(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1)
@@ -4682,6 +4691,24 @@ packages:
       '@types/express': 4.17.17
       file-system-cache: 2.3.0
     dev: true
+
+  /@stripe/react-stripe-js@3.6.0(@stripe/stripe-js@7.0.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-zEnaUmTOsu7zhl3RWbZ0l1dRiad+QIbcAYzQfF+yYelURJowhAwesRHKWH+qGAIBEpkO6/VCLFHhVLH9DtPlnw==}
+    peerDependencies:
+      '@stripe/stripe-js': '>=1.44.1 <8.0.0'
+      react: '>=16.8.0 <20.0.0'
+      react-dom: '>=16.8.0 <20.0.0'
+    dependencies:
+      '@stripe/stripe-js': 7.0.0
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
+
+  /@stripe/stripe-js@7.0.0:
+    resolution: {integrity: sha512-0AWkP+hoIXB5O34FGY7jh687ZPlOqLqMkJDkiSXcp4TaWWidnxjsZSp0xkjyAWbIz4+j1BFXDAK01Rqb7ceBRA==}
+    engines: {node: '>=12.16'}
+    dev: false
 
   /@stylistic/eslint-plugin@2.12.1(eslint@9.17.0)(typescript@5.7.2):
     resolution: {integrity: sha512-fubZKIHSPuo07FgRTn6S4Nl0uXPRPYVNpyZzIDGfp7Fny6JjNus6kReLD7NI380JXi4HtUTSOZ34LBuNPO1XLQ==}
@@ -10917,6 +10944,15 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
       react-is: 18.1.0
     dev: true
+
+  /react-hook-form@7.55.0(react@18.3.1):
+    resolution: {integrity: sha512-XRnjsH3GVMQz1moZTW53MxfoWN7aDpUg/GpVNc4A3eXRVNdGXfbzJ4vM4aLQ8g6XCUh1nIbx70aaNCl7kxnjog==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+    dependencies:
+      react: 18.3.1
+    dev: false
 
   /react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-j8z+cQbWIM5LY37pR6uZR6D4LfseplqnuAO4co4u8917hBUvXlEqyP1ZzqVLcqoyUesZZv/ImreoCeHVDpE5pQ==}

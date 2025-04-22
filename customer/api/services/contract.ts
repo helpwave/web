@@ -1,45 +1,47 @@
 import type { Contract } from '@/api/dataclasses/contract'
-
-// TODO delete later
-export const exampleContracts: Contract[] = [
-  {
-    uuid: '1',
-    name: 'Contract 1',
-    version: 'v1-2211',
-    contractId: 'agb',
-    url: 'https://cdn.helpwave.de/privacy.html',
-  },
-  {
-    uuid: '2',
-    name: 'Contract 2',
-    version: 'v2-7110',
-    contractId: 'agb',
-    url: 'https://cdn.helpwave.de/privacy.html',
-  },
-  {
-    uuid: '3',
-    name: 'Contract 3',
-    version: 'v1-9811',
-    contractId: 'agb',
-    url: 'https://cdn.helpwave.de/privacy.html',
-  }
-]
+import { ContractHelpers } from '@/api/dataclasses/contract'
+import { API_URL } from '@/api/config'
 
 export const ContractsAPI = {
-  get:  async (id: string): Promise<Contract> => {
-    const contract = exampleContracts.find(value => value.uuid === id)
-    if (!contract) {
-      throw new Error('Could not find contract')
+  /** Get a Contract by its id */
+  get:  async (id: string, headers: HeadersInit): Promise<Contract> => {
+    const response = await fetch(`${API_URL}/contract/${id}`, {
+      method: 'GET',
+      headers: headers,
+    })
+    if(response.ok) {
+      return ContractHelpers.fromJson(await response.json())
     }
-    return contract
-  },
-  getMany: async (): Promise<Contract[]>  => {
-    return exampleContracts
+    throw response
   },
   /**
-   * Returns all
+   * Returns all contracts
    */
-  getForProduct: async (_: string): Promise<Contract[]>  => {
-    return exampleContracts
+  getAll: async (headers: HeadersInit): Promise<Contract[]>  => {
+    const response = await fetch(`${API_URL}/contract/`, {
+      method: 'GET',
+      headers: headers,
+    })
+    if(response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (await response.json() as any[]).map(json => ContractHelpers.fromJson(json))
+    }
+    throw response
+  },
+  /**
+   * Returns all contracts based on the productIds
+   */
+  getAllByProductIds: async (productIds: string[],headers: HeadersInit): Promise<Contract[]>  => {
+    // TODO update later
+    const response = await fetch(`${API_URL}/contract/product/`, {
+      method: 'PUT',
+      headers: {  'Content-Type': 'application/json' ,...headers },
+      body: JSON.stringify({ products: productIds })
+    })
+    if(response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (await response.json() as any[]).map(json => ContractHelpers.fromJson(json))
+    }
+    throw response
   },
 }

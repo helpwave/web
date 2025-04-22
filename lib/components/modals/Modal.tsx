@@ -49,7 +49,7 @@ export const ModalHeader = ({
     <div className={tw('flex flex-col')}>
       <div className={tw('flex flex-row justify-between items-start gap-x-8')}>
         {title ?? (
-          <span className={tx('textstyle-title-normal', {
+          <span className={tx('textstyle-title-lg', {
             'mb-1': description || descriptionText,
           })}>
             {titleText}

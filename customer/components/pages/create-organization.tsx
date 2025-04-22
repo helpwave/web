@@ -3,8 +3,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { tw } from '@twind/core'
-import { useState } from 'react'
-import type { Customer } from '@/api/dataclasses/customer'
+import type { CustomerCreate } from '@/api/dataclasses/customer'
 import { Section } from '@/components/layout/Section'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
 
@@ -25,32 +24,19 @@ const defaultCreateOrganizationTranslations: Record<Languages, CreateOrganizatio
 }
 
 type CreateOrganizationPageProps = {
-  createOrganization: (organization: Customer) => Promise<boolean>,
+  createOrganization: (organization: CustomerCreate) => Promise<boolean>,
 }
 
-export const CreateOrganizationPage = ({ createOrganization, overwriteTranslation }: PropsForTranslation<CreateOrganizationTranslation, CreateOrganizationPageProps>) => {
+export const CreateOrganizationPage = ({
+                                         createOrganization,
+                                         overwriteTranslation
+                                       }: PropsForTranslation<CreateOrganizationTranslation, CreateOrganizationPageProps>) => {
   const translation = useTranslation(defaultCreateOrganizationTranslations, overwriteTranslation)
-  const [data, setData] = useState<Customer>({
-    uuid: '',
-    name: '',
-    email: '',
-    address: {
-      country: '',
-      city: '',
-      postalCode: '',
-      street: '',
-      houseNumber: '',
-      houseNumberAdditional: ''
-    },
-    creationDate: new Date(),
-    websiteURL: '',
-    phoneNumber: '',
-  })
 
   return (
     <Page
       pageTitle={titleWrapper(translation.createOrganization)}
-      mainContainerClassName={tw('min-h-[90vh] max-w-[700px]')}
+      mainContainerClassName={tw('max-w-[700px]')}
       contentAndFooterClassName={tw('items-center')}
       isHidingSidebar={true}
     >
@@ -58,9 +44,21 @@ export const CreateOrganizationPage = ({ createOrganization, overwriteTranslatio
         <h2 className={tw('font-space text-3xl font-bold')}>{translation.createOrganization}</h2>
         <span className={tw('text-gray-500')}>{translation.createOrganizationDescription}</span>
         <ContactInformationForm
-          value={data}
-          onChange={setData}
-          onSubmit={() => {createOrganization(data).catch(console.error)}}
+          initialValue={{
+            name: '',
+            email: '',
+            phoneNumber: '',
+            address: '',
+            country: '',
+            city: '',
+            postalCode: '',
+            houseNumber: '',
+            careOf: '',
+            websiteURL: '',
+          }}
+          onSubmit={(data) => {
+            createOrganization(data).catch(console.error)
+          }}
         />
       </Section>
     </Page>

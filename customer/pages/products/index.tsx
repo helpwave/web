@@ -1,374 +1,205 @@
 import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Page } from '@/components/layout/Page'
-import titleWrapper from '@/utils/titleWrapper'
-import { useProductsQuery } from '@/api/mutations/product_mutations'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { tw } from '@twind/core'
+import { tw, tx } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import type { ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
-import { useCustomerProductsQuery } from '@/api/mutations/customer_product_mutations'
-import { Button } from '@helpwave/common/components/Button'
-import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingCart } from 'lucide-react'
-import type { Dispatch, SetStateAction } from 'react'
-import { useState } from 'react'
-import type { CustomerProduct } from '@/api/dataclasses/customer_product'
-import { Table } from '@helpwave/common/components/Table'
-import { useCustomerMyselfQuery } from '@/api/mutations/customer_mutations'
-import { ContractsAPI } from '@/api/services/contract'
-import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import Link from 'next/link'
+import {
+  useCustomerProductDeleteMutation,
+  useCustomerProductsSelfQuery
+} from '@/api/mutations/customer_product_mutations'
 import { withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
+import { withCart } from '@/hocs/withCart'
+import { Page } from '@/components/layout/Page'
+import titleWrapper from '@/utils/titleWrapper'
+import { Button } from '@helpwave/common/components/Button'
+import { Plus } from 'lucide-react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { Modal } from '@helpwave/common/components/modals/Modal'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import type {
+  CustomerProductStatus,
+  ResolvedCustomerProduct
+} from '@/api/dataclasses/customer_product'
+import {
+  CustomerProductStatusCancelable,
+  CustomerProductStatusPlannedCancellation
+} from '@/api/dataclasses/customer_product'
+import {
+  defaultCustomerProductStatusTranslation
+} from '@/api/dataclasses/customer_product'
+import { ContractList } from '@/components/ContractList'
+import { defaultLocaleFormatters } from '@/utils/locale'
 
 type ProductsTranslation = {
-  products: string,
-  toCheckOut: string,
+  bookProduct: string,
+  myProducts: string,
+  noProductsYet: string,
   error: string,
   details: string,
-  addToCart: string,
-  removeFromCart: string,
-  alreadyBought: string,
-  overview: string,
-  name: string,
-  price: string,
   contract: string,
-  actions: string,
-  plan: string,
-  back: string,
-  pay: string,
+  contracts: string,
+  manage: string,
+  cancel: string,
+  noContracts: string,
+  lookAt: string,
+  cancelSubscription: string,
+  cancelSubscriptionDescription: string,
+  endsAt: string,
 } & ProductPlanTranslation
+
+
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
   en: {
     ...defaultProductPlanTranslation.en,
-    products: 'Products',
-    toCheckOut: 'Go to Checkout',
+    bookProduct: 'Book new Product',
+    myProducts: 'My Products',
+    noProductsYet: 'No Products booked yet',
     error: 'There was an error',
     details: 'Details',
-    addToCart: 'Add to Cart',
-    removeFromCart: 'Remove',
-    alreadyBought: 'Already Bought',
-    overview: 'Overview',
-    name: 'Name',
-    price: 'Price',
     contract: 'Contract',
-    actions: 'Actions',
-    plan: 'Plan',
-    back: 'Back',
-    pay: 'Pay'
+    contracts: 'Contracts',
+    manage: 'Manage',
+    cancel: 'Cancel',
+    noContracts: 'No Contracts',
+    lookAt: 'Look at',
+    cancelSubscription: 'Cancel',
+    cancelSubscriptionDescription: 'This will permantly cancel your subscription and you will be required to book the product again.',
+    endsAt: 'Ends at',
   },
   de: {
     ...defaultProductPlanTranslation.de,
-    products: 'Produkte',
-    toCheckOut: 'Zur Kasse',
+    bookProduct: 'Neues Product buchen',
+    myProducts: 'Meine Produkte',
+    noProductsYet: 'Noch keine Produkte gebucht',
     error: 'Es gab einen Fehler',
     details: 'Details',
-    addToCart: 'Hinzufügen',
-    removeFromCart: 'Entfernen',
-    alreadyBought: 'Bereits Gekauft',
-    overview: 'Übersicht',
-    name: 'Name',
-    price: 'Preis',
     contract: 'Vertrag',
-    actions: 'Aktionen',
-    plan: 'Plan',
-    back: 'Zurück',
-    pay: 'Bezahlen'
+    contracts: 'Verträge',
+    manage: 'Verwalten',
+    cancel: 'Kündigen',
+    noContracts: 'Keine Verträge',
+    lookAt: 'Anzeigen',
+    cancelSubscription: 'Abonement aufheben',
+    cancelSubscriptionDescription: 'Das Produkt wird permanent deaboniert und sie müssen zur erneuten Nutzung dieses erneut buchen.',
+    endsAt: 'Endet am',
   }
 }
 
-
-type ProductsStep = 'shopping' | 'overview' | 'contracts' | 'payment'
-
-type ProductsShoppingProps = {
-  cartProducts: CustomerProduct[],
-  setCartProducts: Dispatch<SetStateAction<CustomerProduct[]>>,
-  onCheckoutClick: () => void,
+type CustomerProductStatusDisplayProps = {
+  customerProductStatus: CustomerProductStatus,
 }
 
-const ProductsShopping = ({
-                            cartProducts,
-                            setCartProducts,
-                            onCheckoutClick
-                          }: ProductsShoppingProps) => {
+const CustomerProductStatusDisplay = ({ customerProductStatus }: CustomerProductStatusDisplayProps) => {
+  const translation = useTranslation(defaultCustomerProductStatusTranslation)
+  return (
+    <div className={tx('flex flex-row items-center px-3 py-1 rounded-full text-sm font-bold', {
+      'bg-hw-positive-500 text-white': customerProductStatus === 'active',
+      'bg-hw-warning-500 text-white': customerProductStatus === 'activation' || customerProductStatus === 'scheduled',
+      'bg-hw-negative-500 text-white': customerProductStatus === 'expired' || customerProductStatus === 'payment' || customerProductStatus === 'canceled' || 'refunded',
+      'bg-blue-500 text-white': customerProductStatus === 'trialing',
+    })}>
+      {translation[customerProductStatus]}
+    </div>
+  )
+}
+
+const ProductsPage: NextPage = () => {
   const translation = useTranslation(defaultProductsTranslations)
-  const { data: customer, isLoading: customerLoading, isError: customerError } = useCustomerMyselfQuery()
+  const router = useRouter()
   const {
     data: bookedProducts,
     isError: bookedProductsError,
     isLoading: bookedProductsLoading
-  } = useCustomerProductsQuery()
-  const { data: products, isError: productsError, isLoading: productsLoading } = useProductsQuery()
+  } = useCustomerProductsSelfQuery()
+  const { data: products, isError: productsError, isLoading: productsLoading } = useProductsAllQuery()
+  const [customerProductModalValue, setCustomerProductModalValue] = useState<ResolvedCustomerProduct>()
+  const [cancelDialogId, setCancelDialogId] = useState<string>()
+  const cancelMutation = useCustomerProductDeleteMutation()
+  const localeTranslation = useTranslation(defaultLocaleFormatters)
 
-  const isError = bookedProductsError || productsError || customerError
-  const isLoading = bookedProductsLoading || productsLoading || customerLoading
+  const isError = bookedProductsError || productsError
+  const isLoading = bookedProductsLoading || productsLoading
 
   return (
-    <>
-      <Section>
-        <div className={tw('flex flex-row justify-between items-center')}>
-          <h2 className={tw('font-bold font-space text-3xl')}>{translation.products}</h2>
-          <Button className={tw('flex flex-row items-center gap-x-2 w-[200px]')} disabled={cartProducts.length === 0}
-                  onClick={onCheckoutClick}>
-            <ShoppingCart/>
-            {`${translation.toCheckOut} (${cartProducts.length})`}
-          </Button>
-        </div>
+    <Page pageTitle={titleWrapper(translation.myProducts)} mainContainerClassName={tw('min-h-[80vh]')}>
+      <Modal
+        id="productModal"
+        isOpen={!!customerProductModalValue}
+        titleText={customerProductModalValue?.product.name}
+        modalClassName={tw('flex flex-col gap-y-4')}
+        onBackgroundClick={() => setCustomerProductModalValue(undefined)}
+        onCloseClick={() => setCustomerProductModalValue(undefined)}
+      >
+        <span>{customerProductModalValue?.product.description}</span>
+        <ContractList
+          productIds={customerProductModalValue ? [customerProductModalValue.product.uuid] : []}></ContractList>
+        <Button color="hw-negative" className={tw('!w-fit')} disabled={!CustomerProductStatusCancelable.includes(customerProductModalValue?.status || 'active')}
+          onClick={() => setCancelDialogId(customerProductModalValue?.uuid)}>
+          {translation.cancel}
+        </Button>
+      </Modal>
+
+      <ConfirmDialog
+        id="cancelBooking"
+        isOpen={!!cancelDialogId}
+        onConfirm={() => {
+          cancelMutation.mutate(cancelDialogId!)
+          setCancelDialogId(undefined)
+        }}
+        onBackgroundClick={() => setCancelDialogId(undefined)}
+        onCloseClick={() => setCancelDialogId(undefined)}
+        titleText={translation.cancelSubscription}
+        descriptionText={translation.cancelSubscriptionDescription}
+        confirmType="negative"
+      />
+
+      <Section titleText={translation.myProducts}>
         {isError && (<span>{translation.error}</span>)}
-        {!isError && isLoading && (<LoadingAnimation/>)}
-        {!isError && !isLoading && (
-          <div className={tw('flex flex-wrap gap-x-8 gap-y-12')}>
-            {products.map((product, index) => {
-              const isBookedAlready = bookedProducts.findIndex(value => value.productUUID === product.uuid) !== -1
-              const isInCart = cartProducts.findIndex(value => value.productUUID === product.uuid) !== -1
+        {!isError && isLoading && (<LoadingAnimation />)}
+        {!isError && !isLoading && products && bookedProducts && (
+          <div className={tw('grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12')}>
+            {bookedProducts.map((bookedProduct, index) => {
               return (
                 <div
                   key={index}
-                  className={tw('flex flex-col gap-y-2 min-w-[200px] max-w-[200px] bg-hw-primary-300 px-4 py-2 rounded-md')}
+                  className={tw('flex flex-col border-4 justify-between gap-y-2 bg-gray-100 px-8 py-4 rounded-md')}
                 >
-                  <h4 className={tw('font-bold font-space text-xl')}>{product.name}</h4>
-                  <div className={tw('flex flex-row justify-between')}>
-                    <span className={tw('font-semibold text-lg')}>{`${product.price}€`}</span>
-                    {translation[product.plan]}
+                  <div className={tw('flex flex-col gap-y-2')}>
+                    <div className={tw('flex flex-row gap-x-2 justify-between')}>
+                      <h4 className={tw('font-bold font-space text-2xl')}>{bookedProduct.product.name}</h4>
+                      <CustomerProductStatusDisplay customerProductStatus={bookedProduct.status} />
+                    </div>
+                    <span>{bookedProduct.product.description}</span>
+                    <span>{`${translation.productPlan(bookedProduct.productPlan)} (${localeTranslation.formatMoney(bookedProduct.productPlan.costEuro)})`}</span>
+                    {bookedProduct.cancellationDate && CustomerProductStatusPlannedCancellation.includes(bookedProduct.status) ? <span>{translation.endsAt} {localeTranslation.formatDate(bookedProduct.cancellationDate)}</span> : <></>}
                   </div>
-                  <Button
-                    variant="text"
-                    className={tw('p-0 flex flex-row items-center gap-x-1 text-hw-primary-700 hover:text-hw-primary-800')}
-                    onClick={() => {
-                      // TODO show modal here
-                    }}
-                  >
-                    {translation.details}
-                    <ChevronRight size={16}/>
-                  </Button>
-                  <div className={tw('flex flex-row justify-end items-end h-full')}>
-                    {isBookedAlready && (
-                      <span className={tw('py-2')}>{translation.alreadyBought}</span>
-                    )}
-                    {!isBookedAlready && (
-                      <Button
-                        className={tw('flex flex-row items-center gap-x-2 w-[160px]')}
-                        onClick={async () => {
-                          if (isInCart) {
-                            setCartProducts(prevState => prevState.filter(value => value.productUUID !== product.uuid))
-                          } else {
-                            const contracts = await ContractsAPI.getForProduct(product.uuid)
-                            setCartProducts(prevState => ([...prevState, {
-                              productUUID: product.uuid,
-                              product,
-                              status: 'inCart',
-                              startDate: new Date(),
-                              customerUUID: customer!.uuid,
-                              contracts
-                            }]))
-                          }
-                        }}
-                      >
-                        {isInCart ? <Minus size={20}/> : <Plus size={20}/>}
-                        {isInCart ? translation.removeFromCart : translation.addToCart}
-                      </Button>
-                    )}
+                  <div className={tw('flex flex-row justify-end gap-x-4')}>
+                    <Button className={tw('!w-fit')}
+                      onClick={() => setCustomerProductModalValue(bookedProduct)}>{translation.manage}</Button>
                   </div>
                 </div>
               )
             })}
+            <button
+              key="buy"
+              onClick={() => router.push('/products/shop').catch(console.error)}
+              className={tw('flex flex-row justify-center items-center h-full min-h-[200px] w-full gap-x-2 border-4 border-dashed border-gray-200 hover:brightness-90 px-4 py-2 rounded-md')}
+            >
+              <Plus size={32} />
+              <h4 className={tw('font-bold text-lg')}>{translation.bookProduct}</h4>
+            </button>
           </div>
         )}
       </Section>
-      <Section className={tw('flex flex-row justify-end')}>
-        <Button className={tw('flex flex-row items-center gap-x-2 w-[200px]')} disabled={cartProducts.length === 0}
-                onClick={onCheckoutClick}>
-          <ShoppingCart/>
-          {`${translation.toCheckOut} (${cartProducts.length})`}
-          <ChevronRight/>
-        </Button>
-      </Section>
-    </>
-  )
-}
-
-type ProductsOverviewProps = {
-  cartProducts: CustomerProduct[],
-  setCartProducts: Dispatch<SetStateAction<CustomerProduct[]>>,
-  onBackClick: () => void,
-  onCheckoutClick: () => void,
-}
-const ProductsOverview = ({
-                            cartProducts,
-                            setCartProducts,
-                            onCheckoutClick,
-                            onBackClick
-                          }: ProductsOverviewProps) => {
-  const translation = useTranslation(defaultProductsTranslations)
-
-  return (
-    <>
-      <Section titleText={translation.overview}>
-        <Table
-          data={cartProducts}
-          identifierMapping={dataObject => dataObject.productUUID}
-          rowMappingToCells={dataObject => [
-            <span key={dataObject.productUUID + 'name'}>{dataObject.product!.name}</span>,
-            <span key={dataObject.productUUID + 'price'}>{dataObject.product!.price + '€'}</span>,
-            <span key={dataObject.productUUID + 'plan'}>{translation[dataObject.product!.plan]}</span>,
-            <Button
-              variant="text"
-              key={dataObject.productUUID + 'action'}
-              onClick={() => setCartProducts(prevState => prevState.filter(value => value.productUUID !== dataObject.productUUID))}
-            >
-              {translation.removeFromCart}
-            </Button>,
-          ]}
-          header={[
-            <span key="name">{translation.name}</span>,
-            <span key="price">{translation.price}</span>,
-            <span key="plan">{translation.plan}</span>,
-            <span key="actions">{translation.actions}</span>,
-          ]}
-        />
-      </Section>
-      <Section className={tw('flex flex-row justify-between')}>
-        <Button
-          className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
-          onClick={onBackClick}
-        >
-          <ChevronLeft/>
-          {translation.back}
-        </Button>
-        <Button
-          className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
-          disabled={cartProducts.length === 0}
-          onClick={onCheckoutClick}
-        >
-          <ShoppingCart/>
-          {`${translation.toCheckOut} (${cartProducts.length})`}
-          <ChevronRight/>
-        </Button>
-      </Section>
-    </>
-  )
-}
-
-type ProductsContractProps = {
-  cartProducts: CustomerProduct[],
-  setCartProducts: Dispatch<SetStateAction<CustomerProduct[]>>,
-  onBackClick: () => void,
-  onCheckoutClick: () => void,
-}
-const ProductsContract = ({
-                            cartProducts,
-                            setCartProducts,
-                            onCheckoutClick,
-                            onBackClick
-                          }: ProductsContractProps) => {
-  const translation = useTranslation(defaultProductsTranslations)
-
-  const allContractsAccepted = cartProducts.every(value => value.contracts.every(contract => contract.lastAccepted !== undefined))
-
-  return (
-    <Section titleText={translation.contract}>
-      <form className={tw('flex flex-col gap-y-4')}>
-        {cartProducts.map(booking => (
-          <div key={booking.productUUID} className={tw('flex flex-col gap-y-2')}>
-            <h4 className={tw('font-space text-lg font-semibold')}>{booking.product!.name}</h4>
-            {booking.contracts.map(contract => (
-              <div key={contract.uuid} className={tw('flex flex-row gap-x-2')}>
-                <Checkbox
-                  checked={contract.lastAccepted !== undefined}
-                  onChange={() => {
-                    setCartProducts(prevState => prevState.map(value => {
-                      if (value.productUUID !== booking.productUUID) {
-                        return value
-                      }
-                      return {
-                        ...value,
-                        contracts: value.contracts.map(valueContract => {
-                          if (valueContract.uuid === contract.uuid) {
-                            return {
-                              ...valueContract,
-                              lastAccepted: contract.lastAccepted !== undefined ? undefined : new Date()
-                            }
-                          }
-                          return valueContract
-                        })
-                      }
-                    }))
-                  }}
-                  containerClassName={tw('justify-start')}
-                />
-                <Link href={contract.url} target="_blank" className={tw('font-bold text-lg font-semibold')}>{contract.name}</Link>
-              </div>
-            ))}
-          </div>
-        ))}
-        <div className={tw('flex flex-row justify-between')}>
-          <Button
-            className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
-            onClick={onBackClick}
-          >
-            <ChevronLeft/>
-            {translation.back}
-          </Button>
-          <Button
-            className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
-            disabled={!allContractsAccepted}
-            onClick={onCheckoutClick}
-          >
-            {translation.pay}
-            <ChevronRight/>
-          </Button>
-        </div>
-      </form>
-    </Section>
-  )
-}
-
-const Products: NextPage<PropsForTranslation<ProductsTranslation>> = ({ overwriteTranslation }) => {
-  const translation = useTranslation(defaultProductsTranslations, overwriteTranslation)
-  const [step, setStep] = useState<ProductsStep>('shopping')
-  const [cartProducts, setCartProducts] = useState<CustomerProduct[]>([])
-
-  return (
-    <Page pageTitle={titleWrapper(translation.products)} mainContainerClassName={tw('h-[80vh] justify-between')}>
-      {step === 'shopping' && (
-        <ProductsShopping
-          cartProducts={cartProducts}
-          setCartProducts={setCartProducts}
-          onCheckoutClick={() => setStep('overview')}
-        />
-      )}
-      {step === 'overview' && (
-        <ProductsOverview
-          cartProducts={cartProducts}
-          setCartProducts={setCartProducts}
-          onCheckoutClick={() => setStep('contracts')}
-          onBackClick={() => setStep('shopping')}
-        />
-      )}
-      {step === 'contracts' && (
-        <ProductsContract
-          cartProducts={cartProducts}
-          setCartProducts={setCartProducts}
-          onCheckoutClick={() => setStep('payment')}
-          onBackClick={() => setStep('overview')}
-        />
-      )}
-      {step === 'payment' && (
-        <Section titleText={translation.pay}>
-          <Button
-            className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
-            onClick={() => setStep('contracts')}
-          >
-            <ChevronLeft/>
-            {translation.back}
-          </Button>
-        </Section>
-      )}
     </Page>
   )
 }
 
-export default withAuth(withOrganization(Products))
+export default withAuth(withOrganization(withCart(ProductsPage)))

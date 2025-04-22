@@ -113,7 +113,7 @@ const ProductsPage: NextPage = () => {
           <h3 className={tw('text-lg font-semibold')}>{translation.contracts}</h3>
           {(contracts ?? []).length === 0 ? (
             <span className={tw('text-bg-gray-300')}>{translation.noContracts}</span>
-          ) : contracts.map(contract => (
+          ) : contracts!.map(contract => (
             <Link href={contract.url} target="_blank" key={contract.uuid}
                   className={tw('inline-flex flex-row gap-x-2')}>
               {contract.key}
@@ -134,13 +134,13 @@ const ProductsPage: NextPage = () => {
 
       <ConfirmDialog
         id="cancelBooking"
-        isOpen={cancelDialogId}
+        isOpen={!!cancelDialogId}
         onConfirm={() => {
-          cancelMutation.mutate(cancelDialogId)
-          setCancelDialogId()
+          cancelMutation.mutate(cancelDialogId!)
+          setCancelDialogId(undefined)
         }}
-        onBackgroundClick={() => setCancelDialogId()}
-        onCloseClick={() => setCancelDialogId()}
+        onBackgroundClick={() => setCancelDialogId(undefined)}
+        onCloseClick={() => setCancelDialogId(undefined)}
         titleText={translation.cancelSubscription}
         descriptionText={translation.cancelSubscriptionDescription}
         confirmType="negative"

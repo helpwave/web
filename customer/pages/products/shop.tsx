@@ -43,6 +43,8 @@ type ProductsTranslation = {
   plans: string,
   change: string,
   noProducts: string,
+  noContracts: string,
+  lookAt: string,
 } & ProductPlanTranslation
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
@@ -63,7 +65,9 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     pay: 'Pay',
     plans: 'Plans',
     change: 'Change',
-    noProducts: 'No Products found.'
+    noProducts: 'No Products found.',
+    noContracts: 'No Contracts',
+    lookAt: 'Look at'
   },
   de: {
     ...defaultProductPlanTranslation.de,
@@ -82,7 +86,9 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     pay: 'Bezahlen',
     plans: 'Pläne',
     change: 'Wechseln',
-    noProducts: 'Keine Produkte gefunden.'
+    noProducts: 'Keine Produkte gefunden.',
+    noContracts: 'Keine Verträge',
+    lookAt: 'Anzeigen'
   }
 }
 
@@ -111,9 +117,9 @@ const ProductShop: NextPage = () => {
         <span>{productModal?.description}</span>
         <div className={tw('flex flex-col gap-y-1')}>
           <h3 className={tw('text-lg font-semibold')}>{translation.contracts}</h3>
-          {(contracts ?? []).length === 0 ? (
+          {(contracts ?? []).length === 0 && contracts ? (
             <span className={tw('text-bg-gray-300')}>{translation.noContracts}</span>
-          ) : contracts.map(contract => (
+          ) : contracts!.map(contract => (
             <Link href={contract.url} target="_blank" key={contract.uuid} className={tw('inline-flex flex-row gap-x-2')}>
               {contract.key}
               <span className={tw('inline-flex flex-row gap-x-1/2')}>

@@ -19,6 +19,7 @@ export type NavItem = {
   name: Record<Languages, string>,
   icon?: ReactNode,
   url: string,
+  isExternal?: boolean,
   subItems?: NavItem[],
 }
 
@@ -67,6 +68,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
           <Link
             href={item.url}
             key={i}
+            target={item.isExternal ?? false ? '_blank' : undefined}
             className={tx(
               'px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40 flex flex-row gap-x-2 px-4 items-center',
               { 'bg-gray-200': router.pathname == item.url }

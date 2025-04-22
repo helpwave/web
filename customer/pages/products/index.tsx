@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { tw } from '@twind/core'
+import { tw, tx } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import type { ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
@@ -17,14 +17,19 @@ import { withCart } from '@/hocs/withCart'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { Button } from '@helpwave/common/components/Button'
-import { ExternalLink, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Modal } from '@helpwave/common/components/modals/Modal'
-import { useContractsForProductsQuery } from '@/api/mutations/contract_mutations'
-import Link from 'next/link'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { ResolvedCustomerProduct } from '@/api/dataclasses/customer_product'
+import type {
+  CustomerProductStatus,
+  ResolvedCustomerProduct
+} from '@/api/dataclasses/customer_product'
+import {
+  defaultCustomerProductStatusTranslation
+} from '@/api/dataclasses/customer_product'
+import { ContractList } from '@/components/ContractList'
 
 type ProductsTranslation = {
   bookProduct: string,
@@ -77,6 +82,24 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
   }
 }
 
+type CustomerProductStatusDisplayProps = {
+  customerProductStatus: CustomerProductStatus,
+}
+
+const CustomerProductStatusDisplay = ({ customerProductStatus }: CustomerProductStatusDisplayProps) => {
+  const translation = useTranslation(defaultCustomerProductStatusTranslation)
+  return (
+    <div className={tx('flex flex-row items-center px-3 py-1 rounded-full text-sm font-bold', {
+      'bg-hw-positive-500 text-white': customerProductStatus === 'active',
+      'bg-hw-warning-500 text-white': customerProductStatus === 'activation' || customerProductStatus === 'scheduled',
+      'bg-hw-negative-500 text-white': customerProductStatus === 'expired' || customerProductStatus === 'payment' || customerProductStatus === 'canceled' || 'refunded',
+      'bg-blue-500 text-white': customerProductStatus === 'trialing',
+    })}>
+      {translation[customerProductStatus]}
+    </div>
+  )
+}
+
 const ProductsPage: NextPage = () => {
   const translation = useTranslation(defaultProductsTranslations)
   const router = useRouter()
@@ -87,11 +110,6 @@ const ProductsPage: NextPage = () => {
   } = useCustomerProductsSelfQuery()
   const { data: products, isError: productsError, isLoading: productsLoading } = useProductsAllQuery()
   const [customerProductModalValue, setCustomerProductModalValue] = useState<ResolvedCustomerProduct>()
-  const {
-    data: contracts,
-    // isLoading: contractsIsLoading,
-    // isError: contractsError
-  } = useContractsForProductsQuery(customerProductModalValue ? [customerProductModalValue.product.uuid] : [])
   const [cancelDialogId, setCancelDialogId] = useState<string>()
   const cancelMutation = useCustomerProductDeleteMutation()
 
@@ -109,23 +127,8 @@ const ProductsPage: NextPage = () => {
         onCloseClick={() => setCustomerProductModalValue(undefined)}
       >
         <span>{customerProductModalValue?.product.description}</span>
-        <div className={tw('flex flex-col gap-y-1')}>
-          <h3 className={tw('text-lg font-semibold')}>{translation.contracts}</h3>
-          {(contracts ?? []).length === 0 ? (
-            <span className={tw('text-bg-gray-300')}>{translation.noContracts}</span>
-          ) : contracts!.map(contract => (
-            <Link href={contract.url} target="_blank" key={contract.uuid}
-                  className={tw('inline-flex flex-row gap-x-2')}>
-              {contract.key}
-              <span className={tw('inline-flex flex-row items-center gap-x-1/2')}>
-              <span>(</span>
-                {`${translation.lookAt}`}
-                <ExternalLink size={16}/>
-              <span>)</span>
-            </span>
-            </Link>
-          ))}
-        </div>
+        <ContractList
+          productIds={customerProductModalValue ? [customerProductModalValue.product.uuid] : []}></ContractList>
         <Button color="hw-negative" className={tw('!w-fit')}
                 onClick={() => setCancelDialogId(customerProductModalValue?.uuid)}>
           {translation.cancel}
@@ -158,7 +161,10 @@ const ProductsPage: NextPage = () => {
                   className={tw('flex flex-col justify-between gap-y-2 bg-gray-100 px-4 py-2 rounded-md')}
                 >
                   <div className={tw('flex flex-col gap-y-2')}>
-                    <h4 className={tw('font-bold font-space text-2xl')}>{bookedProduct.product.name}</h4>
+                    <div className={tw('flex flex-row gap-x-2 justify-between')}>
+                      <h4 className={tw('font-bold font-space text-2xl')}>{bookedProduct.product.name}</h4>
+                      <CustomerProductStatusDisplay customerProductStatus={bookedProduct.status}/>
+                    </div>
                     <span>{bookedProduct.product.description}</span>
                     <span>{`${translation.productPlan(bookedProduct.productPlan)} (${bookedProduct.productPlan.costEuro}€)`}</span>
                   </div>

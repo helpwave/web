@@ -13,7 +13,7 @@ import {
   defaultProductPlanTranslation
 } from '@/api/dataclasses/product'
 import { Button } from '@helpwave/common/components/Button'
-import { ChevronRight, ExternalLink } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 import { withCart } from '@/hocs/withCart'
@@ -21,10 +21,9 @@ import { useCart } from '@/hooks/useCart'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { useState } from 'react'
-import { useContractsForProductsQuery } from '@/api/mutations/contract_mutations'
+import { ContractList } from '@/components/ContractList'
 
 type ProductsTranslation = {
   bookProduct: string,
@@ -97,44 +96,24 @@ const ProductShop: NextPage = () => {
   const { addItem, clearCart } = useCart()
   const { data: products, isError, isLoading } = useProductsAvailableQuery()
   const router = useRouter()
-  const [productModal, setProductModal] = useState<Product>()
-  const {
-    data: contracts,
-    // isLoading: contractsIsLoading,
-    // isError: contractsError
-  } = useContractsForProductsQuery(productModal ? [productModal.uuid] : [])
+  const [productModalProductValue, setProductModalProductValue] = useState<Product>()
 
   return (
     <Page pageTitle={titleWrapper(translation.bookProduct)} mainContainerClassName={tw('min-h-[80vh]')}>
       <Modal
         id="productModal"
-        isOpen={!!productModal}
-        titleText={productModal?.name}
+        isOpen={!!productModalProductValue}
+        titleText={productModalProductValue?.name}
         modalClassName={tw('flex flex-col gap-y-4')}
-        onBackgroundClick={() => setProductModal(undefined)}
-        onCloseClick={() => setProductModal(undefined)}
+        onBackgroundClick={() => setProductModalProductValue(undefined)}
+        onCloseClick={() => setProductModalProductValue(undefined)}
       >
-        <span>{productModal?.description}</span>
-        <div className={tw('flex flex-col gap-y-1')}>
-          <h3 className={tw('text-lg font-semibold')}>{translation.contracts}</h3>
-          {(contracts ?? []).length === 0 && contracts ? (
-            <span className={tw('text-bg-gray-300')}>{translation.noContracts}</span>
-          ) : contracts!.map(contract => (
-            <Link href={contract.url} target="_blank" key={contract.uuid} className={tw('inline-flex flex-row gap-x-2')}>
-              {contract.key}
-              <span className={tw('inline-flex flex-row gap-x-1/2')}>
-              <span>(</span>
-                {`${translation.lookAt}`}
-                <ExternalLink size={16}/>
-              <span>)</span>
-            </span>
-            </Link>
-          ))}
-        </div>
+        <span>{productModalProductValue?.description}</span>
+        <ContractList productIds={productModalProductValue ? [productModalProductValue.uuid] : []}></ContractList>
       </Modal>
 
       <Section titleText={translation.bookProduct}>
-      {isError && (<span>{translation.error}</span>)}
+        {isError && (<span>{translation.error}</span>)}
         {!isError && isLoading && (<LoadingAnimation/>)}
         {!isError && !isLoading && (
           <div className={tw('flex flex-col gap-x-8 gap-y-12')}>
@@ -152,7 +131,7 @@ const ProductShop: NextPage = () => {
                         variant="text"
                         className={tw('p-0 flex flex-row items-center gap-x-1 text-hw-primary-700 hover:text-hw-primary-800')}
                         onClick={() => {
-                          setProductModal(product)
+                          setProductModalProductValue(product)
                         }}
                       >
                         {translation.details}

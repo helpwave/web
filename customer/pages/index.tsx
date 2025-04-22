@@ -7,6 +7,8 @@ import { withOrganization } from '@/hooks/useOrganization'
 import { withAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { tw } from '@twind/core'
+import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 
 type DashboardTranslation = {
   dashboard: string,
@@ -30,12 +32,14 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   const router = useRouter()
 
   useEffect(() => {
-    router.push('/products').catch(console.error)
+   router.push('/products').catch(console.error)
   }, [router])
 
   return (
-    <Page pageTitle={titleWrapper(translation.dashboard)}>
-      <div>This is the {translation.dashboard} page</div>
+    <Page pageTitle={titleWrapper(translation.dashboard)} mainContainerClassName={tw('h-full')}>
+      <div className={tw('flex flex-col h-full items-center justify-center')}>
+        {<LoadingAnimation/>}
+      </div>
     </Page>
   )
 }

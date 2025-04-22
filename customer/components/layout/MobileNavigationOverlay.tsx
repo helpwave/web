@@ -67,6 +67,7 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
           <Link
             href={item.url}
             key={i}
+            target={item.isExternal ?? false ? '_blank' : undefined}
             className={tx(
               'flex flex-row justify-between items-center px-4 py-2 hover:bg-hw-primary-500/40 w-full text-lg font-semibold rounded-md',
               { 'bg-gray-100': router.pathname === item.url, 'bg-white': router.pathname !== item.url }

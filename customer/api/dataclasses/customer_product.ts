@@ -1,5 +1,41 @@
 import type { Product, ProductPlan } from '@/api/dataclasses/product'
 import { ProductHelpers } from '@/api/dataclasses/product'
+import type { Translation } from '@helpwave/common/hooks/useTranslation'
+
+export type CustomerProductStatus =
+  'trialing'
+  | 'active'
+  | 'activation'
+  | 'payment'
+  | 'scheduled'
+  | 'canceled'
+  | 'expired'
+  | 'refunded'
+
+export type CustomerProductStatusTranslation = Record<CustomerProductStatus, string>
+
+export const defaultCustomerProductStatusTranslation : Translation<CustomerProductStatusTranslation> = {
+  en: {
+    trialing: 'Trialing',
+    active: 'Active',
+    activation: 'Activation Required',
+    payment: 'Awaiting Payment',
+    scheduled: 'Scheduled Cancelation',
+    canceled: 'Canceled',
+    expired: 'Expired',
+    refunded: 'Refunded'
+  },
+  de: {
+    trialing: 'Testphase',
+    active: 'Aktiv',
+    activation: 'Aktivierung erforderlich',
+    payment: 'Zahlung ausstehend',
+    scheduled: 'Geplante Kündingung',
+    canceled: 'Kündigung',
+    expired: 'Abgelaufen',
+    refunded: 'Erstattet'
+  }
+}
 
 export interface CustomerProduct {
   /** The identifier of the booking
@@ -13,6 +49,8 @@ export interface CustomerProduct {
   productUUID: string,
   /** The identifier of the plan for the booked product */
   productPlanUUID: string,
+  /** The status of the booking */
+  status: CustomerProductStatus,
   /** The number of seats allocated */
   seats?: number,
   /** The date from which the booking starts */
@@ -44,6 +82,8 @@ export interface ResolvedCustomerProduct {
   uuid: string,
   /** The identifier of the customer that booked the product */
   customerUUID: string,
+  /** The status of the booking */
+  status: CustomerProductStatus,
   /** The number of seats allocated */
   seats?: number,
   /** The date from which the booking starts */
@@ -67,6 +107,7 @@ function fromJson(json: any): CustomerProduct {
     customerUUID: json.customer_uuid,
     productUUID: json.product_uuid,
     productPlanUUID: json.product_plan_uuid,
+    status: json.status,
     seats: json.seats,
     startDate: new Date(json.start_date),
     nextPaymentDate: json.next_payment_date ? new Date(json.next_payment_date) : undefined,
@@ -82,6 +123,7 @@ function fromJsonResolvedCustomerProduct(json: any): ResolvedCustomerProduct {
   return {
     uuid: json.uuid,
     customerUUID: json.customer_uuid,
+    status: json.status,
     seats: json.seats,
     startDate: new Date(json.start_date),
     nextPaymentDate: json.next_payment_date ? new Date(json.next_payment_date) : undefined,
@@ -101,6 +143,7 @@ function toJson(customerProduct: CustomerProduct): any {
     customer_uuid: customerProduct.customerUUID,
     product_uuid: customerProduct.productUUID,
     product_plan_uuid: customerProduct.productPlanUUID,
+    status: customerProduct.status,
     seats: customerProduct.seats,
     start_date: customerProduct.startDate.toISOString(),
     next_payment_date: customerProduct.nextPaymentDate?.toISOString(),

@@ -32,7 +32,7 @@ type ProductsTranslation = {
   cancel: string,
   pay: string,
   total: string,
-  lookAt: string,
+  show: string,
   acceptTerms: (name: string) => string,
   bookingSuccessful: string,
   bookingSuccessfulDesc: string,
@@ -51,7 +51,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     cancel: 'Cancel',
     pay: 'Book for a Fee',
     total: 'Total',
-    lookAt: 'Look at',
+    show: 'Show',
     acceptTerms: (name: string) => `Hereby I accept the terms of use for ${name}.`,
     bookingSuccessful: 'Booking successful',
     bookingSuccessfulDesc: 'You will have access to your product shortly.',
@@ -68,7 +68,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     cancel: 'Abbrechen',
     pay: 'Kostenpflichtig Buchen',
     total: 'Total',
-    lookAt: 'Anschauen',
+    show: 'Anzeigen',
     acceptTerms: (name: string) => `Hiermit akzeptiere ich die Nutzungsbedingungen von ${name}`,
     bookingSuccessful: 'Buchung erfolgreich',
     bookingSuccessfulDesc: 'In kürze erhalten sie zu dem Produkt.',
@@ -113,16 +113,24 @@ const Payment: NextPage = () => {
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
       <Modal id="responseModalSuccess" isOpen={modalState === 'success'} titleText={translation.bookingSuccessful}
-             modalClassName={tw('min-h-[120px] p-8 justify-between')}>
-        <span className={tw('my-6')}>{translation.bookingSuccessfulDesc}</span>
-        <Button onClick={() => router.push('/invoices').catch(console.error)}>{translation.toInvoices}</Button>
+             modalClassName={tw('min-h-[120px] justify-between')}>
+        <span>{translation.bookingSuccessfulDesc}</span>
+        <Button
+          onClick={() => router.push('/invoices').catch(console.error)}
+          className={tw('mt-6')}
+        >
+          {translation.toInvoices}
+        </Button>
       </Modal>
       <Modal id="responseModalFailure" isOpen={modalState === 'failure'} titleText={translation.bookingFailure}
              onCloseClick={() => setModalState('hidden')} onBackgroundClick={() => setModalState('hidden')}
-             modalClassName={tw('min-h-[120px] p-8 justify-between')}
+             modalClassName={tw('min-h-[120px] justify-between gap-y-4 !bg-hw-negative-300')}
       >
-        <span className={tw('inline-block')}>{translation.bookingFailureDesc} <Link href={`mailto:${supportMail}`}
-                                                                                    className={tw('text-hw-primary-500')}>{supportMail}</Link></span>
+        <div className={tw('flex flex-col gap-y-1')}>
+          <span>{translation.bookingFailureDesc}</span>
+          <Link href={`mailto:${supportMail}`}
+                className={tw('text-hw-primary-700')}>{supportMail}</Link>
+        </div>
       </Modal>
 
       <Section titleText={translation.checkout}>
@@ -175,16 +183,18 @@ const Payment: NextPage = () => {
                       }}
                       containerClassName={tw('justify-start')}
                     />
-                    <span className={tw('inline-flex gap-x-2')}>
-                      {translation.acceptTerms(`${contract.key}`)}
+                    <span className={tw('block')}>
+                      {translation.acceptTerms(`${contract.key} `)}
                       <Link
                         href={contract.url} target="_blank"
-                        className={tw('flex flex-row gap-x-0.5 items-center')}
+                        className={tw('inline-flex flex-row items-center')}
                       >
-                        <span>(</span>
-                        {`${translation.lookAt}`}
-                        <ExternalLink size={16}/>
-                        <span>)</span>
+                        (
+                        <span className={tw('inline-flex flex-row gap-x-0.5 items-center')}>
+                          {`${translation.show}`}
+                          <ExternalLink size={16}/>
+                        </span>
+                        )
                       </Link>
                     </span>
                   </div>

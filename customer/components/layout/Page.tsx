@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Menu, Package, Receipt, Settings } from 'lucide-react'
+import { Menu, MessageCircleQuestionIcon, Package, Receipt, Section, Settings } from 'lucide-react'
 import Head from 'next/head'
 import { MobileNavigationOverlay } from '@/components/layout/MobileNavigationOverlay'
 
@@ -39,6 +39,18 @@ const navItems: NavItem[] = [
   { name: { en: 'Products', de: 'Produkte' }, url: '/products', icon: (<Package size={24}/>) },
   { name: { en: 'Invoices', de: 'Rechnungen' }, url: '/invoices', icon: (<Receipt size={24}/>) },
   { name: { en: 'Settings', de: 'Einstellungen' }, url: '/settings', icon: (<Settings size={24}/>) },
+  {
+    name: { en: 'Imprint', de: 'Impressum' },
+    url: 'https://cdn.helpwave.de/imprint.html',
+    isExternal: true,
+    icon: (<Section size={24}/>)
+  },
+  {
+    name: { en: 'Support', de: 'Support' },
+    url: 'mailto:contact@helpwave.de',
+    isExternal: true,
+    icon: (<MessageCircleQuestionIcon size={24}/>)
+  },
 ]
 
 /**

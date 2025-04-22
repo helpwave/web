@@ -39,6 +39,7 @@ type ProductsTranslation = {
   bookingFailure: string,
   bookingFailureDesc: string,
   toInvoices: string,
+  noTermsAndConditions: string,
 } & ProductPlanTypeTranslation
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
@@ -58,6 +59,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     bookingFailure: 'Booking failed',
     bookingFailureDesc: 'Try again or contact our support at:',
     toInvoices: 'View Invoices',
+    noTermsAndConditions: 'No Terms and Conditions required.',
   },
   de: {
     ...defaultProductPlanTypeTranslation.de,
@@ -75,6 +77,7 @@ const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
     bookingFailure: 'Buchung fehlgeschlagen',
     bookingFailureDesc: 'Versuchen sie es erneut oder kontaktieren sie unseren Support unter:',
     toInvoices: 'Zu den Rechnungen',
+    noTermsAndConditions: 'Keine Verträge und Nutzungsbedingungen benötigt',
   }
 }
 
@@ -169,7 +172,7 @@ const Payment: NextPage = () => {
           <h4 className={tw('font-bold text-xl')}>{translation.termsAndConditions}</h4>
           {products && contracts && (
             <form className={tw('flex flex-col gap-y-4')}>
-              {contracts.map((contract) => {
+              {contracts.length > 0 ? contracts.map((contract) => {
                 const isAccepted = acceptedContracts[contract.uuid] ?? false
                 return (
                   <div key={contract.uuid} className={tw('flex flex-row gap-x-2')}>
@@ -199,7 +202,7 @@ const Payment: NextPage = () => {
                     </span>
                   </div>
                 )
-              })}
+              }) : <span className={tw('text-gray-500')}>{translation.noTermsAndConditions}</span>}
               <div className={tw('flex flex-row justify-between')}>
                 <Button
                   className={tw('flex flex-row items-center gap-x-2 w-[200px]')}

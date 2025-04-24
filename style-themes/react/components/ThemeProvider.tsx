@@ -1,4 +1,4 @@
-import type { ReactNode, Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction, PropsWithChildren } from 'react'
 import { createContext, useState, useEffect } from 'react'
 import type { ThemeType } from '../types'
 
@@ -12,8 +12,19 @@ export const ThemeContext = createContext<ThemeContextType>({
   setTheme: (_: SetStateAction<ThemeType>) => {},
 })
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<ThemeType>('light')
+type ThemeProviderProps = {
+  initialTheme?: ThemeType,
+}
+
+export const ThemeProvider = ({ children, initialTheme = 'light' }: PropsWithChildren<ThemeProviderProps> ) => {
+  const [theme, setTheme] = useState<ThemeType>(initialTheme)
+
+  useEffect(() => {
+    if(theme !== initialTheme){
+      console.warn('ThemeProvider initial state changed: Prefer using useTheme\'s setTheme instead')
+      setTheme(initialTheme)
+    }
+  }, [initialTheme])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)

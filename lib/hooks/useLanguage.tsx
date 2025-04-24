@@ -30,12 +30,19 @@ export const useLocale = (overWriteLanguage?: Languages) => {
 }
 
 type ProvideLanguageProps = {
-  defaultLanguage?: Languages,
+  initialLanguage?: Languages,
 }
 
-export const ProvideLanguage = ({ defaultLanguage, children }: PropsWithChildren<ProvideLanguageProps>) => {
-  const [language, setLanguage] = useState<Languages>(defaultLanguage ?? DEFAULT_LANGUAGE)
-  const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', defaultLanguage ?? DEFAULT_LANGUAGE)
+export const ProvideLanguage = ({ initialLanguage, children }: PropsWithChildren<ProvideLanguageProps>) => {
+  const [language, setLanguage] = useState<Languages>(initialLanguage ?? DEFAULT_LANGUAGE)
+  const [storedLanguage, setStoredLanguage] = useLocalStorage<Languages>('language', initialLanguage ?? DEFAULT_LANGUAGE)
+
+  useEffect(() => {
+    if(language !== initialLanguage && initialLanguage){
+      console.warn('LanguageProvider initial state changed: Prefer using useLanguages\'s setLanguage instead')
+      setLanguage(initialLanguage)
+    }
+  }, [initialLanguage])
 
   useEffect(() => {
     setStoredLanguage(language)

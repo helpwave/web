@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   CreateBedRequest,
   DeleteBedRequest,
-  GetBedRequest,
+  GetBedRequest, GetBedsRequest,
   UpdateBedRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/bed_svc_pb'
 import { QueryKeys } from '../query_keys'
@@ -29,6 +29,27 @@ export const useBedQuery = (bedId: string | undefined) => {
       }
 
       return bed
+    },
+  })
+}
+
+export const useBedsQuery = (roomId?: string) => {
+  return useQuery({
+    queryKey: [QueryKeys.beds, roomId ?? 'all'],
+    queryFn: async () => {
+      const req = new GetBedsRequest()
+      if (roomId) {
+        req.setRoomId(roomId)
+      }
+      const res = await APIServices.bed.getBeds(req, getAuthenticatedGrpcMetadata())
+
+      const beds: BedWithRoomId[] = res.getBedsList().map(bed => ({
+        id: bed.getId(),
+        name: bed.getName(),
+        roomId: bed.getRoomId()
+      }))
+
+      return beds
     },
   })
 }

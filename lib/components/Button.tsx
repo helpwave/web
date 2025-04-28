@@ -17,7 +17,7 @@ export type ButtonProps = PropsWithChildren<{
   size?: ButtonSizes,
 }> & ButtonHTMLAttributes<Element>
 
-const sizePaddings: Record<ButtonSizes, string> = {
+export const ButtonSizePaddings: Record<ButtonSizes, string> = {
   small: 'btn-sm',
   medium: 'btn-md',
   large: 'btn-lg'
@@ -82,7 +82,7 @@ const SolidButton = ({
           'text-disabled-text bg-disabled-background': disabled,
           [clsx(colorClasses, 'hover:brightness-90')]: !disabled
         },
-        sizePaddings[size]
+        ButtonSizePaddings[size]
       )}
       {...restProps}
     >
@@ -141,7 +141,7 @@ const OutlineButton = ({
           'text-disabled-text border-disabled-outline)': disabled,
           [clsx(colorClasses, 'hover:brightness-80')]: !disabled,
         },
-        sizePaddings[size]
+        ButtonSizePaddings[size]
       )}
       {...restProps}
     >
@@ -202,7 +202,7 @@ const TextButton = ({
           'text-disabled-text': disabled,
           [clsx(colorClasses, 'hover:brightness-70')]: !disabled,
         },
-        sizePaddings[size]
+        ButtonSizePaddings[size]
       )}
       {...restProps}
     >

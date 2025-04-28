@@ -56,7 +56,7 @@
   --color-surface-variant: #F8F8F8;
   --color-surface-warning: #FBECD9;
   --color-highlight: #3272DF;
-  --color-background: #FFFFFF;
+  --color-background: #EEEEEE;
   --color-on-background: #1A1A1A;
 
   --color-female: #E3798A;
@@ -81,7 +81,6 @@
   --color-icon-primary: #1A1A1A;
   --color-icon-secondary: #666666;
   --color-icon-highlight: #3272DF;
-  --color-background: #EEEEEE;
   --color-divider: #E6E6E6;
   --color-description: #555555;
   --color-outline: #E6E6E6;
@@ -133,4 +132,9 @@
   --color-text-image-secondary-text: #FFFFFF;
   --color-text-image-dark-background: #11243E;
   --color-text-image-dark-text: #FFFFFF;
+}
+
+
+body {
+  @apply bg-background text-on-background;
 }

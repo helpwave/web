@@ -38,8 +38,8 @@ export const Chip = ({
         `flex flex-row gap-x-2 w-fit px-2 py-1`,
         colorMapping,
         {
-          '@(rounded-md)': variant === 'normal',
-          '@(rounded-full text-xs font-bold)': variant === 'fullyRounded',
+          'rounded-md': variant === 'normal',
+          'rounded-full text-xs font-bold': variant === 'fullyRounded',
         },
         className
       )}

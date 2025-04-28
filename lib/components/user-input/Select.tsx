@@ -1,9 +1,9 @@
-import { Menu } from '@headlessui/react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
-import type { ReactNode } from 'react'
+import {Menu} from '@headlessui/react'
+import {ChevronDown, ChevronUp} from 'lucide-react'
+import type {ReactNode} from 'react'
 import clsx from 'clsx'
-import type { LabelProps } from './Label'
-import { Label } from './Label'
+import type {LabelProps} from './Label'
+import {Label} from './Label'
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -37,20 +37,20 @@ export type SelectProps<T> = {
  * The State is managed by the parent
  */
 export const Select = <T, >({
-  value,
-  label,
-  options,
-  onChange,
-  isHidingCurrentValue = true,
-  hintText = '',
-  showDisabledOptions = true,
-  isDisabled,
-  className,
-  textColor = 'text-gray-700',
-  hoverColor = 'hover:bg-gray-100',
-  additionalItems,
-  selectedDisplayOverwrite,
-}: SelectProps<T>) => {
+                              value,
+                              label,
+                              options,
+                              onChange,
+                              isHidingCurrentValue = true,
+                              hintText = '',
+                              showDisabledOptions = true,
+                              isDisabled,
+                              className,
+                              textColor = 'text-gray-700',
+                              hoverColor = 'hover:bg-gray-100',
+                              additionalItems,
+                              selectedDisplayOverwrite,
+                            }: SelectProps<T>) => {
   // Notice: for more complex types this check here might need an additional compare method
   let filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
   if (!showDisabledOptions) {
@@ -63,18 +63,20 @@ export const Select = <T, >({
       ' use selectedDisplayOverwrite to set your selected text or component')
   }
 
+  const borderColor = "border-gray-300"
+
   return (
     <div className={clsx(className)}>
       {label && (
         <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
       )}
       <Menu as="div" className={clsx('relative text-gray-700')}>
-        {({ open }) => (
+        {({open}) => (
           <>
             <Menu.Button
               className={clsx(
                 'inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium bg-white',
-                textColor,
+                textColor, borderColor,
                 {
                   'rounded-b-lg': !open,
                   [hoverColor]: !isDisabled,
@@ -91,7 +93,7 @@ export const Select = <T, >({
             >
               {(additionalItems ?? []).map((item, index) => (
                 <div key={`additionalItems${index}`}
-                     className={clsx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
+                     className={clsx(borderColor, 'px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
                        'border-b-0 rounded-b-lg': filteredOptions.length === 0 && index === (additionalItems?.length ?? 1) - 1,
                      })}
                 >
@@ -103,7 +105,7 @@ export const Select = <T, >({
                   {
                     <div
                       className={clsx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0 cursor-pointer',
-                        option.className, {
+                        option.className, borderColor, {
                           'bg-gray-100': option.value === value,
                           'bg-gray-50': index % 2 === 1,
                           'text-gray-300 cursor-not-allowed': !!option.disabled,

@@ -1,16 +1,16 @@
-import type { ReactNode } from 'react'
-import { useState } from 'react'
-import { Search } from 'lucide-react'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
-import { MultiSearchWithMapping } from '../../util/simpleSearch'
+import type {ReactNode} from 'react'
+import {useState} from 'react'
+import {Search} from 'lucide-react'
+import {useTranslation} from '../../hooks/useTranslation'
+import type {PropsForTranslation} from '../../hooks/useTranslation'
+import type {Languages} from '../../hooks/useLanguage'
+import {MultiSearchWithMapping} from '../../util/simpleSearch'
 import clsx from 'clsx'
-import { Menu, MenuItem } from './Menu'
-import { Input } from './Input'
-import { Checkbox } from './Checkbox'
-import type { LabelProps } from './Label'
-import { Label } from './Label'
+import {Menu, MenuItem} from './Menu'
+import {Input} from './Input'
+import {Checkbox} from './Checkbox'
+import type {LabelProps} from './Label'
+import {Label} from './Label'
 
 type MultiSelectTranslation = {
   select: string,
@@ -65,18 +65,18 @@ export type MultiSelectProps<T> = {
  * A Component for multi selection
  */
 export const MultiSelect = <T, >({
-  overwriteTranslation,
-  options,
-  onChange,
-  search,
-  disabled = false,
-  selectedDisplay,
-  label,
-  hintText,
-  showDisabledOptions = true,
-  className = '',
-  triggerClassName = '',
-}: PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>) => {
+                                   overwriteTranslation,
+                                   options,
+                                   onChange,
+                                   search,
+                                   disabled = false,
+                                   selectedDisplay,
+                                   label,
+                                   hintText,
+                                   showDisabledOptions = true,
+                                   className = '',
+                                   triggerClassName = '',
+                                 }: PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>) => {
   const translation = useTranslation(defaultMultiSelectTranslation, overwriteTranslation)
   const [searchText, setSearchText] = useState<string>(search?.initialSearch ?? '')
   let filteredOptions: MultiSelectOption<T>[] = options
@@ -97,28 +97,31 @@ export const MultiSelect = <T, >({
     hintText ?? translation.select
     : <span>{`${selectedItems.length} ${translation.selected}`}</span>
 
+  const borderColor = "border-gray-300"
+
   return (
     <div className={clsx(className)}>
       {label && (
-        <Label {...label} htmlFor={label.name} className={clsx(' mb-1', label.className)} labelType={label.labelType ?? 'labelBig'}/>
+        <Label {...label} htmlFor={label.name} className={clsx(' mb-1', label.className)}
+               labelType={label.labelType ?? 'labelBig'}/>
       )}
       <Menu<HTMLDivElement>
         alignment="t_"
         trigger={(onClick, ref) => (
           <div ref={ref} onClick={disabled ? undefined : onClick}
-               className={clsx('inline-flex w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium cursor-pointer',
+               className={clsx(borderColor, 'inline-flex w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium cursor-pointer',
                  {
-                   'hover:bg-gray-100': !disabled,
+                   'hover:bg-gray-100 hover:border-primary': !disabled,
                    'bg-gray-100 cursor-not-allowed text-gray-500': disabled
                  },
                  triggerClassName)}
           >
-            {selectedDisplay ? selectedDisplay({ items: options, disabled }) : menuButtonText}
+            {selectedDisplay ? selectedDisplay({items: options, disabled}) : menuButtonText}
           </div>
         )}
         menuClassName={clsx(
-          '!rounded-lg !shadow-lg !max-h-[500px] !min-w-[400px] !max-w-[70vh] !overflow-y-auto !border !border-2',
-          { '!py-0': !enableSearch, '!pb-0': enableSearch }
+          '!rounded-lg !shadow-lg !max-h-[500px] !min-w-[400px] !max-w-[70vh] !overflow-y-auto !border !border-2', borderColor,
+          {'!py-0': !enableSearch, '!pb-0': enableSearch}
         )}
       >
         {enableSearch && (
@@ -128,13 +131,13 @@ export const MultiSelect = <T, >({
           </div>
         )}
         {filteredOptions.map((option, index) => (
-          <MenuItem key={`item${index}`}>
+          <MenuItem key={`item${index}`} className={clsx({
+            'text-gray-300 cursor-not-allowed': !!option.disabled,
+            'cursor-pointer': !option.disabled,
+          })}
+          >
             <div
-              className={clsx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis flex flex-row gap-x-2',
-                option.className, {
-                  'text-gray-300 cursor-not-allowed': !!option.disabled,
-                  'hover:bg-gray-100 cursor-pointer': !option.disabled,
-                })}
+              className={clsx('overflow-hidden whitespace-nowrap text-ellipsis flex flex-row items-center gap-x-2', option.className)}
               onClick={() => {
                 if (!option.disabled) {
                   onChange(options.map(value => value.value === option.value ? ({
@@ -144,7 +147,7 @@ export const MultiSelect = <T, >({
                 }
               }}
             >
-              <Checkbox checked={option.selected} disabled={option.disabled}/>
+              <Checkbox checked={option.selected} disabled={option.disabled} size={"small"}/>
               {option.label}
             </div>
           </MenuItem>

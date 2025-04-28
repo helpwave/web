@@ -65,6 +65,8 @@ export type ProfileProps = HTMLAttributes<HTMLDivElement> & {
   imageClassName?: string,
 }
 
+
+// TODO add colors for dark-mode
 /**
  * A Component for showing a Profile
  */
@@ -94,7 +96,7 @@ export const Profile = ({
         </div>
         <div className={clsx('absolute top-[6px] left-[6px] z-[3]')}>{badge}</div>
         {roleBadge && (
-          <div className={clsx('absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2/3 z-[4]')}>
+          <div className={clsx('absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2/3 z-[4] rounded-md')}>
             <Chip color="dark" className={clsx('font-bold px-3')}>{roleBadge}</Chip>
           </div>
         )}

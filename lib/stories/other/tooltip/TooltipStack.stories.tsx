@@ -16,7 +16,7 @@ const TooltipStackExample = ({ ...props }: TooltipStackExampleProps) => {
         another Tooltip
       </Tooltip>
     )} {...props}>
-      <span className={clsx('bg-hw-primary-400 text-white px-2 py-1 rounded-lg')}>Hover over me</span>
+      <span className={clsx('bg-primary text-white px-2 py-1 rounded-lg')}>Hover over me</span>
     </Tooltip>
   )
 }

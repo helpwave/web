@@ -15,10 +15,10 @@ type Story = StoryObj<typeof meta>;
 
 export const ProfileVariation: Story = {
   render: (args) => {
-    return (<div className={clsx('bg-gray-200 p-4')}><Profile {...args}/></div>)
+    return (<Profile {...args}/>)
   },
   args: {
-    name: 'Helpwave Member',
+    name: 'helpwave Member',
     role: 'Chief Executive Officer',
     roleBadge: 'CEO',
     imageUrl: 'https://cdn.helpwave.de/boringavatar.svg',

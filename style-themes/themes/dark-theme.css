@@ -59,8 +59,8 @@
     --color-surface-variant: #F8F8F8;
     --color-surface-warning: #FBECD9;
     --color-highlight: #3272DF;
-    --color-background: #FFFFFF;
-    --color-on-background: #1A1A1A;
+    --color-background: #1A1A1A;
+    --color-on-background: #EEEEEE;
 
     --color-female: #E3798A;
     --color-female-outline: #F4A3A7;
@@ -84,7 +84,6 @@
     --color-icon-primary: #1A1A1A;
     --color-icon-secondary: #666666;
     --color-icon-highlight: #3272DF;
-    --color-background: #222222;
     --color-description: #999999;
     --color-divider: #E6E6E6;
     --color-outline: #E6E6E6;

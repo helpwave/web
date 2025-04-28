@@ -1,10 +1,24 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
-import type { CheckedState } from '@radix-ui/react-checkbox'
-import { Check, Minus } from 'lucide-react'
+import type {CheckedState} from '@radix-ui/react-checkbox'
+import {Check, Minus} from 'lucide-react'
 import clsx from 'clsx'
-import type { LabelProps } from './Label'
-import { Label } from './Label'
+import type {LabelProps} from './Label'
+import {Label} from './Label'
+
+type CheckBoxSize = 'small' | 'medium' | 'large'
+
+const checkboxSizeMapping: Record<CheckBoxSize, string> = {
+  small: "size-4",
+  medium: "size-6",
+  large: "size-8",
+}
+
+const checkboxIconSizeMapping: Record<CheckBoxSize, string> = {
+  small: "size-3",
+  medium: "size-5",
+  large: "size-7",
+}
 
 type CheckboxProps = {
   /** used for the label's `for` attribute */
@@ -17,7 +31,7 @@ type CheckboxProps = {
   disabled?: boolean,
   onChange?: (checked: boolean) => void,
   onChangeTristate?: (checked: CheckedState) => void,
-  size?: number,
+  size?: CheckBoxSize,
   className?: string,
 }
 
@@ -27,18 +41,17 @@ type CheckboxProps = {
  * The state is managed by the parent
  */
 const ControlledCheckbox = ({
-  id,
-  label,
-  checked,
-  disabled,
-  onChange,
-  onChangeTristate,
-  size = 18,
-  className = ''
-}: CheckboxProps) => {
-  // Make sure there is an appropriate minimum
-  const usedSize = Math.max(size, 14)
-  const innerIconSize = usedSize - 4
+                              id,
+                              label,
+                              checked,
+                              disabled,
+                              onChange,
+                              onChangeTristate,
+                              size = "medium",
+                              className = ''
+                            }: CheckboxProps) => {
+  const usedSizeClass = checkboxSizeMapping[size]
+  const innerIconSize = checkboxIconSizeMapping[size]
 
   return (
     <div className={clsx('flex justify-center items-center space-x-2')}>
@@ -54,15 +67,15 @@ const ControlledCheckbox = ({
         checked={checked}
         disabled={disabled}
         id={id}
-        className={clsx(`w-[${usedSize}px] h-[${usedSize}px] flex items-center border border-2 border-gray-300 rounded outline-none focus:border-hw-primary-500`, {
+        className={clsx(usedSizeClass, `flex items-center border-2 border-gray-300 rounded outline-none focus:border-primary`, {
           'text-gray-400': disabled,
-          'bg-hw-primary-300 border-hw-primary-500 hover:border-hw-primary-700 text-hw-primary-500': checked === true || checked === 'indeterminate',
-          'bg-white hover:border-gray-400 focus:hover:border-hw-primary-700': !checked
+          'bg-primary/30 border-primary  text-primary': checked === true || checked === 'indeterminate',
+          'hover:border-gray-400 focus:hover:border-primary': !checked
         }, className)}
       >
         <CheckboxPrimitive.Indicator>
-          {checked === true && <Check width={innerIconSize} height={innerIconSize}/>}
-          {checked === 'indeterminate' && <Minus width={innerIconSize} height={innerIconSize}/>}
+          {checked === true && <Check className={innerIconSize}/>}
+          {checked === 'indeterminate' && <Minus className={innerIconSize}/>}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
       {label && <Label {...label} htmlFor={id}/>}
@@ -83,11 +96,11 @@ type UncontrolledCheckboxProps = Omit<CheckboxProps, 'value' | 'checked'> & {
  * The state is managed by this component
  */
 const UncontrolledCheckbox = ({
-  onChange,
-  onChangeTristate,
-  defaultValue = false,
-  ...props
-}: UncontrolledCheckboxProps) => {
+                                onChange,
+                                onChangeTristate,
+                                defaultValue = false,
+                                ...props
+                              }: UncontrolledCheckboxProps) => {
   const [checked, setChecked] = useState(defaultValue)
 
   const handleChange = (checked: CheckedState) => {

@@ -4,21 +4,30 @@ import { ModalRegister } from '../components/modals/ModalRegister'
 import { modalRootName } from '../components/modals/Modal'
 import { ThemeProvider } from '@helpwave/style-themes/react/components/ThemeProvider'
 import '../te.css'
+import {ThemeType} from "@helpwave/style-themes/react/types";
+
+const colorToHex: Record<ThemeType, string> = {
+  dark: "#222",
+  light: "#EEE",
+}
+
+const colorToHexReverse: Record<string, ThemeType> = {
+  "#222": "dark",
+  "#EEE": "light",
+  "transparent": "light",
+}
 
 const preview: Preview = {
-  globalTypes: {
-    theme: {
-      name: 'Theme',
-      description: 'Global theme for components',
-      defaultValue: 'light',
-      toolbar: {
-        icon: 'circlehollow',
-        items: [
-          { value: 'light', title: 'Light' },
-          { value: 'dark', title: 'Dark' },
-        ],
-      },
+  parameters: {
+    backgrounds: {
+      values: [
+        { name: 'Dark', value: colorToHex.dark },
+        { name: 'Light', value: colorToHex.light },
+      ],
+      default: 'Light',
     },
+  },
+  globalTypes: {
     language: {
       name: 'Language',
       description: 'Component Language',
@@ -32,11 +41,10 @@ const preview: Preview = {
       },
     },
   },
-
   decorators: [
     (Story, context) => {
       const App = Story
-      const theme = context.globals.theme
+      const theme = colorToHexReverse[context.globals.backgrounds?.value ?? colorToHex.light]
       const language = context.globals.language
 
       return (

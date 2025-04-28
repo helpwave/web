@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   args: {
-    color: '#8070A9',
+    color: 'currentColor',
     animate: 'loading',
     width: 128,
     height: 128,

@@ -1,8 +1,9 @@
 export type VerticalDividerProps = {
   width?: number,
   height?: number,
-  dashDistance?: number,
-  dashWidth?: number,
+  strokeWidth?: number,
+  dashGap?: number,
+  dashLength?: number,
 }
 
 /**
@@ -11,13 +12,12 @@ export type VerticalDividerProps = {
 export const VerticalDivider = ({
                                   width = 1,
                                   height = 100,
-                                  dashDistance = 4,
-                                  dashWidth = 0.5,
+                                  strokeWidth = 4,
+                                  dashGap = 4,
+                                  dashLength = 4,
                                 }: VerticalDividerProps) => {
-  const colorString = '000000'
-
   return (
-    <div style={{ width: width + 'px', height: height + 'px' }}>
+    <div style={{width: width + 'px', height: height + 'px'}}>
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} fill="none"
            xmlns="http://www.w3.org/2000/svg">
         <line
@@ -27,8 +27,8 @@ export const VerticalDivider = ({
           x2={width / 2}
           y2="0"
           stroke="url(#paint_linear)"
-          strokeWidth="2"
-          strokeDasharray={`${dashWidth} ${dashDistance}`}
+          strokeWidth={strokeWidth}
+          strokeDasharray={`${dashLength} ${dashLength + dashGap}`}
           strokeLinecap="round"
         />
         <defs>
@@ -40,9 +40,9 @@ export const VerticalDivider = ({
             y2={height}
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor={colorString} stopOpacity="0"/>
-            <stop offset="0.5" stopColor={colorString}/>
-            <stop offset="1" stopColor={colorString} stopOpacity="0"/>
+            <stop stopOpacity="0" stopColor={"currentColor"}/>
+            <stop offset="0.5" stopColor={"currentColor"}/>
+            <stop offset="1" stopColor={"currentColor"} stopOpacity="0"/>
           </linearGradient>
         </defs>
       </svg>

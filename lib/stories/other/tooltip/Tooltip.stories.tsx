@@ -7,7 +7,7 @@ type TooltipExampleProps = Omit<TooltipProps, 'children' | 'tooltip'> & { toolti
 
 const TooltipExample = ({ tooltipText, ...props } : TooltipExampleProps) => {
   return (
-    <Tooltip tooltip={tooltipText} {...props}><span className={clsx('bg-hw-primary-400 text-white px-2 py-1 rounded-lg')}>Hover over me</span></Tooltip>
+    <Tooltip tooltip={tooltipText} {...props}><span className={clsx('bg-primary text-white px-2 py-1 rounded-lg')}>Hover over me</span></Tooltip>
   )
 }
 

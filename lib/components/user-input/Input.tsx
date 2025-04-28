@@ -37,6 +37,7 @@ export type InputProps = {
   containerClassName?: string,
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
+// TODO do add colors to twind config
 /**
  * A Component for inputting text or other information
  *
@@ -75,7 +76,7 @@ const ControlledInput = ({
         value={value}
         id={id}
         type={type}
-        className={clsx('block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500', className)}
+        className={clsx('block bg-surface px-2 py-1 rounded-md w-full border-2 border-gray-200 focus:outline-none focus:border-primary focus:ring-primary', className)}
         onBlur={event => {
           if (onBlur) {
             onBlur(event)

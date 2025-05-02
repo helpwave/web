@@ -1,22 +1,26 @@
 import type { HTMLAttributes } from 'react'
 import clsx from 'clsx'
 
-export type CircleProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
+export type CircleProps = Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'color'> & {
   radius: number,
-  color?: string, // Tailwind color
   className?: string,
 }
 
 export const Circle = ({
   radius = 20,
-  color = 'primary-400',
-  className = '',
+  className = 'bg-primary',
+  style,
   ...restProps
 }: CircleProps) => {
   const size = radius * 2
   return (
     <div
-      className={clsx(`@(w-[${size}px] h-[${size}px] rounded-full bg-${color})`, className)}
+      className={clsx(`rounded-full`, className)}
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        ...style,
+      }}
       {...restProps}
     />
   )

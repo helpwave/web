@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { noop } from '../util/noop'
 import { Circle } from './Circle'
@@ -6,22 +7,22 @@ import clsx from 'clsx'
 export type RingProps = {
   innerSize: number, // the size of the entire circle including the circleWidth
   width: number,
-  color?: string, // Tailwind color
   className?: string,
 };
 
 export const Ring = ({
-  innerSize = 20,
-  width = 7,
-  color = 'hw-primary-800',
-  className = '',
-}: RingProps) => {
+                       innerSize = 20,
+                       width = 7,
+                       className = 'outline-primary',
+                     }: RingProps) => {
   return (
     <div
-      className={clsx(
-        `w-[${innerSize}px] h-[${innerSize}px] bg-transparent rounded-full outline outline-[${width}px] outline-${color}`,
-        className
-      )}
+      className={clsx(`bg-transparent rounded-full outline`, className)}
+      style={{
+        width: `${innerSize}px`,
+        height: `${innerSize}px`,
+        outlineWidth: `${width}px`,
+      }}
     />
   )
 }
@@ -30,17 +31,18 @@ export type AnimatedRingProps = RingProps & {
   fillAnimationDuration?: number, // in seconds, 0 means no animation
   repeating?: boolean,
   onAnimationFinished?: () => void,
+  style?: CSSProperties,
 };
 
 export const AnimatedRing = ({
-  innerSize,
-  width,
-  color,
-  className,
-  fillAnimationDuration = 3,
-  repeating = false,
-  onAnimationFinished = noop,
-}: AnimatedRingProps) => {
+                               innerSize,
+                               width,
+                               className,
+                               fillAnimationDuration = 3,
+                               repeating = false,
+                               onAnimationFinished = noop,
+                               style,
+                             }: AnimatedRingProps) => {
   const [currentWidth, setCurrentWidth] = useState(0)
   const milliseconds = 1000 * fillAnimationDuration
 
@@ -69,16 +71,16 @@ export const AnimatedRing = ({
 
   return (
     <div
-      className={clsx(
-        `w-[${innerSize + 2 * width}px] h-[${
-          innerSize + 2 * width
-        }px] flex flex-row items-center justify-center`
-      )}
+      className={clsx(`flex flex-row items-center justify-center`)}
+      style={{
+        width: `${innerSize + 2 * width}px`,
+        height: `${innerSize + 2 * width}px`,
+        ...style,
+      }}
     >
       <Ring
         innerSize={innerSize}
         width={currentWidth}
-        color={color}
         className={className}
       />
     </div>
@@ -88,18 +90,19 @@ export const AnimatedRing = ({
 export type RingWaveProps = Omit<AnimatedRingProps, 'innerSize'> & {
   startInnerSize: number,
   endInnerSize: number,
+  style?: CSSProperties,
 };
 
 export const RingWave = ({
-  startInnerSize = 20,
-  endInnerSize = 30,
-  width,
-  color,
-  className,
-  fillAnimationDuration = 3,
-  repeating = false,
-  onAnimationFinished = noop,
-}: RingWaveProps) => {
+                           startInnerSize = 20,
+                           endInnerSize = 30,
+                           width,
+                           className,
+                           fillAnimationDuration = 3,
+                           repeating = false,
+                           onAnimationFinished = noop,
+                           style
+                         }: RingWaveProps) => {
   const [currentInnerSize, setCurrentInnerSize] = useState(startInnerSize)
   const distance = endInnerSize - startInnerSize
   const milliseconds = 1000 * fillAnimationDuration
@@ -132,16 +135,16 @@ export const RingWave = ({
 
   return (
     <div
-      className={clsx(
-        `w-[${endInnerSize + 2 * width}px] h-[${
-          endInnerSize + 2 * width
-        }px] flex flex-row items-center justify-center`
-      )}
+      className={clsx(`flex flex-row items-center justify-center`)}
+      style={{
+        width: `${endInnerSize + 2 * width}px`,
+        height: `${endInnerSize + 2 * width}px`,
+        ...style
+      }}
     >
       <Ring
         innerSize={currentInnerSize}
         width={width}
-        color={color}
         className={className}
       />
     </div>
@@ -149,9 +152,9 @@ export const RingWave = ({
 }
 
 export type RadialRingsProps = {
-  color1?: string,
-  color2?: string,
-  color3?: string,
+  circle1ClassName?: string,
+  circle2ClassName?: string,
+  circle3ClassName?: string,
   waveWidth?: number,
   waveBaseColor?: string,
   sizeCircle1?: number,
@@ -159,45 +162,53 @@ export type RadialRingsProps = {
   sizeCircle3?: number,
 };
 
+// TODO use fixed colors here to avoid artifacts
 export const RadialRings = ({
-  color1 = 'hw-primary-700',
-  color2 = 'hw-primary-500',
-  color3 = 'hw-primary-400',
-  waveWidth = 10,
-  waveBaseColor = 'white',
-  sizeCircle1 = 300,
-  sizeCircle2 = 200,
-  sizeCircle3 = 300
-}: RadialRingsProps) => {
+                              circle1ClassName = 'bg-primary/90 outline-primary/90',
+                              circle2ClassName = 'bg-primary/60 outline-primary/60',
+                              circle3ClassName = 'bg-primary/40 outline-primary/40',
+                              waveWidth = 10,
+                              waveBaseColor = 'outline-white/20',
+                              sizeCircle1 = 100,
+                              sizeCircle2 = 200,
+                              sizeCircle3 = 300
+                            }: RadialRingsProps) => {
   const [currentRing, setCurrentRing] = useState(0)
   const size = sizeCircle3
 
   return (
-    <div className={clsx(`relative w-[${sizeCircle3}px] h-[${sizeCircle3}px]`)}>
+    <div
+      className={clsx(`relative`)}
+      style={{
+        width: `${sizeCircle3}px`,
+        height: `${sizeCircle3}px`,
+      }}
+    >
       <Circle
         radius={sizeCircle1 / 2}
-        color={color1}
-        className={clsx(
-          `absolute z-[10] left-[${size / 2}px] top-[${
-            size / 2
-          }px] -translate-y-1/2 -translate-x-1/2`
-        )}
+        className={clsx(circle1ClassName, `absolute z-[10] -translate-y-1/2 -translate-x-1/2`)}
+        style={{
+          left: `${size / 2}px`,
+          top: `${size / 2}px`
+        }}
       />
       {currentRing === 0 ? (
         <AnimatedRing
           innerSize={sizeCircle1}
           width={(sizeCircle2 - sizeCircle1) / 2}
-          color={color2}
           onAnimationFinished={() =>
             currentRing === 0 ? setCurrentRing(1) : null
           }
           repeating={true}
-          className={clsx(
-            { 'opacity-5': currentRing !== 0 },
-            `absolute z-[9] left-[${size / 2}px] top-[${
-              size / 2
-            }px] -translate-y-1/2 -translate-x-1/2`
-          )}
+          className={clsx(circle2ClassName,
+            { 'opacity-5': currentRing !== 0 })}
+          style={{
+            left: `${size / 2}px`,
+            top: `${size / 2}px`,
+            position: 'absolute',
+            translate: `-50% -50%`,
+            zIndex: 9
+          }}
         />
       ) : null}
       {currentRing === 2 ? (
@@ -205,39 +216,43 @@ export const RadialRings = ({
           startInnerSize={sizeCircle1 - waveWidth}
           endInnerSize={sizeCircle2}
           width={waveWidth}
-          color={waveBaseColor}
           repeating={true}
-          className={clsx(
-            `absolute z-[9] left-[${size / 2}px] top-[${
-              size / 2
-            }px] -translate-y-1/2 -translate-x-1/2 opacity-5`
-          )}
+          className={clsx(waveBaseColor, `opacity-5`)}
+          style={{
+            left: `${size / 2}px`,
+            top: `${size / 2}px`,
+            position: 'absolute',
+            translate: `-50% -50%`,
+            zIndex: 9,
+          }}
         />
       ) : null}
       <Circle
         radius={sizeCircle2 / 2}
-        color={color2}
-        className={clsx(
+        className={clsx(circle2ClassName,
           { 'opacity-20': currentRing < 1 },
-          `absolute z-[8] left-[${size / 2}px] top-[${
-            size / 2
-          }px] -translate-y-1/2 -translate-x-1/2`
-        )}
+          `absolute z-[8] -translate-y-1/2 -translate-x-1/2`)}
+        style={{
+          left: `${size / 2}px`,
+          top: `${size / 2}px`
+        }}
       />
       {currentRing === 1 ? (
         <AnimatedRing
           innerSize={sizeCircle2 - 1} // potentially harmful
           width={(sizeCircle3 - sizeCircle2) / 2}
-          color={color3}
           onAnimationFinished={() =>
             currentRing === 1 ? setCurrentRing(2) : null
           }
           repeating={true}
-          className={clsx(
-            `absolute z-[7] left-[${size / 2}px] top-[${
-              size / 2
-            }px] -translate-y-1/2 -translate-x-1/2`
-          )}
+          className={clsx(circle3ClassName)}
+          style={{
+            left: `${size / 2}px`,
+            top: `${size / 2}px`,
+            position: 'absolute',
+            translate: `-50% -50%`,
+            zIndex: 7,
+          }}
         />
       ) : null}
       {currentRing === 2 ? (
@@ -245,24 +260,26 @@ export const RadialRings = ({
           startInnerSize={sizeCircle2}
           endInnerSize={sizeCircle3 - waveWidth}
           width={waveWidth}
-          color={waveBaseColor}
           repeating={true}
-          className={clsx(
-            `absolute z-[7] left-[${size / 2}px] top-[${
-              size / 2
-            }px] -translate-y-1/2 -translate-x-1/2 opacity-5`
-          )}
+          className={clsx(waveBaseColor, `opacity-5`)}
+          style={{
+            left: `${size / 2}px`,
+            top: `${size / 2}px`,
+            position: 'absolute',
+            translate: `-50% -50%`,
+            zIndex: 7,
+          }}
         />
       ) : null}
       <Circle
         radius={sizeCircle3 / 2}
-        color={color3}
-        className={clsx(
+        className={clsx(circle3ClassName,
           { 'opacity-20': currentRing < 2 },
-          `absolute z-[6] left-[${size / 2}px] top-[${
-            size / 2
-          }px] -translate-y-1/2 -translate-x-1/2`
-        )}
+          `absolute z-[6] -translate-y-1/2 -translate-x-1/2`)}
+        style={{
+          left: `${size / 2}px`,
+          top: `${size / 2}px`
+        }}
       />
     </div>
   )

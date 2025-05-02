@@ -134,7 +134,6 @@
   --color-text-image-dark-text: #FFFFFF;
 }
 
-
-body {
+body, html {
   @apply bg-background text-on-background;
 }

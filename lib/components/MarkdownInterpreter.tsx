@@ -51,7 +51,7 @@ export const ASTNodeInterpreter = ({
       )
     case 'primary':
       return (
-        <span className={clsx('text-hw-primary-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-primary')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
@@ -65,7 +65,7 @@ export const ASTNodeInterpreter = ({
       )
     case 'warn':
       return (
-        <span className={clsx('text-hw-warn-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-warning')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
@@ -79,7 +79,7 @@ export const ASTNodeInterpreter = ({
       )
     case 'negative':
       return (
-        <span className={clsx('text-hw-negative-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-negative')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>

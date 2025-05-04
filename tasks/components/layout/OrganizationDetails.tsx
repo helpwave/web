@@ -204,7 +204,7 @@ export const OrganizationDetail = ({
           <span className={clsx('textstyle-description')}>{translation.dangerZoneText}</span>
           <button
             onClick={() => setIsShowingConfirmDialog(true)}
-            className={clsx('text-hw-negative-400 font-bold text-left')}
+            className={clsx('text-negative font-bold text-left')}
           >
             {translation.deleteOrganization}
           </button>

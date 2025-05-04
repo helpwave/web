@@ -80,7 +80,7 @@ export const PropertyList = ({
       <div className={clsx('flex flex-col gap-y-2')}>
         <Tile
           title={{ value: translation.properties, className: 'textstyle-title-lg' }}
-          prefix={<Tag className={clsx('text-hw-primary-400')} size={20}/>}
+          prefix={<Tag className={clsx('text-primary')} size={20}/>}
           className={clsx('!gap-x-2')}
         />
         {properties && properties.map((property, index) => (
@@ -97,7 +97,7 @@ export const PropertyList = ({
           trigger={(onClick, ref) => (
             <div
               ref={ref}
-              className={clsx('flex flex-row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-hw-primary-400 rounded-2xl cursor-pointer')}
+              className={clsx('flex flex-row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-primary rounded-2xl cursor-pointer')}
               onClick={onClick}
             >
               <Plus size={20}/>

@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import { Card, type CardProps } from '@helpwave/common/components/Card'
 import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator'
 import { LockIcon } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -21,19 +20,21 @@ const defaultTaskCardTranslations: Record<Languages, TaskCardTranslation> = {
   }
 }
 
-export type TaskCardProps = CardProps & {
+export type TaskCardProps = {
   task: TaskDTO,
+  onClick: () => void,
+  isSelected: boolean,
 }
 
 /**
  * A Card displaying the information about
  */
 export const TaskCard = ({
-  overwriteTranslation,
-  task,
-  isSelected = false,
-  onTileClick = () => undefined
-}: PropsForTranslation<TaskCardTranslation, TaskCardProps>) => {
+                           overwriteTranslation,
+                           task,
+                           isSelected = false,
+                           onClick = () => undefined
+                         }: PropsForTranslation<TaskCardTranslation, TaskCardProps>) => {
   const translation = useTranslation(defaultTaskCardTranslations, overwriteTranslation)
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== 'done'
@@ -41,31 +42,30 @@ export const TaskCard = ({
   const { data: assignee } = useUserQuery(task.assignee)
 
   return (
-    <Card
-      onTileClick={onTileClick}
-      isSelected={isSelected}
-      className={clsx('bg-white !p-2', {
-        '!border-hw-negative-400 !hover:border-hw-negative-600': isOverDue,
-        '!border-hw-negative-600': isOverDue && isSelected,
+    <div
+      onClick={onClick}
+      className={clsx('card-md row w-full justify-between !p-2', {
+        'border-negative hover:brightness-75': isOverDue,
+        'border-negative': isOverDue && isSelected,
+        'border-primary': isSelected,
       })}
     >
-      <div className={clsx('flex flex-row justify-between w-full gap-x-2')}>
-        <div className={clsx('flex flex-col overflow-hidden')}>
-          <div className={clsx('flex flex-row overflow-hidden items-center gap-x-1')}>
-            {!task.isPublicVisible && <div className={clsx('w-[12px]')}><LockIcon size={12}/></div>}
-            <span className={clsx('textstyle-title-sm truncate')}>{task.name}</span>
-          </div>
-          <span className={clsx('overflow-hidden w-full block text-gray-500 text-ellipsis whitespace-nowrap')}>
+      <div className={clsx('flex flex-col overflow-hidden')}>
+        <div className={clsx('flex flex-row overflow-hidden items-center gap-x-1')}>
+          {!task.isPublicVisible && <div className={clsx('w-[12px]')}><LockIcon size={12}/></div>}
+          <span className={clsx('textstyle-title-sm truncate')}>{task.name}</span>
+        </div>
+        <span className={clsx('overflow-hidden w-full block text-gray-500 text-ellipsis whitespace-nowrap')}>
             {task.notes}
           </span>
-        </div>
-        <div className={clsx('flex flex-col gap-y-1 w-[24px]')}>
-          {assignee && assignee.avatarUrl && <Avatar avatarUrl={assignee.avatarUrl} alt={translation.assigned} size="tiny"/>}
-          {task.subtasks.length > 0 && (
-            <ProgressIndicator progress={progress}/>
-          )}
-        </div>
       </div>
-    </Card>
+      <div className={clsx('flex flex-col gap-y-1 w-[24px]')}>
+        {assignee && assignee.avatarUrl &&
+          <Avatar avatarUrl={assignee.avatarUrl} alt={translation.assigned} size="tiny"/>}
+        {task.subtasks.length > 0 && (
+          <ProgressIndicator progress={progress}/>
+        )}
+      </div>
+    </div>
   )
 }

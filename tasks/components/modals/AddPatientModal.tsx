@@ -94,7 +94,7 @@ export const AddPatientModal = ({
           onChange={(roomBedDropdownIds) => setDropdownId(roomBedDropdownIds)}
           isClearable={true}
         />
-        <span className={clsx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</span>
+        <span className={clsx({ 'text-warning': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</span>
       </div>
     </ConfirmDialog>
   )

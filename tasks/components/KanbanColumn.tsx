@@ -50,7 +50,7 @@ export const KanbanColumn = ({
 
   return (
     <div
-      className={clsx({ 'border-hw-primary-400': isDraggedOver, 'border-transparent': !isDraggedOver },
+      className={clsx({ 'border-primary': isDraggedOver, 'border-transparent': !isDraggedOver },
         'flex flex-col gap-y-4 border-2 border-dashed rounded-lg p-2')}
     >
       <PillLabel count={tasks.length} taskStatus={type}/>
@@ -65,7 +65,7 @@ export const KanbanColumn = ({
               <TaskCard
                 task={task}
                 isSelected={draggedTileId === task.id}
-                onTileClick={() => onEditTask(task)}
+                onClick={() => onEditTask(task)}
               />
             </Sortable>
           ))}

@@ -18,12 +18,12 @@ export const SectionBase = ({
   className,
 }: SectionBaseProps) => {
   return (
-    <div className={clsx('flex flex-col items-center w-full', {
-      'bg-hw-grayscale-0': backgroundColor === 'white',
-      'bg-hw-grayscale-50': backgroundColor === 'gray',
-      'bg-hw-grayscale-1000': backgroundColor === 'black',
-      'bg-hw-secondary-800': backgroundColor === 'darkSecondary',
-      'bg-hw-primary-900': backgroundColor === 'darkPrimary',
+    <div className={clsx('col items-center w-full', {
+      'bg-white': backgroundColor === 'white',
+      'bg-gray-50': backgroundColor === 'gray',
+      'bg-black text-white': backgroundColor === 'black',
+      'bg-[#11243e] text-white': backgroundColor === 'darkSecondary', // TODO make this a variable
+      'bg-primary text-on-primary': backgroundColor === 'darkPrimary',
       'desktop:px-24 tablet:px-12 mobile:px-6 py-16': useDefaultStyle
     }, outerClassName)}>
       <div

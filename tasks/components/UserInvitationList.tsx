@@ -90,14 +90,14 @@ export const UserInvitationList = ({
               </div>,
               <SolidButton
                 key="accept"
-                color="hw-positive"
+                color="positive"
                 onClick={() => acceptInvite(invite.id)}
               >
                 {translation.accept}
               </SolidButton>,
               <SolidButton
                 key="decline"
-                color="hw-negative"
+                color="negative"
                 onClick={() => declineInviteMutation.mutate(invite.id)}
               >
                 {translation.decline}

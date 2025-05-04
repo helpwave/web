@@ -83,8 +83,8 @@ export const StepperBar = ({
               key={index}
               onClick={() => seen && update(index)}
               className={clsx('rounded-full w-4 h-4', {
-                'bg-hw-primary-400 hover:bg-hw-primary-600': index === step && seen,
-                'bg-hw-primary-200 hover:bg-hw-primary-400': index !== step && seen,
+                'bg-primary hover:brightness-75': index === step && seen,
+                'bg-primary/40 hover:bg-primary': index !== step && seen,
                 'bg-gray-200 outline-transparent': !seen,
               },
               {

@@ -39,8 +39,8 @@ export const InputGroup = ({
           'cursor-not-allowed': disabled,
         },
         {
-          'text-hw-primary-400': !disabled,
-          'text-hw-primary-200': disabled
+          'text-primary': !disabled,
+          'text-primary/40': disabled
         })}
         onClick={() => {
           if (!isExpandable) {
@@ -53,8 +53,8 @@ export const InputGroup = ({
       >
         <span className={clsx('textstyle-title-md')}>{title}</span>
         <div className={clsx('rounded-full text-white w-6 h-6', {
-          'bg-hw-primary-400': (isExpandable && !disabled) || expanded,
-          'bg-hw-primary-200': disabled,
+          'bg-primary': (isExpandable && !disabled) || expanded,
+          'bg-primary/40': disabled,
         })}>
           {isExpanded
             ? <ChevronUp className={clsx('-translate-y-[1px]')} size={24}/>

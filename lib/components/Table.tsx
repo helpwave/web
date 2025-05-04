@@ -270,7 +270,7 @@ export const Table = <T, >({
   }, [data, currentPage])
 
   return (
-    <div className={clsx('@(flex flex-col gap-y-4 overflow-hidden)', className)}>
+    <div className={clsx('flex flex-col gap-y-4 overflow-hidden', className)}>
       <div>
         <Scrollbars autoHeight autoHeightMin={scrollbarsAutoHeightMin}>
           <table ref={tableRef} className="w-full mb-[12px]">

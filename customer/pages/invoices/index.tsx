@@ -149,8 +149,8 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                   <span
                     key={dataObject.uuid + '-payment-status'}
                     className={clsx({
-                      'text-hw-negative-400': dataObject.status === 'notPayed',
-                      'text-hw-warn-400': dataObject.status === 'pending' || dataObject.status === 'overdue',
+                      'text-negative': dataObject.status === 'notPayed',
+                      'text-warning': dataObject.status === 'pending' || dataObject.status === 'overdue',
                       'text-hw-positive-400': dataObject.status === 'payed'
                     })}
                   >

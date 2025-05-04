@@ -33,7 +33,7 @@ export const DescriptionWithAction = ({
   let leading
   switch (leadingIcon) {
   case 'label':
-    leading = <Tag className={clsx('text-hw-primary-400')} size={16}/>
+    leading = <Tag className={clsx('text-primary')} size={16}/>
     break
   default:
     leading = null

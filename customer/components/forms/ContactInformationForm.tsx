@@ -67,7 +67,7 @@ type ContactInformationFormProps = {
 export const ContactInformationForm = ({ value, onChange, onSubmit, className }: ContactInformationFormProps) => {
   const translation = useTranslation(defaultContactInformationTranslation)
   return (
-    <form className={clsx('@(flex flex-col gap-y-1 max-w-[700px])', className)}>
+    <form className={clsx('flex flex-col gap-y-1 max-w-[700px]', className)}>
       <h3 className={clsx('font-space font-bold text-2xl')}>{translation.contactInfo}</h3>
       <Input
         value={value.name}

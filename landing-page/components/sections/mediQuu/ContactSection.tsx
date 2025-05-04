@@ -150,7 +150,7 @@ export const ContactSection = ({
           placeholder={translation.message}
           onChange={message => setContactForm(prevState => ({ ...prevState, message, hasSend: false, hasError: false }))}
         />
-        {contactForm.hasError && (<span className={clsx('text-hw-negative-400 font-semibold my-1')}>{translation.error}</span>)}
+        {contactForm.hasError && (<span className={clsx('text-negative font-semibold my-1')}>{translation.error}</span>)}
         <LoadingButton
           color="hw-secondary"
           onClick={() => {

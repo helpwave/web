@@ -57,7 +57,7 @@ export const Page = ({
 
   const mainContent = (
     <div className={clsx('flex flex-col items-center justify-between w-full h-full overflow-y-scroll')}>
-      <main className={clsx('@(flex flex-col max-w-[1200px] gap-y-6)', mainContainerClassName)}>
+      <main className={clsx('flex flex-col max-w-[1200px] gap-y-6', mainContainerClassName)}>
         {children}
       </main>
       {footer}

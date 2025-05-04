@@ -38,7 +38,7 @@ export const ProgressIndicator = ({ progress, strokeWidth = 5, size = 'medium', 
   return (
     <svg className={clsx(`h-[${currentSize}px] w-[${currentSize}px] transform rotate-[${rotation}deg]`)}>
       <circle cx={center} cy={center} r={radius} fill="transparent" strokeWidth={strokeWidth}
-        className={clsx('stroke-hw-primary-400')}
+        className={clsx('stroke-primary')}
       />
       <circle cx={center} cy={center} r={radius} fill="transparent" strokeWidth={strokeWidth}
         strokeDasharray={arcLength} strokeDashoffset={arcOffset} className={clsx('stroke-gray-300')}

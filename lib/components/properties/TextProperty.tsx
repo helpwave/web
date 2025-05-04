@@ -53,7 +53,7 @@ export const TextProperty = ({
           className={clsx('flex flex-row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
         >
           <Textarea
-            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-hw-warn-500': softRequired && !hasValue })}
+            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-warning': softRequired && !hasValue })}
             rows={5}
             defaultStyle={false}
             value={value ?? ''}

@@ -42,7 +42,7 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
 
   return (
     <div
-      className={clsx('@(flex flex-col bg-gray-200 h-full w-full top-0 absolute px-8 py-6 z-[100] not-mobile:hidden justify-between)')}>
+      className={clsx('col bg-gray-200 h-full w-full top-0 absolute px-8 py-6 z-[100] not-mobile:hidden justify-between')}>
       <LanguageModal
         id="language-modal-mobile"
         isOpen={isLanguageModalOpen}
@@ -51,7 +51,7 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
         onDone={() => setIsLanguageModalOpen(false)}
         containerClassName={clsx('z-[102]')}
       />
-      <nav className={clsx('@(flex flex-col gap-y-4 items-center)', className)}>
+      <nav className={clsx('flex flex-col gap-y-4 items-center', className)}>
         <div className={clsx('flex flex-row w-full items-center justify-between mb-2')}>
           <h2 className={clsx('font-bold font-space text-2xl')}>{translation.navigation}</h2>
           <button className={clsx('rounded-md bg-gray-300 hover:bg-gray-400 p-1')} onClick={onCloseClick}>
@@ -63,8 +63,8 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
             href={item.url}
             key={i}
             className={clsx(
-              'flex flex-row justify-between items-center px-4 py-2 hover:bg-hw-primary-500/40 w-full text-lg font-semibold rounded-md',
-              { 'bg-hw-primary-500/30': router.pathname === item.url, 'bg-white': router.pathname !== item.url }
+              'flex flex-row justify-between items-center px-4 py-2 hover:bg-primary/40 w-full text-lg font-semibold rounded-md',
+              { 'bg-primary/30': router.pathname === item.url, 'bg-white': router.pathname !== item.url }
             )}
           >
             <div className={clsx('flex flex-row gap-x-2 items-center')}>
@@ -77,13 +77,13 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
       </nav>
       <div className={clsx('flex flex-col gap-y-4 items-center w-full')}>
         <button
-          className={clsx('flex flex-row w-full justify-between items-center px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40 font-semibold rounded-md')}
+          className={clsx('flex flex-row w-full justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40 font-semibold rounded-md')}
           onClick={() => setIsLanguageModalOpen(true)}
         >
           {languagesLocalNames[language]}
           <ArrowRightLeft size={24}/>
         </button>
-        <button className={clsx('flex flex-row w-full gap-x-2 items-center p-4 bg-gray-50 hover:bg-hw-primary-500/40 font-semibold rounded-md')}>
+        <button className={clsx('row w-full items-center p-4 bg-gray-50 hover:bg-primary/40 font-semibold rounded-md')}>
           <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
           {'Max Mustermann'}
         </button>

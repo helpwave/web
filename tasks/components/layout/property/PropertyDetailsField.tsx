@@ -64,7 +64,7 @@ export const PropertySelectOptionsUpdater = ({
       <div className={clsx('flex flex-row justify-between items-center')}>
         <span className={clsx('textstyle-label-md')}>{translation.values}</span>
         <Plus
-          className={clsx('text-white bg-hw-primary-400 hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
+          className={clsx('text-white bg-primary hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
           size={20}
           onClick={() => {
             onChange({ ...data }, { ...update, create: update.create + 1 })
@@ -97,7 +97,7 @@ export const PropertySelectOptionsUpdater = ({
                 }}
               />
               <X
-                className={clsx('text-hw-negative-400 hover:text-hw-negative-600')}
+                className={clsx('text-negative hover:text-hw-negative-600')}
                 size={20}
                 onClick={() => {
                   const newList = data.options.filter((_, index1) => index1 !== index)

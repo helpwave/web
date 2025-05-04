@@ -121,7 +121,7 @@ export const Modal = ({
   const isSecondLast = register.length < 2 || register[register.length - 2] === id
 
   return ReactDOM.createPortal(
-    <div className={clsx('@(fixed inset-0 overflow-y-auto z-[99])', containerClassName)} id={id}>
+    <div className={clsx('fixed inset-0 overflow-y-auto z-[99]', containerClassName)} id={id}>
       {isLast && (
         <div
           className={clsx('fixed inset-0 h-screen w-screen', backgroundClassName, {

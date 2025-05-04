@@ -210,7 +210,7 @@ export const ScrollPicker = <T, >({
               className={clsx(
                 `flex flex-col items-center justify-center flex max-h-[${itemHeight}px] h-[${itemHeight}px] rounded-md`,
                 {
-                  'text-hw-primary-400 font-bold': currentIndex === index,
+                  'text-primary font-bold': currentIndex === index,
                   'cursor-pointer': !disabled,
                   'cursor-not-allowed': disabled,
                 }

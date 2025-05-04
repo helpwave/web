@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -82,8 +82,8 @@ export const TaskTemplateDetails = ({
     name: !isCreatingNewTemplate
   })
 
-  const inputErrorClasses = clsx('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
-  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
+  const inputErrorClasses = clsx('border-negative focus:border-negative focus:ring-negative border-2')
+  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary')
 
   const minNameLength = 2
   const maxNameLength = 32
@@ -180,7 +180,7 @@ export const TaskTemplateDetails = ({
           {isCreatingNewTemplate ? translation.create : translation.update}
         </SolidButton>
         { !isCreatingNewTemplate &&
-          (<SolidButton variant="text" color="hw-negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</SolidButton>)
+          (<TextButton color="negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</TextButton>)
         }
       </div>
     </div>

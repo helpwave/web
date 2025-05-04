@@ -81,7 +81,7 @@ export const TimePicker = ({
 
   const closestMinute = closestMatch(minutes, (item1, item2) => Math.abs(item1 - time.getMinutes()) < Math.abs(item2 - time.getMinutes()))
 
-  const style = (selected: boolean) => clsx('px-2 py-1 cursor-pointer hover:bg-hw-primary-200 border border-2 rounded-md hover:border-hw-primary-400 text-center mr-3',
+  const style = (selected: boolean) => clsx('px-2 py-1 cursor-pointer hover:bg-hw-primary-200 border border-2 rounded-md hover:border-primary text-center mr-3',
     { 'bg-hw-primary-100 border-hw-primary-300': selected, 'border-transparent': !selected })
 
   const onChangeWrapper = (transformer: (newDate: Date) => void) => {

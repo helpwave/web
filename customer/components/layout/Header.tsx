@@ -15,7 +15,7 @@ export const Header = ({ leading, leftSide, rightSide, className }: HeaderProps)
   return (
     <header
       className={clsx(
-        '@(sticky top-0 flex flex-row items-center justify-between px-2 py-2 w-full min-h-[64px] max-h-[64px] shadow-md bg-white)',
+        'sticky top-0 flex flex-row items-center justify-between px-2 py-2 w-full min-h-[64px] max-h-[64px] shadow-md bg-white',
         className
       )}
     >

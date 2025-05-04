@@ -103,7 +103,7 @@ export const OrganizationForm = ({
   const maxLongNameLength = 64
   const maxMailLength = 320
 
-  const inputErrorClasses = clsx('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
+  const inputErrorClasses = clsx('border-negative focus:border-negative focus:ring-negative border-2')
   const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
 
   function validateShortName(organization: OrganizationMinimalDTO) {
@@ -202,7 +202,7 @@ export const OrganizationForm = ({
           </div>
           {
             !organizationForm.organization.isVerified &&
-            <span className={clsx('text-hw-negative-500 mb-3')}>{translation.notVerified}</span>
+            <span className={clsx('text-negative mb-3')}>{translation.notVerified}</span>
           }
         </div>
         {isDisplayingEmailNameError && <span className={clsx('textstyle-form-error')}>{emailErrorMessage}</span>}

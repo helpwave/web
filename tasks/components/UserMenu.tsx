@@ -71,7 +71,7 @@ export const UserMenu = ({
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick}
              className={clsx('flex gap-2 relative items-center group cursor-pointer select-none')}>
-          <div className={clsx('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.name}</div>
+          <div className={clsx('text-sm font-semibold text-gray-700 group-hover:text-primary')}>{user.name}</div>
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
         </div>
       )}>
@@ -91,7 +91,7 @@ export const UserMenu = ({
           <MenuItem alignment="left">{translation.invitations}</MenuItem>
         </div>
         <div
-          className={clsx('cursor-pointer text-hw-negative-400 hover:text-hw-negative-500')}
+          className={clsx('cursor-pointer text-negative hover:brightness-75')}
           onClick={() => signOut()}
         >
           <MenuItem alignment="left">{translation.signOut}</MenuItem>

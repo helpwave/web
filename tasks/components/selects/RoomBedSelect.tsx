@@ -165,7 +165,7 @@ export const RoomBedSelect = ({
       </div>
       {touched && !isSubmitting && !isCreating && (
         <span className={clsx({
-          '!text-hw-negative-400': hasChanges,
+          '!text-negative': hasChanges,
           '!text-hw-positive-400': !hasChanges
         })}>
           {hasChanges ? translation.unsaved : translation.saved}
@@ -174,7 +174,7 @@ export const RoomBedSelect = ({
       {touched && !isSubmitting && isCreating && (
         <span className={clsx({
           '!text-hw-positive-400': currentSelection.roomId && currentSelection.bedId,
-          '!text-hw-negative-400': !(currentSelection.roomId && currentSelection.bedId)
+          '!text-negative': !(currentSelection.roomId && currentSelection.bedId)
         })}>
           {currentSelection.roomId && currentSelection.bedId ? translation.valid : translation.invalid}
         </span>

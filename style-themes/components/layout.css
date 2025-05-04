@@ -1,2 +1,33 @@
 @layer components {
+  .col {
+    @apply flex flex-col gap-y-2;
+  }
+
+  .row {
+    @apply flex flex-row gap-x-2;
+  }
+
+  .card-sm {
+    @apply bg-surface text-on-surface px-2 py-1 rounded;
+  }
+
+  .card-md {
+    @apply bg-surface text-on-surface px-4 py-2 rounded-md;
+  }
+
+  .card-lg {
+    @apply bg-surface text-on-surface px-8 py-4 rounded-lg;
+  }
+
+  .section-padding-x {
+    @apply px-6 tablet:px-12 desktop:px-24;
+  }
+
+  .section-padding-y {
+    @apply py-16;
+  }
+
+  .section-padding {
+    @apply px-6 tablet:px-12 desktop:px-24 py-16;
+  }
 }

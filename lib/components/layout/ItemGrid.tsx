@@ -9,7 +9,7 @@ type ItemGridProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 }
 
 const defaultIcon = (
-  <div className={clsx('flex flex-col justify-center items-center bg-hw-primary-400 text-white rounded-full min-w-[24px] min-h-[24px]')}>
+  <div className={clsx('flex flex-col justify-center items-center bg-primary text-white rounded-full min-w-[24px] min-h-[24px]')}>
     <Check size={18} strokeWidth={2.5} />
   </div>
 )

@@ -49,11 +49,9 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
   const translation = useTranslation(defaultNavigationSidebarTranslation)
   const { identity, logout } = useAuth()
 
-  const width = 250
-
   return (
     <div
-      className={clsx(`@(flex flex-col justify-between grow bg-gray-200 min-w-[${width}px] max-w-[${width}px])`, className)}>
+      className={clsx(`flex flex-col justify-between grow bg-gray-200 min-w-[250px] max-w-[250px]`, className)}>
       <LanguageModal
         id="language-modal"
         isOpen={isLanguageModalOpen}
@@ -61,14 +59,14 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
         onBackgroundClick={() => setIsLanguageModalOpen(false)}
         onDone={() => setIsLanguageModalOpen(false)}
       />
-      <nav className={clsx('@(flex flex-col overflow-y-auto)')}>
+      <nav className={clsx('flex flex-col overflow-y-auto')}>
         {items.map((item, i) => (
           <Link
             href={item.url}
             key={i}
             className={clsx(
-              'px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40 flex flex-row gap-x-2 items-center',
-              { 'bg-hw-primary-500/30': router.pathname == item.url }
+              'px-4 py-2 bg-gray-50 hover:bg-primary/40 flex flex-row gap-x-2 items-center',
+              { 'bg-primary/30': router.pathname == item.url }
             )}
           >
             {item.icon}
@@ -78,7 +76,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
       </nav>
       <div className={clsx('flex flex-col')}>
         <button
-          className={clsx('flex flex-row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40')}
+          className={clsx('flex flex-row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40')}
           onClick={() => setIsLanguageModalOpen(true)}
         >
           {languagesLocalNames[language]}
@@ -89,7 +87,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
             <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
             {identity?.name}
           </div>
-          <SolidButton onClick={logout} color="hw-negative">{translation.logout}</SolidButton>
+          <SolidButton onClick={logout} color="negative">{translation.logout}</SolidButton>
         </div>
       </div>
     </div>

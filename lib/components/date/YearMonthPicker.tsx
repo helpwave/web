@@ -58,7 +58,7 @@ export const YearMonthPicker = ({
               <Expandable
                 key={year}
                 ref={(value.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
-                label={<span className={clsx({ '!text-hw-primary-400 font-bold': selectedYear })}>{year}</span>}
+                label={<span className={clsx({ '!text-primary font-bold': selectedYear })}>{year}</span>}
                 className={clsx('gap-y-2 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-sm')}
                 headerClassName={clsx('px-2 py-1 rounded-lg bg-gray-100 hover:bg-hw-primary-200')}
                 initialExpansion={showValueOpen && selectedYear}
@@ -75,7 +75,7 @@ export const YearMonthPicker = ({
                           <div
                             key={month}
                             className={clsx(
-                              'px-2 py-1 rounded-md border border-2 hover:bg-hw-primary-200 hover:border-hw-primary-400 flex-1 text-center cursor-pointer',
+                              'px-2 py-1 rounded-md border border-2 hover:bg-hw-primary-200 hover:border-primary flex-1 text-center cursor-pointer',
                               {
                                 'bg-white border-transparent': !selectedMonth,
                                 'border-hw-primary-300 bg-hw-primary-100 hover:bg-hw-primary-200': selectedMonth

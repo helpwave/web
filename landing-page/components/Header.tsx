@@ -103,7 +103,7 @@ const Header = () => {
 
   return (
     <>
-      <div className={clsx('absolute flex flex-row justify-center top-0 w-screen z-[50] bg-hw-grayscale-50 mobile:px-6 tablet:px-12 desktop:px-24')}>
+      <div className={clsx('absolute top-0 z-[50] row justify-center w-screen bg-gray-50 text-black section-padding-x')}>
         <nav className={clsx('flex pt-2 items-center justify-between w-full max-w-[1200px]')}>
           <Link href={homeURL} className={clsx('flex flex-row gap-x-1 items-center text-2xl')}>
             <Helpwave />
@@ -156,7 +156,7 @@ const Header = () => {
               <Link href="mailto:contact@helpwave.de">
                 <Chip
                   variant="fullyRounded"
-                  color="black"
+                  color="dark"
                   className={clsx('!py-2 !px-4 shadow-sm cursor-pointer')}
                 >
                   {translation.contact}
@@ -172,7 +172,7 @@ const Header = () => {
       </div>
 
       {navbarOpen && (
-        <div className={clsx('absolute w-screen h-screen z-[100] bg-hw-grayscale-50')}>
+        <div className={clsx('absolute w-screen h-screen z-[100] bg-gray-50 text-black')}>
           <div className={clsx('text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
             <button onClick={() => setNavbarOpen(false)} className={clsx('mb-5')}>
               <X size={64} />

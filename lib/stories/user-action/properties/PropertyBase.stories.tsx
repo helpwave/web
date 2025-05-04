@@ -17,7 +17,7 @@ export const PropertyBaseVariation: Story = {
     hasValue: true,
     input: ({ softRequired, hasValue }) => (
       <div
-        className={clsx('flex flex-row grow py-2 px-4', { 'text-hw-warn-600': softRequired && !hasValue })}
+        className={clsx('flex flex-row grow py-2 px-4', { 'text-warning': softRequired && !hasValue })}
       >
         Value
       </div>

@@ -53,7 +53,7 @@ export const BedInRoomIndicator =
         <div className={clsx(`flex flex-row gap-3`)}>
           {Array.from(Array(bedsInRoom).keys()).map((_, index) => (
             <div key={bedPosition + index}
-                 className={clsx(`bg-${bedPosition === index ? 'hw-primary-400' : 'gray-300'} rounded-sm h-8 w-5`)}
+                 className={clsx(`bg-${bedPosition === index ? 'primary' : 'gray-300'} rounded-sm h-8 w-5`)}
             />
           ))}
         </div>

@@ -9,8 +9,6 @@ export const useUserQuery = (userId: string | undefined) => {
   return useQuery({
     queryKey: [QueryKeys.users, userId],
     enabled,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 30 * 60 * 1000, // 30 minutes
     queryFn: async () => {
       if (!enabled || !userId) return
       const req = new ReadPublicProfileRequest()

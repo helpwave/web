@@ -43,7 +43,7 @@ export const MediQuuHeaderSection = () => {
             <div className={clsx('flex flex-row justify-end')}>
               <HelpwaveBadge
                 size="large"
-                className="bg-hw-secondary-800 !gap-x-2 !w-fit shadow-md py-4 px-6"
+                className="bg-secondary !gap-x-2 !w-fit shadow-md py-4 px-6"
               />
             </div>
           </div>

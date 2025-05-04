@@ -102,7 +102,7 @@ export const PropertyDisplay = ({
   return (
     <div className={clsx('py-4 px-6 flex flex-col gap-y-4')}>
       <div className={clsx('flex flex-row gap-x-1 items-center')}>
-        <Tag className={clsx('text-hw-primary-400')} size={20}/>
+        <Tag className={clsx('text-primary')} size={20}/>
         <span className={clsx('textstyle-title-lg')}>{translation.properties}</span>
       </div>
       <div className={clsx('flex flex-col gap-y-2')}>

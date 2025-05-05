@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { Toaster } from 'react-hot-toast'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
+import "../styles.css"
 
 
 function MyApp({ Component, pageProps }: AppProps) {

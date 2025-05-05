@@ -1,17 +1,15 @@
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
-import clsx from 'clsx'
-import { Menu as MenuIcon, X } from 'lucide-react'
-import { useState } from 'react'
+import {Helpwave} from '@helpwave/common/icons/Helpwave'
+import {Menu as MenuIcon, X} from 'lucide-react'
+import {useState} from 'react'
 import Link from 'next/link'
-import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { Chip } from '@helpwave/common/components/ChipList'
+import {Menu, MenuItem} from '@helpwave/common/components/user-input/Menu'
+import type {Languages} from '@helpwave/common/hooks/useLanguage'
+import {useTranslation} from '@helpwave/common/hooks/useTranslation'
+import {MarkdownInterpreter} from '@helpwave/common/components/MarkdownInterpreter'
 
 const homeURL = '/'
 
-type LinkNames = 'products'| 'mediquu'| 'story'| 'support'| 'team'| 'talks'| 'tasks'| 'appzumdoc'| 'netzmanager'
+type LinkNames = 'products' | 'mediquu' | 'story' | 'support' | 'team' | 'talks' | 'tasks' | 'appzumdoc' | 'netzmanager'
 
 type LinkType = {
   name: LinkNames,
@@ -103,23 +101,23 @@ const Header = () => {
 
   return (
     <>
-      <div className={clsx('absolute top-0 z-[50] row justify-center w-screen bg-gray-50 text-black section-padding-x')}>
-        <nav className={clsx('pt-2 items-center justify-between w-full max-w-[1200px]')}>
-          <Link href={homeURL} className={clsx('row gap-x-1 items-center text-2xl')}>
-            <Helpwave />
-            <MarkdownInterpreter text={'\\helpwave'} />
+      <div className={'absolute top-0 z-[50] row justify-center w-screen bg-gray-50 text-black section-padding-x'}>
+        <nav className={'row pt-2 items-center justify-between w-full max-w-[1200px]'}>
+          <Link href={homeURL} className={'row gap-x-1 items-center text-2xl'}>
+            <Helpwave/>
+            <MarkdownInterpreter text={'\\helpwave'}/>
           </Link>
-          <div className={clsx('mobile:hidden w-full')}>
-            <div className={clsx('flex flex-wrap items-center justify-end gap-x-6')}>
+          <div className={'max-tablet:hidden w-full'}>
+            <div className={'flex flex-wrap items-center justify-end gap-x-6'}>
               {items.map(({
-                name,
-                url,
-                subpage,
-              }) => (
+                            name,
+                            url,
+                            subpage,
+                          }) => (
                 <div key={name}>
                   {subpage === undefined ? (
                     <Link href={url}>
-                      <span className={clsx('textstyle-navigation-item')}>
+                      <span className={'textstyle-navigation-item'}>
                         {translation[name]}
                       </span>
                     </Link>
@@ -127,8 +125,8 @@ const Header = () => {
                     <Menu<HTMLDivElement>
                       alignment="tl"
                       trigger={(onClick, ref) => (
-                        <div ref={ref} onClick={onClick} className={clsx('cursor-pointer select-none')}>
-                          <span className={clsx('textstyle-navigation-item')}>
+                        <div ref={ref} onClick={onClick} className={'cursor-pointer select-none'}>
+                          <span className={'textstyle-navigation-item'}>
                             {translation[name]}
                           </span>
                         </div>
@@ -136,90 +134,89 @@ const Header = () => {
                       showOnHover={true}
                     >
                       {subpage.map(({
-                        name: subPageName,
-                        url: subPageUrl,
-                        external: subPageExternal,
-                      }) =>
+                                      name: subPageName,
+                                      url: subPageUrl,
+                                      external: subPageExternal,
+                                    }) =>
                         (
-                        <Link key={subPageName} className={clsx('cursor-pointer')} href={subPageExternal ? subPageUrl : url + subPageUrl}>
-                          <MenuItem alignment="left">
-                            <span className={clsx('textstyle-navigation-item')}>
+                          <Link key={subPageName} href={subPageExternal ? subPageUrl : url + subPageUrl}>
+                            <MenuItem alignment="left">
+                            <span className={'textstyle-navigation-item'}>
                               {translation[subPageName]}
                             </span>
-                          </MenuItem>
-                        </Link>
+                            </MenuItem>
+                          </Link>
                         ))}
                     </Menu>
                   )}
                 </div>
               ))}
               <Link href="mailto:contact@helpwave.de">
-                <Chip
-                  variant="fullyRounded"
+                <div
                   color="dark"
-                  className={clsx('!py-2 !px-4 shadow-sm cursor-pointer')}
+                  className={'chip-full py-2 px-4 shadow-sm bg-white text-black font-bold hover:brightness-[98%]'}
                 >
                   {translation.contact}
-                </Chip>
+                </div>
               </Link>
             </div>
           </div>
-          <button onClick={() => setNavbarOpen(true)} className={clsx('desktop:hidden tablet:hidden content-end')}
-            aria-controls="navbar" aria-expanded="false">
-            <MenuIcon size={32} />
+          <button onClick={() => setNavbarOpen(true)} className={'tablet:hidden content-end'}
+                  aria-controls="navbar" aria-expanded="false">
+            <MenuIcon size={32}/>
           </button>
         </nav>
       </div>
 
       {navbarOpen && (
-        <div className={clsx('absolute w-screen h-screen z-[100] bg-gray-50 text-black')}>
-          <div className={clsx('text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
-            <button onClick={() => setNavbarOpen(false)} className={clsx('mb-5')}>
-              <X size={64} />
+        <div className={'absolute w-screen h-screen z-[100] bg-gray-50 text-black'}>
+          <div className={'text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'}>
+            <button onClick={() => setNavbarOpen(false)} className={'mb-5'}>
+              <X size={64}/>
             </button>
 
-            <div className={clsx('w-full p-2')}>
+            <div className={'w-full p-2'}>
               <Link href="/" onClick={() => setNavbarOpen(false)}>
-                <span className={clsx('textstyle-title-lg')}>
+                <span className={'textstyle-title-lg'}>
                   home
                 </span>
               </Link>
             </div>
 
             {items.map(({
-              name,
-              url,
-              subpage,
-            }) => (
-              <div key={name} className={clsx('w-full p-2')}>
+                          name,
+                          url,
+                          subpage,
+                        }) => (
+              <div key={name} className={'w-full p-2'}>
                 {subpage === undefined ? (
                   <Link href={url} onClick={() => setNavbarOpen(false)}>
-                    <span className={clsx('textstyle-title-lg')}>
+                    <span className={'textstyle-title-lg'}>
                       {translation[name]}
                     </span>
                   </Link>
                 ) : (
                   <Menu<HTMLDivElement> alignment="tl" trigger={(onClick, ref) => (
-                    <div ref={ref} onClick={onClick} className={clsx('cursor-pointer select-none')}>
-                      <span className={clsx('textstyle-title-lg')}>
+                    <div ref={ref} onClick={onClick} className={'cursor-pointer select-none'}>
+                      <span className={'textstyle-title-lg'}>
                         {translation[name]}
                       </span>
                     </div>
                   )}>
                     {subpage.map(({
-                      name: subPageName,
-                      url: subPageUrl,
-                      external: subPageExternal
-                    }) =>
+                                    name: subPageName,
+                                    url: subPageUrl,
+                                    external: subPageExternal
+                                  }) =>
                       (
-                      <Link key={subPageName} className={clsx('cursor-pointer')} onClick={() => setNavbarOpen(false)}
-                        href={subPageExternal ? subPageUrl : url + subPageUrl}>
-                        <MenuItem alignment="left">
-                          <span className={clsx('textstyle-title-lg')}>
+                        <Link key={subPageName} onClick={() => setNavbarOpen(false)}
+                              href={subPageExternal ? subPageUrl : url + subPageUrl}>
+                          <MenuItem alignment="left">
+                          <span className={'textstyle-title-lg'}>
                             {translation[subPageName]}
                           </span>
-                        </MenuItem>
-                      </Link>
+                          </MenuItem>
+                        </Link>
                       ))}
                   </Menu>
                 )}

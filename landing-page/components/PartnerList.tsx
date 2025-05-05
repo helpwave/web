@@ -28,7 +28,7 @@ export const PartnerList = ({
         /*itemWidths={{
           desktop: '20%',
           tablet: '33%',
-          mobile: '50%'
+          max-tablet: '50%'
         }}*/
         blurColor="transparent"
         autoLoopingTimeOut={1000}

@@ -21,16 +21,16 @@ const FeatureItem = ({
   reverse = false
 }: FeatureItemProps) => {
   return (
-    <div className={clsx('mobile:col-reverse items-center gap-x-4 gap-y-6 desktop:!gap-x-8 justify-between', {
+    <div className={clsx('max-tablet:col-reverse items-center gap-x-4 gap-y-6 desktop:!gap-x-8 justify-between', {
       'flex-row-reverse': reverse,
       'flex-row': !reverse
     })}>
-      <div className={clsx('w-1/2 mobile:!w-full')}>
+      <div className={clsx('w-1/2 max-tablet:!w-full')}>
         <Image alt="Screenshots" src={imageUrl} style={{ objectFit: 'contain' }} width={size} height={size}
                className={clsx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md`)}/>
       </div>
 
-      <div className={clsx('col w-1/3 mobile:!w-full')}>
+      <div className={clsx('col w-1/3 max-tablet:!w-full')}>
         <span className={clsx('textstyle-title-2xl')}>
           {title}
         </span>

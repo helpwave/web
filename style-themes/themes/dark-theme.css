@@ -80,20 +80,6 @@
     --color-button-text-negative-text: #DC576D;
     --color-button-text-negative-icon: #DC576D;
 
-    --color-tag-default-background: #F6FAFF;
-    --color-tag-default-text: #1A4080;
-    --color-tag-default-icon: #1A4080;
-    --color-tag-dark-background: #333333;
-    --color-tag-dark-text: #FFFFFF;
-    --color-tag-dark-icon: #FFFFFF;
-
     --color-tabel-header-background: #F6FAFF;
-
-    --color-text-image-primary-background: #694BB4;
-    --color-text-image-primary-text: #FFFFFF;
-    --color-text-image-secondary-background: #3171DE;
-    --color-text-image-secondary-text: #FFFFFF;
-    --color-text-image-dark-background: #11243E;
-    --color-text-image-dark-text: #FFFFFF;
   }
 }

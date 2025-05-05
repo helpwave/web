@@ -138,7 +138,7 @@ export const NewsLetterForm = ({
             required={true}
             className={clsx('!desktop:w-3/5 !max-w-[300px]')}
           />
-          <div className={clsx('desktop:flex-row mobile:col gap-x-4')}>
+          <div className={clsx('desktop:flex-row max-tablet:col gap-x-4')}>
             <Input
               id="firstname"
               value={formState.firstname}
@@ -169,7 +169,7 @@ export const NewsLetterForm = ({
               required={true}
             />
           </div>
-          <div className={clsx('desktop:flex-row mobile:col gap-x-4')}>
+          <div className={clsx('desktop:flex-row max-tablet:col gap-x-4')}>
             <Input
               id="company"
               value={formState.company}

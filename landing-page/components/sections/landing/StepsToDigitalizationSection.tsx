@@ -117,7 +117,7 @@ export const StepsToDigitalizationSection = () => {
         )}
         onBackgroundClick={() => setModalValue(undefined)}
         onCloseClick={() => setModalValue(undefined)}
-        modalClassName={clsx('max-w-[600px] mobile:max-w-[90%] w-full')}
+        modalClassName={clsx('max-w-[600px] max-tablet:max-w-[90%] w-full')}
       />
     </SectionBase>
   )

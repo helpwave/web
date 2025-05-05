@@ -32,10 +32,10 @@ export const TasksKanbanSection = ({ overwriteTranslation }: PropsForTranslation
 
   return (
     <SectionBase
-      className={clsx('row mobile:!flex flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
+      className={clsx('row max-tablet:!flex flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center')}
       backgroundColor="white"
     >
-      <div className={clsx('col gap-y-2 pb-16 mobile:pb-0')}>
+      <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0')}>
         <div className={clsx('col gap-y-2')}>
           <div className={clsx('row gap-x-1 text-primary items-center')}>
             <TagIcon/>
@@ -46,7 +46,7 @@ export const TasksKanbanSection = ({ overwriteTranslation }: PropsForTranslation
         </div>
       </div>
       <div
-        className={clsx('row bottom-0 justify-center rounded-l-3xl mobile:w-5/6 min-w-[50%] z-10')}
+        className={clsx('row bottom-0 justify-center rounded-l-3xl max-tablet:w-5/6 min-w-[50%] z-10')}
       >
         <Image
           src={imageUrl}

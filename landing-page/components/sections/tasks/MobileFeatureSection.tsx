@@ -36,12 +36,12 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
 
   return (
     <SectionBase
-      className={clsx('row mobile:!flex flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center text-white')}
+      className={clsx('row max-tablet:!flex flex-wrap-reverse w-full gap-8 justify-between max-tablet:justify-center text-white')}
       backgroundColor="darkSecondary"
       outerClassName={clsx('!pb-0')}
     >
       <div className={clsx('col gap-y-2 pb-16 desktop:w-3/5 justify-center')}>
-        <div className={clsx('col gap-y-2 mobile:pb-0')}>
+        <div className={clsx('col gap-y-2 max-tablet:pb-0')}>
           <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
           <span className={clsx('textstyle-title-normal')}><MarkdownInterpreter text={translation.description}/></span>
         </div>
@@ -58,14 +58,14 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
         </div>
       </div>
       <div
-        className={clsx('col items-center justify-end rounded-l-3xl w-2/5 mobile:w-full tablet:min-w-[220px] z-10 max-h-[70vh] min-h-[100%] desktop:min-h-[400px]')}
+        className={clsx('col items-center justify-end rounded-l-3xl w-2/5 max-tablet:w-full tablet:min-w-[220px] z-10 max-h-[70vh] min-h-[100%] desktop:min-h-[400px]')}
       >
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={clsx('w-fit h-full max-h-[70vh] mobile:-translate-x-[6%]')}
+          className={clsx('w-fit h-full max-h-[70vh] max-tablet:-translate-x-[6%]')}
         />
       </div>
     </SectionBase>

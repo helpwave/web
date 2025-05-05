@@ -33,11 +33,11 @@ export const PatientSection = ({ overwriteTranslation }: PropsForTranslation<Pat
   return (
     <SectionBase
       outerClassName={clsx('tablet:pb-0 desktop:pb-0')}
-      className={clsx('row mobile:!flex flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
+      className={clsx('row max-tablet:!flex flex-wrap w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center')}
       backgroundColor="gray"
     >
       <div
-        className={clsx('row items-end justify-center rounded-l-3xl mobile:w-full w-2/5 z-10 min-w-[250px]')}
+        className={clsx('row items-end justify-center rounded-l-3xl max-tablet:w-full w-2/5 z-10 min-w-[250px]')}
       >
         <Image
           src={imageUrl}
@@ -47,7 +47,7 @@ export const PatientSection = ({ overwriteTranslation }: PropsForTranslation<Pat
           className={clsx('max-h-[70vh]')}
         />
       </div>
-      <div className={clsx('col gap-y-2 pb-16 mobile:pb-0')}>
+      <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0')}>
         <div className={clsx('col gap-y-2')}>
           <div className={clsx('row gap-x-1 text-primary items-center')}>
             <TagIcon/>

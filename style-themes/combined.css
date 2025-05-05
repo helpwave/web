@@ -1,13 +1,11 @@
 @import 'tailwindcss';
 
 @import './utilities/animations.css';
-
 @import './themes/variants.css';
+
 @import './themes/base.css';
 @import './themes/light-theme.css';
 @import './themes/dark-theme.css';
-@import './themes/fonts.css';
-@import "./themes/breakpoints.css";
 
 @import './components/layout.css';
 @import "./components/texts.css";

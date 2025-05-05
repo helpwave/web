@@ -1,4 +1,4 @@
-@import '../themes/fonts.css';
+@import '../themes/base.css';
 
 @layer components {
   .textstyle-title-3xl {

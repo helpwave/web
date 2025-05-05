@@ -15,8 +15,8 @@ const MarketStatsItem = ({ children, stat, title }: MarketStatsItemProps) => {
   return (
     <div className={clsx('col items-center')}>
       {children}
-      <span className={clsx('text-3xl mobile:text-xl mt-2 mobile:font-semibold')}>{stat}</span>
-      <h4><span className={clsx('textstyle-description text-xl mobile:!text-base')}>{title}</span></h4>
+      <span className={clsx('text-3xl max-tablet:text-xl mt-2 max-tablet:font-semibold')}>{stat}</span>
+      <h4><span className={clsx('textstyle-description text-xl max-tablet:!text-base')}>{title}</span></h4>
     </div>
   )
 }
@@ -55,17 +55,17 @@ const MarketStatsSection = ({ overwriteTranslation }: PropsForTranslation<Market
       <div className={clsx('mt-8 w-full flex flex-wrap gap-y-16 gap-x-32 justify-evenly items-center')}>
         <MarketStatsItem stat="1.800" title={translation.hospitals}>
           {/* Image needs attribution to https://www.flaticon.com/free-icon/hospital_3809392?term=hospital&page=1&position=8&origin=search&related_id=3809392 */}
-          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/hospital.png" className={clsx('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px] p-[5%]')}/>
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/hospital.png" className={clsx('w-[72px] h-[72px] max-tablet:w-[48px] max-tablet:h-[48px] p-[5%]')}/>
         </MarketStatsItem>
 
         <MarketStatsItem stat="1.000.000" title={translation.healthcareWorkers}>
           {/* Image needs attribution to https://www.flaticon.com/free-icon/hospital_3809392?term=hospital&page=1&position=8&origin=search&related_id=3809392 */}
-          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/doctors.png" className={clsx('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px]')}/>
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/doctors.png" className={clsx('w-[72px] h-[72px] max-tablet:w-[48px] max-tablet:h-[48px]')}/>
         </MarketStatsItem>
 
         <MarketStatsItem stat="12,1%" title={translation.gdp}>
           {/* Image needs attribution to https://www.freepik.com/icon/donut-chart_483638 */}
-          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/pie_chart.png" className={clsx('w-[72px] h-[72px] mobile:w-[48px] mobile:h-[48px]')}/>
+          <Image width={72} height={72} alt="" src="https://cdn.helpwave.de/icons/pie_chart.png" className={clsx('w-[72px] h-[72px] max-tablet:w-[48px] max-tablet:h-[48px]')}/>
         </MarketStatsItem>
       </div>
     </SectionBase>

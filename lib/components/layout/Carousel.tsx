@@ -257,7 +257,7 @@ export const Carousel = ({
     ]
   }
 
-  const height = `desktop:h-[350px] tablet:h-[350px] mobile:h-[350px]`
+  const height = `desktop:h-[350px] tablet:h-[350px] max-tablet:h-[350px]`
 
   const onDragStart = (x: number) => setCarouselInformation(prevState => ({
     ...prevState,
@@ -352,7 +352,7 @@ export const Carousel = ({
               }, listIndex) => (
                 <div
                   key={listIndex}
-                  className={clsx(`absolute left-[50%] desktop:w-[50%] tablet:w-[70%] mobile:w-[70%] h-full overflow-hidden`, { '!cursor-grabbing': !!dragState })}
+                  className={clsx(`absolute left-[50%] desktop:w-[50%] tablet:w-[70%] max-tablet:w-[70%] h-full overflow-hidden`, { '!cursor-grabbing': !!dragState })}
                   style={{ translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
                   {...dragHandlers}
                   onClick={() => startAnimation(index)}

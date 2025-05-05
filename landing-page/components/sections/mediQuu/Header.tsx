@@ -30,7 +30,7 @@ export const MediQuuHeaderSection = () => {
   const translation = useTranslation(defaultMediQuuPageTranslation)
   return (
     <SectionBase backgroundColor="gray">
-      <div className={clsx('row w-full gap-x-4 gap-y-8 mobile:!col-reverse mobile:items-center')}>
+      <div className={clsx('row w-full gap-x-4 gap-y-8 max-tablet:!col-reverse max-tablet:items-center')}>
         <div className={clsx('col gap-y-2 desktop:max-w-[50%]')}>
           <span className={clsx('textstyle-title-3xl')}>{translation.title}</span>
           <span className={clsx('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></span>

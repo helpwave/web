@@ -114,7 +114,7 @@ export const ContactSection = ({
   const isValid = !!contactForm.firstname && !!contactForm.lastname && validateEmail(contactForm.email) && !!contactForm.message
 
   return (
-    <SectionBase className={clsx('desktop:flex-row desktop:justify-between mobile:col w-full gap-8')} backgroundColor="gray">
+    <SectionBase className={clsx('desktop:flex-row desktop:justify-between max-tablet:col w-full gap-8')} backgroundColor="gray">
       <div className={clsx('col gap-y-1 tablet:w-2/5 desktop:w-1/2')}>
         <span className={clsx('textstyle-title-xl text-secondary')}>{translation.contact}</span>
         <span>{translation.contactDescription}</span>

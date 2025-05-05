@@ -24,7 +24,7 @@ export const SectionBase = ({
       'bg-black text-white': backgroundColor === 'black',
       'bg-[#11243e] text-white': backgroundColor === 'darkSecondary', // TODO make this a variable
       'bg-primary text-on-primary': backgroundColor === 'darkPrimary',
-      'desktop:px-24 tablet:px-12 mobile:px-6 py-16': useDefaultStyle
+      'desktop:px-24 tablet:px-12 max-tablet:px-6 py-16': useDefaultStyle
     }, outerClassName)}>
       <div
         className={clsx(

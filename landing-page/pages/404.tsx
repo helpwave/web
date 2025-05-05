@@ -41,9 +41,9 @@ const NotFound: NextPage = () => {
     <Page className={clsx('h-screen')} pageTitleAddition={translation.notFound}>
       <SectionBase className={clsx('col h-full items-center justify-center text-center')} outerClassName={clsx('h-full')}>
         <Helpwave className={clsx('w-full left-1/2')} size={256} animate="bounce"/>
-        <h1 className={clsx('text-9xl mobile:text-6xl font-space mb-8')}>{`404 ${translation.notFound}`}</h1>
-        <p className={clsx('text-4xl mobile:text-xl font-inter')}>{translation.description}</p>
-        <p className={clsx('text-4xl mobile:text-xl font-inter')}>
+        <h1 className={clsx('text-9xl max-tablet:text-6xl font-space mb-8')}>{`404 ${translation.notFound}`}</h1>
+        <p className={clsx('text-4xl max-tablet:text-xl font-inter')}>{translation.description}</p>
+        <p className={clsx('text-4xl max-tablet:text-xl font-inter')}>
           {translation.toHomePage(<Link className={clsx('underline text-cyan-900')} href="/">home page</Link>)}
         </p>
       </SectionBase>

@@ -73,12 +73,12 @@ const EpisodeSection = ({ overwriteTranslation }: PropsForTranslation<EpisodeSec
         {isLoading ? (<LoadingAnimation />) : data?.map(episode => (
           <Link key={episode.id} href={episode.link} target="_blank">
             <div className={clsx('w-full shadow-sm hover:border-solid hover:border-primary rounded-md transition-all duration-500 border-dashed border-2 p-8 my-8 gap-16 bg-surface text-on-surface')}>
-              <div className={clsx('w-3/4 mobile:!w-full')}>
+              <div className={clsx('w-3/4 max-tablet:!w-full')}>
                 <h4 className={clsx('font-space text-2xl font-bold')}>{episode.title}</h4>
                 <p className={clsx('text-gray-600 text-justify')}>published on {episode.date.toLocaleDateString('de-DE')}</p>
                 <p className={clsx('text-gray-900 text-justify')}>{episode.description}</p>
               </div>
-              <Image alt="Episode Thumbnail" src={episode.imageURL} style={{ objectFit: 'cover' }} width={size} height={size} className={clsx('mobile:hidden transition-all duration-500 shadow-md hover:shadow-2xl w-1/4 h-auto m-auto')}/>
+              <Image alt="Episode Thumbnail" src={episode.imageURL} style={{ objectFit: 'cover' }} width={size} height={size} className={clsx('max-tablet:hidden transition-all duration-500 shadow-md hover:shadow-2xl w-1/4 h-auto m-auto')}/>
             </div>
           </Link>
         ))}

@@ -150,6 +150,18 @@
   --color-text-image-dark-text: #FFFFFF;
 }
 
+/* breakpoints */
+@theme {
+  --breakpoint-tablet: 48rem; /* 768px for 16px font-size */
+  --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
+}
+
+/* fonts */
+@theme {
+  --font-inter: 'Inter', sans-serif;
+  --font-space: 'Space Grotesk', sans-serif;
+}
+
 body, html {
   @apply bg-background text-on-background;
 }

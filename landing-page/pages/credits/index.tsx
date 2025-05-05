@@ -83,10 +83,10 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
   return (
     <Page pageTitleAddition={translation.title}>
       <SectionBase
-        className={clsx('row mobile:!flex flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
+        className={clsx('row max-tablet:!flex flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center')}
         backgroundColor="white"
       >
-        <div className={clsx('col gap-y-2 pb-16 mobile:pb-0')}>
+        <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0')}>
           <div className={clsx('col gap-y-2')}>
             <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
             <span className={clsx('font-space font-semibold')}><MarkdownInterpreter
@@ -94,7 +94,7 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
           </div>
         </div>
         <div
-          className={clsx('row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[50%] z-10')}
+          className={clsx('row bottom-0 justify-center rounded-l-3xl max-tablet:w-full min-w-[50%] z-10')}
         >
           <Image
             src={imageUrl}

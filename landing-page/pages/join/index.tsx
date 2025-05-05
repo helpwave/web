@@ -92,12 +92,12 @@ const NewsLetter: NextPage = () => {
                   sizeCircle3={sizeCircle3}
                   waveWidth={waveWidth}
                 />
-                <div className={clsx(`absolute z-[100] top-1/2 left-[${sizeCircle2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}/>
-                <div className={clsx(`absolute z-[100] top-1/2 left-[${sizeCircle2 + (sizeCircle3 - sizeCircle2) / 2}px] -translate-x-1/2 -translate-y-1/2 text-white mobile:hidden`)}/>
+                <div className={clsx(`absolute z-[100] top-1/2 left-[${sizeCircle2}px] -translate-x-1/2 -translate-y-1/2 text-white max-tablet:hidden`)}/>
+                <div className={clsx(`absolute z-[100] top-1/2 left-[${sizeCircle2 + (sizeCircle3 - sizeCircle2) / 2}px] -translate-x-1/2 -translate-y-1/2 text-white max-tablet:hidden`)}/>
               </>
             )}
           </div>
-          <div className={clsx('absolute top-1/2 -translate-y-1/2 desktop:right-[15%] tablet:right-[15%]  mobile:right-1/2 mobile:translate-x-1/2 desktop:w-[500px] mobile:w-4/5 mobile:max-w-[340px]')}>
+          <div className={clsx('absolute top-1/2 -translate-y-1/2 desktop:right-[15%] tablet:right-[15%]  max-tablet:right-1/2 max-tablet:translate-x-1/2 desktop:w-[500px] max-tablet:w-4/5 max-tablet:max-w-[340px]')}>
             <NewsLetterForm
               onSubmit={async (form) => {
                 await submitNewsLetterForm(form)

@@ -66,7 +66,7 @@ export const Page = ({
 
   return (
     <div
-      className={clsx('relative not-mobile:(grid grid-rows-[auto_1fr]) mobile:(col) w-screen h-screen overflow-hidden')}>
+      className={clsx('relative not-max-tablet:(grid grid-rows-[auto_1fr]) max-tablet:(col) w-screen h-screen overflow-hidden')}>
       <Head>
         <title>{pageTitle}</title>
       </Head>
@@ -80,7 +80,7 @@ export const Page = ({
         {...header}
         rightSide={[...header?.rightSide ?? [], (!isHidingSidebar && (
           // TODO do aria here
-          <button key="navOpen" className={clsx('not-mobile:hidden')}>
+          <button key="navOpen" className={clsx('not-max-tablet:hidden')}>
             <Menu onClick={() => {
               setIsNavigationVisible(true)
             }}/>
@@ -91,11 +91,11 @@ export const Page = ({
       {isNavigationVisible && !isHidingSidebar && (
         <MobileNavigationOverlay items={navItems} onCloseClick={() => setIsNavigationVisible(false)}/>
       )}
-      <div className={clsx('row grow mobile:hidden overflow-hidden')}>
+      <div className={clsx('row grow max-tablet:hidden overflow-hidden')}>
         {!isHidingSidebar && (<NavigationSidebar items={navItems}/>)}
         {mainContent}
       </div>
-      <div className={clsx('col h-full w-full not-mobile:hidden')}>
+      <div className={clsx('col h-full w-full not-max-tablet:hidden')}>
         {mainContent}
       </div>
     </div>

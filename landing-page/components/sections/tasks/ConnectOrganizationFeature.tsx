@@ -51,12 +51,12 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
 
   return (
     <SectionBase
-      className={clsx('row mobile:!flex flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-end items-center')}
+      className={clsx('row max-tablet:!flex flex-wrap-reverse w-full !max-w-full gap-8 justify-between max-tablet:justify-end items-center')}
       backgroundColor="gray"
       outerClassName={clsx('!pr-0')}
     >
-      <div className={clsx('col items-center mobile:items-start flex-1 mobile:pr-6')}>
-        <div className={clsx('col gap-y-2 max-w-[500px] mobile:max-w-full')}>
+      <div className={clsx('col items-center max-tablet:items-start flex-1 max-tablet:pr-6')}>
+        <div className={clsx('col gap-y-2 max-w-[500px] max-tablet:max-w-full')}>
           <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
           <span className={clsx('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
           <ItemGrid className={clsx('mt-2')}>
@@ -66,7 +66,7 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
       </div>
       <div
         // TODO fix image size and add dashed lines
-        className={clsx('relative right-0 rounded-l-3xl w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10')}>
+        className={clsx('relative right-0 rounded-l-3xl w-2/5 tablet:min-w-[360px] max-tablet:w-4/5 z-10')}>
         <Image
           src={imageUrl}
           alt=""

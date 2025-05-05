@@ -90,9 +90,9 @@ const Footer = () => {
 
   return (
     <div className={clsx('w-screen bg-black text-white py-8 col items-center justify-center')}>
-      <div className={clsx('flex flex-wrap w-full max-w-[900px] mobile:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
+      <div className={clsx('flex flex-wrap w-full max-w-[900px] max-tablet:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
         {grouping.map((groups, index) => (
-          <div key={index} className={clsx('col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
+          <div key={index} className={clsx('col max-tablet:w-full w-[192px] max-tablet:text-center max-tablet:items-center')}>
             {groups.map((category) => (
               <FooterLinkGroup key={category} title={translation[category] } links={linkGroups[category]} />
             ))}

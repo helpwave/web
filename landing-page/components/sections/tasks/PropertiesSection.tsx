@@ -33,10 +33,10 @@ export const PropertiesSection = ({ overwriteTranslation }: PropsForTranslation<
   return (
     <SectionBase
       outerClassName={clsx('desktop:py-0 tablet:py-0')}
-      className={clsx('row mobile:!flex flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
+      className={clsx('row max-tablet:!flex flex-wrap w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center')}
     >
       <div
-        className={clsx('row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[40%] w-2/5 z-10')}
+        className={clsx('row bottom-0 justify-center rounded-l-3xl max-tablet:w-full min-w-[40%] w-2/5 z-10')}
       >
         <Image
           src={imageUrl}
@@ -46,7 +46,7 @@ export const PropertiesSection = ({ overwriteTranslation }: PropsForTranslation<
           className={clsx('max-h-[70vh]')}
         />
       </div>
-      <div className={clsx('col gap-y-2 pb-16 mobile:pb-0')}>
+      <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0')}>
         <div className={clsx('col gap-y-2')}>
           <div className={clsx('row gap-x-1 text-primary items-center')}>
             <TagIcon/>

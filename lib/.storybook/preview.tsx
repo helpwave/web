@@ -3,16 +3,16 @@ import { ProvideLanguage } from '../hooks/useLanguage'
 import { ModalRegister } from '../components/modals/ModalRegister'
 import { modalRootName } from '../components/modals/Modal'
 import { ThemeProvider } from '@helpwave/style-themes/react/components/ThemeProvider'
-import '../te.css'
+import '../styles.css'
 import {ThemeType} from "@helpwave/style-themes/react/types";
 
 const colorToHex: Record<ThemeType, string> = {
-  dark: "#222",
+  dark: "#1A1A1A",
   light: "#EEE",
 }
 
 const colorToHexReverse: Record<string, ThemeType> = {
-  "#222": "dark",
+  "#1A1A1A": "dark",
   "#EEE": "light",
   "transparent": "light",
 }

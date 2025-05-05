@@ -42,7 +42,7 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
 
   return (
     <div
-      className={clsx('col bg-gray-200 h-full w-full top-0 absolute px-8 py-6 z-[100] not-mobile:hidden justify-between')}>
+      className={clsx('col bg-gray-200 h-full w-full top-0 absolute px-8 py-6 z-[100] not-max-tablet:hidden justify-between')}>
       <LanguageModal
         id="language-modal-mobile"
         isOpen={isLanguageModalOpen}

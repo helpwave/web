@@ -57,7 +57,7 @@ export const BrandDescriptionsSection = () => {
         prefix={(
           <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64} />
         )}
-        className={clsx('bg-white rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:col tablet:col')}
+        className={clsx('bg-white rounded-3xl px-6 max-tablet:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md max-tablet:col tablet:col')}
       />
       <Tile
         title={{ value: translation.aboutHelpwaveTitle, className: 'textstyle-title-lg' }}
@@ -70,7 +70,7 @@ export const BrandDescriptionsSection = () => {
             />
           </div>
         )}
-        className={clsx('text-on-secondary bg-secondary rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:col tablet:col')}
+        className={clsx('text-on-secondary bg-secondary rounded-3xl px-6 max-tablet:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md max-tablet:col tablet:col')}
       />
     </SectionBase>
   )

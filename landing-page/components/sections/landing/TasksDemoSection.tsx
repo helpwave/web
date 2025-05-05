@@ -64,7 +64,7 @@ export const TasksDemoSection = () => {
         </div>
         <Link
           href={demoURL}
-          className={clsx('btn-md bg-on-primary text-primary whitespace-nowrap')}
+          className={clsx('btn-md hover:brightness-[98%] bg-on-primary text-primary font-bold text-lg whitespace-nowrap')}
         >
           {translation.tryDemo}
         </Link>

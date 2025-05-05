@@ -67,8 +67,8 @@ export const TextImage = ({
       <div
         className={clsx(`col px-6 py-12 rounded-2xl h-full`, colorMapping[color], contentClassName)}>
         {badge && (
-          <div className={clsx(`rounded-full bg-white mb-2 py-2 px-4`, chipColorMapping[color])}>
-            <span className="text-lg">{badge}</span>
+          <div className={clsx(`chip-full bg-white mb-2 py-2 px-4 w-fit`, chipColorMapping[color])}>
+            <span className="text-lg font-bold">{badge}</span>
           </div>
         )}
         <div className="col gap-y-1 text-white overflow-hidden">

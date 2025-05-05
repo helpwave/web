@@ -1,6 +1,6 @@
 {
   "name": "@helpwave/style-themes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.ts",
   "type": "module",
   "scripts": {
@@ -8,7 +8,6 @@
     "lint": "tsc --noEmit && eslint ."
   },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tinycolor2": "1.6.0",

@@ -3,7 +3,7 @@ import { ProvideLanguage } from '../hooks/useLanguage'
 import { ModalRegister } from '../components/modals/ModalRegister'
 import { modalRootName } from '../components/modals/Modal'
 import { ThemeProvider } from '@helpwave/style-themes/react/components/ThemeProvider'
-import '../styles.css'
+import '../globals.css'
 import {ThemeType} from "@helpwave/style-themes/react/types";
 
 const colorToHex: Record<ThemeType, string> = {

@@ -24,12 +24,8 @@ export const PartnerList = ({
       <span className={clsx('textstyle-title-lg')}>{title}</span>
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
-        className={"!h-[100px]"}
-        /*itemWidths={{
-          desktop: '20%',
-          tablet: '33%',
-          max-tablet: '50%'
-        }}*/
+        heightClassName={"h-[8rem]"}
+        widthClassName={"max-tablet:w-1/2 tablet:w-1/3 desktop:w-[20%]"}
         blurColor="transparent"
         autoLoopingTimeOut={1000}
         autoLoopAnimationTime={5000}

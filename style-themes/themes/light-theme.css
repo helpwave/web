@@ -1,7 +1,0 @@
-@import "./variants.css";
-
-@layer base {
-  /* Here will be overrides for the light theme */
-  @variant light {
-  }
-}

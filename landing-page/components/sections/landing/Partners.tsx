@@ -4,7 +4,6 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SectionBase } from '@/components/sections/SectionBase'
 import type { Partner } from '@/components/PartnerList'
 import { PartnerList } from '@/components/PartnerList'
-import {SolidButton} from "@helpwave/common/components/Button";
 
 type PartnerSectionTranslation = {
   title: string,
@@ -68,7 +67,6 @@ const PartnerSection = () => {
   return (
     <SectionBase className={clsx('gap-16 select-none justify-between items-center w-full')} backgroundColor="gray">
       <PartnerList title={translation.title} partners={images}/>
-      <SolidButton color={"tertiary"}>Test</SolidButton>
     </SectionBase>
   )
 }

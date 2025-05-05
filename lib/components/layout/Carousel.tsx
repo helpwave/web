@@ -26,6 +26,8 @@ type CarouselProps = {
   overScrollThreshold?: number,
   blurColor?: string,
   className?: string,
+  heightClassName?: string,
+  widthClassName?: string,
 }
 
 type ItemType = {
@@ -70,7 +72,9 @@ export const Carousel = ({
   dots = true,
   overScrollThreshold = 0.1,
   blurColor = 'from-white',
-  className = ''
+  className = '',
+                           heightClassName = "h-[24rem]",
+  widthClassName = "w-[70%] desktop:w-1/2",
 }: CarouselProps) => {
   if (isAutoLooping && !isLooping) {
     console.error('When isAutoLooping is true, isLooping should also be true')
@@ -257,8 +261,6 @@ export const Carousel = ({
     ]
   }
 
-  const height = `desktop:h-[350px] tablet:h-[350px] max-tablet:h-[350px]`
-
   const onDragStart = (x: number) => setCarouselInformation(prevState => ({
     ...prevState,
     dragState: {
@@ -326,7 +328,7 @@ export const Carousel = ({
 
   return (
     <div className={clsx('col items-center w-full gap-y-2')}>
-      <div className={clsx(`relative w-full overflow-hidden`, height, className)}>
+      <div className={clsx(`relative w-full overflow-hidden`, heightClassName, className)}>
         {arrows && (
           <>
             <div
@@ -344,7 +346,7 @@ export const Carousel = ({
           </>
         )}
         {hintNext ? (
-          <div className={clsx(`relative row h-full`, height)}>
+          <div className={clsx(`relative row h-full`, heightClassName)}>
             <div className={clsx('relative row h-full w-full px-2 overflow-hidden')}>
               {items.map(({
                 item,
@@ -352,7 +354,7 @@ export const Carousel = ({
               }, listIndex) => (
                 <div
                   key={listIndex}
-                  className={clsx(`absolute left-[50%] desktop:w-[50%] tablet:w-[70%] max-tablet:w-[70%] h-full overflow-hidden`, { '!cursor-grabbing': !!dragState })}
+                  className={clsx(`absolute left-[50%] h-full overflow-hidden`, widthClassName, { '!cursor-grabbing': !!dragState })}
                   style={{ translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
                   {...dragHandlers}
                   onClick={() => startAnimation(index)}
@@ -384,10 +386,6 @@ export const Carousel = ({
                 'bg-gray-200': currentIndex !== index,
                 'bg-primary': currentIndex === index
               })}
-              style={{
-                width: '2rem',
-                height: '0.75rem',
-              }}
               onClick={() => startAnimation(index)}
             />
           ))}

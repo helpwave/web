@@ -73,8 +73,8 @@ export const Carousel = ({
   overScrollThreshold = 0.1,
   blurColor = 'from-white',
   className = '',
-                           heightClassName = "h-[24rem]",
-  widthClassName = "w-[70%] desktop:w-1/2",
+                           heightClassName = 'h-[24rem]',
+  widthClassName = 'w-[70%] desktop:w-1/2',
 }: CarouselProps) => {
   if (isAutoLooping && !isLooping) {
     console.error('When isAutoLooping is true, isLooping should also be true')

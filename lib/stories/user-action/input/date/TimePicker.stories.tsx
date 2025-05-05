@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import {ControlledTimePicker} from "../../../../components/date/TimePicker";
+import { ControlledTimePicker } from '../../../../components/date/TimePicker'
 
 const meta = {
   title: 'User-Action/Input/Date',

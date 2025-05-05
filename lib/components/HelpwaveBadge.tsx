@@ -28,7 +28,8 @@ export const HelpwaveBadge = ({
         {
           'px-2 py-1 rounded-md': size === 'small',
           'px-4 py-1 rounded-md': size === 'large',
-        }, className)}
+        }, className
+)}
     />
   )
 }

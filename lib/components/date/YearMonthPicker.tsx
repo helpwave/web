@@ -1,11 +1,11 @@
-import {useEffect, useRef, useState} from 'react'
-import {Scrollbars} from 'react-custom-scrollbars-2'
-import {noop} from '../../util/noop'
-import {equalSizeGroups, range} from '../../util/array'
+import { useEffect, useRef, useState } from 'react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
+import { noop } from '../../util/noop'
+import { equalSizeGroups, range } from '../../util/array'
 import clsx from 'clsx'
-import {Expandable} from '../Expandable'
-import {addDuration, monthsList, subtractDuration} from '../../util/date'
-import {useLocale} from '../../hooks/useLanguage'
+import { Expandable } from '../Expandable'
+import { addDuration, monthsList, subtractDuration } from '../../util/date'
+import { useLocale } from '../../hooks/useLanguage'
 
 export type YearMonthPickerProps = {
   displayedYearMonth?: Date,
@@ -20,8 +20,8 @@ export type YearMonthPickerProps = {
 // TODO use a dynamically loading infinite list here
 export const YearMonthPicker = ({
                                   displayedYearMonth = new Date(),
-                                  start = subtractDuration(new Date(), {years: 50}),
-                                  end = addDuration(new Date(), {years: 50}),
+                                  start = subtractDuration(new Date(), { years: 50 }),
+                                  end = addDuration(new Date(), { years: 50 }),
                                   onChange = noop,
                                   className = '',
                                   maxHeight = 300,
@@ -52,7 +52,7 @@ export const YearMonthPicker = ({
 
   return (
     <div className={clsx('col select-none', className)}>
-      <Scrollbars autoHeight autoHeightMax={maxHeight} style={{height: '100%'}}>
+      <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
         <div className={clsx('col gap-y-1 mr-3')}>
           {years.map(year => {
             const selectedYear = displayedYearMonth.getFullYear() === year
@@ -60,7 +60,7 @@ export const YearMonthPicker = ({
               <Expandable
                 key={year}
                 ref={(displayedYearMonth.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
-                label={<span className={clsx({'text-primary font-bold': selectedYear})}>{year}</span>}
+                label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
                 initialExpansion={showValueOpen && selectedYear}
               >
                 <div className={clsx('col gap-y-1 px-2 pb-2')}>
@@ -73,7 +73,7 @@ export const YearMonthPicker = ({
                         const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()
                         const firstOfMonth = new Date(year, monthIndex, 1)
                         const lastOfMonth = new Date(year, monthIndex, 1)
-                        const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, {days: 1}), {months: 1})
+                        const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, { days: 1 }), { months: 1 })
                         const isBeforeEnd = end === undefined || firstOfMonth <= end
                         const isValid = isAfterStart && isBeforeEnd
                         return (
@@ -92,7 +92,7 @@ export const YearMonthPicker = ({
                               onChange(newDate)
                             }}
                           >
-                            {new Intl.DateTimeFormat(locale, {month: 'short'}).format(newDate)}
+                            {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
                           </button>
                         )
                       })}

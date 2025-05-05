@@ -1,6 +1,6 @@
-import type {PropsWithChildren, ReactNode} from 'react'
-import {forwardRef, useState} from 'react'
-import {ChevronDown, ChevronUp} from 'lucide-react'
+import type { PropsWithChildren, ReactNode } from 'react'
+import { forwardRef, useState } from 'react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import clsx from 'clsx'
 
 type IconBuilder = (expanded: boolean) => ReactNode
@@ -39,11 +39,11 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
   return (
     <div
       ref={ref}
-      className={clsx('col bg-surface text-on-surface group rounded-lg shadow-sm', {'cursor-pointer': !clickOnlyOnHeader}, className)}
+      className={clsx('col bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader }, className)}
       onClick={() => !clickOnlyOnHeader && setIsExpanded(!isExpanded)}
     >
       <button
-        className={clsx('btn-md rounded-lg justify-between items-center bg-surface text-on-surface', {"group-hover:brightness-95": !isExpanded}, headerClassName)}
+        className={clsx('btn-md rounded-lg justify-between items-center bg-surface text-on-surface', { 'group-hover:brightness-95': !isExpanded }, headerClassName)}
         onClick={() => clickOnlyOnHeader && setIsExpanded(!isExpanded)}
       >
         {label}

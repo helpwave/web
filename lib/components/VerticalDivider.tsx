@@ -17,7 +17,7 @@ export const VerticalDivider = ({
                                   dashLength = 4,
                                 }: VerticalDividerProps) => {
   return (
-    <div style={{width: width + 'px', height: height + 'px'}}>
+    <div style={{ width: width + 'px', height: height + 'px' }}>
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} fill="none"
            xmlns="http://www.w3.org/2000/svg">
         <line
@@ -40,9 +40,9 @@ export const VerticalDivider = ({
             y2={height}
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopOpacity="0" stopColor={"currentColor"}/>
-            <stop offset="0.5" stopColor={"currentColor"}/>
-            <stop offset="1" stopColor={"currentColor"} stopOpacity="0"/>
+            <stop stopOpacity="0" stopColor="currentColor"/>
+            <stop offset="0.5" stopColor="currentColor"/>
+            <stop offset="1" stopColor="currentColor" stopOpacity="0"/>
           </linearGradient>
         </defs>
       </svg>

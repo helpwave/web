@@ -1,16 +1,16 @@
-import type {ReactNode} from 'react'
-import {useState} from 'react'
-import {Search} from 'lucide-react'
-import {useTranslation} from '../../hooks/useTranslation'
-import type {PropsForTranslation} from '../../hooks/useTranslation'
-import type {Languages} from '../../hooks/useLanguage'
-import {MultiSearchWithMapping} from '../../util/simpleSearch'
+import type { ReactNode } from 'react'
+import { useState } from 'react'
+import { Search } from 'lucide-react'
+import { useTranslation } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
+import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import clsx from 'clsx'
-import {Menu, MenuItem} from './Menu'
-import {Input} from './Input'
-import {Checkbox} from './Checkbox'
-import type {LabelProps} from './Label'
-import {Label} from './Label'
+import { Menu, MenuItem } from './Menu'
+import { Input } from './Input'
+import { Checkbox } from './Checkbox'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 type MultiSelectTranslation = {
   select: string,
@@ -97,7 +97,7 @@ export const MultiSelect = <T, >({
     hintText ?? translation.select
     : <span>{`${selectedItems.length} ${translation.selected}`}</span>
 
-  const borderColor = "border-gray-300"
+  const borderColor = 'border-gray-300'
 
   return (
     <div className={clsx(className)}>
@@ -116,12 +116,12 @@ export const MultiSelect = <T, >({
                  },
                  triggerClassName)}
           >
-            {selectedDisplay ? selectedDisplay({items: options, disabled}) : menuButtonText}
+            {selectedDisplay ? selectedDisplay({ items: options, disabled }) : menuButtonText}
           </div>
         )}
         menuClassName={clsx(
           '!rounded-lg !shadow-lg !max-h-[500px] !min-w-[400px] !max-w-[70vh] !overflow-y-auto !border !border-2', borderColor,
-          {'!py-0': !enableSearch, '!pb-0': enableSearch}
+          { '!py-0': !enableSearch, '!pb-0': enableSearch }
         )}
       >
         {enableSearch && (
@@ -147,7 +147,7 @@ export const MultiSelect = <T, >({
                 }
               }}
             >
-              <Checkbox checked={option.selected} disabled={option.disabled} size={"small"}/>
+              <Checkbox checked={option.selected} disabled={option.disabled} size="small"/>
               {option.label}
             </div>
           </MenuItem>

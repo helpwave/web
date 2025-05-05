@@ -4,17 +4,17 @@ import { ModalRegister } from '../components/modals/ModalRegister'
 import { modalRootName } from '../components/modals/Modal'
 import { ThemeProvider } from '@helpwave/style-themes/react/components/ThemeProvider'
 import '../globals.css'
-import {ThemeType} from "@helpwave/style-themes/react/types";
+import type { ThemeType } from '@helpwave/style-themes/react/types'
 
 const colorToHex: Record<ThemeType, string> = {
-  dark: "#1A1A1A",
-  light: "#EEE",
+  dark: '#1A1A1A',
+  light: '#EEE',
 }
 
 const colorToHexReverse: Record<string, ThemeType> = {
-  "#1A1A1A": "dark",
-  "#EEE": "light",
-  "transparent": "light",
+  '#1A1A1A': 'dark',
+  '#EEE': 'light',
+  'transparent': 'light',
 }
 
 const preview: Preview = {

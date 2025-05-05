@@ -40,10 +40,14 @@ export const ASTNodeInterpreter = ({
     case 'text':
       return isRoot ? <span className={className}>{node.text}</span> : node.text
     case 'helpwave':
-      return (<span className='font-bold font-space no-underline'>helpwave</span>)
+      return (<span className="font-bold font-space no-underline">helpwave</span>)
     case 'none':
-      return isRoot ? <span className={className}>{node.children.map((value, index) => <ASTNodeInterpreter key={index}
-                                                                                                           node={value}/>)}</span> :
+      return isRoot ? (
+<span className={className}>{node.children.map((value, index) => (
+<ASTNodeInterpreter key={index}
+                                                                                                           node={value}/>
+))}</span>
+) :
         <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
     case 'bold':
       return <b>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</b>
@@ -53,7 +57,7 @@ export const ASTNodeInterpreter = ({
       return (<u>{node.children.map((value, index) => (<ASTNodeInterpreter key={index} node={value}/>))}</u>)
     case 'font-space':
       return (
-        <span className='font-space'>{node.children.map((value, index) => (
+        <span className="font-space">{node.children.map((value, index) => (
           <ASTNodeInterpreter key={index}
                               node={value}/>
         ))}</span>
@@ -99,20 +103,20 @@ export const ASTNodeInterpreter = ({
 }
 
 const modifierIdentifierMapping = [
-  {id: 'i', name: 'italic'},
-  {id: 'b', name: 'bold'},
-  {id: 'u', name: 'underline'},
-  {id: 'space', name: 'font-space'},
-  {id: 'primary', name: 'primary'},
-  {id: 'secondary', name: 'secondary'},
-  {id: 'warn', name: 'warn'},
-  {id: 'positive', name: 'positive'},
-  {id: 'negative', name: 'negative'},
+  { id: 'i', name: 'italic' },
+  { id: 'b', name: 'bold' },
+  { id: 'u', name: 'underline' },
+  { id: 'space', name: 'font-space' },
+  { id: 'primary', name: 'primary' },
+  { id: 'secondary', name: 'secondary' },
+  { id: 'warn', name: 'warn' },
+  { id: 'positive', name: 'positive' },
+  { id: 'negative', name: 'negative' },
 ] as const
 
 const inserterIdentifierMapping = [
-  {id: 'helpwave', name: 'helpwave'},
-  {id: 'newline', name: 'newline'}
+  { id: 'helpwave', name: 'helpwave' },
+  { id: 'newline', name: 'newline' }
 ] as const
 const parseMarkdown = (
   text: string,
@@ -267,7 +271,7 @@ export type MarkdownInterpreterProps = {
   className?: string,
 }
 
-export const MarkdownInterpreter = ({text, className}: MarkdownInterpreterProps) => {
+export const MarkdownInterpreter = ({ text, className }: MarkdownInterpreterProps) => {
   const tree = parseMarkdown(text)
   const optimizedTree = optimizeTree(tree)!
   return <ASTNodeInterpreter node={optimizedTree} isRoot={true} className={className}/>

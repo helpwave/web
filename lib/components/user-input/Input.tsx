@@ -177,7 +177,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
       {labelText && (
         <label htmlFor={id} className={clsx('text-gray-700', labelClassName)}>
           {labelText}
-          {required && <span className={'text-primary'}>*</span>}
+          {required && <span className="text-primary">*</span>}
         </label>
       )}
       {input}

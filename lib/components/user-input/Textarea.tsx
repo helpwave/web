@@ -46,7 +46,7 @@ export const Textarea = ({
   }
 
   return (
-    <div className={'w-full'}>
+    <div className="w-full">
       {label && (<Label {...label} htmlFor={id} className={clsx('mb-1', label.className)} labelType={label.labelType ?? 'labelSmall'}/>)}
       <div className={`${clsx('focus-within:border-primary relative', { 'bg-white shadow border-2 border-gray-300 hover:border-primary rounded-lg': defaultStyle })}`}>
         {headline && (

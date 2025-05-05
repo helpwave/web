@@ -45,6 +45,7 @@
     "@storybook/react": "^8.6.12",
     "@types/react": "18.3.17",
     "@types/react-dom": "18.3.5",
+    "eslint": "9.17.0",
     "next": "15.2.4",
     "prop-types": "15.8.1",
     "storybook": "^8.6.12"

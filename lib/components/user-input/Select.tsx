@@ -1,9 +1,9 @@
-import {Menu} from '@headlessui/react'
-import {ChevronDown, ChevronUp} from 'lucide-react'
-import type {ReactNode} from 'react'
+import { Menu } from '@headlessui/react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import type { ReactNode } from 'react'
 import clsx from 'clsx'
-import type {LabelProps} from './Label'
-import {Label} from './Label'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -63,7 +63,7 @@ export const Select = <T, >({
       ' use selectedDisplayOverwrite to set your selected text or component')
   }
 
-  const borderColor = "border-gray-300"
+  const borderColor = 'border-gray-300'
 
   return (
     <div className={clsx(className)}>
@@ -71,7 +71,7 @@ export const Select = <T, >({
         <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
       )}
       <Menu as="div" className={clsx('relative text-gray-700')}>
-        {({open}) => (
+        {({ open }) => (
           <>
             <Menu.Button
               className={clsx(

@@ -1,17 +1,17 @@
-import {useEffect, useState} from 'react'
-import {ArrowDown, ArrowUp, ChevronDown} from 'lucide-react'
-import type {Languages} from '../../hooks/useLanguage'
-import type {PropsForTranslation} from '../../hooks/useTranslation'
-import {useTranslation} from '../../hooks/useTranslation'
-import {noop} from '../../util/noop'
-import {addDuration, isInTimeSpan, subtractDuration} from '../../util/date'
+import { useEffect, useState } from 'react'
+import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
+import type { Languages } from '../../hooks/useLanguage'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
+import { noop } from '../../util/noop'
+import { addDuration, isInTimeSpan, subtractDuration } from '../../util/date'
 import clsx from 'clsx'
-import {SolidButton, TextButton} from '../Button'
-import {useLocale} from '../../hooks/useLanguage'
-import type {YearMonthPickerProps} from './YearMonthPicker'
-import {YearMonthPicker} from './YearMonthPicker'
-import type {DayPickerProps} from './DayPicker'
-import {DayPicker} from './DayPicker'
+import { SolidButton, TextButton } from '../Button'
+import { useLocale } from '../../hooks/useLanguage'
+import type { YearMonthPickerProps } from './YearMonthPicker'
+import { YearMonthPicker } from './YearMonthPicker'
+import type { DayPickerProps } from './DayPicker'
+import { DayPicker } from './DayPicker'
 
 type DatePickerTranslation = {
   today: string,
@@ -45,8 +45,8 @@ export type DatePickerProps = {
 export const DatePicker = ({
                              overwriteTranslation,
                              value = new Date(),
-                             start = subtractDuration(new Date(), {years: 50}),
-                             end = addDuration(new Date(), {years: 50}),
+                             start = subtractDuration(new Date(), { years: 50 }),
+                             end = addDuration(new Date(), { years: 50 }),
                              initialDisplay = 'day',
                              onChange = noop,
                              yearMonthPickerProps,
@@ -71,27 +71,27 @@ export const DatePicker = ({
           })}
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
         >
-          {`${new Intl.DateTimeFormat(locale, {month: 'long'}).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
+          {`${new Intl.DateTimeFormat(locale, { month: 'long' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
           <ChevronDown size={16}/>
         </TextButton>
         {displayMode === 'day' && (
           <div className={clsx('row justify-end')}>
             <SolidButton
-              size={"small"}
-              color={"primary"}
-              disabled={!isInTimeSpan(subtractDuration(displayedMonth, {months: 1}), start, end)}
+              size="small"
+              color="primary"
+              disabled={!isInTimeSpan(subtractDuration(displayedMonth, { months: 1 }), start, end)}
               onClick={() => {
-                setDisplayedMonth(subtractDuration(displayedMonth, {months: 1}))
+                setDisplayedMonth(subtractDuration(displayedMonth, { months: 1 }))
               }}
             >
               <ArrowUp size={20}/>
             </SolidButton>
             <SolidButton
-              size={"small"}
-              color={"primary"}
-              disabled={!isInTimeSpan(addDuration(displayedMonth, {months: 1}), start, end)}
+              size="small"
+              color="primary"
+              disabled={!isInTimeSpan(addDuration(displayedMonth, { months: 1 }), start, end)}
               onClick={() => {
-                setDisplayedMonth(addDuration(displayedMonth, {months: 1}))
+                setDisplayedMonth(addDuration(displayedMonth, { months: 1 }))
               }}
             >
               <ArrowDown size={20}/>

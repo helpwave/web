@@ -1,12 +1,13 @@
-import {isInTimeSpan, WeekDay} from '../../util/date'
-import {equalDate, getWeeksForCalenderMonth} from '../../util/date'
-import {noop} from '../../util/noop'
+import type { WeekDay } from '../../util/date'
+import { isInTimeSpan } from '../../util/date'
+import { equalDate, getWeeksForCalenderMonth } from '../../util/date'
+import { noop } from '../../util/noop'
 import clsx from 'clsx'
-import {useLocale} from '../../hooks/useLanguage'
-import {useEffect, useState} from "react";
+import { useLocale } from '../../hooks/useLanguage'
+import { useEffect, useState } from 'react'
 
 export type DayPickerProps = {
-  displayedMonth: Date;
+  displayedMonth: Date,
   selected?: Date,
   start?: Date,
   end?: Date,
@@ -38,7 +39,7 @@ export const DayPicker = ({
       <div className={clsx('row text-center')}>
         {weeks[0]!.map((weekDay, index) => (
           <div key={index} className={clsx('flex-1 font-semibold')}>
-            {new Intl.DateTimeFormat(locale, {weekday: 'long'}).format(weekDay).substring(0, 2)}
+            {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
@@ -76,7 +77,7 @@ export const DayPicker = ({
   )
 }
 
-export const DayPickerControlled = ({displayedMonth, onChange = noop, ...restProps}: DayPickerProps) => {
+export const DayPickerControlled = ({ displayedMonth, onChange = noop, ...restProps }: DayPickerProps) => {
   const [date, setDate] = useState(displayedMonth)
 
   useEffect(() => setDate(displayedMonth), [displayedMonth])

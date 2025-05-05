@@ -1,23 +1,23 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
-import type {CheckedState} from '@radix-ui/react-checkbox'
-import {Check, Minus} from 'lucide-react'
+import type { CheckedState } from '@radix-ui/react-checkbox'
+import { Check, Minus } from 'lucide-react'
 import clsx from 'clsx'
-import type {LabelProps} from './Label'
-import {Label} from './Label'
+import type { LabelProps } from './Label'
+import { Label } from './Label'
 
 type CheckBoxSize = 'small' | 'medium' | 'large'
 
 const checkboxSizeMapping: Record<CheckBoxSize, string> = {
-  small: "size-4",
-  medium: "size-6",
-  large: "size-8",
+  small: 'size-4',
+  medium: 'size-6',
+  large: 'size-8',
 }
 
 const checkboxIconSizeMapping: Record<CheckBoxSize, string> = {
-  small: "size-3",
-  medium: "size-5",
-  large: "size-7",
+  small: 'size-3',
+  medium: 'size-5',
+  large: 'size-7',
 }
 
 type CheckboxProps = {
@@ -48,7 +48,7 @@ const ControlledCheckbox = ({
                               disabled,
                               onChange,
                               onChangeTristate,
-                              size = "medium",
+                              size = 'medium',
                               className = '',
                               containerClassName
                             }: CheckboxProps) => {
@@ -88,7 +88,7 @@ const ControlledCheckbox = ({
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
       {label &&
-        <Label {...label} className={clsx("cursor-pointer", label.className)} htmlFor={id} onClick={changeValue}/>}
+        <Label {...label} className={clsx('cursor-pointer', label.className)} htmlFor={id} onClick={changeValue}/>}
     </div>
   )
 }

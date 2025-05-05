@@ -1,7 +1,7 @@
 import type { HTMLProps, PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
 
-export type ChipColor = 'default' | 'dark'| "red" | "yellow" | "green" | "blue" | "pink"
+export type ChipColor = 'default' | 'dark'| 'red' | 'yellow' | 'green' | 'blue' | 'pink'
 type ChipVariant = 'normal' | 'fullyRounded'
 
 export type ChipProps = HTMLProps<HTMLDivElement> & PropsWithChildren<{

@@ -1,12 +1,12 @@
-import {Check} from 'lucide-react'
+import { Check } from 'lucide-react'
 import clsx from 'clsx'
-import {noop} from '../../util/noop'
-import {Checkbox} from '../user-input/Checkbox'
-import type {Languages} from '../../hooks/useLanguage'
-import type {PropsForTranslation} from '../../hooks/useTranslation'
-import {useTranslation} from '../../hooks/useTranslation'
-import type {PropertyBaseProps} from './PropertyBase'
-import {PropertyBase} from './PropertyBase'
+import { noop } from '../../util/noop'
+import { Checkbox } from '../user-input/Checkbox'
+import type { Languages } from '../../hooks/useLanguage'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
+import type { PropertyBaseProps } from './PropertyBase'
+import { PropertyBase } from './PropertyBase'
 
 type CheckboxPropertyTranslation = {
   yes: string,
@@ -54,7 +54,7 @@ export const CheckboxProperty = ({
             checked={value ?? true}
             disabled={readOnly}
             onChange={onChange}
-            label={{name: `${translation.yes}/${translation.no}`, labelType: "labelMedium"}}
+            label={{ name: `${translation.yes}/${translation.no}`, labelType: 'labelMedium' }}
           />
         </div>
       )}

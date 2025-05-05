@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import {DayPickerControlled} from "../../../../components/date/DayPicker";
+import { DayPickerControlled } from '../../../../components/date/DayPicker'
 
 const meta = {
   title: 'User-Action/Input/Date',

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import {
@@ -166,14 +166,13 @@ export const WardDetail = ({
         <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
           <span className={clsx('textstyle-title-normal')}>{translation.dangerZone}</span>
           <span className={clsx('textstyle-description')}>{translation.dangerZoneText}</span>
-          <SolidButton
+          <TextButton
             onClick={() => setIsShowingConfirmDialog(true)}
-            className={clsx('px-0 font-bold text-left')}
+            className="px-0 font-bold justify-start"
             color="negative"
-            variant="text"
           >
             {translation.deleteWard}
-          </SolidButton>
+          </TextButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

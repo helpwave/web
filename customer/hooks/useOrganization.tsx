@@ -23,7 +23,7 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
 
   if (!organization && isLoading) {
     return (
-      <div className={'col items-center justify-center w-screen h-screen'}>
+      <div className="col items-center justify-center w-screen h-screen">
         <LoadingAnimation loadingText="Loading organization..."/>
       </div>
     )
@@ -31,8 +31,8 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
 
   if (isError) {
     return (
-      <div className={'col items-center justify-center w-screen h-screen'}>
-        <span className={'text-negative'}>An Error occurred</span>
+      <div className="col items-center justify-center w-screen h-screen">
+        <span className="text-negative">An Error occurred</span>
       </div>
     )
   }

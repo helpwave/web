@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   if (!identity && isLoading) {
     return (
-      <div className={'col items-center justify-center w-screen h-screen'}>
+      <div className="col items-center justify-center w-screen h-screen">
         <LoadingAnimation loadingText="Logging in..."/>
       </div>
     )

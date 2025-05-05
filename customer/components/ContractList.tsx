@@ -43,22 +43,22 @@ export const ContractList = ({
   return (
     <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
       {contracts && (
-        <div className={'flex flex-col gap-y-1'}>
-          <h3 className={'text-lg font-semibold'}>{translation.contracts}</h3>
+        <div className="flex flex-col gap-y-1">
+          <h3 className="text-lg font-semibold">{translation.contracts}</h3>
           {contracts.length === 0 ? (
-            <span className={'text-bg-gray-300'}>{translation.noContracts}</span>
+            <span className="text-bg-gray-300">{translation.noContracts}</span>
           ) : (
             contracts.map(contract => (
               <Link
                 href={contract.url}
                 target="_blank"
                 key={contract.uuid}
-                className={'inline-flex flex-row gap-x-2'}
+                className="inline-flex flex-row gap-x-2"
               >
                 {contract.key}
-                <span className={'inline-flex flex-row items-center'}>
+                <span className="inline-flex flex-row items-center">
                   (
-                  <div className={'inline-flex flex-row items-center gap-x-0.5'}>
+                  <div className="inline-flex flex-row items-center gap-x-0.5">
                     {`${translation.show}`}
                     <ExternalLink size={16}/>
                   </div>

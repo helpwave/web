@@ -36,8 +36,8 @@ export const CreateOrganizationPage = ({
   return (
     <Page
       pageTitle={titleWrapper(translation.createOrganization)}
-      mainContainerClassName={'max-w-[700px]'}
-      contentAndFooterClassName={'items-center'}
+      mainContainerClassName="max-w-[700px]"
+      contentAndFooterClassName="items-center"
       isHidingSidebar={true}
     >
       <Section>

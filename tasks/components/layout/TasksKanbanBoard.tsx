@@ -217,7 +217,7 @@ export const TasksKanbanBoard = ({
             onEditTask={onEditTask}
           />
           <DragOverlay dropAnimation={dropAnimation}>
-            {task && <TaskCard task={task}/>}
+            {task && <TaskCard task={task} onClick={() => {}} isSelected={false}/>}
           </DragOverlay>
         </div>
       </DndContext>

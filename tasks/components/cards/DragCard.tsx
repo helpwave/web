@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react'
+import type { MouseEventHandler, PropsWithChildren } from 'react'
 import clsx from 'clsx'
 
 export type CardDragProperties = {
@@ -9,7 +9,7 @@ export type CardDragProperties = {
 }
 
 export type DragCardProps = PropsWithChildren<{
-  onClick?: () => void,
+  onClick?: MouseEventHandler<HTMLDivElement>,
   isSelected?: boolean,
   cardDragProperties?: CardDragProperties,
   className?: string,
@@ -22,6 +22,7 @@ export const DragCard = ({
   children,
   cardDragProperties = {},
   isSelected,
+  onClick,
   className,
 }: DragCardProps) => {
   // For now fully equal to a normal card but, that might change later
@@ -33,7 +34,7 @@ export const DragCard = ({
       'border-warning border-dashed': cardDragProperties.isOver && cardDragProperties.isDangerous,
       'border-primary border-dashed': cardDragProperties.isOver && !cardDragProperties.isDangerous && !cardDragProperties.isInvalid,
       'border-negative': cardDragProperties.isOver && cardDragProperties.isInvalid,
-    }, className)}>
+    }, className)} onClick={onClick}>
       {children}
     </div>
   )

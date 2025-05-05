@@ -76,7 +76,7 @@ export const DashboardDisplay = ({
                   className={clsx({ '!cursor-not-allowed': !patient.wardId })}
                   bedName={patient.bed?.name}
                   patientName={patient.name}
-                  onTileClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
+                  onClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
                 />
               ))}
             </div>
@@ -93,7 +93,7 @@ export const DashboardDisplay = ({
                   <WardCard
                     key={ward.id}
                     ward={ward}
-                    onTileClick={() => router.push(`/ward/${ward.id}`)}
+                    onClick={() => router.push(`/ward/${ward.id}`)}
                   />
                 ))}
               </div>

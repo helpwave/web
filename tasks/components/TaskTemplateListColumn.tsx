@@ -36,7 +36,7 @@ export type TaskTemplateListColumnProps = {
  */
 export const TaskTemplateListColumn = ({
   templates,
-  activeId,
+  // activeId,
   onTileClick,
   onColumnEditClick,
   overwriteTranslation: maybeLanguage
@@ -66,8 +66,8 @@ export const TaskTemplateListColumn = ({
                   key={taskTemplateExtension.taskTemplate.id}
                   name={taskTemplateExtension.taskTemplate.name}
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
-                  isSelected={activeId === taskTemplateExtension.taskTemplate.id}
-                  onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
+                  //isSelected={activeId === taskTemplateExtension.taskTemplate.id}
+                  onClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
                   className={clsx('border-2 border-gray-300 !pr-2', { 'mb-2': index === templates.length - 1 })}
                   typeForLabel={taskTemplateExtension.type}
                 />

@@ -23,7 +23,7 @@ import { Modal } from '@helpwave/common/components/modals/Modal'
 import { useState } from 'react'
 import { ContractList } from '@/components/ContractList'
 import { defaultLocaleFormatters } from '@/utils/locale'
-import {SolidButton, TextButton} from "@helpwave/common/components/Button";
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 
 type ProductsTranslation = {
   bookProduct: string,
@@ -100,12 +100,12 @@ const ProductShop: NextPage = () => {
   const localeTranslation = useTranslation(defaultLocaleFormatters)
 
   return (
-    <Page pageTitle={titleWrapper(translation.bookProduct)} mainContainerClassName={'min-h-[80vh]'}>
+    <Page pageTitle={titleWrapper(translation.bookProduct)} mainContainerClassName="min-h-[80vh]">
       <Modal
         id="productModal"
         isOpen={!!productModalProductValue}
         titleText={productModalProductValue?.name}
-        modalClassName={'col gap-y-4'}
+        modalClassName="col gap-y-4"
         onBackgroundClick={() => setProductModalProductValue(undefined)}
         onCloseClick={() => setProductModalProductValue(undefined)}
       >
@@ -117,20 +117,20 @@ const ProductShop: NextPage = () => {
         {isError && (<span>{translation.error}</span>)}
         {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && (
-          <div className={'col gap-x-8 gap-y-12'}>
+          <div className="col gap-x-8 gap-y-12">
             {products.length == 0 ?
               (<span>{translation.noProducts}</span>) :
               products.map((product, index) => {
                 return (
                   <div
                     key={index}
-                    className={'col gap-y-2 bg-hw-primary-300 px-4 py-2 rounded-md'}
+                    className="col gap-y-2 bg-hw-primary-300 px-4 py-2 rounded-md"
                   >
-                    <div className={'row justify-between'}>
-                      <h4 className={'font-bold font-space text-2xl'}>{product.name}</h4>
+                    <div className="row justify-between">
+                      <h4 className="font-bold font-space text-2xl">{product.name}</h4>
                       <TextButton
-                        color={"neutral"}
-                        className={'p-0'}
+                        color="neutral"
+                        className="p-0"
                         onClick={() => {
                           setProductModalProductValue(product)
                         }}
@@ -139,16 +139,16 @@ const ProductShop: NextPage = () => {
                         <ChevronRight size={16} />
                       </TextButton>
                     </div>
-                    <div className={'row gap-x-4'}>
+                    <div className="row gap-x-4">
                       {product.plan.map(plan => {
                         return (
-                          <div key={plan.uuid} className={'col gap-y-6 bg-white rounded-lg px-4 py-2'}>
-                            <span className={'font-space font-bold text-xl'}>{translation.productPlan(plan)}</span>
-                            <span className={'row gap-x-1 justify-center font-semibold text-lg'}>
-                              <span className={'text-3xl'}>{localeTranslation.formatMoney(plan.costEuro)}</span>
+                          <div key={plan.uuid} className="col gap-y-6 bg-white rounded-lg px-4 py-2">
+                            <span className="font-space font-bold text-xl">{translation.productPlan(plan)}</span>
+                            <span className="row gap-x-1 justify-center font-semibold text-lg">
+                              <span className="text-3xl">{localeTranslation.formatMoney(plan.costEuro)}</span>
                             </span>
                             <SolidButton
-                              className={'items-center justify-center gap-x-2 w-[160px]'}
+                              className="items-center justify-center gap-x-2 w-[160px]"
                               onClick={async () => {
                                 clearCart()
                                 addItem({ id: product.uuid, quantity: 1, plan: { uuid: plan.uuid, type: plan.type } })

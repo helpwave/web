@@ -1,11 +1,11 @@
-import {Menu as MenuIcon, X} from 'lucide-react'
-import {useState} from 'react'
+import { Menu as MenuIcon, X } from 'lucide-react'
+import { useState } from 'react'
 import Link from 'next/link'
-import {Menu, MenuItem} from '@helpwave/common/components/user-input/Menu'
-import type {Languages} from '@helpwave/common/hooks/useLanguage'
-import {useTranslation} from '@helpwave/common/hooks/useTranslation'
-import {MarkdownInterpreter} from '@helpwave/common/components/MarkdownInterpreter'
-import {Helpwave} from "@helpwave/common/components/icons/Helpwave";
+import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
+import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 
 const homeURL = '/'
 
@@ -101,14 +101,14 @@ const Header = () => {
 
   return (
     <>
-      <div className={'absolute top-0 z-[50] row justify-center w-screen bg-gray-50 text-black section-padding-x'}>
-        <nav className={'row pt-2 items-center justify-between w-full max-w-[1200px]'}>
-          <Link href={homeURL} className={'row gap-x-1 items-center text-2xl'}>
+      <div className="absolute top-0 z-[50] row justify-center w-screen bg-gray-50 text-black section-padding-x">
+        <nav className="row pt-2 items-center justify-between w-full max-w-[1200px]">
+          <Link href={homeURL} className="row gap-x-1 items-center text-2xl">
             <Helpwave/>
             <MarkdownInterpreter text={'\\helpwave'}/>
           </Link>
-          <div className={'max-tablet:hidden w-full'}>
-            <div className={'flex flex-wrap items-center justify-end gap-x-6'}>
+          <div className="max-tablet:hidden w-full">
+            <div className="flex flex-wrap items-center justify-end gap-x-6">
               {items.map(({
                             name,
                             url,
@@ -117,7 +117,7 @@ const Header = () => {
                 <div key={name}>
                   {subpage === undefined ? (
                     <Link href={url}>
-                      <span className={'textstyle-navigation-item'}>
+                      <span className="textstyle-navigation-item">
                         {translation[name]}
                       </span>
                     </Link>
@@ -125,8 +125,8 @@ const Header = () => {
                     <Menu<HTMLDivElement>
                       alignment="tl"
                       trigger={(onClick, ref) => (
-                        <div ref={ref} onClick={onClick} className={'cursor-pointer select-none'}>
-                          <span className={'textstyle-navigation-item'}>
+                        <div ref={ref} onClick={onClick} className="cursor-pointer select-none">
+                          <span className="textstyle-navigation-item">
                             {translation[name]}
                           </span>
                         </div>
@@ -141,7 +141,7 @@ const Header = () => {
                         (
                           <Link key={subPageName} href={subPageExternal ? subPageUrl : url + subPageUrl}>
                             <MenuItem alignment="left">
-                            <span className={'textstyle-navigation-item'}>
+                            <span className="textstyle-navigation-item">
                               {translation[subPageName]}
                             </span>
                             </MenuItem>
@@ -154,14 +154,14 @@ const Header = () => {
               <Link href="mailto:contact@helpwave.de">
                 <div
                   color="dark"
-                  className={'chip-full py-2 px-4 shadow-sm bg-white text-black font-bold hover:brightness-[98%]'}
+                  className="chip-full py-2 px-4 shadow-sm bg-white text-black font-bold hover:brightness-[98%]"
                 >
                   {translation.contact}
                 </div>
               </Link>
             </div>
           </div>
-          <button onClick={() => setNavbarOpen(true)} className={'tablet:hidden content-end'}
+          <button onClick={() => setNavbarOpen(true)} className="tablet:hidden content-end"
                   aria-controls="navbar" aria-expanded="false">
             <MenuIcon size={32}/>
           </button>
@@ -169,15 +169,15 @@ const Header = () => {
       </div>
 
       {navbarOpen && (
-        <div className={'absolute w-screen h-screen z-[100] bg-gray-50 text-black'}>
-          <div className={'text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'}>
-            <button onClick={() => setNavbarOpen(false)} className={'mb-5'}>
+        <div className="absolute w-screen h-screen z-[100] bg-gray-50 text-black">
+          <div className="text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <button onClick={() => setNavbarOpen(false)} className="mb-5">
               <X size={64}/>
             </button>
 
-            <div className={'w-full p-2'}>
+            <div className="w-full p-2">
               <Link href="/" onClick={() => setNavbarOpen(false)}>
-                <span className={'textstyle-title-lg'}>
+                <span className="textstyle-title-lg">
                   home
                 </span>
               </Link>
@@ -188,17 +188,17 @@ const Header = () => {
                           url,
                           subpage,
                         }) => (
-              <div key={name} className={'w-full p-2'}>
+              <div key={name} className="w-full p-2">
                 {subpage === undefined ? (
                   <Link href={url} onClick={() => setNavbarOpen(false)}>
-                    <span className={'textstyle-title-lg'}>
+                    <span className="textstyle-title-lg">
                       {translation[name]}
                     </span>
                   </Link>
                 ) : (
                   <Menu<HTMLDivElement> alignment="tl" trigger={(onClick, ref) => (
-                    <div ref={ref} onClick={onClick} className={'cursor-pointer select-none'}>
-                      <span className={'textstyle-title-lg'}>
+                    <div ref={ref} onClick={onClick} className="cursor-pointer select-none">
+                      <span className="textstyle-title-lg">
                         {translation[name]}
                       </span>
                     </div>
@@ -212,7 +212,7 @@ const Header = () => {
                         <Link key={subPageName} onClick={() => setNavbarOpen(false)}
                               href={subPageExternal ? subPageUrl : url + subPageUrl}>
                           <MenuItem alignment="left">
-                          <span className={'textstyle-title-lg'}>
+                          <span className="textstyle-title-lg">
                             {translation[subPageName]}
                           </span>
                           </MenuItem>

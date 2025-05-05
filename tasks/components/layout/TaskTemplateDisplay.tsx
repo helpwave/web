@@ -42,7 +42,7 @@ export type TaskTemplateDisplayProps = {
 export const TaskTemplateDisplay = ({
   overwriteTranslation,
   wardId,
-  selectedId,
+  //selectedId,
   onSelectChange,
   taskTemplates,
   variant,
@@ -80,14 +80,14 @@ export const TaskTemplateDisplay = ({
             key={taskTemplate.id}
             name={taskTemplate.name}
             subtaskCount={taskTemplate.subtasks.length}
-            isSelected={selectedId === taskTemplate.id}
+            //TODO isSelected={selectedId === taskTemplate.id}
             onEditClick={() => onSelectChange(taskTemplate)}
-            onTileClick={() => onSelectChange(taskTemplate)}
+            onClick={() => onSelectChange(taskTemplate)}
           />
         ))}
         <AddCard
-          isSelected={selectedId === ''}
-          onTileClick={() => onSelectChange(undefined)}
+          //TODO isSelected={selectedId === ''}
+          onClick={() => onSelectChange(undefined)}
           text={translation.addNewTaskTemplate}
         />
       </div>

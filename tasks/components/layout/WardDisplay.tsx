@@ -63,12 +63,12 @@ export const WardDisplay = ({
               <WardCard
                 key={ward.id}
                 ward={ward}
-                isSelected={selectedWardId === ward.id}
+                // TODO isSelected={selectedWardId === ward.id}
                 onEditClick={() => context.updateContext({
                   ...context.state,
                   wardId: ward.id
                 })}
-                onTileClick={() => {
+                onClick={() => {
                   router.push(`/ward/${ward.id}`).catch(console.error)
                 }}
               />
@@ -76,11 +76,11 @@ export const WardDisplay = ({
             <AddCard
               className={clsx('min-h-[76px]')}
               text={translation.addWard}
-              onTileClick={() => context.updateContext({
+              onClick={() => context.updateContext({
                 ...context.state,
                 wardId: ''
               })}
-              isSelected={!selectedWardId}
+              // TODO isSelected={!selectedWardId}
             />
           </div>
         )}

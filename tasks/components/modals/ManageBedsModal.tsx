@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Modal, type ModalProps } from '@helpwave/common/components/modals/Modal'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { defaultTableStatePagination, Table, updatePagination, type TableState } from '@helpwave/common/components/Table'
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -131,17 +131,16 @@ export const ManageBedsModal = ({
                   <span>{bed.patient ? bed.patient.name : '-'}</span>
                 </div>,
                 <div key="remove" className={clsx('row justify-end')}>
-                  <SolidButton
+                  <TextButton
                     disabled={!!bed.patient}
                     onClick={() => {
                       deleteBedMutation.mutate(bed.id)
                       setTableState({ pagination: tableState.pagination ? updatePagination(tableState.pagination, beds.length - 1) : undefined })
                     }}
                     color="negative"
-                    variant="text"
                   >
                     {translation.remove}
-                  </SolidButton>
+                  </TextButton>
                 </div>
               ]}
             />

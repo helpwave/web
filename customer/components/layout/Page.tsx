@@ -108,7 +108,7 @@ export const Page = ({
         {!isHidingSidebar && (<NavigationSidebar items={navItems}/>)}
         {mainContent}
       </div>
-      <div className={'col grow w-full tablet:hidden overflow-hidden'}>
+      <div className="col grow w-full tablet:hidden overflow-hidden">
         {mainContent}
       </div>
     </div>

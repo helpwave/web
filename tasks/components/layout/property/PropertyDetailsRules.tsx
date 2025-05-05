@@ -66,7 +66,7 @@ export const PropertyDetailsRules = ({
               onChange(newValue)
               onEditComplete(newValue)
             }}
-            size={20}
+            size="medium"
           />
         )}
         className={clsx('mt-4')}

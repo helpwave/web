@@ -9,8 +9,8 @@
   "dependencies": {
     "@helpwave/common": "workspace:*",
     "@helpwave/proto-ts": "0.64.0-89e2023.0",
-    "@tanstack/react-query": "5.72.1",
-    "@tanstack/react-query-devtools": "5.62.7",
+    "@tanstack/react-query": "^4.36.1",
+    "@tanstack/react-query-devtools": "^4.36.1",
     "@types/google-protobuf": "3.15.12",
     "cookies-next": "2.1.2",
     "google-protobuf": "3.21.4",
@@ -26,6 +26,7 @@
     "@helpwave/eslint-config": "workspace:*",
     "@types/js-cookie": "3.0.6",
     "@types/node": "20.17.10",
-    "@types/react": "18.3.17"
+    "@types/react": "18.3.17",
+    "eslint": "9.17.0"
   }
 }

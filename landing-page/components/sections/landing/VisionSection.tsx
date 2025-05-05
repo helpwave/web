@@ -36,7 +36,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
       backgroundColor="white"
     >
       <div className={clsx('col w-1/2 max-tablet:w-full gap-y-2')}>
-        <Chip color={"blue"} className={clsx('font-semibold px-4')}>{translation.ourVision}</Chip>
+        <Chip color="blue" className={clsx('font-semibold px-4')}>{translation.ourVision}</Chip>
         <h2 className={clsx('textstyle-title-xl')}>{translation.title}</h2>
         <span className={clsx('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
       </div>

@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import {
   defaultTableStatePagination,
@@ -87,9 +87,9 @@ export type RoomListProps = {
  * A table for showing and editing the rooms within a ward
  */
 export const RoomList = ({
-  overwriteTranslation,
-  rooms
-}: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
+                           overwriteTranslation,
+                           rooms
+                         }: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
   const translation = useTranslation(defaultRoomListTranslations, overwriteTranslation)
   const context = useContext(OrganizationOverviewContext)
   const [tableState, setTableState] = useState<TableState>({
@@ -239,22 +239,14 @@ export const RoomList = ({
               <span>{room.bedCount}</span>
             </div>,
             <div key="manage" className={clsx('row justify-start min-w-[140px]')}>
-              <SolidButton
-                onClick={() => setManagedRoom(room.id)}
-                variant="text"
-                color="neutral"
-              >
+              <TextButton onClick={() => setManagedRoom(room.id)}>
                 {translation.manage}
-              </SolidButton>
+              </TextButton>
             </div>,
             <div key="remove" className={clsx('row justify-end')}>
-              <SolidButton
-                onClick={() => setDeletionConfirmDialogElement(room.id)}
-                color="negative"
-                variant="text"
-              >
+              <TextButton onClick={() => setDeletionConfirmDialogElement(room.id)} color="negative">
                 {translation.remove}
-              </SolidButton>
+              </TextButton>
             </div>
           ]}
         />

@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <ModalRegister>
-          <div className={'font-sans'} id={modalRootName}>
+          <div className="font-sans" id={modalRootName}>
             <Component {...pageProps} />
           </div>
         </ModalRegister>

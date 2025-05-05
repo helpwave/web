@@ -61,7 +61,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                           doneTasks={bed.patient.tasksDone}
                           inProgressTasks={bed.patient.tasksInProgress}
                           unscheduledTasks={bed.patient.tasksUnscheduled}
-                          onTileClick={(event) => {
+                          onClick={(event) => {
                             event.stopPropagation()
                             if (bed.patient) {
                               // LINTER: `bed.patient.id` gets evaluated as undefined without this if
@@ -95,7 +95,7 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                       <BedCard
                         bedName={bed.name}
                         // TODO move patient creation to here
-                        onTileClick={(event) => {
+                        onClick={(event) => {
                           event.stopPropagation()
                           setSelectedBed(room, bed, undefined, {
                             ...emptyPatient,

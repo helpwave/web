@@ -16,6 +16,7 @@ import { withOrganization } from '@/hooks/useOrganization'
 import { useMyInvoicesQuery } from '@/api/mutations/invoice_mutations'
 import EmbeddedCheckoutButton from '@/components/forms/StripeCheckOutForm'
 import { defaultLocaleFormatters } from '@/utils/locale'
+import { TextButton } from '@helpwave/common/components/Button'
 
 type InvoicesTranslation = {
   invoices: string,
@@ -91,9 +92,9 @@ const PaymentDisplay = ({ amount }: PaymentDisplayProps) => {
   const translation = useTranslation(defaultInvoicesTranslations)
 
   return (
-    <div className={tx('px-4 py-2 rounded-full', {
-      'bg-hw-positive-500 text-white': amount === 0,
-      'bg-hw-negative-500 text-white': amount !== 0,
+    <div className={clsx('px-4 py-2 rounded-full', {
+      'bg-positive text-on-positive': amount === 0,
+      'bg-negative text-on-negative': amount !== 0,
     })}>
       {amount !== 0 ? translation.outstandingPayments + ': ' : translation.allPayed}
       {amount !== 0 && amount + '€'}
@@ -110,8 +111,8 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
   return (
     <Page pageTitle={titleWrapper(translation.invoices)}>
       <Section>
-        <div className={'row justify-between'}>
-          <h2 className={'font-bold font-space text-3xl'}>{translation.invoices}</h2>
+        <div className="row justify-between">
+          <h2 className="font-bold font-space text-3xl">{translation.invoices}</h2>
           {!isError && !isLoading && data && (
             <PaymentDisplay
               amount={data.filter(value => value.status !== 'paid').reduce((previousValue, currentValue) => previousValue + currentValue.totalAmount, 0)} />
@@ -120,9 +121,9 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
         {(isError) && (<span>{'There was an Error'}</span>)}
         {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && data.length > 0 ? (
-          <div className={'flex flex-wrap gap-x-8 gap-y-12'}>
+          <div className="flex flex-wrap gap-x-8 gap-y-12">
             <Table
-              className={'w-full h-full'}
+              className="w-full h-full"
               data={data}
               identifierMapping={dataObject => dataObject.uuid}
               header={[
@@ -137,7 +138,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                 (<span key={invoice.uuid + '-date'}>{localeTranslation.formatDate(invoice.date)}</span>),
                 (<span key={invoice.uuid + '-name'}>{invoice.title}</span>),
                 (
-                  <span key={invoice.uuid + '-price'} className={'font-semibold'}>
+                  <span key={invoice.uuid + '-price'} className="font-semibold">
                     {localeTranslation.formatMoney(invoice.totalAmount)}
                   </span>
                 ),
@@ -169,17 +170,14 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                   ) : (
                     invoice.status !== 'paid' ?
                       (
-                        <Button
-                          disabled={true}
-                          variant="text-border"
-                          className={'mr-2'}>
+                        <TextButton disabled={true} className="mr-2">
                           {translation[invoice.status]}
-                        </Button>
+                        </TextButton>
                       ) :
                       (
-                        <Button>
+                        <TextButton>
                           PDF
-                        </Button>
+                        </TextButton>
                       )
                   )
               ]}
@@ -187,7 +185,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
           </div>
         ) :
           (
-            <div className={'row justify-center w-full text-gray-400'}>{translation.noInvoices}</div>
+            <div className="row justify-center w-full text-gray-400">{translation.noInvoices}</div>
           )}
       </Section>
     </Page>

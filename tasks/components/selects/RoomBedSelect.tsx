@@ -6,7 +6,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { noop } from '@helpwave/common/util/noop'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { TextButton } from '@helpwave/common/components/Button'
 import { usePatientAssignmentByWardQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 
 type RoomBedSelectTranslation = {
@@ -127,24 +127,23 @@ export const RoomBedSelect = ({
     <div className={clsx('row justify-between items-center gap-x-4')}>
       <div>
         {isShowingRevert && (
-          <SolidButton
+          <TextButton
             onClick={() => {
               if (hasChanges) {
                 setCurrentSelection({ ...initialRoomAndBed })
                 setTouched(false)
               }
             }}
-            variant="text-border"
             disabled={!hasChanges}
           >
             <div className={clsx('row gap-x-2 items-center')}>
               {translation.revert}
               <Undo2 size={16}/>
             </div>
-          </SolidButton>
+          </TextButton>
         )}
         {isShowingClear && (
-          <SolidButton
+          <TextButton
             onClick={() => {
               setCurrentSelection({
                 bedId: undefined,
@@ -153,14 +152,13 @@ export const RoomBedSelect = ({
               setTouched(false)
               onChange({})
             }}
-            variant="text-border"
             color="negative"
           >
             <div className={clsx('row gap-x-2 items-center')}>
               {translation.revert}
               <X size={16}/>
             </div>
-          </SolidButton>
+          </TextButton>
         )}
       </div>
       {touched && !isSubmitting && !isCreating && (

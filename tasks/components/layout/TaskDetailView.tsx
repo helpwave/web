@@ -2,7 +2,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import clsx from 'clsx'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -107,11 +107,11 @@ type TaskDetailViewSidebarProps = {
 }
 
 const TaskDetailViewSidebar = ({
-  overwriteTranslation,
-  task,
-  setTask,
-  isCreating
-}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
+                                 overwriteTranslation,
+                                 task,
+                                 setTask,
+                                 isCreating
+                               }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
@@ -162,7 +162,7 @@ const TaskDetailViewSidebar = ({
               }
             }}
           />
-          <SolidButton
+          <TextButton
             onClick={() => {
               setTask({ ...task, assignee: undefined })
               if (!isCreating && task.assignee) {
@@ -172,12 +172,11 @@ const TaskDetailViewSidebar = ({
                 })
               }
             }}
-            variant="text"
             color="negative"
             disabled={!task.assignee}
           >
             <X size={24}/>
-          </SolidButton>
+          </TextButton>
         </div>
       </div>
       <div>
@@ -230,14 +229,9 @@ const TaskDetailViewSidebar = ({
           <div className={clsx('row justify-between items-center')}>
             <span>{task.isPublicVisible ? translation.public : translation.private}</span>
             {!task.isPublicVisible && !isCreating && (
-              <SolidButton
-                color="neutral"
-                variant="text-border"
-                className={clsx('!py-1 !px-2')}
-                onClick={() => setIsShowingPublicDialog(true)}
-              >
+              <TextButton size="small" onClick={() => setIsShowingPublicDialog(true)}>
                 <span>{translation.publish}</span>
-              </SolidButton>
+              </TextButton>
             )}
           </div>
         ) : null}
@@ -275,13 +269,13 @@ export type TaskDetailViewProps = {
  * The view for changing or creating a task and it's information
  */
 export const TaskDetailView = ({
-  overwriteTranslation,
-  patientId,
-  taskId = '',
-  wardId,
-  initialStatus,
-  onClose
-}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
+                                 overwriteTranslation,
+                                 patientId,
+                                 taskId = '',
+                                 wardId,
+                                 initialStatus,
+                                 onClose
+                               }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
@@ -346,7 +340,7 @@ export const TaskDetailView = ({
   const buttons = (
     <div className={clsx('row justify-end gap-x-8')}>
       {!isCreating ?
-          (
+        (
           <>
             <SolidButton
               color="negative"
@@ -364,13 +358,13 @@ export const TaskDetailView = ({
               </SolidButton>
             )}
           </>
-          )
+        )
         :
-          (
+        (
           <SolidButton onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
             {translation.create}
           </SolidButton>
-          )
+        )
       }
     </div>
   )
@@ -418,15 +412,15 @@ export const TaskDetailView = ({
   const taskTemplates =
     personalTaskTemplatesData && wardTaskTemplatesData
       ? [
-          ...(personalTaskTemplatesData.map((taskTemplate) => ({
-            taskTemplate,
-            type: 'personal' as const
-          }))),
-          ...(wardTaskTemplatesData.map((taskTemplate) => ({
-            taskTemplate,
-            type: 'ward' as const
-          })))
-        ].sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))
+        ...(personalTaskTemplatesData.map((taskTemplate) => ({
+          taskTemplate,
+          type: 'personal' as const
+        }))),
+        ...(wardTaskTemplatesData.map((taskTemplate) => ({
+          taskTemplate,
+          type: 'ward' as const
+        })))
+      ].sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))
       : []
 
   const templateSidebar = (

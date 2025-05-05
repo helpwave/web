@@ -3,7 +3,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks
 import clsx from 'clsx'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { TextButton } from '@helpwave/common/components/Button'
 import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 
 type SubtaskTileTranslation = {
@@ -81,15 +81,14 @@ export const SubtaskTile = ({
         minLength={minTaskNameLength}
         maxLength={maxTaskNameLength}
       />
-      <SolidButton
+      <TextButton
         className={clsx('ml-4')}
         onClick={onRemoveClick}
         aria-label={translation.remove}
-        variant="text"
         color="negative"
       >
         {translation.remove}
-      </SolidButton>
+      </TextButton>
     </div>
   )
 }

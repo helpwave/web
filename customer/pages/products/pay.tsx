@@ -22,7 +22,7 @@ import { CustomerProductsAPI } from '@/api/services/customer_product'
 import { useCustomerProductsCalculateQuery } from '@/api/mutations/customer_product_mutations'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { defaultLocaleFormatters } from '@/utils/locale'
-import {SolidButton} from "@helpwave/common/components/Button";
+import { SolidButton } from '@helpwave/common/components/Button'
 
 type ProductsTranslation = {
   checkout: string,
@@ -117,22 +117,22 @@ const Payment: NextPage = () => {
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
       <Modal id="responseModalSuccess" isOpen={modalState === 'success'} titleText={translation.bookingSuccessful}
-        modalClassName={'min-h-[120px] justify-between'}>
+        modalClassName="min-h-[120px] justify-between">
         <span>{translation.bookingSuccessfulDesc}</span>
         <SolidButton
           onClick={() => router.push('/invoices').catch(console.error)}
-          className={'mt-6'}
+          className="mt-6"
         >
           {translation.toInvoices}
         </SolidButton>
       </Modal>
       <Modal id="responseModalFailure" isOpen={modalState === 'failure'} titleText={translation.bookingFailure}
         onCloseClick={() => setModalState('hidden')} onBackgroundClick={() => setModalState('hidden')}
-        modalClassName={'min-h-[120px] justify-between gap-y-4 bg-negative text-on-negative'}
+        modalClassName="min-h-[120px] justify-between gap-y-4 bg-negative text-on-negative"
       >
-        <div className={'col gap-y-1'}>
+        <div className="col gap-y-1">
           <span>{translation.bookingFailureDesc}</span>
-          <Link href={`mailto:${supportMail}`} className={'text-primary'}>{supportMail}</Link>
+          <Link href={`mailto:${supportMail}`} className="text-primary">{supportMail}</Link>
         </div>
       </Modal>
 
@@ -141,7 +141,7 @@ const Payment: NextPage = () => {
           {products && prices && (
             <table>
               <thead>
-                <tr className={'font-bold'}>
+                <tr className="font-bold">
                   <td>{translation.name}</td>
                   <td>{translation.price}</td>
                 </tr>
@@ -157,25 +157,25 @@ const Payment: NextPage = () => {
                   return (
                     <tr key={cartItem.id}>
                       <td key={`${cartItem.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
-                      <td key={`${cartItem.id}+price`} className={'float-right'}>{localeTranslation.formatMoney(price)}</td>
+                      <td key={`${cartItem.id}+price`} className="float-right">{localeTranslation.formatMoney(price)}</td>
                     </tr>
                   )
                 })}
                 <tr>
-                  <td className={'border-t-2'}><span className={'font-semibold'}>{translation.total}</span></td>
-                  <td className={'border-t-2'}><span
-                    className={'font-semibold float-right'}>{localeTranslation.formatMoney(prices.finalPrice)}</span></td>
+                  <td className="border-t-2"><span className="font-semibold">{translation.total}</span></td>
+                  <td className="border-t-2"><span
+                    className="font-semibold float-right">{localeTranslation.formatMoney(prices.finalPrice)}</span></td>
                 </tr>
               </tbody>
             </table>
           )}
-          <h4 className={'font-bold text-xl'}>{translation.termsAndConditions}</h4>
+          <h4 className="font-bold text-xl">{translation.termsAndConditions}</h4>
           {products && contracts && (
-            <form className={'col gap-y-4'}>
+            <form className="col gap-y-4">
               {contracts.length > 0 ? contracts.map((contract) => {
                 const isAccepted = acceptedContracts[contract.uuid] ?? false
                 return (
-                  <div key={contract.uuid} className={'row'}>
+                  <div key={contract.uuid} className="row">
                     <Checkbox
                       checked={isAccepted}
                       onChange={() => {
@@ -184,16 +184,16 @@ const Payment: NextPage = () => {
                           [contract.uuid]: !isAccepted,
                         }))
                       }}
-                      containerClassName={'justify-start'}
+                      containerClassName="justify-start"
                     />
-                    <span className={'block'}>
+                    <span className="block">
                       {translation.acceptTerms(`${contract.key} `)}
                       <Link
                         href={contract.url} target="_blank"
-                        className={'inline-flex flex-row items-center'}
+                        className="inline-flex flex-row items-center"
                       >
                         (
-                        <span className={'inline-flex flex-row gap-x-0.5 items-center'}>
+                        <span className="inline-flex flex-row gap-x-0.5 items-center">
                           {`${translation.show}`}
                           <ExternalLink size={16} />
                         </span>
@@ -202,10 +202,10 @@ const Payment: NextPage = () => {
                     </span>
                   </div>
                 )
-              }) : <span className={'textstyle-description'}>{translation.noTermsAndConditions}</span>}
-              <div className={'row justify-between'}>
+              }) : <span className="textstyle-description">{translation.noTermsAndConditions}</span>}
+              <div className="row justify-between">
                 <SolidButton
-                  className={'gap-x-2 w-[200px]'}
+                  className="gap-x-2 w-[200px]"
                   onClick={() => router.push('/products/overview')}
                   type="button"
                 >
@@ -213,7 +213,7 @@ const Payment: NextPage = () => {
                   {translation.cancel}
                 </SolidButton>
                 <SolidButton
-                  className={'gap-x-2 w-[200px]'}
+                  className="gap-x-2 w-[200px]"
                   disabled={!allContractsAccepted}
                   type="submit"
                   onClick={async (event) => {

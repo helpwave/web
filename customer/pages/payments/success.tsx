@@ -90,7 +90,7 @@ const CheckoutReturn = () => {
     <Page pageTitle={titleWrapper(translation.payment)}>
       <Section titleText={translation.payment}>
         {message}
-        <Link href="/invoices" className={'rounded-md px-4 py-2 text-on-primary bg-primary hover:brightness-90'}>
+        <Link href="/invoices" className="rounded-md px-4 py-2 text-on-primary bg-primary hover:brightness-90">
           {translation.backToInvoice}
         </Link>
       </Section>

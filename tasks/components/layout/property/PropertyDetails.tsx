@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { TextButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { StepperInformation } from '@helpwave/common/components/StepperBar'
 import { StepperBar } from '@helpwave/common/components/StepperBar'
@@ -108,13 +108,9 @@ export const PropertyDetails = ({
       <div className={clsx('top-0 row justify-between items-center')}>
         <span className={clsx('textstyle-title-lg')}>{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
         {!isCreatingNewProperty && (
-          <SolidButton
-            variant="text"
-            color="negative"
-            onClick={() => setArchiveConfirm(true)}
-          >
+          <TextButton color="negative" onClick={() => setArchiveConfirm(true)}>
             {translation.archiveProperty}
-          </SolidButton>
+          </TextButton>
         )}
       </div>
       <LoadingAndErrorComponent

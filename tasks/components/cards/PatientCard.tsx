@@ -36,12 +36,12 @@ export const PatientCard = ({
   inProgressTasks,
   doneTasks,
   isSelected,
-  onTileClick,
+  onClick,
   ...restCardProps
 }: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
   const translation = useTranslation(defaultPatientCardTranslations, overwriteTranslation)
   return (
-    <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
+    <DragCard isSelected={isSelected} onClick={onClick} {...restCardProps}>
       <div className={clsx('row justify-between')}>
         <span className={clsx('textstyle-title-sm whitespace-nowrap')} >{bedName ?? translation.bedNotAssigned}</span>
         <span className={clsx('ml-2 truncate')}>{patientName}</span>

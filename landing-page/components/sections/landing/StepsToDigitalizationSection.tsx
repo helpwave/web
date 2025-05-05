@@ -101,8 +101,8 @@ export const StepsToDigitalizationSection = () => {
       </div>
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
-        heightClassName={"h-[24rem] tablet:max-desktop:h-[19rem]"}
-        widthClassName={"w-1/2 max-tablet:w-[75%]"}
+        heightClassName="h-[24rem] tablet:max-desktop:h-[19rem]"
+        widthClassName="w-1/2 max-tablet:w-[75%]"
         blurColor="from-gray-50"
       >
         {items.map((value, index) => (

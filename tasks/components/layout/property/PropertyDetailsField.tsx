@@ -1,19 +1,19 @@
-import type {Languages} from '@helpwave/common/hooks/useLanguage'
-import type {PropsForTranslation} from '@helpwave/common/hooks/useTranslation'
-import {useTranslation} from '@helpwave/common/hooks/useTranslation'
-import type {InputGroupProps} from '@helpwave/common/components/InputGroup'
-import {InputGroup} from '@helpwave/common/components/InputGroup'
-import {Select} from '@helpwave/common/components/user-input/Select'
-import {Tile} from '@helpwave/common/components/layout/Tile'
-import {Checkbox} from '@helpwave/common/components/user-input/Checkbox'
+import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
+import { InputGroup } from '@helpwave/common/components/InputGroup'
+import { Select } from '@helpwave/common/components/user-input/Select'
+import { Tile } from '@helpwave/common/components/layout/Tile'
+import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import clsx from 'clsx'
-import {Plus, X} from 'lucide-react'
-import {Scrollbars} from 'react-custom-scrollbars-2'
-import {Input} from '@helpwave/common/components/user-input/Input'
-import type {FieldType, Property, SelectData, SelectOption} from '@helpwave/api-services/types/properties/property'
-import {fieldTypeList} from '@helpwave/api-services/types/properties/property'
-import {useEffect, useState} from 'react'
-import {TextButton} from "@helpwave/common/components/Button";
+import { Plus, X } from 'lucide-react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
+import { Input } from '@helpwave/common/components/user-input/Input'
+import type { FieldType, Property, SelectData, SelectOption } from '@helpwave/api-services/types/properties/property'
+import { fieldTypeList } from '@helpwave/api-services/types/properties/property'
+import { useEffect, useState } from 'react'
+import { TextButton } from '@helpwave/common/components/Button'
 
 type SelectDataUpdate = {
   create: number,
@@ -55,12 +55,12 @@ export const PropertySelectOptionsUpdater = ({
   const translation = useTranslation(defaultPropertySelectOptionsUpdaterPropsTranslation, overwriteTranslation)
   const [state, setState] = useState<PropertySelectOptionsUpdaterState>({
     data: value,
-    update: {create: 0, update: [], delete: []}
+    update: { create: 0, update: [], delete: [] }
   })
-  const {data, update} = state
+  const { data, update } = state
 
   useEffect(() => {
-    setState({data: value, update: {create: 0, update: [], delete: []}})
+    setState({ data: value, update: { create: 0, update: [], delete: [] } })
   }, [value])
 
   return (
@@ -71,7 +71,7 @@ export const PropertySelectOptionsUpdater = ({
           className={clsx('text-white bg-primary hover:brightness-90 rounded-full mr-3')}
           size={20}
           onClick={() => {
-            onChange({...data}, {...update, create: update.create + 1})
+            onChange({ ...data }, { ...update, create: update.create + 1 })
           }}
         />
       </div>
@@ -84,32 +84,32 @@ export const PropertySelectOptionsUpdater = ({
                 placeholder={`${translation.newEntry} ${index + 1}`}
                 onChange={text => {
                   const newList = [...data.options]
-                  const newEntry = {...entry, name: text}
+                  const newEntry = { ...entry, name: text }
                   newList[index] = newEntry
                   setState(
                     {
-                      data: {...data, options: newList},
-                      update: {...update, update: [...update.update, {...newEntry, index}]}
+                      data: { ...data, options: newList },
+                      update: { ...update, update: [...update.update, { ...newEntry, index }] }
                     }
                   )
                 }}
                 onEditCompleted={text => {
                   const newList = [...data.options]
-                  const newEntry = {...entry, name: text}
+                  const newEntry = { ...entry, name: text }
                   newList[index] = newEntry
                   onChange(
-                    {...data, options: newList},
-                    {...update, update: [...update.update, {...newEntry, index}]}
+                    { ...data, options: newList },
+                    { ...update, update: [...update.update, { ...newEntry, index }] }
                   )
                 }}
               />
               <TextButton
-                color={"negative"}
+                color="negative"
                 onClick={() => {
                   const newList = data.options.filter((_, index1) => index1 !== index)
                   onChange(
-                    {...data, options: newList},
-                    {...update, delete: [...update.delete, {id: entry.id, index}]}
+                    { ...data, options: newList },
+                    { ...update, delete: [...update.delete, { id: entry.id, index }] }
                   )
                 }}
               >
@@ -189,30 +189,30 @@ export const PropertyDetailsField = ({
       <Select
         // TODO add icons
         value={usedValue.fieldType}
-        label={{name: translation.fieldType, labelType: 'labelMedium'}}
-        options={fieldTypeList.map(fieldType => ({value: fieldType, label: translation[fieldType]}))}
+        label={{ name: translation.fieldType, labelType: 'labelMedium' }}
+        options={fieldTypeList.map(fieldType => ({ value: fieldType, label: translation[fieldType] }))}
         onChange={fieldType => {
-          const newValue = {...usedValue, fieldType}
+          const newValue = { ...usedValue, fieldType }
           onChange(newValue)
         }}
       />
       {isSelectType && (
         <PropertySelectOptionsUpdater
           value={usedValue.selectData!}
-          onChange={(selectData, update) => onChange({...usedValue, selectData}, update)}
+          onChange={(selectData, update) => onChange({ ...usedValue, selectData }, update)}
         />
       )}
       {isSelectType && (
         <Tile
-          title={{value: translation.allowCustomValues, className: 'textstyle-label-md'}}
-          description={{value: translation.allowCustomValuesDescription}}
+          title={{ value: translation.allowCustomValues, className: 'textstyle-label-md' }}
+          description={{ value: translation.allowCustomValuesDescription }}
           suffix={(
             <Checkbox
               checked={usedValue.selectData!.isAllowingFreetext}
               onChange={isAllowingFreetext => {
                 const newValue: PropertyFieldDetails = {
                   ...value,
-                  selectData: {...usedValue.selectData!, isAllowingFreetext}
+                  selectData: { ...usedValue.selectData!, isAllowingFreetext }
                 }
                 onChange(newValue)
               }}

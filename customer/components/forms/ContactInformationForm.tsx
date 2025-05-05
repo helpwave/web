@@ -112,7 +112,7 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
       })}
       className={clsx('flex flex-col gap-y-2 max-w-[700px]', className)}
     >
-      <h3 className={'font-space font-bold text-2xl'}>{translation.contactInfo}</h3>
+      <h3 className="font-space font-bold text-2xl">{translation.contactInfo}</h3>
       <FormInput
         id="name"
         autoComplete="name"
@@ -148,9 +148,9 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
         labelText={translation.phone}
         errorText={errors.phoneNumber?.message}
       />
-      <h4 className={'font-space font-bold text-lg mt-2'}>{translation.address}</h4>
+      <h4 className="font-space font-bold text-lg mt-2">{translation.address}</h4>
 
-      <div className={'row'}>
+      <div className="row">
         <FormInput
           id="address"
           autoComplete="street-address"
@@ -158,7 +158,7 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
           {...register('address', { required: translation.fieldRequired })}
           labelText={translation.address}
           errorText={errors.address?.message}
-          containerClassName={'w-full'}
+          containerClassName="w-full"
         />
         <FormInput
           id="houseNumber"
@@ -172,7 +172,7 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
           })}
           labelText={translation.houseNumber}
           errorText={errors.houseNumber?.message}
-          containerClassName={'max-w-[180px]'}
+          containerClassName="max-w-[180px]"
         />
       </div>
 
@@ -183,7 +183,7 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
         errorText={errors.careOf?.message}
       />
 
-      <div className={'row'}>
+      <div className="row">
         <FormInput
           id="city"
           autoComplete="address-level1"
@@ -191,7 +191,7 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
           {...register('city', { required: translation.fieldRequired })}
           labelText={translation.city}
           errorText={errors.city?.message}
-          containerClassName={'w-full'}
+          containerClassName="w-full"
         />
         <FormInput
           id="postalCode"
@@ -206,7 +206,7 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
           })}
           labelText={translation.postalCode}
           errorText={errors.postalCode?.message}
-          containerClassName={'max-w-[180px]'}
+          containerClassName="max-w-[180px]"
         />
       </div>
 
@@ -219,7 +219,7 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
         errorText={errors.country?.message}
       />
 
-      <h4 className={'font-space font-bold text-lg mt-2'}>{translation.additionalInformation}</h4>
+      <h4 className="font-space font-bold text-lg mt-2">{translation.additionalInformation}</h4>
       <FormInput
         id="websiteURL"
         autoComplete="url"
@@ -233,7 +233,7 @@ export const ContactInformationForm = ({ initialValue, onSubmit, className }: Co
         errorText={errors.websiteURL?.message}
       />
 
-      <div className={'row justify-end mt-2'}>
+      <div className="row justify-end mt-2">
         <SolidButton type="submit">{translation.save}</SolidButton>
       </div>
     </form>

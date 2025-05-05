@@ -72,7 +72,7 @@ export const TaskTemplateWardPreview = ({
                 key={index}
                 name={taskTemplate.name}
                 subtaskCount={taskTemplate.subtasks.length}
-                onTileClick={() => {
+                onClick={() => {
                   router.push(`/ward/${wardId}/templates?templateId=${taskTemplate.id}`).catch(console.error)
                 }}
               />

@@ -16,7 +16,7 @@ import { withOrganization } from '@/hooks/useOrganization'
 import { withCart } from '@/hocs/withCart'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import {SolidButton} from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { Plus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -128,12 +128,12 @@ const ProductsPage: NextPage = () => {
   const isLoading = bookedProductsLoading || productsLoading
 
   return (
-    <Page pageTitle={titleWrapper(translation.myProducts)} mainContainerClassName={'min-h-[80vh]'}>
+    <Page pageTitle={titleWrapper(translation.myProducts)} mainContainerClassName="min-h-[80vh]">
       <Modal
         id="productModal"
         isOpen={!!customerProductModalValue}
         titleText={customerProductModalValue?.product.name}
-        modalClassName={'col gap-y-4'}
+        modalClassName="col gap-y-4"
         onBackgroundClick={() => setCustomerProductModalValue(undefined)}
         onCloseClick={() => setCustomerProductModalValue(undefined)}
       >
@@ -164,24 +164,24 @@ const ProductsPage: NextPage = () => {
         {isError && (<span>{translation.error}</span>)}
         {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && products && bookedProducts && (
-          <div className={'grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12'}>
+          <div className="grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12">
             {bookedProducts.map((bookedProduct, index) => {
               return (
                 <div
                   key={index}
-                  className={'col border-4 justify-between gap-y-2 bg-surface text-on-surface px-8 py-4 rounded-md'}
+                  className="col border-4 justify-between gap-y-2 bg-surface text-on-surface px-8 py-4 rounded-md"
                 >
-                  <div className={'col'}>
-                    <div className={'row justify-between'}>
-                      <h4 className={'font-bold font-space text-2xl'}>{bookedProduct.product.name}</h4>
+                  <div className="col">
+                    <div className="row justify-between">
+                      <h4 className="font-bold font-space text-2xl">{bookedProduct.product.name}</h4>
                       <CustomerProductStatusDisplay customerProductStatus={bookedProduct.status} />
                     </div>
                     <span>{bookedProduct.product.description}</span>
                     <span>{`${translation.productPlan(bookedProduct.productPlan)} (${localeTranslation.formatMoney(bookedProduct.productPlan.costEuro)})`}</span>
                     {bookedProduct.cancellationDate && CustomerProductStatusPlannedCancellation.includes(bookedProduct.status) ? <span>{translation.endsAt} {localeTranslation.formatDate(bookedProduct.cancellationDate)}</span> : <></>}
                   </div>
-                  <div className={'row justify-end gap-x-4'}>
-                    <SolidButton className={'w-fit'}
+                  <div className="row justify-end gap-x-4">
+                    <SolidButton className="w-fit"
                       onClick={() => setCustomerProductModalValue(bookedProduct)}>{translation.manage}</SolidButton>
                   </div>
                 </div>
@@ -190,10 +190,10 @@ const ProductsPage: NextPage = () => {
             <button
               key="buy"
               onClick={() => router.push('/products/shop').catch(console.error)}
-              className={'row justify-center items-center h-full min-h-[200px] w-full gap-x-2 border-4 border-dashed border-gray-200 hover:brightness-90 px-4 py-2 rounded-md'}
+              className="row justify-center items-center h-full min-h-[200px] w-full gap-x-2 border-4 border-dashed border-gray-200 hover:brightness-90 px-4 py-2 rounded-md"
             >
               <Plus size={32} />
-              <h4 className={'font-bold text-lg'}>{translation.bookProduct}</h4>
+              <h4 className="font-bold text-lg">{translation.bookProduct}</h4>
             </button>
           </div>
         )}

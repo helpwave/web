@@ -1,6 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
-import withNextDocument from '@helpwave/common/twind/next/document'
-import { config } from '@helpwave/common/twind/config'
 
 class MyDocument extends Document {
   render() {
@@ -41,4 +39,4 @@ class MyDocument extends Document {
   }
 }
 
-export default withNextDocument(config, MyDocument)
+export default MyDocument

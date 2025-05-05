@@ -27,17 +27,18 @@ export type BedCardProps = DragCardProps & {
  * Shown instead of a PatientCard, if there is no patient assigned to the bed
  */
 export const BedCard = ({
-  overwriteTranslation,
-  bedName,
-  onTileClick,
-  isSelected,
-  className,
-  ...restCardProps
-}: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
+                          overwriteTranslation,
+                          bedName,
+                          onClick,
+                          isSelected,
+                          className,
+                          ...restCardProps
+                        }: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
   const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
   return (
     (
-      <DragCard onTileClick={onTileClick} isSelected={isSelected} className={clsx('min-h-[148px] col', className)} {...restCardProps}>
+      <DragCard onClick={onClick} isSelected={isSelected}
+                className={clsx('min-h-[148px] col', className)} {...restCardProps}>
         <div className={clsx('row justify-between')}>
           <span className={clsx('textstyle-title-sm')}>{bedName}</span>
           <span>{translation.nobody}</span>

@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
@@ -39,9 +38,8 @@ export type OrganizationDisplayProps = {
  */
 export const OrganizationDisplay = ({
   overwriteTranslation,
-  selectedOrganizationId,
+  // selectedOrganizationId,
   organizations,
-  width
 }: PropsForTranslation<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
   const translation = useTranslation(defaultOrganizationDisplayTranslations, overwriteTranslation)
   const router = useRouter()
@@ -53,29 +51,28 @@ export const OrganizationDisplay = ({
   const { fakeTokenEnable } = getAPIServiceConfig()
 
   usedOrganizations = usedOrganizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
-  const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)
 
-  const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
+  // const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
-    <div className={clsx('py-4 px-6')}>
+    <div className="py-4 px-6">
       <ColumnTitle title={translation.yourOrganizations}/>
-      <div className={clsx(`grid grid-cols-${columns} gap-6`)}>
+      <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-6">
         {usedOrganizations.map(organization => (
           <OrganizationCard
             key={organization.id}
             organization={organization}
-            isSelected={usedSelectedId === organization.id}
+            // TODO isSelected={usedSelectedId === organization.id}
             onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
-            onTileClick={() => {
+            onClick={() => {
               router.push(`/organizations/${organization.id}`)
             }}
           />
         ))}
         <AddCard
           text={translation.addOrganization}
-          onTileClick={() => context.updateContext({ ...context.state, organizationId: '' })}
-          isSelected={usedSelectedId === ''}
-          className={clsx('h-full')}
+          onClick={() => context.updateContext({ ...context.state, organizationId: '' })}
+          // TODO isSelected={usedSelectedId === ''}
+          className="h-full"
         />
       </div>
     </div>

@@ -35,8 +35,8 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   }, [router])
 
   return (
-    <Page pageTitle={titleWrapper(translation.dashboard)} mainContainerClassName={'h-full'}>
-      <div className={'col h-full items-center justify-center'}>
+    <Page pageTitle={titleWrapper(translation.dashboard)} mainContainerClassName="h-full">
+      <div className="col h-full items-center justify-center">
         {<LoadingAnimation/>}
       </div>
     </Page>

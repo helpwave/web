@@ -61,7 +61,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
         onBackgroundClick={() => setIsLanguageModalOpen(false)}
         onDone={() => setIsLanguageModalOpen(false)}
       />
-      <nav className={'col overflow-y-auto'}>
+      <nav className="col overflow-y-auto">
         {items.map((item, i) => (
           <Link
             href={item.url}
@@ -85,8 +85,8 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
           {languagesLocalNames[language]}
           <ArrowRightLeft size={24}/>
         </button>
-        <div className={'col p-4 gap-y-4 bg-gray-50'}>
-          <Link href={OIDC_PROVIDER + '/account'} target="_blank" className={'row items-center'}>
+        <div className="col p-4 gap-y-4 bg-gray-50">
+          <Link href={OIDC_PROVIDER + '/account'} target="_blank" className="row items-center">
             <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
             {identity?.profile?.name}
           </Link>

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { Toaster } from 'react-hot-toast'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
-import "../globals.css"
+import '../globals.css'
 import { Inter, Space_Grotesk } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })

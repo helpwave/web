@@ -5,7 +5,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { Plus, Tag } from 'lucide-react'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { MultiSubjectSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { Table } from '@helpwave/common/components/Table'
 import { Tile } from '@helpwave/common/components/layout/Tile'
@@ -121,9 +121,8 @@ export const PropertyDisplay = ({
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation.subjectType}
             />
-            <SolidButton
-              className={clsx('w-full !px-0')}
-              variant="text"
+            <TextButton
+              className="w-full px-0"
               color="negative"
               onClick={() => {
                 updateContext({ ...contextState, subjectType: undefined })
@@ -131,13 +130,13 @@ export const PropertyDisplay = ({
               }}
             >
               {translation.removeFilter}
-            </SolidButton>
+            </TextButton>
           </div>
           <SolidButton onClick={() => updateContext({
             ...contextState,
             propertyId: undefined
           })}>
-            <div className={clsx('row gap-x-2 items-center')}>
+            <div className="row gap-x-2 items-center">
               <Plus/>
               <span>{translation.addProperty}</span>
             </div>
@@ -163,9 +162,9 @@ export const PropertyDisplay = ({
               <span>{translation[property.subjectType]}</span>
             </div>),
             (<div key="edit-button-cell" className={clsx('row justify-end')}>
-              <SolidButton variant="text" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
+              <TextButton onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
                 <span>{translation.edit}</span>
-              </SolidButton>
+              </TextButton>
             </div>)
           ]}
           header={[

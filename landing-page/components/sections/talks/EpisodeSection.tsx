@@ -41,6 +41,7 @@ const getEpisodes = async (): Promise<{ id: string, title: string, description: 
   }
 
   return await fetch(podcastRSS)
+    // TODO do this with proper type casting
     .then(response => response.text())
     .then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
     .then(data => {
@@ -67,11 +68,11 @@ const EpisodeSection = ({ overwriteTranslation }: PropsForTranslation<EpisodeSec
 
   return (
     <SectionBase>
-      <div className={clsx('flex-wrap gap-16 w-full justify-center')}>
+      <div className={clsx('flex flex-wrap gap-16 w-full justify-center')}>
         <h1 className={clsx('font-space text-5xl overline')}>{translation.allEpisodes}</h1>
         {isLoading ? (<LoadingAnimation />) : data?.map(episode => (
           <Link key={episode.id} href={episode.link} target="_blank">
-            <div className={clsx('w-full shadow-sm hover:border-solid hover:border-hw-pool-orange rounded-md transition-all duration-500 border-dashed border-2 p-8 my-8 flex gap-16 bg-white')}>
+            <div className={clsx('w-full shadow-sm hover:border-solid hover:border-primary rounded-md transition-all duration-500 border-dashed border-2 p-8 my-8 gap-16 bg-surface text-on-surface')}>
               <div className={clsx('w-3/4 mobile:!w-full')}>
                 <h4 className={clsx('font-space text-2xl font-bold')}>{episode.title}</h4>
                 <p className={clsx('text-gray-600 text-justify')}>published on {episode.date.toLocaleDateString('de-DE')}</p>

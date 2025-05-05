@@ -32,13 +32,13 @@ export const TasksTemplatesSection = ({ overwriteTranslation }: PropsForTranslat
 
   return (
     <SectionBase
-      className={clsx('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-4 justify-between mobile:justify-center items-center text-white')}
+      className={clsx('row mobile:!flex flex-wrap-reverse w-full gap-x-16 gap-y-4 justify-between mobile:justify-center items-center text-white')}
       backgroundColor="darkSecondary"
       outerClassName={clsx('py-24')}
     >
-      <div className={clsx('flex flex-col gap-y-2 pb-16 mobile:pb-0 overflow-hidden break-words')}>
-        <div className={clsx('flex flex-col gap-y-2')}>
-          <div className={clsx('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
+      <div className={clsx('col gap-y-2 pb-16 mobile:pb-0 overflow-hidden break-words')}>
+        <div className={clsx('col gap-y-2')}>
+          <div className={clsx('row gap-x-1 text-primary items-center')}>
             <TagIcon/>
             <span className={clsx('textstyle-title-normal')}>{translation.taskTemplates}</span>
           </div>
@@ -47,7 +47,7 @@ export const TasksTemplatesSection = ({ overwriteTranslation }: PropsForTranslat
         </div>
       </div>
       <div
-        className={clsx('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[50%] z-10 desktop:scale-125')}
+        className={clsx('row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[50%] z-10 desktop:scale-125')}
       >
         <Image
           src={imageUrl}

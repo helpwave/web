@@ -33,7 +33,7 @@ export const FAQSection = ({
 }: FAQSectionProps) => {
   const chevronSize = 28
   return (
-    <div className={clsx('flex flex-col gap-y-4')}>
+    <div className={clsx('col gap-y-4')}>
       {entries.map(({ id, title, content, ...restProps }) => (
         <Expandable
           key={id}

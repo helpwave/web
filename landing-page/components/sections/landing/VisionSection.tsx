@@ -31,11 +31,11 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
   const imageURL = 'https://cdn.helpwave.de/landing_page/process.png'
   return (
     <SectionBase
-      className={clsx('flex flex-row mobile:flex-col-reverse gap-8 items-center justify-center w-full')}
+      className={clsx('row mobile:col-reverse gap-8 items-center justify-center w-full')}
       outerClassName={clsx('py-24')}
       backgroundColor="white"
     >
-      <div className={clsx('flex flex-col w-1/2 mobile:w-full gap-y-2')}>
+      <div className={clsx('col w-1/2 mobile:w-full gap-y-2')}>
         <Chip className={clsx('!w-fit bg-gray-200 font-semibold px-4')}>{translation.ourVision}</Chip>
         <h2 className={clsx('textstyle-title-xl')}>{translation.title}</h2>
         <span className={clsx('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></span>

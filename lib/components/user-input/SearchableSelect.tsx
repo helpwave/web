@@ -26,7 +26,7 @@ export const SearchableSelect = <T, >({
       value={value}
       options={filteredOptions}
       additionalItems={[(
-        <div key="selectSearch" className={clsx('flex flex-row gap-x-2 items-center')}>
+        <div key="selectSearch" className={clsx('row gap-x-2 items-center')}>
           <Input autoFocus={true} value={search} onChange={setSearch} />
           <Search/>
         </div>

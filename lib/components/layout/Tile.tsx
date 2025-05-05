@@ -21,9 +21,9 @@ export const Tile = ({
   className
 }: TileProps) => {
   return (
-    <div className={clsx('flex flex-row gap-x-4 w-full items-center', className)}>
+    <div className={clsx('row gap-x-4 w-full items-center', className)}>
       {prefix}
-      <div className={clsx('flex flex-col w-full')}>
+      <div className={clsx('col w-full')}>
         <span className={clsx(title.className)}>{title.value}</span>
         {!!description &&
           <span className={clsx(description.className ?? 'textstyle-description')}>{description.value}</span>}

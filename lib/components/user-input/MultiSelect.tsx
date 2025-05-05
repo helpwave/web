@@ -109,7 +109,7 @@ export const MultiSelect = <T, >({
         alignment="t_"
         trigger={(onClick, ref) => (
           <div ref={ref} onClick={disabled ? undefined : onClick}
-               className={clsx(borderColor, 'inline-flex w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium cursor-pointer',
+               className={clsx(borderColor, 'inline-w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium cursor-pointer',
                  {
                    'hover:bg-gray-100 hover:border-primary': !disabled,
                    'bg-gray-100 cursor-not-allowed text-gray-500': disabled
@@ -125,7 +125,7 @@ export const MultiSelect = <T, >({
         )}
       >
         {enableSearch && (
-          <div key="selectSearch" className={clsx('flex flex-row gap-x-2 items-center px-4 py-2')}>
+          <div key="selectSearch" className={clsx('row gap-x-2 items-center px-4 py-2')}>
             <Input autoFocus={true} value={searchText} onChange={setSearchText}/>
             <Search/>
           </div>
@@ -137,7 +137,7 @@ export const MultiSelect = <T, >({
           })}
           >
             <div
-              className={clsx('overflow-hidden whitespace-nowrap text-ellipsis flex flex-row items-center gap-x-2', option.className)}
+              className={clsx('overflow-hidden whitespace-nowrap text-ellipsis row items-center gap-x-2', option.className)}
               onClick={() => {
                 if (!option.disabled) {
                   onChange(options.map(value => value.value === option.value ? ({

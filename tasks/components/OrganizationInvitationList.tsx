@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { SolidButton } from '@helpwave/common/components/Button'
+import {SolidButton, TextButton} from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -130,14 +130,14 @@ export const OrganizationInvitationList = ({
         }]}
         buttonOverwrites={[
           {},
-          { disabled: !isValidEmail, color: 'hw-positive', text: translation.addAndNext },
-          { disabled: !isValidEmail, color: 'hw-primary', text: translation.add }
+          { disabled: !isValidEmail, color: 'positive', text: translation.addAndNext },
+          { disabled: !isValidEmail, color: 'primary', text: translation.add }
         ]}
       />
-      <div className={clsx('flex flex-row justify-between')}>
+      <div className={clsx('row justify-between')}>
         <span className={clsx('textstyle-table-name')}>{`${translation.invitations} (${usedInvitations.length})`}</span>
         <SolidButton
-          color="hw-positive"
+          color="positive"
           onClick={() => setInviteMemberModalEmail('')}
         >
           {translation.inviteMember}
@@ -152,13 +152,12 @@ export const OrganizationInvitationList = ({
           <></>
         ]}
         rowMappingToCells={invite => [
-          <div key="email" className={clsx('flex flex-row justify-start gap-x-2')}>
+          <div key="email" className={clsx('row justify-start gap-x-2')}>
             <span>{invite.email}</span>
           </div>,
-          <div key="remove" className={clsx('flex flex-row justify-end')}>
-            <SolidButton
-              color="hw-negative"
-              variant="text"
+          <div key="remove" className={clsx('row justify-end')}>
+            <TextButton
+              color="negative"
               onClick={() => {
                 if (!isCreatingOrganization) {
                   revokeInviteMutation.mutate(invite.id)
@@ -167,7 +166,7 @@ export const OrganizationInvitationList = ({
               }}
             >
               {translation.remove}
-            </SolidButton>
+            </TextButton>
           </div>
         ]}
       />

@@ -104,8 +104,8 @@ const Header = () => {
   return (
     <>
       <div className={clsx('absolute top-0 z-[50] row justify-center w-screen bg-gray-50 text-black section-padding-x')}>
-        <nav className={clsx('flex pt-2 items-center justify-between w-full max-w-[1200px]')}>
-          <Link href={homeURL} className={clsx('flex flex-row gap-x-1 items-center text-2xl')}>
+        <nav className={clsx('pt-2 items-center justify-between w-full max-w-[1200px]')}>
+          <Link href={homeURL} className={clsx('row gap-x-1 items-center text-2xl')}>
             <Helpwave />
             <MarkdownInterpreter text={'\\helpwave'} />
           </Link>

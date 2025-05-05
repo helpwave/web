@@ -50,14 +50,14 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
 export const BrandDescriptionsSection = () => {
   const translation = useTranslation(defaultMediQuuBrandDescriptionTranslation)
   return (
-    <SectionBase className={clsx('flex flex-col gap-8 justify-center')} backgroundColor="gray">
+    <SectionBase className={clsx('col gap-8 justify-center')} backgroundColor="gray">
       <Tile
         title={{ value: translation.aboutMediQuuTitle, className: 'textstyle-title-lg' }}
         description={{ value: translation.aboutMediQuuDescription, className: '' }}
         prefix={(
           <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64} />
         )}
-        className={clsx('bg-white rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:flex-col tablet:flex-col')}
+        className={clsx('bg-white rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:col tablet:col')}
       />
       <Tile
         title={{ value: translation.aboutHelpwaveTitle, className: 'textstyle-title-lg' }}
@@ -66,11 +66,11 @@ export const BrandDescriptionsSection = () => {
           <div className={clsx('min-w-[220px]')}>
             <HelpwaveBadge
               size="large"
-              className="bg-hw-secondary-800 !gap-x-2 !w-fit"
+              className="bg-secondary !gap-x-2 !w-fit"
             />
           </div>
         )}
-        className={clsx('text-white bg-hw-secondary-800 rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:flex-col tablet:flex-col')}
+        className={clsx('text-on-secondary bg-secondary rounded-3xl px-6 mobile:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md mobile:col tablet:col')}
       />
     </SectionBase>
   )

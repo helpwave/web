@@ -51,7 +51,7 @@ export const KanbanColumn = ({
   return (
     <div
       className={clsx({ 'border-primary': isDraggedOver, 'border-transparent': !isDraggedOver },
-        'flex flex-col gap-y-4 border-2 border-dashed rounded-lg p-2')}
+        'col gap-y-4 border-2 border-dashed rounded-lg p-2')}
     >
       <PillLabel count={tasks.length} taskStatus={type}/>
       <SortableContext
@@ -59,7 +59,7 @@ export const KanbanColumn = ({
         items={tasks}
         strategy={verticalListSortingStrategy}
       >
-        <div ref={setNodeRef} className="flex flex-col gap-y-4">
+        <div ref={setNodeRef} className="col gap-y-4">
           {tasks.map((task) => (
             <Sortable key={task.id} id={task.id}>
               <TaskCard
@@ -77,7 +77,7 @@ export const KanbanColumn = ({
           status: type,
           dueDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
         })}
-        className={clsx('flex flex-row ml-1 gap-x-1 text-gray-300')}
+        className={clsx('row ml-1 gap-x-1 text-gray-300')}
       >
         <Plus/>
         {translation.addTask}

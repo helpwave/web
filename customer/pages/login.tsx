@@ -54,7 +54,7 @@ const Login: NextPage<PropsForTranslation<LoginTranslation, LoginServerSideProps
       mainContainerClassName={clsx('items-center justify-center min-h-[90vh]')}
       isHidingSidebar={true}
     >
-      <div className={clsx('flex flex-col bg-gray-100 max-w-[300px] p-8 gap-y-2 rounded-lg shadow-lg')}>
+      <div className={clsx('col bg-gray-100 max-w-[300px] p-8 gap-y-2 rounded-lg shadow-lg')}>
         <h2 className={clsx('font-bold font-inter text-2xl')}>{translation.login}</h2>
         <Input
           label={{ name: translation.email }}

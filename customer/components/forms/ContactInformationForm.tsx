@@ -67,7 +67,7 @@ type ContactInformationFormProps = {
 export const ContactInformationForm = ({ value, onChange, onSubmit, className }: ContactInformationFormProps) => {
   const translation = useTranslation(defaultContactInformationTranslation)
   return (
-    <form className={clsx('flex flex-col gap-y-1 max-w-[700px]', className)}>
+    <form className={clsx('col gap-y-1 max-w-[700px]', className)}>
       <h3 className={clsx('font-space font-bold text-2xl')}>{translation.contactInfo}</h3>
       <Input
         value={value.name}
@@ -84,14 +84,14 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
         onChange={phoneNumber => onChange({ ...value, phoneNumber })}
         label={{ name: translation.phone }}
       />
-      <div className={clsx('flex flex-col gap-y-1')}>
+      <div className={clsx('col gap-y-1')}>
         <h4 className={clsx('font-space font-bold text-lg')}>{translation.address}</h4>
         <Input
           value={value.address.country ?? ''}
           onChange={country => onChange({ ...value, address: { ...value.address, country } })}
           label={{ name: translation.country }}
         />
-        <div className={clsx('flex flex-row gap-x-1')}>
+        <div className={clsx('row gap-x-1')}>
           <Input
             value={value.address.city ?? ''}
             onChange={city => onChange({ ...value, address: { ...value.address, city } })}
@@ -107,7 +107,7 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
             containerClassName={clsx('max-w-[180px]')}
           />
         </div>
-        <div className={clsx('flex flex-row gap-x-1')}>
+        <div className={clsx('row gap-x-1')}>
           <Input
             value={value.address.street ?? ''}
             onChange={street => onChange({
@@ -135,7 +135,7 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
             containerClassName={clsx('max-w-[180px]')}
           />
         </div>
-        <div className={clsx('flex flex-col gap-y-1')}>
+        <div className={clsx('col gap-y-1')}>
           <h4 className={clsx('font-space font-bold text-lg')}>{translation.additionalInformation}</h4>
           <Input
             value={value.websiteURL ?? ''}
@@ -145,7 +145,7 @@ export const ContactInformationForm = ({ value, onChange, onSubmit, className }:
         </div>
       </div>
 
-      <div className={clsx('flex flex-row justify-end')}>
+      <div className={clsx('row justify-end')}>
         <SolidButton onClick={() => onSubmit(value)}>{translation.save}</SolidButton>
       </div>
     </form>

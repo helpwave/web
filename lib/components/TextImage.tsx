@@ -65,18 +65,18 @@ export const TextImage = ({
         backgroundSize: 'cover',
       }}>
       <div
-        className={clsx(`flex flex-col px-6 py-12 rounded-2xl h-full`, colorMapping[color], contentClassName)}>
+        className={clsx(`col px-6 py-12 rounded-2xl h-full`, colorMapping[color], contentClassName)}>
         {badge && (
           <div className={clsx(`rounded-full bg-white mb-2 py-2 px-4`, chipColorMapping[color])}>
             <span className="text-lg">{badge}</span>
           </div>
         )}
-        <div className="flex flex-col gap-y-1 text-white overflow-hidden">
+        <div className="col gap-y-1 text-white overflow-hidden">
           <span className="textstyle-title-xl">{title}</span>
           <span className="text-ellipsis overflow-hidden">{description}</span>
         </div>
         {onShowMoreClicked && (
-          <div className="flex flex-row mt-2 text-white underline">
+          <div className="row mt-2 text-white underline">
             <button onClick={onShowMoreClicked}>{translation.showMore}</button>
           </div>
         )}

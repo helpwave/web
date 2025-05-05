@@ -117,7 +117,7 @@ export const TwoColumn = ({
   const rightWidth = fullWidth - leftWidth - dividerHitBoxWidth
   return (
     <div
-      ref={ref} className={clsx(`relative flex flex-row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
+      ref={ref} className={clsx(`relative row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
       onMouseMove={event => isDragging ? setLeftWidth(calcPosition(event.pageX)) : undefined}
       onMouseUp={() => setIsDragging(false)}
       onTouchEnd={() => setIsDragging(false)}
@@ -139,12 +139,12 @@ export const TwoColumn = ({
           <div
             onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
             onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
-            className={clsx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
+            className={clsx(`relative h-full justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
           >
               <div className={clsx('bg-gray-300 my-4 rounded-lg w-0.5')} />
             {!disableResize && (
               <div
-                className={clsx('absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] flex flex-col justify-center items-center')}
+                className={clsx('absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] col justify-center items-center')}
               >
                 <GripVertical className={clsx('text-white')}/>
               </div>

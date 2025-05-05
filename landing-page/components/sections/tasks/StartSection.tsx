@@ -33,7 +33,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
 
   return (
     <SectionBase
-      className={clsx('flex flex-col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center')}
+      className={clsx('col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center')}
       outerClassName={clsx('py-24')}
     >
       <Image
@@ -43,9 +43,9 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
         height={0}
         className={clsx(`object-contain w-full desktop:min-w-[40%] desktop:scale-125 -rotate-12`)}
       />
-      <div className={clsx('flex flex-col gap-y-4')}>
+      <div className={clsx('col gap-y-4')}>
         <Link href={demoURL} target="_blank">
-          <Chip className={clsx('flex flex-row gap-x-2 w-fit items-center')} color="lightPrimary">
+          <Chip className={clsx('row gap-x-2 w-fit items-center')} color="lightPrimary">
             <Helpwave size={24} className={clsx('min-w-[24px] min-h-[24px]')}/>
             <span className={clsx('font-bold')}>helpwave tasks</span>
           </Chip>

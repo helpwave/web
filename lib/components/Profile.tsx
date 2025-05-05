@@ -24,6 +24,7 @@ const SocialIcon = ({ type, url, size = 24 }: SocialIconProps) => {
       icon = <Mail size={size}/>
       break
     case 'linkedin':
+      // TODO find an alternative icon
       icon = <Linkedin size={size}/>
       break
     case 'github':
@@ -88,10 +89,10 @@ export const Profile = ({
   return (
     <div
       {...divProps}
-      className={clsx(`flex flex-col items-center text-center rounded-3xl p-3 pb-4 bg-white w-min shadow-around-lg`, className)}
+      className={clsx(`col items-center text-center rounded-3xl p-3 pb-4 bg-white w-min shadow-around-lg`, className)}
     >
       <div className={clsx('relative mb-6')}>
-        <div className={clsx('relative rounded-xl flex flex-row items-center justify-center overflow-hidden', imageClassName)}>
+        <div className={clsx('relative rounded-xl row items-center justify-center overflow-hidden', imageClassName)}>
           <Image src={imageUrl} alt="" className={clsx('z-[2] object-cover', imageClassName)} width={0} height={0} style={{ width: 'auto', height: 'auto' }}/>
         </div>
         <div className={clsx('absolute top-[6px] left-[6px] z-[3]')}>{badge}</div>
@@ -112,7 +113,7 @@ export const Profile = ({
       )}
       {info && <span className={clsx('mt-2 text-sm')}>{info}</span>}
       {socials && (
-        <div className={clsx('flex flex-wrap flex-grow items-end justify-center gap-x-4 gap-y-2 mt-4')}>
+        <div className={clsx('flex flex-wrap grow items-end justify-center gap-x-4 gap-y-2 mt-4')}>
           {socials.map((socialIconProps, index) => (
             <SocialIcon key={index} {...socialIconProps} size={socialIconProps.size ?? 20}/>
           ))}

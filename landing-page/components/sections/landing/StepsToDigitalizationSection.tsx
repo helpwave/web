@@ -94,8 +94,8 @@ export const StepsToDigitalizationSection = () => {
   ]
 
   return (
-    <SectionBase className={clsx('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
-      <div className={clsx('flex flex-col items-center text-center gap-y-2')}>
+    <SectionBase className={clsx('col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
+      <div className={clsx('col items-center text-center gap-y-2')}>
         <h2 className={clsx('textstyle-title-xl')}><MarkdownInterpreter text={translation.title}/></h2>
         <span className={clsx('textstyle-title-sm')}><MarkdownInterpreter text={translation.description}/></span>
       </div>

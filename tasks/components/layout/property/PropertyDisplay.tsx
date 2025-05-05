@@ -100,14 +100,14 @@ export const PropertyDisplay = ({
   })
 
   return (
-    <div className={clsx('py-4 px-6 flex flex-col gap-y-4')}>
-      <div className={clsx('flex flex-row gap-x-1 items-center')}>
+    <div className={clsx('py-4 px-6 col gap-y-4')}>
+      <div className={clsx('row gap-x-1 items-center')}>
         <Tag className={clsx('text-primary')} size={20}/>
         <span className={clsx('textstyle-title-lg')}>{translation.properties}</span>
       </div>
-      <div className={clsx('flex flex-col gap-y-2')}>
-        <div className={clsx('flex flex-row justify-between')}>
-          <div className={clsx('flex flex-row gap-x-2')}>
+      <div className={clsx('col gap-y-2')}>
+        <div className={clsx('row justify-between')}>
+          <div className={clsx('row gap-x-2')}>
             <Input
               // TODO Search Icon
               value={search}
@@ -124,7 +124,7 @@ export const PropertyDisplay = ({
             <SolidButton
               className={clsx('w-full !px-0')}
               variant="text"
-              color="hw-negative"
+              color="negative"
               onClick={() => {
                 updateContext({ ...contextState, subjectType: undefined })
                 setSearch('')
@@ -137,7 +137,7 @@ export const PropertyDisplay = ({
             ...contextState,
             propertyId: undefined
           })}>
-            <div className={clsx('flex flex-row gap-x-2 items-center')}>
+            <div className={clsx('row gap-x-2 items-center')}>
               <Plus/>
               <span>{translation.addProperty}</span>
             </div>
@@ -158,11 +158,11 @@ export const PropertyDisplay = ({
               title={{ value: property.name }}
               description={{ value: translation[property.fieldType] }}
             />),
-            (<div key="subject-type-cell" className={clsx('flex flex-row gap-x-2')}>
+            (<div key="subject-type-cell" className={clsx('row gap-x-2')}>
               <SubjectTypeIcon subjectType={property.subjectType}/>
               <span>{translation[property.subjectType]}</span>
             </div>),
-            (<div key="edit-button-cell" className={clsx('flex flex-row justify-end')}>
+            (<div key="edit-button-cell" className={clsx('row justify-end')}>
               <SolidButton variant="text" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
                 <span>{translation.edit}</span>
               </SolidButton>

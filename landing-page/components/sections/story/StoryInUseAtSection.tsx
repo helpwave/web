@@ -29,9 +29,9 @@ const StoryInUseAtSection = () => {
   const translation = useTranslation(defaultStoryInUseAtSectionTranslation)
 
   return (
-    <SectionBase className={clsx('flex flex-col gap-16 select-none justify-center items-center w-full')}>
+    <SectionBase className={clsx('col gap-16 select-none justify-center items-center w-full')}>
       <span className={clsx('textstyle-title-xl')}>{translation.title}</span>
-      <div className={clsx('flex flex-row justify-center')}>
+      <div className={clsx('row justify-center')}>
         {images.map(partner => (
           <Image
             key={partner.name}

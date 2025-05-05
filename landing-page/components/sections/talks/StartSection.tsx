@@ -31,7 +31,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<TalksTransla
     <SectionBase>
       <Link href={podcastURL} target="_blank">
         <h1 className={clsx('font-space text-6xl font-bold')}>
-          helpwave <span className={clsx('text-hw-pool-orange')}>talks</span>
+          helpwave <span className={clsx('text-primary')}>talks</span>
           <LinkIcon className={clsx('ml-4 inline text-gray-400')} />
         </h1>
       </Link>
@@ -40,7 +40,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<TalksTransla
         {translation.fusionOfHealthcareAndComputerScience}
       </h4>
 
-      <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain' }} width={size} height={size} className={clsx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)}/>
+      <Image alt="Screenshots" src={screenshotURL} style={{ objectFit: 'contain', width: `${size}px` }} width={size} height={size} className={clsx(`shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md mt-8`)}/>
     </SectionBase>
   )
 }

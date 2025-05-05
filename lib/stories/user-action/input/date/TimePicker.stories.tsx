@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TimePickerExample } from '../../../../components/examples/date/TimePickerExample'
+import {ControlledTimePicker} from "../../../../components/date/TimePicker";
 
 const meta = {
   title: 'User-Action/Input/Date',
-  component: TimePickerExample,
-} satisfies Meta<typeof TimePickerExample>
+  component: ControlledTimePicker,
+} satisfies Meta<typeof ControlledTimePicker>
 
 export default meta
 type Story = StoryObj<typeof meta>;

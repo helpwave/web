@@ -61,21 +61,21 @@ export const StepperBar = ({
 
   return (
     <div
-      className={clsx('sticky flex flex-row p-2 border-2 justify-between rounded-lg shadow-lg', className)}
+      className={clsx('sticky row p-2 border-2 justify-between rounded-lg shadow-lg', className)}
     >
-      <div className="flex flex-[2] justify-start">
+      <div className="flex-[2] justify-start">
         <SolidButton
           disabled={step === 0}
           onClick={() => {
             update(step - 1)
           }}
-          className="flex flex-row gap-x-1 items-center justify-center"
+          className="row gap-x-1 items-center justify-center"
         >
           <ChevronLeft size={14}/>
           {translation.back}
         </SolidButton>
       </div>
-      <div className="flex flex-row flex-[5] gap-x-2 justify-center items-center">
+      <div className="row flex-[5] gap-x-2 justify-center items-center">
         {showDots && dots.map((value, index) => {
           const seen = seenSteps.has(index)
           return (
@@ -96,10 +96,10 @@ export const StepperBar = ({
         })}
       </div>
       {step !== lastStep && (
-        <div className="flex flex-[2] justify-end">
+        <div className="flex-[2] justify-end">
           <SolidButton
             onClick={() => update(step + 1)}
-            className="flex flex-row gap-x-1 items-center justify-center"
+            className="row gap-x-1 items-center justify-center"
           >
             {translation.next}
             <ChevronRight size={14}/>
@@ -107,12 +107,12 @@ export const StepperBar = ({
         </div>
       )}
       {step === lastStep && (
-        <div className="flex flex-[2] justify-end">
+        <div className="flex-[2] justify-end">
           <SolidButton
             // TODO check form validity
             disabled={false}
             onClick={onFinish}
-            className="flex flex-row gap-x-1 items-center justify-center"
+            className="row gap-x-1 items-center justify-center"
           >
             <Check size={14}/>
             {translation.confirm}

@@ -325,7 +325,7 @@ export const Carousel = ({
   }
 
   return (
-    <div className={clsx('flex flex-col items-center w-full gap-y-2')}>
+    <div className={clsx('col items-center w-full gap-y-2')}>
       <div className={clsx(`relative w-full overflow-hidden`, height, className)}>
         {arrows && (
           <>
@@ -344,8 +344,8 @@ export const Carousel = ({
           </>
         )}
         {hintNext ? (
-          <div className={clsx(`relative flex flex-row`, height)}>
-            <div className={clsx('relative flex flex-row w-full px-2 overflow-hidden')}>
+          <div className={clsx(`relative row`, height)}>
+            <div className={clsx('relative row w-full px-2 overflow-hidden')}>
               {items.map(({
                 item,
                 index
@@ -376,13 +376,13 @@ export const Carousel = ({
       </div>
       {dots && (
         <div
-          className={clsx('flex flex-row w-full items-center justify-center gap-x-2 my-2')}>
+          className={clsx('row w-full items-center justify-center gap-x-2 my-2')}>
           {range(0, length - 1).map(index => (
-            <div
+            <button
               key={index}
-              className={clsx('hover:!bg-hw-primary-300 cursor-pointer first:rounded-l-md last:rounded-r-md min-w-[32px] min-h-[12px]', {
-                '!bg-gray-200': currentIndex !== index,
-                '!bg-hw-primary-300/80': currentIndex === index
+              className={clsx('hover:bg-primary hover:brightness-90 first:rounded-l-md last:rounded-r-md min-w-[32px] min-h-[12px]', {
+                'bg-gray-200': currentIndex !== index,
+                'bg-primary': currentIndex === index
               })}
               onClick={() => startAnimation(index)}
             />

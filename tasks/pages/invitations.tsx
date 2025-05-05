@@ -35,7 +35,7 @@ export const InvitationsPage = ({
       <Head>
         <title>{titleWrapper(translation.invitations)}</title>
       </Head>
-      <div className={clsx('flex flex-col items-center')}>
+      <div className={clsx('col items-center')}>
           <div className={clsx('w-1/2')}>
             <UserInvitationList/>
           </div>

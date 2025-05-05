@@ -32,9 +32,9 @@ export const InputGroup = ({
   }, [expanded])
 
   return (
-    <div className={clsx('p-4 flex flex-col gap-y-4 bg-white rounded-xl', className)}>
+    <div className={clsx('col gap-y-4 p-4 bg-white rounded-xl', className)}>
       <div
-        className={clsx('flex flex-row justify-between items-center', {
+        className={clsx('row justify-between items-center', {
           'cursor-pointer': isExpandable && !disabled,
           'cursor-not-allowed': disabled,
         },
@@ -63,7 +63,7 @@ export const InputGroup = ({
         </div>
       </div>
       {isExpanded && (
-        <div className={clsx('flex flex-col gap-y-2 h-full')}>
+        <div className={clsx('col gap-y-2 h-full')}>
           {children}
         </div>
       )}

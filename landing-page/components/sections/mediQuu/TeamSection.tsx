@@ -116,8 +116,8 @@ export const TeamSection = () => {
   const translation = useTranslation(defaultTeamSectionTranslation)
   const usedLanguage = useLanguage().language
   return (
-    <SectionBase className={clsx('flex flex-col')}>
-      <span className={clsx('textstyle-title-xl text-hw-secondary-400 mb-1')}>{translation.title}</span>
+    <SectionBase className={clsx('col')}>
+      <span className={clsx('textstyle-title-xl text-secondary mb-1')}>{translation.title}</span>
       <span>{translation.subTitle}</span>
       <div className={clsx('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-8')}>
         {contactsHelpwave.map(value => {

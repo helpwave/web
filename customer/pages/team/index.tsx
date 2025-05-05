@@ -55,7 +55,7 @@ const Team: NextPage<PropsForTranslation<TeamTranslation, TeamServerSideProps>> 
       <Section titleText={translation.team}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
           {!!data && (
-            <div className={clsx('flex flex-col gap-y-1')}>
+            <div className={clsx('col gap-y-1')}>
               <span>{translation.teamDescription}</span>
               <Table
                 data={data}
@@ -67,7 +67,7 @@ const Team: NextPage<PropsForTranslation<TeamTranslation, TeamServerSideProps>> 
                 ]}
                 rowMappingToCells={dataObject => [
                   (
-                    <div key={idMapping(dataObject) + '-name'} className={clsx('flex flex-col')}>
+                    <div key={idMapping(dataObject) + '-name'} className={clsx('col')}>
                       <span
                         className={clsx('text-lg font-semibold')}>{`${dataObject.firstName} ${dataObject.lastName}`}</span>
                       <span className={clsx('text-gray-400')}>{dataObject.email}</span>

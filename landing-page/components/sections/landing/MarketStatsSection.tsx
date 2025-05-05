@@ -13,7 +13,7 @@ type MarketStatsItemProps = PropsWithChildren<{
 
 const MarketStatsItem = ({ children, stat, title }: MarketStatsItemProps) => {
   return (
-    <div className={clsx('flex flex-col items-center')}>
+    <div className={clsx('col items-center')}>
       {children}
       <span className={clsx('text-3xl mobile:text-xl mt-2 mobile:font-semibold')}>{stat}</span>
       <h4><span className={clsx('textstyle-description text-xl mobile:!text-base')}>{title}</span></h4>
@@ -49,7 +49,7 @@ const defaultExpansionTranslation: Record<Languages, MarketStatsSectionTranslati
 const MarketStatsSection = ({ overwriteTranslation }: PropsForTranslation<MarketStatsSectionTranslation>) => {
   const translation = useTranslation(defaultExpansionTranslation, overwriteTranslation)
   return (
-    <SectionBase backgroundColor="darkSecondary" className={clsx('flex flex-col text-white pb-24 font-space')}>
+    <SectionBase backgroundColor="darkSecondary" className={clsx('col text-white pb-24 font-space')}>
       <h1 className={clsx('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>
       <span className={clsx('text-center textstyle-description')}>{translation.marketPotential}</span>
       <div className={clsx('mt-8 w-full flex flex-wrap gap-y-16 gap-x-32 justify-evenly items-center')}>

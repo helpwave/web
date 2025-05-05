@@ -104,7 +104,7 @@ export const OrganizationForm = ({
   const maxMailLength = 320
 
   const inputErrorClasses = clsx('border-negative focus:border-negative focus:ring-negative border-2')
-  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
+  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary')
 
   function validateShortName(organization: OrganizationMinimalDTO) {
     const shortName = organization.shortName.trim()
@@ -186,7 +186,7 @@ export const OrganizationForm = ({
       </div>
       <span className={clsx('textstyle-form-description')}>{translation.longNameDescription}</span>
       <div className={clsx('mt-2 mb-1')}>
-        <div className={clsx('flex flex-row items-end')}>
+        <div className={clsx('row items-end')}>
           <div className={clsx('flex-1 mr-2')}>
             <Input
               id="email"

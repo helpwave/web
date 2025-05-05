@@ -72,7 +72,7 @@ export const ConfirmDialog = ({
   return (
     <Modal {...restProps}>
       {children}
-      <div className={clsx('flex flex-row mt-3 gap-x-4 justify-end')}>
+      <div className={clsx('row mt-3 gap-x-4 justify-end')}>
         {onCancel && (
           <SolidButton
             color={buttonOverwrites?.[0].color ?? 'primary'}

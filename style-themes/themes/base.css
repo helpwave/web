@@ -112,6 +112,7 @@
   --color-button-solid-negative-icon: #FFFFFF;
   --color-button-solid-negative-text: #FFFFFF;
 
+  --color-button-text-hover-background: #E1E1E1;
   --color-button-text-neutral-text: #333333;
   --color-button-text-neutral-icon: #333333;
   --color-button-text-negative-text: #DC576D;
@@ -123,6 +124,21 @@
   --color-tag-dark-background: #333333;
   --color-tag-dark-text: #FFFFFF;
   --color-tag-dark-icon: #FFFFFF;
+  --color-tag-green-background: #E2E9DB;
+  --color-tag-green-text: #7A977E;
+  --color-tag-green-icon: #7A977E;
+  --color-tag-yellow-background: #FEEACB;
+  --color-tag-yellow-text: #C79345;
+  --color-tag-yellow-icon: #C79345;
+  --color-tag-red-background: #FEE0DD;
+  --color-tag-red-text: #D67268;
+  --color-tag-red-icon: #D67268;
+  --color-tag-blue-background: #B1B9CE;
+  --color-tag-blue-text: #758ECE;
+  --color-tag-blue-icon: #758ECE;
+  --color-tag-pink-background: #CEA3B8;
+  --color-tag-pink-text: #CE75A0;
+  --color-tag-pink-icon: #CE75A0;
 
   --color-tabel-header-background: #F6FAFF;
 
@@ -136,4 +152,9 @@
 
 body, html {
   @apply bg-background text-on-background;
+}
+
+button {
+  cursor: pointer;
+  @apply transition-colors duration-100 disabled:cursor-not-allowed;
 }

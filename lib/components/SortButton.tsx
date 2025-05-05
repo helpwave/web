@@ -25,7 +25,7 @@ export const SortButton = ({
       onClick={() => onClick(ascending === 'descending' ? 'ascending' : 'descending')}
       {...buttonProps}
     >
-      <div className={clsx('flex flex-row gap-x-2')}>
+      <div className={clsx('row gap-x-2')}>
         {children}
         {ascending === 'ascending' ? <ChevronUp/> : (!ascending ? <ChevronsUpDown/> : <ChevronDown/>)}
       </div>

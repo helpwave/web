@@ -21,7 +21,7 @@ export const AvatarGroup = ({
   const notDisplayedProfiles = avatars.length - maxShownProfiles
   const avatarGroupWidth = diameter * (stackingOverlap * (displayedProfiles.length - 1) + 1)
   return (
-    <div className="flex flex-row relative" style={{ height: diameter + 'px' }}>
+    <div className="row relative" style={{ height: diameter + 'px' }}>
       <div style={{ width: avatarGroupWidth + 'px' }}>
         {displayedProfiles.map((avatar, index) => (
           <div
@@ -36,7 +36,7 @@ export const AvatarGroup = ({
       {
         notDisplayedProfiles > 0 && (
           <div
-            className="truncate flex flex-row items-center"
+            className="truncate row items-center"
             style={{ fontSize: (diameter / 2) + 'px', marginLeft: (1 + diameter / 16) + 'px' }}
           >
             <span>+ {notDisplayedProfiles}</span>

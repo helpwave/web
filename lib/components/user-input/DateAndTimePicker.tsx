@@ -113,7 +113,7 @@ export const DateTimePicker = ({
     dateDisplay = (
       <DatePicker
         {...datePickerProps}
-        className={clsx('min-w-[220px] min-h-[250px]')}
+        className={clsx('min-w-[320px] min-h-[250px]')}
         yearMonthPickerProps={{ maxHeight: 218 }}
         value={value}
         start={start}
@@ -135,13 +135,13 @@ export const DateTimePicker = ({
   }
 
   return (
-    <div className={clsx('flex flex-col w-fit')}>
-      <div className={clsx('flex flex-row gap-x-4')}>
+    <div className={clsx('col w-fit')}>
+      <div className={clsx('row gap-x-4')}>
         {dateDisplay}
         {timeDisplay}
       </div>
-      <div className={clsx('flex flex-row justify-end')}>
-        <div className={clsx('flex flex-row gap-x-2 mt-1')}>
+      <div className={clsx('row justify-end')}>
+        <div className={clsx('row gap-x-2 mt-1')}>
           <SolidButton size="medium" color="negative" onClick={onRemove}>{translation.clear}</SolidButton>
           <SolidButton
             size="medium"

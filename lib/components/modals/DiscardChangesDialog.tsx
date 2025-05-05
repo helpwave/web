@@ -56,7 +56,7 @@ export const DiscardChangesDialog = ({
       {...modalProps}
     >
       {children}
-      <div className={clsx('flex flex-row mt-3 gap-x-4 justify-end')}>
+      <div className={clsx('row mt-3 gap-x-4 justify-end')}>
         <SolidButton color="positive" onClick={onSave}>
           {translation.save}
         </SolidButton>

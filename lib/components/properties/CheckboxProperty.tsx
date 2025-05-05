@@ -1,12 +1,12 @@
-import { Check } from 'lucide-react'
+import {Check} from 'lucide-react'
 import clsx from 'clsx'
-import { noop } from '../../util/noop'
-import { Checkbox } from '../user-input/Checkbox'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropertyBaseProps } from './PropertyBase'
-import { PropertyBase } from './PropertyBase'
+import {noop} from '../../util/noop'
+import {Checkbox} from '../user-input/Checkbox'
+import type {Languages} from '../../hooks/useLanguage'
+import type {PropsForTranslation} from '../../hooks/useTranslation'
+import {useTranslation} from '../../hooks/useTranslation'
+import type {PropertyBaseProps} from './PropertyBase'
+import {PropertyBase} from './PropertyBase'
 
 type CheckboxPropertyTranslation = {
   yes: string,
@@ -24,7 +24,7 @@ const defaultCheckboxPropertyTranslation: Record<Languages, CheckboxPropertyTran
   }
 }
 
-export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'|'onRemove'> & {
+export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'onRemove'> & {
   value?: boolean,
   onChange?: (value: boolean) => void,
 }
@@ -33,12 +33,12 @@ export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | '
  * An Input for a boolen properties
  */
 export const CheckboxProperty = ({
-  overwriteTranslation,
-  value,
-  onChange = noop,
-  readOnly,
-  ...baseProps
-}: PropsForTranslation<CheckboxPropertyTranslation, CheckboxPropertyProps>) => {
+                                   overwriteTranslation,
+                                   value,
+                                   onChange = noop,
+                                   readOnly,
+                                   ...baseProps
+                                 }: PropsForTranslation<CheckboxPropertyTranslation, CheckboxPropertyProps>) => {
   const translation = useTranslation(defaultCheckboxPropertyTranslation, overwriteTranslation)
 
   return (
@@ -48,18 +48,14 @@ export const CheckboxProperty = ({
       readOnly={readOnly}
       icon={<Check size={16}/>}
       input={() => (
-        <div
-          className={clsx('flex flex-row py-2 px-4 gap-x-2')}
-        >
+        <div className={clsx('row py-2 px-4 items-center')}>
           <Checkbox
             // TODO make bigger as in #904
             checked={value ?? true}
             disabled={readOnly}
             onChange={onChange}
+            label={{name: `${translation.yes}/${translation.no}`, labelType: "labelMedium"}}
           />
-          <span className={clsx('font-semibold select-none cursor-pointer')} onClick={() => onChange(!value)}>
-            {`${translation.yes}/${translation.no}`}
-          </span>
         </div>
       )}
     />

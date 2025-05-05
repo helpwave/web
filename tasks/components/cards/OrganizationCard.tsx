@@ -40,18 +40,18 @@ export const OrganizationCard = ({
 
   return (
     <EditCard {...editCardProps}>
-      <div className={clsx('flex flex-col gap-y-2 overflow-hidden')}>
-        <div className={clsx('flex flex-row gap-x-1 font-bold font-space overflow-hidden')}>
+      <div className={clsx('col gap-y-2 overflow-hidden')}>
+        <div className={clsx('row gap-x-1 font-bold font-space overflow-hidden')}>
           <span className={clsx('truncate flex-1')}>
             {`${organization.longName}`}
           </span>
           <span>{`(${organization.shortName})`}</span>
         </div>
-        <div className={clsx('flex flex-row items-center overflow-hidden gap-x-2')}>
+        <div className={clsx('row items-center overflow-hidden gap-x-2')}>
           <Mail/>
           <span className={clsx('w-full truncate text-sm')}>{organization.email}</span>
         </div>
-        <div className={clsx('flex flex-row justify-between')}>
+        <div className={clsx('row justify-between')}>
           <div className={clsx('text-left my-1 font-semibold text-gray-600 text-sm truncate')}>
             {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation.members : translation.member}`}
           </div>

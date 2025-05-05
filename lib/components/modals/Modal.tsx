@@ -46,8 +46,8 @@ export const ModalHeader = ({
                             }: PropsForTranslation<ModalHeaderTranslation, ModalHeaderProps>) => {
   const translation = useTranslation(defaultModalHeaderTranslation, overwriteTranslation)
   return (
-    <div className={clsx('flex flex-col')}>
-      <div className={clsx('flex flex-row justify-between items-start gap-x-8')}>
+    <div className={clsx('col')}>
+      <div className={clsx('row justify-between items-start gap-x-8')}>
         {title ?? (
           <span className={clsx('textstyle-title-normal', {
             'mb-1': description || descriptionText,
@@ -57,7 +57,7 @@ export const ModalHeader = ({
         )}
         {!!onCloseClick && (
           <Tooltip tooltip={translation.close}>
-            <button className={clsx('flex flex-row bg-gray-200 hover:bg-gray-300 rounded-md p-1')} onClick={onCloseClick}>
+            <button className={clsx('row bg-gray-200 hover:bg-gray-300 rounded-md p-1')} onClick={onCloseClick}>
               <X/>
             </button>
           </Tooltip>
@@ -131,7 +131,7 @@ export const Modal = ({
         />
       )}
       <div
-        className={clsx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
+        className={clsx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
         <ModalHeader {...modalHeaderProps} />
         {children}
       </div>

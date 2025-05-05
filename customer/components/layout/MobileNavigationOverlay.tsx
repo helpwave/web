@@ -51,8 +51,8 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
         onDone={() => setIsLanguageModalOpen(false)}
         containerClassName={clsx('z-[102]')}
       />
-      <nav className={clsx('flex flex-col gap-y-4 items-center', className)}>
-        <div className={clsx('flex flex-row w-full items-center justify-between mb-2')}>
+      <nav className={clsx('col gap-y-4 items-center', className)}>
+        <div className={clsx('row w-full items-center justify-between mb-2')}>
           <h2 className={clsx('font-bold font-space text-2xl')}>{translation.navigation}</h2>
           <button className={clsx('rounded-md bg-gray-300 hover:bg-gray-400 p-1')} onClick={onCloseClick}>
             <X size={24}/>
@@ -63,11 +63,11 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
             href={item.url}
             key={i}
             className={clsx(
-              'flex flex-row justify-between items-center px-4 py-2 hover:bg-primary/40 w-full text-lg font-semibold rounded-md',
+              'row justify-between items-center px-4 py-2 hover:bg-primary/40 w-full text-lg font-semibold rounded-md',
               { 'bg-primary/30': router.pathname === item.url, 'bg-white': router.pathname !== item.url }
             )}
           >
-            <div className={clsx('flex flex-row gap-x-2 items-center')}>
+            <div className={clsx('row gap-x-2 items-center')}>
               {item.icon}
               {item.name[language]}
             </div>
@@ -75,9 +75,9 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
           </Link>
         ))}
       </nav>
-      <div className={clsx('flex flex-col gap-y-4 items-center w-full')}>
+      <div className={clsx('col gap-y-4 items-center w-full')}>
         <button
-          className={clsx('flex flex-row w-full justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40 font-semibold rounded-md')}
+          className={clsx('row w-full justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40 font-semibold rounded-md')}
           onClick={() => setIsLanguageModalOpen(true)}
         >
           {languagesLocalNames[language]}

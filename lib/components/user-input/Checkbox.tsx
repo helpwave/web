@@ -53,21 +53,28 @@ const ControlledCheckbox = ({
   const usedSizeClass = checkboxSizeMapping[size]
   const innerIconSize = checkboxIconSizeMapping[size]
 
+  const propagateChange = (checked: CheckedState) => {
+    if (onChangeTristate) {
+      onChangeTristate(checked)
+    }
+    if (onChange) {
+      onChange(checked === 'indeterminate' ? false : checked)
+    }
+  }
+
+  const changeValue = () => {
+    const newValue = checked === 'indeterminate' ? false : !checked
+    propagateChange(newValue)
+  }
+
   return (
-    <div className={clsx('flex justify-center items-center space-x-2')}>
+    <div className={clsx('row justify-center items-center')}>
       <CheckboxPrimitive.Root
-        onCheckedChange={checked => {
-          if (onChangeTristate) {
-            onChangeTristate(checked)
-          }
-          if (onChange) {
-            onChange(checked === 'indeterminate' ? false : checked)
-          }
-        }}
+        onCheckedChange={propagateChange}
         checked={checked}
         disabled={disabled}
         id={id}
-        className={clsx(usedSizeClass, `flex items-center border-2 border-gray-300 rounded outline-none focus:border-primary`, {
+        className={clsx(usedSizeClass, `items-center border-2 border-gray-300 rounded outline-none focus:border-primary`, {
           'text-gray-400': disabled,
           'bg-primary/30 border-primary  text-primary': checked === true || checked === 'indeterminate',
           'hover:border-gray-400 focus:hover:border-primary': !checked
@@ -78,7 +85,8 @@ const ControlledCheckbox = ({
           {checked === 'indeterminate' && <Minus className={innerIconSize}/>}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
-      {label && <Label {...label} htmlFor={id}/>}
+      {label &&
+        <Label {...label} className={clsx("cursor-pointer", label.className)} htmlFor={id} onClick={changeValue}/>}
     </div>
   )
 }

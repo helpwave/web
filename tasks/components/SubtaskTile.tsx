@@ -48,7 +48,7 @@ export const SubtaskTile = ({
   }, [subtask])
 
   return (
-    <div className={clsx('flex flex-row gap-x-2 items-center overflow-x-hidden')}>
+    <div className={clsx('row gap-x-2 items-center overflow-x-hidden')}>
       <div>
         <Checkbox
           onChange={isDone => {
@@ -86,7 +86,7 @@ export const SubtaskTile = ({
         onClick={onRemoveClick}
         aria-label={translation.remove}
         variant="text"
-        color="hw-negative"
+        color="negative"
       >
         {translation.remove}
       </SolidButton>

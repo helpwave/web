@@ -12,9 +12,9 @@ const ColorStripe = ({ shading }: StripeProps) => {
   const shades = generateShadingColors(shading)
 
   return (
-    <div className="flex flex-row">
+    <div className="row">
       {shadingColorValues.map((shade, index) => (
-        <div key={index} className={clsx('flex flex-col gap-y-2 items-center relative')}>
+        <div key={index} className={clsx('col gap-y-2 items-center relative')}>
           <span className="font-bold">{shade}</span>
           <div
             style={{

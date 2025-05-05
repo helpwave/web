@@ -21,7 +21,7 @@ export const BreadCrumb = ({ crumbs, linkClassName, containerClassName }: BreadC
   const color = 'text-description'
 
   return (
-    <div className={clsx('flex flex-row', containerClassName)}>
+    <div className={clsx('row', containerClassName)}>
       {crumbs.map((crumb, index) => (
         <div key={index}>
           <Link href={crumb.link} className={clsx(linkClassName, { [`${color} hover:brightness-60`]: index !== crumbs.length - 1 })}>

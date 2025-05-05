@@ -6,7 +6,7 @@ import { Page } from '@/components/Page'
 const TechRadar: NextPage = () => {
   return (
     <Page pageTitleAddition="tech radar">
-      <div className={clsx('mt-16 flex items-center justify-center')}>
+      <div className={clsx('mt-16 items-center justify-center')}>
         <TechRadarComponent/>
       </div>
     </Page>

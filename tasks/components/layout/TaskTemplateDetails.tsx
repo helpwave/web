@@ -103,7 +103,7 @@ export const TaskTemplateDetails = ({
   const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
 
   return (
-    <div className={clsx('flex flex-col py-4 px-6')}>
+    <div className={clsx('col py-4 px-6')}>
       <ConfirmDialog
         id="TaskTemplateDetails-DeleteDialog"
         titleText={translation.deleteConfirmText}
@@ -121,7 +121,7 @@ export const TaskTemplateDetails = ({
         title={isCreatingNewTemplate ? translation.createTaskTemplate : translation.updateTaskTemplate}
         subtitle={!isCreatingNewTemplate ? translation.updateTaskTemplateDescription : undefined}
       />
-      <div className={clsx(' flex flex-col gap-y-4 max-w-[400px] mb-4')}>
+      <div className={clsx(' col gap-y-4 max-w-[400px] mb-4')}>
         <div>
           <Input
             id="name"
@@ -166,7 +166,7 @@ export const TaskTemplateDetails = ({
           deletedSubtaskIds: context.state.deletedSubtaskIds
         })}
       />
-      <div className={clsx('flex flex-row mt-12',
+      <div className={clsx('row mt-12',
         {
           'justify-between': !isCreatingNewTemplate,
           'justify-end': isCreatingNewTemplate,

@@ -43,9 +43,9 @@ const Products: NextPage<PropsForTranslation<ProductsTranslation, ProductsServer
         {!isError && !isLoading && (
           <div className={clsx('flex flex-wrap gap-x-8 gap-y-12')}>
             {data.map((product, index) => (
-              <div key={index} className={clsx('flex flex-col gap-y-2 min-w-[200px] max-w-[200px] bg-hw-primary-500 text-white px-4 py-2 rounded-md')}>
+              <div key={index} className={clsx('col gap-y-2 min-w-[200px] max-w-[200px] bg-primary text-on-primary px-4 py-2 rounded-md')}>
                 <h4 className={clsx('font-bold font-space text-xl')}>{product.name}</h4>
-                <div className={clsx('flex flex-row justify-between')}>
+                <div className={clsx('row justify-between')}>
                   <span className={clsx('font-semibold text-lg')}>{`${product.price}€`}</span>
                   {translation[product.plan]}
                 </div>

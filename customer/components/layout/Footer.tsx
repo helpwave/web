@@ -92,12 +92,12 @@ const Footer = () => {
   }, [])
 
   return (
-    <footer className={clsx('w-full bg-black text-white py-8 flex flex-col items-center justify-center')}>
+    <footer className={clsx('w-full bg-black text-white py-8 col items-center justify-center')}>
       <div
         className={clsx('flex flex-wrap w-full max-w-[900px] mobile:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
         {grouping.map((groups, index) => (
           <div key={index}
-               className={clsx('flex flex-col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
+               className={clsx('col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
             {groups.map((category) => (
               <FooterLinkGroup key={category} title={translation[category]} links={linkGroups[category]}/>
             ))}
@@ -118,7 +118,7 @@ const Footer = () => {
         ))}
       </div>
       <div
-        className={clsx('flex flex-row justify-center w-full h-[128px] items-center justify-center mx-auto font-space')}>
+        className={clsx('row justify-center w-full h-[128px] items-center justify-center mx-auto font-space')}>
         <Helpwave color="white" size={128}/>
         <span className={clsx('textstyle-title-normal')}>&copy; {year} helpwave</span>
       </div>

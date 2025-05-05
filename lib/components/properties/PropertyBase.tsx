@@ -47,32 +47,32 @@ export const PropertyBase = ({
   const translation = useTranslation(defaultPropertyBaseTranslation, overwriteTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (
-    <div className={clsx('flex flex-row group', className)}>
+    <div className={clsx('row gap-x-0 group', className)}>
       <div
         className={
-          clsx('flex flex-row gap-x-2 !w-[200px] px-4 py-2 items-center rounded-l-xl border-2 border-r-0', {
-            'bg-gray-100 text-black group-hover:border-hw-primary-800 border-gray-400': !requiredAndNoValue,
-            'bg-hw-warn-600 text-hw-warn-100 group-hover:border-hw-warn-800 border-hw-warn-700': requiredAndNoValue,
+          clsx('row gap-x-2 !w-[200px] px-4 py-2 items-center rounded-l-xl border-2 border-r-0', {
+            'bg-gray-100 text-black group-hover:border-primary border-gray-400': !requiredAndNoValue,
+            'bg-warning text-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
           }, className)}
       >
         {icon}
         {name}
       </div>
       <div className={
-        clsx('flex grow justify-between items-center rounded-r-xl border-2 border-l-0', {
-          'bg-white group-hover:border-hw-primary-800 border-gray-400': !requiredAndNoValue,
-          'bg-hw-warn-200 group-hover:border-hw-warn-800 border-hw-warn-700': requiredAndNoValue,
+        clsx('row grow justify-between items-center rounded-r-xl border-2 border-l-0', {
+          'bg-white group-hover:border-primary border-gray-400': !requiredAndNoValue,
+          'bg-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
         }, className)}
       >
         {input({ softRequired, hasValue })}
         {requiredAndNoValue && (
-          <div className={clsx('text-hw-warn-600 pr-4')}><AlertTriangle size={24}/></div>
+          <div className={clsx('text-warning pr-4')}><AlertTriangle size={24}/></div>
         )}
         {onRemove && (
           <TextButton
             onClick={onRemove}
             color="negative"
-            className={clsx('pr-4', { '!text-transparent': !hasValue || readOnly })}
+            className={clsx('pr-4 items-center', { '!text-transparent': !hasValue || readOnly })}
             disabled={!hasValue || readOnly}
           >
             {translation.remove}

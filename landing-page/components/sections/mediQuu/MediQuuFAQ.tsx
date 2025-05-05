@@ -93,10 +93,10 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
 export const MediQuuFAQSection = () => {
   const translation = useTranslation(defaultMediQuuFAQTranslation)
   return (
-    <SectionBase backgroundColor="gray" className={clsx('flex flex-col w-full')}>
-      <span className={clsx('textstyle-title-xl text-hw-secondary-400 mb-1')}>{translation.title}</span>
+    <SectionBase backgroundColor="gray" className={clsx('col w-full')}>
+      <span className={clsx('textstyle-title-xl text-secondary mb-1')}>{translation.title}</span>
       <span>{translation.subTitle}</span>
-      <div className={clsx('flex flex-col gap-y-4 mt-8')}>
+      <div className={clsx('col gap-y-4 mt-8')}>
         <FAQSection
           entries={translation.faqs.map((faq, index) => ({
             id: `faq${index}`,

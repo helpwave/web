@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { SolidButton } from '@helpwave/common/components/Button'
+import {SolidButton, TextButton} from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -139,7 +139,7 @@ export const PatientList = ({
   const filteredDischarged = !data ? [] : SimpleSearchWithMapping(search, data.discharged, value => value.name)
 
   return (
-    <div className={clsx('relative flex flex-col py-4 px-6')}>
+    <div className={clsx('relative col py-4 px-6')}>
       <ConfirmDialog
         id="patientList-DeleteDialog"
         isOpen={!!deletePatient}
@@ -184,12 +184,12 @@ export const PatientList = ({
         onBackgroundClick={() => setIsShowingAddPatientModal(0)}
         wardId={context.wardId}
       />
-      <div className={clsx('flex flex-row gap-x-2 items-center')}>
+      <div className={clsx('row gap-x-2 items-center')}>
         <span className={clsx('textstyle-title-normal pr-4')}>{translation.patients}</span>
         <Input placeholder={translation.search} value={search} onChange={setSearch} className={clsx('h-9')}/>
         <SolidButton
           className={clsx('whitespace-nowrap')}
-          color="hw-positive"
+          color="positive"
           onClick={() => {
             setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
           }}
@@ -203,7 +203,7 @@ export const PatientList = ({
         errorProps={{ classname: clsx('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
         loadingProps={{ classname: clsx('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
       >
-        <div className={clsx('flex flex-col gap-y-4 mb-8')}>
+        <div className={clsx('col gap-y-4 mb-8')}>
           <div className={clsx('p-2 border-2 border-transparent rounded-xl')}>
             <HideableContentSection
               initiallyOpen={initialOpenedSections?.active}
@@ -220,7 +220,7 @@ export const PatientList = ({
                 }}>
                   {() => (
                     <div
-                      className={clsx('flex flex-row pt-2 border-b-2 justify-between items-center cursor-pointer')}
+                      className={clsx('row pt-2 border-b-2 justify-between items-center cursor-pointer')}
                       onClick={() => updateContext({
                         ...context,
                         patientId: patient.id,
@@ -229,16 +229,16 @@ export const PatientList = ({
                       })}
                     >
                       <span className={clsx('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
-                      <div className={clsx('flex flex-row flex-1 justify-between items-center')}>
-                        <Chip color="hw-label-blue" variant="fullyRounded">
+                      <div className={clsx('row flex-1 justify-between items-center')}>
+                        <Chip color="blue" variant="fullyRounded">
                           {activeLabelText(patient)}
                         </Chip>
-                        <SolidButton color="hw-negative" variant="text" onClick={event => {
+                        <TextButton color="negative" onClick={event => {
                           event.stopPropagation()
                           setDischargingPatient(patient)
                         }}>
                           {translation.discharge}
-                        </SolidButton>
+                        </TextButton>
                       </div>
                     </div>
                   )}
@@ -249,14 +249,14 @@ export const PatientList = ({
           <Droppable id="patientListUnassigned" data={{ patientListSection: 'unassigned' }}>
             {({ isOver }) => (
               <div className={clsx('p-2 border-2 border-dashed rounded-xl', {
-                'border-hw-primary-700': isOver,
+                'border-primary': isOver,
                 'border-transparent': !isOver
               })}>
                 <HideableContentSection
                   initiallyOpen={initialOpenedSections?.unassigned}
                   disabled={filteredUnassigned.length <= 0}
                   header={(
-                    <span className={clsx('textstyle-accent text-hw-label-yellow-400')}>
+                    <span className={clsx('textstyle-accent text-tag-yellow-text')}>
                       {`${translation.unassigned} (${filteredUnassigned.length})`}
                     </span>
                   )}
@@ -269,23 +269,23 @@ export const PatientList = ({
                       {() => (
                         <div
                           key={patient.id}
-                          className={clsx('flex flex-row pt-2 border-b-2 items-center cursor-pointer')}
+                          className={clsx('row pt-2 border-b-2 items-center cursor-pointer')}
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
                           })}
                         >
                           <span className={clsx('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
-                          <div className={clsx('flex flex-row flex-1 justify-between items-center')}>
-                            <Chip color="hw-label-yellow" variant="fullyRounded">
+                          <div className={clsx('row flex-1 justify-between items-center')}>
+                            <Chip color="yellow" variant="fullyRounded">
                               {`${translation.unassigned}`}
                             </Chip>
-                            <SolidButton color="hw-negative" variant="text" onClick={event => {
+                            <TextButton color="negative" onClick={event => {
                               event.stopPropagation()
                               setDischargingPatient(patient)
                             }}>
                               {translation.discharge}
-                            </SolidButton>
+                            </TextButton>
                           </div>
                         </div>
                       )}
@@ -298,7 +298,7 @@ export const PatientList = ({
           <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
             {({ isOver }) => (
               <div className={clsx('p-2 border-2 border-dashed rounded-xl', {
-                'border-hw-primary-700': isOver,
+                'border-primary': isOver,
                 'border-transparent': !isOver
               })}>
                 <HideableContentSection
@@ -314,23 +314,23 @@ export const PatientList = ({
                       {() => (
                         <div
                           key={patient.id}
-                          className={clsx('flex flex-row pt-2 border-b-2 justify-between items-center')}
+                          className={clsx('row pt-2 border-b-2 justify-between items-center')}
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
                           })}
                         >
                           <span className={clsx('textstyle-title-sm')}>{patient.name}</span>
-                          <div className={clsx('flex flex-row gap-x-4')}>
-                            <SolidButton variant="text" onClick={event => {
+                          <div className={clsx('row gap-x-4')}>
+                            <TextButton onClick={event => {
                               event.stopPropagation()
                               readmitPatientMutation.mutate(patient.id)
                             }}>
                               {translation.readmit}
-                            </SolidButton>
-                            <SolidButton
-                              color="hw-negative"
-                              variant="text" onClick={event => {
+                            </TextButton>
+                            <TextButton
+                              color="negative"
+                              onClick={event => {
                                 event.stopPropagation()
                                 setDeletePatient(patient)
                               }}
@@ -338,7 +338,7 @@ export const PatientList = ({
                               disabled={true}
                             >
                               {translation.delete}
-                            </SolidButton>
+                            </TextButton>
                           </div>
                         </div>
                       )}

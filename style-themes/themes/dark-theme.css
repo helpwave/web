@@ -1,49 +1,8 @@
 @import "./variants.css";
 
 @layer base {
+  /* Here are overrides for the light theme */
   @variant dark {
-    --color-white: #FFFFFF;
-    --color-black: #000000;
-    --color-gray-25: #F8F8F8;
-    --color-gray-50: #F2F2F2;
-    --color-gray-100: #E6E6E6;
-    --color-gray-200: #CCCCCC;
-    --color-gray-300: #B3B3B3;
-    --color-gray-400: #999999;
-    --color-gray-500: #888888;
-    --color-gray-600: #666666;
-    --color-gray-700: #4D4D4D;
-    --color-gray-800: #333333;
-    --color-gray-900: #1A1A1A;
-    --color-gray-950: #0D0D0D;
-
-    --color-green-100: #D1EFD8;
-    --color-green-500: #69CB81;
-    --color-green-900: #2C5536;
-
-    --color-orange-100: #FBECD9;
-    --color-orange-200: #F7D8B3;
-    --color-orange-500: #EA9E40;
-
-    --color-purple-50: #EFE6FD;
-    --color-purple-100: #CEB0FA;
-    --color-purple-500: #694BB4;
-
-    --color-blue-50: #F6FAFF;
-    --color-blue-100: #D6E3F9;
-    --color-blue-200: #99B9EF;
-    --color-blue-500: #3272DF;
-    --color-blue-600: #285BB2;
-    --color-blue-800: #1A4080;
-
-    --color-red-50: #FFF9F9;
-    --color-red-100: #FBE0E2;
-    --color-red-200: #F7C2C5;
-    --color-red-300: #F4A3A7;
-    --color-red-400: #E3798A;
-    --color-red-500: #DC576D;
-    --color-red-900: #5C252E;
-
     --color-primary: #694BB4;
     --color-on-primary: #FFFFFF;
     --color-secondary: #11243E;
@@ -115,8 +74,9 @@
     --color-button-solid-negative-icon: #FFFFFF;
     --color-button-solid-negative-text: #FFFFFF;
 
-    --color-button-text-neutral-text: #333333;
-    --color-button-text-neutral-icon: #333333;
+    --color-button-text-hover-background: #333333;
+    --color-button-text-neutral-text: #EEEEEE;
+    --color-button-text-neutral-icon: #EEEEEE;
     --color-button-text-negative-text: #DC576D;
     --color-button-text-negative-icon: #DC576D;
 

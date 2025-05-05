@@ -51,12 +51,12 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
 
   return (
     <SectionBase
-      className={clsx('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-end items-center')}
+      className={clsx('row mobile:!flex flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-end items-center')}
       backgroundColor="gray"
       outerClassName={clsx('!pr-0')}
     >
-      <div className={clsx('flex flex-col items-center mobile:items-start flex-1 mobile:pr-6')}>
-        <div className={clsx('flex flex-col gap-y-2 max-w-[500px] mobile:max-w-full')}>
+      <div className={clsx('col items-center mobile:items-start flex-1 mobile:pr-6')}>
+        <div className={clsx('col gap-y-2 max-w-[500px] mobile:max-w-full')}>
           <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
           <span className={clsx('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
           <ItemGrid className={clsx('mt-2')}>

@@ -133,7 +133,7 @@ export const OrganizationDetail = ({
   return (
     <div
       key={contextState.organizationId}
-      className={clsx('flex flex-col py-4 px-6')}
+      className={clsx('col py-4 px-6')}
     >
       <ConfirmDialog
         id="organizationDetail-DeleteDialog"
@@ -173,7 +173,7 @@ export const OrganizationDetail = ({
         }}
       />
       <ColumnTitle title={translation.organizationDetail}/>
-      <div className={clsx('flex flex-col gap-y-4 max-w-[500px]')}>
+      <div className={clsx('col gap-y-4 max-w-[500px]')}>
         <OrganizationForm
           organizationForm={organizationForm}
           onChange={(organizationForm, shouldUpdate) => {
@@ -191,7 +191,7 @@ export const OrganizationDetail = ({
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
           organizationId={contextState.organizationId}
         />
-        <div className={clsx('flex flex-row justify-end')}>
+        <div className={clsx('row justify-end')}>
           <SolidButton
             className={clsx('w-auto')}
             onClick={() => isCreatingNewOrganization ? createOrganization(organizationForm.organization) : updateOrganization(organizationForm.organization)}
@@ -199,7 +199,7 @@ export const OrganizationDetail = ({
             {isCreatingNewOrganization ? translation.create : translation.update}
           </SolidButton>
         </div>
-        <div className={clsx('flex flex-col justify-start', { hidden: isCreatingNewOrganization })}>
+        <div className={clsx('col justify-start', { hidden: isCreatingNewOrganization })}>
           <span className={clsx('textstyle-title-normal')}>{translation.dangerZone}</span>
           <span className={clsx('textstyle-description')}>{translation.dangerZoneText}</span>
           <button

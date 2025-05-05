@@ -37,12 +37,12 @@ export const BedCard = ({
   const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
   return (
     (
-      <DragCard onTileClick={onTileClick} isSelected={isSelected} className={clsx('min-h-[148px] flex flex-col', className)} {...restCardProps}>
-        <div className={clsx('flex flex-row justify-between')}>
+      <DragCard onTileClick={onTileClick} isSelected={isSelected} className={clsx('min-h-[148px] col', className)} {...restCardProps}>
+        <div className={clsx('row justify-between')}>
           <span className={clsx('textstyle-title-sm')}>{bedName}</span>
           <span>{translation.nobody}</span>
         </div>
-        <div className={clsx('flex flex-1 justify-center items-center')}>
+        <div className={clsx('flex-1 justify-center items-center')}>
           <Plus/>
         </div>
       </DragCard>

@@ -106,7 +106,7 @@ export const WardDetail = ({
   const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
 
   return (
-    <div className={clsx('flex flex-col py-4 px-6')}>
+    <div className={clsx('col py-4 px-6')}>
       <LoadingAndErrorComponent
         isLoading={!isCreatingNewWard && ((isLoading && !ward) || !newWard.id)}
         hasError={isError && !isCreatingNewWard && !ward}
@@ -149,7 +149,7 @@ export const WardDetail = ({
             <RoomList/>
           </div>
             )}
-        <div className={clsx('flex flex-row justify-end mt-6')}>
+        <div className={clsx('row justify-end mt-6')}>
           <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
             disabled={!filledRequired}>
@@ -163,13 +163,13 @@ export const WardDetail = ({
             </div>
           )
         }
-        <div className={clsx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
+        <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
           <span className={clsx('textstyle-title-normal')}>{translation.dangerZone}</span>
           <span className={clsx('textstyle-description')}>{translation.dangerZoneText}</span>
           <SolidButton
             onClick={() => setIsShowingConfirmDialog(true)}
             className={clsx('px-0 font-bold text-left')}
-            color="hw-negative"
+            color="negative"
             variant="text"
           >
             {translation.deleteWard}

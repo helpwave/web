@@ -61,8 +61,8 @@ export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneTo
           options={organizationOptions}
           onChange={setOrganization}
         />
-        <div className={clsx('flex flex-row mt-3 gap-x-4 justify-end')}>
-          <SolidButton autoFocus color="hw-positive" disabled={!organization} onClick={onDone}>
+        <div className={clsx('row mt-3 gap-x-4 justify-end')}>
+          <SolidButton autoFocus color="positive" disabled={!organization} onClick={onDone}>
             {translation.ok}
           </SolidButton>
         </div>

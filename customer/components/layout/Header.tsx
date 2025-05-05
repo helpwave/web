@@ -15,21 +15,21 @@ export const Header = ({ leading, leftSide, rightSide, className }: HeaderProps)
   return (
     <header
       className={clsx(
-        'sticky top-0 flex flex-row items-center justify-between px-2 py-2 w-full min-h-[64px] max-h-[64px] shadow-md bg-white',
+        'sticky top-0 row items-center justify-between px-2 py-2 w-full min-h-[64px] max-h-[64px] shadow-md bg-white',
         className
       )}
     >
-      <div className={clsx('flex flex-row items-center gap-x-4')}>
+      <div className={clsx('row items-center gap-x-4')}>
         {leading}
         {leading && leftSide && (<div className={clsx('h-8 w-[2px] rounded bg-gray-200')}/>)}
         {leftSide && (
-          <div className={clsx('flex flex-row items-center gap-x-2')}>
+          <div className={clsx('row items-center gap-x-2')}>
             {leftSide}
           </div>
         )}
       </div>
       {rightSide && (
-        <div className={clsx('flex flex-row items-center gap-x-2')}>
+        <div className={clsx('row items-center gap-x-2')}>
           {rightSide}
         </div>
       )}

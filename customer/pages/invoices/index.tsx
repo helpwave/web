@@ -137,9 +137,9 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                   </span>
                 ),
                 (
-                  <div key={dataObject.uuid + '-details'} className={clsx('flex flex-col')}>
+                  <div key={dataObject.uuid + '-details'} className={clsx('col')}>
                     <span>{translation.products(dataObject.products!.length)}</span>
-                    <SolidButton size="small" onClick={() => setDetailModalId(dataObject.uuid)} className={clsx('flex flex-row items-center gap-x-1 p-0')} variant="text">
+                    <SolidButton size="small" onClick={() => setDetailModalId(dataObject.uuid)} className={clsx('row items-center gap-x-1 p-0')} variant="text">
                       {translation.show}
                       <ChevronRight size={16}/>
                     </SolidButton>
@@ -151,7 +151,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                     className={clsx({
                       'text-negative': dataObject.status === 'notPayed',
                       'text-warning': dataObject.status === 'pending' || dataObject.status === 'overdue',
-                      'text-hw-positive-400': dataObject.status === 'payed'
+                      'text-positive': dataObject.status === 'payed'
                     })}
                   >
                     {translation[dataObject.status]}

@@ -84,7 +84,7 @@ export const UserInvitationList = ({
               <></>
             ]}
             rowMappingToCells={invite => [
-              <div key="name" className={clsx('flex flex-row justify-start items-center gap-x-2')}>
+              <div key="name" className={clsx('row justify-start items-center gap-x-2')}>
                 <Avatar avatarUrl={invite.organization.id} alt=""/>
                 <span>{invite.organization.longName}</span>
               </div>,

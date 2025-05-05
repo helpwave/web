@@ -144,7 +144,7 @@ export const RoomList = ({
   const multipleInDelete = deletionConfirmDialogElement !== '' || tableState.selection?.currentSelection.length === 1
 
   return (
-    <div className={clsx('flex flex-col')}>
+    <div className={clsx('col')}>
       <ConfirmDialog
         id="roomlist-DeleteBedsDialog"
         titleText={translation.deleteConfirmText(multipleInDelete)}
@@ -180,18 +180,18 @@ export const RoomList = ({
         loadingProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
         errorProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
       >
-        <div className={clsx('flex flex-row justify-between items-center mb-2')}>
+        <div className={clsx('row justify-between items-center mb-2')}>
           <span className={clsx('textstyle-table-name')}>{translation.rooms + ` (${usedRooms.length})`}</span>
-          <div className={clsx('flex flex-row gap-x-2')}>
+          <div className={clsx('row gap-x-2')}>
             {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
               <SolidButton
                 onClick={() => setDeletionConfirmDialogElement('')}
-                color="hw-negative"
+                color="negative"
               >
                 {translation.removeSelection}
               </SolidButton>
             )}
-            <SolidButton onClick={addRoom} color="hw-positive">
+            <SolidButton onClick={addRoom} color="positive">
               {translation.addRoom}
             </SolidButton>
           </div>
@@ -211,7 +211,7 @@ export const RoomList = ({
             <></>
           ]}
           rowMappingToCells={room => [
-            <div key="name" className={clsx('flex flex-row items-center w-10/12 min-w-[50px]')}>
+            <div key="name" className={clsx('row items-center w-10/12 min-w-[50px]')}>
               <Input
                 value={room.name}
                 type="text"
@@ -238,19 +238,19 @@ export const RoomList = ({
             <div key="bedcount" className={clsx('w-20')}>
               <span>{room.bedCount}</span>
             </div>,
-            <div key="manage" className={clsx('flex flex-row justify-start min-w-[140px]')}>
+            <div key="manage" className={clsx('row justify-start min-w-[140px]')}>
               <SolidButton
                 onClick={() => setManagedRoom(room.id)}
                 variant="text"
-                color="hw-neutral"
+                color="neutral"
               >
                 {translation.manage}
               </SolidButton>
             </div>,
-            <div key="remove" className={clsx('flex flex-row justify-end')}>
+            <div key="remove" className={clsx('row justify-end')}>
               <SolidButton
                 onClick={() => setDeletionConfirmDialogElement(room.id)}
-                color="hw-negative"
+                color="negative"
                 variant="text"
               >
                 {translation.remove}

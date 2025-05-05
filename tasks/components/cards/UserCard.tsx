@@ -11,7 +11,7 @@ export type UserCardProps = {
  */
 const UserCard = ({ user }: UserCardProps) => {
   return (
-    <div className={clsx('flex flex-row w-80 h-22 rounded-lg border-2')}>
+    <div className={clsx('row w-80 h-22 rounded-lg border-2')}>
       <div className={clsx('p-2')}>
         <Avatar avatarUrl={user.avatarUrl} alt="profile picture" size="large" />
       </div>

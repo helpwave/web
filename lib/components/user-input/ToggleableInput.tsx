@@ -59,10 +59,10 @@ export const ToggleableInput = ({
   return (
     <div>
       <div
-        className={clsx('flex flex-row items-center w-full gap-x-2 overflow-hidden')}
+        className={clsx('row items-center w-full gap-x-2 overflow-hidden')}
         onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
       >
-        <div className={clsx('flex flex-row overflow-hidden', { 'flex-1': isEditing })}>
+        <div className={clsx('row overflow-hidden', { 'flex-1': isEditing })}>
           {isEditing ? (
             <input
               autoFocus
@@ -84,7 +84,7 @@ export const ToggleableInput = ({
                 onEditCompletedWrapper(value)
                 setIsEditing(false)
               }}
-              onKeyPress={event => {
+              onKeyDown={event => {
                 if (event.key === 'Enter') {
                   setIsEditing(false)
                   onEditCompletedWrapper(value)

@@ -57,7 +57,7 @@ export const TaskTemplateDisplay = ({
   return (
     <div className={clsx('py-4 px-6')}>
       <div className={
-        clsx('flex flex-row items-center justify-between mb-4')}>
+        clsx('row items-center justify-between mb-4')}>
         <span className={clsx('textstyle-title-normal')}>
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
         </span>
@@ -66,7 +66,7 @@ export const TaskTemplateDisplay = ({
             onClick={() => {
               router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).catch(console.error)
             }}
-            className={clsx('flex flex-row gap-x-1 items-center w-auto')}
+            className={clsx('row gap-x-1 items-center w-auto')}
           >
             <LucideArrowLeftRight/>
             {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}

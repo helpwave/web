@@ -77,7 +77,7 @@ export const PropertyList = ({
       hasError={isError}
       loadingProps={{ classname: 'min-h-[200px] border-2 border-black rounded-xl' }}
     >
-      <div className={clsx('flex flex-col gap-y-2')}>
+      <div className={clsx('col gap-y-2')}>
         <Tile
           title={{ value: translation.properties, className: 'textstyle-title-lg' }}
           prefix={<Tag className={clsx('text-primary')} size={20}/>}
@@ -97,7 +97,7 @@ export const PropertyList = ({
           trigger={(onClick, ref) => (
             <div
               ref={ref}
-              className={clsx('flex flex-row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-primary rounded-2xl cursor-pointer')}
+              className={clsx('row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-primary rounded-2xl cursor-pointer')}
               onClick={onClick}
             >
               <Plus size={20}/>

@@ -124,7 +124,7 @@ export const RoomBedSelect = ({
   const isShowingClear = isClearable && !isSubmitting && touched
   const isShowingRevert = touched && hasChanges && !isSubmitting && !isCreating && !isClearable
   const changesAndSaveRow = (
-    <div className={clsx('flex flex-row justify-between items-center gap-x-4')}>
+    <div className={clsx('row justify-between items-center gap-x-4')}>
       <div>
         {isShowingRevert && (
           <SolidButton
@@ -137,7 +137,7 @@ export const RoomBedSelect = ({
             variant="text-border"
             disabled={!hasChanges}
           >
-            <div className={clsx('flex flex-row gap-x-2 items-center')}>
+            <div className={clsx('row gap-x-2 items-center')}>
               {translation.revert}
               <Undo2 size={16}/>
             </div>
@@ -154,9 +154,9 @@ export const RoomBedSelect = ({
               onChange({})
             }}
             variant="text-border"
-            color="hw-negative"
+            color="negative"
           >
-            <div className={clsx('flex flex-row gap-x-2 items-center')}>
+            <div className={clsx('row gap-x-2 items-center')}>
               {translation.revert}
               <X size={16}/>
             </div>
@@ -166,14 +166,14 @@ export const RoomBedSelect = ({
       {touched && !isSubmitting && !isCreating && (
         <span className={clsx({
           '!text-negative': hasChanges,
-          '!text-hw-positive-400': !hasChanges
+          '!text-positive': !hasChanges
         })}>
           {hasChanges ? translation.unsaved : translation.saved}
         </span>
       )}
       {touched && !isSubmitting && isCreating && (
         <span className={clsx({
-          '!text-hw-positive-400': currentSelection.roomId && currentSelection.bedId,
+          '!text-positive': currentSelection.roomId && currentSelection.bedId,
           '!text-negative': !(currentSelection.roomId && currentSelection.bedId)
         })}>
           {currentSelection.roomId && currentSelection.bedId ? translation.valid : translation.invalid}
@@ -188,12 +188,12 @@ export const RoomBedSelect = ({
   )
 
   const widthLayout = (
-    <div className={clsx('flex flex-col')}>
+    <div className={clsx('col')}>
         <table className={clsx('min-w-[200px] border-spacing-y-2 border-separate')}>
           <thead>
             <tr>
-              <th><span className={clsx('textstyle-table-header flex flex-row justify-start')}>{translation.room}</span></th>
-              <th><span className={clsx('textstyle-table-header flex flex-row justify-start')}>{translation.bed}</span></th>
+              <th><span className={clsx('textstyle-table-header row justify-start')}>{translation.room}</span></th>
+              <th><span className={clsx('textstyle-table-header row justify-start')}>{translation.bed}</span></th>
             </tr>
           </thead>
           <tbody>
@@ -212,7 +212,7 @@ export const RoomBedSelect = ({
   )
 
   const heightLayout = (
-    <div className={clsx('flex flex-col')}>
+    <div className={clsx('col')}>
       <table className={clsx('border-spacing-y-2 border-separate')}>
         <thead/>
         <tbody>

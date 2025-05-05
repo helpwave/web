@@ -56,8 +56,8 @@ export const TaskTemplateWardPreview = ({
       errorProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
     >
       {taskTemplates && (
-        <div className={clsx('flex flex-col')}>
-          <div className={clsx('flex flex-row justify-between items-center mb-4')}>
+        <div className={clsx('col')}>
+          <div className={clsx('row justify-between items-center mb-4')}>
             <span className={clsx('textstyle-table-name')}>{translation.taskTemplates(taskTemplates.length)}</span>
             <SolidButton
               className={clsx('w-auto')}

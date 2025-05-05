@@ -20,7 +20,7 @@ export const PartnerList = ({
   partners
 }: PartnerListProps) => {
   return (
-    <div className={clsx('flex flex-col gap-y-4 items-center w-full')}>
+    <div className={clsx('col gap-y-4 items-center w-full')}>
       <span className={clsx('textstyle-title-lg')}>{title}</span>
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
@@ -38,7 +38,7 @@ export const PartnerList = ({
         autoLoopAnimationTime={5000}
       >
         {partners.map(partner => (
-          <div key={partner.name} className={clsx('flex flex-col h-full items-center justify-center')}>
+          <div key={partner.name} className={clsx('col h-full items-center justify-center')}>
             <Image
               key={partner.name}
               width={0}

@@ -24,11 +24,11 @@ export type HeaderProps = {
  */
 const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: HeaderProps) => {
   return (
-    <div className={clsx('h-16 py-4 relative flex items-center justify-between border-b border-slate-900/10')}>
-      <div className={clsx('flex gap-4 w-full justify-between mx-4')}>
-        <div className={clsx('w-full relative flex items-center align-center')}>
+    <div className={clsx('h-16 py-4 relative items-center justify-between border-b border-slate-900/10')}>
+      <div className={clsx('gap-4 w-full justify-between mx-4')}>
+        <div className={clsx('w-full relative items-center align-center')}>
           {withIcon && (
-            <div className={clsx('relative flex gap-2 align-center')}>
+            <div className={clsx('relative gap-2 align-center')}>
               <Link href="/">
                 <Helpwave size={52} />
               </Link>
@@ -36,15 +36,15 @@ const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: Heade
           )}
           {title && <span className={clsx('textstyle-title-md')}>{title}</span>}
           {leftSide?.filter(value => value !== undefined).map((value, index) => (
-            <div key={'leftAction' + index} className={clsx('flex flex-row items-center')}>
+            <div key={'leftAction' + index} className={clsx('row items-center')}>
               {(index !== 0 || title || withIcon) && <div className={clsx('bg-gray-300 rounded h-8 w-0.5 mx-4')}/>}
               {value}
             </div>
           ))}
         </div>
-        <div className={clsx('w-full flex items-center justify-end')}>
+        <div className={clsx('w-full items-center justify-end')}>
           {rightSide?.filter(value => value !== undefined).map((value, index) => (
-            <div key={'rightAction' + index} className={clsx('flex flex-row items-center')}>
+            <div key={'rightAction' + index} className={clsx('row items-center')}>
               {value}
               {index !== rightSide?.length - 1 && <div className={clsx('bg-gray-300 rounded h-8 w-0.5 mx-3')}/>}
             </div>

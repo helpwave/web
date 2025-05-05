@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import {useEffect, useRef, useState} from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
 import { closestMatch, range } from '../../util/array'
@@ -23,8 +23,8 @@ export const TimePicker = ({
   maxHeight = 300,
   className = ''
 }: TimePickerProps) => {
-  const minuteRef = useRef<HTMLDivElement>(null)
-  const hourRef = useRef<HTMLDivElement>(null)
+  const minuteRef = useRef<HTMLButtonElement>(null)
+  const hourRef = useRef<HTMLButtonElement>(null)
 
   const isPM = time.getHours() >= 11
   const hours = is24HourFormat ? range(0, 23) : range(1, 12)
@@ -81,8 +81,8 @@ export const TimePicker = ({
 
   const closestMinute = closestMatch(minutes, (item1, item2) => Math.abs(item1 - time.getMinutes()) < Math.abs(item2 - time.getMinutes()))
 
-  const style = (selected: boolean) => clsx('px-2 py-1 cursor-pointer hover:bg-hw-primary-200 border border-2 rounded-md hover:border-primary text-center mr-3',
-    { 'bg-hw-primary-100 border-hw-primary-300': selected, 'border-transparent': !selected })
+  const style = (selected: boolean) => clsx('chip-full hover:brightness-90 hover:bg-primary hover:text-on-primary rounded-md mr-3',
+    { 'bg-primary text-on-primary': selected, 'bg-white text-black': !selected })
 
   const onChangeWrapper = (transformer: (newDate: Date) => void) => {
     const newDate = new Date(time)
@@ -91,57 +91,77 @@ export const TimePicker = ({
   }
 
   return (
-    <div className={clsx('flex flex-row gap-x-2 w-fit min-w-[150px] select-none', className)}>
+    <div className={clsx('row gap-x-2 w-fit min-w-[150px] select-none', className)}>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={clsx('flex flex-col gap-y-1 h-full')}>
+        <div className={clsx('col gap-y-1 h-full')}>
           {hours.map(hour => {
             const currentHour = hour === time.getHours() - (!is24HourFormat && isPM ? 12 : 0)
             return (
-              <div
+              <button
                 key={hour}
                 ref={currentHour ? hourRef : undefined}
                 className={style(currentHour)}
                 onClick={() => onChangeWrapper(newDate => newDate.setHours(hour + (!is24HourFormat && isPM ? 12 : 0)))}
               >
                 {hour.toString().padStart(2, '0')}
-              </div>
+              </button>
             )
           })}
         </div>
       </Scrollbars>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={clsx('flex flex-col gap-y-1 h-full')}>
+        <div className={clsx('col gap-y-1 h-full')}>
           {minutes.map(minute => {
             const currentMinute = minute === closestMinute
             return (
-              <div
+              <button
                 key={minute + minuteIncrement} // minute increment so that scroll works
                 ref={currentMinute ? minuteRef : undefined}
                 className={style(currentMinute)}
                 onClick={() => onChangeWrapper(newDate => newDate.setMinutes(minute))}
               >
                 {minute.toString().padStart(2, '0')}
-              </div>
+              </button>
             )
           })}
         </div>
       </Scrollbars>
       {!is24HourFormat && (
-        <div className={clsx('flex flex-col gap-y-1')}>
-          <div
+        <div className={clsx('col gap-y-1')}>
+          <button
             className={style(!isPM)}
             onClick={() => onChangeWrapper(newDate => isPM && newDate.setHours(newDate.getHours() - 12))}
           >
             AM
-          </div>
-          <div
+          </button>
+          <button
             className={style(isPM)}
             onClick={() => onChangeWrapper(newDate => !isPM && newDate.setHours(newDate.getHours() + 12))}
           >
             PM
-          </div>
+          </button>
         </div>
       )}
     </div>
+  )
+}
+
+export const ControlledTimePicker = ({
+                                    time,
+                                    onChange = noop,
+                                    ...props
+                                  }: TimePickerProps) => {
+  const [value, setValue] = useState(time)
+  useEffect(() => setValue(time), [time])
+
+  return (
+    <TimePicker
+      {...props}
+      time={value}
+      onChange={time1 => {
+        setValue(time1)
+        onChange(time1)
+      }}
+    />
   )
 }

@@ -61,7 +61,7 @@ export const WardForm = ({
   const maxWardNameLength = 32
 
   const inputErrorClasses = clsx('border-negative focus:border-negative focus:ring-negative border-2')
-  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
+  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary')
 
   function validateName(ward: WardFormInfoDTO) {
     const wardName = ward.name.trim()

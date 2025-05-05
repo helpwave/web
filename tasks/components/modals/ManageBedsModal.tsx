@@ -103,9 +103,9 @@ export const ManageBedsModal = ({
       >
         {room && beds && (
           <>
-            <div className={clsx('flex flex-row justify-between items-end mb-2 mt-4')}>
+            <div className={clsx('row justify-between items-end mb-2 mt-4')}>
               <span className={clsx('textstyle-table-name')}>{`${translation.beds} (${beds.length})`}</span>
-              <SolidButton color="hw-positive" onClick={addBed}>{translation.addBed}</SolidButton>
+              <SolidButton color="positive" onClick={addBed}>{translation.addBed}</SolidButton>
             </div>
             <Table
               data={beds}
@@ -117,7 +117,7 @@ export const ManageBedsModal = ({
                 <></>
               ]}
               rowMappingToCells={bed => [
-                <div key="name" className={clsx('flex flex-row items-center w-10/12 min-w-[50px]')}>
+                <div key="name" className={clsx('row items-center w-10/12 min-w-[50px]')}>
                   <Input
                     value={bed.name}
                     maxLength={maxBedNameLength}
@@ -130,14 +130,14 @@ export const ManageBedsModal = ({
                 <div key="patient" className={clsx('w-20')}>
                   <span>{bed.patient ? bed.patient.name : '-'}</span>
                 </div>,
-                <div key="remove" className={clsx('flex flex-row justify-end')}>
+                <div key="remove" className={clsx('row justify-end')}>
                   <SolidButton
                     disabled={!!bed.patient}
                     onClick={() => {
                       deleteBedMutation.mutate(bed.id)
                       setTableState({ pagination: tableState.pagination ? updatePagination(tableState.pagination, beds.length - 1) : undefined })
                     }}
-                    color="hw-negative"
+                    color="negative"
                     variant="text"
                   >
                     {translation.remove}

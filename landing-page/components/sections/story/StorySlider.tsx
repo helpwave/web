@@ -87,7 +87,7 @@ export const StoriesSliderSection = () => {
   ]
 
   return (
-    <SectionBase className={clsx('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
+    <SectionBase className={clsx('col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
       <Carousel hintNext={true} isLooping={true} isAutoLooping={true} heights={{ tablet: 300 }}>
         {items.map((value, index) => (
           <div key={index} className={clsx('px-[2.5%] h-full')}>

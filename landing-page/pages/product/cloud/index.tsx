@@ -8,7 +8,7 @@ const Cloud: NextPage = () => {
       <div className={clsx('pt-32 pb-16')}>
         <div className={clsx('desktop:w-5/12 desktop:mx-auto mobile:mx-8 relative z-[1]')}>
           <h1 className={clsx('font-space text-6xl font-bold')}>
-            helpwave <span className={clsx('text-hw-primary-800')}>cloud</span>
+            helpwave <span className={clsx('text-primary')}>cloud</span>
           </h1>
           <div className={clsx('w-full min-h-[1000px]')}/>
         </div>

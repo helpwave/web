@@ -198,17 +198,17 @@ export const ScrollPicker = <T, >({
         }
       }}
     >
-      <div className={clsx(`absolute flex top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2`)}>
-        <div className={clsx(`absolute z-[1] flex top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 h-[${itemHeight}px] w-full min-w-[40px] border border-y-2 border-x-0 border-[#00000033]`)}/>
+      <div className={clsx(`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2`)}>
+        <div className={clsx(`absolute z-[1] top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 h-[${itemHeight}px] w-full min-w-[40px] border border-y-2 border-x-0 border-[#00000033]`)}/>
         <div
-          className={clsx(`flex flex-col gap-y-[${distance}px] select-none`)}
+          className={clsx(`col gap-y-[${distance}px] select-none`)}
           style={{ transform: `translateY(${-transition * (distance + itemHeight)}px)` }}
         >
           {shownItems.map(({ name, index }, arrayIndex) => (
             <div
               key={index}
               className={clsx(
-                `flex flex-col items-center justify-center flex max-h-[${itemHeight}px] h-[${itemHeight}px] rounded-md`,
+                `col items-center justify-center max-h-[${itemHeight}px] h-[${itemHeight}px] rounded-md`,
                 {
                   'text-primary font-bold': currentIndex === index,
                   'cursor-pointer': !disabled,

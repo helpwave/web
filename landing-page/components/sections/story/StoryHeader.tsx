@@ -26,8 +26,8 @@ const StoryHeader = ({ overwriteTranslation }: PropsForTranslation<StoryHeaderTr
 
   return (
     <SectionBase className={clsx('text-white')} backgroundColor="black">
-      <div className={clsx('flex flex-col items-center desktop:!flex-row gap-x-16 gap-y-8 justify-between')}>
-        <div className={clsx('flex flex-col gap-y-2')}>
+      <div className={clsx('col items-center desktop:!flex-row gap-x-16 gap-y-8 justify-between')}>
+        <div className={clsx('col gap-y-2')}>
           <span className={clsx('textstyle-title-xl')}>{translation.foundingStory}</span>
           <span>{translation.foundingStoryDescription}</span>
         </div>

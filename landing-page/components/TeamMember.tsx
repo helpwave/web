@@ -26,19 +26,19 @@ const TeamMember = ({
   const backedPictureURL = pictureURL ?? 'https://cdn.helpwave.de/logo/logo.png'
 
   const hashTags = tags.map(tag => (
-    <span key={tag} className={clsx('transiation-all duration-100 cursor-pointer hover:cursor-pointer hover:text-hw-pool-orange')}>{'#' + tag.toLocaleLowerCase()}</span>
+    <span key={tag} className={clsx('transiation-all duration-100 cursor-pointer hover:cursor-pointer hover:text-primary')}>{'#' + tag.toLocaleLowerCase()}</span>
   ))
 
   const generatedSocials = socials.map(social => (
     <Link key={social.name} href={social.url} target="_blank">
-      <span className={clsx('transiation-all duration-100 cursor-pointer hover:cursor-pointer hover:text-hw-pool-orange')}>{social.name.toLowerCase()}</span>
+      <span className={clsx('transiation-all duration-100 cursor-pointer hover:cursor-pointer hover:text-primary')}>{social.name.toLowerCase()}</span>
   </Link>
   ))
 
   const shorthand = role.split(' ').at(0) === 'Chief' ? role.split(' ').map(word => word.at(0)).join('') : null
 
   return (
-    <div className={clsx('flex flex-col h-full mb-8 w-1/2 text-center p-8 min-w-[300px] items-center')}>
+    <div className={clsx('col h-full mb-8 w-1/2 text-center p-8 min-w-[300px] items-center')}>
       <Image alt="Profilepicture" src={backedPictureURL} style={{ objectFit: 'contain' }} width={size} height={size} className={clsx(`w-[${size}px] tansition-all duration-500 shadow-md hover:shadow-2xl rounded-full object-center m-auto mb-6`)}/>
       <h4 className={clsx('font-space text-gray-600 text-lg h-[32px]')}>{prefix}</h4>
       <h2 className={clsx('text-3xl font-inter')}>{name}</h2>

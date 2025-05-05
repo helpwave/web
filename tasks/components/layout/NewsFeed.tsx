@@ -43,7 +43,7 @@ export const NewsFeed = ({
   usedLanguage = overwriteTranslation?.language ?? usedLanguage
   const newsFilter = 'tasks'
   return (
-    <div className={clsx('flex flex-col py-4 px-6 gap-y-4')}>
+    <div className={clsx('col py-4 px-6 gap-y-4')}>
       <ColumnTitle title={translation.title}/>
       {usedLanguage ? filterNews(localizedNews[usedLanguage], [newsFilter]).map(news => (
         <NewsDisplay
@@ -52,7 +52,7 @@ export const NewsFeed = ({
           titleOnTop={width ? width < widthForAppearanceChange : undefined}
         />
       )) : (
-        <div className={clsx('flex flex-col items-center justify-center w-full h-20')}>
+        <div className={clsx('col items-center justify-center w-full h-20')}>
           {translation.noNews}
         </div>
       )}

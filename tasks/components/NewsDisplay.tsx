@@ -14,17 +14,17 @@ export type NewsDisplayProps = {
  */
 export const NewsDisplay = ({ news, titleOnTop = true }: NewsDisplayProps) => {
   const content = (
-    <div className={clsx('flex grow', { 'flex-col gap-y-2': titleOnTop, 'flex-row gap-x-2': !titleOnTop })}>
-      <div className={clsx('flex gap-x-2', {
-        'flex-col w-1/3': !titleOnTop,
+    <div className={clsx('grow', { 'col gap-y-2': titleOnTop, 'flex-row gap-x-2': !titleOnTop })}>
+      <div className={clsx('gap-x-2', {
+        'col w-1/3': !titleOnTop,
         'flex-row-reverse items-center justify-between': titleOnTop
       })}>
         <div className={clsx('min-w-[100px]')}>
           <TimeDisplay date={news.date} mode="date"/>
         </div>
-        <span className={clsx('textstyle-title-md text-hw-primary-700')}>{news.title}</span>
+        <span className={clsx('textstyle-title-md text-primary')}>{news.title}</span>
       </div>
-      <div className={clsx('flex flex-col gap-y-2 flex-1')}>
+      <div className={clsx('col gap-y-2 flex-1')}>
         {news.description.map((value, index) => value instanceof URL ? (
             <Image
               key={index}
@@ -41,7 +41,7 @@ export const NewsDisplay = ({ news, titleOnTop = true }: NewsDisplayProps) => {
       </div>
     </div>
   )
-  const tileStyle = 'flex flex-row gap-x-8 hover:bg-gray-100 rounded-xl p-3'
+  const tileStyle = 'row gap-x-8 hover:bg-gray-100 rounded-xl p-3'
 
   return news.externalResource !== undefined ? (
     <Link target="_blank" href={news.externalResource}

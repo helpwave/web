@@ -120,11 +120,11 @@ export const PatientDetail = ({
   const isShowingTask = !!taskId || taskId === ''
 
   return (
-    <div className={clsx('relative flex flex-col py-4 px-6')}>
+    <div className={clsx('relative col py-4 px-6')}>
       {isShowingSavedNotification &&
         (
           <div
-            className={clsx('absolute top-2 right-2 bg-hw-positive-400 text-white rounded-lg px-2 py-1 animate-pulse')}
+            className={clsx('absolute top-2 right-2 bg-positive text-on-positive rounded-lg px-2 py-1 animate-pulse')}
           >
             {translation.saved}
           </div>
@@ -158,8 +158,8 @@ export const PatientDetail = ({
         isLoading={isLoading}
         hasError={isError}
       >
-        <div className={clsx('flex flex-row gap-x-6 mb-8')}>
-          <div className={clsx('flex flex-col gap-y-2 w-5/12')}>
+        <div className={clsx('row gap-x-6 mb-8')}>
+          <div className={clsx('col gap-y-2 w-5/12')}>
             <div className={clsx('h-12 w-full')}>
               <ToggleableInput
                 maxLength={maxHumanReadableIdentifierLength}
@@ -219,23 +219,23 @@ export const PatientDetail = ({
             <PropertyList subjectId={newPatient.id} subjectType="patient"/>
           </div>
         )}
-        <div className={clsx('flex flex-row justify-end mt-8 gap-x-4')}>
+        <div className={clsx('row justify-end mt-8 gap-x-4')}>
           {!newPatient.discharged ?
               (
               <>
-                <SolidButton color="hw-warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
+                <SolidButton color="warning" onClick={() => unassignMutation.mutate(newPatient.id)}>
                   {translation.unassign}
                 </SolidButton>
-                <SolidButton color="hw-negative" onClick={() => setIsShowingDischargeDialog(true)} >
+                <SolidButton color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
                   {translation.dischargePatient}
                 </SolidButton>
               </>
               ) : (
-              <SolidButton color="hw-positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
+              <SolidButton color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
                 {translation.readmit}
               </SolidButton>
               )}
-          <SolidButton color="hw-primary" onClick={() => {
+          <SolidButton color="primary" onClick={() => {
             clearUpdateTimer(true)
             updateMutation.mutate(newPatient)
           }}>{translation.saveChanges}</SolidButton>

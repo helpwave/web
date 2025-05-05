@@ -52,11 +52,11 @@ export const NumberProperty = ({
       icon={<Binary size={16}/>}
       input={({ softRequired }) => (
         <div
-          className={clsx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
+          className={clsx('row grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
           <Input
             expanded={false}
-            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-hw-warn-200 placeholder-warning': softRequired && !hasValue })}
+            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
             value={value?.toString() ?? ''}
             type="number"
             readOnly={readOnly}
@@ -78,7 +78,7 @@ export const NumberProperty = ({
               }
             }}
           />
-          {suffix && <span className={clsx('ml-1', { 'bg-hw-warn-200': softRequired && !hasValue })}>{suffix}</span>}
+          {suffix && <span className={clsx('ml-1', { 'bg-surface-warning': softRequired && !hasValue })}>{suffix}</span>}
         </div>
       )}
     />

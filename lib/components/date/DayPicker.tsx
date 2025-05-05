@@ -1,12 +1,15 @@
-import type { WeekDay } from '../../util/date'
-import { equalDate, getWeeksForCalenderMonth } from '../../util/date'
-import { noop } from '../../util/noop'
+import {isInTimeSpan, WeekDay} from '../../util/date'
+import {equalDate, getWeeksForCalenderMonth} from '../../util/date'
+import {noop} from '../../util/noop'
 import clsx from 'clsx'
-import { useLocale } from '../../hooks/useLanguage'
+import {useLocale} from '../../hooks/useLanguage'
+import {useEffect, useState} from "react";
 
 export type DayPickerProps = {
-  value: Date,
+  displayedMonth: Date;
   selected?: Date,
+  start?: Date,
+  end?: Date,
   onChange?: (date: Date) => void,
   weekStart?: WeekDay,
   markToday?: boolean,
@@ -17,52 +20,75 @@ export type DayPickerProps = {
  * A component for selecting a day of a month
  */
 export const DayPicker = ({
-  value = new Date(),
-  selected,
-  onChange = noop,
-  weekStart = 'monday',
-  markToday = true,
-  className = ''
-}: DayPickerProps) => {
+  displayedMonth,
+                            selected,
+                            start,
+                            end,
+                            onChange = noop,
+                            weekStart = 'monday',
+                            markToday = true,
+                            className = ''
+                          }: DayPickerProps) => {
   const locale = useLocale()
-  const month = value.getMonth()
-  const weeks = getWeeksForCalenderMonth(value, weekStart)
+  const month = displayedMonth.getMonth()
+  const weeks = getWeeksForCalenderMonth(displayedMonth, weekStart)
 
   return (
-    <div className={clsx('flex flex-col gap-y-1 min-w-[220px] select-none', className)}>
-      <div className={clsx('flex flex-row text-center')}>
+    <div className={clsx('col gap-y-1 min-w-[220px] select-none', className)}>
+      <div className={clsx('row text-center')}>
         {weeks[0]!.map((weekDay, index) => (
           <div key={index} className={clsx('flex-1 font-semibold')}>
-            {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
+            {new Intl.DateTimeFormat(locale, {weekday: 'long'}).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} className={clsx('flex flex-row text-center gap-x-2')}>
+        <div key={index} className={clsx('row text-center')}>
           {week.map((date) => {
             const isSelected = !!selected && equalDate(selected, date)
             const isToday = equalDate(new Date(), date)
             const isSameMonth = date.getMonth() === month
+            const isDayValid = isInTimeSpan(date, start, end)
             return (
-              <div
+              <button
+                disabled={!isDayValid}
                 key={date.getDate()}
                 className={clsx(
-                  'flex-1 cursor-pointer rounded-full border-2 border-transparent hover:bg-primary hover:text-on-primary',
+                  'flex-1 rounded-full border-2 border-transparent shadow-sm',
                   {
-                    'text-black bg-gray-200': !isSameMonth,
-                    'text-on-primary bg-primary/40': isSelected,
-                    'text-black bg-white': !isSelected && isSameMonth,
-                    'border-black': isToday && markToday
+                    'text-gray-700 bg-gray-100': !isSameMonth && isDayValid,
+                    'text-black bg-white': !isSelected && isSameMonth && isDayValid,
+                    'text-on-primary bg-primary': isSelected,
+                    'border-black': isToday && markToday,
+                    'hover:brightness-90 hover:bg-primary hover:text-on-primary': isDayValid,
+                    'text-disabled-text bg-disabled-background': !isDayValid
                   }
                 )}
                 onClick={() => onChange(date)}
               >
                 {date.getDate()}
-              </div>
+              </button>
             )
           })}
         </div>
       ))}
     </div>
+  )
+}
+
+export const DayPickerControlled = ({displayedMonth, onChange = noop, ...restProps}: DayPickerProps) => {
+  const [date, setDate] = useState(displayedMonth)
+
+  useEffect(() => setDate(displayedMonth), [displayedMonth])
+
+  return (
+    <DayPicker
+      displayedMonth={date}
+      onChange={newDate => {
+        setDate(newDate)
+        onChange(newDate)
+      }}
+      {...restProps}
+    />
   )
 }

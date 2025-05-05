@@ -41,7 +41,7 @@ export const FAQSectionVariation: StoryFn = () => (
           title: 'What does the helpwave logo look like?',
           content: {
             type: 'custom',
-            value: (<div className={clsx('flex flex-row justify-center')}><Helpwave/></div>)
+            value: (<div className={clsx('row justify-center')}><Helpwave/></div>)
           }
         },
       ]}

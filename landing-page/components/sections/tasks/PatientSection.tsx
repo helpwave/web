@@ -33,11 +33,11 @@ export const PatientSection = ({ overwriteTranslation }: PropsForTranslation<Pat
   return (
     <SectionBase
       outerClassName={clsx('tablet:pb-0 desktop:pb-0')}
-      className={clsx('flex flex-row mobile:!flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
+      className={clsx('row mobile:!flex flex-wrap w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
       backgroundColor="gray"
     >
       <div
-        className={clsx('flex flex-row items-end justify-center rounded-l-3xl mobile:w-full w-2/5 z-10 min-w-[250px]')}
+        className={clsx('row items-end justify-center rounded-l-3xl mobile:w-full w-2/5 z-10 min-w-[250px]')}
       >
         <Image
           src={imageUrl}
@@ -47,9 +47,9 @@ export const PatientSection = ({ overwriteTranslation }: PropsForTranslation<Pat
           className={clsx('max-h-[70vh]')}
         />
       </div>
-      <div className={clsx('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>
-        <div className={clsx('flex flex-col gap-y-2')}>
-          <div className={clsx('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
+      <div className={clsx('col gap-y-2 pb-16 mobile:pb-0')}>
+        <div className={clsx('col gap-y-2')}>
+          <div className={clsx('row gap-x-1 text-primary items-center')}>
             <TagIcon/>
             <span className={clsx('textstyle-title-normal')}>{translation.patients}</span>
           </div>

@@ -270,7 +270,7 @@ export const Table = <T, >({
   }, [data, currentPage])
 
   return (
-    <div className={clsx('flex flex-col gap-y-4 overflow-hidden', className)}>
+    <div className={clsx('col gap-y-4 overflow-hidden', className)}>
       <div>
         <Scrollbars autoHeight autoHeightMin={scrollbarsAutoHeightMin}>
           <table ref={tableRef} className="w-full mb-[12px]">
@@ -286,7 +286,7 @@ export const Table = <T, >({
               )}
               {header && header.map((value, index) => (
                 <th key={`tableHeader${index}`} className={headerPaddingHead}>
-                  <div className="flex flex-row justify-start px-2">
+                  <div className="row justify-start px-2">
                     {value}
                   </div>
                 </th>
@@ -317,7 +317,7 @@ export const Table = <T, >({
           </table>
         </Scrollbars>
       </div>
-      <div className="flex flex-row justify-center">
+      <div className="row justify-center">
         {tableState.pagination && (
           <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({
             ...tableState,

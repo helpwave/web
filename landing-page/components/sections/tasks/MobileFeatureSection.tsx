@@ -36,12 +36,12 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
 
   return (
     <SectionBase
-      className={clsx('flex flex-row mobile:!flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center text-white')}
+      className={clsx('row mobile:!flex flex-wrap-reverse w-full gap-8 justify-between mobile:justify-center text-white')}
       backgroundColor="darkSecondary"
       outerClassName={clsx('!pb-0')}
     >
-      <div className={clsx('flex flex-col gap-y-2 pb-16 desktop:w-3/5 justify-center')}>
-        <div className={clsx('flex flex-col gap-y-2 mobile:pb-0')}>
+      <div className={clsx('col gap-y-2 pb-16 desktop:w-3/5 justify-center')}>
+        <div className={clsx('col gap-y-2 mobile:pb-0')}>
           <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
           <span className={clsx('textstyle-title-normal')}><MarkdownInterpreter text={translation.description}/></span>
         </div>
@@ -52,13 +52,13 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
           <TasksPlaystoreBadge/>
           <TasksAppStoreBadge/>
         </div>
-        <div className={clsx('flex flex-col mt-6 gap-y-1')}>
+        <div className={clsx('col mt-6 gap-y-1')}>
           <span className={clsx('textstyle-description !text-xs')}>{translation.tradmarkPlaystore}</span>
           <span className={clsx('textstyle-description !text-xs')}>{translation.trademarkAppstore}</span>
         </div>
       </div>
       <div
-        className={clsx('flex flex-col items-center justify-end rounded-l-3xl w-2/5 mobile:w-full tablet:min-w-[220px] z-10 max-h-[70vh] min-h-[100%] desktop:min-h-[400px]')}
+        className={clsx('col items-center justify-end rounded-l-3xl w-2/5 mobile:w-full tablet:min-w-[220px] z-10 max-h-[70vh] min-h-[100%] desktop:min-h-[400px]')}
       >
         <Image
           src={imageUrl}

@@ -90,8 +90,8 @@ export const SubtaskView = ({
   }
 
   return (
-    <div className={clsx('flex flex-col gap-y-2')}>
-      <div className={clsx('flex flex-row items-center justify-between')}>
+    <div className={clsx('col gap-y-2')}>
+      <div className={clsx('row items-center justify-between')}>
         <span className={clsx('textstyle-title-normal')}>{translation.subtasks}</span>
         <SolidButton
           onClick={() => {
@@ -103,7 +103,7 @@ export const SubtaskView = ({
             setScrollToBottom(true)
           }}
         >
-          <div className={clsx('flex flex-row items-center gap-x-2')}>
+          <div className={clsx('row items-center gap-x-2')}>
             <Plus size={18}/>
             <span>{translation.addSubtask}</span>
           </div>

@@ -76,8 +76,8 @@ export const AddPatientModal = ({
       buttonOverwrites={[{}, {}, { disabled: !validPatientName }]}
       {...modalProps}
     >
-      <div className={clsx('flex flex-col gap-y-4 min-w-[300px]')}>
-        <div className={clsx('flex flex-col gap-y-1')}>
+      <div className={clsx('col gap-y-4 min-w-[300px]')}>
+        <div className={clsx('col gap-y-1')}>
           <span className={clsx('textstyle-label-md')}>{translation.name}</span>
           <Input
             value={patientName}

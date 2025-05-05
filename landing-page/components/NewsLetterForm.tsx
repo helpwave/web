@@ -117,10 +117,10 @@ export const NewsLetterForm = ({
 
   return (
     <div className={clsx('rounded-lg py-2 px-4 w-full bg-[#FFFFFFEE] border border-2')}>
-      <div className={clsx('flex flex-col')}>
+      <div className={clsx('col')}>
         <span className={clsx('textstyle-title-md')}>{translation.title}</span>
         <span className={clsx('textstyle-form-description')}>{translation.subtitle}</span>
-        <div className={clsx('flex flex-col my-2 gap-y-1')}>
+        <div className={clsx('col my-2 gap-y-1')}>
         <form>
           <Input
             id="email"
@@ -138,7 +138,7 @@ export const NewsLetterForm = ({
             required={true}
             className={clsx('!desktop:w-3/5 !max-w-[300px]')}
           />
-          <div className={clsx('flex desktop:flex-row mobile:flex-col gap-x-4')}>
+          <div className={clsx('desktop:flex-row mobile:col gap-x-4')}>
             <Input
               id="firstname"
               value={formState.firstname}
@@ -169,7 +169,7 @@ export const NewsLetterForm = ({
               required={true}
             />
           </div>
-          <div className={clsx('flex desktop:flex-row mobile:flex-col gap-x-4')}>
+          <div className={clsx('desktop:flex-row mobile:col gap-x-4')}>
             <Input
               id="company"
               value={formState.company}
@@ -199,7 +199,7 @@ export const NewsLetterForm = ({
               className={clsx('!w-full !max-w-[300px] bg-white')}
             />
           </div>
-          <div className={clsx('flex flex-row justify-end mt-4')}>
+          <div className={clsx('row justify-end mt-4')}>
             {
               showThankYouMessage ? (
                 <p>{translation.thankYou}</p>

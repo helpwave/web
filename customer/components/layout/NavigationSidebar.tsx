@@ -51,7 +51,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
 
   return (
     <div
-      className={clsx(`flex flex-col justify-between grow bg-gray-200 min-w-[250px] max-w-[250px]`, className)}>
+      className={clsx(`col justify-between grow bg-gray-200 min-w-[250px] max-w-[250px]`, className)}>
       <LanguageModal
         id="language-modal"
         isOpen={isLanguageModalOpen}
@@ -59,13 +59,13 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
         onBackgroundClick={() => setIsLanguageModalOpen(false)}
         onDone={() => setIsLanguageModalOpen(false)}
       />
-      <nav className={clsx('flex flex-col overflow-y-auto')}>
+      <nav className={clsx('col overflow-y-auto')}>
         {items.map((item, i) => (
           <Link
             href={item.url}
             key={i}
             className={clsx(
-              'px-4 py-2 bg-gray-50 hover:bg-primary/40 flex flex-row gap-x-2 items-center',
+              'px-4 py-2 bg-gray-50 hover:bg-primary/40 row gap-x-2 items-center',
               { 'bg-primary/30': router.pathname == item.url }
             )}
           >
@@ -74,16 +74,16 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
           </Link>
         ))}
       </nav>
-      <div className={clsx('flex flex-col')}>
+      <div className={clsx('col')}>
         <button
-          className={clsx('flex flex-row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40')}
+          className={clsx('row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40')}
           onClick={() => setIsLanguageModalOpen(true)}
         >
           {languagesLocalNames[language]}
           <ArrowRightLeft size={24}/>
         </button>
-        <div className={clsx('flex flex-col p-4 gap-y-4 bg-gray-50')}>
-          <div className={clsx('flex flex-row gap-x-2 items-center')}>
+        <div className={clsx('col p-4 gap-y-4 bg-gray-50')}>
+          <div className={clsx('row gap-x-2 items-center')}>
             <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
             {identity?.name}
           </div>

@@ -45,13 +45,13 @@ const defaultMediQuuInformationTranslation: Record<Languages, MediQuuInformation
 export const MediQuuInformationSection = () => {
   const translation = useTranslation(defaultMediQuuInformationTranslation)
   return (
-    <SectionBase className={clsx('flex desktop:flex-row mobile:flex-wrap gap-8 desktop:justify-between mobile:justify-center')} backgroundColor="white">
+    <SectionBase className={clsx('desktop:flex-row mobile:flex flex-wrap gap-8 desktop:justify-between mobile:justify-center')} backgroundColor="white">
       <div className={clsx('max-w-[300px]')}>
         <Image src="https://cdn.helpwave.de/icons/agreement.svg" alt="two pages ready for signatures" width={400}
                height={150}/>
       </div>
-      <div className={clsx('flex flex-col')}>
-        <span className={clsx('textstyle-title-lg text-hw-secondary-400')}>{translation.title}</span>
+      <div className={clsx('col')}>
+        <span className={clsx('textstyle-title-lg text-secondary')}>{translation.title}</span>
         <span className={clsx('text-justify')}>{translation.subTitle1}</span>
         <br/>
         <span className={clsx('text-justify')}><MarkdownInterpreter text={translation.subTitle2}/></span>

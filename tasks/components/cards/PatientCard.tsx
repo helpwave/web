@@ -42,7 +42,7 @@ export const PatientCard = ({
   const translation = useTranslation(defaultPatientCardTranslations, overwriteTranslation)
   return (
     <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
-      <div className={clsx('flex flex-row justify-between')}>
+      <div className={clsx('row justify-between')}>
         <span className={clsx('textstyle-title-sm whitespace-nowrap')} >{bedName ?? translation.bedNotAssigned}</span>
         <span className={clsx('ml-2 truncate')}>{patientName}</span>
       </div>

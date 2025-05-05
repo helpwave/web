@@ -76,10 +76,10 @@ const StoryStartSection = ({ overwriteTranslation }: PropsForTranslation<StorySt
   const translation = useTranslation(defaultStoryStartSectionTranslation, overwriteTranslation)
 
   return (
-    <SectionBase className={clsx('flex flex-col gap-y-8')}>
+    <SectionBase className={clsx('col gap-y-8')}>
       <div
-        className={clsx('flex flex-row mobile:flex-col mobile:text-center gap-8 text-6xl text-hw-negative-700 items-center')}>
-        <Popcorn size="128" color="#A54F5C" className={clsx('inline mobile:w-full')}/>
+        className={clsx('col tablet:row max-tablet:text-center gap-8 text-6xl text-negative items-center')}>
+        <Popcorn size="128" color="#A54F5C" className={clsx('inline max-tablet:w-full')}/>
         {translation.ourStory}
       </div>
 

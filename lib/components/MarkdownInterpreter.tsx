@@ -58,7 +58,7 @@ export const ASTNodeInterpreter = ({
       )
     case 'secondary':
       return (
-        <span className={clsx('text-hw-secondary-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-secondary')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
@@ -72,7 +72,7 @@ export const ASTNodeInterpreter = ({
       )
     case 'positive':
       return (
-        <span className={clsx('text-hw-positive-400')}>{node.children.map((value, index) => (
+        <span className={clsx('text-positive')}>{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>

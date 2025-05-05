@@ -1,7 +1,7 @@
 import type { HTMLProps, PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
 
-export type ChipColor = 'default' | 'dark'
+export type ChipColor = 'default' | 'dark'| "red" | "yellow" | "green" | "blue" | "pink"
 type ChipVariant = 'normal' | 'fullyRounded'
 
 export type ChipProps = HTMLProps<HTMLDivElement> & PropsWithChildren<{
@@ -24,18 +24,28 @@ export const Chip = ({
   const colorMapping: string = {
     default: 'text-tag-default-text bg-tag-default-background',
     dark: 'text-tag-dark-text bg-tag-dark-background',
+    red: 'text-tag-red-text bg-tag-red-background',
+    yellow: 'text-tag-yellow-text bg-tag-yellow-background',
+    green: 'text-tag-green-text bg-tag-green-background',
+    blue: 'text-tag-blue-text bg-tag-blue-background',
+    pink: 'text-tag-pink-text bg-tag-pink-background',
   }[color]
 
   const colorMappingIcon: string = {
     default: 'text-tag-default-icon',
     dark: 'text-tag-dark-icon',
+    red: 'text-tag-red-icon',
+    yellow: 'text-tag-yellow-icon',
+    green: 'text-tag-green-icon',
+    blue: 'text-tag-blue-icon',
+    pink: 'text-tag-pink-icon',
   }[color]
 
   return (
     <div
       {...restProps}
       className={clsx(
-        `flex flex-row gap-x-2 w-fit px-2 py-1`,
+        `row gap-x-2 w-fit px-2 py-1`,
         colorMapping,
         {
           'rounded-md': variant === 'normal',

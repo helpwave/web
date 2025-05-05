@@ -39,7 +39,7 @@ const NotFound: NextPage = ({ overwriteTranslation }: PropsForTranslation<NotFou
           <Helpwave className={clsx('w-full left-1/2 pt-[100px]')} size={256} animate="bounce" />
           <h1 className={clsx('text-5xl font-space mb-8')}>{translation.notFound}</h1>
           <p className={clsx('text-3xl font-inter')}>{translation.notFoundDescription1}...</p>
-          <p className={clsx('text-3xl font-inter')}>{translation.notFoundDescription2} <Link className={clsx('underline text-hw-primary-600 hover:text-hw-primary-800')} href="/">{translation.homePage}</Link>.</p>
+          <p className={clsx('text-3xl font-inter')}>{translation.notFoundDescription2} <Link className={clsx('underline text-primary hover:brightness-75')} href="/">{translation.homePage}</Link>.</p>
         </div>
       </div>
     </Page>

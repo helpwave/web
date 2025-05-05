@@ -200,7 +200,7 @@ const TextButton = ({
       className={clsx(
         className, {
           'text-disabled-text': disabled,
-          [clsx(colorClasses, 'hover:brightness-70')]: !disabled,
+          [clsx(colorClasses, 'hover:bg-button-text-hover-background rounded-full')]: !disabled,
         },
         ButtonSizePaddings[size]
       )}
@@ -230,5 +230,7 @@ const TextButton = ({
     </button>
   )
 }
+
+// TODO Icon button
 
 export { SolidButton, OutlineButton, TextButton }

@@ -31,10 +31,10 @@ const TrustedBySection = () => {
   const translation = useTranslation(defaultTrustedBySectionTranslation)
 
   return (
-    <SectionBase className={clsx('flex flex-col gap-y-8 select-none justify-between items-center w-full')} backgroundColor="gray">
+    <SectionBase className={clsx('col gap-y-8 select-none justify-between items-center w-full')} backgroundColor="gray">
       <span className={clsx('textstyle-title-lg')}>{translation.title}</span>
       <DividerInserter
-        className={clsx('flex flex-row gap-x-6 items-center justify-center w-full')}
+        className={clsx('row gap-x-6 items-center justify-center w-full')}
         divider={index => (<VerticalDivider key={index} height={128}/>)}
       >
         {images.map(partner => (

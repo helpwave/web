@@ -70,7 +70,7 @@ export const UserMenu = ({
       />
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick}
-             className={clsx('flex gap-2 relative items-center group cursor-pointer select-none')}>
+             className={clsx('gap-2 relative items-center group cursor-pointer select-none')}>
           <div className={clsx('text-sm font-semibold text-gray-700 group-hover:text-primary')}>{user.name}</div>
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
         </div>

@@ -37,11 +37,11 @@ export const ReSignInModal = ({ overwriteTranslation, titleText, ...modalProps }
         {},
         {
           text: translation.no,
-          color: 'hw-negative'
+          color: 'negative'
         },
         {
           text: translation.yes,
-          color: 'hw-positive'
+          color: 'positive'
         }
       ]}
       {...modalProps}

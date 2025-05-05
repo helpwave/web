@@ -16,31 +16,31 @@ const PillLabelBox = ({ unscheduled, inProgress, done }: PillLabelBoxProps) => {
   const height = '12px' // equivalent to 1.5rem / 2 = 24px / 2 = h-6 / 2 of tailwind
   const borderWidth = `border-y-[${height}] border-x-[${between}]`
   return (
-    <div className={clsx('flex flex-row h-6')}>
+    <div className={clsx('row h-6')}>
       <div
-        className={clsx('flex flex-row bg-hw-label-1-50 rounded-l-md pl-2 pr-1 items-center text-hw-label-1-900')}>
-        <div className={clsx(`rounded-full w-2 h-2 bg-hw-label-1-400 mr-1`)}/>
+        className={clsx('row rounded-l-md pl-2 pr-1 items-center bg-tag-red-background text-tag-red-text')}>
+        <div className={clsx(`rounded-full w-2 h-2 text-tag-red-icon mr-1`)}/>
         {unscheduled}
       </div>
       <div
-        className={clsx(`w-0 h-0 border-hw-label-1-50 border-solid border-r-transparent border-b-transparent ${borderWidth}`)}
+        className={clsx(`w-0 h-0 border-solid border-r-transparent border-b-transparent ${borderWidth} bg-tag-red-background`)}
       />
       <div
-        className={clsx(`w-0 h-0 border-hw-label-2-50 border-solid border-l-transparent border-t-transparent ${borderWidth}`)}
+        className={clsx(`w-0 h-0 bg-tag-yellow-background border-solid border-l-transparent border-t-transparent ${borderWidth}`)}
       />
-      <div className={clsx('flex flex-row bg-hw-label-2-50 px-1 items-center text-hw-label-2-900')}>
-        <div className={clsx(`rounded-full w-2 h-2 bg-hw-label-2-400 mr-1`)}/>
+      <div className={clsx('row px-1 items-center bg-tag-yellow-background text-tag-yellow-text')}>
+        <div className={clsx(`rounded-full w-2 h-2 mr-1 bg-tag-yellow-icon`)}/>
         {inProgress}
       </div>
       <div
-        className={clsx(`w-0 h-0 border-hw-label-2-50 border-solid border-r-transparent border-b-transparent ${borderWidth}`)}
+        className={clsx(`w-0 h-0 bg-tag-yellow-background border-solid border-r-transparent border-b-transparent ${borderWidth}`)}
       />
       <div
-        className={clsx(`w-0 h-0 border-hw-label-3-50 border-solid border-l-transparent border-t-transparent ${borderWidth}`)}
+        className={clsx(`w-0 h-0 bg-tag-green-background border-solid border-l-transparent border-t-transparent ${borderWidth}`)}
       />
       <div
-        className={clsx('flex flex-row bg-hw-label-3-50 rounded-r-md pl-1 pr-2 items-center text-hw-label-3-900')}>
-        <div className={clsx(`rounded-full w-2 h-2 bg-hw-label-3-400 mr-1`)}/>
+        className={clsx('row bg-tag-green-background rounded-r-md pl-1 pr-2 items-center text-tag-green-text')}>
+        <div className={clsx(`rounded-full w-2 h-2 bg-tag-green-icon mr-1`)}/>
         {done}
       </div>
     </div>

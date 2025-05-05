@@ -23,7 +23,7 @@ export const ProfileVariation: Story = {
     roleBadge: 'CEO',
     imageUrl: 'https://cdn.helpwave.de/boringavatar.svg',
     badge: (
-      <Chip className={clsx('flex flex-row gap-x-2 items-center justify-center')} color="dark">
+      <Chip className={clsx('row gap-x-2 items-center justify-center')} color="dark">
         <Helpwave size={24}/>
         <MarkdownInterpreter text={'\\helpwave'}/>
       </Chip>

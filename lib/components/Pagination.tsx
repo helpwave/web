@@ -42,14 +42,14 @@ export const Pagination = ({
   const onLastPage = page === numberOfPages - 1
 
   return (
-    <div className={clsx('flex flex-row', { 'opacity-30': noPages })}>
+    <div className={clsx('row', { 'opacity-30': noPages })}>
       <button onClick={() => changePage(0)} disabled={onFirstPage}>
         <ChevronFirst className={clsx({ 'opacity-30': onFirstPage })}/>
       </button>
       <button onClick={() => changePage(page - 1)} disabled={onFirstPage}>
         <ChevronLeft className={clsx({ 'opacity-30': onFirstPage })}/>
       </button>
-      <div className={clsx('flex min-w-[80px] justify-center mx-2')}>
+      <div className={clsx('min-w-[80px] justify-center mx-2')}>
         <span className={clsx('select-none text-right flex-1')}>{noPages ? 0 : page + 1}</span>
         <span className={clsx('select-none mx-2')}>{translation.of}</span>
         <span className={clsx('select-none text-left flex-1')}>{numberOfPages}</span>

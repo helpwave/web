@@ -20,7 +20,7 @@ export const DateTimePickerVariation: Story = {
     minuteIncrement: '5min',
     weekStart: 'monday',
     initialDisplay: 'day',
-    markToday: false,
+    markToday: true,
     showValueOpen: false,
   },
 }

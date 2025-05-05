@@ -56,11 +56,11 @@ export const StagingDisclaimerModal = ({
       description={(
         <>
           <p><MarkdownInterpreter text={translation.message}/></p>
-          <div className={clsx('flex flex-row gap-x-8 mt-2')}>
-            <Link className={clsx('text-hw-primary-600 hover:text-hw-primary-800 font-bold')} href={config.imprintUrl}>
+          <div className={clsx('row gap-x-8 mt-2')}>
+            <Link className={clsx('text-primary hover:brightness-75 font-bold')} href={config.imprintUrl}>
               {translation.imprint}
             </Link>
-            <Link className={clsx('text-hw-primary-600 hover:text-hw-primary-800 font-bold')} href={config.privacyUrl}>
+            <Link className={clsx('text-primary hover:brightness-75 font-bold')} href={config.privacyUrl}>
               {translation.privacy}
             </Link>
           </div>

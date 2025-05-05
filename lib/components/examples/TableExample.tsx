@@ -62,7 +62,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
   }
 
   return (
-    <div className={clsx('flex flex-col gap-y-12 items-center')}>
+    <div className={clsx('col gap-y-12 items-center')}>
       <Table
         stateManagement={[tableState, (newTableState) => {
           setTableState(newTableState)
@@ -123,7 +123,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
           <></>
         ]}
       />
-      <div className={clsx('flex flex-row gap-x-2')}>
+      <div className={clsx('row gap-x-2')}>
         <SolidButton
           className={clsx('w-auto')}
           onClick={() => {

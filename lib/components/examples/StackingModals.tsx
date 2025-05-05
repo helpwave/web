@@ -47,7 +47,7 @@ export const StackingModals = () => {
       >
         This is Modal 3!
       </ConfirmDialog>
-      <div className={clsx('flex flex-row items-center justify-center min-h-[400px]')} id={modalRootName}>
+      <div className={clsx('row items-center justify-center min-h-[400px]')} id={modalRootName}>
         <SolidButton onClick={() => setModal1(true)}>Open Modal 1</SolidButton>
       </div>
     </ModalRegister>

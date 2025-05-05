@@ -60,7 +60,7 @@ export const DashboardDisplay = ({
   } = useRecentPatientsQuery()
 
   return (
-    <div className={clsx('flex flex-col py-4 px-6 gap-y-4')}>
+    <div className={clsx('col py-4 px-6 gap-y-4')}>
       <InvitationBanner/>
       <span className={clsx('textstyle-title-md')}>{translation.recent}</span>
       <LoadingAndErrorComponent
@@ -84,7 +84,7 @@ export const DashboardDisplay = ({
         )}
       </LoadingAndErrorComponent>
       <LoadingAndErrorComponent isLoading={isLoadingWards}>
-        <div className={clsx('flex flex-col gap-y-1')}>
+        <div className={clsx('col gap-y-1')}>
           {wards && wards.length > 0 && (
             <>
               <span className={clsx('textstyle-title-normal')}>{translation.wards}</span>

@@ -48,12 +48,12 @@ export const TasksDemoSection = () => {
   const imageURL = 'https://cdn.helpwave.de/products/tasks_preview.png'
   return (
     <SectionBase
-      className={clsx('flex flex-col items-center gap-y-20 w-full')}
+      className={clsx('col items-center gap-y-20 w-full')}
       outerClassName={clsx('pb-0')}
     >
-      <div className={clsx('flex flex-col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
-        <div className={clsx('flex flex-col gap-y-4 desktop:max-w-[70%]')}>
-          <HelpwaveBadge className={clsx('!text-hw-primary-800 !bg-hw-primary-200 !w-fit')} title={translation.helpwaveTasks}/>
+      <div className={clsx('col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
+        <div className={clsx('col gap-y-4 desktop:max-w-[70%]')}>
+          <HelpwaveBadge className={clsx('text-primary bg-purple-100 !w-fit')} title={translation.helpwaveTasks}/>
           <span className={clsx('textstyle-title-lg')}>{translation.workflowManagement}</span>
           <ItemGrid columns={1} className={clsx('font-medium mt-2')}>
             {translation.feature1}
@@ -64,8 +64,7 @@ export const TasksDemoSection = () => {
         </div>
         <Link
           href={demoURL}
-          className={clsx('bg-white rounded-lg text-lg font-bold text-hw-secondary-800 h-min px-6 py-2')}
-          style={{ textWrap: 'nowrap' }} // TODO does not seem supported by the current twind version (throws warnings for text-nowrap)
+          className={clsx('btn-md bg-on-primary text-primary whitespace-nowrap')}
         >
           {translation.tryDemo}
         </Link>

@@ -43,14 +43,14 @@ export const KanbanHeader = ({
 }: PropsForTranslation<KanbanHeaderTranslation, KanbanHeaderProps>) => {
   const translation = useTranslation(defaultKanbanHeaderTranslations, overwriteTranslation)
   return (
-    <div className={clsx('flex flex-row justify-between items-center')}>
+    <div className={clsx('row justify-between items-center')}>
       <span className={clsx('textstyle-table-name')}>{translation.tasks}</span>
-      <div className={clsx('flex flex-row gap-x-6')}>
-        <div className={clsx('flex flex-row gap-x-2 items-center hidden')}>
+      <div className={clsx('row gap-x-6')}>
+        <div className={clsx('row gap-x-2 items-center hidden')}>
           {translation.status}
           <ChevronDown className={clsx('stroke-black')}/>
         </div>
-        <div className={clsx('flex flex-row gap-x-2 items-center hidden')}>
+        <div className={clsx('row gap-x-2 items-center hidden')}>
           {translation.label}
           <ChevronDown className={clsx('stroke-black')}/>
         </div>

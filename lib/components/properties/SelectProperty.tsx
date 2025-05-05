@@ -50,14 +50,14 @@ export const SingleSelectProperty = <T, >({
       icon={<List size={16}/>}
       input={({ softRequired }) => (
         <div
-          className={clsx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
+          className={clsx('row grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
           <SearchableSelect
             {...multiSelectProps}
             value={value}
             options={options}
             isDisabled={readOnly}
-            className={clsx('w-full', { 'bg-hw-warn-200': softRequired && !hasValue })}
+            className={clsx('w-full', { 'bg-surface-warning': softRequired && !hasValue })}
             hintText={`${translation.select}...`}
           />
         </div>

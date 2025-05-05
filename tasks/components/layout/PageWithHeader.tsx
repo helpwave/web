@@ -33,7 +33,7 @@ export const PageWithHeader = ({
   const userMenu = <UserMenu />
 
   return (
-    <div className={clsx('w-screen h-screen flex flex-col')}>
+    <div className={clsx('w-screen h-screen col')}>
       <Header
         title={title}
         withIcon={withIcon}

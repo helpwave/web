@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 
@@ -7,25 +6,27 @@ type PillLabelTranslation = {
   text: string,
 }
 
-export type TaskStateInformation = { colorLabel: string, translation: Record<Languages, PillLabelTranslation> }
 
-const TaskState: Record<TaskStatus, TaskStateInformation> = {
+const mapping = {
   todo: {
-    colorLabel: 'hw-label-1',
+    mainClassName: 'bg-tag-red-background text-tag-red-text',
+    iconClassName: 'bg-tag-red-icon',
     translation: {
       en: { text: 'unscheduled' },
       de: { text: 'Nicht Geplant' }
     }
   },
   inProgress: {
-    colorLabel: 'hw-label-2',
+    mainClassName: 'bg-tag-yellow-background text-tag-yellow-text',
+    iconClassName: 'bg-tag-yellow-icon',
     translation: {
       en: { text: 'in progress' },
       de: { text: 'In Arbeit' }
     }
   },
   done: {
-    colorLabel: 'hw-label-3',
+    mainClassName: 'bg-tag-green-background text-tag-green-text',
+    iconClassName: 'bg-tag-green-icon',
     translation: {
       en: { text: 'done' },
       de: { text: 'Fertig' }
@@ -46,14 +47,12 @@ const PillLabel = ({
   count,
   taskStatus = 'todo'
 }: PropsForTranslation<PillLabelTranslation, PillLabelProps>) => {
-  const state = TaskState[taskStatus]
+  const state = mapping[taskStatus]
   const translation = useTranslation(state.translation, overwriteTranslation)
   return (
-    <div className={clsx(`flex flex-row pl-2 pr-3 py-1 rounded-lg justify-between items-center
-       bg-${state.colorLabel}-100 text-${state.colorLabel}-800 text-sm`)}>
-      <div className={clsx(`flex flex-row items-center text-${state.colorLabel}-800`)}>
-        <div className={clsx(`rounded-full w-2 h-2 bg-${state.colorLabel}-400`)}/>
-        <div className={clsx('w-2')}/>
+    <div className={clsx(`row flex-center pl-2 pr-3 py-1 rounded-lg text-sm`, state.mainClassName)}>
+      <div className={clsx(`row gap-x-2 items-center`)}>
+        <div className={clsx(`rounded-full w-2 h-2`, state.iconClassName)}/>
         <span>{translation.text}</span>
       </div>
       {count ?? '-'}
@@ -61,4 +60,4 @@ const PillLabel = ({
   )
 }
 
-export { PillLabel, TaskState }
+export { PillLabel }

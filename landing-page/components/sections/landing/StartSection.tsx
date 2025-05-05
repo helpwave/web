@@ -26,11 +26,11 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
   const translation = useTranslation(defaultLandingPageTranslation, overwriteTranslation)
   return (
     <SectionBase
-      className={clsx('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-center items-center')}
+      className={clsx('row mobile:!flex flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-center items-center')}
       outerClassName={clsx('desktop:pr-0 tablet:pr-0 py-32')}
     >
-      <div className={clsx('flex flex-col items-center flex-1')}>
-        <div className={clsx('flex flex-col gap-y-2 max-w-[600px]')}>
+      <div className={clsx('col items-center flex-1')}>
+        <div className={clsx('col gap-y-2 max-w-[600px]')}>
           <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
           <span className={clsx('textstyle-title-lg')}><MarkdownInterpreter text={translation.description}/></span>
         </div>

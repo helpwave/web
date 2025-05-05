@@ -41,19 +41,19 @@ export const DescriptionWithAction = ({
   }
 
   return (
-    <div className={clsx('rounded-lg bg-white flex desktop:flex-row desktop:gap-x-1 mobile:gap-y-1 mobile:flex-col py-2 px-4', className)}>
+    <div className={clsx('col gap-y-1 desktop:row desktop:gap-x-1 rounded-lg bg-white py-2 px-4', className)}>
       {leading && (
         <div className={clsx('w-4 h-4 mt-[6px]')}>
           {leading}
         </div>
       )}
-      <div className={clsx('flex flex-col')}>
+      <div className={clsx('col')}>
         <span className={clsx('textstyle-description', titleClassName)}>{title}</span>
         <span className={clsx('textstyle-description', descriptionClassName)}>{description}</span>
       </div>
       {trailing}
       {!trailing && trailingButtonText && (
-        <div className={clsx('flex flex-row items-center desktop:justify-end mobile:justify-center grow')}>
+        <div className={clsx('row flex-center desktop:justify-end grow')}>
           <SolidButton onClick={trailingButtonFunction} className={clsx('whitespace-nowrap')}>
             {trailingButtonText}
           </SolidButton>

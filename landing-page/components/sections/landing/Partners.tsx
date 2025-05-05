@@ -65,7 +65,7 @@ const PartnerSection = () => {
   const translation = useTranslation(defaultPartnerSectionTranslation)
 
   return (
-    <SectionBase className={clsx('flex gap-16 select-none justify-between items-center w-full')} backgroundColor="gray">
+    <SectionBase className={clsx('gap-16 select-none justify-between items-center w-full')} backgroundColor="gray">
       <PartnerList title={translation.title} partners={images}/>
     </SectionBase>
   )

@@ -40,8 +40,8 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const selectedBedId = context.state.bedId
 
   return (
-    <div className={clsx('flex flex-col w-full')} ref={ref}>
-      <div className={clsx('flex flex-row items-center mb-1')}>
+    <div className={clsx('col w-full')} ref={ref}>
+      <div className={clsx('row items-center mb-1')}>
         <div className={clsx('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
         <span className={clsx('textstyle-title-normal')}>{room.name}</span>
       </div>

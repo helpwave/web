@@ -56,8 +56,8 @@ export const Page = ({
   const [isNavigationVisible, setIsNavigationVisible] = useState(false)
 
   const mainContent = (
-    <div className={clsx('flex flex-col items-center justify-between w-full h-full overflow-y-scroll')}>
-      <main className={clsx('flex flex-col max-w-[1200px] gap-y-6', mainContainerClassName)}>
+    <div className={clsx('col items-center justify-between w-full h-full overflow-y-scroll')}>
+      <main className={clsx('col max-w-[1200px] gap-y-6', mainContainerClassName)}>
         {children}
       </main>
       {footer}
@@ -66,13 +66,13 @@ export const Page = ({
 
   return (
     <div
-      className={clsx('relative not-mobile:(grid grid-rows-[auto_1fr]) mobile:(flex flex-col) w-screen h-screen overflow-hidden')}>
+      className={clsx('relative not-mobile:(grid grid-rows-[auto_1fr]) mobile:(col) w-screen h-screen overflow-hidden')}>
       <Head>
         <title>{pageTitle}</title>
       </Head>
       <Header
         leading={(
-          <Link href="/" className={clsx('flex flex-row gap-x-1 items-center text-2xl')}>
+          <Link href="/" className={clsx('row gap-x-1 items-center text-2xl')}>
             <Helpwave/>
             <span className={clsx('font-space font-bold')}>{`helpwave ${translation.customer}`}</span>
           </Link>
@@ -91,11 +91,11 @@ export const Page = ({
       {isNavigationVisible && !isHidingSidebar && (
         <MobileNavigationOverlay items={navItems} onCloseClick={() => setIsNavigationVisible(false)}/>
       )}
-      <div className={clsx('flex flex-row grow mobile:hidden overflow-hidden')}>
+      <div className={clsx('row grow mobile:hidden overflow-hidden')}>
         {!isHidingSidebar && (<NavigationSidebar items={navItems}/>)}
         {mainContent}
       </div>
-      <div className={clsx('flex flex-col h-full w-full not-mobile:hidden')}>
+      <div className={clsx('col h-full w-full not-mobile:hidden')}>
         {mainContent}
       </div>
     </div>

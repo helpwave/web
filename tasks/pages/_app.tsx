@@ -26,34 +26,35 @@ const spaceGrotesk = SpaceGrotesk({
 const queryClient = new QueryClient()
 
 function MyApp({
-  Component,
-  pageProps
-}: AppProps) {
+                 Component,
+                 pageProps
+               }: AppProps) {
   return (
     <ProvideLanguage>
       { /* v Scans the user agent */}
       {!isMobile ? (
-        <ProvideAuth>
-          <ProvideUpdates>
-            <Head>
-              <title>{titleWrapper()}</title>
-              <style>{`
+        <QueryClientProvider client={queryClient}>
+          <ProvideAuth>
+            <ProvideUpdates>
+              <Head>
+                <title>{titleWrapper()}</title>
+                <style>{`
             :root {
               --font-inter: ${inter.style.fontFamily};
               --font-space: ${spaceGrotesk.style.fontFamily};
             }
             `}</style>
-            </Head>
-            <QueryClientProvider client={queryClient}>
+              </Head>
+
               <ModalRegister>
                 <div className={clsx('font-sans')} id={modalRootName}>
                   <Component {...pageProps} />
                 </div>
               </ModalRegister>
-              <ReactQueryDevtools buttonPosition="bottom-left" position="left" />
-            </QueryClientProvider>
-          </ProvideUpdates>
-        </ProvideAuth>
+              <ReactQueryDevtools position="bottom-left"/>
+            </ProvideUpdates>
+          </ProvideAuth>
+        </QueryClientProvider>
       ) : (<MobileInterceptor {...pageProps} />)}
     </ProvideLanguage>
   )

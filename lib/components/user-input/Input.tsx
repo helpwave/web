@@ -11,7 +11,6 @@ import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
-import { tw } from '@twind/core'
 
 export type InputProps = {
   /**
@@ -162,11 +161,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
       ref={ref}
       id={id}
       {...restProps}
-      className={tx(
-        'block bg-surface px-[0.675rem] py-2 rounded-md w-full border-2 border-gray-300 shadow-sm focus:outline-none focus:ring-1',
+      className={clsx(
+        'block bg-surface text-on-surface px-[0.675rem] py-2 rounded-md w-full border-2 border-gray-300 shadow-sm focus:outline-none focus:ring-1',
         {
-          'focus:border-hw-primary-400 focus:ring-hw-primary-500': !errorText,
-          'focus:border-hw-negative-500 focus:ring-hw-negative-500 text-hw-negative-500': !!errorText,
+          'focus:border-primary focus:ring-primary': !errorText,
+          'focus:border-negative focus:ring-negative text-negative': !!errorText,
         },
         className
         )}
@@ -174,15 +173,15 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
   )
 
   return (
-    <div className={tx('flex flex-col gap-y-1', containerClassName)}>
+    <div className={clsx('flex flex-col gap-y-1', containerClassName)}>
       {labelText && (
-        <label htmlFor={id} className={tx('text-gray-700', labelClassName)}>
+        <label htmlFor={id} className={clsx('text-gray-700', labelClassName)}>
           {labelText}
-          {required && <span className={tw('text-primary-500')}>*</span>}
+          {required && <span className={'text-primary'}>*</span>}
         </label>
       )}
       {input}
-      {errorText && <label htmlFor={id} className={tx('text-hw-negative-500', errorClassName)}>{errorText}</label>}
+      {errorText && <label htmlFor={id} className={clsx('text-negative', errorClassName)}>{errorText}</label>}
     </div>
   )
 })

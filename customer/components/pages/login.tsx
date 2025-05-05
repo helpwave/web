@@ -2,8 +2,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { tw } from '@twind/core'
-import { Button } from '@helpwave/common/components/Button'
+import {SolidButton} from "@helpwave/common/components/Button";
 
 type LoginTranslation = {
   login: string,
@@ -45,17 +44,13 @@ export const LoginPage = ({ login, overwriteTranslation }: PropsForTranslation<L
   return (
     <Page
       pageTitle={titleWrapper(translation.login)}
-      mainContainerClassName={tw('items-center justify-center min-h-[90vh]')}
-      contentAndFooterClassName={tw('items-center')}
+      mainContainerClassName={'items-center justify-center min-h-[90vh]'}
+      contentAndFooterClassName={'items-center'}
       isHidingSidebar={true}
     >
-      <div className={tw('flex flex-col bg-gray-100 max-w-[300px] p-8 gap-y-2 rounded-lg shadow-lg')}>
-        <h2 className={tw('font-bold font-inter text-2xl')}>{translation.login}</h2>
-        <Button onClick={login}>{translation.signIn}</Button>
-
-        {/*
-        <Button onClick={() => {}} className={tw('mt-6')}>{translation.register}</Button>
-        */}
+      <div className={'col bg-gray-100 max-w-[300px] p-8 gap-y-2 rounded-lg shadow-lg'}>
+        <h2 className={'font-bold font-inter text-2xl'}>{translation.login}</h2>
+        <SolidButton onClick={login}>{translation.signIn}</SolidButton>
       </div>
     </Page>
   )

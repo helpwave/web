@@ -3,7 +3,6 @@
 import type { ComponentType, PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 import { createContext, useContext, useState } from 'react'
-import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { LoginPage } from '@/components/pages/login'
 import { login, logout, onTokenExpiringCallback, removeUser, renewToken, restoreSession } from '@/api/auth/authService'
@@ -51,7 +50,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   if (!identity && isLoading) {
     return (
-      <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
+      <div className={'col items-center justify-center w-screen h-screen'}>
         <LoadingAnimation loadingText="Logging in..."/>
       </div>
     )

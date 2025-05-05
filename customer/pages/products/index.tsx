@@ -16,7 +16,7 @@ import { withOrganization } from '@/hooks/useOrganization'
 import { withCart } from '@/hocs/withCart'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { Button } from '@helpwave/common/components/Button'
+import {SolidButton} from '@helpwave/common/components/Button'
 import { Plus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -99,11 +99,11 @@ type CustomerProductStatusDisplayProps = {
 const CustomerProductStatusDisplay = ({ customerProductStatus }: CustomerProductStatusDisplayProps) => {
   const translation = useTranslation(defaultCustomerProductStatusTranslation)
   return (
-    <div className={tx('flex flex-row items-center px-3 py-1 rounded-full text-sm font-bold', {
-      'bg-hw-positive-500 text-white': customerProductStatus === 'active',
-      'bg-hw-warning-500 text-white': customerProductStatus === 'activation' || customerProductStatus === 'scheduled',
-      'bg-hw-negative-500 text-white': customerProductStatus === 'expired' || customerProductStatus === 'payment' || customerProductStatus === 'canceled' || 'refunded',
-      'bg-blue-500 text-white': customerProductStatus === 'trialing',
+    <div className={clsx('row items-center px-3 py-1 rounded-full text-sm font-bold', {
+      'bg-positive text-on-positive': customerProductStatus === 'active',
+      'bg-warning text-on-warning': customerProductStatus === 'activation' || customerProductStatus === 'scheduled',
+      'bg-negative text-on-negative': customerProductStatus === 'expired' || customerProductStatus === 'payment' || customerProductStatus === 'canceled' || 'refunded',
+      'bg-blue-500 text-white': customerProductStatus === 'trialing', // TODO replace color
     })}>
       {translation[customerProductStatus]}
     </div>
@@ -128,7 +128,7 @@ const ProductsPage: NextPage = () => {
   const isLoading = bookedProductsLoading || productsLoading
 
   return (
-    <Page pageTitle={titleWrapper(translation.myProducts)} mainContainerClassName={tw('min-h-[80vh]')}>
+    <Page pageTitle={titleWrapper(translation.myProducts)} mainContainerClassName={'min-h-[80vh]'}>
       <Modal
         id="productModal"
         isOpen={!!customerProductModalValue}
@@ -164,7 +164,7 @@ const ProductsPage: NextPage = () => {
         {isError && (<span>{translation.error}</span>)}
         {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && products && bookedProducts && (
-          <div className={tw('grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12')}>
+          <div className={'grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12'}>
             {bookedProducts.map((bookedProduct, index) => {
               return (
                 <div

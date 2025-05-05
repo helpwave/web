@@ -2,8 +2,6 @@ import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
-import withNextApp from '@helpwave/common/twind/next/app'
-import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
@@ -48,4 +46,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default withNextApp(config, MyApp)
+export default MyApp

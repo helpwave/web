@@ -1,19 +1,18 @@
 'use client'
-import { loadStripe } from '@stripe/stripe-js'
+import {loadStripe} from '@stripe/stripe-js'
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout
 } from '@stripe/react-stripe-js'
-import type { PropsWithChildren } from 'react'
-import { useCallback, useRef, useState } from 'react'
-import { InvoiceAPI } from '@/api/services/invoice'
-import { useAuth } from '@/hooks/useAuth'
-import { Button } from '@helpwave/common/components/Button'
-import { STRIPE_PUBLISHABLE_KEY } from '@/api/config'
-import type { Translation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@twind/core'
-import { useLanguage } from '@helpwave/common/hooks/useLanguage'
+import type {PropsWithChildren} from 'react'
+import {useCallback, useRef, useState} from 'react'
+import {InvoiceAPI} from '@/api/services/invoice'
+import {useAuth} from '@/hooks/useAuth'
+import {STRIPE_PUBLISHABLE_KEY} from '@/api/config'
+import type {Translation} from '@helpwave/common/hooks/useTranslation'
+import {useTranslation} from '@helpwave/common/hooks/useTranslation'
+import {useLanguage} from '@helpwave/common/hooks/useLanguage'
+import {SolidButton} from "@helpwave/common/components/Button";
 
 type EmbeddedCheckoutButtonTranslation = {
   cancel: string,
@@ -36,9 +35,9 @@ export type EmbeddedCheckoutButtonProps = PropsWithChildren<{
   invoiceId: string,
 }>
 
-export default function EmbeddedCheckoutButton({ children, invoiceId }: EmbeddedCheckoutButtonProps) {
+export default function EmbeddedCheckoutButton({children, invoiceId}: EmbeddedCheckoutButtonProps) {
   const translation = useTranslation(defaultEmbeddedCheckoutButtonTranslation)
-  const { authHeader } = useAuth()
+  const {authHeader} = useAuth()
   const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
   const [showCheckout, setShowCheckout] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
@@ -50,7 +49,7 @@ export default function EmbeddedCheckoutButton({ children, invoiceId }: Embedded
     return InvoiceAPI.pay(invoiceId, locale, authHeader)
   }, [language.language, authHeader, invoiceId])
 
-  const options = { fetchClientSecret }
+  const options = {fetchClientSecret}
 
   const handleCheckoutClick = () => {
     setShowCheckout(true)
@@ -64,21 +63,21 @@ export default function EmbeddedCheckoutButton({ children, invoiceId }: Embedded
 
   return (
     <div id="checkout">
-      <Button onClick={handleCheckoutClick}>
+      <SolidButton onClick={handleCheckoutClick}>
         {children}
-      </Button>
-      <dialog ref={modalRef} className={tw('w-full h-full max-w-[90vw] max-h-[90vh] rounded-lg overflow-hidden')}>
-        <div className={tw('flex flex-col justify-between gap-y-4 w-full h-full overflow-auto')}>
-          <h3 className={tw('font-bold text-2xl')}>{translation.checkout}</h3>
+      </SolidButton>
+      <dialog ref={modalRef} className={'w-full h-full max-w-[90vw] max-h-[90vh] rounded-lg overflow-hidden'}>
+        <div className={'flex flex-col justify-between gap-y-4 w-full h-full overflow-auto'}>
+          <h3 className={'font-bold text-2xl'}>{translation.checkout}</h3>
           {showCheckout && (
             <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-              <EmbeddedCheckout />
+              <EmbeddedCheckout/>
             </EmbeddedCheckoutProvider>
           )}
           <form method="dialog">
-            <Button onClick={handleCloseModal}>
+            <SolidButton onClick={handleCloseModal}>
               {translation.cancel}
-            </Button>
+            </SolidButton>
           </form>
         </div>
       </dialog>

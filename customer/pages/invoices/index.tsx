@@ -7,7 +7,6 @@ import { Section } from '@/components/layout/Section'
 import clsx from 'clsx'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { Table } from '@helpwave/common/components/Table'
-import { SolidButton } from '@helpwave/common/components/Button'
 import type { InvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import { defaultInvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import type { ProductPlanTypeTranslation } from '@/api/dataclasses/product'
@@ -138,7 +137,7 @@ const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServer
                 (<span key={invoice.uuid + '-date'}>{localeTranslation.formatDate(invoice.date)}</span>),
                 (<span key={invoice.uuid + '-name'}>{invoice.title}</span>),
                 (
-                  <span key={invoice.uuid + '-price'} className={tw('font-semibold')}>
+                  <span key={invoice.uuid + '-price'} className={'font-semibold'}>
                     {localeTranslation.formatMoney(invoice.totalAmount)}
                   </span>
                 ),

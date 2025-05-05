@@ -3,7 +3,6 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useProductsAvailableQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import type {
   Product,
@@ -12,7 +11,6 @@ import type {
 import {
   defaultProductPlanTranslation
 } from '@/api/dataclasses/product'
-import { Button } from '@helpwave/common/components/Button'
 import { ChevronRight } from 'lucide-react'
 import { withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
@@ -25,6 +23,7 @@ import { Modal } from '@helpwave/common/components/modals/Modal'
 import { useState } from 'react'
 import { ContractList } from '@/components/ContractList'
 import { defaultLocaleFormatters } from '@/utils/locale'
+import {SolidButton, TextButton} from "@helpwave/common/components/Button";
 
 type ProductsTranslation = {
   bookProduct: string,
@@ -101,12 +100,12 @@ const ProductShop: NextPage = () => {
   const localeTranslation = useTranslation(defaultLocaleFormatters)
 
   return (
-    <Page pageTitle={titleWrapper(translation.bookProduct)} mainContainerClassName={tw('min-h-[80vh]')}>
+    <Page pageTitle={titleWrapper(translation.bookProduct)} mainContainerClassName={'min-h-[80vh]'}>
       <Modal
         id="productModal"
         isOpen={!!productModalProductValue}
         titleText={productModalProductValue?.name}
-        modalClassName={tw('flex flex-col gap-y-4')}
+        modalClassName={'col gap-y-4'}
         onBackgroundClick={() => setProductModalProductValue(undefined)}
         onCloseClick={() => setProductModalProductValue(undefined)}
       >
@@ -118,38 +117,38 @@ const ProductShop: NextPage = () => {
         {isError && (<span>{translation.error}</span>)}
         {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && (
-          <div className={tw('flex flex-col gap-x-8 gap-y-12')}>
+          <div className={'col gap-x-8 gap-y-12'}>
             {products.length == 0 ?
               (<span>{translation.noProducts}</span>) :
               products.map((product, index) => {
                 return (
                   <div
                     key={index}
-                    className={tw('flex flex-col gap-y-2 bg-hw-primary-300 px-4 py-2 rounded-md')}
+                    className={'col gap-y-2 bg-hw-primary-300 px-4 py-2 rounded-md'}
                   >
-                    <div className={tw('flex flex-row justify-between')}>
-                      <h4 className={tw('font-bold font-space text-2xl')}>{product.name}</h4>
-                      <Button
-                        variant="text"
-                        className={tw('p-0 flex flex-row items-center gap-x-1 text-hw-primary-700 hover:text-hw-primary-800')}
+                    <div className={'row justify-between'}>
+                      <h4 className={'font-bold font-space text-2xl'}>{product.name}</h4>
+                      <TextButton
+                        color={"neutral"}
+                        className={'p-0'}
                         onClick={() => {
                           setProductModalProductValue(product)
                         }}
                       >
                         {translation.details}
                         <ChevronRight size={16} />
-                      </Button>
+                      </TextButton>
                     </div>
-                    <div className={tw('flex flex-row gap-x-4')}>
+                    <div className={'row gap-x-4'}>
                       {product.plan.map(plan => {
                         return (
-                          <div key={plan.uuid} className={tw('flex flex-col gap-y-6 bg-white rounded-lg px-4 py-2')}>
-                            <span className={tw('font-space font-bold text-xl')}>{translation.productPlan(plan)}</span>
-                            <span className={tw('flex flex-row gap-x-1 justify-center font-semibold text-lg')}>
-                              <span className={tw('text-3xl')}>{localeTranslation.formatMoney(plan.costEuro)}</span>
+                          <div key={plan.uuid} className={'col gap-y-6 bg-white rounded-lg px-4 py-2'}>
+                            <span className={'font-space font-bold text-xl'}>{translation.productPlan(plan)}</span>
+                            <span className={'row gap-x-1 justify-center font-semibold text-lg'}>
+                              <span className={'text-3xl'}>{localeTranslation.formatMoney(plan.costEuro)}</span>
                             </span>
-                            <Button
-                              className={tw('flex flex-row items-center justify-center gap-x-2 w-[160px]')}
+                            <SolidButton
+                              className={'items-center justify-center gap-x-2 w-[160px]'}
                               onClick={async () => {
                                 clearCart()
                                 addItem({ id: product.uuid, quantity: 1, plan: { uuid: plan.uuid, type: plan.type } })
@@ -157,7 +156,7 @@ const ProductShop: NextPage = () => {
                               }}
                             >
                               {translation.book}
-                            </Button>
+                            </SolidButton>
                           </div>
                         )
                       })}

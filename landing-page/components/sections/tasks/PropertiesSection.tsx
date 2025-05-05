@@ -4,7 +4,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { TagIcon } from '@helpwave/common/icons/Tag'
+import { TagIcon } from '@helpwave/common/components/icons/Tag'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type PropertiesSectionTranslation = {
@@ -33,7 +33,7 @@ export const PropertiesSection = ({ overwriteTranslation }: PropsForTranslation<
   return (
     <SectionBase
       outerClassName={clsx('desktop:py-0 tablet:py-0')}
-      className={clsx('row max-tablet:!flex flex-wrap w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center')}
+      className={clsx('max-tablet:flex max-tablet:flex-wrap max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center')}
     >
       <div
         className={clsx('row bottom-0 justify-center rounded-l-3xl max-tablet:w-full min-w-[40%] w-2/5 z-10')}

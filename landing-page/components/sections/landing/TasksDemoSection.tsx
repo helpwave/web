@@ -4,8 +4,8 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ItemGrid } from '@helpwave/common/components/layout/ItemGrid'
 import { SectionBase } from '@/components/sections/SectionBase'
+import {Check} from "lucide-react";
 
 type TasksDemoSectionTranslation = {
   helpwaveTasks: string,
@@ -55,12 +55,17 @@ export const TasksDemoSection = () => {
         <div className={clsx('col gap-y-4 desktop:max-w-[70%]')}>
           <HelpwaveBadge className={clsx('text-primary bg-purple-100 !w-fit')} title={translation.helpwaveTasks}/>
           <span className={clsx('textstyle-title-lg')}>{translation.workflowManagement}</span>
-          <ItemGrid columns={1} className={clsx('font-medium mt-2')}>
-            {translation.feature1}
-            {translation.feature2}
-            {translation.feature3}
-            {translation.feature4}
-          </ItemGrid>
+          <div className={'grid grid-cols-1 gap-x-6 gap-y-4 overflow-x-auto mt-2'}>
+            {[translation.feature1, translation.feature2, translation.feature3, translation.feature4].map((feature, index) => (
+              <div key={index} className={"row items-center"}>
+                <div
+                  className={clsx('col justify-center items-center bg-primary text-white rounded-full min-w-[24px] min-h-[24px]')}>
+                  <Check size={18} strokeWidth={2.5}/>
+                </div>
+                <span>{feature}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <Link
           href={demoURL}

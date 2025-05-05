@@ -4,7 +4,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { TagIcon } from '@helpwave/common/icons/Tag'
+import { TagIcon } from '@helpwave/common/components/icons/Tag'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type TasksKanbanSectionTranslation = {
@@ -32,7 +32,7 @@ export const TasksKanbanSection = ({ overwriteTranslation }: PropsForTranslation
 
   return (
     <SectionBase
-      className={clsx('row max-tablet:!flex flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center')}
+      className={clsx('max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center')}
       backgroundColor="white"
     >
       <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0')}>

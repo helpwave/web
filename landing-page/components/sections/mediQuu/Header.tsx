@@ -30,7 +30,7 @@ export const MediQuuHeaderSection = () => {
   const translation = useTranslation(defaultMediQuuPageTranslation)
   return (
     <SectionBase backgroundColor="gray">
-      <div className={clsx('row w-full gap-x-4 gap-y-8 max-tablet:!col-reverse max-tablet:items-center')}>
+      <div className={clsx('flex max-tablet:flex-col-reverse max-tablet:items-center tablet:row w-full gap-x-4 gap-y-8')}>
         <div className={clsx('col gap-y-2 desktop:max-w-[50%]')}>
           <span className={clsx('textstyle-title-3xl')}>{translation.title}</span>
           <span className={clsx('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></span>
@@ -43,7 +43,7 @@ export const MediQuuHeaderSection = () => {
             <div className={clsx('row justify-end')}>
               <HelpwaveBadge
                 size="large"
-                className="bg-secondary !gap-x-2 !w-fit shadow-md py-4 px-6"
+                className="bg-secondary text-on-secondary !gap-x-2 !w-fit shadow-md py-4 px-6"
               />
             </div>
           </div>

@@ -94,7 +94,7 @@ export const MediQuuFAQSection = () => {
   const translation = useTranslation(defaultMediQuuFAQTranslation)
   return (
     <SectionBase backgroundColor="gray" className={clsx('col w-full')}>
-      <span className={clsx('textstyle-title-xl text-secondary mb-1')}>{translation.title}</span>
+      <span className={clsx('textstyle-title-xl text-primary mb-1')}>{translation.title}</span>
       <span>{translation.subTitle}</span>
       <div className={clsx('col gap-y-4 mt-8')}>
         <FAQSection
@@ -106,7 +106,6 @@ export const MediQuuFAQSection = () => {
               value: faq.answer
             }
           }))}
-          expandableClassName={clsx('!py-4 !px-6')}
         />
       </div>
     </SectionBase>

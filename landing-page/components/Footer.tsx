@@ -98,9 +98,6 @@ const Footer = () => {
             ))}
             {index === 2 && (
                 <Select<Languages>
-                  className={clsx('w-fit')}
-                  textColor={clsx('text-white bg-transparent')}
-                  hoverColor={clsx('hover:text-white')}
                   value={language}
                   onChange={(language) => setLanguage(language)}
                   options={[
@@ -113,7 +110,7 @@ const Footer = () => {
         ))}
       </div>
       <div
-        className={clsx('row justify-center w-full h-[128px] items-center justify-center mx-auto font-space')}>
+        className={clsx('row w-full h-[128px] items-center justify-center mx-auto font-space')}>
         <Helpwave color="white" size={128}/>
         <span className={clsx('textstyle-title-normal')}>&copy; {year} helpwave</span>
       </div>

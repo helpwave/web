@@ -396,6 +396,14 @@
 }
 
 @layer components {
+  html, main {
+    @apply bg-surface text-on-surface;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
   .textstyle-title-3xl {
     @apply text-5xl font-space font-bold;
   }

@@ -18,7 +18,7 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
     badge: (
       <HelpwaveBadge
         size="small"
-        className="bg-black !gap-x-1 !w-fit"
+        className="bg-black text-white !gap-x-1 !w-fit"
       />
     ),
     socials: [
@@ -38,7 +38,7 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
     badge: (
       <HelpwaveBadge
         size="small"
-        className="bg-black !gap-x-1 !w-fit"
+        className="bg-black text-white !gap-x-1 !w-fit"
       />
     ),
     socials: [
@@ -54,8 +54,13 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
     suffix: 'Maître en droit, Paris II',
     role: 'Chief Legal Officer',
     roleBadge: 'CLO',
-    tags: ['law', 'doctor', 'product'],
     imageUrl: imageUrl('ludwig_maidowski'),
+    badge: (
+      <HelpwaveBadge
+        size="small"
+        className="bg-black text-white !gap-x-1 !w-fit"
+      />
+    ),
     socials: [
       { type: 'linkedin', url: 'https://www.linkedin.com/in/ludwig-maidowski-896b83208/' },
       { type: 'mail', url: 'mailto:ludwig.maidowski@helpwave.de' },
@@ -117,7 +122,7 @@ export const TeamSection = () => {
   const usedLanguage = useLanguage().language
   return (
     <SectionBase className={clsx('col')}>
-      <span className={clsx('textstyle-title-xl text-secondary mb-1')}>{translation.title}</span>
+      <span className={clsx('textstyle-title-xl text-primary mb-1')}>{translation.title}</span>
       <span>{translation.subTitle}</span>
       <div className={clsx('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-8')}>
         {contactsHelpwave.map(value => {
@@ -128,7 +133,7 @@ export const TeamSection = () => {
               key={value.name}
               info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
               {...profileProps}
-              className={clsx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
+              className={clsx('drop-shadow-lg hover:drop-shadow-3xl', value.className)}
             />
           )
         })}
@@ -142,7 +147,7 @@ export const TeamSection = () => {
               key={value.name}
               info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
               {...profileProps}
-              className={clsx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
+              className={clsx('drop-shadow-lg hover:drop-shadow-3xl', value.className)}
             />
           )
         })}

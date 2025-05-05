@@ -75,7 +75,7 @@ export const Select = <T, >({
           <>
             <Menu.Button
               className={clsx(
-                'inline-w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium bg-white',
+                'inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium bg-white',
                 textColor, borderColor,
                 {
                   'rounded-b-lg': !open,

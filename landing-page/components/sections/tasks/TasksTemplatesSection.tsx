@@ -4,7 +4,7 @@ import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { TagIcon } from '@helpwave/common/icons/Tag'
+import { TagIcon } from '@helpwave/common/components/icons/Tag'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type TasksTemplatesSectionTranslation = {
@@ -32,7 +32,7 @@ export const TasksTemplatesSection = ({ overwriteTranslation }: PropsForTranslat
 
   return (
     <SectionBase
-      className={clsx('row max-tablet:!flex flex-wrap-reverse w-full gap-x-16 gap-y-4 justify-between max-tablet:justify-center items-center text-white')}
+      className={clsx('max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center')}
       backgroundColor="darkSecondary"
       outerClassName={clsx('py-24')}
     >

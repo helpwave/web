@@ -1,56 +1,200 @@
 import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Page } from '@/components/layout/Page'
-import titleWrapper from '@/utils/titleWrapper'
-import { useProductsQuery } from '@/api/mutations/product_mutations'
+import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
 import clsx from 'clsx'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
-import type { ProductPlan } from '@/api/dataclasses/product'
+import type { ProductPlanTranslation } from '@/api/dataclasses/product'
+import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
+import {
+  useCustomerProductDeleteMutation,
+  useCustomerProductsSelfQuery
+} from '@/api/mutations/customer_product_mutations'
+import { withAuth } from '@/hooks/useAuth'
+import { withOrganization } from '@/hooks/useOrganization'
+import { withCart } from '@/hocs/withCart'
+import { Page } from '@/components/layout/Page'
+import titleWrapper from '@/utils/titleWrapper'
+import { Button } from '@helpwave/common/components/Button'
+import { Plus } from 'lucide-react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { Modal } from '@helpwave/common/components/modals/Modal'
+import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import type {
+  CustomerProductStatus,
+  ResolvedCustomerProduct
+} from '@/api/dataclasses/customer_product'
+import {
+  CustomerProductStatusCancelable,
+  CustomerProductStatusPlannedCancellation
+} from '@/api/dataclasses/customer_product'
+import {
+  defaultCustomerProductStatusTranslation
+} from '@/api/dataclasses/customer_product'
+import { ContractList } from '@/components/ContractList'
+import { defaultLocaleFormatters } from '@/utils/locale'
 
 type ProductsTranslation = {
-  products: string,
-} & Record<ProductPlan, string>
+  bookProduct: string,
+  myProducts: string,
+  noProductsYet: string,
+  error: string,
+  details: string,
+  contract: string,
+  contracts: string,
+  manage: string,
+  cancel: string,
+  noContracts: string,
+  lookAt: string,
+  cancelSubscription: string,
+  cancelSubscriptionDescription: string,
+  endsAt: string,
+} & ProductPlanTranslation
+
+
 
 const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
   en: {
-    products: 'Products',
-    once: 'Once',
-    monthly: 'Monthly',
-    yearly: 'Yearly',
+    ...defaultProductPlanTranslation.en,
+    bookProduct: 'Book new Product',
+    myProducts: 'My Products',
+    noProductsYet: 'No Products booked yet',
+    error: 'There was an error',
+    details: 'Details',
+    contract: 'Contract',
+    contracts: 'Contracts',
+    manage: 'Manage',
+    cancel: 'Cancel',
+    noContracts: 'No Contracts',
+    lookAt: 'Look at',
+    cancelSubscription: 'Cancel',
+    cancelSubscriptionDescription: 'This will permantly cancel your subscription and you will be required to book the product again.',
+    endsAt: 'Ends at',
   },
   de: {
-    products: 'Produkte',
-    once: 'Einmalig',
-    monthly: 'Monatlich',
-    yearly: 'Jährlich',
+    ...defaultProductPlanTranslation.de,
+    bookProduct: 'Neues Product buchen',
+    myProducts: 'Meine Produkte',
+    noProductsYet: 'Noch keine Produkte gebucht',
+    error: 'Es gab einen Fehler',
+    details: 'Details',
+    contract: 'Vertrag',
+    contracts: 'Verträge',
+    manage: 'Verwalten',
+    cancel: 'Kündigen',
+    noContracts: 'Keine Verträge',
+    lookAt: 'Anzeigen',
+    cancelSubscription: 'Abonement aufheben',
+    cancelSubscriptionDescription: 'Das Produkt wird permanent deaboniert und sie müssen zur erneuten Nutzung dieses erneut buchen.',
+    endsAt: 'Endet am',
   }
 }
 
-type ProductsServerSideProps = {
-  jsonFeed: unknown,
+type CustomerProductStatusDisplayProps = {
+  customerProductStatus: CustomerProductStatus,
 }
 
-const Products: NextPage<PropsForTranslation<ProductsTranslation, ProductsServerSideProps>> = ({ overwriteTranslation }) => {
-  const translation = useTranslation(defaultProductsTranslations, overwriteTranslation)
-  const { data, isError, isLoading } = useProductsQuery()
+const CustomerProductStatusDisplay = ({ customerProductStatus }: CustomerProductStatusDisplayProps) => {
+  const translation = useTranslation(defaultCustomerProductStatusTranslation)
   return (
-    <Page pageTitle={titleWrapper(translation.products)} mainContainerClassName={clsx('min-h-[80vh]')}>
-      <Section titleText={translation.products}>
-        {isError && (<span className={clsx('There was an Error')}></span>)}
-        {!isError && isLoading && (<LoadingAnimation/>)}
-        {!isError && !isLoading && (
-          <div className={clsx('flex flex-wrap gap-x-8 gap-y-12')}>
-            {data.map((product, index) => (
-              <div key={index} className={clsx('col gap-y-2 min-w-[200px] max-w-[200px] bg-primary text-on-primary px-4 py-2 rounded-md')}>
-                <h4 className={clsx('font-bold font-space text-xl')}>{product.name}</h4>
-                <div className={clsx('row justify-between')}>
-                  <span className={clsx('font-semibold text-lg')}>{`${product.price}€`}</span>
-                  {translation[product.plan]}
+    <div className={tx('flex flex-row items-center px-3 py-1 rounded-full text-sm font-bold', {
+      'bg-hw-positive-500 text-white': customerProductStatus === 'active',
+      'bg-hw-warning-500 text-white': customerProductStatus === 'activation' || customerProductStatus === 'scheduled',
+      'bg-hw-negative-500 text-white': customerProductStatus === 'expired' || customerProductStatus === 'payment' || customerProductStatus === 'canceled' || 'refunded',
+      'bg-blue-500 text-white': customerProductStatus === 'trialing',
+    })}>
+      {translation[customerProductStatus]}
+    </div>
+  )
+}
+
+const ProductsPage: NextPage = () => {
+  const translation = useTranslation(defaultProductsTranslations)
+  const router = useRouter()
+  const {
+    data: bookedProducts,
+    isError: bookedProductsError,
+    isLoading: bookedProductsLoading
+  } = useCustomerProductsSelfQuery()
+  const { data: products, isError: productsError, isLoading: productsLoading } = useProductsAllQuery()
+  const [customerProductModalValue, setCustomerProductModalValue] = useState<ResolvedCustomerProduct>()
+  const [cancelDialogId, setCancelDialogId] = useState<string>()
+  const cancelMutation = useCustomerProductDeleteMutation()
+  const localeTranslation = useTranslation(defaultLocaleFormatters)
+
+  const isError = bookedProductsError || productsError
+  const isLoading = bookedProductsLoading || productsLoading
+
+  return (
+    <Page pageTitle={titleWrapper(translation.myProducts)} mainContainerClassName={tw('min-h-[80vh]')}>
+      <Modal
+        id="productModal"
+        isOpen={!!customerProductModalValue}
+        titleText={customerProductModalValue?.product.name}
+        modalClassName={'col gap-y-4'}
+        onBackgroundClick={() => setCustomerProductModalValue(undefined)}
+        onCloseClick={() => setCustomerProductModalValue(undefined)}
+      >
+        <span>{customerProductModalValue?.product.description}</span>
+        <ContractList
+          productIds={customerProductModalValue ? [customerProductModalValue.product.uuid] : []}></ContractList>
+        <SolidButton color="negative" disabled={!CustomerProductStatusCancelable.includes(customerProductModalValue?.status || 'active')}
+          onClick={() => setCancelDialogId(customerProductModalValue?.uuid)}>
+          {translation.cancel}
+        </SolidButton>
+      </Modal>
+
+      <ConfirmDialog
+        id="cancelBooking"
+        isOpen={!!cancelDialogId}
+        onConfirm={() => {
+          cancelMutation.mutate(cancelDialogId!)
+          setCancelDialogId(undefined)
+        }}
+        onBackgroundClick={() => setCancelDialogId(undefined)}
+        onCloseClick={() => setCancelDialogId(undefined)}
+        titleText={translation.cancelSubscription}
+        descriptionText={translation.cancelSubscriptionDescription}
+        confirmType="negative"
+      />
+
+      <Section titleText={translation.myProducts}>
+        {isError && (<span>{translation.error}</span>)}
+        {!isError && isLoading && (<LoadingAnimation />)}
+        {!isError && !isLoading && products && bookedProducts && (
+          <div className={tw('grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12')}>
+            {bookedProducts.map((bookedProduct, index) => {
+              return (
+                <div
+                  key={index}
+                  className={'col border-4 justify-between gap-y-2 bg-surface text-on-surface px-8 py-4 rounded-md'}
+                >
+                  <div className={'col'}>
+                    <div className={'row justify-between'}>
+                      <h4 className={'font-bold font-space text-2xl'}>{bookedProduct.product.name}</h4>
+                      <CustomerProductStatusDisplay customerProductStatus={bookedProduct.status} />
+                    </div>
+                    <span>{bookedProduct.product.description}</span>
+                    <span>{`${translation.productPlan(bookedProduct.productPlan)} (${localeTranslation.formatMoney(bookedProduct.productPlan.costEuro)})`}</span>
+                    {bookedProduct.cancellationDate && CustomerProductStatusPlannedCancellation.includes(bookedProduct.status) ? <span>{translation.endsAt} {localeTranslation.formatDate(bookedProduct.cancellationDate)}</span> : <></>}
+                  </div>
+                  <div className={'row justify-end gap-x-4'}>
+                    <SolidButton className={'w-fit'}
+                      onClick={() => setCustomerProductModalValue(bookedProduct)}>{translation.manage}</SolidButton>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
+            <button
+              key="buy"
+              onClick={() => router.push('/products/shop').catch(console.error)}
+              className={'row justify-center items-center h-full min-h-[200px] w-full gap-x-2 border-4 border-dashed border-gray-200 hover:brightness-90 px-4 py-2 rounded-md'}
+            >
+              <Plus size={32} />
+              <h4 className={'font-bold text-lg'}>{translation.bookProduct}</h4>
+            </button>
           </div>
         )}
       </Section>
@@ -58,4 +202,4 @@ const Products: NextPage<PropsForTranslation<ProductsTranslation, ProductsServer
   )
 }
 
-export default Products
+export default withAuth(withOrganization(withCart(ProductsPage)))

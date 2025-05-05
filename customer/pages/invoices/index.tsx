@@ -1,26 +1,27 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { type Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { Section } from '@/components/layout/Section'
-import { useInvoiceQuery } from '@/api/mutations/invoice_mutations'
 import clsx from 'clsx'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { Table } from '@helpwave/common/components/Table'
 import { SolidButton } from '@helpwave/common/components/Button'
 import type { InvoiceStatusTranslation } from '@/api/dataclasses/invoice'
 import { defaultInvoiceStatusTranslation } from '@/api/dataclasses/invoice'
-import { useState } from 'react'
-import { Modal } from '@helpwave/common/components/modals/Modal'
-import type { ProductPlanTranslation } from '@/api/dataclasses/product'
-import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
-import { ChevronRight } from 'lucide-react'
+import type { ProductPlanTypeTranslation } from '@/api/dataclasses/product'
+import { defaultProductPlanTypeTranslation } from '@/api/dataclasses/product'
+import { withAuth } from '@/hooks/useAuth'
+import { withOrganization } from '@/hooks/useOrganization'
+import { useMyInvoicesQuery } from '@/api/mutations/invoice_mutations'
+import EmbeddedCheckoutButton from '@/components/forms/StripeCheckOutForm'
+import { defaultLocaleFormatters } from '@/utils/locale'
 
 type InvoicesTranslation = {
   invoices: string,
   payNow: string,
-  name: string,
+  title: string,
   createdAt: string,
   paymentStatus: string,
   paymentDate: string,
@@ -31,17 +32,20 @@ type InvoicesTranslation = {
   show: string,
   products: (amount: number) => string,
   plan: string,
-} & InvoiceStatusTranslation & ProductPlanTranslation
+  noInvoices: string,
+  outstandingPayments: string,
+  allPayed: string,
+} & InvoiceStatusTranslation & ProductPlanTypeTranslation
 
 const defaultInvoicesTranslations: Record<Languages, InvoicesTranslation> = {
   en: {
     ...defaultInvoiceStatusTranslation.en,
-    ...defaultProductPlanTranslation.en,
-    payNow: 'Pay Now',
+    ...defaultProductPlanTypeTranslation.en,
+    payNow: 'Pay',
     invoices: 'Invoices',
-    name: 'Name',
+    title: 'Name',
     createdAt: 'Created At',
-    paymentStatus: 'Payment Status',
+    paymentStatus: 'Status',
     actions: 'Actions',
     paymentDate: 'Payment Date',
     date: 'Date',
@@ -50,24 +54,29 @@ const defaultInvoicesTranslations: Record<Languages, InvoicesTranslation> = {
     show: 'Show',
     products: (amount: number) => `${amount} ${amount === 1 ? 'Product' : 'Products'}`,
     plan: 'Plan',
+    noInvoices: 'No Invoices',
+    outstandingPayments: 'Outstanding Payments',
+    allPayed: 'All payed up',
   },
   de: {
     ...defaultInvoiceStatusTranslation.de,
-    ...defaultProductPlanTranslation.de,
+    ...defaultProductPlanTypeTranslation.de,
     invoices: 'Rechnungen',
-    payNow: 'Jetzt Zahlen',
-    name: 'Name',
+    payNow: 'Bezahlen',
+    title: 'Name',
     createdAt: 'Erstellt Am',
-    paymentStatus: 'Zahlungs Status',
-    actions: 'Actionen',
-    paymentDate: 'Zahlungs Datum',
+    paymentStatus: 'Status',
+    actions: 'Aktion',
+    paymentDate: 'Zahlungsdatum',
     date: 'Datum',
     price: 'Preis',
     details: 'Details',
     show: 'Anzeigen',
     products: (amount: number) => `${amount} ${amount === 1 ? 'Produkt' : 'Produkte'}`,
     plan: 'Plan',
-
+    noInvoices: 'Keine Rechnungen',
+    outstandingPayments: 'Ausstehende Zahlungen',
+    allPayed: 'Alles bezahlt',
   }
 }
 
@@ -75,105 +84,115 @@ type InvoicesServerSideProps = {
   jsonFeed: unknown,
 }
 
+type PaymentDisplayProps = {
+  amount: number,
+}
+
+const PaymentDisplay = ({ amount }: PaymentDisplayProps) => {
+  const translation = useTranslation(defaultInvoicesTranslations)
+
+  return (
+    <div className={tx('px-4 py-2 rounded-full', {
+      'bg-hw-positive-500 text-white': amount === 0,
+      'bg-hw-negative-500 text-white': amount !== 0,
+    })}>
+      {amount !== 0 ? translation.outstandingPayments + ': ' : translation.allPayed}
+      {amount !== 0 && amount + '€'}
+    </div>
+  )
+}
+
 const Invoices: NextPage<PropsForTranslation<InvoicesTranslation, InvoicesServerSideProps>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultInvoicesTranslations, overwriteTranslation)
-  const { isError, isLoading, data } = useInvoiceQuery()
-  const [detailModalId, setDetailModalId] = useState<string>() // undefined means not used
+  const localeTranslation = useTranslation(defaultLocaleFormatters)
 
-  const hasNecessaryExtensions = data?.every(value => value.products != undefined) ?? false
-  const detailModalObject = data?.find(value => value.uuid === detailModalId)
+  const { isError, isLoading, data } = useMyInvoicesQuery()
 
   return (
     <Page pageTitle={titleWrapper(translation.invoices)}>
-      <Modal
-        id="invoice-detail-modal"
-        modalClassName="min-w-[600px]"
-        isOpen={!!detailModalObject}
-        titleText={`${translation.details}: ${detailModalObject?.name}`}
-        onCloseClick={() => setDetailModalId(undefined)}
-        onBackgroundClick={() => setDetailModalId(undefined)}
-      >
-        {!!detailModalObject?.products && (
-          <Table
-            data={detailModalObject!.products!}
-            identifierMapping={dataObject => dataObject.uuid}
-            rowMappingToCells={dataObject => [
-              (<span key={dataObject.name + '-name'} className={clsx('semi-bold')}>{dataObject.name}</span>),
-              (<span key={dataObject.name + '-price'}>{dataObject.price.toFixed(2) + '€'}</span>),
-              (<span key={dataObject.plan + '-plan'}>{translation[dataObject.plan]}</span>),
-            ]}
-            header={[
-              (<span key="name">{translation.name}</span>),
-              (<span key="price" className={clsx('text-right')}>{translation.price}</span>),
-              (<span key="-plan">{translation.plan}</span>),
-            ]}
-          />
-        )}
-      </Modal>
-      <Section titleText={translation.invoices}>
-        {(isError || !hasNecessaryExtensions) && (<span className={clsx('There was an Error')}></span>)}
-        {!isError && isLoading && (<LoadingAnimation/>)}
-        {!isError && !isLoading && (
-          <div className={clsx('flex flex-wrap gap-x-8 gap-y-12')}>
+      <Section>
+        <div className={'row justify-between'}>
+          <h2 className={'font-bold font-space text-3xl'}>{translation.invoices}</h2>
+          {!isError && !isLoading && data && (
+            <PaymentDisplay
+              amount={data.filter(value => value.status !== 'paid').reduce((previousValue, currentValue) => previousValue + currentValue.totalAmount, 0)} />
+          )}
+        </div>
+        {(isError) && (<span>{'There was an Error'}</span>)}
+        {!isError && isLoading && (<LoadingAnimation />)}
+        {!isError && !isLoading && data.length > 0 ? (
+          <div className={'flex flex-wrap gap-x-8 gap-y-12'}>
             <Table
-              className={clsx('w-full h-full')}
+              className={'w-full h-full'}
               data={data}
               identifierMapping={dataObject => dataObject.uuid}
               header={[
                 (<span key="date">{translation.date}</span>),
-                (<span key="name">{translation.name}</span>),
+                (<span key="name">{translation.title}</span>),
                 (<span key="price">{translation.price}</span>),
-                (<span key="details" className={clsx('min-w-[120px] text-left')}>{translation.details}</span>),
                 (<span key="paymentStatus">{translation.paymentStatus}</span>),
                 (<span key="paymentDate">{translation.paymentDate}</span>),
                 (<span key="actions">{translation.actions}</span>),
               ]}
-              rowMappingToCells={dataObject => [
-                (<span key={dataObject.uuid + '-date'}>{dataObject.date.toDateString()}</span>),
-                (<span key={dataObject.uuid + '-name'}>{dataObject.name}</span>),
+              rowMappingToCells={invoice => [
+                (<span key={invoice.uuid + '-date'}>{localeTranslation.formatDate(invoice.date)}</span>),
+                (<span key={invoice.uuid + '-name'}>{invoice.title}</span>),
                 (
-                  <span key={dataObject.uuid + '-price'} className={clsx('font-semibold')}>
-                    {dataObject.products!.reduce((sum, product) => sum + product.price, 0).toFixed(2) + '€'}
+                  <span key={invoice.uuid + '-price'} className={tw('font-semibold')}>
+                    {localeTranslation.formatMoney(invoice.totalAmount)}
                   </span>
-                ),
-                (
-                  <div key={dataObject.uuid + '-details'} className={clsx('col')}>
-                    <span>{translation.products(dataObject.products!.length)}</span>
-                    <SolidButton size="small" onClick={() => setDetailModalId(dataObject.uuid)} className={clsx('row items-center gap-x-1 p-0')} variant="text">
-                      {translation.show}
-                      <ChevronRight size={16}/>
-                    </SolidButton>
-                  </div>
                 ),
                 (
                   <span
-                    key={dataObject.uuid + '-payment-status'}
-                    className={clsx({
-                      'text-negative': dataObject.status === 'notPayed',
-                      'text-warning': dataObject.status === 'pending' || dataObject.status === 'overdue',
-                      'text-positive': dataObject.status === 'payed'
+                    key={invoice.uuid + '-payment-status'}
+                    className={clsx('w-full px-4 py-2 rounded-full', {
+                      'bg-negative text-on-negative': invoice.status === 'overdue',
+                      'bg-warning text-on-warning': invoice.status === 'pending',
+                      'bg-positive text-on-positive': invoice.status === 'paid'
                     })}
                   >
-                    {translation[dataObject.status]}
+                    {translation[invoice.status]}
                   </span>
                 ),
                 (
-                  <span key={dataObject.uuid + '-payment-date'}>
-                    {dataObject.paymentDate?.toDateString() ?? '-'}
+                  <span key={invoice.uuid + '-payment-date'}>
+                    {invoice.status === 'paid' && invoice.createdAt != undefined ? localeTranslation.formatDate(invoice.updatedAt) : '-'}
                   </span>
                 ),
-                (
-                  <SolidButton key={dataObject.uuid + '-pay'} disabled={!!dataObject.paymentDate}>
-                    {translation.payNow}
-                  </SolidButton>
-                )
+                invoice.status === 'overdue' || invoice.status === 'pending' ?
+                  (
+                    <EmbeddedCheckoutButton
+                      key={invoice.uuid + '-pay'}
+                      invoiceId={invoice.uuid}
+                    >
+                      {translation.payNow}
+                    </EmbeddedCheckoutButton>
+                  ) : (
+                    invoice.status !== 'paid' ?
+                      (
+                        <Button
+                          disabled={true}
+                          variant="text-border"
+                          className={'mr-2'}>
+                          {translation[invoice.status]}
+                        </Button>
+                      ) :
+                      (
+                        <Button>
+                          PDF
+                        </Button>
+                      )
+                  )
               ]}
             />
           </div>
-        )}
+        ) :
+          (
+            <div className={'row justify-center w-full text-gray-400'}>{translation.noInvoices}</div>
+          )}
       </Section>
     </Page>
   )
 }
 
-export default Invoices
+export default withAuth(withOrganization(Invoices))

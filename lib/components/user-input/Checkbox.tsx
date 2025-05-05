@@ -33,6 +33,7 @@ type CheckboxProps = {
   onChangeTristate?: (checked: CheckedState) => void,
   size?: CheckBoxSize,
   className?: string,
+  containerClassName?: string,
 }
 
 /**
@@ -48,7 +49,8 @@ const ControlledCheckbox = ({
                               onChange,
                               onChangeTristate,
                               size = "medium",
-                              className = ''
+                              className = '',
+                              containerClassName
                             }: CheckboxProps) => {
   const usedSizeClass = checkboxSizeMapping[size]
   const innerIconSize = checkboxIconSizeMapping[size]
@@ -68,7 +70,7 @@ const ControlledCheckbox = ({
   }
 
   return (
-    <div className={clsx('row justify-center items-center')}>
+    <div className={clsx('row justify-center items-center', containerClassName)}>
       <CheckboxPrimitive.Root
         onCheckedChange={propagateChange}
         checked={checked}

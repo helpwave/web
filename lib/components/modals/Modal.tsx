@@ -49,7 +49,7 @@ export const ModalHeader = ({
     <div className={clsx('col')}>
       <div className={clsx('row justify-between items-start gap-x-8')}>
         {title ?? (
-          <span className={clsx('textstyle-title-normal', {
+          <span className={clsx('textstyle-title-lg', {
             'mb-1': description || descriptionText,
           })}>
             {titleText}

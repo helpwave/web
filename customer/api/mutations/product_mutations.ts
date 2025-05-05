@@ -1,35 +1,38 @@
 import { useQuery } from '@tanstack/react-query'
-import type { Product } from '@/api/dataclasses/product'
 import { QueryKeys } from '@/api/mutations/query_keys'
+import { ProductAPI } from '@/api/services/product'
+import { useAuth } from '@/hooks/useAuth'
 
-// TODO delete later
-export const exampleProducts: Product[] = [
-  {
-    uuid: '1',
-    name: 'helpwave tasks',
-    plan: 'monthly',
-    price: 10
-  },
-  {
-    uuid: '2',
-    name: 'mediquu',
-    plan: 'once',
-    price: 0
-  },
-  {
-    uuid: '3',
-    name: 'mediquu viva',
-    plan: 'monthly',
-    price: 5
-  }
-]
-
-export const useProductsQuery = () => {
+export const useProductsAllQuery = () => {
+  const { authHeader } = useAuth()
   return useQuery({
     queryKey: [QueryKeys.product, 'all'],
     queryFn: async () => {
-      // TODO do request here
-      return exampleProducts
+      return await ProductAPI.getAll(authHeader)
+    },
+  })
+}
+
+export const useProductsAvailableQuery = () => {
+  const { authHeader } = useAuth()
+  return useQuery({
+    queryKey: [QueryKeys.product, 'available'],
+    queryFn: async () => {
+      return await ProductAPI.getAvailable(authHeader)
+    },
+  })
+}
+
+export const useProductQuery = (id?: string) => {
+  const { authHeader } = useAuth()
+  return useQuery({
+    queryKey: [QueryKeys.product, id],
+    enabled: id !== undefined,
+    queryFn: async () => {
+      if(id === undefined) {
+        throw new Error('invalid id')
+      }
+      return await ProductAPI.get(id, authHeader)
     },
   })
 }

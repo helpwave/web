@@ -6,10 +6,9 @@ import titleWrapper from '@/utils/titleWrapper'
 import { Section } from '@/components/layout/Section'
 import { useCustomerMyselfQuery, useCustomerUpdateMutation } from '@/api/mutations/customer_mutations'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { useEffect, useState } from 'react'
-import type { Customer } from '@/api/dataclasses/customer'
-import clsx from 'clsx'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
+import { withAuth } from '@/hooks/useAuth'
+import { withOrganization } from '@/hooks/useOrganization'
 
 type SettingsTranslation = {
   settings: string,
@@ -71,22 +70,20 @@ const defaultSettingsTranslations: Record<Languages, SettingsTranslation> = {
 
 const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwriteTranslation }) => {
   const translation = useTranslation(defaultSettingsTranslations, overwriteTranslation)
-  const [currentData, setCurrentData] = useState<Customer>()
   const { data, isError, isLoading } = useCustomerMyselfQuery()
   const customerUpdate = useCustomerUpdateMutation()
 
-  useEffect(() => {
-    setCurrentData(data)
-  }, [data])
-
   // TODO do input validation
   return (
-    <Page pageTitle={titleWrapper(translation.settings)} mainContainerClassName={clsx('min-h-[auto] pb-6')}>
+    <Page pageTitle={titleWrapper(translation.settings)}>
       <Section titleText={translation.settings}>
         <span>{translation.settingsDescription}</span>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
-          {!!currentData && (
-            <ContactInformationForm value={currentData} onChange={setCurrentData} onSubmit={customerUpdate.mutate}/>
+          {!!data && (
+            <ContactInformationForm
+              initialValue={data}
+              onSubmit={customer => customerUpdate.mutate({ ...data, ...customer })}
+            />
           )}
         </LoadingAndErrorComponent>
       </Section>
@@ -94,4 +91,4 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
   )
 }
 
-export default Settings
+export default withAuth(withOrganization(Settings))

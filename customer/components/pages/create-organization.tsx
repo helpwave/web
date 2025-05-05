@@ -1,13 +1,9 @@
-import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import clsx from 'clsx'
-import { useState } from 'react'
-import type { Customer } from '@/api/dataclasses/customer'
-import { useCustomerCreateMutation } from '@/api/mutations/customer_mutations'
-import { useOrganization } from '@/hooks/useOrganization'
+import { clsx } from 'clsx'
+import type { CustomerCreate } from '@/api/dataclasses/customer'
 import { Section } from '@/components/layout/Section'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
 
@@ -27,48 +23,44 @@ const defaultCreateOrganizationTranslations: Record<Languages, CreateOrganizatio
   }
 }
 
-const CreateOrganization: NextPage<PropsForTranslation<CreateOrganizationTranslation>> = ({ overwriteTranslation }) => {
+type CreateOrganizationPageProps = {
+  createOrganization: (organization: CustomerCreate) => Promise<boolean>,
+}
+
+export const CreateOrganizationPage = ({
+                                         createOrganization,
+                                         overwriteTranslation
+                                       }: PropsForTranslation<CreateOrganizationTranslation, CreateOrganizationPageProps>) => {
   const translation = useTranslation(defaultCreateOrganizationTranslations, overwriteTranslation)
-  const [data, setData] = useState<Customer>({
-    uuid: '',
-    name: '',
-    email: '',
-    address: {
-      country: '',
-      city: '',
-      postalCode: '',
-      street: '',
-      houseNumber: '',
-      houseNumberAdditional: ''
-    },
-    creationDate: new Date(),
-    websiteURL: '',
-    phoneNumber: '',
-  })
-  const createMutation = useCustomerCreateMutation()
-  const { reload } = useOrganization()
 
   return (
     <Page
       pageTitle={titleWrapper(translation.createOrganization)}
-      mainContainerClassName={clsx('min-h-[90vh] max-w-[700px]')}
+      mainContainerClassName={'max-w-[700px]'}
+      contentAndFooterClassName={'items-center'}
       isHidingSidebar={true}
     >
       <Section>
         <h2 className={clsx('font-space text-3xl font-bold')}>{translation.createOrganization}</h2>
         <span className={clsx('text-gray-500')}>{translation.createOrganizationDescription}</span>
         <ContactInformationForm
-          value={data}
-          onChange={setData}
-          onSubmit={async () => {
-            createMutation.mutate(data)
-            // TODO we have to wait here, ensure it this works or try changing the organization context to do that
-            reload()
+          initialValue={{
+            name: '',
+            email: '',
+            phoneNumber: '',
+            address: '',
+            country: '',
+            city: '',
+            postalCode: '',
+            houseNumber: '',
+            careOf: '',
+            websiteURL: '',
+          }}
+          onSubmit={(data) => {
+            createOrganization(data).catch(console.error)
           }}
         />
       </Section>
     </Page>
   )
 }
-
-export default CreateOrganization

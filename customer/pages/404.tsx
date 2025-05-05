@@ -33,7 +33,7 @@ const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {
 const NotFound: NextPage = ({ overwriteTranslation }: PropsForTranslation<NotFoundTranslation>) => {
   const translation = useTranslation(defaultNotFoundTranslation, overwriteTranslation)
   return (
-    <Page pageTitle={titleWrapper()}>
+    <Page pageTitle={titleWrapper()} isHidingSidebar={true}>
       <div className={clsx('desktop:w-5/12 h-full desktop:mx-auto tablet:mx-16 max-tablet:mx-8 relative z-[1]')}>
         <div className={clsx('absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center')}>
           <Helpwave className={clsx('w-full left-1/2 pt-[100px]')} size={256} animate="bounce" />

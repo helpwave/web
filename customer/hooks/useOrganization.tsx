@@ -1,10 +1,10 @@
-'use client' // Ensures this runs only on the client-side
-
-import type { PropsWithChildren } from 'react'
-import { useCallback } from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import type { ComponentType, PropsWithChildren } from 'react'
+import { createContext, useContext } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
+import { tw } from '@twind/core'
+import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import { CreateOrganizationPage } from '@/components/pages/create-organization'
+import { useCustomerMyselfQuery } from '@/api/mutations/customer_mutations'
 import { CustomerAPI } from '@/api/services/customer'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -19,39 +19,59 @@ type OrganizationContextType = {
 const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined)
 
 export const OrganizationProvider = ({ children }: PropsWithChildren) => {
-  const { isAuthenticated } = useAuth()
-  const [organization, setOrganization] = useState<Organization>()
-  const [redirect, setRedirect] = useState<string>('/')
-  const router = useRouter()
+  const { isLoading, isError, data: organization, refetch } = useCustomerMyselfQuery()
+  const { authHeader } = useAuth()
 
-  const checkOrganization = useCallback(async () => {
-    const organization: Organization | undefined = await CustomerAPI.getMyself()
-    if (organization) {
-      // TODO change to parsing later
-      setOrganization(organization)
-      router.push(redirect).catch(console.error) // TODO use a redirect here
-    } else {
-      setOrganization(undefined)
-      setRedirect(router.pathname)
-      router.push('/create-organization').catch(console.error)
-    }
-  }, [redirect, router])
+  if (!organization && isLoading) {
+    return (
+      <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
+        <LoadingAnimation loadingText="Loading organization..."/>
+      </div>
+    )
+  }
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      // Cannot do the check when not logged in
-      return
-    }
-    checkOrganization().catch(console.error)
-  }, [isAuthenticated]) // eslint-disable-line react-hooks/exhaustive-deps
+  if (isError) {
+    return (
+      <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
+        <span className={tw('text-hw-negative-400')}>An Error occurred</span>
+      </div>
+    )
+  }
 
-  const reload = useCallback(async () => {await  checkOrganization()}, [checkOrganization])
+  if (!organization) {
+    return (
+      <CreateOrganizationPage createOrganization={async (data) => {
+        try {
+          // TODO fix this
+          // We cannot use a mutation because we would trigger a rerender and delete the form information
+          await CustomerAPI.create(data, authHeader)
+          refetch().catch(console.error)
+          return true
+        } catch (error) {
+          console.error(error)
+          return false
+        }
+      }}
+      />
+    )
+  }
 
   return (
-    <OrganizationContext.Provider value={{ hasOrganization: !!organization, organization, reload }}>
+    <OrganizationContext.Provider value={{ hasOrganization: !!organization, organization, reload: refetch }}>
       {children}
     </OrganizationContext.Provider>
   )
+}
+
+export const withOrganization = <P extends object>(Component: ComponentType<P>) => {
+  const WrappedComponent = (props: P) => (
+    <OrganizationProvider>
+      <Component {...props} />
+    </OrganizationProvider>
+  )
+  WrappedComponent.displayName = `withOrganization(${Component.displayName || Component.name || 'Component'})`
+
+  return WrappedComponent
 }
 
 // Custom hook for using OrganizationContext

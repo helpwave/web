@@ -13,6 +13,8 @@ import { useUserSeatsQuery, useUserSeatUpdateMutation } from '@/api/mutations/us
 import { Table } from '@helpwave/common/components/Table'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
+import { withAuth } from '@/hooks/useAuth'
+import { withOrganization } from '@/hooks/useOrganization'
 
 type TeamTranslation = {
   team: string,
@@ -98,4 +100,4 @@ const Team: NextPage<PropsForTranslation<TeamTranslation, TeamServerSideProps>> 
   )
 }
 
-export default Team
+export default withAuth(withOrganization(Team))

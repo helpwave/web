@@ -13,11 +13,13 @@ import { useAuth } from '@/hooks/useAuth'
 import { SolidButton } from '@helpwave/common/components/Button'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import { OIDC_PROVIDER } from '@/api/config'
 
 export type NavItem = {
   name: Record<Languages, string>,
   icon?: ReactNode,
   url: string,
+  isExternal?: boolean,
   subItems?: NavItem[],
 }
 
@@ -51,7 +53,7 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
 
   return (
     <div
-      className={clsx(`col justify-between grow bg-gray-200 min-w-[250px] max-w-[250px]`, className)}>
+      className={clsx(`col justify-between grow shadow-xl bg-gray-200 min-w-[250px] max-w-[250px]`, className)}>
       <LanguageModal
         id="language-modal"
         isOpen={isLanguageModalOpen}
@@ -59,14 +61,15 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
         onBackgroundClick={() => setIsLanguageModalOpen(false)}
         onDone={() => setIsLanguageModalOpen(false)}
       />
-      <nav className={clsx('col overflow-y-auto')}>
+      <nav className={'col overflow-y-auto'}>
         {items.map((item, i) => (
           <Link
             href={item.url}
             key={i}
+            target={item.isExternal ?? false ? '_blank' : undefined}
             className={clsx(
-              'px-4 py-2 bg-gray-50 hover:bg-primary/40 row gap-x-2 items-center',
-              { 'bg-primary/30': router.pathname == item.url }
+              'px-4 py-2 bg-gray-50 hover:bg-primary/40 flex flex-row gap-x-2 px-4 items-center',
+              { 'bg-gray-200': router.pathname == item.url }
             )}
           >
             {item.icon}
@@ -82,11 +85,11 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
           {languagesLocalNames[language]}
           <ArrowRightLeft size={24}/>
         </button>
-        <div className={clsx('col p-4 gap-y-4 bg-gray-50')}>
-          <div className={clsx('row gap-x-2 items-center')}>
+        <div className={'col p-4 gap-y-4 bg-gray-50'}>
+          <Link href={OIDC_PROVIDER + '/account'} target="_blank" className={'row items-center'}>
             <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
-            {identity?.name}
-          </div>
+            {identity?.profile?.name}
+          </Link>
           <SolidButton onClick={logout} color="negative">{translation.logout}</SolidButton>
         </div>
       </div>

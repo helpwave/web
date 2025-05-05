@@ -1,16 +1,17 @@
-import {
+import React, {
   useEffect,
   useRef,
   useState,
   type ChangeEvent,
   type HTMLInputTypeAttribute,
-  type InputHTMLAttributes
+  type InputHTMLAttributes, forwardRef
 } from 'react'
 import clsx from 'clsx'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
+import { tw } from '@twind/core'
 
 export type InputProps = {
   /**
@@ -136,7 +137,58 @@ const UncontrolledInput = ({
   )
 }
 
+export type FormInputProps = InputHTMLAttributes<HTMLInputElement> & {
+  id: string,
+  labelText?: string,
+  errorText?: string,
+  labelClassName?: string,
+  errorClassName?: string,
+  containerClassName?: string,
+}
+
+const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInput({
+                                                                                    id,
+                                                                                    labelText,
+                                                                                    errorText,
+                                                                                    className,
+                                                                                    labelClassName,
+                                                                                    errorClassName,
+                                                                                    containerClassName,
+                                                                                    required,
+                                                                                    ...restProps
+                                                                                  }, ref) {
+  const input = (
+    <input
+      ref={ref}
+      id={id}
+      {...restProps}
+      className={tx(
+        'block bg-surface px-[0.675rem] py-2 rounded-md w-full border-2 border-gray-300 shadow-sm focus:outline-none focus:ring-1',
+        {
+          'focus:border-hw-primary-400 focus:ring-hw-primary-500': !errorText,
+          'focus:border-hw-negative-500 focus:ring-hw-negative-500 text-hw-negative-500': !!errorText,
+        },
+        className
+        )}
+    />
+  )
+
+  return (
+    <div className={tx('flex flex-col gap-y-1', containerClassName)}>
+      {labelText && (
+        <label htmlFor={id} className={tx('text-gray-700', labelClassName)}>
+          {labelText}
+          {required && <span className={tw('text-primary-500')}>*</span>}
+        </label>
+      )}
+      {input}
+      {errorText && <label htmlFor={id} className={tx('text-hw-negative-500', errorClassName)}>{errorText}</label>}
+    </div>
+  )
+})
+
 export {
   UncontrolledInput,
   ControlledInput as Input,
+  FormInput
 }

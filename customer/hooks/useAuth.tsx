@@ -1,68 +1,89 @@
 'use client' // Ensures this runs only on the client-side
 
-import type { PropsWithChildren } from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import Cookies from 'js-cookie'
-
-type Identity = {
-  token: string,
-  name: string,
-}
+import type { ComponentType, PropsWithChildren } from 'react'
+import { useEffect } from 'react'
+import { createContext, useContext, useState } from 'react'
+import { tw } from '@twind/core'
+import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import { LoginPage } from '@/components/pages/login'
+import { login, logout, onTokenExpiringCallback, removeUser, renewToken, restoreSession } from '@/api/auth/authService'
+import type { User } from 'oidc-client-ts'
+import { REDIRECT_URI } from '@/api/config'
 
 type AuthContextType = {
-  isAuthenticated: boolean,
-  identity?: Identity,
-  login: (email: string, password: string) => void,
+  identity: User,
   logout: () => void,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const cookieName = 'authToken'
+type AuthState = {
+  identity?: User,
+  isLoading: boolean,
+}
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [identity, setIdentity] = useState<Identity>()
-  const [redirect, setRedirect] = useState<string>('/')
-  const router = useRouter()
+  const [{ isLoading, identity }, setAuthState] = useState<AuthState>({ isLoading: true })
 
-  const checkAndHandleCookie = () => {
-    const token = Cookies.get(cookieName)
-    const newAuthState = !!token
-    if (newAuthState) {
-      // TODO change to parsing later
-      const identity: Identity = { token: 'test-token', name: 'Max Mustermann' }
-      setIdentity(identity)
-      router.push(redirect).catch(console.error) // TODO use a redirect here
-    } else {
-      setIdentity(undefined)
-      setRedirect(router.pathname)
-      router.push('/login').catch(console.error)
-    }
-  }
-
-  // Check authentication state on first load
   useEffect(() => {
-    checkAndHandleCookie()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    restoreSession().then(identity => {
+      if(identity) {
+        setAuthState({
+          identity,
+          isLoading: false,
+        })
+        onTokenExpiringCallback(async () => {
+          console.log('Token expiring, refreshing...')
+          const identity = await renewToken()
+          setAuthState({
+            identity: identity ?? undefined,
+            isLoading: false,
+          })
+        })
+      } else {
+        login(REDIRECT_URI + `?redirect_uri=${encodeURIComponent(window.location.href)}`).catch(console.error)
+      }
+    }).catch(async () => {
+      await removeUser()
+      await login(REDIRECT_URI + `?redirect_uri=${encodeURIComponent(window.location.href)}`)
+    })
+  }, [])
 
-  const login = (email: string, _: string) => {
-    // TODO do real login
-    Cookies.set(cookieName, email, { expires: 1 })
-    checkAndHandleCookie()
+  if (!identity && isLoading) {
+    return (
+      <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
+        <LoadingAnimation loadingText="Logging in..."/>
+      </div>
+    )
   }
 
-  const logout = () => {
-    Cookies.remove(cookieName)
-    checkAndHandleCookie()
+  if (!identity) {
+    return (
+      <LoginPage login={async () => {
+        await login(REDIRECT_URI + `?redirect_uri=${encodeURIComponent(window.location.href)}`)
+        return true
+      }}/>
+    )
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!identity, identity, login, logout }}>
+    <AuthContext.Provider value={{ identity, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
+
+export const withAuth = <P extends object>(Component: ComponentType<P>) => {
+  const WrappedComponent = (props: P) => (
+    <AuthProvider>
+      <Component {...props} />
+    </AuthProvider>
+  )
+  WrappedComponent.displayName = `withAuth(${Component.displayName || Component.name || 'Component'})`
+
+  return WrappedComponent
+}
+
 
 // Custom hook for using AuthContext
 export const useAuth = () => {
@@ -70,5 +91,8 @@ export const useAuth = () => {
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
   }
-  return context
+  const authHeader = {
+    Authorization: `Bearer ${context.identity.access_token}`,
+  }
+  return { ...context, authHeader }
 }

@@ -1,4 +1,4 @@
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 import clsx from 'clsx'
 import type { NextPage } from 'next'
 import Link from 'next/link'

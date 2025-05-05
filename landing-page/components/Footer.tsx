@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'

@@ -53,7 +53,7 @@ export const DescriptionWithAction = ({
       </div>
       {trailing}
       {!trailing && trailingButtonText && (
-        <div className={clsx('row flex-center desktop:justify-end grow')}>
+        <div className={clsx('row items-center justify-center desktop:justify-end grow')}>
           <SolidButton onClick={trailingButtonFunction} className={clsx('whitespace-nowrap')}>
             {trailingButtonText}
           </SolidButton>

@@ -50,7 +50,7 @@ const PillLabel = ({
   const state = mapping[taskStatus]
   const translation = useTranslation(state.translation, overwriteTranslation)
   return (
-    <div className={clsx(`row flex-center pl-2 pr-3 py-1 rounded-lg text-sm`, state.mainClassName)}>
+    <div className={clsx(`row items-center justify-center pl-2 pr-3 py-1 rounded-lg text-sm`, state.mainClassName)}>
       <div className={clsx(`row gap-x-2 items-center`)}>
         <div className={clsx(`rounded-full w-2 h-2`, state.iconClassName)}/>
         <span>{translation.text}</span>

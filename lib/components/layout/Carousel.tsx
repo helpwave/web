@@ -344,8 +344,8 @@ export const Carousel = ({
           </>
         )}
         {hintNext ? (
-          <div className={clsx(`relative row`, height)}>
-            <div className={clsx('relative row w-full px-2 overflow-hidden')}>
+          <div className={clsx(`relative row h-full`, height)}>
+            <div className={clsx('relative row h-full w-full px-2 overflow-hidden')}>
               {items.map(({
                 item,
                 index
@@ -376,14 +376,18 @@ export const Carousel = ({
       </div>
       {dots && (
         <div
-          className={clsx('row w-full items-center justify-center gap-x-2 my-2')}>
+          className={clsx('row items-center justify-center w-full my-2')}>
           {range(0, length - 1).map(index => (
             <button
               key={index}
-              className={clsx('hover:bg-primary hover:brightness-90 first:rounded-l-md last:rounded-r-md min-w-[32px] min-h-[12px]', {
+              className={clsx('w-[2rem] min-w-[2rem] h-[0.75rem] min-h-[0.75rem] hover:bg-primary hover:brightness-90 first:rounded-l-md last:rounded-r-md', {
                 'bg-gray-200': currentIndex !== index,
                 'bg-primary': currentIndex === index
               })}
+              style={{
+                width: '2rem',
+                height: '0.75rem',
+              }}
               onClick={() => startAnimation(index)}
             />
           ))}

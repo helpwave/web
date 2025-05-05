@@ -6,7 +6,7 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { Chip } from '@helpwave/common/components/ChipList'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type StartSectionTranslation = {

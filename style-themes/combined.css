@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-@import './utilities/animations.css';
+@import './utilities/utils.css';
 @import './themes/variants.css';
 
 @import './themes/base.css';

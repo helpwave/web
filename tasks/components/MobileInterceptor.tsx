@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import clsx from 'clsx'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 import { getConfig } from '@/utils/config'
 
 type MobileInterceptorTranslation = {

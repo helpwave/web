@@ -1,4 +1,5 @@
 @theme {
+  /* Colors */
   --color-white: #FFFFFF;
   --color-black: #000000;
   --color-gray-25: #F8F8F8;
@@ -148,25 +149,23 @@
   --color-text-image-secondary-text: #FFFFFF;
   --color-text-image-dark-background: #11243E;
   --color-text-image-dark-text: #FFFFFF;
-}
 
-/* breakpoints */
-@theme {
+  /* breakpoints */
   --breakpoint-tablet: 48rem; /* 768px for 16px font-size */
   --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
-}
 
-/* fonts */
-@theme {
+  /* fonts */
   --font-inter: 'Inter', sans-serif;
   --font-space: 'Space Grotesk', sans-serif;
 }
 
-body, html {
-  @apply bg-background text-on-background;
-}
+@layer components {
+  body, html {
+    @apply bg-background text-on-background;
+  }
 
-button {
-  cursor: pointer;
-  @apply transition-colors duration-100 disabled:cursor-not-allowed;
+  button {
+    cursor: pointer;
+    @apply transition-colors duration-100 disabled:cursor-not-allowed;
+  }
 }

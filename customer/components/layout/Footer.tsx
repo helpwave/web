@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
 import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
@@ -9,6 +8,7 @@ import { Select } from '@helpwave/common/components/user-input/Select'
 import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
 import pluginConfig from '@/utils/CookieConsentConfig'
+import {Helpwave} from "@helpwave/common/components/icons/Helpwave";
 
 type Categories = 'socials' | 'general' | 'products' | 'development'
 type FooterTranslation = { [key in Categories]: string }

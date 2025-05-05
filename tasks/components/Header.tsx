@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import {Helpwave} from "@helpwave/common/components/icons/Helpwave";
 
 export type HeaderProps = {
   title?: string,

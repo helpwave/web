@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { Helpwave } from '../icons/Helpwave'
+import { Helpwave } from './icons/Helpwave'
 import { Tile } from './layout/Tile'
 
 type Size = 'small' | 'large'

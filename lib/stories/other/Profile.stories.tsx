@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import clsx from 'clsx'
 import { Profile } from '../../components/Profile'
-import { Helpwave } from '../../icons/Helpwave'
+import { Helpwave } from '../../components/icons/Helpwave'
 import { MarkdownInterpreter } from '../../components/MarkdownInterpreter'
 import { Chip } from '../../components/ChipList'
 

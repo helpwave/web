@@ -1,7 +1,7 @@
 import type { StoryFn } from '@storybook/react'
 import clsx from 'clsx'
 import { FAQSection } from '../../components/layout/FAQSection'
-import { Helpwave } from '../../icons/Helpwave'
+import { Helpwave } from '../../components/icons/Helpwave'
 
 const meta = {
   title: 'Layout',

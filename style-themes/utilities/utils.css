@@ -1,3 +1,11 @@
+@utility col {
+  @apply flex flex-col gap-y-2;
+}
+
+@utility row {
+  @apply flex flex-row gap-x-2;
+}
+
 @layer utilities {
   .animation-delay-0 {
     animation-delay: 0ms;

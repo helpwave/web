@@ -1,7 +1,7 @@
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
-import { Helpwave } from '../icons/Helpwave'
+import { Helpwave } from './icons/Helpwave'
 import clsx from 'clsx'
 
 type LoadingAnimationTranslation = {

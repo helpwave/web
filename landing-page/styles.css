@@ -1,2 +1,4 @@
-@import "@helpwave/style-themes/combined.css";
-/*@source inline("text-positive");*/
+@import "tailwindcss";
+@import "@helpwave/common/styles.css";
+@source "../node_modules/@helpwave/style-themes";
+@source "../node_modules/@helpwave/lib";

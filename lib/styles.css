@@ -1,1 +1,10 @@
+@import "tailwindcss";
 @import "@helpwave/style-themes/combined.css";
+
+/* TODO Remove this when they are detected in the MarkdownInterpreter*/
+@source inline("text-primary");
+@source inline("text-secondary");
+@source inline("text-positive");
+@source inline("text-warning");
+@source inline("text-negative");
+@source "../compontens";

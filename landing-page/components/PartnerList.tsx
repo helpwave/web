@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import {clsx} from 'clsx'
 import Image from 'next/image'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
 
@@ -24,15 +24,12 @@ export const PartnerList = ({
       <span className={clsx('textstyle-title-lg')}>{title}</span>
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
-        heights={{
-          tablet: 100,
-          mobile: 100,
-          desktop: 100
-        }} itemWidths={{
+        className={"!h-[100px]"}
+        /*itemWidths={{
           desktop: '20%',
           tablet: '33%',
           mobile: '50%'
-        }}
+        }}*/
         blurColor="transparent"
         autoLoopingTimeOut={1000}
         autoLoopAnimationTime={5000}

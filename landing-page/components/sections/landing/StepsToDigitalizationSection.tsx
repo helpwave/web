@@ -99,7 +99,7 @@ export const StepsToDigitalizationSection = () => {
         <h2 className={clsx('textstyle-title-xl')}><MarkdownInterpreter text={translation.title}/></h2>
         <span className={clsx('textstyle-title-sm')}><MarkdownInterpreter text={translation.description}/></span>
       </div>
-      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} heights={{ tablet: 300 }} blurColor="from-gray-50">
+      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} className={"tablet:h-[300px]"} blurColor="from-gray-50">
         {items.map((value, index) => (
           <div key={index} className={clsx('px-[2.5%] h-full')}>
             <TextImage {...value} className={clsx('h-full overflow-hidden')}/>

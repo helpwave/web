@@ -78,7 +78,7 @@ export const StoriesSliderSection = () => {
       description: translation.step3Description,
       // make attribution https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm#fromView=search&page=1&position=45&uuid=12db1ee2-bec5-40ce-a317-5d240ad56f12
       imageUrl: 'https://cdn.helpwave.de/landing_page/dashboard.jpg',
-      color: 'secondaryDark',
+      color: 'dark',
       onShowMoreClicked: () => setModalValue({
         titleText: translation.step3Title,
         description: translation.step3Description
@@ -88,7 +88,7 @@ export const StoriesSliderSection = () => {
 
   return (
     <SectionBase className={clsx('col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
-      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} heights={{ tablet: 300 }}>
+      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} className={"tablet:h-[300px]"}>
         {items.map((value, index) => (
           <div key={index} className={clsx('px-[2.5%] h-full')}>
             <TextImage {...value} className={clsx('h-full overflow-hidden')}/>

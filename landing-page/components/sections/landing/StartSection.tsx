@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import {clsx} from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'

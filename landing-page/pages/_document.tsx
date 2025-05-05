@@ -1,5 +1,3 @@
-import { config } from '@helpwave/style-themes/twind/config'
-import withNextDocument from '@helpwave/style-themes/twind/next/document'
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document {
@@ -43,4 +41,4 @@ class MyDocument extends Document {
   }
 }
 
-export default withNextDocument(config, MyDocument)
+export default MyDocument

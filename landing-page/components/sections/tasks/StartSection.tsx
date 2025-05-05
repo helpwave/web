@@ -45,7 +45,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
       />
       <div className={clsx('col gap-y-4')}>
         <Link href={demoURL} target="_blank">
-          <Chip className={clsx('row gap-x-2 w-fit items-center')} color="lightPrimary">
+          <Chip className={clsx('row w-fit items-center')} color="default">
             <Helpwave size={24} className={clsx('min-w-[24px] min-h-[24px]')}/>
             <span className={clsx('font-bold')}>helpwave tasks</span>
           </Chip>

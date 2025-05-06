@@ -31,7 +31,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
   const imageURL = 'https://cdn.helpwave.de/landing_page/process.png'
   return (
     <SectionBase
-      className={clsx('row max-tablet:col-reverse gap-8 items-center justify-center w-full')}
+      className={clsx('flex max-tablet:flex-col-reverse tablet:row gap-8 items-center justify-center w-full')}
       outerClassName={clsx('py-24')}
       backgroundColor="white"
     >
@@ -40,7 +40,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
         <h2 className={clsx('textstyle-title-xl')}>{translation.title}</h2>
         <span className={clsx('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
       </div>
-      <Image src={imageURL} alt="" width={0} height={0} className={clsx('max-tablet:w-full w-1/2')}/>
+      <Image src={imageURL} alt="" width={0} height={0} className={clsx('max-tablet:w-full max-tablet:max-w-[400px] w-1/2')}/>
     </SectionBase>
   )
 }

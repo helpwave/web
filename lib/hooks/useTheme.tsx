@@ -1,6 +1,8 @@
+import { useContext } from 'react'
 import type { Dispatch, SetStateAction, PropsWithChildren } from 'react'
 import { createContext, useState, useEffect } from 'react'
-import type { ThemeType } from '../types'
+
+export type ThemeType = 'light' | 'dark'
 
 type ThemeContextType = {
   theme: ThemeType,
@@ -24,7 +26,7 @@ export const ThemeProvider = ({ children, initialTheme = 'light' }: PropsWithChi
       console.warn('ThemeProvider initial state changed: Prefer using useTheme\'s setTheme instead')
       setTheme(initialTheme)
     }
-  }, [initialTheme])
+  }, [initialTheme]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -32,8 +34,11 @@ export const ThemeProvider = ({ children, initialTheme = 'light' }: PropsWithChi
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  )
+  {children}
+  </ThemeContext.Provider>
+)
 }
 
+
+
+export const useTheme = () => useContext(ThemeContext)

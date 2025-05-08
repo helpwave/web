@@ -2,9 +2,9 @@ import type { Preview } from '@storybook/react'
 import { ProvideLanguage } from '../hooks/useLanguage'
 import { ModalRegister } from '../components/modals/ModalRegister'
 import { modalRootName } from '../components/modals/Modal'
-import { ThemeProvider } from '@helpwave/style-themes/react/components/ThemeProvider'
 import '../globals.css'
-import type { ThemeType } from '@helpwave/style-themes/react/types'
+import type { ThemeType } from '../hooks/useTheme'
+import { ThemeProvider } from '../hooks/useTheme'
 
 const colorToHex: Record<ThemeType, string> = {
   dark: '#1A1A1A',

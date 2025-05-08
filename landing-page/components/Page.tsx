@@ -29,7 +29,7 @@ export const Page = ({
 }: PageProps) => {
   return (
     <div {...restProps}
-         className={clsx('w-screen h-screen relative overflow-x-hidden bg-white', outerClassName)}>
+         className={clsx('w-screen h-screen relative overflow-x-hidden bg-background text-on-background', outerClassName)}>
       {header}
       <Head>
         <title>{titleWrapper(pageTitleAddition)}</title>

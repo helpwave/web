@@ -46,8 +46,8 @@ export const Select = <T, >({
                               showDisabledOptions = true,
                               isDisabled,
                               className,
-                              textColor = 'text-gray-700',
-                              hoverColor = 'hover:bg-gray-100',
+                              textColor = 'text-menu-text',
+                              hoverColor = 'hover:brightness-90',
                               additionalItems,
                               selectedDisplayOverwrite,
                             }: SelectProps<T>) => {
@@ -63,24 +63,24 @@ export const Select = <T, >({
       ' use selectedDisplayOverwrite to set your selected text or component')
   }
 
-  const borderColor = 'border-gray-300'
+  const borderColor = 'border-menu-border'
 
   return (
     <div className={clsx(className)}>
       {label && (
         <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
       )}
-      <Menu as="div" className={clsx('relative text-gray-700')}>
+      <Menu as="div" className={clsx('relative text-menu-text')}>
         {({ open }) => (
           <>
             <Menu.Button
               className={clsx(
-                'inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium bg-white',
+                'inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium bg-menu-background text-menu-text',
                 textColor, borderColor,
                 {
                   'rounded-b-lg': !open,
                   [hoverColor]: !isDisabled,
-                  'bg-gray-100 cursor-not-allowed text-gray-500': isDisabled
+                  'bg-disabled-background cursor-not-allowed text-disabled': isDisabled
                 }
               )}
               disabled={isDisabled}
@@ -89,7 +89,7 @@ export const Select = <T, >({
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items
-              className={clsx('absolute w-full z-10 rounded-b-lg bg-white shadow-lg max-h-[500px] overflow-y-auto')}
+              className={clsx('absolute w-full z-10 rounded-b-lg bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto')}
             >
               {(additionalItems ?? []).map((item, index) => (
                 <div key={`additionalItems${index}`}
@@ -106,10 +106,10 @@ export const Select = <T, >({
                     <div
                       className={clsx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0 cursor-pointer',
                         option.className, borderColor, {
-                          'bg-gray-100': option.value === value,
-                          'bg-gray-50': index % 2 === 1,
-                          'text-gray-300 cursor-not-allowed': !!option.disabled,
-                          'hover:bg-gray-100 cursor-pointer': !option.disabled,
+                          'brightness-90': option.value === value,
+                          'brightness-95': index % 2 === 1,
+                          'text-disabled bg-disabled-background cursor-not-allowed': !!option.disabled,
+                          'bg-menu-background text-menu-text hover:brightness-90 cursor-pointer': !option.disabled,
                           'rounded-b-lg': index === filteredOptions.length - 1,
                         })}
                       onClick={() => {

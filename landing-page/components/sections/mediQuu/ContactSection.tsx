@@ -114,7 +114,7 @@ export const ContactSection = ({
   const isValid = !!contactForm.firstname && !!contactForm.lastname && validateEmail(contactForm.email) && !!contactForm.message
 
   return (
-    <SectionBase className={clsx('max-tablet:col tablet:row tablet:justify-between w-full gap-8')} backgroundColor="gray">
+    <SectionBase className={clsx('max-tablet:col tablet:row tablet:justify-between w-full gap-8')} >
       <div className={clsx('col gap-y-1 tablet:w-2/5 desktop:w-1/2')}>
         <span className={clsx('textstyle-title-xl text-primary')}>{translation.contact}</span>
         <span>{translation.contactDescription}</span>
@@ -152,7 +152,7 @@ export const ContactSection = ({
         />
         {contactForm.hasError && (<span className={clsx('text-negative font-semibold my-1')}>{translation.error}</span>)}
         <LoadingButton
-          color="secondary"
+          color="primary"
           onClick={() => {
             if (!isSending) {
               setIsSending(true)

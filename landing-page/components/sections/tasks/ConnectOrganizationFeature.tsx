@@ -52,7 +52,7 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
   return (
     <SectionBase
       className="max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-end tablet:row tablet:justify-between  w-full !max-w-full gap-8 items-center"
-      backgroundColor="gray"
+
       outerClassName="!pr-0"
     >
       <div className="col items-center max-tablet:items-start flex-1 max-tablet:pr-6">

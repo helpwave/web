@@ -36,7 +36,7 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<TalksTransla
         </h1>
       </Link>
 
-      <h4 className={clsx('font-sans text-2xl font-medium mt-2 text-gray-600')}>
+      <h4 className={clsx('font-sans text-2xl font-medium mt-2 text-description')}>
         {translation.fusionOfHealthcareAndComputerScience}
       </h4>
 

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { clsx } from 'clsx'
 
-type BackgroundColor = 'white' | 'black' | 'gray' | 'darkSecondary' | 'darkPrimary'
+type BackgroundColor = 'variant' | 'dark' |  'secondary' | 'primary' | 'none'
 
 type SectionBaseProps = PropsWithChildren & {
   useDefaultStyle?: boolean,
@@ -13,18 +13,17 @@ type SectionBaseProps = PropsWithChildren & {
 export const SectionBase = ({
   children,
   useDefaultStyle = true,
-  backgroundColor = 'gray',
+  backgroundColor = 'none',
   outerClassName,
   className,
 }: SectionBaseProps) => {
   return (
     <div className={clsx('col items-center w-full', {
-      'bg-white': backgroundColor === 'white',
-      'bg-gray-50': backgroundColor === 'gray',
-      'bg-black text-white': backgroundColor === 'black',
-      'bg-[#11243e] text-white': backgroundColor === 'darkSecondary', // TODO make this a variable
-      'bg-primary text-on-primary': backgroundColor === 'darkPrimary',
-      'desktop:px-24 tablet:px-12 max-tablet:px-6 py-16': useDefaultStyle
+      'bg-section-variant text-section-on-variant': backgroundColor === 'variant',
+      'bg-section-dark text-section-on-dark': backgroundColor === 'dark',
+      'bg-secondary text-white': backgroundColor === 'secondary',
+      'bg-primary text-on-primary': backgroundColor === 'primary',
+      'section-padding': useDefaultStyle
     }, outerClassName)}>
       <div
         className={clsx(

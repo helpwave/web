@@ -94,7 +94,7 @@ export const StorySliderSection = () => {
 
   return (
     <SectionBase className={clsx('col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
-      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} autoLoopingTimeOut={15000} blurColor="from-gray-50">
+      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} autoLoopingTimeOut={15000} blurColor="from-background">
         {items.map((value, index) => (
           <div key={index} className={clsx('px-[2.5%] h-full')}>
             <TextImage {...value} className={clsx('h-full overflow-hidden')}/>

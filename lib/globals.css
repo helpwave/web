@@ -181,6 +181,7 @@
 
   --color-purple-50: #EFE6FD;
   --color-purple-100: #CEB0FA;
+  --color-purple-400: #8470c5;
   --color-purple-500: #694BB4;
 
   --color-blue-50: #F6FAFF;
@@ -198,7 +199,7 @@
   --color-red-500: #DC576D;
   --color-red-900: #5C252E;
 
-  --color-primary: #694BB4;
+  --color-primary: var(--color-purple-500);
   --color-on-primary: #FFFFFF;
   --color-secondary: #11243E;
   --color-on-secondary: #FFFFFF;
@@ -247,18 +248,18 @@
   --color-disabled-icon: #555555;
   --color-disabled-outline: #555555;
 
-  --color-button-solid-primary-background: #694BB4;
+  --color-button-solid-primary-background: var(--color-purple-500);
   --color-button-solid-primary-text: #FFFFFF;
   --color-button-solid-primary-icon: #FFFFFF;
   --color-button-solid-secondary-background: #EFE6FD;
-  --color-button-solid-secondary-text: #694BB4;
-  --color-button-solid-secondary-icon: #694BB4;
+  --color-button-solid-secondary-text: var(--color-purple-500);
+  --color-button-solid-secondary-icon: var(--color-purple-500);
   --color-button-solid-tertiary-background: #F2F2F2;
   --color-button-solid-tertiary-icon: #888888;
   --color-button-solid-tertiary-text: #888888;
-  --color-button-outline-primary-outline: #694BB4;
-  --color-button-outline-primary-icon: #694BB4;
-  --color-button-outline-primary-text: #694BB4;
+  --color-button-outline-primary-outline: var(--color-purple-500);
+  --color-button-outline-primary-icon: var(--color-purple-500);
+  --color-button-outline-primary-text: var(--color-purple-500);
   --color-button-solid-positive-background: #69CB81;
   --color-button-solid-positive-icon: #FFFFFF;
   --color-button-solid-positive-text: #FFFFFF;
@@ -274,6 +275,10 @@
   --color-button-text-neutral-icon: #333333;
   --color-button-text-negative-text: #DC576D;
   --color-button-text-negative-icon: #DC576D;
+
+  --color-menu-background: #FFFFFF;
+  --color-menu-text: #1A1A1A;
+  --color-menu-border: #999999;
 
   --color-tag-default-background: #F6FAFF;
   --color-tag-default-text: #1A4080;
@@ -299,7 +304,7 @@
 
   --color-tabel-header-background: #F6FAFF;
 
-  --color-text-image-primary-background: #694BB4;
+  --color-text-image-primary-background: var(--color-purple-500);
   --color-text-image-primary-text: #FFFFFF;
   --color-text-image-secondary-background: #3171DE;
   --color-text-image-secondary-text: #FFFFFF;
@@ -318,6 +323,8 @@
 @layer base {
   /* Here are overrides for the light theme */
   @variant dark {
+    --color-primary: var(--color-purple-400);
+
     --color-surface: #333333;
     --color-on-surface: #EEEEEE;
     --color-surface-variant: #494949;
@@ -343,6 +350,10 @@
     --color-button-text-hover-background: #DDD;
     --color-button-text-neutral-text: #EEEEEE;
     --color-button-text-neutral-icon: #EEEEEE;
+
+    --color-menu-background: #333333;
+    --color-menu-text: #EEEEEE;
+    --color-menu-border: #999999;
 
     --color-tabel-header-background: #F6FAFF;
   }

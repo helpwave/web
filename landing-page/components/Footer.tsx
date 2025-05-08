@@ -9,9 +9,12 @@ import { Select } from '@helpwave/common/components/user-input/Select'
 import pluginConfig from '../utils/CookieConsentConfig'
 import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
+import type { ThemeType, ThemeTypeTranslation } from '@helpwave/common/hooks/useTheme'
+import { defaultThemeTypeTranslation } from '@helpwave/common/hooks/useTheme'
+import { useTheme } from '@helpwave/common/hooks/useTheme'
 
 type Categories = 'socials'| 'general'| 'products'| 'development'
-type FooterTranslation = { [key in Categories]: string }
+type FooterTranslation = { [key in Categories]: string } & ThemeTypeTranslation
 
 const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
   en: {
@@ -19,12 +22,14 @@ const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
     general: 'general',
     products: 'products',
     development: 'development',
+    ...defaultThemeTypeTranslation.en,
   },
   de: {
     socials: 'social',
     general: 'allgemein',
     products: 'produkte',
     development: 'entwicklung',
+    ...defaultThemeTypeTranslation.de,
   }
 }
 
@@ -82,6 +87,7 @@ const grouping: (Categories[])[] = [
 const Footer = () => {
   const year = new Date().getFullYear()
   const { language, setLanguage } = useLanguage()
+  const { theme, setTheme } = useTheme()
   const translation = useTranslation(defaultFooterTranslation, {})
 
   useEffect(() => {
@@ -97,6 +103,7 @@ const Footer = () => {
               <FooterLinkGroup key={category} title={translation[category] } links={linkGroups[category]} />
             ))}
             {index === 2 && (
+              <>
                 <Select<Languages>
                   value={language}
                   onChange={(language) => setLanguage(language)}
@@ -105,6 +112,15 @@ const Footer = () => {
                     { value: 'en', label: 'English' }
                   ]}>
                 </Select>
+                <Select<ThemeType>
+                  value={theme}
+                  onChange={(theme) => setTheme(theme)}
+                  options={[
+                    { value: 'light', label: translation.light },
+                    { value: 'dark', label: translation.dark }
+                  ]}>
+                </Select>
+              </>
             )}
           </div>
         ))}

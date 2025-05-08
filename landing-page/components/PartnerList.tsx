@@ -25,20 +25,20 @@ export const PartnerList = ({
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
         heightClassName="h-[8rem]"
-        widthClassName="max-tablet:w-1/2 tablet:w-1/3 desktop:w-[20%]"
-        blurColor="transparent"
+        widthClassName="max-tablet:w-1/2 tablet:w-1/3 desktop:w-[30%]"
+        blurColor="dark:from-background transparent"
         autoLoopingTimeOut={1000}
         autoLoopAnimationTime={5000}
       >
         {partners.map(partner => (
-          <div key={partner.name} className={clsx('col h-full items-center justify-center')}>
+          <div key={partner.name} className={clsx('col h-full items-center justify-center rounded-lg mx-2 dark:bg-white')}>
             <Image
               key={partner.name}
               width={0}
               height={0}
               src={partner.url}
               alt={partner.name}
-              className={clsx('w-auto max-h-[100px] py-2 px-4')}
+              className={clsx('w-auto max-h-[100px] p-4')}
             />
           </div>
         ))}

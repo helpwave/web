@@ -49,7 +49,7 @@ const defaultExpansionTranslation: Record<Languages, MarketStatsSectionTranslati
 const MarketStatsSection = ({ overwriteTranslation }: PropsForTranslation<MarketStatsSectionTranslation>) => {
   const translation = useTranslation(defaultExpansionTranslation, overwriteTranslation)
   return (
-    <SectionBase backgroundColor="darkSecondary" className={clsx('col text-white pb-24 font-space')}>
+    <SectionBase backgroundColor="secondary" className={clsx('col text-white pb-24 font-space')}>
       <h1 className={clsx('w-full text-3xl text-center font-space')}>{translation.germanyHealthcareSystem}</h1>
       <span className={clsx('text-center textstyle-description')}>{translation.marketPotential}</span>
       <div className={clsx('mt-8 w-full flex flex-wrap gap-y-16 gap-x-32 justify-evenly items-center')}>

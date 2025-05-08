@@ -42,9 +42,10 @@ export const ProvideLanguage = ({ initialLanguage, children }: PropsWithChildren
       console.warn('LanguageProvider initial state changed: Prefer using useLanguages\'s setLanguage instead')
       setLanguage(initialLanguage)
     }
-  }, [initialLanguage])
+  }, [initialLanguage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
+    // TODO set locale of html tag here as well
     setStoredLanguage(language)
   }, [language, setStoredLanguage])
 

@@ -46,9 +46,9 @@ export const Textarea = ({
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-surface text-on-surface">
       {label && (<Label {...label} htmlFor={id} className={clsx('mb-1', label.className)} labelType={label.labelType ?? 'labelSmall'}/>)}
-      <div className={`${clsx('focus-within:border-primary relative', { 'bg-white shadow border-2 border-gray-300 hover:border-primary rounded-lg': defaultStyle })}`}>
+      <div className={`${clsx('focus-within:border-primary relative', { 'shadow border-2 border-gray-300 hover:border-primary rounded-lg': defaultStyle })}`}>
         {headline && (
           <span className={clsx('mx-3 mt-3 block text-gray-700 font-bold')}>
             {headline}
@@ -56,7 +56,7 @@ export const Textarea = ({
         )}
         <textarea
           id={id}
-          className={clsx('pt-0 px-3 border-transparent focus:border-transparent focus:ring-0 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable, 'h-32': defaultStyle, 'mt-3': !headline }, className)}
+          className={clsx('pt-0 px-3 border-transparent focus:border-transparent focus:ring-0 appearance-none border w-full leading-tight focus:outline-none', { 'resize-none': !resizable, 'h-32': defaultStyle, 'mt-3': !headline }, className)}
           onChange={(event) => {
             const value = event.target.value
             restartTimer(() => {

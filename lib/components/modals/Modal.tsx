@@ -131,7 +131,7 @@ export const Modal = ({
         />
       )}
       <div
-        className={clsx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
+        className={clsx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 col p-4 bg-white text-black rounded-xl shadow-xl', modalClassName)}>
         <ModalHeader {...modalHeaderProps} />
         {children}
       </div>

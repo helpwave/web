@@ -50,14 +50,14 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
 export const BrandDescriptionsSection = () => {
   const translation = useTranslation(defaultMediQuuBrandDescriptionTranslation)
   return (
-    <SectionBase className={clsx('col gap-8 justify-center')} backgroundColor="gray">
+    <SectionBase className={clsx('col gap-8 justify-center')} >
       <Tile
         title={{ value: translation.aboutMediQuuTitle, className: 'textstyle-title-lg' }}
         description={{ value: translation.aboutMediQuuDescription, className: '' }}
         prefix={(
-          <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64} />
+          <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64} className="p-4 rounded-lg dark:bg-white"/>
         )}
-        className={clsx('bg-white rounded-3xl px-6 max-tablet:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md max-tablet:col tablet:col')}
+        className={clsx('bg-surface text-on-surface rounded-3xl px-6 max-tablet:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md max-tablet:col tablet:col')}
       />
       <Tile
         title={{ value: translation.aboutHelpwaveTitle, className: 'textstyle-title-lg' }}

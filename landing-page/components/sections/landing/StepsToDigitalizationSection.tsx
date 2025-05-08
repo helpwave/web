@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
@@ -24,7 +23,7 @@ type StepsToDigitalizationSectionTranslation = {
 
 const defaultStepsToDigitalizationSectionTranslation: Record<Languages, StepsToDigitalizationSectionTranslation> = {
   en: {
-    title: '\\secondary{Digital excellence} in\\newline 3 simple steps',
+    title: '\\primary{Digital excellence} in\\newline 3 simple steps',
     description: 'Our approach is to implement more efficient and fun\\newline processes in a simple yet powerful way.',
     step: 'Step',
     step1Title: 'Define the mission',
@@ -35,7 +34,7 @@ const defaultStepsToDigitalizationSectionTranslation: Record<Languages, StepsToD
     step3Description: 'Regulatory burdens and high entry barriers make it difficult for small companies to enter the market, leading to a lack of competition. helpwave is here to change that. We provide a platform that invites everyone to the table, not just only the big players.'
   },
   de: {
-    title: '\\secondary{Digitale Exelenz} in\\newline 3 Schritten',
+    title: '\\primary{Digitale Exelenz} in\\newline 3 Schritten',
     description: 'Unser Ansatz ist es, effizientere Prozesse zu implementieren, die Spaß machen\\newline - und das auf einfache, aber wirkungsvolle Weise.',
     step: 'Step',
     step1Title: 'Definieren Sie die Mission', // TODO update
@@ -94,20 +93,20 @@ export const StepsToDigitalizationSection = () => {
   ]
 
   return (
-    <SectionBase className={clsx('col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
-      <div className={clsx('col items-center text-center gap-y-2')}>
-        <h2 className={clsx('textstyle-title-xl')}><MarkdownInterpreter text={translation.title}/></h2>
-        <span className={clsx('textstyle-title-sm')}><MarkdownInterpreter text={translation.description}/></span>
+    <SectionBase className="col gap-y-8 w-full !max-w-[1600px]" outerClassName="!px-0">
+      <div className="col items-center text-center">
+        <h2 className="textstyle-title-xl"><MarkdownInterpreter text={translation.title}/></h2>
+        <span className="textstyle-title-sm"><MarkdownInterpreter text={translation.description}/></span>
       </div>
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
         heightClassName="h-[24rem] tablet:max-desktop:h-[19rem]"
         widthClassName="w-1/2 max-tablet:w-[75%]"
-        blurColor="from-gray-50"
+        blurColor="from-background"
       >
         {items.map((value, index) => (
-          <div key={index} className={clsx('px-[2.5%] h-full')}>
-            <TextImage {...value} className={clsx('h-full overflow-hidden')}/>
+          <div key={index} className="px-[2.5%] h-full">
+            <TextImage {...value} className="h-full overflow-hidden"/>
           </div>
         ))}
       </Carousel>
@@ -122,7 +121,7 @@ export const StepsToDigitalizationSection = () => {
         )}
         onBackgroundClick={() => setModalValue(undefined)}
         onCloseClick={() => setModalValue(undefined)}
-        modalClassName={clsx('max-w-[600px] max-tablet:max-w-[90%] w-full')}
+        modalClassName="max-w-[600px] max-tablet:max-w-[90%] w-full"
       />
     </SectionBase>
   )

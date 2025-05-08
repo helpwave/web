@@ -76,7 +76,7 @@ const ControlledInput = ({
         value={value}
         id={id}
         type={type}
-        className={clsx('block bg-surface px-3 py-2 rounded-md w-full border-2 border-gray-200 hover:border-primary focus:outline-none focus:border-primary focus:ring-primary', className)}
+        className={clsx('block bg-surface text-on-surface px-3 py-2 rounded-md w-full border-2 border-gray-200 hover:border-primary focus:outline-none focus:border-primary focus:ring-primary', className)}
         onBlur={event => {
           if (onBlur) {
             onBlur(event)

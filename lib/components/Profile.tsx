@@ -89,7 +89,7 @@ export const Profile = ({
   return (
     <div
       {...divProps}
-      className={clsx(`col items-center text-center rounded-3xl p-3 pb-4 bg-white w-min shadow-around-lg`, className)}
+      className={clsx(`col items-center text-center rounded-3xl p-3 pb-4 bg-white text-gray-900 w-min shadow-around-lg`, className)}
     >
       <div className={clsx('relative mb-6')}>
         <div className={clsx('relative rounded-xl row items-center justify-center overflow-hidden', imageClassName)}>

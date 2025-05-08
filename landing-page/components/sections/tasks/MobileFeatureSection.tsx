@@ -36,8 +36,8 @@ export const MobileFeatureSection = ({ overwriteTranslation }: PropsForTranslati
 
   return (
     <SectionBase
-      className={clsx('max-tablet:flex max-tablet:flex-wrap-reverse justify-center tablet:row tablet:justify-between w-full gap-8 text-white')}
-      backgroundColor="darkSecondary"
+      className={clsx('max-tablet:flex max-tablet:flex-wrap-reverse justify-center tablet:row tablet:justify-between w-full gap-8')}
+      backgroundColor="secondary"
       outerClassName={clsx('!pb-0')}
     >
       <div className={clsx('col gap-y-2 pb-16 desktop:w-3/5 justify-center')}>

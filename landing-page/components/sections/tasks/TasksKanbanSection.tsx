@@ -33,7 +33,7 @@ export const TasksKanbanSection = ({ overwriteTranslation }: PropsForTranslation
   return (
     <SectionBase
       className={clsx('max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center')}
-      backgroundColor="white"
+      backgroundColor="variant"
     >
       <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0')}>
         <div className={clsx('col gap-y-2')}>
@@ -53,7 +53,7 @@ export const TasksKanbanSection = ({ overwriteTranslation }: PropsForTranslation
           alt=""
           width={0}
           height={0}
-          className={clsx('w-fit desktop:max-h-[70vh]')}
+          className={clsx('w-fit desktop:max-h-[70vh] p-4 rounded-lg dark:bg-white')}
         />
       </div>
     </SectionBase>

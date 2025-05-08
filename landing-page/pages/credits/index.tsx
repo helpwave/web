@@ -83,18 +83,18 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
   return (
     <Page pageTitleAddition={translation.title}>
       <SectionBase
-        className={clsx('row max-tablet:!flex flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center')}
-        backgroundColor="white"
+        className="row max-tablet:!flex flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center"
+        backgroundColor="variant"
       >
-        <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0')}>
-          <div className={clsx('col gap-y-2')}>
-            <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
-            <span className={clsx('font-space font-semibold')}><MarkdownInterpreter
+        <div className="col gap-y-2 pb-16 max-tablet:pb-0">
+          <div className="col gap-y-2">
+            <h1 className="textstyle-title-2xl">{translation.title}</h1>
+            <span className="font-space font-semibold"><MarkdownInterpreter
               text={translation.text}/></span>
           </div>
         </div>
         <div
-          className={clsx('row bottom-0 justify-center rounded-l-3xl max-tablet:w-full min-w-[50%] z-10')}
+          className="row bottom-0 justify-center rounded-l-3xl max-tablet:w-full min-w-[50%] z-10"
         >
           <Image
             src={imageUrl}
@@ -106,7 +106,7 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
         </div>
       </SectionBase>
 
-      <SectionBase backgroundColor="gray" className={clsx('w-full')}>
+      <SectionBase  className={clsx('w-full')}>
         <h2 className={clsx('textstyle-title-normal')}>Freepik</h2>
         <div className={clsx('grow col items-center min-w-50 items-center gap-y-4')}>
           {
@@ -121,7 +121,7 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
 
       </SectionBase>
 
-      <SectionBase backgroundColor="white" className={clsx('col gap-y-2 w-full')}>
+      <SectionBase backgroundColor="variant" className={clsx('col gap-y-2 w-full')}>
         <h2 className={clsx('textstyle-title-md')}>{translation.flaticon}</h2>
         {flaticonCredits.map(({ name, author, link }) => (
           <Link key={name + author} href={link} title={name} className={clsx('underline')} target="_blank">

@@ -85,7 +85,7 @@ const defaultStoryTranslation: Record<Languages, StoryTranslation> = {
 const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTranslation>) => {
   const translation = useTranslation(defaultStoryTranslation, overwriteTranslation)
   return (
-    <SectionBase className={clsx('tablet:flex flex-wrap max-tablet:flex flex-wrap w-full relative gap-16')} backgroundColor="gray">
+    <SectionBase className={clsx('tablet:flex flex-wrap max-tablet:flex flex-wrap w-full relative gap-16')} >
       <StoryBlock
         pill={translation.innovation}
         header={translation.innovationHeader}

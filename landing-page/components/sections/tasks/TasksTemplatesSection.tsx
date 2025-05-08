@@ -33,7 +33,7 @@ export const TasksTemplatesSection = ({ overwriteTranslation }: PropsForTranslat
   return (
     <SectionBase
       className={clsx('max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center')}
-      backgroundColor="darkSecondary"
+      backgroundColor="secondary"
       outerClassName={clsx('py-24')}
     >
       <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0 overflow-hidden break-words')}>

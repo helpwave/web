@@ -57,6 +57,7 @@ const items: SubLinkType[] = [
   {
     name: 'support',
     url: 'https://support.helpwave.de',
+    external: true
   },
   {
     name: 'team',
@@ -101,7 +102,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="absolute top-0 z-[50] row justify-center w-screen bg-gray-50 text-black section-padding-x">
+      <div className="absolute top-0 z-[50] row justify-center w-screen section-padding-x">
         <nav className="row pt-2 items-center justify-between w-full max-w-[1200px]">
           <Link href={homeURL} className="row gap-x-1 items-center text-2xl">
             <Helpwave/>
@@ -112,11 +113,12 @@ const Header = () => {
               {items.map(({
                             name,
                             url,
+                            external,
                             subpage,
                           }) => (
                 <div key={name}>
                   {subpage === undefined ? (
-                    <Link href={url}>
+                    <Link href={url} target={external ? '_blank' : undefined}>
                       <span className="textstyle-navigation-item">
                         {translation[name]}
                       </span>
@@ -139,7 +141,7 @@ const Header = () => {
                                       external: subPageExternal,
                                     }) =>
                         (
-                          <Link key={subPageName} href={subPageExternal ? subPageUrl : url + subPageUrl}>
+                          <Link key={subPageName} href={subPageExternal ? subPageUrl : url + subPageUrl} target={subPageExternal ? '_blank' : undefined}>
                             <MenuItem alignment="left">
                             <span className="textstyle-navigation-item">
                               {translation[subPageName]}
@@ -169,7 +171,7 @@ const Header = () => {
       </div>
 
       {navbarOpen && (
-        <div className="absolute w-screen h-screen z-[100] bg-gray-50 text-black">
+        <div className="absolute w-screen h-screen z-[100] bg-background text-on-background">
           <div className="text-center content-center fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <button onClick={() => setNavbarOpen(false)} className="mb-5">
               <X size={64}/>

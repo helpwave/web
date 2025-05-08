@@ -8,6 +8,7 @@ import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import '../globals.css'
 import { Inter, Space_Grotesk } from 'next/font/google'
+import { ThemeProvider } from '@helpwave/common/hooks/useTheme'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -36,14 +37,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         `}</style>
       </Head>
       <QueryClientProvider client={queryClient}>
-        <ProvideLanguage initialLanguage={defaultLanguage}>
-          <ModalRegister>
-            <div className="font-sans" id={modalRootName}>
-              <Component {...pageProps} />
-              <Toaster/>
-            </div>
-          </ModalRegister>
-        </ProvideLanguage>
+        <ThemeProvider>
+          <ProvideLanguage initialLanguage={defaultLanguage}>
+            <ModalRegister>
+              <div className="font-sans" id={modalRootName}>
+                <Component {...pageProps} />
+                <Toaster/>
+              </div>
+            </ModalRegister>
+          </ProvideLanguage>
+        </ThemeProvider>
       </QueryClientProvider>
     </>
   )

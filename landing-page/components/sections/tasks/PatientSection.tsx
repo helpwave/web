@@ -34,7 +34,7 @@ export const PatientSection = ({ overwriteTranslation }: PropsForTranslation<Pat
     <SectionBase
       outerClassName={clsx('tablet:pb-0 desktop:pb-0')}
       className={clsx('max-tablet:flex max-tablet:flex-wrap max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center')}
-      backgroundColor="gray"
+
     >
       <div
         className={clsx('row items-end justify-center rounded-l-3xl max-tablet:w-full w-2/5 z-10 min-w-[250px]')}

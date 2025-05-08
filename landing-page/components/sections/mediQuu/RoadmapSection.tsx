@@ -1,6 +1,5 @@
 import { type Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import clsx from 'clsx'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type RoadmapItem = {
@@ -83,15 +82,15 @@ const defaultRoadmapTranslation: Record<Languages, RoadmapTranslation> = {
 export const RoadmapSection = () => {
   const translation = useTranslation(defaultRoadmapTranslation)
   return (
-    <SectionBase  className={clsx('col')}>
-      <span className={clsx('textstyle-title-lg text-primary mb-1')}>{translation.title}</span>
-      <span className={clsx('textstyle-description mb-1')}>{translation.description}</span>
-      <div className={clsx('mt-4 w-full flex flex-wrap justify-start gap-4')}>
+    <SectionBase className="col w-full">
+      <span className="textstyle-title-lg text-primary mb-1">{translation.title}</span>
+      <span className="textstyle-description mb-1">{translation.description}</span>
+      <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 mt-4 w-full justify-start gap-4">
         {translation.roadmap.map(value => (
-          <div key={value.name} className={clsx('w-full desktop:max-w-[300px] bg-surface text-on-surface shadow-md rounded-lg p-5 hover:shadow-lg transition-shadow transition-1000')}>
-            <span className={clsx('textstyle-title-normal block')}>{value.name}</span>
-            <span className={clsx('textstyle-label-sm block text-secondary dark:text-primary mb-2')}>{value.start}</span>
-            <span className={clsx('text-description')}>{value.description}</span>
+          <div key={value.name} className="w-full bg-surface text-on-surface shadow-md rounded-lg p-5 hover:shadow-lg transition-shadow transition-1000">
+            <span className="textstyle-title-normal block">{value.name}</span>
+            <span className="textstyle-label-sm block text-primary mb-2">{value.start}</span>
+            <span className="text-description">{value.description}</span>
           </div>
         ))}
       </div>

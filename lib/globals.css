@@ -347,7 +347,10 @@
     --color-icon-highlight: #3272DF;
     --color-description: #999999;
 
-    --color-button-text-hover-background: #DDD;
+    --color-disabled-background: #555555;
+    --color-disabled-text: #888888;
+
+    --color-button-text-hover-background: #383838;
     --color-button-text-neutral-text: #EEEEEE;
     --color-button-text-neutral-icon: #EEEEEE;
 
@@ -452,7 +455,7 @@
   }
 
   .textstyle-label-lg {
-    @apply text-lg font-semibold;
+    @apply text-gray-700 text-lg font-semibold;
   }
 
   .textstyle-label-md {

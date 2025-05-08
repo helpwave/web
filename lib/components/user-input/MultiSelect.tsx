@@ -97,7 +97,7 @@ export const MultiSelect = <T, >({
     hintText ?? translation.select
     : <span>{`${selectedItems.length} ${translation.selected}`}</span>
 
-  const borderColor = 'border-gray-300'
+  const borderColor = 'border-menu-border'
 
   return (
     <div className={clsx(className)}>
@@ -109,10 +109,10 @@ export const MultiSelect = <T, >({
         alignment="t_"
         trigger={(onClick, ref) => (
           <div ref={ref} onClick={disabled ? undefined : onClick}
-               className={clsx(borderColor, 'inline-w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium cursor-pointer',
+               className={clsx(borderColor, 'bg-menu-background text-menu-text inline-w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium',
                  {
-                   'hover:bg-gray-100 hover:border-primary': !disabled,
-                   'bg-gray-100 cursor-not-allowed text-gray-500': disabled
+                   'hover:brightness-90 hover:border-primary cursor-pointer': !disabled,
+                   'bg-disabled-background text-disabled cursor-not-allowed': disabled
                  },
                  triggerClassName)}
           >
@@ -125,14 +125,14 @@ export const MultiSelect = <T, >({
         )}
       >
         {enableSearch && (
-          <div key="selectSearch" className={clsx('row gap-x-2 items-center px-4 py-2')}>
+          <div key="selectSearch" className={clsx('row gap-x-2 items-center px-2 py-2')}>
             <Input autoFocus={true} value={searchText} onChange={setSearchText}/>
             <Search/>
           </div>
         )}
         {filteredOptions.map((option, index) => (
           <MenuItem key={`item${index}`} className={clsx({
-            'text-gray-300 cursor-not-allowed': !!option.disabled,
+            'cursor-not-allowed !bg-disabled-background !text-disabled-text hover:brightness-100': !!option.disabled,
             'cursor-pointer': !option.disabled,
           })}
           >

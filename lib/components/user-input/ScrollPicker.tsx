@@ -34,12 +34,12 @@ type Direction = 1 | -1
  * A component for picking an option by scrolling
  */
 export const ScrollPicker = <T, >({
-  options,
-  mapping,
-  selected,
-  onChange = noop,
-  disabled = false,
-}: ScrollPickerProps<T>) => {
+                                    options,
+                                    mapping,
+                                    selected,
+                                    onChange = noop,
+                                    disabled = false,
+                                  }: ScrollPickerProps<T>) => {
   let selectedIndex = 0
   if (selected && options.indexOf(selected) !== -1) {
     selectedIndex = options.indexOf(selected)
@@ -68,7 +68,7 @@ export const ScrollPicker = <T, >({
 
   const containerHeight = itemHeight * (itemsShownCount - 2) + distance * (itemsShownCount - 2 + 1)
 
-  const getDirection = useCallback((targetIndex: number, currentIndex:number, transition: number, length: number): Direction => {
+  const getDirection = useCallback((targetIndex: number, currentIndex: number, transition: number, length: number): Direction => {
     if (targetIndex === currentIndex) {
       return transition > 0 ? up : down
     }
@@ -79,7 +79,7 @@ export const ScrollPicker = <T, >({
     return distanceForward >= length / 2 ? down : up
   }, [])
 
-  const animate = useCallback((timestamp: number, startTime: number|undefined) => {
+  const animate = useCallback((timestamp: number, startTime: number | undefined) => {
     setAnimation((prevState) => {
       const {
         targetIndex,
@@ -165,25 +165,26 @@ export const ScrollPicker = <T, >({
     requestAnimationFrame((timestamp) => animate(timestamp, lastTimeStamp))
   })
 
-  const interpolateColor = (transition: number, index: number, itemsCount: number) => {
-    const max = 220
+  const opacity = (transition: number, index: number, itemsCount: number) => {
+    const max = 100
     const min = 0
     const distance = max - min
 
-    let interpolatedColor = min
+    let opacityValue = min
     const unitTransition = clamp((transition) / 0.5)
     if (index === 1 || index === itemsCount - 2) {
       if (index === 1 && transition > 0) {
-        interpolatedColor += Math.floor(unitTransition * distance)
+        opacityValue += Math.floor(unitTransition * distance)
       }
       if (index === itemsCount - 2 && transition < 0) {
-        interpolatedColor += Math.floor(unitTransition * distance)
+        opacityValue += Math.floor(unitTransition * distance)
       }
     } else {
-      interpolatedColor = max
+      opacityValue = max
     }
 
-    return `rgb(${[interpolatedColor, interpolatedColor, interpolatedColor].join(',')})`
+    // TODO this is not the right value for the bottom entry
+    return clamp(1- (opacityValue / max))
   }
 
   return (
@@ -198,24 +199,35 @@ export const ScrollPicker = <T, >({
         }
       }}
     >
-      <div className={clsx(`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2`)}>
-        <div className={clsx(`absolute z-[1] top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 h-[${itemHeight}px] w-full min-w-[40px] border border-y-2 border-x-0 border-[#00000033]`)}/>
+      <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
         <div
-          className={clsx(`col gap-y-[${distance}px] select-none`)}
-          style={{ transform: `translateY(${-transition * (distance + itemHeight)}px)` }}
+          className="absolute z-[1] top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 w-full min-w-[40px] border border-y-2 border-x-0 border-[#00000033]"
+          style={{ height: `${itemHeight}px` }}
+        />
+        <div
+          className={clsx(`col select-none`)}
+          style={{
+            transform: `translateY(${-transition * (distance + itemHeight)}px)`,
+            columnGap: `${distance}px`,
+          }}
         >
           {shownItems.map(({ name, index }, arrayIndex) => (
             <div
               key={index}
               className={clsx(
-                `col items-center justify-center max-h-[${itemHeight}px] h-[${itemHeight}px] rounded-md`,
+                `col items-center justify-center rounded-md`,
                 {
                   'text-primary font-bold': currentIndex === index,
+                  'text-on-background': currentIndex === index,
                   'cursor-pointer': !disabled,
                   'cursor-not-allowed': disabled,
                 }
               )}
-              style={currentIndex !== index ? { color: interpolateColor(transition, arrayIndex, shownItems.length) } : {}}
+              style={{
+                opacity: currentIndex !== index ? opacity(transition, arrayIndex, shownItems.length) : undefined,
+                height: `${itemHeight}px`,
+                maxHeight: `${itemHeight}px`,
+              }}
               onClick={() => !disabled && setAnimation(prevState => ({ ...prevState, targetIndex: index }))}
             >
               {name}

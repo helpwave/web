@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
 import titleWrapper from '@/utils/titleWrapper'
+// import '@helpwave/common/globals.css' TODO import here when customer is adopting dark mode
 
 const inter = Inter({
   subsets: ['latin'],

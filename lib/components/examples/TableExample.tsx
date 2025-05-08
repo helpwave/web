@@ -82,6 +82,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
           }} />,
           <TextButton
             key="delete"
+            color="negative"
             onClick={() => {
               const newData = data.filter(value => value.id !== dataObject.id)
               setData(newData)

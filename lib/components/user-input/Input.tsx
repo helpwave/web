@@ -162,7 +162,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
       id={id}
       {...restProps}
       className={clsx(
-        'block bg-surface text-on-surface px-[0.675rem] py-2 rounded-md w-full border-2 border-gray-300 shadow-sm focus:outline-none focus:ring-1',
+        'block bg-surface text-on-surface px-3 py-2 rounded-md w-full border-2 border-gray-200 hover:border-primary focus:outline-none focus:border-primary focus:ring-primary',
         {
           'focus:border-primary focus:ring-primary': !errorText,
           'focus:border-negative focus:ring-negative text-negative': !!errorText,
@@ -175,9 +175,9 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
   return (
     <div className={clsx('flex flex-col gap-y-1', containerClassName)}>
       {labelText && (
-        <label htmlFor={id} className={clsx('text-gray-700', labelClassName)}>
+        <label htmlFor={id} className={clsx('textstyle-label-md', labelClassName)}>
           {labelText}
-          {required && <span className="text-primary">*</span>}
+          {required && <span className="text-primary font-bold">*</span>}
         </label>
       )}
       {input}

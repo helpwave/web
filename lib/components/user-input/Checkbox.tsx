@@ -76,9 +76,10 @@ const ControlledCheckbox = ({
         checked={checked}
         disabled={disabled}
         id={id}
-        className={clsx(usedSizeClass, `items-center border-2 border-gray-300 rounded outline-none focus:border-primary`, {
-          'text-gray-400': disabled,
-          'bg-primary/30 border-primary  text-primary': checked === true || checked === 'indeterminate',
+        className={clsx(usedSizeClass, `items-center border-2 rounded outline-none focus:border-primary`, {
+          'text-disabled-text border-disabled-text': disabled,
+          'border-on-background': !disabled,
+          'bg-primary/30 border-primary text-primary': checked === true || checked === 'indeterminate',
           'hover:border-gray-400 focus:hover:border-primary': !checked
         }, className)}
       >

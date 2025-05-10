@@ -23,7 +23,7 @@ export const HelpwaveBadge = ({
   return (
     <Tile
       prefix={(<Helpwave size={iconSize} />)}
-      title={{ value: title, className: size === 'small' ? clsx('textstyle-title-lg text-base') : clsx('textstyle-title-xl') }}
+      title={{ value: title, className: size === 'small' ? 'textstyle-title-lg text-base' : 'textstyle-title-xl' }}
       className={clsx(
         {
           'px-2 py-1 rounded-md': size === 'small',

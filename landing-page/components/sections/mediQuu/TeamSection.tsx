@@ -121,10 +121,10 @@ export const TeamSection = () => {
   const translation = useTranslation(defaultTeamSectionTranslation)
   const usedLanguage = useLanguage().language
   return (
-    <SectionBase className={clsx('col')}>
-      <span className={clsx('textstyle-title-xl text-primary mb-1')}>{translation.title}</span>
+    <SectionBase className="col">
+      <span className="textstyle-title-xl text-primary mb-1">{translation.title}</span>
       <span>{translation.subTitle}</span>
-      <div className={clsx('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-8')}>
+      <div className="flex flex-wrap justify-around gap-x-8 gap-y-6 mt-8">
         {contactsHelpwave.map(value => {
           const profileProps = { ...value }
           delete profileProps.translatedInfo
@@ -138,7 +138,7 @@ export const TeamSection = () => {
           )
         })}
       </div>
-      <div className={clsx('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-6')}>
+      <div className="flex flex-wrap justify-around gap-x-8 gap-y-6 mt-6">
         {contactsMediquu.map(value => {
           const profileProps = { ...value }
           delete profileProps.translatedInfo

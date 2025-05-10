@@ -133,7 +133,7 @@ export const OrganizationDetail = ({
   return (
     <div
       key={contextState.organizationId}
-      className={clsx('col py-4 px-6')}
+      className="col py-4 px-6"
     >
       <ConfirmDialog
         id="organizationDetail-DeleteDialog"
@@ -173,7 +173,7 @@ export const OrganizationDetail = ({
         }}
       />
       <ColumnTitle title={translation.organizationDetail}/>
-      <div className={clsx('col gap-y-4 max-w-[500px]')}>
+      <div className="col gap-y-4 max-w-[500px]">
         <OrganizationForm
           organizationForm={organizationForm}
           onChange={(organizationForm, shouldUpdate) => {
@@ -191,20 +191,20 @@ export const OrganizationDetail = ({
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
           organizationId={contextState.organizationId}
         />
-        <div className={clsx('row justify-end')}>
+        <div className="row justify-end">
           <SolidButton
-            className={clsx('w-auto')}
+            className="w-auto"
             onClick={() => isCreatingNewOrganization ? createOrganization(organizationForm.organization) : updateOrganization(organizationForm.organization)}
             disabled={!organizationForm.isValid}>
             {isCreatingNewOrganization ? translation.create : translation.update}
           </SolidButton>
         </div>
         <div className={clsx('col justify-start', { hidden: isCreatingNewOrganization })}>
-          <span className={clsx('textstyle-title-normal')}>{translation.dangerZone}</span>
-          <span className={clsx('textstyle-description')}>{translation.dangerZoneText}</span>
+          <span className="textstyle-title-normal">{translation.dangerZone}</span>
+          <span className="textstyle-description">{translation.dangerZoneText}</span>
           <button
             onClick={() => setIsShowingConfirmDialog(true)}
-            className={clsx('text-negative font-bold text-left')}
+            className="text-negative font-bold text-left"
           >
             {translation.deleteOrganization}
           </button>

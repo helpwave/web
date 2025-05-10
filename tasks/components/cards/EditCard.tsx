@@ -26,7 +26,7 @@ export const EditCard = ({
             event.stopPropagation()
             onEditClick()
           }}
-          className={clsx('col justify-center items-center px-2 bg-gray-100 hover:bg-gray-200 rounded-md')}
+          className="col justify-center items-center px-2 bg-gray-100 hover:bg-gray-200 rounded-md"
         >
           <Pencil size={24}/>
         </button>

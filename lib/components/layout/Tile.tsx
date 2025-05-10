@@ -23,7 +23,7 @@ export const Tile = ({
   return (
     <div className={clsx('row gap-x-4 w-full items-center', className)}>
       {prefix}
-      <div className={clsx('col w-full')}>
+      <div className="col w-full">
         <span className={clsx(title.className)}>{title.value}</span>
         {!!description &&
           <span className={clsx(description.className ?? 'textstyle-description')}>{description.value}</span>}

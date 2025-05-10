@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SectionBase } from '@/components/sections/SectionBase'
@@ -65,7 +64,7 @@ const PartnerSection = () => {
   const translation = useTranslation(defaultPartnerSectionTranslation)
 
   return (
-    <SectionBase className={clsx('gap-16 select-none justify-between items-center w-full')} >
+    <SectionBase className="gap-16 select-none justify-between items-center w-full" >
       <PartnerList title={translation.title} partners={images}/>
     </SectionBase>
   )

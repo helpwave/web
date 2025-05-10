@@ -64,7 +64,7 @@ export const DatePicker = ({
 
   return (
     <div className={clsx('col gap-y-4', className)}>
-      <div className={clsx('row items-center justify-between h-7')}>
+      <div className="row items-center justify-between h-7">
         <TextButton
           className={clsx('row gap-x-1 items-center cursor-pointer select-none', {
             'text-disabled-text': displayMode !== 'day',
@@ -75,7 +75,7 @@ export const DatePicker = ({
           <ChevronDown size={16}/>
         </TextButton>
         {displayMode === 'day' && (
-          <div className={clsx('row justify-end')}>
+          <div className="row justify-end">
             <SolidButton
               size="small"
               color="primary"
@@ -122,7 +122,7 @@ export const DatePicker = ({
               onChange(date)
             }}
           />
-          <div className={clsx('mt-2')}>
+          <div className="mt-2">
             <TextButton
               onClick={() => {
                 const newDate = new Date()

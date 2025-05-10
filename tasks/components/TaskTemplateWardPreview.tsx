@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -27,7 +27,6 @@ const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateW
 
 export type TaskTemplateWardPreviewProps = {
   wardId?: string,
-  columns?: number,
 }
 
 /**
@@ -36,7 +35,6 @@ export type TaskTemplateWardPreviewProps = {
 export const TaskTemplateWardPreview = ({
   overwriteTranslation,
   wardId,
-  columns = 3
 }: PropsForTranslation<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
   const translation = useTranslation(defaultTaskTemplateWardPreviewTranslation, overwriteTranslation)
   const router = useRouter()
@@ -52,21 +50,21 @@ export const TaskTemplateWardPreview = ({
     <LoadingAndErrorComponent
       isLoading={isLoading || !context.state.wardId}
       hasError={isError}
-      loadingProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-      errorProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+      loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
+      errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
     >
       {taskTemplates && (
-        <div className={clsx('col')}>
-          <div className={clsx('row justify-between items-center mb-4')}>
-            <span className={clsx('textstyle-table-name')}>{translation.taskTemplates(taskTemplates.length)}</span>
+        <div className="col">
+          <div className="row justify-between items-center mb-4">
+            <span className="textstyle-table-name">{translation.taskTemplates(taskTemplates.length)}</span>
             <SolidButton
-              className={clsx('w-auto')}
+              className="w-auto"
               onClick={() => router.push(`/ward/${wardId}/templates`)}
             >
               {translation.showAllTaskTemplates}
             </SolidButton>
           </div>
-          <div className={clsx(`grid grid-cols-${columns} gap-4`)}>
+          <div className="grid mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-4">
             {taskTemplates.map((taskTemplate, index) => (
               <TaskTemplateCard
                 key={index}

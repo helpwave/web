@@ -1,5 +1,4 @@
 import { type PropsWithChildren } from 'react'
-import clsx from 'clsx'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user-input/Select'
@@ -59,14 +58,14 @@ export const LanguageModal = ({
       }}
       {...modalProps}
     >
-      <div className={clsx('w-[320px]')}>
+      <div className="w-[320px]">
         <Select
-            className={clsx('mt-2')}
+            className="mt-2"
             value={language}
             options={Object.entries(languageDetails).map(([tag, name]) => ({ label: name, value: tag }))}
             onChange={(language: string) => setLanguage(language as Languages)}
           />
-          <div className={clsx('row mt-3 gap-x-4 justify-end')}>
+          <div className="row mt-3 gap-x-4 justify-end">
             <SolidButton autoFocus color="positive" onClick={onDone}>
               {translation.done}
             </SolidButton>

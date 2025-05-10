@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -78,7 +78,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
 
       <LoadingAndErrorComponent
         isLoading={isLoading || !user || !organizations}
-        loadingProps={{ classname: clsx('!h-full') }}
+        loadingProps={{ classname: '!h-full' }}
       >
         {organizations && (
           <TwoColumn

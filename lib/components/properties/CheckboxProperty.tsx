@@ -1,5 +1,4 @@
 import { Check } from 'lucide-react'
-import clsx from 'clsx'
 import { noop } from '../../util/noop'
 import { Checkbox } from '../user-input/Checkbox'
 import type { Languages } from '../../hooks/useLanguage'
@@ -48,7 +47,7 @@ export const CheckboxProperty = ({
       readOnly={readOnly}
       icon={<Check size={16}/>}
       input={() => (
-        <div className={clsx('row py-2 px-4 items-center')}>
+        <div className="row py-2 px-4 items-center">
           <Checkbox
             // TODO make bigger as in #904
             checked={value ?? true}

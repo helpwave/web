@@ -12,7 +12,7 @@ export const LoadingButton = ({ isLoading = false, size = 'medium', onClick, ...
   const paddingClass = ButtonSizePaddings[size]
 
   return (
-    <div className={clsx('inline-block relative')}>
+    <div className="inline-block relative">
       {
         isLoading && (
           <div className={clsx('absolute inset-0 row items-center justify-center bg-white/40', paddingClass)}>

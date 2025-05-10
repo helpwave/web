@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from 'react'
-import clsx from 'clsx'
 import type { SolidButtonColor } from '../Button'
 import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
@@ -72,7 +71,7 @@ export const ConfirmDialog = ({
   return (
     <Modal {...restProps}>
       {children}
-      <div className={clsx('row mt-3 gap-x-4 justify-end')}>
+      <div className="row mt-3 gap-x-4 justify-end">
         {onCancel && (
           <SolidButton
             color={buttonOverwrites?.[0].color ?? 'primary'}

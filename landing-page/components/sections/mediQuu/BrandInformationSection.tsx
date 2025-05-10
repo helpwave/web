@@ -1,6 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import clsx from 'clsx'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import Image from 'next/image'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
@@ -50,27 +49,27 @@ const defaultMediQuuBrandDescriptionTranslation: Record<Languages, MediQuuBrandD
 export const BrandDescriptionsSection = () => {
   const translation = useTranslation(defaultMediQuuBrandDescriptionTranslation)
   return (
-    <SectionBase className={clsx('col gap-8 justify-center')} >
+    <SectionBase className="col gap-8 justify-center" >
       <Tile
         title={{ value: translation.aboutMediQuuTitle, className: 'textstyle-title-lg' }}
         description={{ value: translation.aboutMediQuuDescription, className: '' }}
         prefix={(
           <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={220} height={64} className="p-4 rounded-lg dark:bg-white"/>
         )}
-        className={clsx('bg-surface text-on-surface rounded-3xl px-6 max-tablet:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md max-tablet:col tablet:col')}
+        className="bg-surface text-on-surface rounded-3xl px-6 max-tablet:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md max-tablet:col tablet:col"
       />
       <Tile
         title={{ value: translation.aboutHelpwaveTitle, className: 'textstyle-title-lg' }}
         description={{ value: translation.aboutHelpwaveDescription, className: '' }}
         prefix={(
-          <div className={clsx('min-w-[220px]')}>
+          <div className="min-w-[220px]">
             <HelpwaveBadge
               size="large"
               className="bg-secondary !gap-x-2 !w-fit"
             />
           </div>
         )}
-        className={clsx('text-on-secondary bg-secondary rounded-3xl px-6 max-tablet:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md max-tablet:col tablet:col')}
+        className="text-on-secondary bg-secondary rounded-3xl px-6 max-tablet:py-6 tablet:py-12 desktop:py-16 !gap-6 !w-fit shadow-md max-tablet:col tablet:col"
       />
     </SectionBase>
   )

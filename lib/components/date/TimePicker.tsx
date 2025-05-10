@@ -93,7 +93,7 @@ export const TimePicker = ({
   return (
     <div className={clsx('row gap-x-2 w-fit min-w-[150px] select-none', className)}>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={clsx('col gap-y-1 h-full')}>
+        <div className="col gap-y-1 h-full">
           {hours.map(hour => {
             const currentHour = hour === time.getHours() - (!is24HourFormat && isPM ? 12 : 0)
             return (
@@ -110,7 +110,7 @@ export const TimePicker = ({
         </div>
       </Scrollbars>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={clsx('col gap-y-1 h-full')}>
+        <div className="col gap-y-1 h-full">
           {minutes.map(minute => {
             const currentMinute = minute === closestMinute
             return (
@@ -127,7 +127,7 @@ export const TimePicker = ({
         </div>
       </Scrollbars>
       {!is24HourFormat && (
-        <div className={clsx('col gap-y-1')}>
+        <div className="col gap-y-1">
           <button
             className={style(!isPM)}
             onClick={() => onChangeWrapper(newDate => isPM && newDate.setHours(newDate.getHours() - 12))}

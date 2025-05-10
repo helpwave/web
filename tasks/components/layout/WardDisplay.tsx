@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -29,7 +28,6 @@ const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> 
 export type WardDisplayProps = {
   organizationId: string,
   selectedWardId?: string,
-  width?: number,
 }
 
 /**
@@ -39,7 +37,6 @@ export const WardDisplay = ({
   overwriteTranslation,
   organizationId,
   selectedWardId,
-  width
 }: PropsForTranslation<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation(defaultWardDisplayTranslations, overwriteTranslation)
   const router = useRouter()
@@ -48,17 +45,16 @@ export const WardDisplay = ({
 
   const wards = data
   selectedWardId ??= context.state.wardId
-  const columns = width === undefined ? 3 : Math.max(Math.floor(width / 250), 1)
 
   return (
-    <div className={clsx('py-4 px-6')}>
+    <div className="py-4 px-6">
       <ColumnTitle title={translation.wards}/>
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
       >
         {wards && (
-          <div className={clsx(`grid grid-cols-${columns} gap-6`)}>
+          <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-6">
             {wards.map(ward => (
               <WardCard
                 key={ward.id}
@@ -74,7 +70,7 @@ export const WardDisplay = ({
               />
             ))}
             <AddCard
-              className={clsx('min-h-[76px]')}
+              className="min-h-[76px]"
               text={translation.addWard}
               onClick={() => context.updateContext({
                 ...context.state,

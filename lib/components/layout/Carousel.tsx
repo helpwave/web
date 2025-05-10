@@ -327,7 +327,7 @@ export const Carousel = ({
   }
 
   return (
-    <div className={clsx('col items-center w-full gap-y-2')}>
+    <div className="col items-center w-full gap-y-2">
       <div className={clsx(`relative w-full overflow-hidden`, heightClassName, className)}>
         {arrows && (
           <>
@@ -347,7 +347,7 @@ export const Carousel = ({
         )}
         {hintNext ? (
           <div className={clsx(`relative row h-full`, heightClassName)}>
-            <div className={clsx('relative row h-full w-full px-2 overflow-hidden')}>
+            <div className="relative row h-full w-full px-2 overflow-hidden">
               {items.map(({
                 item,
                 index
@@ -378,7 +378,7 @@ export const Carousel = ({
       </div>
       {dots && (
         <div
-          className={clsx('row items-center justify-center w-full my-2')}>
+          className="row items-center justify-center w-full my-2">
           {range(0, length - 1).map(index => (
             <button
               key={index}

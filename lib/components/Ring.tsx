@@ -71,7 +71,7 @@ export const AnimatedRing = ({
 
   return (
     <div
-      className={clsx(`row items-center justify-center`)}
+      className="row items-center justify-center"
       style={{
         width: `${innerSize + 2 * width}px`,
         height: `${innerSize + 2 * width}px`,
@@ -135,7 +135,7 @@ export const RingWave = ({
 
   return (
     <div
-      className={clsx(`row items-center justify-center`)}
+      className="row items-center justify-center"
       style={{
         width: `${endInnerSize + 2 * width}px`,
         height: `${endInnerSize + 2 * width}px`,
@@ -178,7 +178,7 @@ export const RadialRings = ({
 
   return (
     <div
-      className={clsx(`relative`)}
+      className="relative"
       style={{
         width: `${sizeCircle3}px`,
         height: `${sizeCircle3}px`,

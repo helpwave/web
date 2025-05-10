@@ -61,7 +61,6 @@ export type TaskTemplateDetailsProps = {
   onCreate: (taskTemplate: TaskTemplateDTO) => void,
   onUpdate: (taskTemplate: TaskTemplateFormType) => void,
   onDelete: (taskTemplate: TaskTemplateDTO) => void,
-  width?: number,
 }
 
 /**
@@ -82,8 +81,8 @@ export const TaskTemplateDetails = ({
     name: !isCreatingNewTemplate
   })
 
-  const inputErrorClasses = clsx('border-negative focus:border-negative focus:ring-negative border-2')
-  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary')
+  const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
+  const inputClasses = 'mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary'
 
   const minNameLength = 2
   const maxNameLength = 32
@@ -103,7 +102,7 @@ export const TaskTemplateDetails = ({
   const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
 
   return (
-    <div className={clsx('col py-4 px-6')}>
+    <div className="col py-4 px-6">
       <ConfirmDialog
         id="TaskTemplateDetails-DeleteDialog"
         titleText={translation.deleteConfirmText}
@@ -121,7 +120,7 @@ export const TaskTemplateDetails = ({
         title={isCreatingNewTemplate ? translation.createTaskTemplate : translation.updateTaskTemplate}
         subtitle={!isCreatingNewTemplate ? translation.updateTaskTemplateDescription : undefined}
       />
-      <div className={clsx(' col gap-y-4 max-w-[400px] mb-4')}>
+      <div className=" col gap-y-4 max-w-[400px] mb-4">
         <div>
           <Input
             id="name"
@@ -140,7 +139,7 @@ export const TaskTemplateDetails = ({
             maxLength={maxNameLength}
             className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
           />
-          {isDisplayingNameError && <span className={clsx('textstyle-form-error')}>{nameErrorMessage}</span>}
+          {isDisplayingNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
         </div>
         <Textarea
           headline={translation.notes}
@@ -173,7 +172,7 @@ export const TaskTemplateDetails = ({
         })}
       >
         <SolidButton
-          className={clsx('w-auto')}
+          className="w-auto"
           onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state)}
           disabled={!context.state.isValid}
         >

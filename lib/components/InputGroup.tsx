@@ -51,19 +51,19 @@ export const InputGroup = ({
           setIsExpanded(updatedIsExpanded)
         }}
       >
-        <span className={clsx('textstyle-title-md')}>{title}</span>
+        <span className="textstyle-title-md">{title}</span>
         <div className={clsx('rounded-full text-white w-6 h-6', {
           'bg-primary': (isExpandable && !disabled) || expanded,
           'bg-primary/40': disabled,
         })}>
           {isExpanded
-            ? <ChevronUp className={clsx('-translate-y-[1px]')} size={24}/>
-            : <ChevronDown className={clsx('translate-y-[1px]')} size={24}/>
+            ? <ChevronUp className="-translate-y-[1px]" size={24}/>
+            : <ChevronDown className="translate-y-[1px]" size={24}/>
           }
         </div>
       </div>
       {isExpanded && (
-        <div className={clsx('col gap-y-2 h-full')}>
+        <div className="col gap-y-2 h-full">
           {children}
         </div>
       )}

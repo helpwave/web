@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -35,8 +35,8 @@ export const InvitationsPage = ({
       <Head>
         <title>{titleWrapper(translation.invitations)}</title>
       </Head>
-      <div className={clsx('col items-center')}>
-          <div className={clsx('w-1/2')}>
+      <div className="col items-center">
+          <div className="w-1/2">
             <UserInvitationList/>
           </div>
       </div>

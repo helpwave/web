@@ -2,7 +2,7 @@ import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { isMobile } from 'react-device-detect'
-import clsx from 'clsx'
+
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
@@ -47,7 +47,7 @@ function MyApp({
               </Head>
 
               <ModalRegister>
-                <div className={clsx('font-sans')} id={modalRootName}>
+                <div className="font-sans" id={modalRootName}>
                   <Component {...pageProps} />
                 </div>
               </ModalRegister>

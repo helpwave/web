@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { ModalProps } from '@helpwave/common/components/modals/Modal'
@@ -54,14 +53,14 @@ export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneTo
       titleText={translation.switchOrganization}
       {...modalProps}
     >
-      <div className={clsx('w-[320px]')}>
+      <div className="w-[320px]">
         <Select
-          className={clsx('mt-2')}
+          className="mt-2"
           value={organization}
           options={organizationOptions}
           onChange={setOrganization}
         />
-        <div className={clsx('row mt-3 gap-x-4 justify-end')}>
+        <div className="row mt-3 gap-x-4 justify-end">
           <SolidButton autoFocus color="positive" disabled={!organization} onClick={onDone}>
             {translation.ok}
           </SolidButton>

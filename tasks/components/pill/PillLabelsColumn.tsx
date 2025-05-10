@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+
 import { PillLabel } from './PillLabel'
 
 export type PillLabelsColumnProps = {
@@ -12,7 +12,7 @@ export type PillLabelsColumnProps = {
  */
 const PillLabelsColumn = ({ unscheduledCount, inProgressCount, doneCount }: PillLabelsColumnProps) => {
   return (
-    <div className={clsx('col gap-y-2')}>
+    <div className="col gap-y-2">
       <PillLabel count={unscheduledCount} taskStatus="todo"/>
       <PillLabel count={inProgressCount} taskStatus="inProgress"/>
       <PillLabel count={doneCount} taskStatus="done"/>

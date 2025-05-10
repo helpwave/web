@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
 import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import { Select } from '@helpwave/common/components/user-input/Select'
@@ -95,10 +94,10 @@ const Footer = () => {
   }, [])
 
   return (
-    <div className={clsx('w-screen bg-black text-white py-8 col items-center justify-center')}>
-      <div className={clsx('flex flex-wrap w-full max-w-[900px] max-tablet:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
+    <div className="w-screen bg-black text-white py-8 col items-center justify-center">
+      <div className="flex flex-wrap w-full max-w-[900px] max-tablet:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between">
         {grouping.map((groups, index) => (
-          <div key={index} className={clsx('col max-tablet:w-full w-[192px] max-tablet:text-center max-tablet:items-center')}>
+          <div key={index} className="col max-tablet:w-full w-[192px] max-tablet:text-center max-tablet:items-center">
             {groups.map((category) => (
               <FooterLinkGroup key={category} title={translation[category] } links={linkGroups[category]} />
             ))}
@@ -126,9 +125,9 @@ const Footer = () => {
         ))}
       </div>
       <div
-        className={clsx('row w-full h-[128px] items-center justify-center mx-auto font-space')}>
+        className="row w-full h-[128px] items-center justify-center mx-auto font-space">
         <Helpwave color="white" size={128}/>
-        <span className={clsx('textstyle-title-normal')}>&copy; {year} helpwave</span>
+        <span className="textstyle-title-normal">&copy; {year} helpwave</span>
       </div>
     </div>
   )

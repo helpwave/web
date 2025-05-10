@@ -125,7 +125,7 @@ export const MultiSelect = <T, >({
         )}
       >
         {enableSearch && (
-          <div key="selectSearch" className={clsx('row gap-x-2 items-center px-2 py-2')}>
+          <div key="selectSearch" className="row gap-x-2 items-center px-2 py-2">
             <Input autoFocus={true} value={searchText} onChange={setSearchText}/>
             <Search/>
           </div>

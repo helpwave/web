@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -91,7 +91,7 @@ export const PropertyDetails = ({
   const { step } = stepper
 
   return (
-    <div className={clsx('py-4 px-6 col gap-y-4 bg-gray-100 min-h-full')}>
+    <div className="py-4 px-6 col gap-y-4 bg-gray-100 min-h-full">
       <ConfirmDialog
         id="confirmArchiveModal"
         isOpen={showArchiveConfirm}
@@ -105,8 +105,8 @@ export const PropertyDetails = ({
         onBackgroundClick={() => setArchiveConfirm(false)}
         confirmType="negative"
       />
-      <div className={clsx('top-0 row justify-between items-center')}>
-        <span className={clsx('textstyle-title-lg')}>{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
+      <div className="top-0 row justify-between items-center">
+        <span className="textstyle-title-lg">{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
         {!isCreatingNewProperty && (
           <TextButton color="negative" onClick={() => setArchiveConfirm(true)}>
             {translation.archiveProperty}
@@ -185,7 +185,7 @@ export const PropertyDetails = ({
             disabled: isCreatingNewProperty && step !== 1 && step !== lastStep
           }}
         />
-        <div className={clsx('grow')}></div>
+        <div className="grow"></div>
         {isCreatingNewProperty && (
           <StepperBar
             stepper={stepper}
@@ -193,7 +193,7 @@ export const PropertyDetails = ({
             onFinish={() => {
               propertyCreateMutation.mutate(value)
             }}
-            className={clsx('sticky bottom-4 right-6 left-6 bg-white')}
+            className="sticky bottom-4 right-6 left-6 bg-white"
           />
         )}
       </LoadingAndErrorComponent>

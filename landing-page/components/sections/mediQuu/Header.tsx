@@ -1,6 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import clsx from 'clsx'
 import Image from 'next/image'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
@@ -30,17 +29,17 @@ export const MediQuuHeaderSection = () => {
   const translation = useTranslation(defaultMediQuuPageTranslation)
   return (
     <SectionBase >
-      <div className={clsx('flex max-tablet:flex-col-reverse max-tablet:items-center tablet:row w-full gap-x-4 gap-y-8')}>
-        <div className={clsx('col gap-y-2 desktop:max-w-[50%]')}>
-          <span className={clsx('textstyle-title-3xl')}>{translation.title}</span>
-          <span className={clsx('text-lg')}><MarkdownInterpreter text={translation.subTitle}/></span>
+      <div className="flex max-tablet:flex-col-reverse max-tablet:items-center tablet:row w-full gap-x-4 gap-y-8">
+        <div className="col gap-y-2 desktop:max-w-[50%]">
+          <span className="textstyle-title-3xl">{translation.title}</span>
+          <span className="text-lg"><MarkdownInterpreter text={translation.subTitle}/></span>
         </div>
-        <div className={clsx('row justify-center items-center grow')}>
-          <div className={clsx('col gap-y-4 min-w-[350px] max-w-[350px]')}>
-            <div className={clsx('bg-white rounded-md px-6 py-4 !gap-x-2 !w-fit shadow-md')}>
+        <div className="row justify-center items-center grow">
+          <div className="col gap-y-4 min-w-[350px] max-w-[350px]">
+            <div className="bg-white rounded-md px-6 py-4 !gap-x-2 !w-fit shadow-md">
               <Image src="https://cdn.helpwave.de/mediquu/logo_2021.png" alt="" width={140} height={64}/>
             </div>
-            <div className={clsx('row justify-end')}>
+            <div className="row justify-end">
               <HelpwaveBadge
                 size="large"
                 className="bg-secondary text-on-secondary !gap-x-2 !w-fit shadow-md py-4 px-6"

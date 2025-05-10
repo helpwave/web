@@ -19,24 +19,24 @@ export const NewsDisplay = ({ news, titleOnTop = true }: NewsDisplayProps) => {
         'col w-1/3': !titleOnTop,
         'flex-row-reverse items-center justify-between': titleOnTop
       })}>
-        <div className={clsx('min-w-[100px]')}>
+        <div className="min-w-[100px]">
           <TimeDisplay date={news.date} mode="date"/>
         </div>
-        <span className={clsx('textstyle-title-md text-primary')}>{news.title}</span>
+        <span className="textstyle-title-md text-primary">{news.title}</span>
       </div>
-      <div className={clsx('col gap-y-2 flex-1')}>
+      <div className="col gap-y-2 flex-1">
         {news.description.map((value, index) => value instanceof URL ? (
             <Image
               key={index}
               src={value.href}
               alt=""
-              className={clsx('h-auto w-full rounded-xl')}
+              className="h-auto w-full rounded-xl"
               width={1000}
               height={1000}
             />
         )
           :
-          <span key={index} className={clsx('font-medium')}>{value}</span>)
+          <span key={index} className="font-medium">{value}</span>)
         }
       </div>
     </div>

@@ -1,4 +1,3 @@
-import { clsx } from 'clsx'
 import Image from 'next/image'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
 
@@ -20,8 +19,8 @@ export const PartnerList = ({
   partners
 }: PartnerListProps) => {
   return (
-    <div className={clsx('col gap-y-4 items-center w-full')}>
-      <span className={clsx('textstyle-title-lg')}>{title}</span>
+    <div className="col gap-y-4 items-center w-full">
+      <span className="textstyle-title-lg">{title}</span>
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
         heightClassName="h-[8rem]"
@@ -31,14 +30,14 @@ export const PartnerList = ({
         autoLoopAnimationTime={5000}
       >
         {partners.map(partner => (
-          <div key={partner.name} className={clsx('col h-full items-center justify-center rounded-lg mx-2 dark:bg-white')}>
+          <div key={partner.name} className="col h-full items-center justify-center rounded-lg mx-2 dark:bg-white">
             <Image
               key={partner.name}
               width={0}
               height={0}
               src={partner.url}
               alt={partner.name}
-              className={clsx('w-auto max-h-[100px] p-4')}
+              className="w-auto max-h-[100px] p-4"
             />
           </div>
         ))}

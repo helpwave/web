@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -16,13 +15,13 @@ const StoryBlock = ({
   content,
 }: StoryBlockProps) => {
   return (
-    <div className={clsx('w-2/3 max-tablet:w-full tablet:w-full')}>
-      <div className={clsx('col items-start')}>
-        {pill && <h4 className={clsx('text-sm text-green-600 bg-green-100 px-3 py-0.5 font-semibold tracking-widest rounded-lg')}>{pill}</h4>}
+    <div className="w-2/3 max-tablet:w-full tablet:w-full">
+      <div className="col items-start">
+        {pill && <h4 className="text-sm text-green-600 bg-green-100 px-3 py-0.5 font-semibold tracking-widest rounded-lg">{pill}</h4>}
       </div>
-      <h2 className={clsx('pt-4 text-4xl font-space font-bold')}>{header}</h2>
+      <h2 className="pt-4 text-4xl font-space font-bold">{header}</h2>
       <br />
-      <p className={clsx('text-md')}>
+      <p className="text-md">
         {content}
       </p>
     </div>
@@ -85,7 +84,7 @@ const defaultStoryTranslation: Record<Languages, StoryTranslation> = {
 const StorySection = ({ overwriteTranslation }: PropsForTranslation<StoryTranslation>) => {
   const translation = useTranslation(defaultStoryTranslation, overwriteTranslation)
   return (
-    <SectionBase className={clsx('tablet:flex flex-wrap max-tablet:flex flex-wrap w-full relative gap-16')} >
+    <SectionBase className="flex max-tablet:flex-row tablet:flex-wrap w-full relative gap-16" >
       <StoryBlock
         pill={translation.innovation}
         header={translation.innovationHeader}

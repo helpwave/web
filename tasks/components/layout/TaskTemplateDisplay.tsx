@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import clsx from 'clsx'
+
 import { LucideArrowLeftRight } from 'lucide-react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
@@ -33,7 +33,6 @@ export type TaskTemplateDisplayProps = {
   onSelectChange: (taskTemplate: TaskTemplateDTO | undefined) => void,
   taskTemplates: TaskTemplateDTO[],
   variant: 'wardTemplates' | 'personalTemplates',
-  width?: number,
 }
 
 /**
@@ -46,19 +45,16 @@ export const TaskTemplateDisplay = ({
   onSelectChange,
   taskTemplates,
   variant,
-  width
 }: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation(defaultTaskTemplateDisplayTranslation, overwriteTranslation)
 
   const router = useRouter()
-  const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))
 
   const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
   return (
-    <div className={clsx('py-4 px-6')}>
-      <div className={
-        clsx('row items-center justify-between mb-4')}>
-        <span className={clsx('textstyle-title-normal')}>
+    <div className="py-4 px-6">
+      <div className="row items-center justify-between mb-4">
+        <span className="textstyle-title-normal">
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
         </span>
         { (variant === 'wardTemplates' || wardId) && (
@@ -66,7 +62,7 @@ export const TaskTemplateDisplay = ({
             onClick={() => {
               router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).catch(console.error)
             }}
-            className={clsx('row gap-x-1 items-center w-auto')}
+            className="row gap-x-1 items-center w-auto"
           >
             <LucideArrowLeftRight/>
             {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}
@@ -74,7 +70,7 @@ export const TaskTemplateDisplay = ({
         )}
       </div>
       {/* TODO replace onClick function to something different */}
-      <div className={clsx(`grid grid-cols-${columns} gap-6`)}>
+      <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-6">
         {taskTemplates.map(taskTemplate => (
           <TaskTemplateCard
             key={taskTemplate.id}

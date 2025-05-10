@@ -79,21 +79,21 @@ export const Page = ({
 
   return (
     <div
-      className={clsx('relative tablet:grid tablet:grid-rows-[auto_1fr] max-tablet:col w-screen h-screen overflow-hidden')}>
+      className="relative tablet:grid tablet:grid-rows-[auto_1fr] max-tablet:col w-screen h-screen overflow-hidden">
       <Head>
         <title>{pageTitle}</title>
       </Head>
       <Header
         leading={(
-          <Link href="/" className={clsx('row gap-x-1 items-center text-2xl')}>
+          <Link href="/" className="row gap-x-1 items-center text-2xl">
             <Helpwave/>
-            <span className={clsx('font-space font-bold')}>{`helpwave ${translation.customer}`}</span>
+            <span className="font-space font-bold">{`helpwave ${translation.customer}`}</span>
           </Link>
         )}
         {...header}
         rightSide={[...header?.rightSide ?? [], (!isHidingSidebar && (
           // TODO do aria here
-          <button key="navOpen" className={clsx('tablet:hidden')}>
+          <button key="navOpen" className="tablet:hidden">
             <Menu onClick={() => {
               setIsNavigationVisible(true)
             }}/>
@@ -104,7 +104,7 @@ export const Page = ({
       {isNavigationVisible && !isHidingSidebar && (
         <MobileNavigationOverlay items={navItems} onCloseClick={() => setIsNavigationVisible(false)}/>
       )}
-      <div className={clsx('row grow max-tablet:hidden overflow-hidden')}>
+      <div className="row grow max-tablet:hidden overflow-hidden">
         {!isHidingSidebar && (<NavigationSidebar items={navItems}/>)}
         {mainContent}
       </div>

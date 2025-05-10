@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -62,7 +61,7 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
           <div className="grid grid-cols-2 gap-x-6 gap-y-4 overflow-x-auto mt-2">
             {features.map((feature, index) => (
               <div key={index}  className="row items-center">
-                <div className={clsx('col justify-center items-center bg-primary text-white rounded-full min-w-[24px] min-h-[24px]')}>
+                <div className="col justify-center items-center bg-primary text-white rounded-full min-w-[24px] min-h-[24px]">
                   <Check size={18} strokeWidth={2.5}/>
                 </div>
                 <span className={featureStyle}>{feature}</span>

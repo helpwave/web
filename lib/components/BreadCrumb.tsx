@@ -27,7 +27,7 @@ export const BreadCrumb = ({ crumbs, linkClassName, containerClassName }: BreadC
           <Link href={crumb.link} className={clsx(linkClassName, { [`${color} hover:brightness-60`]: index !== crumbs.length - 1 })}>
             {crumb.display}
           </Link>
-          {index !== crumbs.length - 1 && <span className={clsx(`px-1 ${color}`)}>/</span>}
+          {index !== crumbs.length - 1 && <span className={clsx(`px-1`, color)}>/</span>}
         </div>
       ))}
     </div>

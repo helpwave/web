@@ -77,7 +77,7 @@ export const KanbanColumn = ({
           status: type,
           dueDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
         })}
-        className={clsx('row ml-1 gap-x-1 text-gray-300')}
+        className="row ml-1 gap-x-1 text-gray-300"
       >
         <Plus/>
         {translation.addTask}

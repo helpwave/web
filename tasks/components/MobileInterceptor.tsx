@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import clsx from 'clsx'
+
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 import { getConfig } from '@/utils/config'
@@ -36,9 +36,9 @@ const MobileInterceptor: NextPage = ({ overwriteTranslation }: PropsForTranslati
   const playStoreLink = config.appstoreLinks.playStore
   const appstoreLink = config.appstoreLinks.appStore
   return (
-    <div className={clsx('w-screen h-[80vh] col items-center justify-center')}>
-      <Helpwave className={clsx('w-1/3 mx-auto h-auto mb-2 text-black')}/>
-      <span className={clsx('textstyle-title-normal mb-8')}>{translation.pleaseDownloadApp}</span>
+    <div className="w-screen h-[80vh] col items-center justify-center">
+      <Helpwave className="w-1/3 mx-auto h-auto mb-2 text-black"/>
+      <span className="textstyle-title-normal mb-8">{translation.pleaseDownloadApp}</span>
       <Link href={playStoreLink}>{translation.playStore}</Link>
       <Link href={appstoreLink}>{translation.appStore}</Link>
     </div>

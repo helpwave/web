@@ -14,27 +14,30 @@ type FeatureItemProps = {
 }
 
 const FeatureItem = ({
-  imageUrl,
-  size,
-  title,
-  description,
-  reverse = false
-}: FeatureItemProps) => {
+                       imageUrl,
+                       size,
+                       title,
+                       description,
+                       reverse = false
+                     }: FeatureItemProps) => {
   return (
     <div className={clsx('max-tablet:col-reverse items-center gap-x-4 gap-y-6 desktop:!gap-x-8 justify-between', {
       'flex-row-reverse': reverse,
       'flex-row': !reverse
     })}>
-      <div className={clsx('w-1/2 max-tablet:!w-full')}>
-        <Image alt="Screenshots" src={imageUrl} style={{ objectFit: 'contain' }} width={size} height={size}
-               className={clsx(`w-[${size}px] shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md`)}/>
+      <div className="w-1/2 max-tablet:!w-full">
+        <Image
+          alt="Screenshots" src={imageUrl}
+          style={{ objectFit: 'contain', width: `${size}px` }}
+          width={size} height={size}
+          className="shadow-md hover:shadow-2xl transition-all duration-500 w-full rounded-md"/>
       </div>
 
-      <div className={clsx('col w-1/3 max-tablet:!w-full')}>
-        <span className={clsx('textstyle-title-2xl')}>
+      <div className="col w-1/3 max-tablet:!w-full">
+        <span className="textstyle-title-2xl">
           {title}
         </span>
-        <span className={clsx('textstyle-description text-gray-600')}>
+        <span className="textstyle-description text-gray-600">
           {description}
         </span>
       </div>
@@ -78,7 +81,7 @@ const FeatureSection = ({ overwriteTranslation }: PropsForTranslation<FeatureSec
   const size = 1024
 
   return (
-    <SectionBase className={clsx('col gap-y-12')}>
+    <SectionBase className="col gap-y-12">
       <FeatureItem
         imageUrl={screenshotTemplates}
         size={size}

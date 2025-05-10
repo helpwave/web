@@ -60,16 +60,16 @@ export const DashboardDisplay = ({
   } = useRecentPatientsQuery()
 
   return (
-    <div className={clsx('col py-4 px-6 gap-y-4')}>
+    <div className="col py-4 px-6 gap-y-4">
       <InvitationBanner/>
-      <span className={clsx('textstyle-title-md')}>{translation.recent}</span>
+      <span className="textstyle-title-md">{translation.recent}</span>
       <LoadingAndErrorComponent
         isLoading={isLoadingPatients}
       >
         {patients && patients.length > 0 && (
           <>
-            <span className={clsx('textstyle-title-normal')}>{translation.patients}</span>
-            <div className={clsx(`grid grid-cols-${columns} gap-6`)}>
+            <span className="textstyle-title-normal">{translation.patients}</span>
+            <div className={`grid grid-cols-${columns} gap-6`}>
               {patients?.map(patient => (
                 <PatientCard
                   key={patient.id}
@@ -84,11 +84,11 @@ export const DashboardDisplay = ({
         )}
       </LoadingAndErrorComponent>
       <LoadingAndErrorComponent isLoading={isLoadingWards}>
-        <div className={clsx('col gap-y-1')}>
+        <div className="col gap-y-1">
           {wards && wards.length > 0 && (
             <>
-              <span className={clsx('textstyle-title-normal')}>{translation.wards}</span>
-              <div className={clsx(`grid grid-cols-${columns} gap-6`)}>
+              <span className="textstyle-title-normal">{translation.wards}</span>
+              <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-6">
                 {wards?.map(ward => (
                   <WardCard
                     key={ward.id}

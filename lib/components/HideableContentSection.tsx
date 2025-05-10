@@ -19,7 +19,7 @@ export const HideableContentSection = ({
 }: HideableContentSectionProps) => {
   const [open, setOpen] = useState(initiallyOpen)
   return (
-    <div className={clsx('col gap-y-2')}>
+    <div className="col">
       <div
         className={clsx('row justify-between items-center', { 'cursor-pointer': !disabled })}
         onClick={() => {

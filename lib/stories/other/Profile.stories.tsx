@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import clsx from 'clsx'
 import { Profile } from '../../components/Profile'
 import { Helpwave } from '../../components/icons/Helpwave'
 import { MarkdownInterpreter } from '../../components/MarkdownInterpreter'
@@ -23,7 +22,7 @@ export const ProfileVariation: Story = {
     roleBadge: 'CEO',
     imageUrl: 'https://cdn.helpwave.de/boringavatar.svg',
     badge: (
-      <Chip className={clsx('row gap-x-2 items-center justify-center')} color="dark">
+      <Chip className="row gap-x-2 items-center justify-center" color="dark">
         <Helpwave size={24}/>
         <MarkdownInterpreter text={'\\helpwave'}/>
       </Chip>

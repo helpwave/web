@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -31,7 +30,7 @@ export const ReSignInModal = ({ overwriteTranslation, titleText, ...modalProps }
 
   return (
     <ConfirmDialog
-      backgroundClassName={clsx('w-5')}
+      backgroundClassName="w-5"
       titleText={titleText ?? translation.pleaseReSignIn}
       buttonOverwrites={[
         {},

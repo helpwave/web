@@ -1,6 +1,5 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import clsx from 'clsx'
 import { FAQSection } from '@helpwave/common/components/layout/FAQSection'
 import { SectionBase } from '@/components/sections/SectionBase'
 
@@ -93,10 +92,10 @@ const defaultMediQuuFAQTranslation: Record<Languages, MediQuuFAQTranslation> = {
 export const MediQuuFAQSection = () => {
   const translation = useTranslation(defaultMediQuuFAQTranslation)
   return (
-    <SectionBase  className={clsx('col w-full')}>
-      <span className={clsx('textstyle-title-xl text-primary mb-1')}>{translation.title}</span>
+    <SectionBase  className="col w-full">
+      <span className="textstyle-title-xl text-primary mb-1">{translation.title}</span>
       <span>{translation.subTitle}</span>
-      <div className={clsx('col gap-y-4 mt-8')}>
+      <div className="col gap-y-4 mt-8">
         <FAQSection
           entries={translation.faqs.map((faq, index) => ({
             id: `faq${index}`,

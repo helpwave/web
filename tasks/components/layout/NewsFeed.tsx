@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
@@ -43,7 +43,7 @@ export const NewsFeed = ({
   usedLanguage = overwriteTranslation?.language ?? usedLanguage
   const newsFilter = 'tasks'
   return (
-    <div className={clsx('col py-4 px-6 gap-y-4')}>
+    <div className="col py-4 px-6 gap-y-4">
       <ColumnTitle title={translation.title}/>
       {usedLanguage ? filterNews(localizedNews[usedLanguage], [newsFilter]).map(news => (
         <NewsDisplay
@@ -52,7 +52,7 @@ export const NewsFeed = ({
           titleOnTop={width ? width < widthForAppearanceChange : undefined}
         />
       )) : (
-        <div className={clsx('col items-center justify-center w-full h-20')}>
+        <div className="col items-center justify-center w-full h-20">
           {translation.noNews}
         </div>
       )}

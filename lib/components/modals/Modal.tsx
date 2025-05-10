@@ -46,8 +46,8 @@ export const ModalHeader = ({
                             }: PropsForTranslation<ModalHeaderTranslation, ModalHeaderProps>) => {
   const translation = useTranslation(defaultModalHeaderTranslation, overwriteTranslation)
   return (
-    <div className={clsx('col')}>
-      <div className={clsx('row justify-between items-start gap-x-8')}>
+    <div className="col">
+      <div className="row justify-between items-start gap-x-8">
         {title ?? (
           <span className={clsx('textstyle-title-lg', {
             'mb-1': description || descriptionText,
@@ -57,13 +57,13 @@ export const ModalHeader = ({
         )}
         {!!onCloseClick && (
           <Tooltip tooltip={translation.close}>
-            <button className={clsx('row bg-gray-200 hover:bg-gray-300 rounded-md p-1')} onClick={onCloseClick}>
+            <button className="row bg-gray-200 hover:bg-gray-300 rounded-md p-1" onClick={onCloseClick}>
               <X/>
             </button>
           </Tooltip>
         )}
       </div>
-      {description ?? (<span className={clsx('textstyle-description')}>{descriptionText}</span>)}
+      {description ?? (<span className="textstyle-description">{descriptionText}</span>)}
     </div>
   )
 }

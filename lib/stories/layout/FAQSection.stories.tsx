@@ -1,5 +1,4 @@
 import type { StoryFn } from '@storybook/react'
-import clsx from 'clsx'
 import { FAQSection } from '../../components/layout/FAQSection'
 import { Helpwave } from '../../components/icons/Helpwave'
 
@@ -11,7 +10,7 @@ const meta = {
 export default meta
 
 export const FAQSectionVariation: StoryFn = () => (
-  <div className={clsx('bg-gray-100 p-4')}>
+  <div className="bg-gray-100 p-4">
     <FAQSection
       entries={[
         { id: 'question1', title: 'A Very Good Question?', content: { type: 'markdown', value: '\\negative{NO.}' } },
@@ -41,7 +40,7 @@ export const FAQSectionVariation: StoryFn = () => (
           title: 'What does the helpwave logo look like?',
           content: {
             type: 'custom',
-            value: (<div className={clsx('row justify-center')}><Helpwave/></div>)
+            value: (<div className="row justify-center"><Helpwave/></div>)
           }
         },
       ]}

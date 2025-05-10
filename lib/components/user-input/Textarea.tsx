@@ -50,7 +50,7 @@ export const Textarea = ({
       {label && (<Label {...label} htmlFor={id} className={clsx('mb-1', label.className)} labelType={label.labelType ?? 'labelSmall'}/>)}
       <div className={`${clsx(' bg-surface text-on-surface focus-within:border-primary relative', { 'shadow border-2 border-gray-300 hover:border-primary rounded-lg': defaultStyle })}`}>
         {headline && (
-          <span className={clsx('mx-3 mt-3 block text-gray-700 font-bold')}>
+          <span className="mx-3 mt-3 block text-gray-700 font-bold">
             {headline}
           </span>
         )}
@@ -77,7 +77,7 @@ export const Textarea = ({
       </textarea>
       </div>
       {(hasFocus && disclaimer) && (
-        <label className={clsx('text-negative')}>
+        <label className="text-negative">
           {disclaimer}
         </label>
       )}

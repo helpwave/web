@@ -66,7 +66,7 @@ export const PropertyBase = ({
       >
         {input({ softRequired, hasValue })}
         {requiredAndNoValue && (
-          <div className={clsx('text-warning pr-4')}><AlertTriangle size={24}/></div>
+          <div className="text-warning pr-4"><AlertTriangle size={24}/></div>
         )}
         {onRemove && (
           <TextButton

@@ -46,11 +46,11 @@ export const BedInRoomIndicator =
     return (
       <div>
         {roomName !== undefined && (
-          <span className={clsx('mb-1')}>
+          <span className="mb-1">
             {`${translation.bed} ${bedPosition + 1} ${translation.in} ${roomName}`}
           </span>
         )}
-        <div className={clsx(`row gap-3`)}>
+        <div className="row gap-3">
           {Array.from(Array(bedsInRoom).keys()).map((_, index) => (
             <div key={bedPosition + index}
                  className={clsx(`bg-${bedPosition === index ? 'primary' : 'gray-300'} rounded-sm h-8 w-5`)}

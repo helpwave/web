@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import clsx from 'clsx'
+
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
@@ -130,14 +130,13 @@ const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForT
         <title>{titleWrapper(translation.personalTaskTemplates)}</title>
       </Head>
       <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
-        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError || !data} loadingProps={{ classname: clsx('!h-full') }} errorProps={{ classname: clsx('!h-full') }}>
+        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError || !data} loadingProps={{ classname: '!h-full' }} errorProps={{ classname: '!h-full' }}>
           <TwoColumn
             disableResize={false}
-            left={width => (
+            left={() => (
               // TODO move this data checking and so on into the TaskTemplateDisplay Component
               data && (
                 <TaskTemplateDisplay
-                  width={width}
                   onSelectChange={taskTemplate => {
                     setContextState({
                       ...contextState,
@@ -154,9 +153,8 @@ const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForT
                 />
               )
             )}
-            right={width => (
+            right={() => (
               <TaskTemplateDetails
-                width={width}
                 key={contextState.template.id}
                 onCreate={createMutation.mutate}
                 onUpdate={updateMutation.mutate}

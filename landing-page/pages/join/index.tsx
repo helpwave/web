@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { NextPage } from 'next'
 import { RadialRings } from '@helpwave/common/components/Ring'
 import { useEffect, useState } from 'react'
@@ -80,10 +79,10 @@ const NewsLetter: NextPage = () => {
   const waveWidth = (sizeCircle2 - sizeCircle1) / 20
 
   return (
-    <Page className={clsx('w-screen h-screen relative z-0')} pageTitleAddition={translation.title}>
-      <SectionBase className={clsx('h-screen z-[1] w-full !max-w-full')} outerClassName={clsx('!p-0')}>
-        <div className={clsx('relative h-full overflow-hidden')}>
-          <div className={clsx(`absolute left-0 top-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2`)}>
+    <Page className="w-screen h-screen relative z-0" pageTitleAddition={translation.title}>
+      <SectionBase className="h-screen z-[1] w-full !max-w-full" outerClassName="!p-0">
+        <div className="relative h-full overflow-hidden">
+          <div className="absolute left-0 top-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2">
             {width !== 0 && height !== 0 && (
               <>
                 <RadialRings
@@ -92,12 +91,16 @@ const NewsLetter: NextPage = () => {
                   sizeCircle3={sizeCircle3}
                   waveWidth={waveWidth}
                 />
-                <div className={clsx(`absolute z-[100] top-1/2 left-[${sizeCircle2}px] -translate-x-1/2 -translate-y-1/2 text-white max-tablet:hidden`)}/>
-                <div className={clsx(`absolute z-[100] top-1/2 left-[${sizeCircle2 + (sizeCircle3 - sizeCircle2) / 2}px] -translate-x-1/2 -translate-y-1/2 text-white max-tablet:hidden`)}/>
+                <div className="absolute z-[100] top-1/2 -translate-x-1/2 -translate-y-1/2 text-white max-tablet:hidden"
+                  style={{ left: `${sizeCircle2}px` }}
+                />
+                <div className="absolute z-[100] top-1/2 -translate-x-1/2 -translate-y-1/2 text-white max-tablet:hidden"
+                  style={{ left: `${sizeCircle2 + (sizeCircle3 - sizeCircle2) / 2}px` }}
+                />
               </>
             )}
           </div>
-          <div className={clsx('absolute top-1/2 -translate-y-1/2 desktop:right-[15%] tablet:right-[15%]  max-tablet:right-1/2 max-tablet:translate-x-1/2 desktop:w-[500px] max-tablet:w-4/5 max-tablet:max-w-[340px]')}>
+          <div className="absolute top-1/2 -translate-y-1/2 desktop:right-[15%] tablet:right-[15%]  max-tablet:right-1/2 max-tablet:translate-x-1/2 desktop:w-[500px] max-tablet:w-4/5 max-tablet:max-w-[340px]">
             <NewsLetterForm
               onSubmit={async (form) => {
                 await submitNewsLetterForm(form)

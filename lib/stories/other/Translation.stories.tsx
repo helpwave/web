@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
-import clsx from 'clsx'
 
 type TranslationExampleTranslation = {
   welcome: string,
@@ -33,10 +32,10 @@ type TranslationExampleProps = {
 const TranslationExample = ({ overwriteTranslation, name }:PropsForTranslation<TranslationExampleTranslation, TranslationExampleProps>) => {
   const translation = useTranslation(defaultTranslationExampleTranslations, overwriteTranslation)
   return (
-    <p className={clsx('rounded bg-gray-800 text-gray-200 p-1 px-2')}>
+    <p className="rounded bg-surface text-on-surface p-1 px-2">
       {translation.welcome}{'! '}
       {translation.goodToSeeYou}{', '}
-      <span className={clsx('text-green-300')}>{name}</span>{'. '}
+      <span className="text-primary">{name}</span>{'. '}
       {translation.page(123)}
     </p>
   )

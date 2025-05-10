@@ -59,7 +59,7 @@ export const ToggleableInput = ({
   return (
     <div>
       <div
-        className={clsx('row items-center w-full gap-x-2 overflow-hidden')}
+        className="row items-center w-full gap-x-2 overflow-hidden"
         onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
       >
         <div className={clsx('row overflow-hidden', { 'flex-1': isEditing })}>
@@ -106,7 +106,7 @@ export const ToggleableInput = ({
         <Pencil className={clsx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size} />
       </div>
       {(isEditing && disclaimer) && (
-        <label className={clsx('text-negative')}>
+        <label className="text-negative">
           {disclaimer}
         </label>
       )}

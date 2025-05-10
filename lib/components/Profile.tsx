@@ -91,29 +91,29 @@ export const Profile = ({
       {...divProps}
       className={clsx(`col items-center text-center rounded-3xl p-3 pb-4 bg-white text-gray-900 w-min shadow-around-lg`, className)}
     >
-      <div className={clsx('relative mb-6')}>
+      <div className="relative mb-6">
         <div className={clsx('relative rounded-xl row items-center justify-center overflow-hidden', imageClassName)}>
           <Image src={imageUrl} alt="" className={clsx('z-[2] object-cover', imageClassName)} width={0} height={0} style={{ width: 'auto', height: 'auto' }}/>
         </div>
-        <div className={clsx('absolute top-[6px] left-[6px] z-[3]')}>{badge}</div>
+        <div className="absolute top-[6px] left-[6px] z-[3]">{badge}</div>
         {roleBadge && (
-          <div className={clsx('absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2/3 z-[4] rounded-md')}>
-            <Chip color="dark" className={clsx('font-bold px-3')}>{roleBadge}</Chip>
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2/3 z-[4] rounded-md">
+            <Chip color="dark" className="font-bold px-3">{roleBadge}</Chip>
           </div>
         )}
       </div>
-      {prefix && <span className={clsx('font-semibold')}>{prefix}</span>}
-      <h2 id={name} className={clsx('textstyle-title-md')}>{name}</h2>
-      {suffix && <span className={clsx('text-sm mb-1')}>{suffix}</span>}
-      {role && <span className={clsx('font-space font-bold text-sm')}>{role}</span>}
+      {prefix && <span className="font-semibold">{prefix}</span>}
+      <h2 id={name} className="textstyle-title-md">{name}</h2>
+      {suffix && <span className="text-sm mb-1">{suffix}</span>}
+      {role && <span className="font-space font-bold text-sm">{role}</span>}
       {tags && (
-        <div className={clsx('flex flex-wrap mx-4 mt-2 gap-x-2 justify-center')}>
-          {tags.map((tag, index) => <span key={index} className={clsx('textstyle-description text-sm')}>{`#${tag}`}</span>)}
+        <div className="flex flex-wrap mx-4 mt-2 gap-x-2 justify-center">
+          {tags.map((tag, index) => <span key={index} className="textstyle-description text-sm">{`#${tag}`}</span>)}
         </div>
       )}
-      {info && <span className={clsx('mt-2 text-sm')}>{info}</span>}
+      {info && <span className="mt-2 text-sm">{info}</span>}
       {socials && (
-        <div className={clsx('flex flex-wrap grow items-end justify-center gap-x-4 gap-y-2 mt-4')}>
+        <div className="flex flex-wrap grow items-end justify-center gap-x-4 gap-y-2 mt-4">
           {socials.map((socialIconProps, index) => (
             <SocialIcon key={index} {...socialIconProps} size={socialIconProps.size ?? 20}/>
           ))}

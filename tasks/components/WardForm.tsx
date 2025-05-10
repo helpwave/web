@@ -60,8 +60,8 @@ export const WardForm = ({
   const minWardNameLength = 2
   const maxWardNameLength = 32
 
-  const inputErrorClasses = clsx('border-negative focus:border-negative focus:ring-negative border-2')
-  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary')
+  const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
+  const inputClasses = 'mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary'
 
   function validateName(ward: WardFormInfoDTO) {
     const wardName = ward.name.trim()
@@ -85,16 +85,16 @@ export const WardForm = ({
 
   return (
     <form>
-      <div className={clsx('mt-2 mb-1')}>
+      <div className="mt-2 mb-1">
         <Input id="name" value={ward.name} label={{ name: translation.name }}
                onBlur={() => setTouched({ ...touched, name: true })}
                onChange={text => triggerOnChange({ ...ward, name: text })}
                maxLength={maxWardNameLength}
                className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <span className={clsx('textstyle-form-error')}>{nameErrorMessage}</span>}
+        {isDisplayingShortNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
       </div>
-      <span className={clsx('textstyle-form-description')}>{translation.nameDescription}</span>
+      <span className="textstyle-form-description">{translation.nameDescription}</span>
     </form>
   )
 }

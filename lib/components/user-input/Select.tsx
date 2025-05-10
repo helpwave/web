@@ -70,7 +70,7 @@ export const Select = <T, >({
       {label && (
         <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
       )}
-      <Menu as="div" className={clsx('relative text-menu-text')}>
+      <Menu as="div" className="relative text-menu-text">
         {({ open }) => (
           <>
             <Menu.Button
@@ -89,7 +89,7 @@ export const Select = <T, >({
               {open ? <ChevronUp/> : <ChevronDown/>}
             </Menu.Button>
             <Menu.Items
-              className={clsx('absolute w-full z-10 rounded-b-lg bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto')}
+              className="absolute w-full z-10 rounded-b-lg bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto"
             >
               {(additionalItems ?? []).map((item, index) => (
                 <div key={`additionalItems${index}`}

@@ -18,8 +18,8 @@ export type ExpandableProps = PropsWithChildren<{
 }>
 
 const DefaultIcon: IconBuilder = (expanded) => expanded ?
-  (<ChevronUp size={16} className={clsx('min-w-[16px]')}/>)
-  : (<ChevronDown size={16} className={clsx('min-w-[16px]')}/>)
+  (<ChevronUp size={16} className="min-w-[16px]"/>)
+  : (<ChevronDown size={16} className="min-w-[16px]"/>)
 
 /**
  * A Component for showing and hiding content
@@ -50,7 +50,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
         {icon(isExpanded)}
       </button>
       {isExpanded && (
-        <div className={clsx('col')}>
+        <div className="col">
           {children}
         </div>
       )}

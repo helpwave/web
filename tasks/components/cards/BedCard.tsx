@@ -39,11 +39,11 @@ export const BedCard = ({
     (
       <DragCard onClick={onClick} isSelected={isSelected}
                 className={clsx('min-h-[148px] col', className)} {...restCardProps}>
-        <div className={clsx('row justify-between')}>
-          <span className={clsx('textstyle-title-sm')}>{bedName}</span>
+        <div className="row justify-between">
+          <span className="textstyle-title-sm">{bedName}</span>
           <span>{translation.nobody}</span>
         </div>
-        <div className={clsx('flex-1 justify-center items-center')}>
+        <div className="flex-1 justify-center items-center">
           <Plus/>
         </div>
       </DragCard>

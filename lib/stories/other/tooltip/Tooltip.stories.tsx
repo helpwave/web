@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import clsx from 'clsx'
 import type { TooltipProps } from '../../../components/Tooltip'
 import { Tooltip } from '../../../components/Tooltip'
 
@@ -7,7 +6,7 @@ type TooltipExampleProps = Omit<TooltipProps, 'children' | 'tooltip'> & { toolti
 
 const TooltipExample = ({ tooltipText, ...props } : TooltipExampleProps) => {
   return (
-    <Tooltip tooltip={tooltipText} {...props}><span className={clsx('bg-primary text-white px-2 py-1 rounded-lg')}>Hover over me</span></Tooltip>
+    <Tooltip tooltip={tooltipText} {...props}><span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span></Tooltip>
   )
 }
 

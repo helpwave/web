@@ -1,5 +1,4 @@
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
-import clsx from 'clsx'
 import type { TextButtonProps } from './Button'
 import { TextButton } from './Button'
 import type { TableSortingType } from './Table'
@@ -25,7 +24,7 @@ export const SortButton = ({
       onClick={() => onClick(ascending === 'descending' ? 'ascending' : 'descending')}
       {...buttonProps}
     >
-      <div className={clsx('row gap-x-2')}>
+      <div className="row gap-x-2">
         {children}
         {ascending === 'ascending' ? <ChevronUp/> : (!ascending ? <ChevronsUpDown/> : <ChevronDown/>)}
       </div>

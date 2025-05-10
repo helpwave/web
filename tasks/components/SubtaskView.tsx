@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Plus } from 'lucide-react'
-import clsx from 'clsx'
+
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { SolidButton } from '@helpwave/common/components/Button'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -90,9 +90,9 @@ export const SubtaskView = ({
   }
 
   return (
-    <div className={clsx('col gap-y-2')}>
-      <div className={clsx('row items-center justify-between')}>
-        <span className={clsx('textstyle-title-normal')}>{translation.subtasks}</span>
+    <div className="col gap-y-2">
+      <div className="row items-center justify-between">
+        <span className="textstyle-title-normal">{translation.subtasks}</span>
         <SolidButton
           onClick={() => {
             const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
@@ -103,15 +103,15 @@ export const SubtaskView = ({
             setScrollToBottom(true)
           }}
         >
-          <div className={clsx('row items-center gap-x-2')}>
+          <div className="row items-center gap-x-2">
             <Plus size={18}/>
             <span>{translation.addSubtask}</span>
           </div>
         </SolidButton>
       </div>
-      <div className={clsx('max-h-[500px] overflow-hidden')}>
-        <Scrollbars autoHide={true} ref={scrollableRef} className={clsx('h-screen')} style={{ minHeight: 250 }}>
-          <div className={clsx('grid grid-cols-1 gap-y-2')}>
+      <div className="max-h-[500px] overflow-hidden">
+        <Scrollbars autoHide={true} ref={scrollableRef} className="h-screen" style={{ minHeight: 250 }}>
+          <div className="grid grid-cols-1 gap-y-2">
             {subtasks.map((subtask, index) => (
               <SubtaskTile
                 key={index}

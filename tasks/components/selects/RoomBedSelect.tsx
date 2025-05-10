@@ -90,7 +90,7 @@ export const RoomBedSelect = ({
 
   const roomSelect = (data && (
     <Select
-      className={clsx('min-w-[120px]')}
+      className="min-w-[120px]"
       value={currentSelection.roomId}
       options={data.map(room => ({ value: room.id, label: room.name, disabled: room.beds.length === 0 }))}
       onChange={value => {
@@ -106,7 +106,7 @@ export const RoomBedSelect = ({
 
   const bedSelect = (
     <Select
-      className={clsx('min-w-[150px]')}
+      className="min-w-[150px]"
       value={currentSelection.bedId}
       isDisabled={!currentSelection.roomId}
       options={(currentRoom?.beds ?? []).map(value => ({ value: value.id, label: value.name, disabled: !!value.patient }))}
@@ -124,7 +124,7 @@ export const RoomBedSelect = ({
   const isShowingClear = isClearable && !isSubmitting && touched
   const isShowingRevert = touched && hasChanges && !isSubmitting && !isCreating && !isClearable
   const changesAndSaveRow = (
-    <div className={clsx('row justify-between items-center gap-x-4')}>
+    <div className="row justify-between items-center gap-x-4">
       <div>
         {isShowingRevert && (
           <TextButton
@@ -136,7 +136,7 @@ export const RoomBedSelect = ({
             }}
             disabled={!hasChanges}
           >
-            <div className={clsx('row gap-x-2 items-center')}>
+            <div className="row gap-x-2 items-center">
               {translation.revert}
               <Undo2 size={16}/>
             </div>
@@ -154,7 +154,7 @@ export const RoomBedSelect = ({
             }}
             color="negative"
           >
-            <div className={clsx('row gap-x-2 items-center')}>
+            <div className="row gap-x-2 items-center">
               {translation.revert}
               <X size={16}/>
             </div>
@@ -186,17 +186,17 @@ export const RoomBedSelect = ({
   )
 
   const widthLayout = (
-    <div className={clsx('col')}>
-        <table className={clsx('min-w-[200px] border-spacing-y-2 border-separate')}>
+    <div className="col">
+        <table className="min-w-[200px] border-spacing-y-2 border-separate">
           <thead>
             <tr>
-              <th><span className={clsx('textstyle-table-header row justify-start')}>{translation.room}</span></th>
-              <th><span className={clsx('textstyle-table-header row justify-start')}>{translation.bed}</span></th>
+              <th><span className="textstyle-table-header row justify-start">{translation.room}</span></th>
+              <th><span className="textstyle-table-header row justify-start">{translation.bed}</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className={clsx('pr-4')}>
+              <td className="pr-4">
                 {roomSelect}
               </td>
               <td>
@@ -210,18 +210,18 @@ export const RoomBedSelect = ({
   )
 
   const heightLayout = (
-    <div className={clsx('col')}>
-      <table className={clsx('border-spacing-y-2 border-separate')}>
+    <div className="col">
+      <table className="border-spacing-y-2 border-separate">
         <thead/>
         <tbody>
           <tr>
-            <td><span className={clsx('textstyle-table-header')}>{translation.room}</span></td>
+            <td><span className="textstyle-table-header">{translation.room}</span></td>
             <td>
               {roomSelect}
             </td>
           </tr>
           <tr>
-            <td><span className={clsx('textstyle-table-header')}>{translation.bed}</span></td>
+            <td><span className="textstyle-table-header">{translation.bed}</span></td>
             <td>
               {bedSelect}
             </td>

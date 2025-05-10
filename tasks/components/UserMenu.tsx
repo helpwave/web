@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import clsx from 'clsx'
 import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -60,7 +59,7 @@ export const UserMenu = ({
   const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
 
   return (
-    <div className={clsx('relative z-10')}>
+    <div className="relative z-10">
       <LanguageModal
         id="userMenu-LanguageModal"
         onDone={() => setLanguageModalOpen(false)}
@@ -70,28 +69,29 @@ export const UserMenu = ({
       />
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick}
-             className={clsx('gap-2 relative items-center group cursor-pointer select-none')}>
-          <div className={clsx('text-sm font-semibold text-gray-700 group-hover:text-primary')}>{user.name}</div>
+             className="gap-2 relative items-center group cursor-pointer select-none">
+          {/* TODO set this color in the css config */}
+          <div className="text-sm font-semibold text-gray-700 group-hover:text-primary">{user.name}</div>
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
         </div>
       )}>
         <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
         <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem
           alignment="left">{translation.language}</MenuItem></div>
-        <div className={clsx('cursor-pointer')} onClick={() => router.push('/templates')}>
+        <div className="cursor-pointer" onClick={() => router.push('/templates')}>
           <MenuItem alignment="left">{translation.taskTemplates}</MenuItem>
         </div>
-        <div className={clsx('cursor-pointer')} onClick={() => router.push('/properties')}>
+        <div className="cursor-pointer" onClick={() => router.push('/properties')}>
           <MenuItem alignment="left">{translation.properties}</MenuItem>
         </div>
-        <div className={clsx('cursor-pointer')} onClick={() => router.push('/organizations')}>
+        <div className="cursor-pointer" onClick={() => router.push('/organizations')}>
           <MenuItem alignment="left">{translation.organizations}</MenuItem>
         </div>
-        <div className={clsx('cursor-pointer')} onClick={() => router.push('/invitations')}>
+        <div className="cursor-pointer" onClick={() => router.push('/invitations')}>
           <MenuItem alignment="left">{translation.invitations}</MenuItem>
         </div>
         <div
-          className={clsx('cursor-pointer text-negative hover:brightness-75')}
+          className="cursor-pointer text-negative hover:brightness-75"
           onClick={() => signOut()}
         >
           <MenuItem alignment="left">{translation.signOut}</MenuItem>

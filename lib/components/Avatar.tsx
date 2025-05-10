@@ -44,7 +44,7 @@ const Avatar = ({ avatarUrl, alt, size = 'medium', className = '' }: AvatarProps
     // TODO transparent or white background later
     <div className={clsx(`rounded-full bg-primary`, className)} style={style}>
       <Image
-        className={clsx('rounded-full border border-gray-200')}
+        className="rounded-full border border-gray-200"
         style={style}
         src={avatarUrl}
         alt={alt}

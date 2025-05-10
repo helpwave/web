@@ -139,7 +139,7 @@ export const PatientList = ({
   const filteredDischarged = !data ? [] : SimpleSearchWithMapping(search, data.discharged, value => value.name)
 
   return (
-    <div className={clsx('relative col py-4 px-6')}>
+    <div className="relative col py-4 px-6">
       <ConfirmDialog
         id="patientList-DeleteDialog"
         isOpen={!!deletePatient}
@@ -184,11 +184,11 @@ export const PatientList = ({
         onBackgroundClick={() => setIsShowingAddPatientModal(0)}
         wardId={context.wardId}
       />
-      <div className={clsx('row gap-x-2 items-center')}>
-        <span className={clsx('textstyle-title-normal pr-4')}>{translation.patients}</span>
-        <Input placeholder={translation.search} value={search} onChange={setSearch} className={clsx('h-9')}/>
+      <div className="row gap-x-2 items-center">
+        <span className="textstyle-title-normal pr-4">{translation.patients}</span>
+        <Input placeholder={translation.search} value={search} onChange={setSearch} className="h-9"/>
         <SolidButton
-          className={clsx('whitespace-nowrap')}
+          className="whitespace-nowrap"
           color="positive"
           onClick={() => {
             setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
@@ -200,15 +200,15 @@ export const PatientList = ({
       <LoadingAndErrorComponent
         hasError={isError || !data}
         isLoading={isLoading}
-        errorProps={{ classname: clsx('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
-        loadingProps={{ classname: clsx('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
+        errorProps={{ classname: 'min-h-[400px] border-2 border-gray-600 rounded-xl' }}
+        loadingProps={{ classname: 'min-h-[400px] border-2 border-gray-600 rounded-xl' }}
       >
-        <div className={clsx('col gap-y-4 mb-8')}>
-          <div className={clsx('p-2 border-2 border-transparent rounded-xl')}>
+        <div className="col gap-y-4 mb-8">
+          <div className="p-2 border-2 border-transparent rounded-xl">
             <HideableContentSection
               initiallyOpen={initialOpenedSections?.active}
               disabled={filteredActive.length <= 0}
-              header={<span className={clsx('textstyle-accent')}>{`${translation.active} (${filteredActive.length})`}</span>}
+              header={<span className="textstyle-accent">{`${translation.active} (${filteredActive.length})`}</span>}
             >
               {filteredActive.map(patient => (
                 <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
@@ -220,7 +220,7 @@ export const PatientList = ({
                 }}>
                   {() => (
                     <div
-                      className={clsx('row pt-2 border-b-2 justify-between items-center cursor-pointer')}
+                      className="row pt-2 border-b-2 justify-between items-center cursor-pointer"
                       onClick={() => updateContext({
                         ...context,
                         patientId: patient.id,
@@ -228,8 +228,8 @@ export const PatientList = ({
                         bedId: patient.bed.id
                       })}
                     >
-                      <span className={clsx('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
-                      <div className={clsx('row flex-1 justify-between items-center')}>
+                      <span className="textstyle-title-sm w-1/3 text-ellipsis">{patient.name}</span>
+                      <div className="row flex-1 justify-between items-center">
                         <Chip color="blue" variant="fullyRounded">
                           {activeLabelText(patient)}
                         </Chip>
@@ -256,7 +256,7 @@ export const PatientList = ({
                   initiallyOpen={initialOpenedSections?.unassigned}
                   disabled={filteredUnassigned.length <= 0}
                   header={(
-                    <span className={clsx('textstyle-accent text-tag-yellow-text')}>
+                    <span className="textstyle-accent text-tag-yellow-text">
                       {`${translation.unassigned} (${filteredUnassigned.length})`}
                     </span>
                   )}
@@ -269,14 +269,14 @@ export const PatientList = ({
                       {() => (
                         <div
                           key={patient.id}
-                          className={clsx('row pt-2 border-b-2 items-center cursor-pointer')}
+                          className="row pt-2 border-b-2 items-center cursor-pointer"
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
                           })}
                         >
-                          <span className={clsx('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
-                          <div className={clsx('row flex-1 justify-between items-center')}>
+                          <span className="textstyle-title-sm w-1/3 text-ellipsis">{patient.name}</span>
+                          <div className="row flex-1 justify-between items-center">
                             <Chip color="yellow" variant="fullyRounded">
                               {`${translation.unassigned}`}
                             </Chip>
@@ -304,7 +304,7 @@ export const PatientList = ({
                 <HideableContentSection
                   initiallyOpen={initialOpenedSections?.discharged}
                   disabled={filteredDischarged.length <= 0}
-                  header={<span className={clsx('textstyle-accent')}>{`${translation.discharged} (${filteredDischarged.length})`}</span>}
+                  header={<span className="textstyle-accent">{`${translation.discharged} (${filteredDischarged.length})`}</span>}
                 >
                   {filteredDischarged.map(patient => (
                     <Draggable id={patient.id} key={patient.id} data={{
@@ -314,14 +314,14 @@ export const PatientList = ({
                       {() => (
                         <div
                           key={patient.id}
-                          className={clsx('row pt-2 border-b-2 justify-between items-center')}
+                          className="row pt-2 border-b-2 justify-between items-center"
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
                           })}
                         >
-                          <span className={clsx('textstyle-title-sm')}>{patient.name}</span>
-                          <div className={clsx('row gap-x-4')}>
+                          <span className="textstyle-title-sm">{patient.name}</span>
+                          <div className="row gap-x-4">
                             <TextButton onClick={event => {
                               event.stopPropagation()
                               readmitPatientMutation.mutate(patient.id)

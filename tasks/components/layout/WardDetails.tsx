@@ -65,7 +65,6 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
 export type WardDetailProps = {
   organizationId: string,
   ward?: WardDetailDTO,
-  width?: number,
 }
 
 /**
@@ -76,7 +75,6 @@ export const WardDetail = ({
   overwriteTranslation,
   organizationId,
   ward,
-  width
 }: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
   const translation = useTranslation(defaultWardDetailTranslations, overwriteTranslation)
 
@@ -101,17 +99,13 @@ export const WardDetail = ({
   })
   const deleteWardMutation = useWardDeleteMutation(organizationId, () => context.updateContext({ ...context.state, wardId: '' }))
 
-  // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
-  const minimumWidthOfCards = 200
-  const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
-
   return (
-    <div className={clsx('col py-4 px-6')}>
+    <div className="col py-4 px-6">
       <LoadingAndErrorComponent
         isLoading={!isCreatingNewWard && ((isLoading && !ward) || !newWard.id)}
         hasError={isError && !isCreatingNewWard && !ward}
-        loadingProps={{ classname: clsx('!h-full') }}
-        errorProps={{ classname: clsx('!h-full') }}
+        loadingProps={{ classname: '!h-full' }}
+        errorProps={{ classname: '!h-full' }}
       >
         <ConfirmDialog
           id="WardDetail-DeleteDialog"
@@ -131,7 +125,7 @@ export const WardDetail = ({
           title={isCreatingNewWard ? translation.createWard : translation.updateWard}
           subtitle={isCreatingNewWard ? translation.createWardSubtitle : translation.updateWardSubtitle}
         />
-        <div className={clsx('max-w-[400px]')}>
+        <div className="max-w-[400px]">
           <WardForm
             key={newWard.id}
             ward={newWard}
@@ -145,11 +139,11 @@ export const WardDetail = ({
         {isCreatingNewWard ?
           <span>{translation.roomsNotOnCreate}</span>
           : (
-          <div className={clsx('max-w-[600px] mt-6')}>
+          <div className="max-w-[600px] mt-6">
             <RoomList/>
           </div>
             )}
-        <div className={clsx('row justify-end mt-6')}>
+        <div className="row justify-end mt-6">
           <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
             disabled={!filledRequired}>
@@ -158,14 +152,14 @@ export const WardDetail = ({
         </div>
         {newWard.id !== '' &&
           (
-            <div className={clsx('mt-6')}>
-              <TaskTemplateWardPreview wardId={newWard.id} columns={columns}/>
+            <div className="mt-6">
+              <TaskTemplateWardPreview wardId={newWard.id}/>
             </div>
           )
         }
         <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
-          <span className={clsx('textstyle-title-normal')}>{translation.dangerZone}</span>
-          <span className={clsx('textstyle-description')}>{translation.dangerZoneText}</span>
+          <span className="textstyle-title-normal">{translation.dangerZone}</span>
+          <span className="textstyle-description">{translation.dangerZoneText}</span>
           <TextButton
             onClick={() => setIsShowingConfirmDialog(true)}
             className="px-0 font-bold justify-start"

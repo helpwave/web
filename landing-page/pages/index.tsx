@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { NextPage } from 'next'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -27,7 +26,7 @@ const defaultHomeTranslation: Record<Languages, HomeTranslation> = {
 const Home: NextPage = ({ overwriteTranslation }: PropsForTranslation<HomeTranslation>) => {
   const translation = useTranslation(defaultHomeTranslation, overwriteTranslation)
   return (
-    <Page outerClassName={clsx('z-0')} className={clsx('z-0')} pageTitleAddition={translation.home}>
+    <Page outerClassName="z-0" className="z-0" pageTitleAddition={translation.home}>
       <StartSection/>
       <PartnerSection/>
       <VisionSection/>

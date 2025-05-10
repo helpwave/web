@@ -11,8 +11,8 @@ type ColumnTitleProps = {
 export const ColumnTitle = ({ title, subtitle }: ColumnTitleProps) => {
   return (
     <div className={clsx('col', { 'mb-8': subtitle === undefined, 'mb-4': subtitle !== undefined })}>
-      <span className={clsx('textstyle-title-md')}>{title}</span>
-      <span className={clsx('leading-4 text-gray-400')}>{subtitle}</span>
+      <span className="textstyle-title-md">{title}</span>
+      <span className="leading-4 text-gray-400">{subtitle}</span>
     </div>
   )
 }

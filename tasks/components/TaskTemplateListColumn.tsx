@@ -50,17 +50,17 @@ export const TaskTemplateListColumn = ({
   }, [ref.current?.clientHeight])
 
   return (
-    <div className={clsx('col overflow-hidden h-full')}>
-      <div className={clsx('row overflow-hidden')}>
-        <span className={clsx('textstyle-lg mb-4 flex-1')}>
+    <div className="col overflow-hidden h-full">
+      <div className="row overflow-hidden">
+        <span className="textstyle-lg mb-4 flex-1">
           {translation.template}
         </span>
         {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
       </div>
-      <div className={clsx('overflow-hidden h-full')} ref={ref}>
+      <div className="overflow-hidden h-full" ref={ref}>
         <div>
           <Scrollbars autoHeight autoHeightMin={height} autoHide >
-            <div className={clsx('col gap-y-2 pr-3')}>
+            <div className="col gap-y-2 pr-3">
               {templates.map((taskTemplateExtension, index) => (
                 <TaskTemplateCard
                   key={taskTemplateExtension.taskTemplate.id}

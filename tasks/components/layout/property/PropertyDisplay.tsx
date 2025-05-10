@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -100,14 +99,14 @@ export const PropertyDisplay = ({
   })
 
   return (
-    <div className={clsx('py-4 px-6 col gap-y-4')}>
-      <div className={clsx('row gap-x-1 items-center')}>
-        <Tag className={clsx('text-primary')} size={20}/>
-        <span className={clsx('textstyle-title-lg')}>{translation.properties}</span>
+    <div className="py-4 px-6 col gap-y-4">
+      <div className="row gap-x-1 items-center">
+        <Tag className="text-primary" size={20}/>
+        <span className="textstyle-title-lg">{translation.properties}</span>
       </div>
-      <div className={clsx('col gap-y-2')}>
-        <div className={clsx('row justify-between')}>
-          <div className={clsx('row gap-x-2')}>
+      <div className="col gap-y-2">
+        <div className="row justify-between">
+          <div className="row gap-x-2">
             <Input
               // TODO Search Icon
               value={search}
@@ -116,7 +115,7 @@ export const PropertyDisplay = ({
               placeholder={translation.search}
             />
             <PropertySubjectTypeSelect
-              className={clsx('w-full')}
+              className="w-full"
               value={contextState.subjectType}
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation.subjectType}
@@ -146,7 +145,7 @@ export const PropertyDisplay = ({
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: clsx('min-h-[300px] border-2 border-black rounded-xl') }}
+        loadingProps={{ classname: 'min-h-[300px] border-2 border-black rounded-xl' }}
       >
         <Table
           data={filteredProperties}
@@ -157,19 +156,19 @@ export const PropertyDisplay = ({
               title={{ value: property.name }}
               description={{ value: translation[property.fieldType] }}
             />),
-            (<div key="subject-type-cell" className={clsx('row gap-x-2')}>
+            (<div key="subject-type-cell" className="row gap-x-2">
               <SubjectTypeIcon subjectType={property.subjectType}/>
               <span>{translation[property.subjectType]}</span>
             </div>),
-            (<div key="edit-button-cell" className={clsx('row justify-end')}>
+            (<div key="edit-button-cell" className="row justify-end">
               <TextButton onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
                 <span>{translation.edit}</span>
               </TextButton>
             </div>)
           ]}
           header={[
-            <span key="headerName" className={clsx('textstyle-table-header')}>{translation.name}</span>,
-            <span key="headerSubjectType" className={clsx('textstyle-table-header')}>{translation.subjectType}</span>,
+            <span key="headerName" className="textstyle-table-header">{translation.name}</span>,
+            <span key="headerSubjectType" className="textstyle-table-header">{translation.subjectType}</span>,
             <></>
           ]}
         />

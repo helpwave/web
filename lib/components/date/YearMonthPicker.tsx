@@ -53,7 +53,7 @@ export const YearMonthPicker = ({
   return (
     <div className={clsx('col select-none', className)}>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={clsx('col gap-y-1 mr-3')}>
+        <div className="col gap-y-1 mr-3">
           {years.map(year => {
             const selectedYear = displayedYearMonth.getFullYear() === year
             return (
@@ -63,9 +63,9 @@ export const YearMonthPicker = ({
                 label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
                 initialExpansion={showValueOpen && selectedYear}
               >
-                <div className={clsx('col gap-y-1 px-2 pb-2')}>
+                <div className="col gap-y-1 px-2 pb-2">
                   {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
-                    <div key={index} className={clsx('row')}>
+                    <div key={index} className="row">
                       {monthList.map(month => {
                         const monthIndex = monthsList.indexOf(month)
                         const newDate = new Date(year, monthIndex)

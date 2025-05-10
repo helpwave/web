@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
@@ -48,18 +47,18 @@ export const TasksDemoSection = () => {
   const imageURL = 'https://cdn.helpwave.de/products/tasks_preview.png'
   return (
     <SectionBase
-      className={clsx('col items-center gap-y-20 w-full')}
-      outerClassName={clsx('pb-0')}
+      className="col items-center gap-y-20 w-full"
+      outerClassName="pb-0"
     >
-      <div className={clsx('col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8')}>
-        <div className={clsx('col gap-y-4 desktop:max-w-[70%]')}>
-          <HelpwaveBadge className={clsx('text-primary bg-purple-100 !w-fit')} title={translation.helpwaveTasks}/>
-          <span className={clsx('textstyle-title-lg')}>{translation.workflowManagement}</span>
+      <div className="col desktop:flex-row w-full items-end justify-between gap-x-16 gap-y-8">
+        <div className="col gap-y-4 desktop:max-w-[70%]">
+          <HelpwaveBadge className="text-primary bg-purple-100 !w-fit" title={translation.helpwaveTasks}/>
+          <span className="textstyle-title-lg">{translation.workflowManagement}</span>
           <div className="grid grid-cols-1 gap-x-6 gap-y-4 overflow-x-auto mt-2">
             {[translation.feature1, translation.feature2, translation.feature3, translation.feature4].map((feature, index) => (
               <div key={index} className="row items-center">
                 <div
-                  className={clsx('col justify-center items-center bg-primary text-white rounded-full min-w-[24px] min-h-[24px]')}>
+                  className="col justify-center items-center bg-primary text-white rounded-full min-w-[24px] min-h-[24px]">
                   <Check size={18} strokeWidth={2.5}/>
                 </div>
                 <span>{feature}</span>
@@ -69,7 +68,7 @@ export const TasksDemoSection = () => {
         </div>
         <Link
           href={demoURL}
-          className={clsx('btn-md hover:brightness-[98%] bg-on-primary text-primary font-bold text-lg whitespace-nowrap')}
+          className="btn-md hover:brightness-[98%] bg-on-primary text-primary font-bold text-lg whitespace-nowrap"
         >
           {translation.tryDemo}
         </Link>
@@ -77,7 +76,7 @@ export const TasksDemoSection = () => {
       <Image
         src={imageURL}
         alt=""
-        className={clsx('w-full rounded-t-2xl max-w-[1000px]')}
+        className="w-full rounded-t-2xl max-w-[1000px]"
         style={{ transform: 'scale(101.28051%, 102.6862%) translate(-0.640255%, -1.3431%)' }}
         width={2351}
         height={1246}

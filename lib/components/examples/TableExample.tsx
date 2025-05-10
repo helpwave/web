@@ -7,7 +7,6 @@ import {
   removeFromTableSelection,
   Table
 } from '../Table'
-import clsx from 'clsx'
 import { Input } from '../user-input/Input'
 import { SolidButton, TextButton } from '../Button'
 import { SortButton } from '../SortButton'
@@ -62,7 +61,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
   }
 
   return (
-    <div className={clsx('col gap-y-12 items-center')}>
+    <div className="col gap-y-12 items-center">
       <Table
         stateManagement={[tableState, (newTableState) => {
           setTableState(newTableState)
@@ -71,7 +70,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
         data={data}
         identifierMapping={idMapping}
         rowMappingToCells={dataObject => [
-          <span key="id" className={clsx('textstyle-title-md w-[100px] text-ellipsis overflow-hidden block')}>{dataObject.id}</span>,
+          <span key="id" className="textstyle-title-md w-[100px] text-ellipsis overflow-hidden block">{dataObject.id}</span>,
           <Input key="name" value={dataObject.name} onChange={text => {
             setData(data.map(value => value.id === dataObject.id ? { ...dataObject, name: text } : value))
             setSorting(undefined)
@@ -99,7 +98,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.id[newTableSorting]))
             }}
           >
-            <span className={clsx('textstyle-table-header')}>Id</span>
+            <span className="textstyle-table-header">Id</span>
           </SortButton>,
           <SortButton
             key="name"
@@ -109,7 +108,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.name[newTableSorting]))
             }}
           >
-            <span className={clsx('textstyle-table-header')}>Name</span>
+            <span className="textstyle-table-header">Name</span>
           </SortButton>,
           <SortButton
             key="name"
@@ -119,14 +118,14 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.age[newTableSorting]))
             }}
           >
-            <span key="age" className={clsx('textstyle-table-header')}>age</span>
+            <span key="age" className="textstyle-table-header">age</span>
           </SortButton>,
           <></>
         ]}
       />
-      <div className={clsx('row gap-x-2')}>
+      <div className="row gap-x-2">
         <SolidButton
-          className={clsx('w-auto')}
+          className="w-auto"
           onClick={() => {
             const newData = {
               id: Math.random().toString(),
@@ -142,7 +141,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
           {'Add Data'}
         </SolidButton>
         <TextButton
-          className={clsx('w-auto')}
+          className="w-auto"
           onClick={() => {
             const selectedData = data.filter((d) => tableState.selection?.currentSelection.includes(idMapping(d)))
             const unselectedData = data.filter((d) => !tableState.selection?.currentSelection.includes(idMapping(d)))

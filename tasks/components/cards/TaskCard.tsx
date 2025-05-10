@@ -50,16 +50,16 @@ export const TaskCard = ({
         'border-primary': isSelected,
       })}
     >
-      <div className={clsx('col overflow-hidden')}>
-        <div className={clsx('row overflow-hidden items-center gap-x-1')}>
-          {!task.isPublicVisible && <div className={clsx('w-[12px]')}><LockIcon size={12}/></div>}
-          <span className={clsx('textstyle-title-sm truncate')}>{task.name}</span>
+      <div className="col overflow-hidden">
+        <div className="row overflow-hidden items-center gap-x-1">
+          {!task.isPublicVisible && <div className="w-[12px]"><LockIcon size={12}/></div>}
+          <span className="textstyle-title-sm truncate">{task.name}</span>
         </div>
-        <span className={clsx('overflow-hidden w-full block text-gray-500 text-ellipsis whitespace-nowrap')}>
+        <span className="overflow-hidden w-full block text-gray-500 text-ellipsis whitespace-nowrap">
             {task.notes}
           </span>
       </div>
-      <div className={clsx('col gap-y-1 w-[24px]')}>
+      <div className="col gap-y-1 w-[24px]">
         {assignee && assignee.avatarUrl &&
           <Avatar avatarUrl={assignee.avatarUrl} alt={translation.assigned} size="tiny"/>}
         {task.subtasks.length > 0 && (

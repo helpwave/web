@@ -36,15 +36,15 @@ export const DayPicker = ({
 
   return (
     <div className={clsx('col gap-y-1 min-w-[220px] select-none', className)}>
-      <div className={clsx('row text-center')}>
+      <div className="row text-center">
         {weeks[0]!.map((weekDay, index) => (
-          <div key={index} className={clsx('flex-1 font-semibold')}>
+          <div key={index} className="flex-1 font-semibold">
             {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} className={clsx('row text-center')}>
+        <div key={index} className="row text-center">
           {week.map((date) => {
             const isSelected = !!selected && equalDate(selected, date)
             const isToday = equalDate(new Date(), date)

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import clsx from 'clsx'
 import type { ShadedColors } from '../../coloring/types'
 import { shadingColorValues } from '../../coloring/types'
 import { generateShadingColors } from '../../coloring/shading'
@@ -14,7 +13,7 @@ const ColorStripe = ({ shading }: StripeProps) => {
   return (
     <div className="row">
       {shadingColorValues.map((shade, index) => (
-        <div key={index} className={clsx('col gap-y-2 items-center relative')}>
+        <div key={index} className="col gap-y-2 items-center relative">
           <span className="font-bold">{shade}</span>
           <div
             style={{

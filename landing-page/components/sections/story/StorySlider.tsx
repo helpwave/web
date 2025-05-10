@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { TextImageProps } from '@helpwave/common/components/TextImage'
@@ -87,11 +87,11 @@ export const StoriesSliderSection = () => {
   ]
 
   return (
-    <SectionBase className={clsx('col gap-y-8 w-full !max-w-[1600px]')} outerClassName={clsx('!px-0')}>
+    <SectionBase className="col gap-y-8 w-full !max-w-[1600px]" outerClassName="!px-0">
       <Carousel hintNext={true} isLooping={true} isAutoLooping={true} className="tablet:h-[300px]">
         {items.map((value, index) => (
-          <div key={index} className={clsx('px-[2.5%] h-full')}>
-            <TextImage {...value} className={clsx('h-full overflow-hidden')}/>
+          <div key={index} className="px-[2.5%] h-full">
+            <TextImage {...value} className="h-full overflow-hidden"/>
           </div>
         ))}
       </Carousel>
@@ -106,7 +106,7 @@ export const StoriesSliderSection = () => {
         )}
         onBackgroundClick={() => setModalValue(undefined)}
         onCloseClick={() => setModalValue(undefined)}
-        modalClassName={clsx('max-w-[600px] max-tablet:max-w-[90%] w-full')}
+        modalClassName="max-w-[600px] max-tablet:max-w-[90%] w-full"
       />
     </SectionBase>
   )

@@ -189,7 +189,7 @@ export const ScrollPicker = <T, >({
 
   return (
     <div
-      className={clsx('relative overflow-hidden')}
+      className="relative overflow-hidden"
       style={{ height: containerHeight }}
       onWheel={event => {
         if (event.deltaY !== 0) {
@@ -205,7 +205,7 @@ export const ScrollPicker = <T, >({
           style={{ height: `${itemHeight}px` }}
         />
         <div
-          className={clsx(`col select-none`)}
+          className="col select-none"
           style={{
             transform: `translateY(${-transition * (distance + itemHeight)}px)`,
             columnGap: `${distance}px`,

@@ -19,17 +19,17 @@ export const Header = ({ leading, leftSide, rightSide, className }: HeaderProps)
         className
       )}
     >
-      <div className={clsx('row items-center gap-x-4')}>
+      <div className="row items-center gap-x-4">
         {leading}
-        {leading && leftSide && (<div className={clsx('h-8 w-[2px] rounded bg-gray-200')}/>)}
+        {leading && leftSide && (<div className="h-8 w-[2px] rounded bg-gray-200"/>)}
         {leftSide && (
-          <div className={clsx('row items-center gap-x-2')}>
+          <div className="row items-center gap-x-2">
             {leftSide}
           </div>
         )}
       </div>
       {rightSide && (
-        <div className={clsx('row items-center gap-x-2')}>
+        <div className="row items-center gap-x-2">
           {rightSide}
         </div>
       )}

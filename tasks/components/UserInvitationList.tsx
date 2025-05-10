@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
@@ -70,8 +70,8 @@ export const UserInvitationList = ({
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError}
-        loadingProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-        errorProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+        loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
+        errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
       >
         {data && (
           <Table
@@ -79,12 +79,12 @@ export const UserInvitationList = ({
             stateManagement={[tableState, setTableState]}
             identifierMapping={idMapping}
             header={[
-              <span key="organization" className={clsx('textstyle-table-header')}>{translation.organization}</span>,
+              <span key="organization" className="textstyle-table-header">{translation.organization}</span>,
               <></>,
               <></>
             ]}
             rowMappingToCells={invite => [
-              <div key="name" className={clsx('row justify-start items-center gap-x-2')}>
+              <div key="name" className="row justify-start items-center gap-x-2">
                 <Avatar avatarUrl={invite.organization.id} alt=""/>
                 <span>{invite.organization.longName}</span>
               </div>,

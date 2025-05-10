@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
@@ -144,7 +144,7 @@ export const RoomList = ({
   const multipleInDelete = deletionConfirmDialogElement !== '' || tableState.selection?.currentSelection.length === 1
 
   return (
-    <div className={clsx('col')}>
+    <div className="col">
       <ConfirmDialog
         id="roomlist-DeleteBedsDialog"
         titleText={translation.deleteConfirmText(multipleInDelete)}
@@ -177,12 +177,12 @@ export const RoomList = ({
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-        errorProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+        loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
+        errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
       >
-        <div className={clsx('row justify-between items-center mb-2')}>
-          <span className={clsx('textstyle-table-name')}>{translation.rooms + ` (${usedRooms.length})`}</span>
-          <div className={clsx('row gap-x-2')}>
+        <div className="row justify-between items-center mb-2">
+          <span className="textstyle-table-name">{translation.rooms + ` (${usedRooms.length})`}</span>
+          <div className="row gap-x-2">
             {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
               <SolidButton
                 onClick={() => setDeletionConfirmDialogElement('')}
@@ -205,13 +205,13 @@ export const RoomList = ({
           }]}
           identifierMapping={identifierMapping}
           header={[
-            <span key="name" className={clsx('textstyle-table-header')}>{translation.roomName}</span>,
-            <span key="bedcount" className={clsx('textstyle-table-header')}>{translation.bedCount}</span>,
-            <span key="manage" className={clsx('textstyle-table-header')}>{translation.manageBeds}</span>,
+            <span key="name" className="textstyle-table-header">{translation.roomName}</span>,
+            <span key="bedcount" className="textstyle-table-header">{translation.bedCount}</span>,
+            <span key="manage" className="textstyle-table-header">{translation.manageBeds}</span>,
             <></>
           ]}
           rowMappingToCells={room => [
-            <div key="name" className={clsx('row items-center w-10/12 min-w-[50px]')}>
+            <div key="name" className="row items-center w-10/12 min-w-[50px]">
               <Input
                 value={room.name}
                 type="text"
@@ -235,15 +235,15 @@ export const RoomList = ({
                 maxLength={maxRoomNameLength}
               />
             </div>,
-            <div key="bedcount" className={clsx('w-20')}>
+            <div key="bedcount" className="w-20">
               <span>{room.bedCount}</span>
             </div>,
-            <div key="manage" className={clsx('row justify-start min-w-[140px]')}>
+            <div key="manage" className="row justify-start min-w-[140px]">
               <TextButton onClick={() => setManagedRoom(room.id)}>
                 {translation.manage}
               </TextButton>
             </div>,
-            <div key="remove" className={clsx('row justify-end')}>
+            <div key="remove" className="row justify-end">
               <TextButton onClick={() => setDeletionConfirmDialogElement(room.id)} color="negative">
                 {translation.remove}
               </TextButton>

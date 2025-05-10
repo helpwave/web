@@ -53,7 +53,7 @@ const Menu = <T extends HTMLElement>({
 
   return (
     <div
-      className={clsx('relative')}
+      className="relative"
       {...handlers}
     >
       {trigger(() => setIsOpen(!isOpen), triggerRef)}

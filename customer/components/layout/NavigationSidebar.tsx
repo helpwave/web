@@ -77,9 +77,9 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
           </Link>
         ))}
       </nav>
-      <div className={clsx('col')}>
+      <div className="col">
         <button
-          className={clsx('row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40')}
+          className="row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40"
           onClick={() => setIsLanguageModalOpen(true)}
         >
           {languagesLocalNames[language]}

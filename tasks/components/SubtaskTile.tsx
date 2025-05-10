@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import clsx from 'clsx'
+
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
 import { TextButton } from '@helpwave/common/components/Button'
@@ -48,7 +48,7 @@ export const SubtaskTile = ({
   }, [subtask])
 
   return (
-    <div className={clsx('row gap-x-2 items-center overflow-x-hidden')}>
+    <div className="row gap-x-2 items-center overflow-x-hidden">
       <div>
         <Checkbox
           onChange={isDone => {
@@ -64,7 +64,6 @@ export const SubtaskTile = ({
       </div>
       <ToggleableInput
         value={subtask.name}
-        className={clsx('')}
         onChange={name => setLocalSubtask({
           ...subtask,
           name
@@ -82,7 +81,7 @@ export const SubtaskTile = ({
         maxLength={maxTaskNameLength}
       />
       <TextButton
-        className={clsx('ml-4')}
+        className="ml-4"
         onClick={onRemoveClick}
         aria-label={translation.remove}
         color="negative"

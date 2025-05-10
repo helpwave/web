@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -32,28 +31,28 @@ export const TasksKanbanSection = ({ overwriteTranslation }: PropsForTranslation
 
   return (
     <SectionBase
-      className={clsx('max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center')}
+      className="max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center"
       backgroundColor="variant"
     >
-      <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0')}>
-        <div className={clsx('col gap-y-2')}>
-          <div className={clsx('row gap-x-1 text-primary items-center')}>
+      <div className="col gap-y-2 pb-16 max-tablet:pb-0">
+        <div className="col gap-y-2">
+          <div className="row gap-x-1 text-primary items-center">
             <TagIcon/>
-            <span className={clsx('textstyle-title-normal')}>{translation.tasks}</span>
+            <span className="textstyle-title-normal">{translation.tasks}</span>
           </div>
-          <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
-          <span className={clsx('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
+          <h1 className="textstyle-title-2xl">{translation.title}</h1>
+          <span className="font-space font-semibold"><MarkdownInterpreter text={translation.description}/></span>
         </div>
       </div>
       <div
-        className={clsx('row bottom-0 justify-center rounded-l-3xl max-tablet:w-5/6 min-w-[50%] z-10')}
+        className="row bottom-0 justify-center rounded-l-3xl max-tablet:w-5/6 min-w-[50%] z-10"
       >
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={clsx('w-fit desktop:max-h-[70vh] p-4 rounded-lg dark:bg-white')}
+          className="w-fit desktop:max-h-[70vh] p-4 rounded-lg dark:bg-white"
         />
       </div>
     </SectionBase>

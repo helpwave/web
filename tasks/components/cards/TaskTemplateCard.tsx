@@ -49,9 +49,9 @@ export const TaskTemplateCard = ({
       className={clsx('group col bg-white', className)}
       {...editCardProps}
     >
-      <div className={clsx('overflow-hidden h-full')}>
-        <div className={clsx('row items-start overflow-hidden gap-x-1')}>
-          <span className={clsx('textstyle-title-sm')}>{name}</span>
+      <div className="overflow-hidden h-full">
+        <div className="row items-start overflow-hidden gap-x-1">
+          <span className="textstyle-title-sm">{name}</span>
           {typeForLabel && (
             <Chip
               // TODO use correct colors

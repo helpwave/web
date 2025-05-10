@@ -5,7 +5,6 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { Section } from '@/components/layout/Section'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import clsx from 'clsx'
 import type { UserRole, UserRoleTranslation, UserSeat } from '@/api/dataclasses/user_seat'
 import { userRoles } from '@/api/dataclasses/user_seat'
 import { defaultUserRoleTranslation } from '@/api/dataclasses/user_seat'
@@ -53,11 +52,11 @@ const Team: NextPage<PropsForTranslation<TeamTranslation, TeamServerSideProps>> 
 
   // TODO do input validation
   return (
-    <Page pageTitle={titleWrapper(translation.team)} mainContainerClassName={clsx('min-h-[auto] pb-6')}>
+    <Page pageTitle={titleWrapper(translation.team)} mainContainerClassName="min-h-[auto] pb-6">
       <Section titleText={translation.team}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
           {!!data && (
-            <div className={clsx('col gap-y-1')}>
+            <div className="col gap-y-1">
               <span>{translation.teamDescription}</span>
               <Table
                 data={data}
@@ -69,10 +68,10 @@ const Team: NextPage<PropsForTranslation<TeamTranslation, TeamServerSideProps>> 
                 ]}
                 rowMappingToCells={dataObject => [
                   (
-                    <div key={idMapping(dataObject) + '-name'} className={clsx('col')}>
+                    <div key={idMapping(dataObject) + '-name'} className="col">
                       <span
-                        className={clsx('text-lg font-semibold')}>{`${dataObject.firstName} ${dataObject.lastName}`}</span>
-                      <span className={clsx('text-gray-400')}>{dataObject.email}</span>
+                        className="text-lg font-semibold">{`${dataObject.firstName} ${dataObject.lastName}`}</span>
+                      <span className="text-gray-400">{dataObject.email}</span>
                     </div>
                   ),
                   (

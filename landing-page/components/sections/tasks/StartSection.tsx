@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -33,25 +32,25 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
 
   return (
     <SectionBase
-      className={clsx('col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center')}
-      outerClassName={clsx('py-24')}
+      className="col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center"
+      outerClassName="py-24"
     >
       <Image
         alt="Screenshots"
         src={screenshotURL}
         width={0}
         height={0}
-        className={clsx(`object-contain w-full desktop:min-w-[40%] desktop:scale-125 -rotate-12`)}
+        className="object-contain w-full desktop:min-w-[40%] desktop:scale-125 -rotate-12"
       />
-      <div className={clsx('col gap-y-4')}>
+      <div className="col gap-y-4">
         <Link href={demoURL} target="_blank">
-          <Chip className={clsx('row w-fit items-center')} color="default">
-            <Helpwave size={24} className={clsx('min-w-[24px] min-h-[24px]')}/>
-            <span className={clsx('font-bold')}>helpwave tasks</span>
+          <Chip className="row w-fit items-center" color="default">
+            <Helpwave size={24} className="min-w-[24px] min-h-[24px]"/>
+            <span className="font-bold">helpwave tasks</span>
           </Chip>
         </Link>
-        <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
-        <MarkdownInterpreter text={translation.text} className={clsx('text-xl font-medium')}/>
+        <h1 className="textstyle-title-2xl">{translation.title}</h1>
+        <MarkdownInterpreter text={translation.text} className="text-xl font-medium"/>
       </div>
     </SectionBase>
   )

@@ -76,9 +76,9 @@ export const AddPatientModal = ({
       buttonOverwrites={[{}, {}, { disabled: !validPatientName }]}
       {...modalProps}
     >
-      <div className={clsx('col gap-y-4 min-w-[300px]')}>
-        <div className={clsx('col gap-y-1')}>
-          <span className={clsx('textstyle-label-md')}>{translation.name}</span>
+      <div className="col gap-y-4 min-w-[300px]">
+        <div className="col gap-y-1">
+          <span className="textstyle-label-md">{translation.name}</span>
           <Input
             value={patientName}
             onChange={(text) => {
@@ -86,7 +86,7 @@ export const AddPatientModal = ({
               setPatientName(text)
             }}
           />
-          {isShowingError && <span className={clsx('textstyle-form-error')}>{translation.minimumLength(minimumNameLength)}</span>}
+          {isShowingError && <span className="textstyle-form-error">{translation.minimumLength(minimumNameLength)}</span>}
         </div>
         <RoomBedSelect
           initialRoomAndBed={dropdownId}

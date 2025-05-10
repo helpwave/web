@@ -6,7 +6,6 @@ import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -64,11 +63,11 @@ export const PropertySelectOptionsUpdater = ({
   }, [value])
 
   return (
-    <div className={clsx('col mt-2 gap-y-1')}>
-      <div className={clsx('row justify-between items-center')}>
-        <span className={clsx('textstyle-label-md')}>{translation.values}</span>
+    <div className="col mt-2 gap-y-1">
+      <div className="row justify-between items-center">
+        <span className="textstyle-label-md">{translation.values}</span>
         <Plus
-          className={clsx('text-white bg-primary hover:brightness-90 rounded-full mr-3')}
+          className="text-white bg-primary hover:brightness-90 rounded-full mr-3"
           size={20}
           onClick={() => {
             onChange({ ...data }, { ...update, create: update.create + 1 })
@@ -76,9 +75,9 @@ export const PropertySelectOptionsUpdater = ({
         />
       </div>
       <Scrollbars autoHide autoHeight autoHeightMax={400}>
-        <div className={clsx('col gap-y-2 mr-3')}>
+        <div className="col gap-y-2 mr-3">
           {data.options.map((entry, index) => (
-            <div key={index} className={clsx('row items-center justify-between gap-x-4')}>
+            <div key={index} className="row items-center justify-between gap-x-4">
               <Input
                 value={entry.name ?? ''}
                 placeholder={`${translation.newEntry} ${index + 1}`}
@@ -218,7 +217,7 @@ export const PropertyDetailsField = ({
               }}
             />
           )}
-          className={clsx('mt-4')}
+          className="mt-4"
         />
       )}
     </InputGroup>

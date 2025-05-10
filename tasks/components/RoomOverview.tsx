@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+
 import { useContext, useEffect, useRef, useState } from 'react'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import type { BedMinimalDTO } from '@helpwave/api-services/types/tasks/bed'
@@ -40,18 +40,18 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const selectedBedId = context.state.bedId
 
   return (
-    <div className={clsx('col w-full')} ref={ref}>
-      <div className={clsx('row items-center mb-1')}>
-        <div className={clsx('w-2 h-2 mx-2 rounded-full bg-gray-300')}/>
-        <span className={clsx('textstyle-title-normal')}>{room.name}</span>
+    <div className="col w-full" ref={ref}>
+      <div className="row items-center mb-1">
+        <div className="w-2 h-2 mx-2 rounded-full bg-gray-300"/>
+        <span className="textstyle-title-normal">{room.name}</span>
       </div>
-      <div className={clsx(`grid grid-cols-${columns} gap-4`)}>
+      <div className={`grid grid-cols-${columns} gap-4`}>
         {room.beds.map((bed) => bed.patient && bed.patient?.id ?
             (
               <Droppable id={bed.id} key={bed.id} data={{ bed, room, patient: bed.patient }}>
                 {({ isOver }) => bed.patient && bed.patient?.id && (
                   <DragCard
-                    className={clsx('!p-0 !border-0')}
+                    className="!p-0 !border-0"
                   >
                     <Draggable id={bed.patient.id + 'roomOverview'} data={{ bed, room, patient: bed.patient }}>
                       {() => bed.patient && bed.patient?.id && (

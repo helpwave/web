@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { NextPage } from 'next'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import Image from 'next/image'
@@ -101,19 +100,19 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
             alt=""
             width={0}
             height={0}
-            className={clsx('w-fit desktop:max-h-[70vh]')}
+            className="w-fit desktop:max-h-[70vh]"
           />
         </div>
       </SectionBase>
 
-      <SectionBase  className={clsx('w-full')}>
-        <h2 className={clsx('textstyle-title-normal')}>Freepik</h2>
-        <div className={clsx('grow col items-center min-w-50 items-center gap-y-4')}>
+      <SectionBase  className="w-full">
+        <h2 className="textstyle-title-normal">Freepik</h2>
+        <div className="grow col items-center min-w-50 items-center gap-y-4">
           {
             freepikCredits.map((credit) => (
-              <div className={clsx('w-full')} key={credit.link}>
+              <div className="w-full" key={credit.link}>
                 <span>{credit.text}</span>
-                <Link href={credit.link} className={clsx('underline block')} target="_blank">{credit.link}</Link>
+                <Link href={credit.link} className="underline block" target="_blank">{credit.link}</Link>
               </div>
             ))
           }
@@ -121,10 +120,10 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
 
       </SectionBase>
 
-      <SectionBase backgroundColor="variant" className={clsx('col gap-y-2 w-full')}>
-        <h2 className={clsx('textstyle-title-md')}>{translation.flaticon}</h2>
+      <SectionBase backgroundColor="variant" className="col gap-y-2 w-full">
+        <h2 className="textstyle-title-md">{translation.flaticon}</h2>
         {flaticonCredits.map(({ name, author, link }) => (
-          <Link key={name + author} href={link} title={name} className={clsx('underline')} target="_blank">
+          <Link key={name + author} href={link} title={name} className="underline" target="_blank">
             {translation.createdBy(name, author)}
           </Link>
         ))}

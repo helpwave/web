@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { ModalRegister } from '../modals/ModalRegister'
 import { ConfirmDialog } from '../modals/ConfirmDialog'
 import { SolidButton } from '../Button'
-import clsx from 'clsx'
 import { modalRootName } from '../modals/Modal'
 
 /**
@@ -21,7 +20,7 @@ export const StackingModals = () => {
         onConfirm={() => setModal1(false)}
         onBackgroundClick={() => setModal1(false)}
         onCloseClick={() => setModal1(false)}
-        modalClassName={clsx('!bg-yellow-200 min-h-[300px]')}
+        modalClassName="!bg-yellow-200 min-h-[300px]"
       >
         {'I\'m Modal 1'}
         <SolidButton onClick={() => setModal2(true)}>Open Modal 2</SolidButton>
@@ -32,7 +31,7 @@ export const StackingModals = () => {
         onConfirm={() => setModal2(false)}
         onBackgroundClick={() => setModal2(false)}
         onCloseClick={() => setModal2(false)}
-        modalClassName={clsx('!bg-green-200 min-w-[300px]')}
+        modalClassName="!bg-green-200 min-w-[300px]"
       >
         {'The next layer of Modals!'}
         {'This is Modal 2'}
@@ -47,7 +46,7 @@ export const StackingModals = () => {
       >
         This is Modal 3!
       </ConfirmDialog>
-      <div className={clsx('row items-center justify-center min-h-[400px]')} id={modalRootName}>
+      <div className="row items-center justify-center min-h-[400px]" id={modalRootName}>
         <SolidButton onClick={() => setModal1(true)}>Open Modal 1</SolidButton>
       </div>
     </ModalRegister>

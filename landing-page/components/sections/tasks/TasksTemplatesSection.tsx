@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -32,29 +31,29 @@ export const TasksTemplatesSection = ({ overwriteTranslation }: PropsForTranslat
 
   return (
     <SectionBase
-      className={clsx('max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center')}
+      className="max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center"
       backgroundColor="secondary"
-      outerClassName={clsx('py-24')}
+      outerClassName="py-24"
     >
-      <div className={clsx('col gap-y-2 pb-16 max-tablet:pb-0 overflow-hidden break-words')}>
-        <div className={clsx('col gap-y-2')}>
-          <div className={clsx('row gap-x-1 text-primary items-center')}>
+      <div className="col gap-y-2 pb-16 max-tablet:pb-0 overflow-hidden break-words">
+        <div className="col gap-y-2">
+          <div className="row gap-x-1 text-primary items-center">
             <TagIcon/>
-            <span className={clsx('textstyle-title-normal')}>{translation.taskTemplates}</span>
+            <span className="textstyle-title-normal">{translation.taskTemplates}</span>
           </div>
-          <h1 className={clsx('textstyle-title-2xl')}>{translation.title}</h1>
-          <span className={clsx('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
+          <h1 className="textstyle-title-2xl">{translation.title}</h1>
+          <span className="font-space font-semibold"><MarkdownInterpreter text={translation.description}/></span>
         </div>
       </div>
       <div
-        className={clsx('row bottom-0 justify-center rounded-l-3xl max-tablet:w-full min-w-[50%] z-10 desktop:scale-125')}
+        className="row bottom-0 justify-center rounded-l-3xl max-tablet:w-full min-w-[50%] z-10 desktop:scale-125"
       >
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={clsx('w-fit desktop:max-h-[70vh]')}
+          className="w-fit desktop:max-h-[70vh]"
         />
       </div>
     </SectionBase>

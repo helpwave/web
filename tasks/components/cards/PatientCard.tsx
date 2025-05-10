@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
@@ -42,11 +42,11 @@ export const PatientCard = ({
   const translation = useTranslation(defaultPatientCardTranslations, overwriteTranslation)
   return (
     <DragCard isSelected={isSelected} onClick={onClick} {...restCardProps}>
-      <div className={clsx('row justify-between')}>
-        <span className={clsx('textstyle-title-sm whitespace-nowrap')} >{bedName ?? translation.bedNotAssigned}</span>
-        <span className={clsx('ml-2 truncate')}>{patientName}</span>
+      <div className="row justify-between">
+        <span className="textstyle-title-sm whitespace-nowrap" >{bedName ?? translation.bedNotAssigned}</span>
+        <span className="ml-2 truncate">{patientName}</span>
       </div>
-      <div className={clsx('min-w-[150px] max-w-[200px] mt-1')}>
+      <div className="min-w-[150px] max-w-[200px] mt-1">
         <PillLabelsColumn
           doneCount={doneTasks}
           inProgressCount={inProgressTasks}

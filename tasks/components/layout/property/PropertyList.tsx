@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
@@ -77,11 +77,11 @@ export const PropertyList = ({
       hasError={isError}
       loadingProps={{ classname: 'min-h-[200px] border-2 border-black rounded-xl' }}
     >
-      <div className={clsx('col gap-y-2')}>
+      <div className="col gap-y-2">
         <Tile
           title={{ value: translation.properties, className: 'textstyle-title-lg' }}
-          prefix={<Tag className={clsx('text-primary')} size={20}/>}
-          className={clsx('!gap-x-2')}
+          prefix={<Tag className="text-primary" size={20}/>}
+          className="!gap-x-2"
         />
         {properties && properties.map((property, index) => (
             <PropertyEntry
@@ -97,14 +97,14 @@ export const PropertyList = ({
           trigger={(onClick, ref) => (
             <div
               ref={ref}
-              className={clsx('row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-primary rounded-2xl cursor-pointer')}
+              className="row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-primary rounded-2xl cursor-pointer"
               onClick={onClick}
             >
               <Plus size={20}/>
               <span>{translation.addProperty}</span>
             </div>
           )}
-          menuClassName={clsx('min-w-[200px] p-2 ')}
+          menuClassName="min-w-[200px] p-2 "
           alignment="t_"
         >
           <LoadingAndErrorComponent
@@ -125,7 +125,7 @@ export const PropertyList = ({
                       addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
                       updateViewRulesMutation.mutate({ subjectId, appendToAlwaysInclude: [property.id] })
                     }}
-                    className={clsx('rounded-md cursor-pointer')}
+                    className="rounded-md cursor-pointer"
                   >
                     {property.name}
                   </MenuItem>

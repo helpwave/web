@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from 'react'
-import clsx from 'clsx'
 import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -56,7 +55,7 @@ export const DiscardChangesDialog = ({
       {...modalProps}
     >
       {children}
-      <div className={clsx('row mt-3 gap-x-4 justify-end')}>
+      <div className="row mt-3 gap-x-4 justify-end">
         <SolidButton color="positive" onClick={onSave}>
           {translation.save}
         </SolidButton>

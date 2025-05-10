@@ -129,7 +129,7 @@ export const TwoColumn = ({
       {fullWidth !== 0 && (
         <>
           <div
-            className={clsx(`overflow-hidden`)}
+            className="overflow-hidden"
             style={{ width: leftWidth + 'px' }}
           >
             <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: leftWidth }}>
@@ -141,17 +141,17 @@ export const TwoColumn = ({
             onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
             className={clsx(`relative h-full justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
           >
-              <div className={clsx('bg-gray-300 my-4 rounded-lg w-0.5')} />
+              <div className="bg-gray-300 my-4 rounded-lg w-0.5" />
             {!disableResize && (
               <div
-                className={clsx('absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] col justify-center items-center')}
+                className="absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] col justify-center items-center"
               >
-                <GripVertical className={clsx('text-white')}/>
+                <GripVertical className="text-white"/>
               </div>
             )}
             {!disableResize && (
               <button
-                className={clsx('absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5')}
+                className="absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5"
                 onClick={() => setLeftWidth(leftFocus ? convertToLeftWidth(baseLayoutValue, fullWidth) : fullWidth - convertToLeftWidth(constraints.right?.min ?? defaultConstraint.right.min, fullWidth))}
               >
                 {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
@@ -159,7 +159,7 @@ export const TwoColumn = ({
             )}
           </div>
           <div
-            className={clsx(`overflow-hidden`)}
+            className="overflow-hidden"
             style={{ width: (rightWidth) + 'px' }}
           >
             <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: rightWidth }}>

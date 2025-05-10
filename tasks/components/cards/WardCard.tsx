@@ -18,11 +18,11 @@ export const WardCard = ({
 }: WardCardProps) => {
   return (
     <EditCard className={clsx('group cursor-pointer', className)} {...editCardProps}>
-      <div className={clsx('col gap-y-2')}>
-        <div className={clsx('row w-full overflow-hidden')}>
-          <span className={clsx('textstyle-title-sm flex-1 truncate')}>{ward.name}</span>
+      <div className="col gap-y-2">
+        <div className="row w-full overflow-hidden">
+          <span className="textstyle-title-sm flex-1 truncate">{ward.name}</span>
         </div>
-        <div className={clsx('row gap-x-1')}>
+        <div className="row gap-x-1">
           <Bed/>
           <span>{ward.bedCount}</span>
         </div>

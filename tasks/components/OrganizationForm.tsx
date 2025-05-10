@@ -103,8 +103,8 @@ export const OrganizationForm = ({
   const maxLongNameLength = 64
   const maxMailLength = 320
 
-  const inputErrorClasses = clsx('border-negative focus:border-negative focus:ring-negative border-2')
-  const inputClasses = clsx('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary')
+  const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
+  const inputClasses = 'mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary'
 
   function validateShortName(organization: OrganizationMinimalDTO) {
     const shortName = organization.shortName.trim()
@@ -153,11 +153,11 @@ export const OrganizationForm = ({
   return (
     <LoadingAndErrorComponent
       isLoading={!organizationForm}
-      loadingProps={{ classname: clsx('border-2 border-gray-500 rounded-xl min-h-[350px]') }}
+      loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[350px]' }}
       minimumLoadingDuration={200} // prevents errors flickering
     >
-      <span className={clsx('textstyle-title-normal')}>{translation.general}</span>
-      <div className={clsx('mt-2 mb-1')}>
+      <span className="textstyle-title-normal">{translation.general}</span>
+      <div className="mt-2 mb-1">
         <Input
           id="shortName"
           value={organizationForm.organization.shortName}
@@ -168,10 +168,10 @@ export const OrganizationForm = ({
           maxLength={maxShortNameLength}
           className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <span className={clsx('textstyle-form-error')}>{shortNameErrorMessage}</span>}
+        {isDisplayingShortNameError && <span className="textstyle-form-error">{shortNameErrorMessage}</span>}
       </div>
-      <span className={clsx('textstyle-form-description')}>{translation.shortNameDescription}</span>
-      <div className={clsx('mt-2 mb-1')}>
+      <span className="textstyle-form-description">{translation.shortNameDescription}</span>
+      <div className="mt-2 mb-1">
         <Input
           id="longName"
           value={organizationForm.organization.longName}
@@ -182,12 +182,12 @@ export const OrganizationForm = ({
           maxLength={maxLongNameLength}
           className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
         />
-        {isDisplayingLongNameError && <span className={clsx('textstyle-form-error')}>{longNameErrorMessage}</span>}
+        {isDisplayingLongNameError && <span className="textstyle-form-error">{longNameErrorMessage}</span>}
       </div>
-      <span className={clsx('textstyle-form-description')}>{translation.longNameDescription}</span>
-      <div className={clsx('mt-2 mb-1')}>
-        <div className={clsx('row items-end')}>
-          <div className={clsx('flex-1 mr-2')}>
+      <span className="textstyle-form-description">{translation.longNameDescription}</span>
+      <div className="mt-2 mb-1">
+        <div className="row items-end">
+          <div className="flex-1 mr-2">
             <Input
               id="email"
               value={organizationForm.organization.email}
@@ -202,12 +202,12 @@ export const OrganizationForm = ({
           </div>
           {
             !organizationForm.organization.isVerified &&
-            <span className={clsx('text-negative mb-3')}>{translation.notVerified}</span>
+            <span className="text-negative mb-3">{translation.notVerified}</span>
           }
         </div>
-        {isDisplayingEmailNameError && <span className={clsx('textstyle-form-error')}>{emailErrorMessage}</span>}
+        {isDisplayingEmailNameError && <span className="textstyle-form-error">{emailErrorMessage}</span>}
       </div>
-      <span className={clsx('textstyle-form-description')}>{translation.contactEmailDescription}</span>
+      <span className="textstyle-form-description">{translation.contactEmailDescription}</span>
     </LoadingAndErrorComponent>
   )
 }

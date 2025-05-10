@@ -1,5 +1,5 @@
 import { Mail } from 'lucide-react'
-import clsx from 'clsx'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import Link from 'next/link'
@@ -49,7 +49,7 @@ export const InvitationBanner = ({
 
   return (
   <Link
-    className={clsx('w-full bg-primary text-white py-2 px-4 rounded-xl cursor-pointer select-none row gap-x-2 items-center')}
+    className="w-full bg-primary text-white py-2 px-4 rounded-xl cursor-pointer select-none row gap-x-2 items-center"
     href="/invitations"
   >
     <Mail />{`${translation.openInvites}: ${openInvites}`}

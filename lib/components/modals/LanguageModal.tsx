@@ -1,11 +1,10 @@
 import { type PropsWithChildren } from 'react'
-import { tw } from '../../twind'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user-input/Select'
 import type { Languages } from '../../hooks/useLanguage'
 import { useLanguage } from '../../hooks/useLanguage'
-import { Button } from '../Button'
+import { SolidButton } from '../Button'
 import { Modal, type ModalProps } from './Modal'
 
 const languageDetails = {
@@ -59,17 +58,17 @@ export const LanguageModal = ({
       }}
       {...modalProps}
     >
-      <div className={tw('w-[320px]')}>
+      <div className="w-[320px]">
         <Select
-            className={tw('mt-2')}
+            className="mt-2"
             value={language}
             options={Object.entries(languageDetails).map(([tag, name]) => ({ label: name, value: tag }))}
             onChange={(language: string) => setLanguage(language as Languages)}
           />
-          <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-            <Button autoFocus color="hw-positive" onClick={onDone}>
+          <div className="row mt-3 gap-x-4 justify-end">
+            <SolidButton autoFocus color="positive" onClick={onDone}>
               {translation.done}
-            </Button>
+            </SolidButton>
           </div>
       </div>
     </Modal>

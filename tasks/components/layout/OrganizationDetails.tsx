@@ -1,8 +1,8 @@
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import {
   useInviteMemberMutation,
@@ -133,7 +133,7 @@ export const OrganizationDetail = ({
   return (
     <div
       key={contextState.organizationId}
-      className={tw('flex flex-col py-4 px-6')}
+      className="col py-4 px-6"
     >
       <ConfirmDialog
         id="organizationDetail-DeleteDialog"
@@ -173,7 +173,7 @@ export const OrganizationDetail = ({
         }}
       />
       <ColumnTitle title={translation.organizationDetail}/>
-      <div className={tw('flex flex-col gap-y-4 max-w-[500px]')}>
+      <div className="col gap-y-4 max-w-[500px]">
         <OrganizationForm
           organizationForm={organizationForm}
           onChange={(organizationForm, shouldUpdate) => {
@@ -191,20 +191,20 @@ export const OrganizationDetail = ({
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
           organizationId={contextState.organizationId}
         />
-        <div className={tw('flex flex-row justify-end')}>
-          <Button
-            className={tw('w-auto')}
+        <div className="row justify-end">
+          <SolidButton
+            className="w-auto"
             onClick={() => isCreatingNewOrganization ? createOrganization(organizationForm.organization) : updateOrganization(organizationForm.organization)}
             disabled={!organizationForm.isValid}>
             {isCreatingNewOrganization ? translation.create : translation.update}
-          </Button>
+          </SolidButton>
         </div>
-        <div className={tx('flex flex-col justify-start', { hidden: isCreatingNewOrganization })}>
-          <span className={tw('textstyle-title-normal')}>{translation.dangerZone}</span>
-          <span className={tw('textstyle-description')}>{translation.dangerZoneText}</span>
+        <div className={clsx('col justify-start', { hidden: isCreatingNewOrganization })}>
+          <span className="textstyle-title-normal">{translation.dangerZone}</span>
+          <span className="textstyle-description">{translation.dangerZoneText}</span>
           <button
             onClick={() => setIsShowingConfirmDialog(true)}
-            className={tw('text-hw-negative-400 font-bold text-left')}
+            className="text-negative font-bold text-left"
           >
             {translation.deleteOrganization}
           </button>

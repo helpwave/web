@@ -1,30 +1,32 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
 import { equalSizeGroups, range } from '../../util/array'
-import { tw, tx } from '../../twind'
+import clsx from 'clsx'
 import { Expandable } from '../Expandable'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
 import { useLocale } from '../../hooks/useLanguage'
 
 export type YearMonthPickerProps = {
-  value?: Date,
-  startYear?: Date,
-  endYear?: Date,
+  displayedYearMonth?: Date,
+  start?: Date,
+  end?: Date,
   onChange?: (date: Date) => void,
   className?: string,
   maxHeight?: number,
   showValueOpen?: boolean,
 }
+
+// TODO use a dynamically loading infinite list here
 export const YearMonthPicker = ({
-  value = new Date(),
-  startYear = subtractDuration(new Date(), { years: 50 }),
-  endYear = addDuration(new Date(), { years: 50 }),
-  onChange = noop,
-  className = '',
-  maxHeight = 300,
-  showValueOpen = true
-}: YearMonthPickerProps) => {
+                                  displayedYearMonth = new Date(),
+                                  start = subtractDuration(new Date(), { years: 50 }),
+                                  end = addDuration(new Date(), { years: 50 }),
+                                  onChange = noop,
+                                  className = '',
+                                  maxHeight = 300,
+                                  showValueOpen = true
+                                }: YearMonthPickerProps) => {
   const locale = useLocale()
   const ref = useRef<HTMLDivElement>(null)
 
@@ -41,50 +43,57 @@ export const YearMonthPicker = ({
     scrollToItem()
   }, [ref])
 
-  if (endYear < startYear) {
-    console.error(`startYear: (${startYear}) less than endYear: (${endYear})`)
+  if (end < start) {
+    console.error(`startYear: (${start}) less than endYear: (${end})`)
     return null
   }
 
-  const years = range(startYear.getFullYear(), endYear.getFullYear())
+  const years = range(start.getFullYear(), end.getFullYear())
 
   return (
-    <div className={tx('flex flex-col select-none', className)}>
+    <div className={clsx('col select-none', className)}>
       <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className={tw('flex flex-col gap-y-1 mr-3')}>
+        <div className="col gap-y-1 mr-3">
           {years.map(year => {
-            const selectedYear = value.getFullYear() === year
+            const selectedYear = displayedYearMonth.getFullYear() === year
             return (
               <Expandable
                 key={year}
-                ref={(value.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
-                label={<span className={tx({ '!text-hw-primary-400 font-bold': selectedYear })}>{year}</span>}
-                className={tw('gap-y-2 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-sm')}
-                headerClassName={tw('px-2 py-1 rounded-lg bg-gray-100 hover:bg-hw-primary-200')}
+                ref={(displayedYearMonth.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
+                label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
                 initialExpansion={showValueOpen && selectedYear}
               >
-                <div className={tw('flex flex-col gap-y-1 px-2 pb-2')}>
+                <div className="col gap-y-1 px-2 pb-2">
                   {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
-                    <div key={index} className={tw('flex flex-row gap-x-2')}>
+                    <div key={index} className="row">
                       {monthList.map(month => {
-                        const newDate = new Date(value)
                         const monthIndex = monthsList.indexOf(month)
-                        newDate.setFullYear(year, monthIndex)
-                        const selectedMonth = selectedYear && monthIndex === value.getMonth()
+                        const newDate = new Date(year, monthIndex)
+
+                        const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()
+                        const firstOfMonth = new Date(year, monthIndex, 1)
+                        const lastOfMonth = new Date(year, monthIndex, 1)
+                        const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, { days: 1 }), { months: 1 })
+                        const isBeforeEnd = end === undefined || firstOfMonth <= end
+                        const isValid = isAfterStart && isBeforeEnd
                         return (
-                          <div
+                          <button
                             key={month}
-                            className={tx(
-                              'px-2 py-1 rounded-md border border-2 hover:bg-hw-primary-200 hover:border-hw-primary-400 flex-1 text-center cursor-pointer',
+                            disabled={!isValid}
+                            className={clsx(
+                              'chip hover:brightness-95 flex-1',
                               {
-                                'bg-white border-transparent': !selectedMonth,
-                                'border-hw-primary-300 bg-hw-primary-100 hover:bg-hw-primary-200': selectedMonth
+                                'bg-gray-50 text-black': !selectedMonth && isValid,
+                                'bg-primary text-on-primary': selectedMonth && isValid,
+                                'bg-disabled-background text-disabled-text': !isValid
                               }
                             )}
-                            onClick={() => { onChange(newDate) }}
+                            onClick={() => {
+                              onChange(newDate)
+                            }}
                           >
                             {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
-                          </div>
+                          </button>
                         )
                       })}
                     </div>
@@ -96,5 +105,26 @@ export const YearMonthPicker = ({
         </div>
       </Scrollbars>
     </div>
+  )
+}
+
+export const ControlledYearMonthPicker = ({
+                                         displayedYearMonth = new Date(),
+                                         onChange = noop,
+                                         ...props
+                                       }: YearMonthPickerProps) => {
+  const [yearMonth, setYearMonth] = useState<Date>(displayedYearMonth)
+
+  useEffect(() => setYearMonth(displayedYearMonth), [displayedYearMonth])
+
+  return (
+    <YearMonthPicker
+      displayedYearMonth={yearMonth}
+      onChange={date => {
+        setYearMonth(date)
+        onChange(date)
+      }}
+      {...props}
+    />
   )
 }

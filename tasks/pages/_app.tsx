@@ -2,10 +2,8 @@ import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { isMobile } from 'react-device-detect'
-import { tw } from '@helpwave/common/twind'
+
 import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
-import withNextApp from '@helpwave/common/twind/next/app'
-import { config } from '@helpwave/common/twind/config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/common/components/modals/Modal'
 import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
@@ -28,37 +26,38 @@ const spaceGrotesk = SpaceGrotesk({
 const queryClient = new QueryClient()
 
 function MyApp({
-  Component,
-  pageProps
-}: AppProps) {
+                 Component,
+                 pageProps
+               }: AppProps) {
   return (
     <ProvideLanguage>
       { /* v Scans the user agent */}
       {!isMobile ? (
-        <ProvideAuth>
-          <ProvideUpdates>
-            <Head>
-              <title>{titleWrapper()}</title>
-              <style>{`
+        <QueryClientProvider client={queryClient}>
+          <ProvideAuth>
+            <ProvideUpdates>
+              <Head>
+                <title>{titleWrapper()}</title>
+                <style>{`
             :root {
               --font-inter: ${inter.style.fontFamily};
               --font-space: ${spaceGrotesk.style.fontFamily};
             }
             `}</style>
-            </Head>
-            <QueryClientProvider client={queryClient}>
+              </Head>
+
               <ModalRegister>
-                <div className={tw('font-sans')} id={modalRootName}>
+                <div className="font-sans" id={modalRootName}>
                   <Component {...pageProps} />
                 </div>
               </ModalRegister>
-              <ReactQueryDevtools buttonPosition="bottom-left" position="left" />
-            </QueryClientProvider>
-          </ProvideUpdates>
-        </ProvideAuth>
+              <ReactQueryDevtools position="bottom-left"/>
+            </ProvideUpdates>
+          </ProvideAuth>
+        </QueryClientProvider>
       ) : (<MobileInterceptor {...pageProps} />)}
     </ProvideLanguage>
   )
 }
 
-export default withNextApp(config, MyApp)
+export default MyApp

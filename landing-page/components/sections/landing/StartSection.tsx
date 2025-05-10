@@ -1,4 +1,3 @@
-import { tw } from '@helpwave/common/twind'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -26,23 +25,23 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<LandingPageT
   const translation = useTranslation(defaultLandingPageTranslation, overwriteTranslation)
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-center items-center')}
-      outerClassName={tw('desktop:pr-0 tablet:pr-0 py-32')}
+      className="row max-tablet:!flex flex-wrap-reverse w-full !max-w-full gap-8 justify-between max-tablet:justify-center items-center"
+      outerClassName="desktop:pr-0 tablet:pr-0 py-32"
     >
-      <div className={tw('flex flex-col items-center flex-1')}>
-        <div className={tw('flex flex-col gap-y-2 max-w-[600px]')}>
-          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
-          <span className={tw('textstyle-title-lg')}><MarkdownInterpreter text={translation.description}/></span>
+      <div className="col items-center flex-1">
+        <div className="col gap-y-2 max-w-[600px]">
+          <h1 className="textstyle-title-2xl">{translation.title}</h1>
+          <span className="textstyle-title-lg"><MarkdownInterpreter text={translation.description}/></span>
         </div>
       </div>
-      <div className={tw('desktop:relative desktop:right-0 p-4 pr-0 mobile:pr-4 rounded-l-3xl mobile:rounded-3xl bg-white w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10 h-fit shadow-around-lg')}>
+      <div className="desktop:relative desktop:right-0 p-4 pr-0 max-tablet:pr-4 rounded-l-3xl max-tablet:rounded-3xl bg-white w-2/5 tablet:min-w-[360px] max-tablet:w-4/5 z-10 h-fit shadow-around-lg">
         <Image
           // TODO make attribution to https://www.freepik.com/free-vector/medics-working-charts_4950249.htm
           src="https://cdn.helpwave.de/landing_page/doctor_statistics.svg"
           alt=""
           width={0}
           height={0}
-          className={tw('w-full rounded-l-lg')}
+          className="w-full rounded-l-lg"
         />
       </div>
     </SectionBase>

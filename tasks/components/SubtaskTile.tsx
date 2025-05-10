@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind'
+
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { Button } from '@helpwave/common/components/Button'
+import { TextButton } from '@helpwave/common/components/Button'
 import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 
 type SubtaskTileTranslation = {
@@ -48,7 +48,7 @@ export const SubtaskTile = ({
   }, [subtask])
 
   return (
-    <div className={tw('flex flex-row gap-x-2 items-center overflow-x-hidden')}>
+    <div className="row gap-x-2 items-center overflow-x-hidden">
       <div>
         <Checkbox
           onChange={isDone => {
@@ -64,7 +64,6 @@ export const SubtaskTile = ({
       </div>
       <ToggleableInput
         value={subtask.name}
-        className={tw('')}
         onChange={name => setLocalSubtask({
           ...subtask,
           name
@@ -81,15 +80,14 @@ export const SubtaskTile = ({
         minLength={minTaskNameLength}
         maxLength={maxTaskNameLength}
       />
-      <Button
-        className={tw('ml-4')}
+      <TextButton
+        className="ml-4"
         onClick={onRemoveClick}
         aria-label={translation.remove}
-        variant="text"
-        color="hw-negative"
+        color="negative"
       >
         {translation.remove}
-      </Button>
+      </TextButton>
     </div>
   )
 }

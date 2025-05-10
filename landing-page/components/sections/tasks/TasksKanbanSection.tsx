@@ -1,10 +1,9 @@
-import { tw } from '@helpwave/common/twind'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { TagIcon } from '@helpwave/common/icons/Tag'
+import { TagIcon } from '@helpwave/common/components/icons/Tag'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type TasksKanbanSectionTranslation = {
@@ -32,28 +31,28 @@ export const TasksKanbanSection = ({ overwriteTranslation }: PropsForTranslation
 
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
-      backgroundColor="white"
+      className="max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-center tablet:row tablet:justify-between w-full !gap-x-16 gap-y-8 items-center"
+      backgroundColor="variant"
     >
-      <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>
-        <div className={tw('flex flex-col gap-y-2')}>
-          <div className={tw('flex flex-row gap-x-1 text-hw-primary-800 items-center')}>
+      <div className="col gap-y-2 pb-16 max-tablet:pb-0">
+        <div className="col gap-y-2">
+          <div className="row gap-x-1 text-primary items-center">
             <TagIcon/>
-            <span className={tw('textstyle-title-normal')}>{translation.tasks}</span>
+            <span className="textstyle-title-normal">{translation.tasks}</span>
           </div>
-          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
-          <span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
+          <h1 className="textstyle-title-2xl">{translation.title}</h1>
+          <span className="font-space font-semibold"><MarkdownInterpreter text={translation.description}/></span>
         </div>
       </div>
       <div
-        className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-5/6 min-w-[50%] z-10')}
+        className="row bottom-0 justify-center rounded-l-3xl max-tablet:w-5/6 min-w-[50%] z-10"
       >
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={tw('w-fit desktop:max-h-[70vh]')}
+          className="w-fit desktop:max-h-[70vh] p-4 rounded-lg dark:bg-white"
         />
       </div>
     </SectionBase>

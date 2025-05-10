@@ -3,7 +3,7 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { tw, tx } from '@twind/core'
+import clsx from 'clsx'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import type { ProductPlanTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTranslation } from '@/api/dataclasses/product'
@@ -16,7 +16,7 @@ import { withOrganization } from '@/hooks/useOrganization'
 import { withCart } from '@/hocs/withCart'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { Plus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -99,11 +99,11 @@ type CustomerProductStatusDisplayProps = {
 const CustomerProductStatusDisplay = ({ customerProductStatus }: CustomerProductStatusDisplayProps) => {
   const translation = useTranslation(defaultCustomerProductStatusTranslation)
   return (
-    <div className={tx('flex flex-row items-center px-3 py-1 rounded-full text-sm font-bold', {
-      'bg-hw-positive-500 text-white': customerProductStatus === 'active',
-      'bg-hw-warning-500 text-white': customerProductStatus === 'activation' || customerProductStatus === 'scheduled',
-      'bg-hw-negative-500 text-white': customerProductStatus === 'expired' || customerProductStatus === 'payment' || customerProductStatus === 'canceled' || 'refunded',
-      'bg-blue-500 text-white': customerProductStatus === 'trialing',
+    <div className={clsx('row items-center px-3 py-1 rounded-full text-sm font-bold', {
+      'bg-positive text-on-positive': customerProductStatus === 'active',
+      'bg-warning text-on-warning': customerProductStatus === 'activation' || customerProductStatus === 'scheduled',
+      'bg-negative text-on-negative': customerProductStatus === 'expired' || customerProductStatus === 'payment' || customerProductStatus === 'canceled' || 'refunded',
+      'bg-blue-500 text-white': customerProductStatus === 'trialing', // TODO replace color
     })}>
       {translation[customerProductStatus]}
     </div>
@@ -128,22 +128,22 @@ const ProductsPage: NextPage = () => {
   const isLoading = bookedProductsLoading || productsLoading
 
   return (
-    <Page pageTitle={titleWrapper(translation.myProducts)} mainContainerClassName={tw('min-h-[80vh]')}>
+    <Page pageTitle={titleWrapper(translation.myProducts)} mainContainerClassName="min-h-[80vh]">
       <Modal
         id="productModal"
         isOpen={!!customerProductModalValue}
         titleText={customerProductModalValue?.product.name}
-        modalClassName={tw('flex flex-col gap-y-4')}
+        modalClassName="col gap-y-4"
         onBackgroundClick={() => setCustomerProductModalValue(undefined)}
         onCloseClick={() => setCustomerProductModalValue(undefined)}
       >
         <span>{customerProductModalValue?.product.description}</span>
         <ContractList
           productIds={customerProductModalValue ? [customerProductModalValue.product.uuid] : []}></ContractList>
-        <Button color="hw-negative" className={tw('!w-fit')} disabled={!CustomerProductStatusCancelable.includes(customerProductModalValue?.status || 'active')}
+        <SolidButton color="negative" disabled={!CustomerProductStatusCancelable.includes(customerProductModalValue?.status || 'active')}
           onClick={() => setCancelDialogId(customerProductModalValue?.uuid)}>
           {translation.cancel}
-        </Button>
+        </SolidButton>
       </Modal>
 
       <ConfirmDialog
@@ -164,25 +164,25 @@ const ProductsPage: NextPage = () => {
         {isError && (<span>{translation.error}</span>)}
         {!isError && isLoading && (<LoadingAnimation />)}
         {!isError && !isLoading && products && bookedProducts && (
-          <div className={tw('grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12')}>
+          <div className="grid grid-cols-1 desktop:grid-cols-2 gap-x-8 gap-y-12">
             {bookedProducts.map((bookedProduct, index) => {
               return (
                 <div
                   key={index}
-                  className={tw('flex flex-col border-4 justify-between gap-y-2 bg-gray-100 px-8 py-4 rounded-md')}
+                  className="col border-4 justify-between gap-y-2 bg-surface text-on-surface px-8 py-4 rounded-md"
                 >
-                  <div className={tw('flex flex-col gap-y-2')}>
-                    <div className={tw('flex flex-row gap-x-2 justify-between')}>
-                      <h4 className={tw('font-bold font-space text-2xl')}>{bookedProduct.product.name}</h4>
+                  <div className="col">
+                    <div className="row justify-between">
+                      <h4 className="font-bold font-space text-2xl">{bookedProduct.product.name}</h4>
                       <CustomerProductStatusDisplay customerProductStatus={bookedProduct.status} />
                     </div>
                     <span>{bookedProduct.product.description}</span>
                     <span>{`${translation.productPlan(bookedProduct.productPlan)} (${localeTranslation.formatMoney(bookedProduct.productPlan.costEuro)})`}</span>
                     {bookedProduct.cancellationDate && CustomerProductStatusPlannedCancellation.includes(bookedProduct.status) ? <span>{translation.endsAt} {localeTranslation.formatDate(bookedProduct.cancellationDate)}</span> : <></>}
                   </div>
-                  <div className={tw('flex flex-row justify-end gap-x-4')}>
-                    <Button className={tw('!w-fit')}
-                      onClick={() => setCustomerProductModalValue(bookedProduct)}>{translation.manage}</Button>
+                  <div className="row justify-end gap-x-4">
+                    <SolidButton className="w-fit"
+                      onClick={() => setCustomerProductModalValue(bookedProduct)}>{translation.manage}</SolidButton>
                   </div>
                 </div>
               )
@@ -190,10 +190,10 @@ const ProductsPage: NextPage = () => {
             <button
               key="buy"
               onClick={() => router.push('/products/shop').catch(console.error)}
-              className={tw('flex flex-row justify-center items-center h-full min-h-[200px] w-full gap-x-2 border-4 border-dashed border-gray-200 hover:brightness-90 px-4 py-2 rounded-md')}
+              className="row justify-center items-center h-full min-h-[200px] w-full gap-x-2 border-4 border-dashed border-gray-200 hover:brightness-90 px-4 py-2 rounded-md"
             >
               <Plus size={32} />
-              <h4 className={tw('font-bold text-lg')}>{translation.bookProduct}</h4>
+              <h4 className="font-bold text-lg">{translation.bookProduct}</h4>
             </button>
           </div>
         )}

@@ -1,7 +1,7 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { languagesLocalNames } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import { tw, tx } from '@twind/core'
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
@@ -10,7 +10,7 @@ import { Avatar } from '@helpwave/common/components/Avatar'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import { ArrowRightLeft } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { Translation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { OIDC_PROVIDER } from '@/api/config'
@@ -51,11 +51,9 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
   const translation = useTranslation(defaultNavigationSidebarTranslation)
   const { identity, logout } = useAuth()
 
-  const width = 250
-
   return (
     <div
-      className={tx(`@(flex flex-col justify-between grow shadow-xl bg-gray-50 min-w-[${width}px] max-w-[${width}px])`, className)}>
+      className={clsx(`col justify-between grow shadow-xl bg-gray-200 min-w-[250px] max-w-[250px]`, className)}>
       <LanguageModal
         id="language-modal"
         isOpen={isLanguageModalOpen}
@@ -63,14 +61,14 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
         onBackgroundClick={() => setIsLanguageModalOpen(false)}
         onDone={() => setIsLanguageModalOpen(false)}
       />
-      <nav className={tw('@(flex flex-col overflow-y-auto)')}>
+      <nav className="col overflow-y-auto">
         {items.map((item, i) => (
           <Link
             href={item.url}
             key={i}
             target={item.isExternal ?? false ? '_blank' : undefined}
-            className={tx(
-              'px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40 flex flex-row gap-x-2 px-4 items-center',
+            className={clsx(
+              'px-4 py-2 bg-gray-50 hover:bg-primary/40 flex flex-row gap-x-2 px-4 items-center',
               { 'bg-gray-200': router.pathname == item.url }
             )}
           >
@@ -79,20 +77,20 @@ export const NavigationSidebar = ({ items, className }: NavSidebarProps) => {
           </Link>
         ))}
       </nav>
-      <div className={tw('flex flex-col')}>
+      <div className="col">
         <button
-          className={tw('flex flex-row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-hw-primary-500/40')}
+          className="row justify-between items-center px-4 py-2 bg-gray-50 hover:bg-primary/40"
           onClick={() => setIsLanguageModalOpen(true)}
         >
           {languagesLocalNames[language]}
           <ArrowRightLeft size={24}/>
         </button>
-        <div className={tw('flex flex-col p-4 gap-y-4 bg-gray-50')}>
-          <Link href={OIDC_PROVIDER + '/account'} target="_blank" className={tw('flex flex-row gap-x-2 items-center')}>
+        <div className="col p-4 gap-y-4 bg-gray-50">
+          <Link href={OIDC_PROVIDER + '/account'} target="_blank" className="row items-center">
             <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
             {identity?.profile?.name}
           </Link>
-          <Button onClick={logout} color="hw-negative">{translation.logout}</Button>
+          <SolidButton onClick={logout} color="negative">{translation.logout}</SolidButton>
         </div>
       </div>
     </div>

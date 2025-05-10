@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { DayPickerExample } from '../../../../components/examples/date/DayPickerExample'
+import { DayPickerControlled } from '../../../../components/date/DayPicker'
 
 const meta = {
   title: 'User-Action/Input/Date',
-  component: DayPickerExample,
-} satisfies Meta<typeof DayPickerExample>
+  component: DayPickerControlled,
+} satisfies Meta<typeof DayPickerControlled>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const DayPickerVariation: Story = {
   args: {
-    value: new Date(),
+    displayedMonth: new Date(),
     selected: new Date(),
     markToday: true,
     weekStart: 'monday',

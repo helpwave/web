@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Plus } from 'lucide-react'
-import { tw } from '@helpwave/common/twind'
+
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 import {
@@ -90,10 +90,10 @@ export const SubtaskView = ({
   }
 
   return (
-    <div className={tw('flex flex-col gap-y-2')}>
-      <div className={tw('flex flex-row items-center justify-between')}>
-        <span className={tw('textstyle-title-normal')}>{translation.subtasks}</span>
-        <Button
+    <div className="col gap-y-2">
+      <div className="row items-center justify-between">
+        <span className="textstyle-title-normal">{translation.subtasks}</span>
+        <SolidButton
           onClick={() => {
             const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
             onChange([...subtasks, newSubtask])
@@ -103,15 +103,15 @@ export const SubtaskView = ({
             setScrollToBottom(true)
           }}
         >
-          <div className={tw('flex flex-row items-center gap-x-2')}>
+          <div className="row items-center gap-x-2">
             <Plus size={18}/>
             <span>{translation.addSubtask}</span>
           </div>
-        </Button>
+        </SolidButton>
       </div>
-      <div className={tw('max-h-[500px] overflow-hidden')}>
-        <Scrollbars autoHide={true} ref={scrollableRef} className={tw('h-screen')} style={{ minHeight: 250 }}>
-          <div className={tw('grid grid-cols-1 gap-y-2')}>
+      <div className="max-h-[500px] overflow-hidden">
+        <Scrollbars autoHide={true} ref={scrollableRef} className="h-screen" style={{ minHeight: 250 }}>
+          <div className="grid grid-cols-1 gap-y-2">
             {subtasks.map((subtask, index) => (
               <SubtaskTile
                 key={index}

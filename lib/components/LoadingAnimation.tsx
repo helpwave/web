@@ -1,8 +1,8 @@
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
-import { Helpwave } from '../icons/Helpwave'
-import { tx } from '../twind'
+import { Helpwave } from './icons/Helpwave'
+import clsx from 'clsx'
 
 type LoadingAnimationTranslation = {
   loading: string,
@@ -32,7 +32,7 @@ export const LoadingAnimation = ({
 }: PropsForTranslation<LoadingAnimationTranslation, LoadingAnimationProps>) => {
   const translation = useTranslation(defaultLoadingAnimationTranslation, overwriteTranslation)
   return (
-    <div className={tx('flex flex-col items-center justify-center gap-y-2 w-full h-24', classname)}>
+    <div className={clsx('col items-center justify-center w-full h-24', classname)}>
       <Helpwave animate="loading" />
       {loadingText ?? `${translation.loading}...`}
     </div>

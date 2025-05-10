@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { MultiSelectExample } from '../../../../components/examples/MultiSelectExample'
+import { action } from '@storybook/addon-actions'
 
 const meta = {
   title: 'User-Action/Input/Select',
@@ -32,6 +33,7 @@ export const MultiSelectVariations: Story = {
     useChipDisplay: true,
     enableSearch: false,
     className: '',
-    triggerClassName: ''
+    triggerClassName: '',
+    onChange: action('onChange'),
   },
 }

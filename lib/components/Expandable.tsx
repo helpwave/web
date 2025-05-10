@@ -1,12 +1,13 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { forwardRef, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { tw } from '@twind/core'
-import { tx } from '../twind'
+import clsx from 'clsx'
+
+type IconBuilder = (expanded: boolean) => ReactNode
 
 export type ExpandableProps = PropsWithChildren<{
   label: ReactNode,
-  icon?: (expanded: boolean) => ReactNode,
+  icon?: IconBuilder,
   initialExpansion?: boolean,
   /**
    * Whether the expansion should only happen when the header is clicked or on the entire component
@@ -16,36 +17,40 @@ export type ExpandableProps = PropsWithChildren<{
   headerClassName?: string,
 }>
 
+const DefaultIcon: IconBuilder = (expanded) => expanded ?
+  (<ChevronUp size={16} className="min-w-[16px]"/>)
+  : (<ChevronDown size={16} className="min-w-[16px]"/>)
+
 /**
  * A Component for showing and hiding content
  */
 export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
-  children,
-  label,
-  icon,
-  initialExpansion = false,
-  clickOnlyOnHeader = true,
-  className = '',
-  headerClassName = ''
-}, ref) => {
-  const [expanded, setExpanded] = useState(initialExpansion)
-  icon ??= expanded1 => expanded1 ? <ChevronUp size={16} className={tw('min-w-[16px]')}/> : <ChevronDown size={16} className={tw('min-w-[16px]')}/>
+                                                                         children,
+                                                                         label,
+                                                                         icon,
+                                                                         initialExpansion = false,
+                                                                         clickOnlyOnHeader = true,
+                                                                         className = '',
+                                                                         headerClassName = ''
+                                                                       }, ref) => {
+  const [isExpanded, setIsExpanded] = useState(initialExpansion)
+  icon ??= DefaultIcon
 
   return (
     <div
       ref={ref}
-      className={tx('flex flex-col', { 'cursor-pointer': !clickOnlyOnHeader }, className)}
-      onClick={() => !clickOnlyOnHeader && setExpanded(!expanded)}
+      className={clsx('col bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader }, className)}
+      onClick={() => !clickOnlyOnHeader && setIsExpanded(!isExpanded)}
     >
-      <div
-        className={tx('flex flex-row justify-between items-center cursor-pointer gap-x-2', headerClassName)}
-        onClick={() => clickOnlyOnHeader && setExpanded(!expanded)}
+      <button
+        className={clsx('btn-md rounded-lg justify-between items-center bg-surface text-on-surface', { 'group-hover:brightness-95': !isExpanded }, headerClassName)}
+        onClick={() => clickOnlyOnHeader && setIsExpanded(!isExpanded)}
       >
         {label}
-        {icon(expanded)}
-      </div>
-      {expanded && (
-        <div className={tx('flex flex-col')}>
+        {icon(isExpanded)}
+      </button>
+      {isExpanded && (
+        <div className="col">
           {children}
         </div>
       )}

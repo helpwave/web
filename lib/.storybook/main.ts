@@ -1,4 +1,6 @@
-import type { StorybookConfig } from '@storybook/nextjs';
+// .storybook/main.ts
+import type { StorybookConfig } from '@storybook/nextjs'
+
 const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -10,8 +12,13 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {},
   },
-  docs: {
-    autodocs: 'tag',
+  docs: {},
+  typescript: {
+    reactDocgen: 'react-docgen-typescript'
   },
-};
-export default config;
+  core: {
+    disableTelemetry: true,
+  },
+}
+
+export default config

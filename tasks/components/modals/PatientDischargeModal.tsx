@@ -1,4 +1,3 @@
-import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
@@ -38,13 +37,13 @@ export const PatientDischargeModal = ({
   return (
     <ConfirmDialog
       titleText={titleText ?? translation.dischargePatient}
-      buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'hw-negative' }]}
+      buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'negative' }]}
       {...confirmDialogProps}
     >
       {patient && (
         <>
-          <span className={tw('mt-2')}>{`${translation.followingPatient}: `}</span>
-          <span className={tw('font-medium')}>{patient.name}</span>
+          <span className="mt-2">{`${translation.followingPatient}: `}</span>
+          <span className="font-medium">{patient.name}</span>
         </>
       )}
     </ConfirmDialog>

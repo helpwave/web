@@ -131,6 +131,23 @@ export const getBetweenDuration = (startDate: Date, endDate: Date): Duration => 
   }
 }
 
+/** Checks if a given date is in the range of two dates
+ *
+ * An undefined value for startDate or endDate means no bound for the start or end respectively
+ */
+export const isInTimeSpan = (value: Date, startDate?: Date, endDate?: Date): boolean => {
+  if(startDate && endDate) {
+    console.assert(startDate <= endDate)
+    return startDate <= value && value <= endDate
+  } else if (startDate) {
+    return startDate <= value
+  } else if(endDate) {
+    return endDate >= value
+  } else {
+    return true
+  }
+}
+
 /** Compare two dates on the year, month, day */
 export const equalDate = (date1: Date, date2: Date) => {
   return date1.getFullYear() === date2.getFullYear()
@@ -138,18 +155,20 @@ export const equalDate = (date1: Date, date2: Date) => {
     && date1.getDate() === date2.getDate()
 }
 
-export const getWeeksForCalenderMonth = (date: Date, weekStart: WeekDay) => {
+export const getWeeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: number = 6) => {
   const month = date.getMonth()
   const year = date.getFullYear()
 
   const dayList: Date[] = []
   let currentDate = new Date(year, month, 1) // Start of month
   const weekStartIndex = weekDayList.indexOf(weekStart)
+
+  // Move the current day to the week before
   while (currentDate.getDay() !== weekStartIndex) {
     currentDate = subtractDuration(currentDate, { days: 1 })
   }
 
-  while (currentDate.getMonth() !== (month + 1) % 12 || currentDate.getDay() !== weekStartIndex) {
+  while (dayList.length < 7 * weeks) {
     const date = new Date(currentDate)
     date.setHours(date.getHours(), date.getMinutes()) // To make sure we are not overwriting the time
     dayList.push(date)

@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
@@ -61,7 +61,6 @@ export type TaskTemplateDetailsProps = {
   onCreate: (taskTemplate: TaskTemplateDTO) => void,
   onUpdate: (taskTemplate: TaskTemplateFormType) => void,
   onDelete: (taskTemplate: TaskTemplateDTO) => void,
-  width?: number,
 }
 
 /**
@@ -82,8 +81,8 @@ export const TaskTemplateDetails = ({
     name: !isCreatingNewTemplate
   })
 
-  const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
-  const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
+  const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
+  const inputClasses = 'mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary'
 
   const minNameLength = 2
   const maxNameLength = 32
@@ -103,7 +102,7 @@ export const TaskTemplateDetails = ({
   const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
 
   return (
-    <div className={tw('flex flex-col py-4 px-6')}>
+    <div className="col py-4 px-6">
       <ConfirmDialog
         id="TaskTemplateDetails-DeleteDialog"
         titleText={translation.deleteConfirmText}
@@ -121,7 +120,7 @@ export const TaskTemplateDetails = ({
         title={isCreatingNewTemplate ? translation.createTaskTemplate : translation.updateTaskTemplate}
         subtitle={!isCreatingNewTemplate ? translation.updateTaskTemplateDescription : undefined}
       />
-      <div className={tw(' flex flex-col gap-y-4 max-w-[400px] mb-4')}>
+      <div className=" col gap-y-4 max-w-[400px] mb-4">
         <div>
           <Input
             id="name"
@@ -138,9 +137,9 @@ export const TaskTemplateDetails = ({
               })
             }}
             maxLength={maxNameLength}
-            className={tx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
+            className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
           />
-          {isDisplayingNameError && <span className={tw('textstyle-form-error')}>{nameErrorMessage}</span>}
+          {isDisplayingNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
         </div>
         <Textarea
           headline={translation.notes}
@@ -166,21 +165,21 @@ export const TaskTemplateDetails = ({
           deletedSubtaskIds: context.state.deletedSubtaskIds
         })}
       />
-      <div className={tx('flex flex-row mt-12',
+      <div className={clsx('row mt-12',
         {
           'justify-between': !isCreatingNewTemplate,
           'justify-end': isCreatingNewTemplate,
         })}
       >
-        <Button
-          className={tw('w-auto')}
+        <SolidButton
+          className="w-auto"
           onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state)}
           disabled={!context.state.isValid}
         >
           {isCreatingNewTemplate ? translation.create : translation.update}
-        </Button>
+        </SolidButton>
         { !isCreatingNewTemplate &&
-          (<Button variant="text" color="hw-negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</Button>)
+          (<TextButton color="negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</TextButton>)
         }
       </div>
     </div>

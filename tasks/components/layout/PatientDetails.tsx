@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
@@ -120,11 +120,11 @@ export const PatientDetail = ({
   const isShowingTask = !!taskId || taskId === ''
 
   return (
-    <div className={tw('relative flex flex-col py-4 px-6')}>
+    <div className="relative col py-4 px-6">
       {isShowingSavedNotification &&
         (
           <div
-            className={tw('absolute top-2 right-2 bg-hw-positive-400 text-white rounded-lg px-2 py-1 animate-pulse')}
+            className="absolute top-2 right-2 bg-positive text-on-positive rounded-lg px-2 py-1 animate-pulse"
           >
             {translation.saved}
           </div>
@@ -158,13 +158,13 @@ export const PatientDetail = ({
         isLoading={isLoading}
         hasError={isError}
       >
-        <div className={tw('flex flex-row gap-x-6 mb-8')}>
-          <div className={tw('flex flex-col gap-y-2 w-5/12')}>
-            <div className={tw('h-12 w-full')}>
+        <div className="row gap-x-6 mb-8">
+          <div className="col gap-y-2 w-5/12">
+            <div className="h-12 w-full">
               <ToggleableInput
                 maxLength={maxHumanReadableIdentifierLength}
-                labelClassName={tw('text-xl font-semibold')}
-                className={tw('text-lg font-semibold')}
+                labelClassName="text-xl font-semibold"
+                className="text-lg font-semibold"
                 id="humanReadableIdentifier"
                 value={newPatient.name}
                 onChange={name => changeSavedValue({
@@ -192,7 +192,7 @@ export const PatientDetail = ({
               isSubmitting={isSubmitting}
             />
           </div>
-          <div className={tw('flex-1')}>
+          <div className="flex-1">
             <Textarea
               headline={translation.notes}
               value={newPatient.note}
@@ -215,30 +215,30 @@ export const PatientDetail = ({
           />
         )}
         {!!newPatient.id && (
-          <div className={tw('mt-4')}>
+          <div className="mt-4">
             <PropertyList subjectId={newPatient.id} subjectType="patient"/>
           </div>
         )}
-        <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
+        <div className="row justify-end mt-8 gap-x-4">
           {!newPatient.discharged ?
               (
               <>
-                <Button color="hw-warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
+                <SolidButton color="warning" onClick={() => unassignMutation.mutate(newPatient.id)}>
                   {translation.unassign}
-                </Button>
-                <Button color="hw-negative" onClick={() => setIsShowingDischargeDialog(true)} >
+                </SolidButton>
+                <SolidButton color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
                   {translation.dischargePatient}
-                </Button>
+                </SolidButton>
               </>
               ) : (
-              <Button color="hw-positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
+              <SolidButton color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
                 {translation.readmit}
-              </Button>
+              </SolidButton>
               )}
-          <Button color="hw-primary" onClick={() => {
+          <SolidButton color="primary" onClick={() => {
             clearUpdateTimer(true)
             updateMutation.mutate(newPatient)
-          }}>{translation.saveChanges}</Button>
+          }}>{translation.saveChanges}</SolidButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

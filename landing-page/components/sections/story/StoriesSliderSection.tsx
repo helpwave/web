@@ -1,4 +1,3 @@
-import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { TextImageProps } from '@helpwave/common/components/TextImage'
@@ -84,7 +83,7 @@ export const StorySliderSection = () => {
       description: translation.description3,
       // make attribution https://www.freepik.com/free-vector/infographic-dashboard-element-set_6209714.htm#fromView=search&page=1&position=45&uuid=12db1ee2-bec5-40ce-a317-5d240ad56f12
       imageUrl: 'https://cdn.helpwave.de/landing_page/dashboard.jpg',
-      color: 'secondaryDark',
+      color: 'dark',
       onShowMoreClicked: () => setModalValue({
         titleText: translation.title3,
         description: translation.description3
@@ -93,11 +92,11 @@ export const StorySliderSection = () => {
   ]
 
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 w-full !max-w-[1600px]')} outerClassName={tw('!px-0')}>
-      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} autoLoopingTimeOut={15000} blurColor="hw-grayscale-50">
+    <SectionBase className="col gap-y-8 w-full !max-w-[1600px]" outerClassName="!px-0">
+      <Carousel hintNext={true} isLooping={true} isAutoLooping={true} autoLoopingTimeOut={15000} blurColor="from-background">
         {items.map((value, index) => (
-          <div key={index} className={tw('px-[2.5%] h-full')}>
-            <TextImage {...value} className={tw('h-full overflow-hidden')}/>
+          <div key={index} className="px-[2.5%] h-full">
+            <TextImage {...value} className="h-full overflow-hidden"/>
           </div>
         ))}
       </Carousel>
@@ -112,7 +111,7 @@ export const StorySliderSection = () => {
         )}
         onBackgroundClick={() => setModalValue(undefined)}
         onCloseClick={() => setModalValue(undefined)}
-        modalClassName={tw('max-w-[600px] mobile:max-w-[90%] w-full')}
+        modalClassName="max-w-[600px] max-tablet:max-w-[90%] w-full"
       />
     </SectionBase>
   )

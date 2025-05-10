@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import {
   defaultTableStatePagination,
@@ -108,7 +108,7 @@ export const OrganizationMemberList = ({
   }
 
   return (
-    <div className={tw('flex flex-col')}>
+    <div className="col">
       <ConfirmDialog
         id="organizationMemberList-DeleteDialog"
         title={translation.deleteConfirmText(hasSelectedMultiple)}
@@ -132,19 +132,19 @@ export const OrganizationMemberList = ({
       <LoadingAndErrorComponent
         hasError={(isError || !data) && !members}
         isLoading={!members && isLoading}
-        errorProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
-        loadingProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
+        errorProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
+        loadingProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
       >
-        <div className={tw('flex flex-row justify-between items-center mb-2')}>
-          <span className={tw('textstyle-table-name')}>{translation.members + ` (${usedMembers.length})`}</span>
-          <div className={tw('flex flex-row gap-x-2')}>
+        <div className="row justify-between items-center mb-2">
+          <span className="textstyle-table-name">{translation.members + ` (${usedMembers.length})`}</span>
+          <div className="row gap-x-2">
             {tableState.selection && tableState.selection.currentSelection.length > 0 && (
-              <Button
+              <SolidButton
                 onClick={() => setDeleteDialogState({ isShowing: true })}
-                color="hw-negative"
+                color="negative"
               >
                 {translation.removeSelection}
-              </Button>
+              </SolidButton>
             )}
           </div>
         </div>
@@ -152,41 +152,40 @@ export const OrganizationMemberList = ({
           data={usedMembers}
           stateManagement={[tableState, setTableState]}
           header={[
-            <div key="member" className={tw('flex flex-row')}>
-              <span className={tw('textstyle-table-header')}>{translation.member}</span>
+            <div key="member" className="row">
+              <span className="textstyle-table-header">{translation.member}</span>
             </div>,
-            <div key="role" className={tw('flex flex-row')}>
-              <span className={tw('textstyle-table-header')}>{translation.role}</span>
+            <div key="role" className="row">
+              <span className="textstyle-table-header">{translation.role}</span>
             </div>,
             <></>
           ]}
           rowMappingToCells={orgMember => [
-            <div key="member" className={tw('flex flex-row items-center h-12 overflow-hidden max-w-[200px]')}>
+            <div key="member" className="row items-center h-12 overflow-hidden max-w-[200px]">
               <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
-              <div className={tw('flex flex-col ml-2')}>
-                <span className={tw('font-bold truncate')}>{orgMember.name}</span>
+              <div className="col ml-2">
+                <span className="font-bold truncate">{orgMember.name}</span>
                 <a href={`mailto:${orgMember.email}`}>
-                  <span className={tw('textstyle-description text-sm truncate')}>{orgMember.email}</span>
+                  <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
                 </a>
               </div>
             </div>,
-            <div key="role" className={tw('flex flex-row items-center mr-2')}>
-              <button className={tw('flex flex-row items-center')} onClick={() => { /* TODO allow changing roles */
+            <div key="role" className="row items-center mr-2">
+              <button className="row items-center" onClick={() => { /* TODO allow changing roles */
               }}>
-                <span className={tw(`font-semibold`)}>
+                <span className="font-semibold">
                   {'N.A.' /* translation.roleTypes[orgMember.role] */}
                 </span>
               </button>
             </div>,
-            <div key="remove" className={tw('flex flex-row justify-end')}>
-              <Button
+            <div key="remove" className="row justify-end">
+              <TextButton
                 onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
-                color="hw-negative"
-                variant="text"
+                color="negative"
                 // disabled={orgMember.role === Role.admin}
               >
                 {translation.remove}
-              </Button>
+              </TextButton>
             </div>
           ]}
          identifierMapping={idMapping}

@@ -9,7 +9,7 @@ import {
   type DropAnimation
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
-import { tw } from '@helpwave/common/twind'
+
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { SortedTasks, TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
@@ -179,8 +179,8 @@ export const TasksKanbanBoard = ({
     <LoadingAndErrorComponent
       isLoading={isLoading}
       hasError={isError}
-      loadingProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
-      errorProps={{ classname: tw('border-2 border-gray-600 rounded-xl min-h-[300px]') }}
+      loadingProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
+      errorProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
       minimumLoadingDuration={200}
     >
       <KanbanHeader
@@ -194,7 +194,7 @@ export const TasksKanbanBoard = ({
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <div className={tw('grid grid-cols-3 gap-x-4 mt-6')}>
+        <div className="grid grid-cols-3 gap-x-4 mt-6">
           <KanbanColumn
             type="todo"
             tasks={filterBySearch(sortedTasks.todo)}
@@ -217,7 +217,7 @@ export const TasksKanbanBoard = ({
             onEditTask={onEditTask}
           />
           <DragOverlay dropAnimation={dropAnimation}>
-            {task && <TaskCard task={task}/>}
+            {task && <TaskCard task={task} onClick={() => {}} isSelected={false}/>}
           </DragOverlay>
         </div>
       </DndContext>

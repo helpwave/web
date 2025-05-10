@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/common/twind'
+
 import { LucideArrowLeftRight } from 'lucide-react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
@@ -33,7 +33,6 @@ export type TaskTemplateDisplayProps = {
   onSelectChange: (taskTemplate: TaskTemplateDTO | undefined) => void,
   taskTemplates: TaskTemplateDTO[],
   variant: 'wardTemplates' | 'personalTemplates',
-  width?: number,
 }
 
 /**
@@ -42,52 +41,49 @@ export type TaskTemplateDisplayProps = {
 export const TaskTemplateDisplay = ({
   overwriteTranslation,
   wardId,
-  selectedId,
+  //selectedId,
   onSelectChange,
   taskTemplates,
   variant,
-  width
 }: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation(defaultTaskTemplateDisplayTranslation, overwriteTranslation)
 
   const router = useRouter()
-  const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))
 
   const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
   return (
-    <div className={tw('py-4 px-6')}>
-      <div className={
-        tw('flex flex-row items-center justify-between mb-4')}>
-        <span className={tw('textstyle-title-normal')}>
+    <div className="py-4 px-6">
+      <div className="row items-center justify-between mb-4">
+        <span className="textstyle-title-normal">
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
         </span>
         { (variant === 'wardTemplates' || wardId) && (
-          <Button
+          <SolidButton
             onClick={() => {
               router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).catch(console.error)
             }}
-            className={tw('flex flex-row gap-x-1 items-center w-auto')}
+            className="row gap-x-1 items-center w-auto"
           >
             <LucideArrowLeftRight/>
             {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}
-          </Button>
+          </SolidButton>
         )}
       </div>
       {/* TODO replace onClick function to something different */}
-      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+      <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-6">
         {taskTemplates.map(taskTemplate => (
           <TaskTemplateCard
             key={taskTemplate.id}
             name={taskTemplate.name}
             subtaskCount={taskTemplate.subtasks.length}
-            isSelected={selectedId === taskTemplate.id}
+            //TODO isSelected={selectedId === taskTemplate.id}
             onEditClick={() => onSelectChange(taskTemplate)}
-            onTileClick={() => onSelectChange(taskTemplate)}
+            onClick={() => onSelectChange(taskTemplate)}
           />
         ))}
         <AddCard
-          isSelected={selectedId === ''}
-          onTileClick={() => onSelectChange(undefined)}
+          //TODO isSelected={selectedId === ''}
+          onClick={() => onSelectChange(undefined)}
           text={translation.addNewTaskTemplate}
         />
       </div>

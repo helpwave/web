@@ -86,13 +86,9 @@ const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wards
       <OrganizationOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn
           disableResize={false}
-          left={width => (<WardDisplay organizationId={organizationId} width={width} />)}
-          right={width => (
-            <WardDetail
-              key={contextState.wardId}
-              organizationId={organizationId}
-              width={width}
-            />
+          left={() => (<WardDisplay organizationId={organizationId} />)}
+          right={() => (
+            <WardDetail key={contextState.wardId} organizationId={organizationId}/>
           )}
         />
       </OrganizationOverviewContext.Provider>

@@ -1,4 +1,3 @@
-import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
@@ -11,6 +10,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
 import { OrganizationContext } from '@/pages/organizations'
+import clsx from 'clsx'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -41,7 +41,6 @@ export const OrganizationDisplay = ({
   overwriteTranslation,
   selectedOrganizationId,
   organizations,
-  width
 }: PropsForTranslation<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
   const translation = useTranslation(defaultOrganizationDisplayTranslations, overwriteTranslation)
   const router = useRouter()
@@ -53,29 +52,27 @@ export const OrganizationDisplay = ({
   const { fakeTokenEnable } = getAPIServiceConfig()
 
   usedOrganizations = usedOrganizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
-  const columns = !width ? 3 : Math.min(Math.max(Math.floor(width / 250), 1), 3)
 
   const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
-    <div className={tw('py-4 px-6')}>
+    <div className="py-4 px-6">
       <ColumnTitle title={translation.yourOrganizations}/>
-      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+      <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-6">
         {usedOrganizations.map(organization => (
           <OrganizationCard
             key={organization.id}
             organization={organization}
-            isSelected={usedSelectedId === organization.id}
+            className={clsx('h-full border-2 hover:border-primary', { 'border-primary border-solid': usedSelectedId === organization.id })}
             onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
-            onTileClick={() => {
+            onClick={() => {
               router.push(`/organizations/${organization.id}`)
             }}
           />
         ))}
         <AddCard
           text={translation.addOrganization}
-          onTileClick={() => context.updateContext({ ...context.state, organizationId: '' })}
-          isSelected={usedSelectedId === ''}
-          className={tw('h-full')}
+          onClick={() => context.updateContext({ ...context.state, organizationId: '' })}
+          className={clsx('h-full', { 'border-primary border-solid': usedSelectedId === '' })}
         />
       </div>
     </div>

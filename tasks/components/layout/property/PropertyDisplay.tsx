@@ -1,11 +1,10 @@
-import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { Plus, Tag } from 'lucide-react'
 import { Input } from '@helpwave/common/components/user-input/Input'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { MultiSubjectSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { Table } from '@helpwave/common/components/Table'
 import { Tile } from '@helpwave/common/components/layout/Tile'
@@ -100,14 +99,14 @@ export const PropertyDisplay = ({
   })
 
   return (
-    <div className={tw('py-4 px-6 flex flex-col gap-y-4')}>
-      <div className={tw('flex flex-row gap-x-1 items-center')}>
-        <Tag className={tw('text-hw-primary-400')} size={20}/>
-        <span className={tw('textstyle-title-lg')}>{translation.properties}</span>
+    <div className="py-4 px-6 col gap-y-4">
+      <div className="row gap-x-1 items-center">
+        <Tag className="text-primary" size={20}/>
+        <span className="textstyle-title-lg">{translation.properties}</span>
       </div>
-      <div className={tw('flex flex-col gap-y-2')}>
-        <div className={tw('flex flex-row justify-between')}>
-          <div className={tw('flex flex-row gap-x-2')}>
+      <div className="col gap-y-2">
+        <div className="row justify-between">
+          <div className="row gap-x-2">
             <Input
               // TODO Search Icon
               value={search}
@@ -116,38 +115,37 @@ export const PropertyDisplay = ({
               placeholder={translation.search}
             />
             <PropertySubjectTypeSelect
-              className={tw('w-full')}
+              className="w-full"
               value={contextState.subjectType}
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation.subjectType}
             />
-            <Button
-              className={tw('w-full !px-0')}
-              variant="text"
-              color="hw-negative"
+            <TextButton
+              className="w-full px-0"
+              color="negative"
               onClick={() => {
                 updateContext({ ...contextState, subjectType: undefined })
                 setSearch('')
               }}
             >
               {translation.removeFilter}
-            </Button>
+            </TextButton>
           </div>
-          <Button onClick={() => updateContext({
+          <SolidButton onClick={() => updateContext({
             ...contextState,
             propertyId: undefined
           })}>
-            <div className={tw('flex flex-row gap-x-2 items-center')}>
+            <div className="row gap-x-2 items-center">
               <Plus/>
               <span>{translation.addProperty}</span>
             </div>
-          </Button>
+          </SolidButton>
         </div>
       </div>
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: tw('min-h-[300px] border-2 border-black rounded-xl') }}
+        loadingProps={{ classname: 'min-h-[300px] border-2 border-black rounded-xl' }}
       >
         <Table
           data={filteredProperties}
@@ -158,19 +156,19 @@ export const PropertyDisplay = ({
               title={{ value: property.name }}
               description={{ value: translation[property.fieldType] }}
             />),
-            (<div key="subject-type-cell" className={tw('flex flex-row gap-x-2')}>
+            (<div key="subject-type-cell" className="row gap-x-2">
               <SubjectTypeIcon subjectType={property.subjectType}/>
               <span>{translation[property.subjectType]}</span>
             </div>),
-            (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
-              <Button variant="text" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
+            (<div key="edit-button-cell" className="row justify-end">
+              <TextButton onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
                 <span>{translation.edit}</span>
-              </Button>
+              </TextButton>
             </div>)
           ]}
           header={[
-            <span key="headerName" className={tw('textstyle-table-header')}>{translation.name}</span>,
-            <span key="headerSubjectType" className={tw('textstyle-table-header')}>{translation.subjectType}</span>,
+            <span key="headerName" className="textstyle-table-header">{translation.name}</span>,
+            <span key="headerSubjectType" className="textstyle-table-header">{translation.subjectType}</span>,
             <></>
           ]}
         />

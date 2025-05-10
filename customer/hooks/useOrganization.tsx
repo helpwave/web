@@ -1,7 +1,6 @@
 import type { ComponentType, PropsWithChildren } from 'react'
 import { createContext, useContext } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
-import { tw } from '@twind/core'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
 import { CreateOrganizationPage } from '@/components/pages/create-organization'
 import { useCustomerMyselfQuery } from '@/api/mutations/customer_mutations'
@@ -24,7 +23,7 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
 
   if (!organization && isLoading) {
     return (
-      <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
+      <div className="col items-center justify-center w-screen h-screen">
         <LoadingAnimation loadingText="Loading organization..."/>
       </div>
     )
@@ -32,8 +31,8 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
 
   if (isError) {
     return (
-      <div className={tw('flex flex-col items-center justify-center w-screen h-screen')}>
-        <span className={tw('text-hw-negative-400')}>An Error occurred</span>
+      <div className="col items-center justify-center w-screen h-screen">
+        <span className="text-negative">An Error occurred</span>
       </div>
     )
   }

@@ -1,8 +1,8 @@
 import { AlertOctagon } from 'lucide-react'
-import { tw, tx } from '../twind'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
+import clsx from 'clsx'
 
 type ErrorComponentTranslation = {
   errorOccurred: string,
@@ -32,8 +32,8 @@ export const ErrorComponent = ({
 }: PropsForTranslation<ErrorComponentTranslation, ErrorComponentProps>) => {
   const translation = useTranslation(defaultErrorComponentTranslation, overwriteTranslation)
   return (
-    <div className={tx('flex flex-col items-center justify-center gap-y-4 w-full h-24', classname)}>
-      <AlertOctagon size={64} className={tw('text-hw-warn-400')}/>
+    <div className={clsx('col items-center justify-center gap-y-4 w-full h-24', classname)}>
+      <AlertOctagon size={64} className="text-warning"/>
       {errorText ?? `${translation.errorOccurred} :(`}
     </div>
   )

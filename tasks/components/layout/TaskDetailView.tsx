@@ -1,8 +1,8 @@
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
 import { Textarea } from '@helpwave/common/components/user-input/Textarea'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { X } from 'lucide-react'
 import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
 import { Input } from '@helpwave/common/components/user-input/Input'
@@ -107,11 +107,11 @@ type TaskDetailViewSidebarProps = {
 }
 
 const TaskDetailViewSidebar = ({
-  overwriteTranslation,
-  task,
-  setTask,
-  isCreating
-}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
+                                 overwriteTranslation,
+                                 task,
+                                 setTask,
+                                 isCreating
+                               }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
@@ -130,7 +130,7 @@ const TaskDetailViewSidebar = ({
   }
 
   return (
-    <div className={tw('flex flex-col min-w-[250px] gap-y-4')}>
+    <div className="col min-w-[250px] gap-y-4">
       <ConfirmDialog
         id="TaskDetailView-PublishDialog"
         isOpen={isShowingPublicDialog}
@@ -150,8 +150,8 @@ const TaskDetailViewSidebar = ({
         descriptionText={translation.publishTaskDescription}
       />
       <div>
-        <label className={tw('textstyle-label-md')}>{translation.assignee}</label>
-        <div className={tw('flex flex-row items-center gap-x-2')}>
+        <label className="textstyle-label-md">{translation.assignee}</label>
+        <div className="row items-center gap-x-2">
           <AssigneeSelect
             organizationId={organization?.id ?? ''}
             value={task.assignee}
@@ -162,7 +162,7 @@ const TaskDetailViewSidebar = ({
               }
             }}
           />
-          <Button
+          <TextButton
             onClick={() => {
               setTask({ ...task, assignee: undefined })
               if (!isCreating && task.assignee) {
@@ -172,17 +172,16 @@ const TaskDetailViewSidebar = ({
                 })
               }
             }}
-            variant="text"
-            color="hw-negative"
+            color="negative"
             disabled={!task.assignee}
           >
             <X size={24}/>
-          </Button>
+          </TextButton>
         </div>
       </div>
       <div>
-        <label className={tw('textstyle-label-md')}>{translation.dueDate}</label>
-        <div className={tw('flex flex-row items-center gap-x-2')}>
+        <label className="textstyle-label-md">{translation.dueDate}</label>
+        <div className="row items-center gap-x-2">
           <Input
             value={task.dueDate ? formatDate(task.dueDate) : ''}
             type="datetime-local"
@@ -202,7 +201,7 @@ const TaskDetailViewSidebar = ({
           <Button
             onClick={() => setTask({ ...task, dueDate: undefined })}
             variant="text"
-            color="hw-negative"
+            color="negative"
             disabled={!task.dueDate}
           >
             <X size={24}/>
@@ -211,7 +210,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label className={tw('textstyle-label-md')}>{translation.status}</label>
+        <label className="textstyle-label-md">{translation.status}</label>
         <TaskStatusSelect
           value={task.status}
           removeOptions={isCreating ? ['done'] : []}
@@ -224,20 +223,15 @@ const TaskDetailViewSidebar = ({
           }}
         />
       </div>
-      <div className={tw('select-none')}>
-        <label className={tw('textstyle-label-md')}>{translation.visibility}</label>
+      <div className="select-none">
+        <label className="textstyle-label-md">{translation.visibility}</label>
         {!isCreating ? (
-          <div className={tw('flex flex-row justify-between items-center')}>
+          <div className="row justify-between items-center">
             <span>{task.isPublicVisible ? translation.public : translation.private}</span>
             {!task.isPublicVisible && !isCreating && (
-              <Button
-                color="hw-neutral"
-                variant="text-border"
-                className={tw('!py-1 !px-2')}
-                onClick={() => setIsShowingPublicDialog(true)}
-              >
+              <TextButton size="small" onClick={() => setIsShowingPublicDialog(true)}>
                 <span>{translation.publish}</span>
-              </Button>
+              </TextButton>
             )}
           </div>
         ) : null}
@@ -251,8 +245,8 @@ const TaskDetailViewSidebar = ({
         )}
       </div>
       {task.createdAt && (
-        <div className={tw('flex flex-col gap-y-1')}>
-          <span className={tw('textstyle-label-md')}>{translation.creationTime}</span>
+        <div className="col gap-y-1">
+          <span className="textstyle-label-md">{translation.creationTime}</span>
           <TimeDisplay date={new Date(task.createdAt)}/>
         </div>
       )}
@@ -275,13 +269,13 @@ export type TaskDetailViewProps = {
  * The view for changing or creating a task and it's information
  */
 export const TaskDetailView = ({
-  overwriteTranslation,
-  patientId,
-  taskId = '',
-  wardId,
-  initialStatus,
-  onClose
-}: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
+                                 overwriteTranslation,
+                                 patientId,
+                                 taskId = '',
+                                 wardId,
+                                 initialStatus,
+                                 onClose
+                               }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
@@ -344,39 +338,39 @@ export const TaskDetailView = ({
   }
 
   const buttons = (
-    <div className={tw('flex flex-row justify-end gap-x-8')}>
+    <div className="row justify-end gap-x-8">
       {!isCreating ?
-          (
+        (
           <>
-            <Button
-              color="hw-negative"
+            <SolidButton
+              color="negative"
               disabled={true} // TODO reenable when backend allows it
               onClick={() => setIsShowingDeleteDialog(true)}
             >
               {translation.delete}
-            </Button>
+            </SolidButton>
             {task.status !== 'done' && (
-              <Button color="hw-positive" onClick={() => {
+              <SolidButton color="positive" onClick={() => {
                 updateTaskMutation.mutate({ ...task, status: 'done' })
                 onClose()
               }}>
                 {translation.finish}
-              </Button>
+              </SolidButton>
             )}
           </>
-          )
+        )
         :
-          (
-          <Button onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
+        (
+          <SolidButton onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
             {translation.create}
-          </Button>
-          )
+          </SolidButton>
+        )
       }
     </div>
   )
 
   const tasksDetails = (
-    <div className={tx('flex flex-col', {
+    <div className={clsx('col', {
       'pl-6': isCreating,
       'px-2': !isCreating
     })}>
@@ -389,7 +383,7 @@ export const TaskDetailView = ({
             value={task.name}
             onChange={(name) => setTask({ ...task, name })}
             onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, name: text })}
-            labelClassName={tw('text-2xl font-bold')}
+            labelClassName="text-2xl font-bold"
             minLength={minTaskNameLength}
             maxLength={maxTaskNameLength}
             size={24}
@@ -397,9 +391,9 @@ export const TaskDetailView = ({
         )}
         onCloseClick={onClose}
       />
-      <div className={tw('flex flex-row flex-1 gap-x-8 mt-3')}>
-        <div className={tw('flex flex-col gap-y-8 w-[60%] min-w-[500px]')}>
-          <div className={tw('min-h-[25%]')}>
+      <div className="row flex-1 gap-x-8 mt-3">
+        <div className="col gap-y-8 w-[60%] min-w-[500px]">
+          <div className="min-h-[25%]">
             <Textarea
               headline={translation.notes}
               value={task.notes}
@@ -418,20 +412,20 @@ export const TaskDetailView = ({
   const taskTemplates =
     personalTaskTemplatesData && wardTaskTemplatesData
       ? [
-          ...(personalTaskTemplatesData.map((taskTemplate) => ({
-            taskTemplate,
-            type: 'personal' as const
-          }))),
-          ...(wardTaskTemplatesData.map((taskTemplate) => ({
-            taskTemplate,
-            type: 'ward' as const
-          })))
-        ].sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))
+        ...(personalTaskTemplatesData.map((taskTemplate) => ({
+          taskTemplate,
+          type: 'personal' as const
+        }))),
+        ...(wardTaskTemplatesData.map((taskTemplate) => ({
+          taskTemplate,
+          type: 'ward' as const
+        })))
+      ].sort((a, b) => a.taskTemplate.name.localeCompare(b.taskTemplate.name))
       : []
 
   const templateSidebar = (
     <div
-      className={tw('fixed flex flex-col w-[250px] -translate-x-[250px] -translate-y-4 overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full')}
+      className="fixed col w-[250px] -translate-x-[250px] -translate-y-4 overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full"
     >
       {personalTaskTemplatesData && wardTaskTemplatesData && (
         <TaskTemplateListColumn
@@ -463,15 +457,15 @@ export const TaskDetailView = ({
         onCancel={() => setIsShowingDeleteDialog(false)}
         onCloseClick={() => setIsShowingDeleteDialog(false)}
         onBackgroundClick={() => setIsShowingDeleteDialog(false)}
-        buttonOverwrites={[{}, {}, { color: 'hw-negative' }]}
+        buttonOverwrites={[{}, {}, { color: 'negative' }]}
       />
       <LoadingAndErrorComponent
         isLoading={(isLoading || !data) && !isCreating}
         hasError={isError}
-        loadingProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
-        errorProps={{ classname: tw('min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]') }}
+        loadingProps={{ classname: 'min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]' }}
+        errorProps={{ classname: 'min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]' }}
       >
-        <div className={tx('relative flex flex-row')}>
+        <div className="relative row">
           {isCreating && templateSidebar}
           {tasksDetails}
         </div>

@@ -1,6 +1,6 @@
 import type { TextareaHTMLAttributes } from 'react'
 import { useState } from 'react'
-import { tw, tx } from '../../twind'
+import clsx from 'clsx'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
@@ -46,17 +46,17 @@ export const Textarea = ({
   }
 
   return (
-    <div className={tx({ 'focus-within:border-hw-primary-700': defaultStyle }, 'w-full')}>
-      {label && (<Label {...label} htmlFor={id} className={tx('mb-1', label.className)} labelType={label.labelType ?? 'labelSmall'}/>)}
-      <div className={`${tx('relative', { 'bg-white shadow border-2 border-gray-300 rounded-lg': defaultStyle })}`}>
+    <div className="w-full">
+      {label && (<Label {...label} htmlFor={id} className={clsx('mb-1', label.className)} labelType={label.labelType ?? 'labelSmall'}/>)}
+      <div className={`${clsx(' bg-surface text-on-surface focus-within:border-primary relative', { 'shadow border-2 border-gray-300 hover:border-primary rounded-lg': defaultStyle })}`}>
         {headline && (
-          <label className={tw('mx-3 mt-3 block text-gray-700 font-bold')} htmlFor={id}>
+          <span className="mx-3 mt-3 block text-gray-700 font-bold">
             {headline}
-          </label>
+          </span>
         )}
         <textarea
           id={id}
-          className={tx('pt-0 border-transparent focus:border-transparent focus:ring-0 appearance-none border w-full text-gray-700 leading-tight focus:outline-none', { 'resize-none': !resizable, 'h-32': defaultStyle, 'mt-3': !headline }, className)}
+          className={clsx('pt-0 px-3 border-transparent focus:border-transparent focus:ring-0 appearance-none border w-full leading-tight focus:outline-none', { 'resize-none': !resizable, 'h-32': defaultStyle, 'mt-3': !headline }, className)}
           onChange={(event) => {
             const value = event.target.value
             restartTimer(() => {
@@ -77,7 +77,7 @@ export const Textarea = ({
       </textarea>
       </div>
       {(hasFocus && disclaimer) && (
-        <label className={tw('text-hw-negative-500')}>
+        <label className="text-negative">
           {disclaimer}
         </label>
       )}

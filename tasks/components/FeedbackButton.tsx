@@ -1,4 +1,4 @@
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { getConfig } from '@/utils/config'
@@ -23,8 +23,8 @@ export const FeedbackButton = ({ overwriteTranslation }: PropsForTranslation<Fee
   const onClick = () => window.open(config.feedbackFormUrl, '_blank')
 
   return (
-    <Button variant="text-border" color="hw-neutral" className="!text-black" onClick={onClick}>
+    <SolidButton color="secondary" onClick={onClick}>
       {translation.text}
-    </Button>
+    </SolidButton>
   )
 }

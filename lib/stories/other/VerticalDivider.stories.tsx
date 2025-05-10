@@ -13,8 +13,8 @@ export const VerticalDividerBasic: Story = {
   args: {
     width: 1,
     height: 100,
-    color: 'black',
-    dashWidth: 0.5,
-    dashDistance: 4,
+    strokeWidth: 4,
+    dashLength: 6,
+    dashGap: 6,
   },
 }

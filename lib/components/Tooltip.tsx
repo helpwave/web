@@ -1,6 +1,6 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { tx } from '@twind/core'
 import { useHoverState } from '../hooks/useHoverState'
+import { clsx } from 'clsx'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -22,7 +22,6 @@ export type TooltipProps = PropsWithChildren<{
   containerClassName?: string,
   position?: Position,
   zIndex?: number,
-  offset?: number,
 }>
 
 /**
@@ -34,37 +33,32 @@ export type TooltipProps = PropsWithChildren<{
  * @param containerClassName Additional ClassNames for the Container holding the content
  * @param position The direction of the tooltip relative to the Container
  * @param zIndex The z Index of the tooltip (you may require this when stacking modals)
- * @param offset The distance to the parent container in pixels
  * @constructor
  */
 export const Tooltip = ({
-  tooltip,
-  children,
-  animationDelay = 650,
-  tooltipClassName = '',
-  containerClassName = '',
-  position = 'bottom',
-  zIndex = 10,
-  offset = 6,
-}: TooltipProps) => {
+                          tooltip,
+                          children,
+                          animationDelay = 650,
+                          tooltipClassName = '',
+                          containerClassName = '',
+                          position = 'bottom',
+                          zIndex = 10,
+                        }: TooltipProps) => {
   const { isHovered, handlers } = useHoverState()
 
   const positionClasses = {
-    top: `bottom-full left-1/2 -translate-x-1/2 mb-[${offset}px]`,
-    bottom: `top-full left-1/2 -translate-x-1/2 mt-[${offset}px]`,
-    left: `right-full top-1/2 -translate-y-1/2 mr-[${offset}px]`,
-    right: `left-full top-1/2 -translate-y-1/2 ml-[${offset}px]`
+    top: `bottom-full left-1/2 -translate-x-1/2 mb-[6px]`,
+    bottom: `top-full left-1/2 -translate-x-1/2 mt-[6px]`,
+    left: `right-full top-1/2 -translate-y-1/2 mr-[6px]`,
+    right: `left-full top-1/2 -translate-y-1/2 ml-[6px]`
   }
-
-  const backgroundColor = 'gray-100'
-  const borderColor = 'gray-600'
 
   const triangleSize = 6
   const triangleClasses = {
-    top: `top-full left-1/2 -translate-x-1/2 border-t-${borderColor} border-l-transparent border-r-transparent`,
-    bottom: `bottom-full left-1/2 -translate-x-1/2 border-b-${borderColor} border-l-transparent border-r-transparent`,
-    left: `left-full top-1/2 -translate-y-1/2 border-l-${borderColor} border-t-transparent border-b-transparent`,
-    right: `right-full top-1/2 -translate-y-1/2 border-r-${borderColor} border-t-transparent border-b-transparent`
+    top: `top-full left-1/2 -translate-x-1/2 border-t-gray-600 border-l-transparent border-r-transparent`,
+    bottom: `bottom-full left-1/2 -translate-x-1/2 border-b-gray-600 border-l-transparent border-r-transparent`,
+    left: `left-full top-1/2 -translate-y-1/2 border-l-gray-600 border-t-transparent border-b-transparent`,
+    right: `right-full top-1/2 -translate-y-1/2 border-r-gray-600 border-t-transparent border-b-transparent`
   }
 
   const triangleStyle: Record<Position, CSSProperties> = {
@@ -76,17 +70,21 @@ export const Tooltip = ({
 
   return (
     <div
-      className={tx(`relative inline-block`, containerClassName)}
+      className={clsx('relative inline-block', containerClassName)}
       {...handlers}
     >
       {children}
       {isHovered && (
         <div
-          className={tx(`opacity-0 absolute z-[${zIndex}] text-black text-xs font-semibold text-[${borderColor}] px-2 py-1 rounded whitespace-nowrap border-2 border-${borderColor}
-           animate-tooltip-fade-in animation-delay-${animationDelay} shadow-lg bg-${backgroundColor}`, positionClasses[position], tooltipClassName)}
+          className={clsx(`opacity-0 absolute text-black text-xs font-semibold text-gray-600 px-2 py-1 rounded whitespace-nowrap border-2 border-gray-600
+           animate-tooltip-fade-in shadow-lg bg-gray-100`, positionClasses[position], tooltipClassName)}
+          style={{ zIndex, animationDelay: animationDelay + 'ms' }}
         >
           {tooltip}
-          <div className={tx(`absolute w-0 h-0 z-[${zIndex}]`, triangleClasses[position])} style={triangleStyle[position]}/>
+          <div
+            className={clsx(`absolute w-0 h-0`, triangleClasses[position])}
+            style={{ ...triangleStyle[position], zIndex }}
+           />
         </div>
       )}
     </div>

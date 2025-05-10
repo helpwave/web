@@ -2,7 +2,6 @@ import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { tw } from '@twind/core'
 import type { CustomerCreate } from '@/api/dataclasses/customer'
 import { Section } from '@/components/layout/Section'
 import { ContactInformationForm } from '@/components/forms/ContactInformationForm'
@@ -36,13 +35,13 @@ export const CreateOrganizationPage = ({
   return (
     <Page
       pageTitle={titleWrapper(translation.createOrganization)}
-      mainContainerClassName={tw('max-w-[700px]')}
-      contentAndFooterClassName={tw('items-center')}
+      mainContainerClassName="max-w-[700px]"
+      contentAndFooterClassName="items-center"
       isHidingSidebar={true}
     >
       <Section>
-        <h2 className={tw('font-space text-3xl font-bold')}>{translation.createOrganization}</h2>
-        <span className={tw('text-gray-500')}>{translation.createOrganizationDescription}</span>
+        <h2 className="font-space text-3xl font-bold">{translation.createOrganization}</h2>
+        <span className="text-gray-500">{translation.createOrganizationDescription}</span>
         <ContactInformationForm
           initialValue={{
             name: '',

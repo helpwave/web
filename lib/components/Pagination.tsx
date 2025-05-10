@@ -1,5 +1,5 @@
 import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
-import { tw, tx } from '../twind'
+import clsx from 'clsx'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
 import type { Languages } from '../hooks/useLanguage'
@@ -42,23 +42,23 @@ export const Pagination = ({
   const onLastPage = page === numberOfPages - 1
 
   return (
-    <div className={tx('flex flex-row', { 'opacity-30': noPages })}>
+    <div className={clsx('row', { 'opacity-30': noPages })}>
       <button onClick={() => changePage(0)} disabled={onFirstPage}>
-        <ChevronFirst className={tx({ 'opacity-30': onFirstPage })}/>
+        <ChevronFirst className={clsx({ 'opacity-30': onFirstPage })}/>
       </button>
       <button onClick={() => changePage(page - 1)} disabled={onFirstPage}>
-        <ChevronLeft className={tx({ 'opacity-30': onFirstPage })}/>
+        <ChevronLeft className={clsx({ 'opacity-30': onFirstPage })}/>
       </button>
-      <div className={tw('flex min-w-[80px] justify-center mx-2')}>
-        <span className={tw('select-none text-right flex-1')}>{noPages ? 0 : page + 1}</span>
-        <span className={tw('select-none mx-2')}>{translation.of}</span>
-        <span className={tw('select-none text-left flex-1')}>{numberOfPages}</span>
+      <div className="min-w-[80px] justify-center mx-2">
+        <span className="select-none text-right flex-1">{noPages ? 0 : page + 1}</span>
+        <span className="select-none mx-2">{translation.of}</span>
+        <span className="select-none text-left flex-1">{numberOfPages}</span>
       </div>
       <button onClick={() => changePage(page + 1)} disabled={onLastPage || noPages}>
-        <ChevronRight className={tx({ 'opacity-30': onLastPage })}/>
+        <ChevronRight className={clsx({ 'opacity-30': onLastPage })}/>
       </button>
       <button onClick={() => changePage(numberOfPages - 1)} disabled={onLastPage || noPages}>
-        <ChevronLast className={tx({ 'opacity-30': onLastPage })}/>
+        <ChevronLast className={clsx({ 'opacity-30': onLastPage })}/>
       </button>
     </div>
   )

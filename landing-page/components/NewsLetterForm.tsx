@@ -1,7 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { useState } from 'react'
 import { Select } from '@helpwave/common/components/user-input/Select'
@@ -116,11 +115,11 @@ export const NewsLetterForm = ({
   })
 
   return (
-    <div className={tw('rounded-lg py-2 px-4 w-full bg-[#FFFFFFEE] border border-2')}>
-      <div className={tw('flex flex-col')}>
-        <span className={tw('textstyle-title-md')}>{translation.title}</span>
-        <span className={tw('textstyle-form-description')}>{translation.subtitle}</span>
-        <div className={tw('flex flex-col my-2 gap-y-1')}>
+    <div className="rounded-lg py-2 px-4 w-full bg-[#FFFFFFEE] border border-2">
+      <div className="col">
+        <span className="textstyle-title-md">{translation.title}</span>
+        <span className="textstyle-form-description">{translation.subtitle}</span>
+        <div className="col my-2 gap-y-1">
         <form>
           <Input
             id="email"
@@ -136,9 +135,9 @@ export const NewsLetterForm = ({
             }))}
             maxLength={255}
             required={true}
-            className={tw('!desktop:w-3/5 !max-w-[300px]')}
+            className="!desktop:w-3/5 !max-w-[300px]"
           />
-          <div className={tw('flex desktop:flex-row mobile:flex-col gap-x-4')}>
+          <div className="desktop:flex-row max-tablet:col gap-x-4">
             <Input
               id="firstname"
               value={formState.firstname}
@@ -169,7 +168,7 @@ export const NewsLetterForm = ({
               required={true}
             />
           </div>
-          <div className={tw('flex desktop:flex-row mobile:flex-col gap-x-4')}>
+          <div className="desktop:flex-row max-tablet:col gap-x-4">
             <Input
               id="company"
               value={formState.company}
@@ -183,7 +182,7 @@ export const NewsLetterForm = ({
                 company: text
               }))}
               maxLength={255}
-              className={tw('!max-w-[300px]')}
+              className="!max-w-[300px]"
             />
             <Select
               label={{ name: translation.industry, labelType: 'labelSmall' }}
@@ -196,10 +195,10 @@ export const NewsLetterForm = ({
                 ...prevState,
                 industry
               }))}
-              className={tw('!w-full !max-w-[300px] bg-white')}
+              className="!w-full !max-w-[300px] bg-white"
             />
           </div>
-          <div className={tw('flex flex-row justify-end mt-4')}>
+          <div className="row justify-end mt-4">
             {
               showThankYouMessage ? (
                 <p>{translation.thankYou}</p>
@@ -212,7 +211,7 @@ export const NewsLetterForm = ({
                     setLoading(false)
                     setShowThankYouMessage(true)
                   })
-                }} size="medium" className={tw('min-w-[120px] w-fit')}>
+                }} size="medium" className="min-w-[120px] w-fit">
                   {translation.callToAction}
                 </LoadingButton>
               )

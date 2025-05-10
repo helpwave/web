@@ -1,4 +1,3 @@
-import { tw } from '@helpwave/common/twind'
 import type { NextPage } from 'next'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import Image from 'next/image'
@@ -83,37 +82,37 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
   return (
     <Page pageTitleAddition={translation.title}>
       <SectionBase
-        className={tw('flex flex-row mobile:!flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between mobile:justify-center items-center')}
-        backgroundColor="white"
+        className="row max-tablet:!flex flex-wrap-reverse w-full gap-x-16 gap-y-8 justify-between max-tablet:justify-center items-center"
+        backgroundColor="variant"
       >
-        <div className={tw('flex flex-col gap-y-2 pb-16 mobile:pb-0')}>
-          <div className={tw('flex flex-col gap-y-2')}>
-            <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
-            <span className={tw('font-space font-semibold')}><MarkdownInterpreter
+        <div className="col gap-y-2 pb-16 max-tablet:pb-0">
+          <div className="col gap-y-2">
+            <h1 className="textstyle-title-2xl">{translation.title}</h1>
+            <span className="font-space font-semibold"><MarkdownInterpreter
               text={translation.text}/></span>
           </div>
         </div>
         <div
-          className={tw('flex flex-row bottom-0 justify-center rounded-l-3xl mobile:w-full min-w-[50%] z-10')}
+          className="row bottom-0 justify-center rounded-l-3xl max-tablet:w-full min-w-[50%] z-10"
         >
           <Image
             src={imageUrl}
             alt=""
             width={0}
             height={0}
-            className={tw('w-fit desktop:max-h-[70vh]')}
+            className="w-fit desktop:max-h-[70vh]"
           />
         </div>
       </SectionBase>
 
-      <SectionBase backgroundColor="gray" className={tw('w-full')}>
-        <h2 className={tw('textstyle-title-normal')}>Freepik</h2>
-        <div className={tw('flex grow flex-col items-center min-w-50 items-center gap-y-4')}>
+      <SectionBase  className="w-full">
+        <h2 className="textstyle-title-normal">Freepik</h2>
+        <div className="grow col items-center min-w-50 items-center gap-y-4">
           {
             freepikCredits.map((credit) => (
-              <div className={tw('w-full')} key={credit.link}>
+              <div className="w-full" key={credit.link}>
                 <span>{credit.text}</span>
-                <Link href={credit.link} className={tw('underline block')} target="_blank">{credit.link}</Link>
+                <Link href={credit.link} className="underline block" target="_blank">{credit.link}</Link>
               </div>
             ))
           }
@@ -121,10 +120,10 @@ const CreditsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Cre
 
       </SectionBase>
 
-      <SectionBase backgroundColor="white" className={tw('flex flex-col gap-y-2 w-full')}>
-        <h2 className={tw('textstyle-title-md')}>{translation.flaticon}</h2>
+      <SectionBase backgroundColor="variant" className="col gap-y-2 w-full">
+        <h2 className="textstyle-title-md">{translation.flaticon}</h2>
         {flaticonCredits.map(({ name, author, link }) => (
-          <Link key={name + author} href={link} title={name} className={tw('underline')} target="_blank">
+          <Link key={name + author} href={link} title={name} className="underline" target="_blank">
             {translation.createdBy(name, author)}
           </Link>
         ))}

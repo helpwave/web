@@ -1,6 +1,5 @@
 import type { ImageProps } from 'next/image'
 import Image from 'next/image'
-import { tx } from '@twind/core'
 
 export type TagProps = Omit<ImageProps, 'src'|'alt'>
 
@@ -24,7 +23,7 @@ export const TagIcon = ({
       height={height}
       alt=""
       src="https://cdn.helpwave.de/icons/label.png"
-      className={tx(`w-[${width}px] h-[${height}px]`, className)}
+      className={className}
     />
   )
 }

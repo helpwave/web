@@ -1,4 +1,3 @@
-import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { ModalProps } from '@helpwave/common/components/modals/Modal'
@@ -6,7 +5,7 @@ import { Modal } from '@helpwave/common/components/modals/Modal'
 import type { SelectOption } from '@helpwave/common/components/user-input/Select'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { useMemo, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationSwitchModalTranslation = {
@@ -54,17 +53,17 @@ export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneTo
       titleText={translation.switchOrganization}
       {...modalProps}
     >
-      <div className={tw('w-[320px]')}>
+      <div className="w-[320px]">
         <Select
-          className={tw('mt-2')}
+          className="mt-2"
           value={organization}
           options={organizationOptions}
           onChange={setOrganization}
         />
-        <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-          <Button autoFocus color="hw-positive" disabled={!organization} onClick={onDone}>
+        <div className="row mt-3 gap-x-4 justify-end">
+          <SolidButton autoFocus color="positive" disabled={!organization} onClick={onDone}>
             {translation.ok}
-          </Button>
+          </SolidButton>
         </div>
       </div>
     </Modal>

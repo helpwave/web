@@ -1,52 +1,63 @@
 import type { Preview } from '@storybook/react'
-import withNextApp from '../twind/next/app'
-import config from '../twind/config'
-import { Inter, Space_Grotesk } from 'next/font/google'
 import { ProvideLanguage } from '../hooks/useLanguage'
-import { LanguageHeader } from '../components/language/LanguageHeader'
 import { ModalRegister } from '../components/modals/ModalRegister'
 import { modalRootName } from '../components/modals/Modal'
+import '../globals.css'
+import type { ThemeType } from '../hooks/useTheme'
+import { ThemeProvider } from '../hooks/useTheme'
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter'
-})
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-space-grotesk'
-})
+const colorToHex: Record<ThemeType, string> = {
+  dark: '#1A1A1A',
+  light: '#EEE',
+}
+
+const colorToHexReverse: Record<string, ThemeType> = {
+  '#1A1A1A': 'dark',
+  '#EEE': 'light',
+  'transparent': 'light',
+}
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/,
+    backgrounds: {
+      values: [
+        { name: 'Dark', value: colorToHex.dark },
+        { name: 'Light', value: colorToHex.light },
+      ],
+      default: 'Light',
+    },
+  },
+  globalTypes: {
+    language: {
+      name: 'Language',
+      description: 'Component Language',
+      defaultValue: 'en',
+      toolbar: {
+        icon: 'globe',
+        items: [
+          { value: 'en', title: 'English' },
+          { value: 'de', title: 'German' },
+        ],
       },
     },
   },
   decorators: [
-    (Story) => {
-      const App = withNextApp(config, Story)
+    (Story, context) => {
+      const App = Story
+      const theme = colorToHexReverse[context.globals.backgrounds?.value ?? colorToHex.light]
+      const language = context.globals.language
+
       return (
-        <main>
-          <style>{`
-        :root {
-          --font-inter: ${inter.style.fontFamily};
-          --font-space: ${spaceGrotesk.style.fontFamily};
-        }
-      `}</style>
-          <ProvideLanguage>
-            <ModalRegister>
-              <div id={modalRootName}>
-                {/* TODO try to integrate this header/language select directly into the storybook interface */}
-                <LanguageHeader>
-                  <App/>
-                </LanguageHeader>
-              </div>
-            </ModalRegister>
-          </ProvideLanguage>
+        <main data-theme={theme}>
+          <ThemeProvider initialTheme={theme}>
+            <ProvideLanguage initialLanguage={language}>
+              <ModalRegister>
+                <div id={modalRootName}>
+                  <App />
+                </div>
+              </ModalRegister>
+            </ProvideLanguage>
+          </ThemeProvider>
         </main>
       )
     },

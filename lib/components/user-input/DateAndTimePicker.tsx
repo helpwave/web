@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
-import { tw, tx } from '../../twind'
+import clsx from 'clsx'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { noop } from '../../util/noop'
 import { addDuration, subtractDuration } from '../../util/date'
-import { Button } from '../Button'
+import { SolidButton } from '../Button'
 import type { TimePickerProps } from '../date/TimePicker'
 import { TimePicker } from '../date/TimePicker'
 import type { DatePickerProps } from '../date/DatePicker'
@@ -113,7 +113,7 @@ export const DateTimePicker = ({
     dateDisplay = (
       <DatePicker
         {...datePickerProps}
-        className={tw('min-w-[220px] min-h-[250px]')}
+        className="min-w-[320px] min-h-[250px]"
         yearMonthPickerProps={{ maxHeight: 218 }}
         value={value}
         start={start}
@@ -126,7 +126,7 @@ export const DateTimePicker = ({
     timeDisplay = (
       <TimePicker
         {...timePickerProps}
-        className={tx('h-full', { 'justify-between w-full': mode === 'time' })}
+        className={clsx('h-full', { 'justify-between w-full': mode === 'time' })}
         maxHeight={250}
         time={value}
         onChange={onChange}
@@ -135,20 +135,20 @@ export const DateTimePicker = ({
   }
 
   return (
-    <div className={tw('flex flex-col w-fit')}>
-      <div className={tw('flex flex-row gap-x-4')}>
+    <div className="col w-fit">
+      <div className="row gap-x-4">
         {dateDisplay}
         {timeDisplay}
       </div>
-      <div className={tw('flex flex-row justify-end')}>
-        <div className={tw('flex flex-row gap-x-2 mt-1')}>
-          <Button size="medium" color="hw-negative" onClick={onRemove}>{translation.clear}</Button>
-          <Button
+      <div className="row justify-end">
+        <div className="row gap-x-2 mt-1">
+          <SolidButton size="medium" color="negative" onClick={onRemove}>{translation.clear}</SolidButton>
+          <SolidButton
             size="medium"
             onClick={() => onFinish(value)}
           >
             {translation.change}
-          </Button>
+          </SolidButton>
         </div>
       </div>
     </div>

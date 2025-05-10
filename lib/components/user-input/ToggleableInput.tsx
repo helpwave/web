@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { Pencil } from 'lucide-react'
-import { tw, tx } from '../../twind'
+import clsx from 'clsx'
 import useSaveDelay from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 
@@ -59,10 +59,10 @@ export const ToggleableInput = ({
   return (
     <div>
       <div
-        className={tw('flex flex-row items-center w-full gap-x-2 overflow-hidden')}
+        className="row items-center w-full gap-x-2 overflow-hidden"
         onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
       >
-        <div className={tx('flex flex-row overflow-hidden', { 'flex-1': isEditing })}>
+        <div className={clsx('row overflow-hidden', { 'flex-1': isEditing })}>
           {isEditing ? (
             <input
               autoFocus
@@ -84,29 +84,29 @@ export const ToggleableInput = ({
                 onEditCompletedWrapper(value)
                 setIsEditing(false)
               }}
-              onKeyPress={event => {
+              onKeyDown={event => {
                 if (event.key === 'Enter') {
                   setIsEditing(false)
                   onEditCompletedWrapper(value)
                 }
               }}
-              className={tx(labelClassName, `w-full border-none rounded-none focus:ring-0 shadow-transparent decoration-hw-primary-400 p-0 underline-offset-4`, {
+              className={clsx(labelClassName, `w-full border-none rounded-none focus:ring-0 shadow-transparent decoration-primary p-0 underline-offset-4`, {
                 underline: isEditing
               })}
               onFocus={event => event.target.select()}
             />
           ) : (
             <span
-              className={tx(labelClassName, 'max-w-xs break-words overflow-hidden')}
+              className={clsx(labelClassName, 'max-w-xs break-words overflow-hidden')}
             >
         {value}
         </span>
           )}
         </div>
-        <Pencil className={tx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size} />
+        <Pencil className={clsx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size} />
       </div>
       {(isEditing && disclaimer) && (
-        <label className={tw('text-hw-negative-500')}>
+        <label className="text-negative">
           {disclaimer}
         </label>
       )}

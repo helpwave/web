@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { tw } from '@twind/core'
 import { Profile } from '../../components/Profile'
-import { Helpwave } from '../../icons/Helpwave'
+import { Helpwave } from '../../components/icons/Helpwave'
 import { MarkdownInterpreter } from '../../components/MarkdownInterpreter'
 import { Chip } from '../../components/ChipList'
 
@@ -15,15 +14,15 @@ type Story = StoryObj<typeof meta>;
 
 export const ProfileVariation: Story = {
   render: (args) => {
-    return (<div className={tw('bg-gray-200 p-4')}><Profile {...args}/></div>)
+    return (<Profile {...args}/>)
   },
   args: {
-    name: 'Helpwave Member',
+    name: 'helpwave Member',
     role: 'Chief Executive Officer',
     roleBadge: 'CEO',
     imageUrl: 'https://cdn.helpwave.de/boringavatar.svg',
     badge: (
-      <Chip className={tw('flex flex-row gap-x-2 items-center justify-center')} color="black">
+      <Chip className="row gap-x-2 items-center justify-center" color="dark">
         <Helpwave size={24}/>
         <MarkdownInterpreter text={'\\helpwave'}/>
       </Chip>

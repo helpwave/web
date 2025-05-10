@@ -10,7 +10,6 @@ import { useRouter } from 'next/router'
 import { loadStripe } from '@stripe/stripe-js'
 import { STRIPE_PUBLISHABLE_KEY } from '@/api/config'
 import Link from 'next/link'
-import { tw } from '@twind/core'
 import { withAuth } from '@/hooks/useAuth'
 import { withOrganization } from '@/hooks/useOrganization'
 
@@ -91,7 +90,7 @@ const CheckoutReturn = () => {
     <Page pageTitle={titleWrapper(translation.payment)}>
       <Section titleText={translation.payment}>
         {message}
-        <Link href="/invoices" className={tw('rounded-md px-4 py-2 text-white bg-hw-primary-400 hover:bg-hw-primary-400')}>
+        <Link href="/invoices" className="rounded-md px-4 py-2 text-on-primary bg-primary hover:brightness-90">
           {translation.backToInvoice}
         </Link>
       </Section>

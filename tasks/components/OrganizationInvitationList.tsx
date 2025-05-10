@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { InputModal } from '@helpwave/common/components/modals/InputModal'
 import { validateEmail } from '@helpwave/common/util/emailValidation'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -88,12 +88,12 @@ export const OrganizationInvitationList = ({
     <LoadingAndErrorComponent
       isLoading={isLoading && !!context.state.organizationId}
       hasError={isError && !!context.state.organizationId}
-      errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
-      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl') }}
+      errorProps={{ classname: 'border-2 border-gray-500 rounded-xl' }}
+      loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl' }}
     >
       <InputModal
         id="inviteMemberModal"
-        modalClassName={tw('min-w-[400px]')}
+        modalClassName="min-w-[400px]"
         isOpen={isShowingInviteMemberModal}
         onBackgroundClick={() => setInviteMemberModalEmail(undefined)}
         onConfirm={() => {
@@ -130,35 +130,34 @@ export const OrganizationInvitationList = ({
         }]}
         buttonOverwrites={[
           {},
-          { disabled: !isValidEmail, color: 'hw-positive', text: translation.addAndNext },
-          { disabled: !isValidEmail, color: 'hw-primary', text: translation.add }
+          { disabled: !isValidEmail, color: 'positive', text: translation.addAndNext },
+          { disabled: !isValidEmail, color: 'primary', text: translation.add }
         ]}
       />
-      <div className={tw('flex flex-row justify-between')}>
-        <span className={tw('textstyle-table-name')}>{`${translation.invitations} (${usedInvitations.length})`}</span>
-        <Button
-          color="hw-positive"
+      <div className="row justify-between">
+        <span className="textstyle-table-name">{`${translation.invitations} (${usedInvitations.length})`}</span>
+        <SolidButton
+          color="positive"
           onClick={() => setInviteMemberModalEmail('')}
         >
           {translation.inviteMember}
-        </Button>
+        </SolidButton>
       </div>
       <Table
         data={usedInvitations}
         stateManagement={[tableState, setTableState]}
         identifierMapping={idMapping}
         header={[
-          <span key="organization" className={tw('textstyle-table-header')}>{translation.email}</span>,
+          <span key="organization" className="textstyle-table-header">{translation.email}</span>,
           <></>
         ]}
         rowMappingToCells={invite => [
-          <div key="email" className={tw('flex flex-row justify-start gap-x-2')}>
+          <div key="email" className="row justify-start gap-x-2">
             <span>{invite.email}</span>
           </div>,
-          <div key="remove" className={tw('flex flex-row justify-end')}>
-            <Button
-              color="hw-negative"
-              variant="text"
+          <div key="remove" className="row justify-end">
+            <TextButton
+              color="negative"
               onClick={() => {
                 if (!isCreatingOrganization) {
                   revokeInviteMutation.mutate(invite.id)
@@ -167,7 +166,7 @@ export const OrganizationInvitationList = ({
               }}
             >
               {translation.remove}
-            </Button>
+            </TextButton>
           </div>
         ]}
       />

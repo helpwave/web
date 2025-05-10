@@ -7,9 +7,8 @@ import {
   removeFromTableSelection,
   Table
 } from '../Table'
-import { tw } from '../../twind'
 import { Input } from '../user-input/Input'
-import { Button } from '../Button'
+import { SolidButton, TextButton } from '../Button'
 import { SortButton } from '../SortButton'
 
 export type DataType = {
@@ -62,7 +61,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
   }
 
   return (
-    <div className={tw('flex flex-col gap-y-12 items-center')}>
+    <div className="col gap-y-12 items-center">
       <Table
         stateManagement={[tableState, (newTableState) => {
           setTableState(newTableState)
@@ -71,7 +70,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
         data={data}
         identifierMapping={idMapping}
         rowMappingToCells={dataObject => [
-          <span key="id" className={tw('textstyle-title-md w-[100px] text-ellipsis overflow-hidden block')}>{dataObject.id}</span>,
+          <span key="id" className="textstyle-title-md w-[100px] text-ellipsis overflow-hidden block">{dataObject.id}</span>,
           <Input key="name" value={dataObject.name} onChange={text => {
             setData(data.map(value => value.id === dataObject.id ? { ...dataObject, name: text } : value))
             setSorting(undefined)
@@ -80,16 +79,15 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
             setData(data.map(value => value.id === dataObject.id ? { ...dataObject, age: parseInt(text) } : value))
             setSorting(undefined)
           }} />,
-          <Button
+          <TextButton
             key="delete"
+            color="negative"
             onClick={() => {
               const newData = data.filter(value => value.id !== dataObject.id)
               setData(newData)
               setTableState(removeFromTableSelection(tableState, [dataObject], data.length, idMapping))
             }}
-            variant="text"
-            color="hw-negative"
-          >Delete</Button>
+          >Delete</TextButton>
         ]}
         header={[
           <SortButton
@@ -100,7 +98,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.id[newTableSorting]))
             }}
           >
-            <span className={tw('textstyle-table-header')}>Id</span>
+            <span className="textstyle-table-header">Id</span>
           </SortButton>,
           <SortButton
             key="name"
@@ -110,7 +108,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.name[newTableSorting]))
             }}
           >
-            <span className={tw('textstyle-table-header')}>Name</span>
+            <span className="textstyle-table-header">Name</span>
           </SortButton>,
           <SortButton
             key="name"
@@ -120,14 +118,14 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
               setData(data.sort(sortingFunctions.age[newTableSorting]))
             }}
           >
-            <span key="age" className={tw('textstyle-table-header')}>age</span>
+            <span key="age" className="textstyle-table-header">age</span>
           </SortButton>,
           <></>
         ]}
       />
-      <div className={tw('flex flex-row gap-x-2')}>
-        <Button
-          className={tw('w-auto')}
+      <div className="row gap-x-2">
+        <SolidButton
+          className="w-auto"
           onClick={() => {
             const newData = {
               id: Math.random().toString(),
@@ -141,10 +139,9 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
           }}
         >
           {'Add Data'}
-        </Button>
-        <Button
-          color="hw-negative"
-          className={tw('w-auto')}
+        </SolidButton>
+        <TextButton
+          className="w-auto"
           onClick={() => {
             const selectedData = data.filter((d) => tableState.selection?.currentSelection.includes(idMapping(d)))
             const unselectedData = data.filter((d) => !tableState.selection?.currentSelection.includes(idMapping(d)))
@@ -153,7 +150,7 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
           }}
         >
           {'Remove all selected'}
-        </Button>
+        </TextButton>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useRouter } from 'next/router'
@@ -60,23 +60,23 @@ export const DashboardDisplay = ({
   } = useRecentPatientsQuery()
 
   return (
-    <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
+    <div className="col py-4 px-6 gap-y-4">
       <InvitationBanner/>
-      <span className={tw('textstyle-title-md')}>{translation.recent}</span>
+      <span className="textstyle-title-md">{translation.recent}</span>
       <LoadingAndErrorComponent
         isLoading={isLoadingPatients}
       >
         {patients && patients.length > 0 && (
           <>
-            <span className={tw('textstyle-title-normal')}>{translation.patients}</span>
-            <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+            <span className="textstyle-title-normal">{translation.patients}</span>
+            <div className={`grid grid-cols-${columns} gap-6`}>
               {patients?.map(patient => (
                 <PatientCard
                   key={patient.id}
-                  className={tx({ '!cursor-not-allowed': !patient.wardId })}
+                  className={clsx({ '!cursor-not-allowed': !patient.wardId })}
                   bedName={patient.bed?.name}
                   patientName={patient.name}
-                  onTileClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
+                  onClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
                 />
               ))}
             </div>
@@ -84,16 +84,16 @@ export const DashboardDisplay = ({
         )}
       </LoadingAndErrorComponent>
       <LoadingAndErrorComponent isLoading={isLoadingWards}>
-        <div className={tw('flex flex-col gap-y-1')}>
+        <div className="col gap-y-1">
           {wards && wards.length > 0 && (
             <>
-              <span className={tw('textstyle-title-normal')}>{translation.wards}</span>
-              <div className={tw(`grid grid-cols-${columns} gap-6`)}>
+              <span className="textstyle-title-normal">{translation.wards}</span>
+              <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-6">
                 {wards?.map(ward => (
                   <WardCard
                     key={ward.id}
                     ward={ward}
-                    onTileClick={() => router.push(`/ward/${ward.id}`)}
+                    onClick={() => router.push(`/ward/${ward.id}`)}
                   />
                 ))}
               </div>

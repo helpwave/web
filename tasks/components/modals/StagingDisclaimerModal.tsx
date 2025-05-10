@@ -4,7 +4,6 @@ import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Link from 'next/link'
 import { getConfig } from '@/utils/config'
@@ -56,11 +55,11 @@ export const StagingDisclaimerModal = ({
       description={(
         <>
           <p><MarkdownInterpreter text={translation.message}/></p>
-          <div className={tw('flex flex-row gap-x-8 mt-2')}>
-            <Link className={tw('text-hw-primary-600 hover:text-hw-primary-800 font-bold')} href={config.imprintUrl}>
+          <div className="row gap-x-8 mt-2">
+            <Link className="text-primary hover:brightness-75 font-bold" href={config.imprintUrl}>
               {translation.imprint}
             </Link>
-            <Link className={tw('text-hw-primary-600 hover:text-hw-primary-800 font-bold')} href={config.privacyUrl}>
+            <Link className="text-primary hover:brightness-75 font-bold" href={config.privacyUrl}>
               {translation.privacy}
             </Link>
           </div>

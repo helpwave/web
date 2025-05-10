@@ -1,6 +1,12 @@
 import type { LabelHTMLAttributes } from 'react'
 
 export type LabelType = 'labelSmall' | 'labelMedium' | 'labelBig'
+const styleMapping: Record<LabelType, string> = {
+  labelSmall: 'textstyle-label-sm',
+  labelMedium: 'textstyle-label-md',
+  labelBig: 'textstyle-label-lg',
+}
+
 
 export type LabelProps = {
   /** The text for the label */
@@ -18,15 +24,9 @@ export const Label = ({
   labelType = 'labelSmall',
   ...props
 }: LabelProps) => {
-  const mapping:Record<LabelType, string> = {
-    labelSmall: 'textstyle-label-sm',
-    labelMedium: 'textstyle-label-md',
-    labelBig: 'textstyle-label-lg',
-  }
-
   return (
     <label {...props}>
-      {children ? children : (<span className={mapping[labelType]}>{name}</span>)}
+      {children ? children : (<span className={styleMapping[labelType]}>{name}</span>)}
     </label>
   )
 }

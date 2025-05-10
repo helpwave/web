@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
-import { apply, tx } from '@twind/core'
+import { clsx } from 'clsx'
 
-type BackgroundColor = 'white' | 'black' | 'gray' | 'darkSecondary' | 'darkPrimary'
+type BackgroundColor = 'variant' | 'dark' |  'secondary' | 'primary' | 'none'
 
 type SectionBaseProps = PropsWithChildren & {
   useDefaultStyle?: boolean,
@@ -13,21 +13,20 @@ type SectionBaseProps = PropsWithChildren & {
 export const SectionBase = ({
   children,
   useDefaultStyle = true,
-  backgroundColor = 'gray',
+  backgroundColor = 'none',
   outerClassName,
   className,
 }: SectionBaseProps) => {
   return (
-    <div className={tx('flex flex-col items-center w-full', {
-      'bg-hw-grayscale-0': backgroundColor === 'white',
-      'bg-hw-grayscale-50': backgroundColor === 'gray',
-      'bg-hw-grayscale-1000': backgroundColor === 'black',
-      'bg-hw-secondary-800': backgroundColor === 'darkSecondary',
-      'bg-hw-primary-900': backgroundColor === 'darkPrimary',
-      [apply('desktop:px-24 tablet:px-12 mobile:px-6 py-16')]: useDefaultStyle
+    <div className={clsx('col items-center w-full', {
+      'bg-section-variant text-section-on-variant': backgroundColor === 'variant',
+      'bg-section-dark text-section-on-dark': backgroundColor === 'dark',
+      'bg-secondary text-white': backgroundColor === 'secondary',
+      'bg-primary text-on-primary': backgroundColor === 'primary',
+      'section-padding': useDefaultStyle
     }, outerClassName)}>
       <div
-        className={tx(
+        className={clsx(
           className,
           {
             'max-w-[1200px]': useDefaultStyle,

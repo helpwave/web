@@ -1,4 +1,3 @@
-import { tw } from '@twind/core'
 import Image from 'next/image'
 import { Carousel } from '@helpwave/common/components/layout/Carousel'
 
@@ -20,32 +19,25 @@ export const PartnerList = ({
   partners
 }: PartnerListProps) => {
   return (
-    <div className={tw('flex flex-col gap-y-4 items-center w-full')}>
-      <span className={tw('textstyle-title-lg')}>{title}</span>
+    <div className="col gap-y-4 items-center w-full">
+      <span className="textstyle-title-lg">{title}</span>
       <Carousel
         hintNext={true} isLooping={true} isAutoLooping={true}
-        heights={{
-          tablet: 100,
-          mobile: 100,
-          desktop: 100
-        }} itemWidths={{
-          desktop: '20%',
-          tablet: '33%',
-          mobile: '50%'
-        }}
-        blurColor="transparent"
+        heightClassName="h-[8rem]"
+        widthClassName="max-tablet:w-1/2 tablet:w-1/3 desktop:w-[30%]"
+        blurColor="dark:from-background transparent"
         autoLoopingTimeOut={1000}
         autoLoopAnimationTime={5000}
       >
         {partners.map(partner => (
-          <div key={partner.name} className={tw('flex flex-col h-full items-center justify-center')}>
+          <div key={partner.name} className="col h-full items-center justify-center rounded-lg mx-2 dark:bg-white">
             <Image
               key={partner.name}
               width={0}
               height={0}
               src={partner.url}
               alt={partner.name}
-              className={tw('w-auto max-h-[100px] py-2 px-4')}
+              className="w-auto max-h-[100px] p-4"
             />
           </div>
         ))}

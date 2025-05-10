@@ -3,6 +3,7 @@ import { Helpwave } from './icons/Helpwave'
 import type { SolidButtonProps } from './Button'
 import { ButtonSizePaddings } from './Button'
 import { SolidButton } from './Button'
+import { noop } from '../util/noop'
 
 type LoadingButtonProps = {
   isLoading?: boolean,
@@ -20,7 +21,7 @@ export const LoadingButton = ({ isLoading = false, size = 'medium', onClick, ...
           </div>
         )
       }
-      <SolidButton {...rest} disabled={rest.disabled} onClick={isLoading ? undefined: onClick}/>
+      <SolidButton {...rest} disabled={rest.disabled} onClick={isLoading ? noop: onClick}/>
     </div>
   )
 }

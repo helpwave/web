@@ -75,7 +75,7 @@ const SolidButton = ({
   return (
     <button
       onClick={disabled ? undefined : onClick}
-      disabled={disabled}
+      disabled={disabled || onClick === undefined}
       className={clsx(
         className,
         {
@@ -135,7 +135,7 @@ const OutlineButton = ({
   return (
     <button
       onClick={disabled ? undefined : onClick}
-      disabled={disabled}
+      disabled={disabled || onClick === undefined}
       className={clsx(
         className, {
           'text-disabled-text border-disabled-outline)': disabled,
@@ -196,7 +196,7 @@ const TextButton = ({
   return (
     <button
       onClick={disabled ? undefined : onClick}
-      disabled={disabled}
+      disabled={disabled || onClick === undefined}
       className={clsx(
         className, {
           'text-disabled-text': disabled,

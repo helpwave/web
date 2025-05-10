@@ -73,7 +73,7 @@ export const Carousel = ({
   overScrollThreshold = 0.1,
   blurColor = 'from-white',
   className = '',
-                           heightClassName = 'h-[24rem]',
+  heightClassName = 'h-[24rem]',
   widthClassName = 'w-[70%] desktop:w-1/2',
 }: CarouselProps) => {
   if (isAutoLooping && !isLooping) {
@@ -349,9 +349,9 @@ export const Carousel = ({
           <div className={clsx(`relative row h-full`, heightClassName)}>
             <div className="relative row h-full w-full px-2 overflow-hidden">
               {items.map(({
-                item,
-                index
-              }, listIndex) => (
+                            item,
+                            index
+                          }, listIndex) => (
                 <div
                   key={listIndex}
                   className={clsx(`absolute left-[50%] h-full overflow-hidden`, widthClassName, { '!cursor-grabbing': !!dragState })}

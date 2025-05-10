@@ -37,7 +37,6 @@ export type InputProps = {
   containerClassName?: string,
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
 
-// TODO do add colors to twind config
 /**
  * A Component for inputting text or other information
  *

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { TextButton } from '../../../components/Button'
+import { action } from '@storybook/addon-actions'
 
 const meta = {
   title: 'User-Action/Button',
@@ -16,8 +17,6 @@ export const TextButtonVariation: Story = {
     size: 'medium',
     disabled: false,
     className: 'rounded',
-    onClick: () => {
-      console.log('clicked')
-    }
+    onClick: action('Clicked'),
   },
 }

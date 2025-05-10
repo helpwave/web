@@ -3,7 +3,7 @@ import clsx from 'clsx'
 
 export const avtarSizeList = ['tiny', 'small', 'medium', 'large'] as const
 export type AvatarSize = typeof avtarSizeList[number]
-export const avtarSizeMapping: Record<AvatarSize, number> = {
+export const avatarSizeMapping: Record<AvatarSize, number> = {
   tiny: 24,
   small: 32,
   medium: 48,

@@ -1,5 +1,5 @@
 import type { AvatarProps, AvatarSize } from './Avatar'
-import { Avatar, avtarSizeMapping } from './Avatar'
+import { Avatar, avatarSizeMapping } from './Avatar'
 
 export type AvatarGroupProps = {
   avatars: Omit<AvatarProps, 'size'>[],
@@ -16,7 +16,7 @@ export const AvatarGroup = ({
                               size = 'tiny'
                             }: AvatarGroupProps) => {
   const displayedProfiles = avatars.length < maxShownProfiles ? avatars : avatars.slice(0, maxShownProfiles)
-  const diameter = avtarSizeMapping[size]
+  const diameter = avatarSizeMapping[size]
   const stackingOverlap = 0.5 // given as a percentage
   const notDisplayedProfiles = avatars.length - maxShownProfiles
   const avatarGroupWidth = diameter * (stackingOverlap * (displayedProfiles.length - 1) + 1)

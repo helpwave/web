@@ -10,6 +10,7 @@ import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { AddCard } from '../cards/AddCard'
 import { OrganizationContext } from '@/pages/organizations'
+import clsx from 'clsx'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
@@ -38,7 +39,7 @@ export type OrganizationDisplayProps = {
  */
 export const OrganizationDisplay = ({
   overwriteTranslation,
-  // selectedOrganizationId,
+  selectedOrganizationId,
   organizations,
 }: PropsForTranslation<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
   const translation = useTranslation(defaultOrganizationDisplayTranslations, overwriteTranslation)
@@ -52,7 +53,7 @@ export const OrganizationDisplay = ({
 
   usedOrganizations = usedOrganizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
 
-  // const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
+  const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
     <div className="py-4 px-6">
       <ColumnTitle title={translation.yourOrganizations}/>
@@ -61,7 +62,7 @@ export const OrganizationDisplay = ({
           <OrganizationCard
             key={organization.id}
             organization={organization}
-            // TODO isSelected={usedSelectedId === organization.id}
+            className={clsx('h-full border-2 hover:border-primary', { 'border-primary border-solid': usedSelectedId === organization.id })}
             onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
             onClick={() => {
               router.push(`/organizations/${organization.id}`)
@@ -71,8 +72,7 @@ export const OrganizationDisplay = ({
         <AddCard
           text={translation.addOrganization}
           onClick={() => context.updateContext({ ...context.state, organizationId: '' })}
-          // TODO isSelected={usedSelectedId === ''}
-          className="h-full"
+          className={clsx('h-full', { 'border-primary border-solid': usedSelectedId === '' })}
         />
       </div>
     </div>

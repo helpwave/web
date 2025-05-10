@@ -71,7 +71,7 @@ const OrganizationsPage: NextPage = ({ overwriteTranslation }: PropsForTranslati
         <TwoColumn
           disableResize={false}
           left={width => (
-            <OrganizationDisplay width={width} />
+            <OrganizationDisplay width={width} selectedOrganizationId={context.organizationId}/>
           )}
           right={width => (
             <OrganizationDetail

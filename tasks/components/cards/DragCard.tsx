@@ -25,7 +25,6 @@ export const DragCard = ({
   onClick,
   className,
 }: DragCardProps) => {
-  // For now fully equal to a normal card but, that might change later
   return (
     <div className={clsx('card-md border-2', {
       'hover:brightness-75 hover:border-primary cursor-pointer': !cardDragProperties.isDragging && !cardDragProperties.isOver, // default

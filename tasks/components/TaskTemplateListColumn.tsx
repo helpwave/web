@@ -26,6 +26,7 @@ export type TaskTemplateDTOExtension = { taskTemplate: TaskTemplateDTO, type: 'p
 
 export type TaskTemplateListColumnProps = {
   templates: TaskTemplateDTOExtension[],
+  activeId?: string,
   onTileClick: (taskTemplate: TaskTemplateDTO) => void,
   onColumnEditClick?: () => void,
 }
@@ -34,11 +35,12 @@ export type TaskTemplateListColumnProps = {
  * A column for showing TaskTemplates either for Ward or Private templates
  */
 export const TaskTemplateListColumn = ({
-  templates,
-  onTileClick,
-  onColumnEditClick,
-  overwriteTranslation: maybeLanguage
-}: PropsForTranslation<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
+                                         templates,
+                                         activeId,
+                                         onTileClick,
+                                         onColumnEditClick,
+                                         overwriteTranslation: maybeLanguage
+                                       }: PropsForTranslation<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
   const translation = useTranslation(defaultTaskTemplateListColumnTranslation, maybeLanguage)
   const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
@@ -53,11 +55,11 @@ export const TaskTemplateListColumn = ({
         <span className="textstyle-lg mb-4 flex-1">
           {translation.template}
         </span>
-        {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
+        {onColumnEditClick && <Edit onClick={onColumnEditClick}/>}
       </div>
       <div className="overflow-hidden h-full" ref={ref}>
         <div>
-          <Scrollbars autoHeight autoHeightMin={height} autoHide >
+          <Scrollbars autoHeight autoHeightMin={height} autoHide>
             <div className="col gap-y-2 pr-3">
               {templates.map((taskTemplateExtension, index) => (
                 <TaskTemplateCard
@@ -65,7 +67,10 @@ export const TaskTemplateListColumn = ({
                   name={taskTemplateExtension.taskTemplate.name}
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
                   onClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
-                  className={clsx('border-2 border-gray-300 !pr-2', { 'mb-2': index === templates.length - 1 })}
+                  className={clsx('border-2 border-gray-300 !pr-2', {
+                    'mb-2': index === templates.length - 1,
+                    'border-primary': activeId === taskTemplateExtension.taskTemplate.id,
+                  })}
                   typeForLabel={taskTemplateExtension.type}
                 />
               ))}

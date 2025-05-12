@@ -1,5 +1,4 @@
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
-import { tw } from '@helpwave/common/twind'
+import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
@@ -38,13 +37,13 @@ const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {
 const NotFound: NextPage = () => {
   const translation = useTranslation(defaultNotFoundTranslation)
   return (
-    <Page className={tw('h-screen')} pageTitleAddition={translation.notFound}>
-      <SectionBase className={tw('flex flex-col h-full items-center justify-center text-center')} outerClassName={tw('h-full')}>
-        <Helpwave className={tw('w-full left-1/2')} size={256} animate="bounce"/>
-        <h1 className={tw('text-9xl mobile:text-6xl font-space mb-8')}>{`404 ${translation.notFound}`}</h1>
-        <p className={tw('text-4xl mobile:text-xl font-inter')}>{translation.description}</p>
-        <p className={tw('text-4xl mobile:text-xl font-inter')}>
-          {translation.toHomePage(<Link className={tw('underline text-cyan-900')} href="/">home page</Link>)}
+    <Page className="h-screen" pageTitleAddition={translation.notFound}>
+      <SectionBase className="col h-full items-center justify-center text-center" outerClassName="h-full">
+        <Helpwave className="w-full left-1/2" size={256} animate="bounce"/>
+        <h1 className="text-9xl max-tablet:text-6xl font-space mb-8">{`404 ${translation.notFound}`}</h1>
+        <p className="text-4xl max-tablet:text-xl font-inter">{translation.description}</p>
+        <p className="text-4xl max-tablet:text-xl font-inter">
+          {translation.toHomePage(<Link className="underline text-cyan-900" href="/">home page</Link>)}
         </p>
       </SectionBase>
     </Page>

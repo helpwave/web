@@ -99,14 +99,13 @@ const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTrans
       <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn
           disableResize={false}
-          left={width => (
+          left={() => (
             <LoadingAndErrorComponent
               isLoading={isLoading}
               hasError={isError}
             >
               {data && (
                 <TaskTemplateDisplay
-                  width={width}
                   onSelectChange={taskTemplate => {
                     setContextState({
                       ...contextState,
@@ -127,9 +126,8 @@ const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTrans
               )}
             </LoadingAndErrorComponent>
           )}
-          right={width => (
+          right={() => (
             <TaskTemplateDetails
-              width={width}
               key={contextState.template.id}
               onCreate={createMutation.mutate}
               onUpdate={updateMutation.mutate}

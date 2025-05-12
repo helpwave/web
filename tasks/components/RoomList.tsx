@@ -1,9 +1,9 @@
-import { tw } from '@helpwave/common/twind'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import {
   defaultTableStatePagination,
@@ -87,9 +87,9 @@ export type RoomListProps = {
  * A table for showing and editing the rooms within a ward
  */
 export const RoomList = ({
-  overwriteTranslation,
-  rooms
-}: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
+                           overwriteTranslation,
+                           rooms
+                         }: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
   const translation = useTranslation(defaultRoomListTranslations, overwriteTranslation)
   const context = useContext(OrganizationOverviewContext)
   const [tableState, setTableState] = useState<TableState>({
@@ -144,7 +144,7 @@ export const RoomList = ({
   const multipleInDelete = deletionConfirmDialogElement !== '' || tableState.selection?.currentSelection.length === 1
 
   return (
-    <div className={tw('flex flex-col')}>
+    <div className="col">
       <ConfirmDialog
         id="roomlist-DeleteBedsDialog"
         titleText={translation.deleteConfirmText(multipleInDelete)}
@@ -177,23 +177,23 @@ export const RoomList = ({
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-        errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+        loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
+        errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
       >
-        <div className={tw('flex flex-row justify-between items-center mb-2')}>
-          <span className={tw('textstyle-table-name')}>{translation.rooms + ` (${usedRooms.length})`}</span>
-          <div className={tw('flex flex-row gap-x-2')}>
+        <div className="row justify-between items-center mb-2">
+          <span className="textstyle-table-name">{translation.rooms + ` (${usedRooms.length})`}</span>
+          <div className="row gap-x-2">
             {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
-              <Button
+              <SolidButton
                 onClick={() => setDeletionConfirmDialogElement('')}
-                color="hw-negative"
+                color="negative"
               >
                 {translation.removeSelection}
-              </Button>
+              </SolidButton>
             )}
-            <Button onClick={addRoom} color="hw-positive">
+            <SolidButton onClick={addRoom} color="positive">
               {translation.addRoom}
-            </Button>
+            </SolidButton>
           </div>
         </div>
         <Table
@@ -205,13 +205,13 @@ export const RoomList = ({
           }]}
           identifierMapping={identifierMapping}
           header={[
-            <span key="name" className={tw('textstyle-table-header')}>{translation.roomName}</span>,
-            <span key="bedcount" className={tw('textstyle-table-header')}>{translation.bedCount}</span>,
-            <span key="manage" className={tw('textstyle-table-header')}>{translation.manageBeds}</span>,
+            <span key="name" className="textstyle-table-header">{translation.roomName}</span>,
+            <span key="bedcount" className="textstyle-table-header">{translation.bedCount}</span>,
+            <span key="manage" className="textstyle-table-header">{translation.manageBeds}</span>,
             <></>
           ]}
           rowMappingToCells={room => [
-            <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
+            <div key="name" className="row items-center w-10/12 min-w-[50px]">
               <Input
                 value={room.name}
                 type="text"
@@ -235,26 +235,18 @@ export const RoomList = ({
                 maxLength={maxRoomNameLength}
               />
             </div>,
-            <div key="bedcount" className={tw('w-20')}>
+            <div key="bedcount" className="w-20">
               <span>{room.bedCount}</span>
             </div>,
-            <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
-              <Button
-                onClick={() => setManagedRoom(room.id)}
-                variant="text"
-                color="hw-neutral"
-              >
+            <div key="manage" className="row justify-start min-w-[140px]">
+              <TextButton onClick={() => setManagedRoom(room.id)}>
                 {translation.manage}
-              </Button>
+              </TextButton>
             </div>,
-            <div key="remove" className={tw('flex flex-row justify-end')}>
-              <Button
-                onClick={() => setDeletionConfirmDialogElement(room.id)}
-                color="hw-negative"
-                variant="text"
-              >
+            <div key="remove" className="row justify-end">
+              <TextButton onClick={() => setDeletionConfirmDialogElement(room.id)} color="negative">
                 {translation.remove}
-              </Button>
+              </TextButton>
             </div>
           ]}
         />

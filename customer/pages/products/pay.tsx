@@ -5,10 +5,8 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { tw } from '@twind/core'
 import type { Product, ProductPlanTypeTranslation } from '@/api/dataclasses/product'
 import { defaultProductPlanTypeTranslation } from '@/api/dataclasses/product'
-import { Button } from '@helpwave/common/components/Button'
 import { ChevronLeft, Coins, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
@@ -24,6 +22,7 @@ import { CustomerProductsAPI } from '@/api/services/customer_product'
 import { useCustomerProductsCalculateQuery } from '@/api/mutations/customer_product_mutations'
 import { Modal } from '@helpwave/common/components/modals/Modal'
 import { defaultLocaleFormatters } from '@/utils/locale'
+import { SolidButton } from '@helpwave/common/components/Button'
 
 type ProductsTranslation = {
   checkout: string,
@@ -118,23 +117,22 @@ const Payment: NextPage = () => {
   return (
     <Page pageTitle={titleWrapper(translation.checkout)}>
       <Modal id="responseModalSuccess" isOpen={modalState === 'success'} titleText={translation.bookingSuccessful}
-        modalClassName={tw('min-h-[120px] justify-between')}>
+        modalClassName="min-h-[120px] justify-between">
         <span>{translation.bookingSuccessfulDesc}</span>
-        <Button
+        <SolidButton
           onClick={() => router.push('/invoices').catch(console.error)}
-          className={tw('mt-6')}
+          className="mt-6"
         >
           {translation.toInvoices}
-        </Button>
+        </SolidButton>
       </Modal>
       <Modal id="responseModalFailure" isOpen={modalState === 'failure'} titleText={translation.bookingFailure}
         onCloseClick={() => setModalState('hidden')} onBackgroundClick={() => setModalState('hidden')}
-        modalClassName={tw('min-h-[120px] justify-between gap-y-4 !bg-hw-negative-300')}
+        modalClassName="min-h-[120px] justify-between gap-y-4 bg-negative text-on-negative"
       >
-        <div className={tw('flex flex-col gap-y-1')}>
+        <div className="col gap-y-1">
           <span>{translation.bookingFailureDesc}</span>
-          <Link href={`mailto:${supportMail}`}
-            className={tw('text-hw-primary-700')}>{supportMail}</Link>
+          <Link href={`mailto:${supportMail}`} className="text-primary">{supportMail}</Link>
         </div>
       </Modal>
 
@@ -143,7 +141,7 @@ const Payment: NextPage = () => {
           {products && prices && (
             <table>
               <thead>
-                <tr className={tw('font-bold')}>
+                <tr className="font-bold">
                   <td>{translation.name}</td>
                   <td>{translation.price}</td>
                 </tr>
@@ -159,25 +157,25 @@ const Payment: NextPage = () => {
                   return (
                     <tr key={cartItem.id}>
                       <td key={`${cartItem.id}+name`}>{`${product.name} (${translation[plan.type]})`}</td>
-                      <td key={`${cartItem.id}+price`} className={tw('float-right')}>{localeTranslation.formatMoney(price)}</td>
+                      <td key={`${cartItem.id}+price`} className="float-right">{localeTranslation.formatMoney(price)}</td>
                     </tr>
                   )
                 })}
                 <tr>
-                  <td className={tw('border-t-2')}><span className={tw('font-semibold')}>{translation.total}</span></td>
-                  <td className={tw('border-t-2')}><span
-                    className={tw('font-semibold float-right')}>{localeTranslation.formatMoney(prices.finalPrice)}</span></td>
+                  <td className="border-t-2"><span className="font-semibold">{translation.total}</span></td>
+                  <td className="border-t-2"><span
+                    className="font-semibold float-right">{localeTranslation.formatMoney(prices.finalPrice)}</span></td>
                 </tr>
               </tbody>
             </table>
           )}
-          <h4 className={tw('font-bold text-xl')}>{translation.termsAndConditions}</h4>
+          <h4 className="font-bold text-xl">{translation.termsAndConditions}</h4>
           {products && contracts && (
-            <form className={tw('flex flex-col gap-y-4')}>
+            <form className="col gap-y-4">
               {contracts.length > 0 ? contracts.map((contract) => {
                 const isAccepted = acceptedContracts[contract.uuid] ?? false
                 return (
-                  <div key={contract.uuid} className={tw('flex flex-row gap-x-2')}>
+                  <div key={contract.uuid} className="row">
                     <Checkbox
                       checked={isAccepted}
                       onChange={() => {
@@ -186,16 +184,16 @@ const Payment: NextPage = () => {
                           [contract.uuid]: !isAccepted,
                         }))
                       }}
-                      containerClassName={tw('justify-start')}
+                      containerClassName="justify-start"
                     />
-                    <span className={tw('block')}>
+                    <span className="block">
                       {translation.acceptTerms(`${contract.key} `)}
                       <Link
                         href={contract.url} target="_blank"
-                        className={tw('inline-flex flex-row items-center')}
+                        className="inline-flex flex-row items-center"
                       >
                         (
-                        <span className={tw('inline-flex flex-row gap-x-0.5 items-center')}>
+                        <span className="inline-flex flex-row gap-x-0.5 items-center">
                           {`${translation.show}`}
                           <ExternalLink size={16} />
                         </span>
@@ -204,18 +202,18 @@ const Payment: NextPage = () => {
                     </span>
                   </div>
                 )
-              }) : <span className={tw('text-gray-500')}>{translation.noTermsAndConditions}</span>}
-              <div className={tw('flex flex-row justify-between')}>
-                <Button
-                  className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
+              }) : <span className="textstyle-description">{translation.noTermsAndConditions}</span>}
+              <div className="row justify-between">
+                <SolidButton
+                  className="gap-x-2 w-[200px]"
                   onClick={() => router.push('/products/overview')}
                   type="button"
                 >
                   <ChevronLeft />
                   {translation.cancel}
-                </Button>
-                <Button
-                  className={tw('flex flex-row items-center gap-x-2 w-[200px]')}
+                </SolidButton>
+                <SolidButton
+                  className="gap-x-2 w-[200px]"
                   disabled={!allContractsAccepted}
                   type="submit"
                   onClick={async (event) => {
@@ -229,7 +227,7 @@ const Payment: NextPage = () => {
                           voucher_uuid: value.voucher?.uuid,
                         }, authHeader)
                       }
-                      clearCart()
+                      await clearCart()
                       setModalState('success')
                     } catch (error) {
                       setModalState('failure')
@@ -239,7 +237,7 @@ const Payment: NextPage = () => {
                 >
                   <Coins />
                   {translation.pay}
-                </Button>
+                </SolidButton>
               </div>
             </form>
           )}

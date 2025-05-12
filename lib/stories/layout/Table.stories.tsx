@@ -12,7 +12,7 @@ export default meta
 type Story = StoryObj<typeof meta>;
 
 export const TableExampleStory: Story = {
-  render: (args) => <TableExample data={args.data}/>,
+  render: (args) => <TableExample data={args['data']}/>,
   args: {
     data: exampleData,
   }

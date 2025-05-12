@@ -1,4 +1,4 @@
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Plus } from 'lucide-react'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -27,22 +27,23 @@ export type BedCardProps = DragCardProps & {
  * Shown instead of a PatientCard, if there is no patient assigned to the bed
  */
 export const BedCard = ({
-  overwriteTranslation,
-  bedName,
-  onTileClick,
-  isSelected,
-  className,
-  ...restCardProps
-}: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
+                          overwriteTranslation,
+                          bedName,
+                          onClick,
+                          isSelected,
+                          className,
+                          ...restCardProps
+                        }: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
   const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
   return (
     (
-      <DragCard onTileClick={onTileClick} isSelected={isSelected} className={tx('min-h-[148px] flex flex-col', className)} {...restCardProps}>
-        <div className={tw('flex flex-row justify-between')}>
-          <span className={tw('textstyle-title-sm')}>{bedName}</span>
+      <DragCard onClick={onClick} isSelected={isSelected}
+                className={clsx('min-h-[148px] col', className)} {...restCardProps}>
+        <div className="row justify-between">
+          <span className="textstyle-title-sm">{bedName}</span>
           <span>{translation.nobody}</span>
         </div>
-        <div className={tw('flex flex-1 justify-center items-center')}>
+        <div className="flex-1 justify-center items-center">
           <Plus/>
         </div>
       </DragCard>

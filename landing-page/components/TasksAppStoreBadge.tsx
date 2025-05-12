@@ -1,7 +1,6 @@
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import Link from 'next/link'
-import { tw } from '@twind/core'
 
 /**
  * WHEN USING MAKE THE NECESSARY ATTRIBUTION TO APPLE
@@ -32,7 +31,7 @@ export const TasksAppStoreBadge = () => {
     <Link href={linkURL} target="_blank">
       <Image
         alt={alt} src={imageURL} height={0} width={156}
-        className={tw('w-full min-h-[54px] max-h-[54px] min-w-[156px] max-w-[156px]')}
+        className="w-full min-h-[54px] max-h-[54px] min-w-[156px] max-w-[156px]"
       />
     </Link>
   )

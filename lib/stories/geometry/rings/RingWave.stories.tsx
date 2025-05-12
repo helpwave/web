@@ -14,8 +14,6 @@ export const RingWaveVariation: Story = {
     startInnerSize: 20,
     endInnerSize: 50,
     width: 5,
-    color: 'hw-primary-400',
-    className: '',
     fillAnimationDuration: 3,
     repeating: false,
   },

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { tx, tw } from '../twind'
+import clsx from 'clsx'
 import { noop } from '../util/noop'
 
 export type InputGroupProps = PropsWithChildren<{
@@ -32,15 +32,15 @@ export const InputGroup = ({
   }, [expanded])
 
   return (
-    <div className={tx('p-4 flex flex-col gap-y-4 bg-white rounded-xl', className)}>
+    <div className={clsx('col gap-y-4 p-4 bg-white rounded-xl', className)}>
       <div
-        className={tx('flex flex-row justify-between items-center', {
+        className={clsx('row justify-between items-center', {
           'cursor-pointer': isExpandable && !disabled,
           'cursor-not-allowed': disabled,
         },
         {
-          'text-hw-primary-400': !disabled,
-          'text-hw-primary-200': disabled
+          'text-primary': !disabled,
+          'text-primary/40': disabled
         })}
         onClick={() => {
           if (!isExpandable) {
@@ -51,19 +51,19 @@ export const InputGroup = ({
           setIsExpanded(updatedIsExpanded)
         }}
       >
-        <span className={tw('textstyle-title-md')}>{title}</span>
-        <div className={tx('rounded-full text-white w-6 h-6', {
-          'bg-hw-primary-400': (isExpandable && !disabled) || expanded,
-          'bg-hw-primary-200': disabled,
+        <span className="textstyle-title-md">{title}</span>
+        <div className={clsx('rounded-full text-white w-6 h-6', {
+          'bg-primary': (isExpandable && !disabled) || expanded,
+          'bg-primary/40': disabled,
         })}>
           {isExpanded
-            ? <ChevronUp className={tw('-translate-y-[1px]')} size={24}/>
-            : <ChevronDown className={tw('translate-y-[1px]')} size={24}/>
+            ? <ChevronUp className="-translate-y-[1px]" size={24}/>
+            : <ChevronDown className="translate-y-[1px]" size={24}/>
           }
         </div>
       </div>
       {isExpanded && (
-        <div className={tx('flex flex-col gap-y-2 h-full')}>
+        <div className="col gap-y-2 h-full">
           {children}
         </div>
       )}

@@ -5,7 +5,6 @@ import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
 import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { tw } from '@helpwave/common/twind'
 import type { Property } from '@helpwave/api-services/types/properties/property'
 
 type PropertyDetailsRulesTranslation = {
@@ -66,10 +65,10 @@ export const PropertyDetailsRules = ({
               onChange(newValue)
               onEditComplete(newValue)
             }}
-            size={20}
+            size="medium"
           />
         )}
-        className={tw('mt-4')}
+        className="mt-4"
       />
     </InputGroup>
   )

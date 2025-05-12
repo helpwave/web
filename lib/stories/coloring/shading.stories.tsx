@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { tw } from '@twind/core'
 import type { ShadedColors } from '../../coloring/types'
 import { shadingColorValues } from '../../coloring/types'
 import { generateShadingColors } from '../../coloring/shading'
@@ -12,9 +11,9 @@ const ColorStripe = ({ shading }: StripeProps) => {
   const shades = generateShadingColors(shading)
 
   return (
-    <div className="flex flex-row">
+    <div className="row">
       {shadingColorValues.map((shade, index) => (
-        <div key={index} className={tw('flex flex-col gap-y-2 items-center relative')}>
+        <div key={index} className="col gap-y-2 items-center relative">
           <span className="font-bold">{shade}</span>
           <div
             style={{

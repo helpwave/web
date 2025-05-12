@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import {
@@ -65,7 +65,6 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
 export type WardDetailProps = {
   organizationId: string,
   ward?: WardDetailDTO,
-  width?: number,
 }
 
 /**
@@ -76,7 +75,6 @@ export const WardDetail = ({
   overwriteTranslation,
   organizationId,
   ward,
-  width
 }: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
   const translation = useTranslation(defaultWardDetailTranslations, overwriteTranslation)
 
@@ -101,17 +99,13 @@ export const WardDetail = ({
   })
   const deleteWardMutation = useWardDeleteMutation(organizationId, () => context.updateContext({ ...context.state, wardId: '' }))
 
-  // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
-  const minimumWidthOfCards = 200
-  const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
-
   return (
-    <div className={tw('flex flex-col py-4 px-6')}>
+    <div className="col py-4 px-6">
       <LoadingAndErrorComponent
         isLoading={!isCreatingNewWard && ((isLoading && !ward) || !newWard.id)}
         hasError={isError && !isCreatingNewWard && !ward}
-        loadingProps={{ classname: tw('!h-full') }}
-        errorProps={{ classname: tw('!h-full') }}
+        loadingProps={{ classname: '!h-full' }}
+        errorProps={{ classname: '!h-full' }}
       >
         <ConfirmDialog
           id="WardDetail-DeleteDialog"
@@ -131,7 +125,7 @@ export const WardDetail = ({
           title={isCreatingNewWard ? translation.createWard : translation.updateWard}
           subtitle={isCreatingNewWard ? translation.createWardSubtitle : translation.updateWardSubtitle}
         />
-        <div className={tw('max-w-[400px]')}>
+        <div className="max-w-[400px]">
           <WardForm
             key={newWard.id}
             ward={newWard}
@@ -145,35 +139,34 @@ export const WardDetail = ({
         {isCreatingNewWard ?
           <span>{translation.roomsNotOnCreate}</span>
           : (
-          <div className={tw('max-w-[600px] mt-6')}>
+          <div className="max-w-[600px] mt-6">
             <RoomList/>
           </div>
             )}
-        <div className={tw('flex flex-row justify-end mt-6')}>
-          <Button
+        <div className="row justify-end mt-6">
+          <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
             disabled={!filledRequired}>
             {isCreatingNewWard ? translation.create : translation.update}
-          </Button>
+          </SolidButton>
         </div>
         {newWard.id !== '' &&
           (
-            <div className={tw('mt-6')}>
-              <TaskTemplateWardPreview wardId={newWard.id} columns={columns}/>
+            <div className="mt-6">
+              <TaskTemplateWardPreview wardId={newWard.id}/>
             </div>
           )
         }
-        <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
-          <span className={tw('textstyle-title-normal')}>{translation.dangerZone}</span>
-          <span className={tw('textstyle-description')}>{translation.dangerZoneText}</span>
-          <Button
+        <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
+          <span className="textstyle-title-normal">{translation.dangerZone}</span>
+          <span className="textstyle-description">{translation.dangerZoneText}</span>
+          <TextButton
             onClick={() => setIsShowingConfirmDialog(true)}
-            className={tw('px-0 font-bold text-left')}
-            color="hw-negative"
-            variant="text"
+            className="px-0 font-bold justify-start"
+            color="negative"
           >
             {translation.deleteWard}
-          </Button>
+          </TextButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

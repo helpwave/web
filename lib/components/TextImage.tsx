@@ -1,11 +1,9 @@
-import { tw, tx } from '@twind/core'
-import { colors } from '../twind/config'
 import type { Languages } from '../hooks/useLanguage'
 import type { PropsForTranslation } from '../hooks/useTranslation'
 import { useTranslation } from '../hooks/useTranslation'
-import { Chip } from './ChipList'
+import clsx from 'clsx'
 
-type TextImageColor = 'primary'| 'secondary'| 'secondaryDark'| 'red'
+type TextImageColor = 'primary' | 'secondary' | 'dark'
 
 type TextImageTranslation = {
   showMore: string,
@@ -35,53 +33,50 @@ export type TextImageProps = {
  * A Component for layering a Text upon a Image
  */
 export const TextImage = ({
-  overwriteTranslation,
-  title,
-  description,
-  imageUrl,
-  onShowMoreClicked,
-  color = 'primary',
-  badge,
-  contentClassName = '',
-  className = '',
-}: PropsForTranslation<TextImageTranslation, TextImageProps>) => {
+                            overwriteTranslation,
+                            title,
+                            description,
+                            imageUrl,
+                            onShowMoreClicked,
+                            color = 'primary',
+                            badge,
+                            contentClassName = '',
+                            className = '',
+                          }: PropsForTranslation<TextImageTranslation, TextImageProps>) => {
   const translation = useTranslation(defaultTextImageTranslation, overwriteTranslation)
 
-  const colorMapping: Record<TextImageColor, string> = {
-    primary: colors['hw-primary'][600],
-    secondary: colors['hw-secondary'][400],
-    secondaryDark: colors['hw-secondary'][800],
-    red: colors['hw-negative'][700]
+  const chipColorMapping: Record<TextImageColor, string> = {
+    primary: 'text-text-image-primary-background bg-text-text-image-primary-text',
+    secondary: 'text-text-image-secondary-background bg-text-text-image-secondary-text',
+    dark: 'text-text-image-dark-background bg-text-text-image-dark-text',
   }
 
-  const withTransparency = (color: string, transparency: string) => {
-    return color.padEnd(9, transparency)
+  const colorMapping: Record<TextImageColor, string> = {
+    primary: 'text-text-image-primary-text bg-linear-to-r from-30% from-text-image-primary-background to-text-image-primary-background/55',
+    secondary: 'text-text-image-secondary-text bg-linear-to-r from-30% from-text-image-secondary-background to-text-image-secondary-background/55',
+    dark: 'text-text-image-dark-text bg-linear-to-r from-30% from-text-image-dark-background to-text-image-dark-background/55',
   }
 
   return (
     <div
-      className={tx('rounded-2xl w-full', className)}
+      className={clsx('rounded-2xl w-full', className)}
       style={{
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: 'cover',
       }}>
       <div
-        className={tx(`flex flex-col px-6 py-12 rounded-2xl h-full`, contentClassName)}
-        style={{
-          backgroundImage: `linear-gradient(to right, ${colorMapping[color]} 30%, ${withTransparency(colorMapping[color], '55')})`
-        }}
-      >
+        className={clsx(`col px-6 py-12 rounded-2xl h-full`, colorMapping[color], contentClassName)}>
         {badge && (
-          <Chip variant="fullyRounded" className={tw(`!bg-white !text-[${colorMapping[color]}] mb-2 !px-4`)}>
-            <span className={tw('text-lg')}>{badge}</span>
-          </Chip>
+          <div className={clsx(`chip-full bg-white mb-2 py-2 px-4 w-fit`, chipColorMapping[color])}>
+            <span className="text-lg font-bold">{badge}</span>
+          </div>
         )}
-        <div className={tw('flex flex-col gap-y-1 text-white overflow-hidden')}>
-          <span className={tw('textstyle-title-xl')}>{title}</span>
-          <span className={tw('text-ellipsis overflow-hidden')}>{description}</span>
+        <div className="col gap-y-1 text-white overflow-hidden">
+          <span className="textstyle-title-xl">{title}</span>
+          <span className="text-ellipsis overflow-hidden">{description}</span>
         </div>
         {onShowMoreClicked && (
-          <div className={tw('flex flex-row mt-2 text-white underline')}>
+          <div className="row mt-2 text-white underline">
             <button onClick={onShowMoreClicked}>{translation.showMore}</button>
           </div>
         )}

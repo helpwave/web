@@ -10,8 +10,7 @@ import { handleCallback } from '@/api/auth/authService'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { Section } from '@/components/layout/Section'
-import { tw } from '@twind/core'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 
 type AuthCallbackTranslation = {
   callback: string,
@@ -73,9 +72,9 @@ const AuthCallback: NextPage<PropsForTranslation<AuthCallbackTranslation, AuthCa
     <Page pageTitle={titleWrapper(translation.callback)} isHidingSidebar={true}>
       <Section>
         {hasError && (
-          <span className={tw('text-hw-negative-400')}>{translation.authenticationFailure}</span>
+          <span className="text-negative">{translation.authenticationFailure}</span>
         )}
-        <Button onClick={() => router.push('/')}>{translation.home}</Button>
+        <SolidButton onClick={() => router.push('/')}>{translation.home}</SolidButton>
       </Section>
     </Page>
   )

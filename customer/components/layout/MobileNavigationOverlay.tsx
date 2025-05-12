@@ -1,7 +1,6 @@
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { languagesLocalNames } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import { tw, tx } from '@twind/core'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { noop } from '@helpwave/common/util/noop'
@@ -11,8 +10,9 @@ import type { NavItem } from '@/components/layout/NavigationSidebar'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
 import { useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
 import { logout } from '@/api/auth/authService'
+import clsx from 'clsx'
+import { SolidButton } from '@helpwave/common/components/Button'
 
 type MobileNavigationOverlayTranslation = { navigation: string, logout: string }
 
@@ -47,19 +47,19 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
 
   return (
     <div
-      className={tw('@(flex flex-col bg-white h-full w-full top-0 absolute px-8 py-6 z-[100] not-mobile:hidden justify-between)')}>
+      className="col bg-white h-full w-full top-0 absolute px-8 py-6 z-[100] tablet:hidden justify-between">
       <LanguageModal
         id="language-modal-mobile"
         isOpen={isLanguageModalOpen}
         onCloseClick={() => setIsLanguageModalOpen(false)}
         onBackgroundClick={() => setIsLanguageModalOpen(false)}
         onDone={() => setIsLanguageModalOpen(false)}
-        containerClassName={tw('z-[102]')}
+        containerClassName="z-[102]"
       />
-      <nav className={tx('@(flex flex-col gap-y-4 items-center)', className)}>
-        <div className={tw('flex flex-row w-full items-center justify-between mb-2')}>
-          <h2 className={tw('font-bold font-space text-2xl')}>{translation.navigation}</h2>
-          <button className={tw('rounded-md p-1')} onClick={onCloseClick}>
+      <nav className={clsx('col gap-y-4 items-center', className)}>
+        <div className="row w-full items-center justify-between mb-2">
+          <h2 className="font-bold font-space text-2xl">{translation.navigation}</h2>
+          <button className="rounded-md p-1" onClick={onCloseClick}>
             <X size={24}/>
           </button>
         </div>
@@ -68,12 +68,12 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
             href={item.url}
             key={i}
             target={item.isExternal ?? false ? '_blank' : undefined}
-            className={tx(
-              'flex flex-row justify-between items-center px-4 py-2 hover:bg-hw-primary-500/40 w-full text-lg font-semibold rounded-md',
+            className={clsx(
+              'flex flex-row justify-between items-center px-4 py-2 hover:bg-primary/40 hover:text-on-primary w-full text-lg font-semibold rounded-md',
               { 'bg-gray-100': router.pathname === item.url, 'bg-white': router.pathname !== item.url }
             )}
           >
-            <div className={tw('flex flex-row gap-x-2 items-center')}>
+            <div className="row gap-x-2 items-center">
               {item.icon}
               {item.name[language]}
             </div>
@@ -81,20 +81,20 @@ export const MobileNavigationOverlay = ({ items, onCloseClick = noop, className 
           </Link>
         ))}
       </nav>
-      <div className={tw('flex flex-col gap-y-4 items-center w-full')}>
+      <div className="col gap-y-4 items-center w-full">
         <button
-          className={tw('flex flex-row w-full justify-between items-center px-4 py-2 bg-gray-100 hover:bg-hw-primary-500/40 font-semibold rounded-md')}
+          className="row w-full justify-between items-center px-4 py-2 bg-gray-100 hover:bg-hw-primary-500/40 font-semibold rounded-md"
           onClick={() => setIsLanguageModalOpen(true)}
         >
           {languagesLocalNames[language]}
           <ArrowRightLeft size={24}/>
         </button>
         <button
-          className={tw('flex flex-row w-full gap-x-2 items-center p-4 bg-white bg-gray-100 hover:bg-hw-primary-500/40 font-semibold rounded-md')}>
+          className="row w-full items-center p-4 bg-white bg-gray-100 hover:bg-hw-primary-500/40 font-semibold rounded-md">
           <Avatar avatarUrl="https://helpwave.de/favicon.ico" alt="" size="small"/>
           {'Max Mustermann'}
         </button>
-        <Button onClick={logout} color="hw-negative">{translation.logout}</Button>
+        <SolidButton onClick={logout} color="negative">{translation.logout}</SolidButton>
       </div>
     </div>
   )

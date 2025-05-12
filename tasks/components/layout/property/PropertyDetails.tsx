@@ -1,9 +1,9 @@
-import { tw } from '@helpwave/common/twind'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
+import { TextButton } from '@helpwave/common/components/Button'
 import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
 import type { StepperInformation } from '@helpwave/common/components/StepperBar'
 import { StepperBar } from '@helpwave/common/components/StepperBar'
@@ -91,7 +91,7 @@ export const PropertyDetails = ({
   const { step } = stepper
 
   return (
-    <div className={tw('py-4 px-6 flex flex-col gap-y-4 bg-gray-100 min-h-full')}>
+    <div className="py-4 px-6 col gap-y-4 bg-gray-100 min-h-full">
       <ConfirmDialog
         id="confirmArchiveModal"
         isOpen={showArchiveConfirm}
@@ -105,16 +105,12 @@ export const PropertyDetails = ({
         onBackgroundClick={() => setArchiveConfirm(false)}
         confirmType="negative"
       />
-      <div className={tw('top-0 flex flex-row justify-between items-center')}>
-        <span className={tw('textstyle-title-lg')}>{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
+      <div className="top-0 row justify-between items-center">
+        <span className="textstyle-title-lg">{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
         {!isCreatingNewProperty && (
-          <Button
-            variant="text"
-            color="hw-negative"
-            onClick={() => setArchiveConfirm(true)}
-          >
+          <TextButton color="negative" onClick={() => setArchiveConfirm(true)}>
             {translation.archiveProperty}
-          </Button>
+          </TextButton>
         )}
       </div>
       <LoadingAndErrorComponent
@@ -189,7 +185,7 @@ export const PropertyDetails = ({
             disabled: isCreatingNewProperty && step !== 1 && step !== lastStep
           }}
         />
-        <div className={tw('flex grow')}></div>
+        <div className="grow"></div>
         {isCreatingNewProperty && (
           <StepperBar
             stepper={stepper}
@@ -197,7 +193,7 @@ export const PropertyDetails = ({
             onFinish={() => {
               propertyCreateMutation.mutate(value)
             }}
-            className={tw('sticky bottom-4 right-6 left-6 bg-white')}
+            className="sticky bottom-4 right-6 left-6 bg-white"
           />
         )}
       </LoadingAndErrorComponent>

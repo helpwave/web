@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { SearchableSelectExample } from '../../../../components/examples/SearchableSelectExample'
+import { action } from '@storybook/addon-actions'
 
 const meta = {
   title: 'User-Action/Input/Select',
@@ -26,5 +27,6 @@ export const SearchableSelectVariations: Story = {
     isHidingCurrentValue: false,
     showDisabledOptions: true,
     className: '',
+    onChange: action('onChange'),
   },
 }

@@ -1,7 +1,6 @@
 import type { PropsWithChildren } from 'react'
-import { tw } from '../../twind'
-import type { ButtonColorType } from '../Button'
-import { Button } from '../Button'
+import type { SolidButtonColor } from '../Button'
+import { SolidButton } from '../Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Modal, type ModalProps } from './Modal'
@@ -29,7 +28,7 @@ const defaultConfirmDialogTranslation = {
 
 export type ButtonOverwriteType = {
   text?: string,
-  color?: ButtonColorType,
+  color?: SolidButtonColor,
   disabled?: boolean,
 }
 
@@ -63,43 +62,43 @@ export const ConfirmDialog = ({
 }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
 
-  const mapping: Record<ConfirmDialogType, ButtonColorType> = {
-    neutral: 'hw-neutral',
-    negative: 'hw-negative',
-    positive: 'hw-positive'
+  const mapping: Record<ConfirmDialogType, SolidButtonColor> = {
+    neutral: 'primary',
+    negative: 'negative',
+    positive: 'positive'
   }
 
   return (
     <Modal {...restProps}>
       {children}
-      <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
+      <div className="row mt-3 gap-x-4 justify-end">
         {onCancel && (
-          <Button
-            color={buttonOverwrites?.[0].color ?? 'hw-neutral'}
+          <SolidButton
+            color={buttonOverwrites?.[0].color ?? 'primary'}
             onClick={onCancel}
             disabled={buttonOverwrites?.[0].disabled ?? false}
           >
             {buttonOverwrites?.[0].text ?? translation.cancel}
-          </Button>
+          </SolidButton>
         )}
         {onDecline && (
-          <Button
-            color={buttonOverwrites?.[1].color ?? 'hw-negative'}
+          <SolidButton
+            color={buttonOverwrites?.[1].color ?? 'negative'}
             onClick={onDecline}
 
             disabled={buttonOverwrites?.[1].disabled ?? false}
           >
             {buttonOverwrites?.[1].text ?? translation.decline}
-          </Button>
+          </SolidButton>
         )}
-        <Button
+        <SolidButton
           autoFocus
           color={buttonOverwrites?.[2].color ?? mapping[confirmType]}
           onClick={onConfirm}
           disabled={buttonOverwrites?.[2].disabled ?? false}
         >
           {buttonOverwrites?.[2].text ?? translation.confirm}
-        </Button>
+        </SolidButton>
       </div>
     </Modal>
   )

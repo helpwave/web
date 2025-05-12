@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { tw } from '@helpwave/common/twind'
+
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { Avatar } from '@helpwave/common/components/Avatar'
 import {
@@ -70,8 +70,8 @@ export const UserInvitationList = ({
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError}
-        loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-        errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+        loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
+        errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
       >
         {data && (
           <Table
@@ -79,29 +79,29 @@ export const UserInvitationList = ({
             stateManagement={[tableState, setTableState]}
             identifierMapping={idMapping}
             header={[
-              <span key="organization" className={tw('textstyle-table-header')}>{translation.organization}</span>,
+              <span key="organization" className="textstyle-table-header">{translation.organization}</span>,
               <></>,
               <></>
             ]}
             rowMappingToCells={invite => [
-              <div key="name" className={tw('flex flex-row justify-start items-center gap-x-2')}>
+              <div key="name" className="row justify-start items-center gap-x-2">
                 <Avatar avatarUrl={invite.organization.id} alt=""/>
                 <span>{invite.organization.longName}</span>
               </div>,
-              <Button
+              <SolidButton
                 key="accept"
-                color="hw-positive"
+                color="positive"
                 onClick={() => acceptInvite(invite.id)}
               >
                 {translation.accept}
-              </Button>,
-              <Button
+              </SolidButton>,
+              <SolidButton
                 key="decline"
-                color="hw-negative"
+                color="negative"
                 onClick={() => declineInviteMutation.mutate(invite.id)}
               >
                 {translation.decline}
-              </Button>
+              </SolidButton>
             ]}
           />
         )}

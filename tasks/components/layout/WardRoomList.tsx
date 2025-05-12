@@ -1,9 +1,9 @@
 import { useContext, useEffect } from 'react'
-import { tw } from '@helpwave/common/twind'
+
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/common/components/Button'
 import Link from 'next/link'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
@@ -71,17 +71,17 @@ export const WardRoomList = ({
   }, [observeAttribute, refetch])
 
   return (
-    <div className={tw('flex flex-col px-6 py-4')}
+    <div className="col px-6 py-4"
          onClick={() => updateContext({ wardId: contextState.wardId })}
     >
-      <div className={tw('flex flex-row justify-between items-center pb-4')}>
-        <span className={tw('textstyle-title-md')}>{translation.roomOverview}</span>
-        <Button onClick={event => {
+      <div className="row justify-between items-center pb-4">
+        <span className="textstyle-title-md">{translation.roomOverview}</span>
+        <SolidButton onClick={event => {
           event.stopPropagation()
           updateContext({ wardId: contextState.wardId })
         }}>
           {translation.showPatientList}
-        </Button>
+        </SolidButton>
       </div>
       <LoadingAndErrorComponent
         isLoading={isLoading}
@@ -94,10 +94,10 @@ export const WardRoomList = ({
               room={room}
             />
           )) : (
-            <div className={tw('flex flex-col gap-y-2 items-center')}>
+            <div className="col gap-y-2 items-center">
               <span>{translation.noRooms}</span>
               <Link href={`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`}>
-                <Button>{translation.editWard}</Button>
+                <SolidButton>{translation.editWard}</SolidButton>
               </Link>
             </div>
           )}

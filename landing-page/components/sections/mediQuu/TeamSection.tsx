@@ -3,8 +3,7 @@ import type { ProfileProps } from '@helpwave/common/components/Profile'
 import { Profile } from '@helpwave/common/components/Profile'
 import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind'
-import { tx } from '@twind/core'
+import clsx from 'clsx'
 import { MediQuuBadge } from '@/components/sections/mediQuu/MediQuuBadge'
 import { SectionBase } from '@/components/sections/SectionBase'
 
@@ -19,7 +18,7 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
     badge: (
       <HelpwaveBadge
         size="small"
-        className="bg-black !gap-x-1 !w-fit"
+        className="bg-black text-white !gap-x-1 !w-fit"
       />
     ),
     socials: [
@@ -39,7 +38,7 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
     badge: (
       <HelpwaveBadge
         size="small"
-        className="bg-black !gap-x-1 !w-fit"
+        className="bg-black text-white !gap-x-1 !w-fit"
       />
     ),
     socials: [
@@ -55,12 +54,11 @@ const contactsHelpwave: (ProfileProps & { translatedInfo?: Record<Languages, str
     suffix: 'Maître en droit, Paris II',
     role: 'Chief Legal Officer',
     roleBadge: 'CLO',
-    tags: ['law', 'doctor', 'product'],
     imageUrl: imageUrl('ludwig_maidowski'),
     badge: (
       <HelpwaveBadge
         size="small"
-        className="bg-black !gap-x-1 !w-fit"
+        className="bg-black text-white !gap-x-1 !w-fit"
       />
     ),
     socials: [
@@ -123,10 +121,10 @@ export const TeamSection = () => {
   const translation = useTranslation(defaultTeamSectionTranslation)
   const usedLanguage = useLanguage().language
   return (
-    <SectionBase className={tw('flex flex-col')}>
-      <span className={tw('textstyle-title-xl text-hw-secondary-400 mb-1')}>{translation.title}</span>
+    <SectionBase className="col">
+      <span className="textstyle-title-xl text-primary mb-1">{translation.title}</span>
       <span>{translation.subTitle}</span>
-      <div className={tw('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-8')}>
+      <div className="flex flex-wrap justify-around gap-x-8 gap-y-6 mt-8">
         {contactsHelpwave.map(value => {
           const profileProps = { ...value }
           delete profileProps.translatedInfo
@@ -135,12 +133,12 @@ export const TeamSection = () => {
               key={value.name}
               info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
               {...profileProps}
-              className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
+              className={clsx('drop-shadow-lg hover:drop-shadow-3xl', value.className)}
             />
           )
         })}
       </div>
-      <div className={tw('flex flex-wrap justify-around gap-x-8 gap-y-6 mt-6')}>
+      <div className="flex flex-wrap justify-around gap-x-8 gap-y-6 mt-6">
         {contactsMediquu.map(value => {
           const profileProps = { ...value }
           delete profileProps.translatedInfo
@@ -149,7 +147,7 @@ export const TeamSection = () => {
               key={value.name}
               info={value.translatedInfo ? value.translatedInfo[usedLanguage] : undefined}
               {...profileProps}
-              className={tx('drop-shadow-lg hover:drop-shadow-3xl border-1', value.className)}
+              className={clsx('drop-shadow-lg hover:drop-shadow-3xl', value.className)}
             />
           )
         })}

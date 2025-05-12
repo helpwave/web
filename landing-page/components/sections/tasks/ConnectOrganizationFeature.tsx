@@ -1,11 +1,10 @@
-import { tw } from '@helpwave/common/twind'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import Image from 'next/image'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { ItemGrid } from '@helpwave/common/components/layout/ItemGrid'
 import { SectionBase } from '@/components/sections/SectionBase'
+import { Check } from 'lucide-react'
 
 type ConnectOrganizationFeatureSectionTranslation = {
   title: string,
@@ -47,32 +46,39 @@ export const ConnectOrganizationFeatureSection = ({ overwriteTranslation }: Prop
 
   const features = [translation.feature1, translation.feature2, translation.feature3,
     translation.feature4, translation.feature5, translation.feature6]
-  const featureStyle = tw('font-semibold')
+  const featureStyle = 'font-semibold'
 
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:!flex-wrap-reverse w-full !max-w-full gap-8 justify-between mobile:justify-end items-center')}
-      backgroundColor="gray"
-      outerClassName={tw('!pr-0')}
+      className="max-tablet:flex max-tablet:flex-wrap-reverse max-tablet:justify-end tablet:row tablet:justify-between  w-full !max-w-full gap-8 items-center"
+
+      outerClassName="!pr-0"
     >
-      <div className={tw('flex flex-col items-center mobile:items-start flex-1 mobile:pr-6')}>
-        <div className={tw('flex flex-col gap-y-2 max-w-[500px] mobile:max-w-full')}>
-          <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
-          <span className={tw('font-space font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
-          <ItemGrid className={tw('mt-2')}>
-            {features.map((feature, index) => (<span key={index} className={featureStyle}>{feature}</span>))}
-          </ItemGrid>
+      <div className="col items-center max-tablet:items-start flex-1 max-tablet:pr-6">
+        <div className="col gap-y-2 max-w-[500px] max-tablet:max-w-full">
+          <h1 className="textstyle-title-2xl">{translation.title}</h1>
+          <span className="font-space font-semibold"><MarkdownInterpreter text={translation.description}/></span>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4 overflow-x-auto mt-2">
+            {features.map((feature, index) => (
+              <div key={index}  className="row items-center">
+                <div className="col justify-center items-center bg-primary text-white rounded-full min-w-[24px] min-h-[24px]">
+                  <Check size={18} strokeWidth={2.5}/>
+                </div>
+                <span className={featureStyle}>{feature}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div
         // TODO fix image size and add dashed lines
-        className={tw('relative right-0 rounded-l-3xl w-2/5 tablet:min-w-[360px] mobile:w-4/5 z-10')}>
+        className="relative right-0 rounded-l-3xl w-2/5 tablet:min-w-[360px] max-tablet:w-4/5 z-10">
         <Image
           src={imageUrl}
           alt=""
           width={0}
           height={0}
-          className={tw('w-full object-cover ')}
+          className="w-full object-cover"
         />
       </div>
     </SectionBase>

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Undo2, X } from 'lucide-react'
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { noop } from '@helpwave/common/util/noop'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Button } from '@helpwave/common/components/Button'
+import { TextButton } from '@helpwave/common/components/Button'
 import { usePatientAssignmentByWardQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 
 type RoomBedSelectTranslation = {
@@ -90,7 +90,7 @@ export const RoomBedSelect = ({
 
   const roomSelect = (data && (
     <Select
-      className={tw('min-w-[120px]')}
+      className="min-w-[120px]"
       value={currentSelection.roomId}
       options={data.map(room => ({ value: room.id, label: room.name, disabled: room.beds.length === 0 }))}
       onChange={value => {
@@ -106,7 +106,7 @@ export const RoomBedSelect = ({
 
   const bedSelect = (
     <Select
-      className={tw('min-w-[150px]')}
+      className="min-w-[150px]"
       value={currentSelection.bedId}
       isDisabled={!currentSelection.roomId}
       options={(currentRoom?.beds ?? []).map(value => ({ value: value.id, label: value.name, disabled: !!value.patient }))}
@@ -124,27 +124,26 @@ export const RoomBedSelect = ({
   const isShowingClear = isClearable && !isSubmitting && touched
   const isShowingRevert = touched && hasChanges && !isSubmitting && !isCreating && !isClearable
   const changesAndSaveRow = (
-    <div className={tw('flex flex-row justify-between items-center gap-x-4')}>
+    <div className="row justify-between items-center gap-x-4">
       <div>
         {isShowingRevert && (
-          <Button
+          <TextButton
             onClick={() => {
               if (hasChanges) {
                 setCurrentSelection({ ...initialRoomAndBed })
                 setTouched(false)
               }
             }}
-            variant="text-border"
             disabled={!hasChanges}
           >
-            <div className={tw('flex flex-row gap-x-2 items-center')}>
+            <div className="row gap-x-2 items-center">
               {translation.revert}
               <Undo2 size={16}/>
             </div>
-          </Button>
+          </TextButton>
         )}
         {isShowingClear && (
-          <Button
+          <TextButton
             onClick={() => {
               setCurrentSelection({
                 bedId: undefined,
@@ -153,28 +152,27 @@ export const RoomBedSelect = ({
               setTouched(false)
               onChange({})
             }}
-            variant="text-border"
-            color="hw-negative"
+            color="negative"
           >
-            <div className={tw('flex flex-row gap-x-2 items-center')}>
+            <div className="row gap-x-2 items-center">
               {translation.revert}
               <X size={16}/>
             </div>
-          </Button>
+          </TextButton>
         )}
       </div>
       {touched && !isSubmitting && !isCreating && (
-        <span className={tx({
-          '!text-hw-negative-400': hasChanges,
-          '!text-hw-positive-400': !hasChanges
+        <span className={clsx({
+          '!text-negative': hasChanges,
+          '!text-positive': !hasChanges
         })}>
           {hasChanges ? translation.unsaved : translation.saved}
         </span>
       )}
       {touched && !isSubmitting && isCreating && (
-        <span className={tx({
-          '!text-hw-positive-400': currentSelection.roomId && currentSelection.bedId,
-          '!text-hw-negative-400': !(currentSelection.roomId && currentSelection.bedId)
+        <span className={clsx({
+          '!text-positive': currentSelection.roomId && currentSelection.bedId,
+          '!text-negative': !(currentSelection.roomId && currentSelection.bedId)
         })}>
           {currentSelection.roomId && currentSelection.bedId ? translation.valid : translation.invalid}
         </span>
@@ -188,17 +186,17 @@ export const RoomBedSelect = ({
   )
 
   const widthLayout = (
-    <div className={tw('flex flex-col')}>
-        <table className={tw('min-w-[200px] border-spacing-y-2 border-separate')}>
+    <div className="col">
+        <table className="min-w-[200px] border-spacing-y-2 border-separate">
           <thead>
             <tr>
-              <th><span className={tw('textstyle-table-header flex flex-row justify-start')}>{translation.room}</span></th>
-              <th><span className={tw('textstyle-table-header flex flex-row justify-start')}>{translation.bed}</span></th>
+              <th><span className="textstyle-table-header row justify-start">{translation.room}</span></th>
+              <th><span className="textstyle-table-header row justify-start">{translation.bed}</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className={tw('pr-4')}>
+              <td className="pr-4">
                 {roomSelect}
               </td>
               <td>
@@ -212,18 +210,18 @@ export const RoomBedSelect = ({
   )
 
   const heightLayout = (
-    <div className={tw('flex flex-col')}>
-      <table className={tw('border-spacing-y-2 border-separate')}>
+    <div className="col">
+      <table className="border-spacing-y-2 border-separate">
         <thead/>
         <tbody>
           <tr>
-            <td><span className={tw('textstyle-table-header')}>{translation.room}</span></td>
+            <td><span className="textstyle-table-header">{translation.room}</span></td>
             <td>
               {roomSelect}
             </td>
           </tr>
           <tr>
-            <td><span className={tw('textstyle-table-header')}>{translation.bed}</span></td>
+            <td><span className="textstyle-table-header">{translation.bed}</span></td>
             <td>
               {bedSelect}
             </td>

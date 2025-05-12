@@ -1,4 +1,3 @@
-import { tw, tx } from '@helpwave/common/twind'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -6,7 +5,7 @@ import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
 import { Chip } from '@helpwave/common/components/ChipList'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type StartSectionTranslation = {
@@ -33,25 +32,25 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
 
   return (
     <SectionBase
-      className={tw('flex flex-col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center')}
-      outerClassName={tw('py-24')}
+      className="col desktop:flex-row gap-x-16 gap-y-8 justify-center items-center"
+      outerClassName="py-24"
     >
       <Image
         alt="Screenshots"
         src={screenshotURL}
         width={0}
         height={0}
-        className={tx(`object-contain w-full desktop:min-w-[40%] desktop:scale-125 -rotate-12`)}
+        className="object-contain w-full desktop:min-w-[40%] desktop:scale-125 -rotate-12"
       />
-      <div className={tw('flex flex-col gap-y-4')}>
+      <div className="col gap-y-4">
         <Link href={demoURL} target="_blank">
-          <Chip className={tw('flex flex-row gap-x-2 w-fit items-center')} color="lightPrimary">
-            <Helpwave size={24} className={tw('min-w-[24px] min-h-[24px]')}/>
-            <span className={tw('font-bold')}>helpwave tasks</span>
+          <Chip className="row w-fit items-center" color="default">
+            <Helpwave size={24} className="min-w-[24px] min-h-[24px]"/>
+            <span className="font-bold">helpwave tasks</span>
           </Chip>
         </Link>
-        <h1 className={tw('textstyle-title-2xl')}>{translation.title}</h1>
-        <MarkdownInterpreter text={translation.text} className={tw('text-xl font-medium')}/>
+        <h1 className="textstyle-title-2xl">{translation.title}</h1>
+        <MarkdownInterpreter text={translation.text} className="text-xl font-medium"/>
       </div>
     </SectionBase>
   )

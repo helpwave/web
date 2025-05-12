@@ -1,7 +1,7 @@
 import { useContext, useEffect, type MouseEventHandler, type PropsWithChildren, type ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import { X } from 'lucide-react'
-import { tx, tw } from '../../twind'
+import clsx from 'clsx'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -46,10 +46,10 @@ export const ModalHeader = ({
                             }: PropsForTranslation<ModalHeaderTranslation, ModalHeaderProps>) => {
   const translation = useTranslation(defaultModalHeaderTranslation, overwriteTranslation)
   return (
-    <div className={tw('flex flex-col')}>
-      <div className={tw('flex flex-row justify-between items-start gap-x-8')}>
+    <div className="col">
+      <div className="row justify-between items-start gap-x-8">
         {title ?? (
-          <span className={tx('textstyle-title-lg', {
+          <span className={clsx('textstyle-title-lg', {
             'mb-1': description || descriptionText,
           })}>
             {titleText}
@@ -57,13 +57,13 @@ export const ModalHeader = ({
         )}
         {!!onCloseClick && (
           <Tooltip tooltip={translation.close}>
-            <button className={tw('flex flex-row bg-gray-200 hover:bg-gray-300 rounded-md p-1')} onClick={onCloseClick}>
+            <button className="row bg-gray-200 hover:bg-gray-300 rounded-md p-1" onClick={onCloseClick}>
               <X/>
             </button>
           </Tooltip>
         )}
       </div>
-      {description ?? (<span className={tw('textstyle-description')}>{descriptionText}</span>)}
+      {description ?? (<span className="textstyle-description">{descriptionText}</span>)}
     </div>
   )
 }
@@ -121,23 +121,23 @@ export const Modal = ({
   const isSecondLast = register.length < 2 || register[register.length - 2] === id
 
   return ReactDOM.createPortal(
-    <div className={tx('@(fixed inset-0 overflow-y-auto z-[99])', containerClassName)} id={id}>
+    <div className={clsx('fixed inset-0 overflow-y-auto z-[99]', containerClassName)} id={id}>
       {isLast && (
         <div
-          className={tx('fixed inset-0 h-screen w-screen', backgroundClassName, {
+          className={clsx('fixed inset-0 h-screen w-screen', backgroundClassName, {
             'bg-black/70': isLast && register.length === 1,
           })}
           onClick={onBackgroundClick}
         />
       )}
       <div
-        className={tx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-4 bg-white rounded-xl shadow-xl', modalClassName)}>
+        className={clsx('fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 col p-4 bg-white text-black rounded-xl shadow-xl', modalClassName)}>
         <ModalHeader {...modalHeaderProps} />
         {children}
       </div>
       {!isLast && (
         <div
-          className={tx('fixed inset-0 h-screen w-screen', backgroundClassName, {
+          className={clsx('fixed inset-0 h-screen w-screen', backgroundClassName, {
             'bg-black/70': isSecondLast && register.length > 1,
           })}
         />

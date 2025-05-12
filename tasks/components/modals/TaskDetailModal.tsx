@@ -1,4 +1,4 @@
-import { tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import { Modal, type ModalProps, type ModalHeaderProps } from '@helpwave/common/components/modals/Modal'
 import type { TaskDetailViewProps } from '@/components/layout/TaskDetailView'
 import { TaskDetailView } from '@/components/layout/TaskDetailView'
@@ -21,7 +21,7 @@ export const TaskDetailModal = ({
 }: TaskDetailModalProps) => {
   return (
     <Modal
-      modalClassName={tx(modalClassName)}
+      modalClassName={clsx(modalClassName)}
       {...modalProps}
     >
       <TaskDetailView patientId={patientId} wardId={wardId} taskId={taskId} onClose={onClose} initialStatus={initialStatus}/>

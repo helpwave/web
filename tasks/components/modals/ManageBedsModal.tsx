@@ -1,8 +1,8 @@
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { Modal, type ModalProps } from '@helpwave/common/components/modals/Modal'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { defaultTableStatePagination, Table, updatePagination, type TableState } from '@helpwave/common/components/Table'
 import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -92,32 +92,32 @@ export const ManageBedsModal = ({
   return (
     <Modal
       titleText={titleText ?? (room ? `${translation.manageBedsIn} ${room.name}` : '')}
-      modalClassName={tx('min-w-[600px]', modalClassName)}
+      modalClassName={clsx('min-w-[600px]', modalClassName)}
       {...modalProps}
     >
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}
-        loadingProps={{ classname: tw('!h-full min-h-[400px]') }}
-        errorProps={{ classname: tw('!h-full min-h-[400px]') }}
+        loadingProps={{ classname: '!h-full min-h-[400px]' }}
+        errorProps={{ classname: '!h-full min-h-[400px]' }}
       >
         {room && beds && (
           <>
-            <div className={tw('flex flex-row justify-between items-end mb-2 mt-4')}>
-              <span className={tw('textstyle-table-name')}>{`${translation.beds} (${beds.length})`}</span>
-              <Button color="hw-positive" onClick={addBed}>{translation.addBed}</Button>
+            <div className="row justify-between items-end mb-2 mt-4">
+              <span className="textstyle-table-name">{`${translation.beds} (${beds.length})`}</span>
+              <SolidButton color="positive" onClick={addBed}>{translation.addBed}</SolidButton>
             </div>
             <Table
               data={beds}
               stateManagement={[tableState, setTableState]}
               identifierMapping={identifierMapping}
               header={[
-                <span key="name" className={tw('textstyle-table-header')}>{translation.name}</span>,
-                <span key="patient" className={tw('textstyle-table-header')}>{translation.patient}</span>,
+                <span key="name" className="textstyle-table-header">{translation.name}</span>,
+                <span key="patient" className="textstyle-table-header">{translation.patient}</span>,
                 <></>
               ]}
               rowMappingToCells={bed => [
-                <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
+                <div key="name" className="row items-center w-10/12 min-w-[50px]">
                   <Input
                     value={bed.name}
                     maxLength={maxBedNameLength}
@@ -127,21 +127,20 @@ export const ManageBedsModal = ({
                     onEditCompleted={(text) => updateBedMutation.mutate({ id: bed.id, name: text, roomId: room.id })}
                   />
                 </div>,
-                <div key="patient" className={tw('w-20')}>
+                <div key="patient" className="w-20">
                   <span>{bed.patient ? bed.patient.name : '-'}</span>
                 </div>,
-                <div key="remove" className={tw('flex flex-row justify-end')}>
-                  <Button
+                <div key="remove" className="row justify-end">
+                  <TextButton
                     disabled={!!bed.patient}
                     onClick={() => {
                       deleteBedMutation.mutate(bed.id)
                       setTableState({ pagination: tableState.pagination ? updatePagination(tableState.pagination, beds.length - 1) : undefined })
                     }}
-                    color="hw-negative"
-                    variant="text"
+                    color="negative"
                   >
                     {translation.remove}
-                  </Button>
+                  </TextButton>
                 </div>
               ]}
             />

@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { tw } from '@helpwave/common/twind'
+
 import type { Crumb } from '@helpwave/common/components/BreadCrumb'
 import { BreadCrumb } from '@helpwave/common/components/BreadCrumb'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
@@ -33,7 +33,7 @@ export const PageWithHeader = ({
   const userMenu = <UserMenu />
 
   return (
-    <div className={tw('w-screen h-screen flex flex-col')}>
+    <div className="w-screen h-screen col">
       <Header
         title={title}
         withIcon={withIcon}

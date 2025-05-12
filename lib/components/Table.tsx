@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useEffect, useRef, useState } from 'react'
-import { tw, tx } from '../twind'
 import { noop } from '../util/noop'
 import { Checkbox } from './user-input/Checkbox'
 import { Pagination } from './Pagination'
+import clsx from 'clsx'
 
 export type TableStatePagination = {
   currentPage: number,
@@ -238,8 +238,8 @@ export const Table = <T, >({
     currentPage = 0
   }
 
-  const headerRow = tw('border-b-2 border-gray-300')
-  const headerPaddingHead = tw('pb-2')
+  const headerRow = 'border-b-2 border-gray-300'
+  const headerPaddingHead = 'pb-2'
   const headerPaddingBody = 'pt-2'
   const cellPadding = 'py-1 px-2'
 
@@ -270,10 +270,10 @@ export const Table = <T, >({
   }, [data, currentPage])
 
   return (
-    <div className={tx('@(flex flex-col gap-y-4 overflow-hidden)', className)}>
+    <div className={clsx('col gap-y-4 overflow-hidden', className)}>
       <div>
         <Scrollbars autoHeight autoHeightMin={scrollbarsAutoHeightMin}>
-          <table ref={tableRef} className={tw('w-full mb-[12px]')}>
+          <table ref={tableRef} className="w-full mb-[12px]">
             <thead>
             <tr className={headerRow}>
               {header && tableState.selection && (
@@ -286,7 +286,7 @@ export const Table = <T, >({
               )}
               {header && header.map((value, index) => (
                 <th key={`tableHeader${index}`} className={headerPaddingHead}>
-                  <div className={tw('flex flex-row justify-start px-2')}>
+                  <div className="row justify-start px-2">
                     {value}
                   </div>
                 </th>
@@ -297,7 +297,7 @@ export const Table = <T, >({
             {shownElements.map((value, rowIndex) => (
               <tr key={identifierMapping(value)}>
                 {tableState.selection && (
-                  <td className={tx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
+                  <td className={clsx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
                     <Checkbox
                       checked={isDataObjectSelected(tableState, value, identifierMapping)}
                       onChange={() => {
@@ -307,7 +307,7 @@ export const Table = <T, >({
                   </td>
                 )}
                 {rowMappingToCells(value).map((value1, index) => (
-                  <td key={index} className={tx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
+                  <td key={index} className={clsx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
                     {value1}
                   </td>
                 ))}
@@ -317,7 +317,7 @@ export const Table = <T, >({
           </table>
         </Scrollbars>
       </div>
-      <div className={tw('flex flex-row justify-center')}>
+      <div className="row justify-center">
         {tableState.pagination && (
           <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({
             ...tableState,

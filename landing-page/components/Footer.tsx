@@ -1,17 +1,19 @@
 import { useEffect } from 'react'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import * as CookieConsent from 'vanilla-cookieconsent'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
-import { tw } from '@helpwave/common/twind'
+import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useLanguage } from '@helpwave/common/hooks/useLanguage'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import pluginConfig from '../utils/CookieConsentConfig'
 import FooterLinkGroup from './FooterLinkGroup'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
+import type { ThemeType, ThemeTypeTranslation } from '@helpwave/common/hooks/useTheme'
+import { defaultThemeTypeTranslation } from '@helpwave/common/hooks/useTheme'
+import { useTheme } from '@helpwave/common/hooks/useTheme'
 
 type Categories = 'socials'| 'general'| 'products'| 'development'
-type FooterTranslation = { [key in Categories]: string }
+type FooterTranslation = { [key in Categories]: string } & ThemeTypeTranslation
 
 const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
   en: {
@@ -19,12 +21,14 @@ const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
     general: 'general',
     products: 'products',
     development: 'development',
+    ...defaultThemeTypeTranslation.en,
   },
   de: {
     socials: 'social',
     general: 'allgemein',
     products: 'produkte',
     development: 'entwicklung',
+    ...defaultThemeTypeTranslation.de,
   }
 }
 
@@ -82,6 +86,7 @@ const grouping: (Categories[])[] = [
 const Footer = () => {
   const year = new Date().getFullYear()
   const { language, setLanguage } = useLanguage()
+  const { theme, setTheme } = useTheme()
   const translation = useTranslation(defaultFooterTranslation, {})
 
   useEffect(() => {
@@ -89,18 +94,16 @@ const Footer = () => {
   }, [])
 
   return (
-    <div className={tw('w-screen bg-black text-white py-8 flex flex-col items-center justify-center')}>
-      <div className={tw('flex flex-wrap w-full max-w-[900px] mobile:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between')}>
+    <div className="w-screen bg-black text-white py-8 col items-center justify-center">
+      <div className="flex flex-wrap w-full max-w-[900px] max-tablet:px-6 tablet:px-24 desktop:px-24 mx-auto justify-between">
         {grouping.map((groups, index) => (
-          <div key={index} className={tw('flex flex-col mobile:w-full w-[192px] mobile:text-center mobile:items-center')}>
+          <div key={index} className="col max-tablet:w-full w-[192px] max-tablet:text-center max-tablet:items-center">
             {groups.map((category) => (
               <FooterLinkGroup key={category} title={translation[category] } links={linkGroups[category]} />
             ))}
             {index === 2 && (
+              <>
                 <Select<Languages>
-                  className={tw('w-fit')}
-                  textColor={tw('text-white bg-transparent')}
-                  hoverColor={tw('hover:text-white')}
                   value={language}
                   onChange={(language) => setLanguage(language)}
                   options={[
@@ -108,14 +111,23 @@ const Footer = () => {
                     { value: 'en', label: 'English' }
                   ]}>
                 </Select>
+                <Select<ThemeType>
+                  value={theme}
+                  onChange={(theme) => setTheme(theme)}
+                  options={[
+                    { value: 'light', label: translation.light },
+                    { value: 'dark', label: translation.dark }
+                  ]}>
+                </Select>
+              </>
             )}
           </div>
         ))}
       </div>
       <div
-        className={tw('flex flex-row justify-center w-full h-[128px] items-center justify-center mx-auto font-space')}>
+        className="row w-full h-[128px] items-center justify-center mx-auto font-space">
         <Helpwave color="white" size={128}/>
-        <span className={tw('textstyle-title-normal')}>&copy; {year} helpwave</span>
+        <span className="textstyle-title-normal">&copy; {year} helpwave</span>
       </div>
     </div>
   )

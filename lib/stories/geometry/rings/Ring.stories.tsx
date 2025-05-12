@@ -13,7 +13,5 @@ export const RingVariation: Story = {
   args: {
     innerSize: 40,
     width: 10,
-    color: 'hw-primary-400',
-    className: '',
   },
 }

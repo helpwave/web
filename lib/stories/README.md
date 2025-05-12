@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const CircleVariation: Story = {
   args: {
     radius: 40,
-    color: 'hw-primary-400',
+    color: 'primary',
     className: '',
   },
 }

@@ -14,6 +14,6 @@ export const ChipVariation: Story = {
     children: 'Label',
     className: '',
     variant: 'normal',
-    color: 'hw-label-blue'
+    color: 'default'
   },
 }

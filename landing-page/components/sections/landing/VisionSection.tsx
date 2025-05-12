@@ -1,4 +1,3 @@
-import { tw } from '@helpwave/common/twind'
 import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
@@ -31,16 +30,16 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<VisionSectio
   const imageURL = 'https://cdn.helpwave.de/landing_page/process.png'
   return (
     <SectionBase
-      className={tw('flex flex-row mobile:flex-col-reverse gap-8 items-center justify-center w-full')}
-      outerClassName={tw('py-24')}
-      backgroundColor="white"
+      className="flex max-tablet:flex-col-reverse tablet:row tablet:gap-x-8 gap-y-8 items-center justify-center w-full"
+      outerClassName="py-24"
+      backgroundColor="variant"
     >
-      <div className={tw('flex flex-col w-1/2 mobile:w-full gap-y-2')}>
-        <Chip className={tw('!w-fit bg-gray-200 font-semibold px-4')}>{translation.ourVision}</Chip>
-        <h2 className={tw('textstyle-title-xl')}>{translation.title}</h2>
-        <span className={tw('font-inter font-semibold')}><MarkdownInterpreter text={translation.description}/></span>
+      <div className="col w-1/2 max-tablet:w-full gap-y-2">
+        <Chip color="blue" className="font-semibold px-4">{translation.ourVision}</Chip>
+        <h2 className="textstyle-title-xl">{translation.title}</h2>
+        <span className="font-inter font-semibold"><MarkdownInterpreter text={translation.description}/></span>
       </div>
-      <Image src={imageURL} alt="" width={0} height={0} className={tw('mobile:w-full w-1/2')}/>
+      <Image src={imageURL} alt="" width={0} height={0} className="max-tablet:w-full max-tablet:max-w-[500px] w-1/2 py-4 px-8 rounded-2xl dark:bg-white"/>
     </SectionBase>
   )
 }

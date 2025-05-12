@@ -1,5 +1,5 @@
-import { tw, tx } from '@twind/core'
-import { Helpwave } from '../icons/Helpwave'
+import clsx from 'clsx'
+import { Helpwave } from './icons/Helpwave'
 import { Tile } from './layout/Tile'
 
 type Size = 'small' | 'large'
@@ -22,13 +22,14 @@ export const HelpwaveBadge = ({
 
   return (
     <Tile
-      prefix={(<Helpwave size={iconSize}/>)}
-      title={{ value: title, className: size === 'small' ? tw('@(textstyle-title-lg) text-base') : tw('textstyle-title-xl') }}
-      className={tx('text-white',
+      prefix={(<Helpwave size={iconSize} />)}
+      title={{ value: title, className: size === 'small' ? 'textstyle-title-lg text-base' : 'textstyle-title-xl' }}
+      className={clsx(
         {
           'px-2 py-1 rounded-md': size === 'small',
           'px-4 py-1 rounded-md': size === 'large',
-        }, className)}
+        }, className
+)}
     />
   )
 }

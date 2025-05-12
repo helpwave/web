@@ -1,5 +1,5 @@
 import { CalendarDays } from 'lucide-react'
-import { tx } from '../../twind'
+import clsx from 'clsx'
 import { formatDate, formatDateTime } from '../../util/date'
 import { noop } from '../../util/noop'
 import { Input } from '../user-input/Input'
@@ -34,10 +34,10 @@ export const DateProperty = ({
       icon={<CalendarDays size={16}/>}
       input={({ softRequired }) => (
         <div
-          className={tx('flex flex-row grow py-2 px-4 cursor-pointer', { 'text-hw-warn-600': softRequired && !hasValue })}
+          className={clsx('row grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
           <Input
-            className={tx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !w-fit !rounded-none', { 'bg-hw-warn-200': softRequired && !hasValue })}
+            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !w-fit !rounded-none', { 'bg-surface-warning': softRequired && !hasValue })}
             value={dateText}
             type={type === 'dateTime' ? 'datetime-local' : 'date'}
             readOnly={readOnly}

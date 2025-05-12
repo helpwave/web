@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+@import '@helpwave/common/globals.css';
+
+@source "./node_modules/@helpwave/common";
+
+@theme {
+  --color-section-variant: #FFF;
+  --color-section-on-variant: #000;
+  --color-section-dark: #000;
+  --color-section-on-dark: #FFF;
+}
+
+
+/* Overrides of the dark theme */
+@layer base {
+  /* Here are overrides for the light theme */
+  @variant dark {
+    --color-section-variant: #000;
+    --color-section-on-variant: #FFF;
+    --color-section-dark: #2A2A2A;
+    --color-section-on-dark: #FFF;
+  }
+}

@@ -1,7 +1,7 @@
 import { createRef, useEffect, useState, type ReactNode } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 /**
  * Only px and %
  * e.g. 250px or 10%
@@ -117,7 +117,7 @@ export const TwoColumn = ({
   const rightWidth = fullWidth - leftWidth - dividerHitBoxWidth
   return (
     <div
-      ref={ref} className={tx(`relative flex flex-row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
+      ref={ref} className={clsx(`relative row h-[calc(100vh_-_${headerHeight}px)]`, { 'select-none': isDragging })}
       onMouseMove={event => isDragging ? setLeftWidth(calcPosition(event.pageX)) : undefined}
       onMouseUp={() => setIsDragging(false)}
       onTouchEnd={() => setIsDragging(false)}
@@ -129,7 +129,7 @@ export const TwoColumn = ({
       {fullWidth !== 0 && (
         <>
           <div
-            className={tw(`overflow-hidden`)}
+            className="overflow-hidden"
             style={{ width: leftWidth + 'px' }}
           >
             <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: leftWidth }}>
@@ -139,19 +139,19 @@ export const TwoColumn = ({
           <div
             onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
             onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
-            className={tx(`relative h-full flex justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
+            className={clsx(`relative h-full justify-center bg-white w-[${dividerHitBoxWidth}px]`, { '!cursor-col-resize': !disableResize })}
           >
-              <div className={tw('bg-gray-300 my-4 rounded-lg w-0.5')} />
+              <div className="bg-gray-300 my-4 rounded-lg w-0.5" />
             {!disableResize && (
               <div
-                className={tw('absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] flex flex-col justify-center items-center')}
+                className="absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] col justify-center items-center"
               >
-                <GripVertical className={tw('text-white')}/>
+                <GripVertical className="text-white"/>
               </div>
             )}
             {!disableResize && (
               <button
-                className={tw('absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5')}
+                className="absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] border-white border-[3px] text-white p-0.5"
                 onClick={() => setLeftWidth(leftFocus ? convertToLeftWidth(baseLayoutValue, fullWidth) : fullWidth - convertToLeftWidth(constraints.right?.min ?? defaultConstraint.right.min, fullWidth))}
               >
                 {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
@@ -159,7 +159,7 @@ export const TwoColumn = ({
             )}
           </div>
           <div
-            className={tw(`overflow-hidden`)}
+            className="overflow-hidden"
             style={{ width: (rightWidth) + 'px' }}
           >
             <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: rightWidth }}>

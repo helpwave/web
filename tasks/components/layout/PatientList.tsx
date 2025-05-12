@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
 import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
@@ -139,7 +139,7 @@ export const PatientList = ({
   const filteredDischarged = !data ? [] : SimpleSearchWithMapping(search, data.discharged, value => value.name)
 
   return (
-    <div className={tw('relative flex flex-col py-4 px-6')}>
+    <div className="relative col py-4 px-6">
       <ConfirmDialog
         id="patientList-DeleteDialog"
         isOpen={!!deletePatient}
@@ -184,31 +184,31 @@ export const PatientList = ({
         onBackgroundClick={() => setIsShowingAddPatientModal(0)}
         wardId={context.wardId}
       />
-      <div className={tw('flex flex-row gap-x-2 items-center')}>
-        <span className={tw('textstyle-title-normal pr-4')}>{translation.patients}</span>
-        <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
-        <Button
-          className={tw('whitespace-nowrap')}
-          color="hw-positive"
+      <div className="row gap-x-2 items-center">
+        <span className="textstyle-title-normal pr-4">{translation.patients}</span>
+        <Input placeholder={translation.search} value={search} onChange={setSearch} className="h-9"/>
+        <SolidButton
+          className="whitespace-nowrap"
+          color="positive"
           onClick={() => {
             setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
           }}
         >
           {translation.addPatient}
-        </Button>
+        </SolidButton>
       </div>
       <LoadingAndErrorComponent
         hasError={isError || !data}
         isLoading={isLoading}
-        errorProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
-        loadingProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
+        errorProps={{ classname: 'min-h-[400px] border-2 border-gray-600 rounded-xl' }}
+        loadingProps={{ classname: 'min-h-[400px] border-2 border-gray-600 rounded-xl' }}
       >
-        <div className={tw('flex flex-col gap-y-4 mb-8')}>
-          <div className={tx('p-2 border-2 border-transparent rounded-xl')}>
+        <div className="col gap-y-4 mb-8">
+          <div className="p-2 border-2 border-transparent rounded-xl">
             <HideableContentSection
               initiallyOpen={initialOpenedSections?.active}
               disabled={filteredActive.length <= 0}
-              header={<span className={tw('textstyle-accent')}>{`${translation.active} (${filteredActive.length})`}</span>}
+              header={<span className="textstyle-accent">{`${translation.active} (${filteredActive.length})`}</span>}
             >
               {filteredActive.map(patient => (
                 <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
@@ -220,7 +220,7 @@ export const PatientList = ({
                 }}>
                   {() => (
                     <div
-                      className={tw('flex flex-row pt-2 border-b-2 justify-between items-center cursor-pointer')}
+                      className="row pt-2 border-b-2 justify-between items-center cursor-pointer"
                       onClick={() => updateContext({
                         ...context,
                         patientId: patient.id,
@@ -228,17 +228,17 @@ export const PatientList = ({
                         bedId: patient.bed.id
                       })}
                     >
-                      <span className={tw('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
-                      <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                        <Chip color="hw-label-blue" variant="fullyRounded">
+                      <span className="textstyle-title-sm w-1/3 text-ellipsis">{patient.name}</span>
+                      <div className="row flex-1 justify-between items-center">
+                        <Chip color="blue" variant="fullyRounded">
                           {activeLabelText(patient)}
                         </Chip>
-                        <Button color="hw-negative" variant="text" onClick={event => {
+                        <TextButton color="negative" onClick={event => {
                           event.stopPropagation()
                           setDischargingPatient(patient)
                         }}>
                           {translation.discharge}
-                        </Button>
+                        </TextButton>
                       </div>
                     </div>
                   )}
@@ -248,15 +248,15 @@ export const PatientList = ({
           </div>
           <Droppable id="patientListUnassigned" data={{ patientListSection: 'unassigned' }}>
             {({ isOver }) => (
-              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
-                'border-hw-primary-700': isOver,
+              <div className={clsx('p-2 border-2 border-dashed rounded-xl', {
+                'border-primary': isOver,
                 'border-transparent': !isOver
               })}>
                 <HideableContentSection
                   initiallyOpen={initialOpenedSections?.unassigned}
                   disabled={filteredUnassigned.length <= 0}
                   header={(
-                    <span className={tw('textstyle-accent text-hw-label-yellow-400')}>
+                    <span className="textstyle-accent text-tag-yellow-text">
                       {`${translation.unassigned} (${filteredUnassigned.length})`}
                     </span>
                   )}
@@ -269,23 +269,23 @@ export const PatientList = ({
                       {() => (
                         <div
                           key={patient.id}
-                          className={tw('flex flex-row pt-2 border-b-2 items-center cursor-pointer')}
+                          className="row pt-2 border-b-2 items-center cursor-pointer"
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
                           })}
                         >
-                          <span className={tw('textstyle-title-sm w-1/3 text-ellipsis')}>{patient.name}</span>
-                          <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                            <Chip color="hw-label-yellow" variant="fullyRounded">
+                          <span className="textstyle-title-sm w-1/3 text-ellipsis">{patient.name}</span>
+                          <div className="row flex-1 justify-between items-center">
+                            <Chip color="yellow" variant="fullyRounded">
                               {`${translation.unassigned}`}
                             </Chip>
-                            <Button color="hw-negative" variant="text" onClick={event => {
+                            <TextButton color="negative" onClick={event => {
                               event.stopPropagation()
                               setDischargingPatient(patient)
                             }}>
                               {translation.discharge}
-                            </Button>
+                            </TextButton>
                           </div>
                         </div>
                       )}
@@ -297,14 +297,14 @@ export const PatientList = ({
           </Droppable>
           <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
             {({ isOver }) => (
-              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
-                'border-hw-primary-700': isOver,
+              <div className={clsx('p-2 border-2 border-dashed rounded-xl', {
+                'border-primary': isOver,
                 'border-transparent': !isOver
               })}>
                 <HideableContentSection
                   initiallyOpen={initialOpenedSections?.discharged}
                   disabled={filteredDischarged.length <= 0}
-                  header={<span className={tw('textstyle-accent')}>{`${translation.discharged} (${filteredDischarged.length})`}</span>}
+                  header={<span className="textstyle-accent">{`${translation.discharged} (${filteredDischarged.length})`}</span>}
                 >
                   {filteredDischarged.map(patient => (
                     <Draggable id={patient.id} key={patient.id} data={{
@@ -314,23 +314,23 @@ export const PatientList = ({
                       {() => (
                         <div
                           key={patient.id}
-                          className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
+                          className="row pt-2 border-b-2 justify-between items-center"
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
                           })}
                         >
-                          <span className={tw('textstyle-title-sm')}>{patient.name}</span>
-                          <div className={tw('flex flex-row gap-x-4')}>
-                            <Button variant="text" onClick={event => {
+                          <span className="textstyle-title-sm">{patient.name}</span>
+                          <div className="row gap-x-4">
+                            <TextButton onClick={event => {
                               event.stopPropagation()
                               readmitPatientMutation.mutate(patient.id)
                             }}>
                               {translation.readmit}
-                            </Button>
-                            <Button
-                              color="hw-negative"
-                              variant="text" onClick={event => {
+                            </TextButton>
+                            <TextButton
+                              color="negative"
+                              onClick={event => {
                                 event.stopPropagation()
                                 setDeletePatient(patient)
                               }}
@@ -338,7 +338,7 @@ export const PatientList = ({
                               disabled={true}
                             >
                               {translation.delete}
-                            </Button>
+                            </TextButton>
                           </div>
                         </div>
                       )}

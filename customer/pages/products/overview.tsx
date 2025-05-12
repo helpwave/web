@@ -5,14 +5,12 @@ import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { useProductsAllQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { tw, tx } from '@twind/core'
 import type {
   ProductPlanTranslation
 } from '@/api/dataclasses/product'
 import {
   defaultProductPlanTranslation
 } from '@/api/dataclasses/product'
-import { Button } from '@helpwave/common/components/Button'
 import { ChevronLeft, Coins } from 'lucide-react'
 import { Table } from '@helpwave/common/components/Table'
 import { useAuth, withAuth } from '@/hooks/useAuth'
@@ -31,6 +29,8 @@ import { useCustomerProductsCalculateQuery } from '@/api/mutations/customer_prod
 import { defaultLocaleFormatters } from '@/utils/locale'
 import { ProductAPI } from '@/api/services/product'
 import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import { SolidButton, TextButton } from '@helpwave/common/components/Button'
+import clsx from 'clsx'
 
 type ReferralStatus = 'loading' | 'error'
 type ReferralData = {
@@ -187,10 +187,10 @@ const CartOverview: NextPage = () => {
         onBackgroundClick={referralStatus === 'error' ? () => setReferralStatus(undefined) : undefined}
         onCloseClick={referralStatus === 'error' ? () => setReferralStatus(undefined) : undefined}
         titleText={translation.referral}
-        modalClassName={tw('gap-y-2')}
+        modalClassName="gap-y-2"
       >
         {referralStatus === 'error' ? (
-          <span className={tw('text-hw-negative-500')}>{translation.referralError}</span>
+          <span className="text-negative">{translation.referralError}</span>
         ) : (<LoadingAnimation/>)}
       </Modal>
       <Modal
@@ -199,9 +199,9 @@ const CartOverview: NextPage = () => {
         onCloseClick={() => setProductVoucherModalId(undefined)}
         onBackgroundClick={() => setProductVoucherModalId(undefined)}
         titleText={translation.redeemVoucherFor(products?.find(value => value.uuid === productVoucherModalId)?.name ?? '')}
-        modalClassName={tw('gap-y-6')}
+        modalClassName="gap-y-6"
       >
-        <div className={tw('gap-y-2')}>
+        <div className="col gap-y-2">
           <Input
             value={voucherCode}
             autoFocus={true}
@@ -211,9 +211,9 @@ const CartOverview: NextPage = () => {
             }}
             label={{ name: translation.code }}
           />
-          {redeemResponse && <span className={tw('text-hw-negative-400')}>{redeemResponse}</span>}
+          {redeemResponse && <span className="text-negative">{redeemResponse}</span>}
         </div>
-        <Button
+        <SolidButton
           disabled={!voucherCode}
           onClick={async () => {
             try {
@@ -230,7 +230,7 @@ const CartOverview: NextPage = () => {
           }}
         >
           {translation.redeemVoucher}
-        </Button>
+        </SolidButton>
       </Modal>
       <Section titleText={translation.overview}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
@@ -251,27 +251,25 @@ const CartOverview: NextPage = () => {
                 // TODO handle not found errors here
                 return [
                   <span key={cartItem.id + 'name'}>{product?.name ?? 'Not Found'}</span>,
-                  <span key={cartItem.id + 'price'} className={tx({ 'text-hw-primary-500': priceResult.saving !== 0 })}>
+                  <span key={cartItem.id + 'price'} className={clsx({ 'text-primary': priceResult.saving !== 0 })}>
                     {localeTranslation.formatMoney(priceResult.finalPrice)}
                   </span>,
                   <span key={cartItem.id + 'plan'}>{plan ? translation.productPlan(plan) : ''}</span>,
                   !voucher ? (
-                    <Button
-                      variant="text"
+                    <TextButton
                       key={cartItem.id + 'voucher-redeem'}
                       onClick={() => setProductVoucherModalId(cartItem.id)}
                     >
                       {translation.redeemVoucher}
-                    </Button>
-                  ) : (<Chip key={cartItem.id + 'voucher'} color="hw-primary">{voucher.code}</Chip>),
-                  <Button
-                    variant="text"
+                    </TextButton>
+                  ) : (<Chip key={cartItem.id + 'voucher'} color="default">{voucher.code}</Chip>),
+                  <TextButton
                     key={cartItem.id + 'action'}
-                    color="hw-negative"
+                    color="negative"
                     onClick={() => removeItem(cartItem.id)}
                   >
                     {translation.removeFromCart}
-                  </Button>,
+                  </TextButton>,
                 ]
               }}
               header={[
@@ -285,22 +283,22 @@ const CartOverview: NextPage = () => {
           )}
         </LoadingAndErrorComponent>
       </Section>
-      <Section className={tw('flex flex-row justify-between')}>
-        <Button
-          className={tw('flex flex-row items-center gap-x-2')}
+      <Section className="row justify-between">
+        <SolidButton
+          className="row items-center"
           onClick={() => router.push('/products/shop')}
         >
           <ChevronLeft size={20} />
           {`${translation.back}`}
-        </Button>
-        <Button
-          className={tw('flex flex-row items-center gap-x-2')}
+        </SolidButton>
+        <SolidButton
+          className="row items-center"
           onClick={() => router.push('/products/pay')}
           disabled={cart.length === 0}
         >
           <Coins size={20} />
           {`${translation.checkout}`}
-        </Button>
+        </SolidButton>
       </Section>
     </Page>
   )

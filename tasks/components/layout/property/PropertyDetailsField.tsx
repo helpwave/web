@@ -6,13 +6,13 @@ import { InputGroup } from '@helpwave/common/components/InputGroup'
 import { Select } from '@helpwave/common/components/user-input/Select'
 import { Tile } from '@helpwave/common/components/layout/Tile'
 import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { tw } from '@helpwave/common/twind'
 import { Plus, X } from 'lucide-react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Input } from '@helpwave/common/components/user-input/Input'
 import type { FieldType, Property, SelectData, SelectOption } from '@helpwave/api-services/types/properties/property'
 import { fieldTypeList } from '@helpwave/api-services/types/properties/property'
 import { useEffect, useState } from 'react'
+import { TextButton } from '@helpwave/common/components/Button'
 
 type SelectDataUpdate = {
   create: number,
@@ -47,12 +47,15 @@ type PropertySelectOptionsUpdaterState = {
 }
 
 export const PropertySelectOptionsUpdater = ({
-  overwriteTranslation,
-  value,
-  onChange,
-}: PropsForTranslation<PropertySelectOptionsUpdaterPropsTranslation, PropertySelectOptionsUpdaterProps>) => {
+                                               overwriteTranslation,
+                                               value,
+                                               onChange,
+                                             }: PropsForTranslation<PropertySelectOptionsUpdaterPropsTranslation, PropertySelectOptionsUpdaterProps>) => {
   const translation = useTranslation(defaultPropertySelectOptionsUpdaterPropsTranslation, overwriteTranslation)
-  const [state, setState] = useState<PropertySelectOptionsUpdaterState>({ data: value, update: { create: 0, update: [], delete: [] } })
+  const [state, setState] = useState<PropertySelectOptionsUpdaterState>({
+    data: value,
+    update: { create: 0, update: [], delete: [] }
+  })
   const { data, update } = state
 
   useEffect(() => {
@@ -60,11 +63,11 @@ export const PropertySelectOptionsUpdater = ({
   }, [value])
 
   return (
-    <div className={tw('flex flex-col mt-2 gap-y-1')}>
-      <div className={tw('flex flex-row justify-between items-center')}>
-        <span className={tw('textstyle-label-md')}>{translation.values}</span>
+    <div className="col mt-2 gap-y-1">
+      <div className="row justify-between items-center">
+        <span className="textstyle-label-md">{translation.values}</span>
         <Plus
-          className={tw('text-white bg-hw-primary-400 hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
+          className="text-white bg-primary hover:brightness-90 rounded-full mr-3"
           size={20}
           onClick={() => {
             onChange({ ...data }, { ...update, create: update.create + 1 })
@@ -72,9 +75,9 @@ export const PropertySelectOptionsUpdater = ({
         />
       </div>
       <Scrollbars autoHide autoHeight autoHeightMax={400}>
-        <div className={tw('flex flex-col gap-y-2 mr-3')}>
+        <div className="col gap-y-2 mr-3">
           {data.options.map((entry, index) => (
-            <div key={index} className={tw('flex flex-row items-center justify-between gap-x-4')}>
+            <div key={index} className="row items-center justify-between gap-x-4">
               <Input
                 value={entry.name ?? ''}
                 placeholder={`${translation.newEntry} ${index + 1}`}
@@ -83,7 +86,10 @@ export const PropertySelectOptionsUpdater = ({
                   const newEntry = { ...entry, name: text }
                   newList[index] = newEntry
                   setState(
-                    { data: { ...data, options: newList }, update: { ...update, update: [...update.update, { ...newEntry, index }] } }
+                    {
+                      data: { ...data, options: newList },
+                      update: { ...update, update: [...update.update, { ...newEntry, index }] }
+                    }
                   )
                 }}
                 onEditCompleted={text => {
@@ -96,9 +102,8 @@ export const PropertySelectOptionsUpdater = ({
                   )
                 }}
               />
-              <X
-                className={tw('text-hw-negative-400 hover:text-hw-negative-600')}
-                size={20}
+              <TextButton
+                color="negative"
                 onClick={() => {
                   const newList = data.options.filter((_, index1) => index1 !== index)
                   onChange(
@@ -106,7 +111,9 @@ export const PropertySelectOptionsUpdater = ({
                     { ...update, delete: [...update.delete, { id: entry.id, index }] }
                   )
                 }}
-              />
+              >
+                <X size={20}/>
+              </TextButton>
             </div>
           ))}
         </div>
@@ -163,11 +170,11 @@ export type PropertyDetailsFieldProps = {
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsField = ({
-  overwriteTranslation,
-  value,
-  onChange,
-  inputGroupProps
-}: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
+                                       overwriteTranslation,
+                                       value,
+                                       onChange,
+                                       inputGroupProps
+                                     }: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
   const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
   const [usedValue, setUsedValue] = useState<PropertyFieldDetails>(value)
   const isSelectType = value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect'
@@ -202,13 +209,15 @@ export const PropertyDetailsField = ({
             <Checkbox
               checked={usedValue.selectData!.isAllowingFreetext}
               onChange={isAllowingFreetext => {
-                const newValue: PropertyFieldDetails = { ...value, selectData: { ...usedValue.selectData!, isAllowingFreetext } }
+                const newValue: PropertyFieldDetails = {
+                  ...value,
+                  selectData: { ...usedValue.selectData!, isAllowingFreetext }
+                }
                 onChange(newValue)
               }}
-              size={20}
             />
           )}
-          className={tw('mt-4')}
+          className="mt-4"
         />
       )}
     </InputGroup>

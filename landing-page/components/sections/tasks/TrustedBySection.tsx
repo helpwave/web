@@ -1,4 +1,3 @@
-import { tw } from '@helpwave/common/twind'
 import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { useTranslation } from '@helpwave/common/hooks/useTranslation'
 import { VerticalDivider } from '@helpwave/common/components/VerticalDivider'
@@ -31,10 +30,10 @@ const TrustedBySection = () => {
   const translation = useTranslation(defaultTrustedBySectionTranslation)
 
   return (
-    <SectionBase className={tw('flex flex-col gap-y-8 select-none justify-between items-center w-full')} backgroundColor="gray">
-      <span className={tw('textstyle-title-lg')}>{translation.title}</span>
+    <SectionBase className="col gap-y-8 select-none justify-between items-center w-full" >
+      <span className="textstyle-title-lg">{translation.title}</span>
       <DividerInserter
-        className={tw('flex flex-row gap-x-6 items-center justify-center w-full')}
+        className="row gap-x-6 items-center justify-center w-full"
         divider={index => (<VerticalDivider key={index} height={128}/>)}
       >
         {images.map(partner => (
@@ -44,7 +43,7 @@ const TrustedBySection = () => {
             height={0}
             src={partner.url}
             alt={partner.name}
-            className={tw('w-auto max-h-[64px]')}
+            className="w-auto max-h-[64px]"
           />
         ))}
       </DividerInserter>

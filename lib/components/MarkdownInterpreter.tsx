@@ -1,6 +1,14 @@
-import { tw, tx } from '../twind'
-
-type ASTNodeModifierType = 'none'| 'italic'| 'bold'| 'underline'| 'font-space'| 'primary'| 'secondary'| 'warn'| 'positive'| 'negative'
+type ASTNodeModifierType =
+  'none'
+  | 'italic'
+  | 'bold'
+  | 'underline'
+  | 'font-space'
+  | 'primary'
+  | 'secondary'
+  | 'warn'
+  | 'positive'
+  | 'negative'
 
 const astNodeInserterType = ['helpwave', 'newline'] as const
 type ASTNodeInserterType = typeof astNodeInserterType[number]
@@ -22,19 +30,24 @@ export type ASTNodeInterpreterProps = {
   className?: string,
 }
 export const ASTNodeInterpreter = ({
-  node,
-  isRoot = false,
-  className = '',
-}: ASTNodeInterpreterProps) => {
+                                     node,
+                                     isRoot = false,
+                                     className = '',
+                                   }: ASTNodeInterpreterProps) => {
   switch (node.type) {
     case 'newline':
-      return <br />
+      return <br/>
     case 'text':
-      return isRoot ? <span className={tx(className)}>{node.text}</span> : node.text
+      return isRoot ? <span className={className}>{node.text}</span> : node.text
     case 'helpwave':
-      return (<span className={tw('font-bold font-space no-underline')}>helpwave</span>)
+      return (<span className="font-bold font-space no-underline">helpwave</span>)
     case 'none':
-      return isRoot ? <span className={tx(className)}>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</span> :
+      return isRoot ? (
+<span className={className}>{node.children.map((value, index) => (
+<ASTNodeInterpreter key={index}
+                                                                                                           node={value}/>
+))}</span>
+) :
         <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
     case 'bold':
       return <b>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</b>
@@ -44,42 +57,42 @@ export const ASTNodeInterpreter = ({
       return (<u>{node.children.map((value, index) => (<ASTNodeInterpreter key={index} node={value}/>))}</u>)
     case 'font-space':
       return (
-        <span className={tw('font-space')}>{node.children.map((value, index) => (
+        <span className="font-space">{node.children.map((value, index) => (
           <ASTNodeInterpreter key={index}
                               node={value}/>
         ))}</span>
       )
     case 'primary':
       return (
-        <span className={tw('text-hw-primary-400')}>{node.children.map((value, index) => (
+        <span className="text-primary">{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
       )
     case 'secondary':
       return (
-        <span className={tw('text-hw-secondary-400')}>{node.children.map((value, index) => (
+        <span className="text-secondary">{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
       )
     case 'warn':
       return (
-        <span className={tw('text-hw-warn-400')}>{node.children.map((value, index) => (
+        <span className="text-warning">{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
       )
     case 'positive':
       return (
-        <span className={tw('text-hw-positive-400')}>{node.children.map((value, index) => (
+        <span className="text-positive">{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
       )
     case 'negative':
       return (
-        <span className={tw('text-hw-negative-400')}>{node.children.map((value, index) => (
+        <span className="text-negative">{node.children.map((value, index) => (
           <ASTNodeInterpreter
             key={index} node={value}/>
         ))}</span>
@@ -261,5 +274,5 @@ export type MarkdownInterpreterProps = {
 export const MarkdownInterpreter = ({ text, className }: MarkdownInterpreterProps) => {
   const tree = parseMarkdown(text)
   const optimizedTree = optimizeTree(tree)!
-  return <ASTNodeInterpreter node={optimizedTree} isRoot={true} className={className} />
+  return <ASTNodeInterpreter node={optimizedTree} isRoot={true} className={className}/>
 }

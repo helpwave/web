@@ -7,7 +7,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@helpwave/hightide": "^0.0.7",
+    "@helpwave/hightide": "^0.0.8",
     "@helpwave/proto-ts": "0.64.0-89e2023.0",
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^4.36.1",

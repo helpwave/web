@@ -9,6 +9,6 @@
     "commander": "12.1.0"
   },
   "devDependencies": {
-    "@helpwave/eslint-config": "workspace:*"
+    "@helpwave/eslint-config": "^0.0.1"
   }
 }

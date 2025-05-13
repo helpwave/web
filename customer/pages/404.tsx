@@ -1,9 +1,9 @@
-import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
+import { Helpwave } from '@helpwave/hightide/components/icons/Helpwave'
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
 import titleWrapper from '@/utils/titleWrapper'
 import { Page } from '@/components/layout/Page'
 

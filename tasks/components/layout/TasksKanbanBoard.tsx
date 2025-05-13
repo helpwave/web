@@ -11,7 +11,7 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 
 import { useEffect, useState } from 'react'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
 import type { SortedTasks, TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import { emptySortedTasks } from '@helpwave/api-services/types/tasks/task'
 import {

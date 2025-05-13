@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import clsx from 'clsx'
-import { TimeDisplay } from '@helpwave/common/components/TimeDisplay'
-import type { News } from '@helpwave/common/util/news'
+import { TimeDisplay } from '@helpwave/hightide/components/TimeDisplay'
+import type { News } from '@helpwave/hightide/util/news'
 import Image from 'next/image'
 
 export type NewsDisplayProps = {

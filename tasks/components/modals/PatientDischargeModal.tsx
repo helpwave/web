@@ -1,6 +1,6 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/hightide/components/modals/ConfirmDialog'
 import type { PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
 
 type PatientDischargeModalTranslation = {

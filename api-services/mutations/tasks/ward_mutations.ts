@@ -7,7 +7,7 @@ import {
   GetWardRequest,
   UpdateWardRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/ward_svc_pb'
-import { noop } from '@helpwave/common/util/noop'
+import { noop } from '@helpwave/hightide/util/noop'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import type { WardDetailDTO, WardMinimalDTO, WardOverviewDTO } from '../../types/tasks/wards'

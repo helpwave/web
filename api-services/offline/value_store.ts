@@ -1,4 +1,4 @@
-import { range } from '@helpwave/common/util/array'
+import { range } from '@helpwave/hightide/util/array'
 import type { Property } from '../types/properties/property'
 import { emptyProperty } from '../types/properties/property'
 import type { AttachedProperty } from '../types/properties/attached_property'

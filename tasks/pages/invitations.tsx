@@ -1,7 +1,7 @@
 import Head from 'next/head'
 
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { UserInvitationList } from '@/components/UserInvitationList'
 import titleWrapper from '@/utils/titleWrapper'

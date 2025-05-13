@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import { LoadingAnimation } from '@helpwave/hightide/components/LoadingAnimation'
 import { useQuery } from '@tanstack/react-query'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type EpisodeSectionTranslation = {

@@ -1,11 +1,11 @@
 import { Menu as MenuIcon, X } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { Helpwave } from '@helpwave/common/components/icons/Helpwave'
+import { Menu, MenuItem } from '@helpwave/hightide/components/user-input/Menu'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { MarkdownInterpreter } from '@helpwave/hightide/components/MarkdownInterpreter'
+import { Helpwave } from '@helpwave/hightide/components/icons/Helpwave'
 
 const homeURL = '/'
 

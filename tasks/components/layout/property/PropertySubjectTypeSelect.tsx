@@ -1,8 +1,8 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { SelectProps } from '@helpwave/common/components/user-input/Select'
-import { Select } from '@helpwave/common/components/user-input/Select'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { SelectProps } from '@helpwave/hightide/components/user-input/Select'
+import { Select } from '@helpwave/hightide/components/user-input/Select'
 import type { SubjectType } from '@helpwave/api-services/types/properties/property'
 import { subjectTypeList } from '@helpwave/api-services/types/properties/property'
 

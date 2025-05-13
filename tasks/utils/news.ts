@@ -1,4 +1,4 @@
-import { localizedNewsSchema, type LocalizedNews } from '@helpwave/common/util/news'
+import { localizedNewsSchema, type LocalizedNews } from '@helpwave/hightide/util/news'
 import { getConfig } from './config'
 
 export const fetchLocalizedNews = (): Promise<LocalizedNews> => {

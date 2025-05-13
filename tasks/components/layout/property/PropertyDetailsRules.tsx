@@ -1,10 +1,10 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
-import { InputGroup } from '@helpwave/common/components/InputGroup'
-import { Tile } from '@helpwave/common/components/layout/Tile'
-import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { InputGroupProps } from '@helpwave/hightide/components/InputGroup'
+import { InputGroup } from '@helpwave/hightide/components/InputGroup'
+import { Tile } from '@helpwave/hightide/components/layout/Tile'
+import { Checkbox } from '@helpwave/hightide/components/user-input/Checkbox'
 import type { Property } from '@helpwave/api-services/types/properties/property'
 
 type PropertyDetailsRulesTranslation = {

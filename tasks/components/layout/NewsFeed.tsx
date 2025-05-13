@@ -1,8 +1,8 @@
 
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useLanguage } from '@helpwave/common/hooks/useLanguage'
-import { filterNews, type LocalizedNews } from '@helpwave/common/util/news'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useLanguage } from '@helpwave/hightide/hooks/useLanguage'
+import { filterNews, type LocalizedNews } from '@helpwave/hightide/util/news'
 import { NewsDisplay } from '../NewsDisplay'
 import { ColumnTitle } from '../ColumnTitle'
 

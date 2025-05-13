@@ -1,9 +1,9 @@
 import { Link as LinkIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type TalksTranslation = {

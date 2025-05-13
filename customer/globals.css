@@ -1,4 +1,4 @@
 @import 'tailwindcss';
-@import '@helpwave/common/globals.css';
+@import '@helpwave/hightide/globals.css';
 
-@source "./node_modules/@helpwave/common";
+@source "./node_modules/@helpwave/hightide";

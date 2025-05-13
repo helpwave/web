@@ -62,7 +62,7 @@ jobs:
         run: pnpm install
 
       - name: Build Storybook
-        run: pnpm --filter "@helpwave/common" run build-storybook
+        run: pnpm --filter "@helpwave/hightide" run build-storybook
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1

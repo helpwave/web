@@ -1,4 +1,4 @@
-import type { Translation } from '@helpwave/common/hooks/useTranslation'
+import type { Translation } from '@helpwave/hightide/hooks/useTranslation'
 
 export type ProductPlanType = 'once' | 'recurring' | 'lifetime' | 'trial';
 

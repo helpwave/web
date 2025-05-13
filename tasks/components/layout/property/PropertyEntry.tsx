@@ -1,10 +1,10 @@
-import { TextProperty } from '@helpwave/common/components/properties/TextProperty'
-import { NumberProperty } from '@helpwave/common/components/properties/NumberProperty'
-import { DateProperty } from '@helpwave/common/components/properties/DateProperty'
-import { CheckboxProperty } from '@helpwave/common/components/properties/CheckboxProperty'
-import { SingleSelectProperty } from '@helpwave/common/components/properties/SelectProperty'
-import { MultiSelectProperty } from '@helpwave/common/components/properties/MultiSelectProperty'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { TextProperty } from '@helpwave/hightide/components/properties/TextProperty'
+import { NumberProperty } from '@helpwave/hightide/components/properties/NumberProperty'
+import { DateProperty } from '@helpwave/hightide/components/properties/DateProperty'
+import { CheckboxProperty } from '@helpwave/hightide/components/properties/CheckboxProperty'
+import { SingleSelectProperty } from '@helpwave/hightide/components/properties/SelectProperty'
+import { MultiSelectProperty } from '@helpwave/hightide/components/properties/MultiSelectProperty'
+import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
 import type { Property } from '@helpwave/api-services/types/properties/property'
 import type {
   AttachedProperty,

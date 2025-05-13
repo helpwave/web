@@ -1,5 +1,5 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide/hooks/useTranslation'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'

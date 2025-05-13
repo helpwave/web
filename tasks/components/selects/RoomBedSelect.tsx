@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Undo2, X } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Select } from '@helpwave/common/components/user-input/Select'
-import { noop } from '@helpwave/common/util/noop'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { TextButton } from '@helpwave/common/components/Button'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { Select } from '@helpwave/hightide/components/user-input/Select'
+import { noop } from '@helpwave/hightide/util/noop'
+import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import { TextButton } from '@helpwave/hightide/components/Button'
 import { usePatientAssignmentByWardQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 
 type RoomBedSelectTranslation = {

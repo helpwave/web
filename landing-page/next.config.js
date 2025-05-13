@@ -2,7 +2,7 @@
 const nextConfig = {
   distDir: 'build',
   reactStrictMode: true,
-  transpilePackages: ['@helpwave/common'],
+  transpilePackages: ['@helpwave/hightide'],
   output: 'export',
   images: {
     unoptimized: true,

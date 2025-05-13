@@ -1,18 +1,18 @@
 import { useContext, useState } from 'react'
 
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { SolidButton, TextButton } from '@helpwave/common/components/Button'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { SolidButton, TextButton } from '@helpwave/hightide/components/Button'
+import { ConfirmDialog } from '@helpwave/hightide/components/modals/ConfirmDialog'
 import {
   defaultTableStatePagination,
   defaultTableStateSelection,
   removeFromTableSelection,
   Table,
   type TableState
-} from '@helpwave/common/components/Table'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Avatar } from '@helpwave/common/components/Avatar'
+} from '@helpwave/hightide/components/Table'
+import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import { Avatar } from '@helpwave/hightide/components/Avatar'
 import type { OrganizationMember } from '@helpwave/api-services/types/users/organization_member'
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 import { useRemoveMemberMutation } from '@helpwave/api-services/mutations/users/organization_mutations'

@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { TechRadar as TechRadarComponent } from '@helpwave/common/components/TechRadar'
+import { TechRadar as TechRadarComponent } from '@helpwave/hightide/components/TechRadar'
 import { Page } from '@/components/Page'
 
 const TechRadar: NextPage = () => {

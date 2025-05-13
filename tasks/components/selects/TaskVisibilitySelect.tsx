@@ -1,5 +1,5 @@
-import { Select, type SelectProps } from '@helpwave/common/components/user-input/Select'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { Select, type SelectProps } from '@helpwave/hightide/components/user-input/Select'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
 
 type TaskVisibilitySelectTranslation = {
   private: string,

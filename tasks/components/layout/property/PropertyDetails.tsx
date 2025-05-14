@@ -1,13 +1,13 @@
 
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { TextButton } from '@helpwave/common/components/Button'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { StepperInformation } from '@helpwave/common/components/StepperBar'
-import { StepperBar } from '@helpwave/common/components/StepperBar'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import { TextButton } from '@helpwave/hightide/components/Button'
+import { ConfirmDialog } from '@helpwave/hightide/components/modals/ConfirmDialog'
+import type { StepperInformation } from '@helpwave/hightide/components/StepperBar'
+import { StepperBar } from '@helpwave/hightide/components/StepperBar'
+import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
 import {
   usePropertyChangeSelectOptionMutation,
   usePropertyCreateMutation,
@@ -16,7 +16,7 @@ import {
 } from '@helpwave/api-services/mutations/properties/property_mutations'
 import type { Property, SelectData } from '@helpwave/api-services/types/properties/property'
 import { emptyProperty, emptySelectData } from '@helpwave/api-services/types/properties/property'
-import { range } from '@helpwave/common/util/array'
+import { range } from '@helpwave/hightide/util/array'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
 import { PropertyContext } from '@/pages/properties'

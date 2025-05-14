@@ -1,11 +1,11 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { ModalProps } from '@helpwave/common/components/modals/Modal'
-import { Modal } from '@helpwave/common/components/modals/Modal'
-import type { SelectOption } from '@helpwave/common/components/user-input/Select'
-import { Select } from '@helpwave/common/components/user-input/Select'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { ModalProps } from '@helpwave/hightide/components/modals/Modal'
+import { Modal } from '@helpwave/hightide/components/modals/Modal'
+import type { SelectOption } from '@helpwave/hightide/components/user-input/Select'
+import { Select } from '@helpwave/hightide/components/user-input/Select'
 import { useMemo, useState } from 'react'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/hightide/components/Button'
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationSwitchModalTranslation = {

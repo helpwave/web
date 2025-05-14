@@ -1,6 +1,6 @@
 import type { Product, ProductPlan } from '@/api/dataclasses/product'
 import { ProductHelpers } from '@/api/dataclasses/product'
-import type { Translation } from '@helpwave/common/hooks/useTranslation'
+import type { Translation } from '@helpwave/hightide/hooks/useTranslation'
 
 export type CustomerProductStatus =
   'trialing'

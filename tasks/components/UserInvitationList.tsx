@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { SolidButton } from '@helpwave/common/components/Button'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Avatar } from '@helpwave/common/components/Avatar'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { defaultTableStatePagination, Table, type TableState } from '@helpwave/hightide/components/Table'
+import { SolidButton } from '@helpwave/hightide/components/Button'
+import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import { Avatar } from '@helpwave/hightide/components/Avatar'
 import {
   useInvitationsByUserQuery,
   useInviteAcceptMutation,

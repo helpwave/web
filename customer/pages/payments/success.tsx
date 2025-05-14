@@ -1,5 +1,5 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import { Section } from '@/components/layout/Section'
 import titleWrapper from '@/utils/titleWrapper'

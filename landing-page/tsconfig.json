@@ -26,7 +26,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "node_modules/@helpwave/common",
     "public/ga.js"
   ],
   "exclude": []

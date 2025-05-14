@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { noop } from '@helpwave/common/util/noop'
+import { noop } from '@helpwave/hightide/util/noop'
 import type { ProductPlanType } from '@/api/dataclasses/product'
 import type { Voucher } from '@/api/dataclasses/voucher'
 

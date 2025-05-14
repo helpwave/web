@@ -1,8 +1,8 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Tile } from '@helpwave/common/components/layout/Tile'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { Tile } from '@helpwave/hightide/components/layout/Tile'
 import Image from 'next/image'
-import { HelpwaveBadge } from '@helpwave/common/components/HelpwaveBadge'
+import { HelpwaveBadge } from '@helpwave/hightide/components/HelpwaveBadge'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type MediQuuBrandDescriptionTranslation = {

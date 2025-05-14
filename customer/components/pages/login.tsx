@@ -1,8 +1,8 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
-import { SolidButton } from '@helpwave/common/components/Button'
+import { SolidButton } from '@helpwave/hightide/components/Button'
 
 type LoginTranslation = {
   login: string,

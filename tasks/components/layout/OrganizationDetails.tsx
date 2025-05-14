@@ -1,9 +1,9 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { SolidButton } from '@helpwave/common/components/Button'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
+import { SolidButton } from '@helpwave/hightide/components/Button'
+import { ConfirmDialog } from '@helpwave/hightide/components/modals/ConfirmDialog'
 import {
   useInviteMemberMutation,
   useOrganizationCreateMutation,

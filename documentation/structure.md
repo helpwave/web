@@ -6,7 +6,3 @@ All packages and apps we develop are within the main folder.
 
 - [landing-page](../landing-page): The homepage of helpwave hosted on https://helpwave.de
 - [tasks](../tasks): The task management application for healthcare workers
-
-### Packages
-- [lib](../lib): The library containing all default components and additional utility functions for helpwave.
-For looking at the components refer to the [storybook](../README.md#storybook).

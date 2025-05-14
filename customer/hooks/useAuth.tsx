@@ -3,7 +3,7 @@
 import type { ComponentType, PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 import { createContext, useContext, useState } from 'react'
-import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import { LoadingAnimation } from '@helpwave/hightide/components/LoadingAnimation'
 import { LoginPage } from '@/components/pages/login'
 import { login, logout, onTokenExpiringCallback, removeUser, renewToken, restoreSession } from '@/api/auth/authService'
 import type { User } from 'oidc-client-ts'

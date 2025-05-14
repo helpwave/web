@@ -1,11 +1,11 @@
 
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { TextImageProps } from '@helpwave/common/components/TextImage'
-import { TextImage } from '@helpwave/common/components/TextImage'
-import { Carousel } from '@helpwave/common/components/layout/Carousel'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { TextImageProps } from '@helpwave/hightide/components/TextImage'
+import { TextImage } from '@helpwave/hightide/components/TextImage'
+import { Carousel } from '@helpwave/hightide/components/layout/Carousel'
 import { useState } from 'react'
-import { Modal } from '@helpwave/common/components/modals/Modal'
+import { Modal } from '@helpwave/hightide/components/modals/Modal'
 import Scrollbars from 'react-custom-scrollbars-2'
 import { SectionBase } from '@/components/sections/SectionBase'
 

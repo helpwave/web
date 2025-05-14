@@ -1,4 +1,4 @@
-import type { ProfileProps } from '@helpwave/common/components/Profile'
+import type { ProfileProps } from '@helpwave/hightide/components/Profile'
 import TeamGroup from '@/components/TeamGroup'
 import { SectionBase } from '@/components/sections/SectionBase'
 

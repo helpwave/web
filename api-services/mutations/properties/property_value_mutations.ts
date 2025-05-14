@@ -1,4 +1,4 @@
-import { noop } from '@helpwave/common/util/noop'
+import { noop } from '@helpwave/hightide/util/noop'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AttachPropertyValueRequest,
@@ -9,7 +9,7 @@ import {
 import {
   Date as ProtoDate
 } from '@helpwave/proto-ts/services/property_svc/v1/types_pb'
-import { ArrayUtil } from '@helpwave/common/util/array'
+import { ArrayUtil } from '@helpwave/hightide/util/array'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import { QueryKeys } from '../query_keys'

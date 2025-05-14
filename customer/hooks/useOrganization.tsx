@@ -1,7 +1,7 @@
 import type { ComponentType, PropsWithChildren } from 'react'
 import { createContext, useContext } from 'react'
 import type { Customer } from '@/api/dataclasses/customer'
-import { LoadingAnimation } from '@helpwave/common/components/LoadingAnimation'
+import { LoadingAnimation } from '@helpwave/hightide/components/LoadingAnimation'
 import { CreateOrganizationPage } from '@/components/pages/create-organization'
 import { useCustomerMyselfQuery } from '@/api/mutations/customer_mutations'
 import { CustomerAPI } from '@/api/services/customer'

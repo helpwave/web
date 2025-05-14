@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
 
 import { LucideArrowLeftRight } from 'lucide-react'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { SolidButton } from '@helpwave/common/components/Button'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { SolidButton } from '@helpwave/hightide/components/Button'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'

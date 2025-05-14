@@ -1,5 +1,5 @@
 
-import { Avatar } from '@helpwave/common/components/Avatar'
+import { Avatar } from '@helpwave/hightide/components/Avatar'
 import type { User } from '@helpwave/api-services/authentication/useAuth'
 
 export type UserCardProps = {

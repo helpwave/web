@@ -1,6 +1,6 @@
-import { SolidButton } from '@helpwave/common/components/Button'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { SolidButton } from '@helpwave/hightide/components/Button'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
 import { getConfig } from '@/utils/config'
 
 type FeedbackButtonTranslation = {

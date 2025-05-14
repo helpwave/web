@@ -1,6 +1,6 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { FAQSection } from '@helpwave/common/components/layout/FAQSection'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { FAQSection } from '@helpwave/hightide/components/layout/FAQSection'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type MediQuuFAQTranslation = {

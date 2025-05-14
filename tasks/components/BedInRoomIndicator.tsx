@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
 
 type BedInRoomIndicatorTranslation = {
   bed: string,

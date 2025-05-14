@@ -1,18 +1,18 @@
 
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
 import { useContext, useEffect, useState } from 'react'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { SolidButton, TextButton } from '@helpwave/common/components/Button'
-import { Input } from '@helpwave/common/components/user-input/Input'
+import { ConfirmDialog } from '@helpwave/hightide/components/modals/ConfirmDialog'
+import { SolidButton, TextButton } from '@helpwave/hightide/components/Button'
+import { Input } from '@helpwave/hightide/components/user-input/Input'
 import {
   defaultTableStatePagination,
   defaultTableStateSelection,
   removeFromTableSelection,
   Table,
   type TableState
-} from '@helpwave/common/components/Table'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+} from '@helpwave/hightide/components/Table'
+import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
 import type { RoomMinimalDTO } from '@helpwave/api-services/types/tasks/room'
 import {
   useRoomCreateMutation,

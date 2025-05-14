@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { SolidButton, TextButton } from '@helpwave/common/components/Button'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Chip } from '@helpwave/common/components/ChipList'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { SolidButton, TextButton } from '@helpwave/hightide/components/Button'
+import { Input } from '@helpwave/hightide/components/user-input/Input'
+import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/hightide/util/simpleSearch'
+import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import { HideableContentSection } from '@helpwave/hightide/components/HideableContentSection'
+import { ConfirmDialog } from '@helpwave/hightide/components/modals/ConfirmDialog'
+import { Chip } from '@helpwave/hightide/components/ChipList'
 import {
   usePatientDischargeMutation,
   usePatientListQuery,

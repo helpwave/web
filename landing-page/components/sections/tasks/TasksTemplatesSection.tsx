@@ -1,9 +1,9 @@
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
 import Image from 'next/image'
-import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { TagIcon } from '@helpwave/common/components/icons/Tag'
+import { MarkdownInterpreter } from '@helpwave/hightide/components/MarkdownInterpreter'
+import { TagIcon } from '@helpwave/hightide/components/icons/Tag'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type TasksTemplatesSectionTranslation = {

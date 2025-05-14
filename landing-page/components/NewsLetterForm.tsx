@@ -1,10 +1,10 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Input } from '@helpwave/common/components/user-input/Input'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { Input } from '@helpwave/hightide/components/user-input/Input'
 import { useState } from 'react'
-import { Select } from '@helpwave/common/components/user-input/Select'
-import { LoadingButton } from '@helpwave/common/components/LoadingButton'
+import { Select } from '@helpwave/hightide/components/user-input/Select'
+import { LoadingButton } from '@helpwave/hightide/components/LoadingButton'
 
 const industryList = ['investment', 'hospital', 'patient_care', 'research', 'development', 'press'] as const
 export type Industry = typeof industryList[number]

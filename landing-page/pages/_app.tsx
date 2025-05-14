@@ -1,14 +1,14 @@
-import { ProvideLanguage } from '@helpwave/common/hooks/useLanguage'
+import { ProvideLanguage } from '@helpwave/hightide/hooks/useLanguage'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { usePathname } from 'next/navigation'
 import { Toaster } from 'react-hot-toast'
-import { ModalRegister } from '@helpwave/common/components/modals/ModalRegister'
-import { modalRootName } from '@helpwave/common/components/modals/Modal'
+import { ModalRegister } from '@helpwave/hightide/components/modals/ModalRegister'
+import { modalRootName } from '@helpwave/hightide/components/modals/Modal'
 import '../globals.css'
 import { Inter, Space_Grotesk } from 'next/font/google'
-import { ThemeProvider } from '@helpwave/common/hooks/useTheme'
+import { ThemeProvider } from '@helpwave/hightide/hooks/useTheme'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 

@@ -1,9 +1,9 @@
 import clsx from 'clsx'
-import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator'
+import { ProgressIndicator } from '@helpwave/hightide/components/ProgressIndicator'
 import { LockIcon } from 'lucide-react'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Avatar } from '@helpwave/common/components/Avatar'
+import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { Avatar } from '@helpwave/hightide/components/Avatar'
 import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
 import { useUserQuery } from '@helpwave/api-services/mutations/users/user_mutations'
 

@@ -27,7 +27,7 @@ const defaultStartSectionTranslation: Record<Languages, StartSectionTranslation>
 const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSectionTranslation>) => {
   const translation = useTranslation(defaultStartSectionTranslation, overwriteTranslation)
 
-  const demoURL = 'https://staging-tasks.helpwave.de'
+  const demoURL = 'https://tasks.helpwave.de'
   const screenshotURL = 'https://cdn.helpwave.de/products/helpwave_tasks_ui_elements.png'
 
   return (
@@ -45,12 +45,12 @@ const StartSection = ({ overwriteTranslation }: PropsForTranslation<StartSection
       <div className="col gap-y-4">
         <Link href={demoURL} target="_blank">
           <Chip className="row w-fit items-center" color="default">
-            <Helpwave size={24} className="min-w-[24px] min-h-[24px]"/>
+            <Helpwave size={24} className="min-w-[24px] min-h-[24px]" />
             <span className="font-bold">helpwave tasks</span>
           </Chip>
         </Link>
         <h1 className="textstyle-title-2xl">{translation.title}</h1>
-        <MarkdownInterpreter text={translation.text} className="text-xl font-medium"/>
+        <MarkdownInterpreter text={translation.text} className="text-xl font-medium" />
       </div>
     </SectionBase>
   )

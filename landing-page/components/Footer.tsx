@@ -12,7 +12,7 @@ import type { ThemeType, ThemeTypeTranslation } from '@helpwave/hightide/hooks/u
 import { defaultThemeTypeTranslation } from '@helpwave/hightide/hooks/useTheme'
 import { useTheme } from '@helpwave/hightide/hooks/useTheme'
 
-type Categories = 'socials'| 'general'| 'products'| 'development'
+type Categories = 'socials' | 'general' | 'products' | 'development'
 type FooterTranslation = { [key in Categories]: string } & ThemeTypeTranslation
 
 const defaultFooterTranslation: Record<Languages, FooterTranslation> = {
@@ -51,7 +51,7 @@ const linkGroups: Record<Categories, LinkType[]> = {
     { name: 'web', link: 'https://github.com/helpwave/web' },
     { name: 'mobile-app', link: 'https://github.com/helpwave/mobile-app' },
     { name: 'services', link: 'https://github.com/helpwave/services' },
-    { name: 'helpwave tasks (staging)', link: 'https://staging-tasks.helpwave.de' },
+    { name: 'helpwave tasks', link: 'https://tasks.helpwave.de' },
   ],
   general: [
     { name: 'Support', link: 'https://support.helpwave.de' },
@@ -99,7 +99,7 @@ const Footer = () => {
         {grouping.map((groups, index) => (
           <div key={index} className="col max-tablet:w-full w-[192px] max-tablet:text-center max-tablet:items-center">
             {groups.map((category) => (
-              <FooterLinkGroup key={category} title={translation[category] } links={linkGroups[category]} />
+              <FooterLinkGroup key={category} title={translation[category]} links={linkGroups[category]} />
             ))}
             {index === 2 && (
               <>
@@ -126,7 +126,7 @@ const Footer = () => {
       </div>
       <div
         className="row w-full h-[128px] items-center justify-center mx-auto font-space">
-        <Helpwave color="white" size={128}/>
+        <Helpwave color="white" size={128} />
         <span className="textstyle-title-normal">&copy; {year} helpwave</span>
       </div>
     </div>

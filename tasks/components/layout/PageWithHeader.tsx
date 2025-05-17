@@ -33,7 +33,7 @@ export const PageWithHeader = ({
   const userMenu = <UserMenu />
 
   return (
-    <div className="w-screen h-screen col">
+    <div className="col w-screen h-screen">
       <Header
         title={title}
         withIcon={withIcon}

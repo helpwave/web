@@ -59,7 +59,7 @@ export const UserMenu = ({
   const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
 
   return (
-    <div className="relative z-10">
+    <div className="row relative z-10">
       <LanguageModal
         id="userMenu-LanguageModal"
         onDone={() => setLanguageModalOpen(false)}
@@ -69,7 +69,7 @@ export const UserMenu = ({
       />
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick}
-             className="gap-2 relative items-center group cursor-pointer select-none">
+             className="row relative items-center group cursor-pointer select-none">
           {/* TODO set this color in the css config */}
           <div className="text-sm font-semibold text-gray-700 group-hover:text-primary">{user.name}</div>
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>

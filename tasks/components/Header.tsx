@@ -24,11 +24,11 @@ export type HeaderProps = {
  */
 const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: HeaderProps) => {
   return (
-    <div className="h-16 py-4 relative items-center justify-between border-b border-slate-900/10">
-      <div className="gap-4 w-full justify-between mx-4">
-        <div className="w-full relative items-center align-center">
+    <div className="row h-16 py-4 relative items-center justify-between border-b border-slate-900/10">
+      <div className="row gap-4 w-full justify-between mx-4">
+        <div className="row w-full relative items-center align-center">
           {withIcon && (
-            <div className="relative gap-2 align-center">
+            <div className="row relative align-center">
               <Link href="/">
                 <Helpwave size={52} />
               </Link>
@@ -42,7 +42,7 @@ const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: Heade
             </div>
           ))}
         </div>
-        <div className="w-full items-center justify-end">
+        <div className="row w-full items-center justify-end">
           {rightSide?.filter(value => value !== undefined).map((value, index) => (
             <div key={'rightAction' + index} className="row items-center">
               {value}

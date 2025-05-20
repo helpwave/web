@@ -9,10 +9,10 @@ import { useCallback, useRef, useState } from 'react'
 import { InvoiceAPI } from '@/api/services/invoice'
 import { useAuth } from '@/hooks/useAuth'
 import { STRIPE_PUBLISHABLE_KEY } from '@/api/config'
-import type { Translation } from '@helpwave/hightide/hooks/useTranslation'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { useLanguage } from '@helpwave/hightide/hooks/useLanguage'
-import { SolidButton } from '@helpwave/hightide/components/Button'
+import type { Translation } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
+import { useLanguage } from '@helpwave/hightide'
+import { SolidButton } from '@helpwave/hightide'
 
 type EmbeddedCheckoutButtonTranslation = {
   cancel: string,

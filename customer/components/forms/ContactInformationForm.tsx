@@ -1,9 +1,9 @@
 import type { CustomerCreate } from '@/api/dataclasses/customer'
-import type { Translation } from '@helpwave/hightide/hooks/useTranslation'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Translation } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
 import clsx from 'clsx'
-import { SolidButton } from '@helpwave/hightide/components/Button'
-import { FormInput } from '@helpwave/hightide/components/user-input/Input'
+import { SolidButton } from '@helpwave/hightide'
+import { FormInput } from '@helpwave/hightide'
 import { useForm } from 'react-hook-form'
 
 type ContactInformationTranslation = {

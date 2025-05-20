@@ -1,8 +1,8 @@
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import type { PropsForTranslation } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
 import { useContractsForProductsQuery } from '@/api/mutations/contract_mutations'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
 

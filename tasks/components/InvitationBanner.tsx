@@ -1,7 +1,7 @@
 import { Mail } from 'lucide-react'
 
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import Link from 'next/link'
 import { useInvitationsByUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { InvitationState } from '@helpwave/api-services/types/users/invitations'

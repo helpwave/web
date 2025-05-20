@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { SolidButton, TextButton } from '@helpwave/hightide/components/Button'
-import { Input } from '@helpwave/hightide/components/user-input/Input'
-import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/hightide/util/simpleSearch'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
-import { HideableContentSection } from '@helpwave/hightide/components/HideableContentSection'
-import { ConfirmDialog } from '@helpwave/hightide/components/modals/ConfirmDialog'
-import { Chip } from '@helpwave/hightide/components/ChipList'
+import type { Languages } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import { SolidButton, TextButton } from '@helpwave/hightide'
+import { Input } from '@helpwave/hightide'
+import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/hightide'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import { HideableContentSection } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
+import { Chip } from '@helpwave/hightide'
 import {
   usePatientDischargeMutation,
   usePatientListQuery,

@@ -1,5 +1,5 @@
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
 import Image from 'next/image'
 import { SectionBase } from '@/components/sections/SectionBase'
 import type { Partner } from '@/components/PartnerList'

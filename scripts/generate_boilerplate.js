@@ -50,8 +50,8 @@ filePath = path.resolve(dir, fileName)
 
 const imports = {
   standard: `import clsx from 'clsx'`,
-  translation: `import type { Languages } from '@helpwave/hightide/hooks/useLanguage'\n` +
-    `import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'`
+  translation: `import type { Languages } from '@helpwave/hightide'\n` +
+    `import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'`
 }
 const usedImports = imports['standard'] + (options.translate ? `\n${imports['translation']}` : '')
 

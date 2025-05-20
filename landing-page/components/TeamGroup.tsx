@@ -1,5 +1,5 @@
-import type { ProfileProps } from '@helpwave/hightide/components/Profile'
-import { Profile } from '@helpwave/hightide/components/Profile'
+import type { ProfileProps } from '@helpwave/hightide'
+import { Profile } from '@helpwave/hightide'
 
 export type TeamGroupProps = {
   name: string,

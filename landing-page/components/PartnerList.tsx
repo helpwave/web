@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Carousel } from '@helpwave/hightide/components/layout/Carousel'
+import { Carousel } from '@helpwave/hightide'
 
 export type Partner = {
   name: string,

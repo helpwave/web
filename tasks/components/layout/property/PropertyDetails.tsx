@@ -1,13 +1,13 @@
 
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import type { PropsForTranslation } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
-import { TextButton } from '@helpwave/hightide/components/Button'
-import { ConfirmDialog } from '@helpwave/hightide/components/modals/ConfirmDialog'
-import type { StepperInformation } from '@helpwave/hightide/components/StepperBar'
-import { StepperBar } from '@helpwave/hightide/components/StepperBar'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import { TextButton } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
+import type { StepperInformation } from '@helpwave/hightide'
+import { StepperBar } from '@helpwave/hightide'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import {
   usePropertyChangeSelectOptionMutation,
   usePropertyCreateMutation,
@@ -16,7 +16,7 @@ import {
 } from '@helpwave/api-services/mutations/properties/property_mutations'
 import type { Property, SelectData } from '@helpwave/api-services/types/properties/property'
 import { emptyProperty, emptySelectData } from '@helpwave/api-services/types/properties/property'
-import { range } from '@helpwave/hightide/util/array'
+import { range } from '@helpwave/hightide'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
 import { PropertyContext } from '@/pages/properties'

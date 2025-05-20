@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
 import StoryHeader from '@/components/sections/story/StoryHeader'
 import { Page } from '@/components/Page'
 import { StorySliderSection } from '@/components/sections/story/StoriesSliderSection'

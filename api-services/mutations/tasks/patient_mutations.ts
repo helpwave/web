@@ -12,7 +12,7 @@ import {
   UnassignBedRequest,
   UpdatePatientRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/patient_svc_pb'
-import { noop } from '@helpwave/hightide/util/noop'
+import { noop } from '@helpwave/hightide'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import type {

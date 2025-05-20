@@ -1,4 +1,4 @@
-import { useLanguage } from '@helpwave/hightide/hooks/useLanguage'
+import { useLanguage } from '@helpwave/hightide'
 import Image from 'next/image'
 import Link from 'next/link'
 

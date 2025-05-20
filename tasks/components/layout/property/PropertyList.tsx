@@ -1,13 +1,13 @@
 
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { Tile } from '@helpwave/hightide/components/layout/Tile'
+import type { Languages } from '@helpwave/hightide'
+import type { PropsForTranslation } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
+import { Tile } from '@helpwave/hightide'
 import { Plus, Tag } from 'lucide-react'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
-import { Menu, MenuItem } from '@helpwave/hightide/components/user-input/Menu'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import { Menu, MenuItem } from '@helpwave/hightide'
 import { useEffect, useState } from 'react'
-import { SearchableList } from '@helpwave/hightide/components/SearchableList'
+import { SearchableList } from '@helpwave/hightide'
 import type { SubjectType } from '@helpwave/api-services/types/properties/property'
 import {
   useAttachPropertyMutation,

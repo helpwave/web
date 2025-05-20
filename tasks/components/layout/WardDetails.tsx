@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { SolidButton, TextButton } from '@helpwave/hightide/components/Button'
-import { ConfirmDialog } from '@helpwave/hightide/components/modals/ConfirmDialog'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { SolidButton, TextButton } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import {
   useWardCreateMutation,
   useWardDeleteMutation,

@@ -26,10 +26,10 @@ import { z } from 'zod'
 
 const configSchema = z.object({
   NODE_ENV: z.literal('production').or(z.literal('development')).default('production'),
-  NEXT_PUBLIC_API_URL: z.string().url().default('https://api.helpwave.de'),
+  NEXT_PUBLIC_API_URL: z.string().url().default('https://services.helpwave.de'),
   NEXT_PUBLIC_OFFLINE_API: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_REQUEST_LOGGING: z.literal('true').or(z.literal('false')).optional(),
-  NEXT_PUBLIC_OAUTH_ISSUER_URL: z.string().url().default('https://auth.helpwave.de'),
+  NEXT_PUBLIC_OAUTH_ISSUER_URL: z.string().url().default('https://id.helpwave.de'),
   NEXT_PUBLIC_OAUTH_REDIRECT_URI: z.string().url().default('https://tasks.helpwave.de/auth/callback'),
   NEXT_PUBLIC_OAUTH_CLIENT_ID: z.string().default('425f8b8d-c786-4ff7-b2bf-e52f505fb588'),
   NEXT_PUBLIC_OAUTH_SCOPES: z.string().default('openid,offline_access,email,nickname,name,organizations'),

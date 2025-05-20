@@ -12,7 +12,7 @@ import { ProvideAuth } from '@helpwave/api-services/authentication/useAuth'
 import { ProvideUpdates } from '@helpwave/api-services/util/useUpdates'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
-import '@helpwave/hightide/globals.css'
+import '../globals.css'
 
 const inter = Inter({
   subsets: ['latin'],

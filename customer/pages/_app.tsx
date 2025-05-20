@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { modalRootName } from '@helpwave/hightide'
 import { ModalRegister } from '@helpwave/hightide'
 import titleWrapper from '@/utils/titleWrapper'
-import '@helpwave/hightide/globals.css'
+import '../globals.css'
 
 const inter = Inter({
   subsets: ['latin'],

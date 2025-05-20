@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
-import type { PropsForTranslation, Languages } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
+import type { PropsForTranslation, Languages } from '@helpwave/hightide'
 import MarketStatsSection from '../components/sections/landing/MarketStatsSection'
 import PartnerSection from '../components/sections/landing/Partners'
 import StartSection from '../components/sections/landing/StartSection'

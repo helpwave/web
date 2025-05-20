@@ -5,7 +5,7 @@ import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { SolidButton } from '@helpwave/hightide'
 import { Textarea } from '@helpwave/hightide'
 import { ToggleableInput } from '@helpwave/hightide'
-import useSaveDelay from '@helpwave/hightide'
+import { useSaveDelay } from '@helpwave/hightide'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import {

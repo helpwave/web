@@ -1,7 +1,7 @@
 import clsx from 'clsx'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Plus } from 'lucide-react'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import type { Languages } from '@helpwave/hightide'
 import { DragCard, type DragCardProps } from './DragCard'
 
 type BedCardTranslation = {

@@ -2,8 +2,8 @@ import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
-import { type PropsForTranslation, useTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import {

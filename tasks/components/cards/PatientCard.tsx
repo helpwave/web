@@ -1,6 +1,6 @@
 
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import { DragCard, type DragCardProps } from './DragCard'
 

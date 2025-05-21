@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { noop } from '@helpwave/hightide/util/noop'
+import { noop } from '@helpwave/hightide'
 import {
   CreatePropertyRequest,
   GetPropertiesRequest,

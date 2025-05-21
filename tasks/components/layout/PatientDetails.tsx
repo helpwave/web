@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { SolidButton } from '@helpwave/hightide/components/Button'
-import { Textarea } from '@helpwave/hightide/components/user-input/Textarea'
-import { ToggleableInput } from '@helpwave/hightide/components/user-input/ToggleableInput'
-import useSaveDelay from '@helpwave/hightide/hooks/useSaveDelay'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { SolidButton } from '@helpwave/hightide'
+import { Textarea } from '@helpwave/hightide'
+import { ToggleableInput } from '@helpwave/hightide'
+import { useSaveDelay } from '@helpwave/hightide'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import {
   useAssignBedMutation,

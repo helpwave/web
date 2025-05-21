@@ -1,13 +1,13 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { withOrganization } from '@/hooks/useOrganization'
 import { withAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { LoadingAnimation } from '@helpwave/hightide/components/LoadingAnimation'
+import { LoadingAnimation } from '@helpwave/hightide'
 
 type DashboardTranslation = {
   dashboard: string,

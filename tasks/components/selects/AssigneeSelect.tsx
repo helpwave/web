@@ -1,7 +1,7 @@
-import type { SelectProps } from '@helpwave/hightide/components/user-input/Select'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import type { SelectProps } from '@helpwave/hightide'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import clsx from 'clsx'
-import { SearchableSelect } from '@helpwave/hightide/components/user-input/SearchableSelect'
+import { SearchableSelect } from '@helpwave/hightide'
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 
 export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {

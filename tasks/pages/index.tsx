@@ -2,11 +2,17 @@ import { useEffect, useState } from 'react'
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import useLocalStorage from '@helpwave/hightide/hooks/useLocalStorage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
-import { localizedNewsSchema, type LocalizedNews } from '@helpwave/hightide/util/news'
+import type {
+  Languages,
+  LocalizedNews,
+  PropsForTranslation
+} from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  localizedNewsSchema,
+  useLocalStorage,
+  useTranslation
+} from '@helpwave/hightide'
 import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -42,7 +48,10 @@ export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = 
   return { props: { jsonFeed: json } }
 }
 
-const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, overwriteTranslation }) => {
+const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({
+                                                                                                    jsonFeed,
+                                                                                                    overwriteTranslation
+                                                                                                  }) => {
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
   const { user } = useAuth()
   const { data: organizations, isLoading } = useOrganizationsForUserQuery()
@@ -87,7 +96,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
                 <DashboardDisplay
                   width={width}
                 />
-            )
+              )
             )}
             right={width => (
               <NewsFeed

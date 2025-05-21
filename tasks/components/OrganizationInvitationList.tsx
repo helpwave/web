@@ -1,12 +1,12 @@
 import { useContext, useState } from 'react'
 
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { defaultTableStatePagination, Table, type TableState } from '@helpwave/hightide/components/Table'
-import { SolidButton, TextButton } from '@helpwave/hightide/components/Button'
-import { InputModal } from '@helpwave/hightide/components/modals/InputModal'
-import { validateEmail } from '@helpwave/hightide/util/emailValidation'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { defaultTableStatePagination, Table, type TableState } from '@helpwave/hightide'
+import { SolidButton, TextButton } from '@helpwave/hightide'
+import { InputModal } from '@helpwave/hightide'
+import { validateEmail } from '@helpwave/hightide'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import {
   useInvitationsByOrganizationQuery,
   useInviteMemberMutation, useInviteRevokeMutation

@@ -1,8 +1,8 @@
-import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
+import type { PropsForTranslation } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
+import type { Languages } from '@helpwave/hightide'
 import Image from 'next/image'
-import { MarkdownInterpreter } from '@helpwave/hightide/components/MarkdownInterpreter'
+import { MarkdownInterpreter } from '@helpwave/hightide'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type LandingPageTranslation = {

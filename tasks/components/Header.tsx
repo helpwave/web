@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 
-import { Helpwave } from '@helpwave/hightide/components/icons/Helpwave'
+import { Helpwave } from '@helpwave/hightide'
 
 export type HeaderProps = {
   title?: string,

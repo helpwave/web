@@ -6,7 +6,10 @@ const nextConfig = {
   output: 'standalone',
   images: {
     dangerouslyAllowSVG: true,
-    domains: ['cdn.helpwave.de', 'helpwave.de'],
+    remotePatterns: [
+      new URL('https://cdn.helpwave.de/**'),
+      new URL('https://helpwave.de/**'),
+    ],
   },
 }
 

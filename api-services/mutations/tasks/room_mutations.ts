@@ -6,7 +6,7 @@ import {
   GetRoomRequest,
   UpdateRoomRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/room_svc_pb'
-import { noop } from '@helpwave/hightide/util/noop'
+import { noop } from '@helpwave/hightide'
 import type { RoomDTO, RoomMinimalDTO, RoomOverviewDTO } from '../../types/tasks/room'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'

@@ -1,7 +1,7 @@
 import { Popcorn } from 'lucide-react'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import type { PropsForTranslation } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
 import { SectionBase } from '@/components/sections/SectionBase'
 
 type StoryStartSectionTranslation = {

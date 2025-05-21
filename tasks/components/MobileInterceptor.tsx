@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
 
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { Helpwave } from '@helpwave/hightide/components/icons/Helpwave'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { Helpwave } from '@helpwave/hightide'
 import { getConfig } from '@/utils/config'
 
 type MobileInterceptorTranslation = {

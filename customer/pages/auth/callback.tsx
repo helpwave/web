@@ -1,8 +1,8 @@
 'use client'
 
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import { handleCallback } from '@/api/auth/authService'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { Section } from '@/components/layout/Section'
-import { SolidButton } from '@helpwave/hightide/components/Button'
+import { SolidButton } from '@helpwave/hightide'
 
 type AuthCallbackTranslation = {
   callback: string,

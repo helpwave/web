@@ -1,8 +1,8 @@
 
 import { Mail } from 'lucide-react'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { AvatarGroup } from '@helpwave/hightide/components/AvatarGroup'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { AvatarGroup } from '@helpwave/hightide'
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 import { EditCard, type EditCardProps } from './EditCard'
 

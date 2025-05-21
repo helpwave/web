@@ -17,28 +17,35 @@ type PageWithHeaderProps = Partial<HeaderProps> & {
  * The page content will be passed as the children
  */
 export const PageWithHeader = ({
-  children,
-  title,
-  withIcon = true,
-  leftSide,
-  rightSide,
-  crumbs
-}: PropsWithChildren<PageWithHeaderProps>) => {
+                                 children,
+                                 title,
+                                 withIcon = true,
+                                 leftSide,
+                                 rightSide,
+                                 crumbs
+                               }: PropsWithChildren<PageWithHeaderProps>) => {
   const { user, redirectUserToOrganizationSelection } = useAuth()
 
   if (!user) return null
-
-  const feedbackButton = <FeedbackButton/>
-  const organization = <button onClick={() => redirectUserToOrganizationSelection()}>{user?.organization?.name}</button>
-  const userMenu = <UserMenu />
 
   return (
     <div className="col w-screen h-screen">
       <Header
         title={title}
         withIcon={withIcon}
-        leftSide={[(crumbs ? <BreadCrumb crumbs={crumbs}/> : undefined), ...(leftSide ?? [])]}
-        rightSide={[...(rightSide ?? []), feedbackButton, organization, userMenu]}
+        leftSide={[(crumbs ?
+          <BreadCrumb crumbs={crumbs} containerClassName="max-tablet:hidden"/> : undefined), ...(leftSide ?? [])]}
+        leftSideClassName="max-tablet:hidden"
+        rightSide={[
+          ...(rightSide ?? []),
+          (<FeedbackButton key="feedback"/>),
+          (
+            <button key="organization" onClick={() => redirectUserToOrganizationSelection()}>
+              {user?.organization?.name}
+            </button>
+          ),
+          (<UserMenu key="usermenu"/>),
+        ]}
       />
       {children}
     </div>

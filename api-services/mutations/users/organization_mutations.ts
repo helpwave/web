@@ -209,7 +209,7 @@ export const useOrganizationDeleteMutation = () => {
       req.setId(organizationId)
       const res = await APIServices.organization.deleteOrganization(req, getAuthenticatedGrpcMetadata())
 
-      const obj = res.toObject() // TODO: what is the type of this?
+      const obj = res.toObject()
 
       if (!obj) {
         throw new Error('error in OrganizationDelete')
@@ -231,7 +231,7 @@ export const useInviteDeclineMutation = () => {
       req.setInvitationId(inviteId)
       const res = await APIServices.organization.declineInvitation(req, getAuthenticatedGrpcMetadata())
 
-      const obj = res.toObject() // TODO: what is the type of this?
+      const obj = res.toObject()
 
       if (!obj) {
         throw new Error('error in InviteDecline')
@@ -253,7 +253,7 @@ export const useInviteRevokeMutation = () => {
       req.setInvitationId(inviteId)
       const res = await APIServices.organization.revokeInvitation(req, getAuthenticatedGrpcMetadata())
 
-      const obj = res.toObject() // TODO: what is the type of this?
+      const obj = res.toObject()
 
       if (!obj) {
         throw new Error('error in InviteDecline')
@@ -328,7 +328,7 @@ export const useRemoveMemberMutation = (organizationId: string) => {
       req.setUserId(userId)
 
       const res = await APIServices.organization.removeMember(req, getAuthenticatedGrpcMetadata())
-      const obj = res.toObject() // TODO: what is the type of this?
+      const obj = res.toObject()
 
       if (!obj) {
         throw new Error('DeclineInvitation failed')

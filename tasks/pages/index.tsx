@@ -45,20 +45,22 @@ export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = 
 const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, overwriteTranslation }) => {
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
   const { user } = useAuth()
-  const { data: organizations, isLoading } = useOrganizationsForUserQuery()
+  const { data: organizations, isLoading, isError } = useOrganizationsForUserQuery()
 
-  const [isStagingDiclaimerOpen, setStagingDiclaimerOpen] = useState(false)
+  console.log(organizations)
+
+  const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
   const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
 
   const dismissStagingDisclaimer = () => {
     setLastTimeStagingDisclaimerDismissed(new Date().getTime())
-    setStagingDiclaimerOpen(false)
+    setStagingDisclaimerOpen(false)
   }
 
   useEffect(() => {
     const ONE_DAY = 1000 * 60 * 60 * 24
     if (config.showStagingDisclaimerModal && new Date().getTime() - lastTimeStagingDisclaimerDismissed > ONE_DAY) {
-      setStagingDiclaimerOpen(true)
+      setStagingDisclaimerOpen(true)
     }
   }, [lastTimeStagingDisclaimerDismissed])
 
@@ -73,11 +75,12 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
       <StagingDisclaimerModal
         id="main-staging-disclaimer-modal"
         onConfirm={dismissStagingDisclaimer}
-        isOpen={isStagingDiclaimerOpen}
+        isOpen={isStagingDisclaimerOpen}
       />
 
       <LoadingAndErrorComponent
         isLoading={isLoading || !user || !organizations}
+        hasError={isError}
         loadingProps={{ classname: '!h-full' }}
       >
         {organizations && (

@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
-import { ProvideLanguage } from '@helpwave/hightide/hooks/useLanguage'
+import { ProvideLanguage } from '@helpwave/hightide'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { modalRootName } from '@helpwave/hightide/components/modals/Modal'
-import { ModalRegister } from '@helpwave/hightide/components/modals/ModalRegister'
+import { modalRootName } from '@helpwave/hightide'
+import { ModalRegister } from '@helpwave/hightide'
 import titleWrapper from '@/utils/titleWrapper'
-import '@helpwave/hightide/globals.css'
+import '../globals.css'
 
 const inter = Inter({
   subsets: ['latin'],

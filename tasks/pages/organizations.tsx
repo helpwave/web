@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { OrganizationDisplay } from '@/components/layout/OrganizationDisplay'
 import { OrganizationDetail } from '@/components/layout/OrganizationDetails'

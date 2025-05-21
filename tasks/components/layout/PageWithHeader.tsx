@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 
-import type { Crumb } from '@helpwave/hightide/components/BreadCrumb'
-import { BreadCrumb } from '@helpwave/hightide/components/BreadCrumb'
+import type { Crumb } from '@helpwave/hightide'
+import { BreadCrumb } from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { UserMenu } from '@/components/UserMenu'
 import { Header, type HeaderProps } from '@/components/Header'

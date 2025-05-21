@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import {
   useCreateMutation,

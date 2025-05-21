@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { Input } from '@helpwave/hightide/components/user-input/Input'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { Input } from '@helpwave/hightide'
 
 type WardFormTranslation = {
   general: string,

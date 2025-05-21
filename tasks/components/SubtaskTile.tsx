@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 
-import { ToggleableInput } from '@helpwave/hightide/components/user-input/ToggleableInput'
-import { Checkbox } from '@helpwave/hightide/components/user-input/Checkbox'
-import { TextButton } from '@helpwave/hightide/components/Button'
+import { ToggleableInput } from '@helpwave/hightide'
+import { Checkbox } from '@helpwave/hightide'
+import { TextButton } from '@helpwave/hightide'
 import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 
 type SubtaskTileTranslation = {

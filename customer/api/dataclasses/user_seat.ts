@@ -1,4 +1,4 @@
-import type { Translation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Translation } from '@helpwave/hightide'
 
 export const userRoles = ['admin' , 'user'] as const
 

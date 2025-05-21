@@ -1,7 +1,7 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { Chip } from '@helpwave/hightide/components/ChipList'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { Chip } from '@helpwave/hightide'
 import { EditCard, type EditCardProps } from './EditCard'
 
 type TaskTemplateCardTranslation = {

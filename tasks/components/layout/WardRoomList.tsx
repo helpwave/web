@@ -1,9 +1,9 @@
 import { useContext, useEffect } from 'react'
 
-import { LoadingAndErrorComponent } from '@helpwave/hightide/components/LoadingAndErrorComponent'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
-import { SolidButton } from '@helpwave/hightide/components/Button'
+import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { SolidButton } from '@helpwave/hightide'
 import Link from 'next/link'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'

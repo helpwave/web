@@ -18,7 +18,7 @@ import {
   RevokeInvitationRequest,
   UpdateOrganizationRequest
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
-import { noop } from '@helpwave/hightide/util/noop'
+import { noop } from '@helpwave/hightide'
 import { QueryKeys } from '../query_keys'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata, grpcWrapper } from '../../authentication/grpc_metadata'

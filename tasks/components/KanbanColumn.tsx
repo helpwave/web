@@ -1,6 +1,6 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Plus } from 'lucide-react'

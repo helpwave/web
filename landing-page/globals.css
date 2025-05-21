@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '@helpwave/hightide/globals.css';
+@import '@helpwave/hightide/css/uncompiled/globals.css';
 
 @source "./node_modules/@helpwave/hightide";
 

@@ -1,9 +1,9 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide/hooks/useLanguage'
-import { useTranslation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Languages } from '@helpwave/hightide'
+import { useTranslation } from '@helpwave/hightide'
 import { useProductsAvailableQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
-import { LoadingAnimation } from '@helpwave/hightide/components/LoadingAnimation'
+import { LoadingAnimation } from '@helpwave/hightide'
 import type {
   Product,
   ProductPlanTranslation
@@ -19,11 +19,11 @@ import { useCart } from '@/hooks/useCart'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
 import { useRouter } from 'next/router'
-import { Modal } from '@helpwave/hightide/components/modals/Modal'
+import { Modal } from '@helpwave/hightide'
 import { useState } from 'react'
 import { ContractList } from '@/components/ContractList'
 import { defaultLocaleFormatters } from '@/utils/locale'
-import { SolidButton, TextButton } from '@helpwave/hightide/components/Button'
+import { SolidButton, TextButton } from '@helpwave/hightide'
 
 type ProductsTranslation = {
   bookProduct: string,

@@ -1,4 +1,4 @@
-import type { Translation } from '@helpwave/hightide/hooks/useTranslation'
+import type { Translation } from '@helpwave/hightide'
 
 export type LocaleFormattingTranslation = {
   formatMoney: (amount: number, currency?: string) => string,

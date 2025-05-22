@@ -2,8 +2,8 @@ import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { z } from 'zod'
 import keycloakInstance, { KeycloakService } from '../util/keycloak'
-import { createPersonalOrganization } from '../mutations/users/organization_mutations'
 import { getAPIServiceConfig } from '../config/config'
+import { OrganizationService } from '../service/users/OrganizationService'
 
 const IdTokenClaimsSchema = z.object({
   sub: z.string().uuid(),
@@ -27,10 +27,6 @@ export const fakeToken = IdTokenClaimsSchema.default({
   preferred_username: 'max.mustermann',
   given_name: 'Max',
   family_name: 'Mustermann',
-  organization: {
-    id: '3b25c6f5-4705-4074-9fc6-a50c28eba406',
-    name: 'helpwave fake'
-  }
 })
 
 const config = getAPIServiceConfig()
@@ -120,7 +116,7 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (config.fakeTokenEnable) {
-      const user = tokenToUser(config.fakeToken)
+      const user: User | null = tokenToUser(config.fakeToken)
       if (!user) throw new Error('Invalid fake token')
       didInit.current = true
       setUser(user)
@@ -147,7 +143,7 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
 
       if (!user?.organization?.id) {
         console.info('after init keycloak, no organization found, creating personal')
-        createPersonalOrganization()
+        OrganizationService.createPersonal()
           .then(() => {
             keycloakInstance?.updateToken(-1)
               .then(() => {

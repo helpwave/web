@@ -56,7 +56,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   const { user } = useAuth()
   const { data: organizations, isLoading, isError } = useOrganizationsForUserQuery()
 
-  console.log(organizations)
+  console.log(isLoading, isError)
 
   const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
   const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
@@ -88,7 +88,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
       />
 
       <LoadingAndErrorComponent
-        isLoading={isLoading || !user || !organizations}
+        isLoading={isLoading}
         hasError={isError}
         loadingProps={{ classname: '!h-full' }}
       >

@@ -9,7 +9,6 @@ The official helpwave web frontends.
 ## [Projects](./documentation/structure.md) 
 This repository is split up into multiple subprojects using [pnpm](https://pnpm.io) workspaces.
 - helpwave tasks (see [tasks](/tasks))
-- landing page of helpwave (see [landing-page](/landing-page))
 
 ## Getting Started
 
@@ -25,7 +24,7 @@ pnpm install
 
 ### Usage
 ```shell
-cd tasks # or any other page like e.g. landing-page
+cd tasks
 pnpm run dev
 ```
 

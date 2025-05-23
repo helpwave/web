@@ -16,14 +16,18 @@ const defaultFeedbackButtonTranslation: Record<Languages, FeedbackButtonTranslat
   }
 }
 
-export const FeedbackButton = ({ overwriteTranslation }: PropsForTranslation<FeedbackButtonTranslation>) => {
+type FeedbackButtonProps = {
+  className?: string,
+}
+
+export const FeedbackButton = ({ overwriteTranslation, className }: PropsForTranslation<FeedbackButtonTranslation, FeedbackButtonProps>) => {
   const config = getConfig()
   const translation = useTranslation(defaultFeedbackButtonTranslation, overwriteTranslation)
 
   const onClick = () => window.open(config.feedbackFormUrl, '_blank')
 
   return (
-    <SolidButton color="primary" onClick={onClick}>
+    <SolidButton color="primary" onClick={onClick} className={className}>
       {translation.text}
     </SolidButton>
   )

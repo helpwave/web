@@ -8,6 +8,7 @@ import type { Languages } from '@helpwave/hightide'
 import { Avatar } from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { getAPIServiceConfig } from '@helpwave/api-services/config/config'
+import clsx from 'clsx'
 
 const config = getAPIServiceConfig()
 
@@ -42,12 +43,17 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
   }
 }
 
+type UserMenuProps = {
+  className?: string,
+}
+
 /**
  * A component showing a menu for user actions. For example editing the profile, language and logout.
  */
 export const UserMenu = ({
                            overwriteTranslation,
-                         }: PropsForTranslation<UserMenuTranslation>) => {
+                           className,
+                         }: PropsForTranslation<UserMenuTranslation, UserMenuProps>) => {
   const translation = useTranslation(defaultUserMenuTranslations, overwriteTranslation)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const { user, signOut } = useAuth()
@@ -59,7 +65,7 @@ export const UserMenu = ({
   const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
 
   return (
-    <div className="row relative z-10">
+    <div className={clsx('row relative z-10', className)}>
       <LanguageModal
         id="userMenu-LanguageModal"
         onDone={() => setLanguageModalOpen(false)}

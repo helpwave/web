@@ -19,16 +19,6 @@ const IdTokenClaimsSchema = z.object({
   }).optional()
 })
 
-export const fakeToken = IdTokenClaimsSchema.default({
-  sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984',
-  email: 'max.mustermann@helpwave.de',
-  email_verified: true,
-  name: 'Max Mustermann',
-  preferred_username: 'max.mustermann',
-  given_name: 'Max',
-  family_name: 'Mustermann',
-})
-
 const config = getAPIServiceConfig()
 
 const UserFromIdTokenClaims = IdTokenClaimsSchema.transform((obj) => ({
@@ -59,7 +49,7 @@ const tokenToUser = (token: string): User | null => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  if (Object.keys(decoded?.organization).length === 0) delete decoded.organization
+  if (decoded.organization && Object.keys(decoded.organization).length === 0) delete decoded.organization
 
   const parsed = UserFromIdTokenClaims.safeParse(decoded)
   return parsed.success ? parsed.data : null
@@ -67,7 +57,7 @@ const tokenToUser = (token: string): User | null => {
 
 type AuthContextValue = {
   user?: User,
-  setUser?: Dispatch<SetStateAction<User|undefined>>,
+  setUser?: Dispatch<SetStateAction<User | undefined>>,
   token?: string,
   organization?: {
     id: string,
@@ -83,8 +73,10 @@ const defaultAuthContextValue: AuthContextValue = {
   token: undefined,
   organization: undefined,
   organizations: [],
-  signOut: () => {},
-  redirectUserToOrganizationSelection: () => {}
+  signOut: () => {
+  },
+  redirectUserToOrganizationSelection: () => {
+  }
 }
 
 const AuthContext = createContext<AuthContextValue>(defaultAuthContextValue)
@@ -118,9 +110,47 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
     if (config.fakeTokenEnable) {
       const user: User | null = tokenToUser(config.fakeToken)
       if (!user) throw new Error('Invalid fake token')
-      didInit.current = true
-      setUser(user)
-      setToken(config.fakeToken)
+      try {
+        OrganizationService.getForUser().then(organizations => {
+          console.log(`Found ${organizations.length} organizations for fake token user`)
+          if (organizations.length > 0) {
+            const organization = organizations[0]!
+            console.log(`Using ${organization.longName} for user.`, organization)
+            setUser(() => ({
+              ...user,
+              organization: {
+                id: organization.id,
+                name: organization.longName,
+              }
+            }))
+            setToken(config.fakeToken)
+            didInit.current = true
+          } else {
+            console.log('Creating a new organization')
+            OrganizationService.create({
+              id: '',
+              email: 'test@helpwave.de',
+              longName: 'Test Organization',
+              shortName: 'Test-Org',
+              avatarURL: 'https://helpwave.de/favicon.ico',
+              isPersonal: false,
+              isVerified: false,
+            }).then(organization => {
+              setUser(() => ({
+                ...user,
+                organization: {
+                  id: organization.id,
+                  name: organization.longName,
+                }
+              }))
+              setToken(config.fakeToken)
+              didInit.current = true
+            })
+          }
+        })
+      } catch (e) {
+        console.error('Use auth with fake token failed', e)
+      }
       return
     }
 

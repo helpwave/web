@@ -14,7 +14,6 @@ import {
   useTranslation
 } from '@helpwave/hightide'
 import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
-import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { NewsFeed } from '@/components/layout/NewsFeed'
@@ -53,10 +52,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
                                                                                                     overwriteTranslation
                                                                                                   }) => {
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
-  const { user } = useAuth()
-  const { data: organizations, isLoading, isError } = useOrganizationsForUserQuery()
-
-  console.log(isLoading, isError)
+  const { isLoading, isError } = useOrganizationsForUserQuery()
 
   const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
   const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
@@ -92,24 +88,21 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
         hasError={isError}
         loadingProps={{ classname: '!h-full' }}
       >
-        {organizations && (
-          <TwoColumn
-            disableResize={false}
-            left={width => ((
-                <DashboardDisplay
-                  width={width}
-                />
-              )
-            )}
-            right={width => (
-              <NewsFeed
+        <TwoColumn
+          disableResize={false}
+          left={width => ((
+              <DashboardDisplay
                 width={width}
-                // TODO fix typing
-                localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
               />
-            )}
-          />
-        )}
+            )
+          )}
+          right={width => (
+            <NewsFeed
+              width={width}
+              localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
+            />
+          )}
+        />
       </LoadingAndErrorComponent>
     </PageWithHeader>
   )

@@ -9,7 +9,7 @@ import {
   GetOrganizationsForUserRequest, UpdateOrganizationRequest
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import { APIServices } from '../../services'
-import { getAuthenticatedGrpcMetadata, grpcWrapper } from '../../authentication/grpc_metadata'
+import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 
 export const OrganizationService = {
   create: async (organization: OrganizationMinimalDTO): Promise<OrganizationMinimalDTO> => {
@@ -24,7 +24,7 @@ export const OrganizationService = {
   },
   createPersonal: async (): Promise<string> => {
     const req = new CreatePersonalOrganizationRequest()
-    const res = await grpcWrapper(APIServices.organization.createPersonalOrganization, req)
+    const res = await APIServices.organization.createPersonalOrganization(req, getAuthenticatedGrpcMetadata())
     return res.getId()
   },
   delete: async (id: string): Promise<boolean> => {

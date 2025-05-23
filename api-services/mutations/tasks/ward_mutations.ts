@@ -18,7 +18,7 @@ export const useWardOverviewsQuery = (organisationId?: string) => {
     queryKey: [QueryKeys.wards, organisationId],
     queryFn: async () => {
       const req = new GetWardOverviewsRequest()
-      const res = await APIServices.ward.getWardOverviews(req, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.ward.getWardOverviews(req, getAuthenticatedGrpcMetadata())
 
       const wards: WardOverviewDTO[] = res.getWardsList().map((ward) => ({
         id: ward.getId(),
@@ -34,7 +34,7 @@ export const useWardOverviewsQuery = (organisationId?: string) => {
   })
 }
 
-export const useWardDetailsQuery = (wardId?: string, organizationId?: string) => {
+export const useWardDetailsQuery = (wardId?: string) => {
   return useQuery({
     queryKey: [QueryKeys.wards, wardId],
     enabled: !!wardId,
@@ -45,7 +45,7 @@ export const useWardDetailsQuery = (wardId?: string, organizationId?: string) =>
 
       const req = new GetWardDetailsRequest()
       req.setId(wardId)
-      const res = await APIServices.ward.getWardDetails(req, getAuthenticatedGrpcMetadata(organizationId))
+      const res = await APIServices.ward.getWardDetails(req, getAuthenticatedGrpcMetadata())
 
       return {
         id: res.getId(),
@@ -70,13 +70,13 @@ export const useWardDetailsQuery = (wardId?: string, organizationId?: string) =>
   })
 }
 
-export const useWardQuery = (id: string, organisationId?: string) => useQuery({
+export const useWardQuery = (id: string) => useQuery({
   queryKey: [QueryKeys.wards, id],
   enabled: !!id,
   queryFn: async (): Promise<WardMinimalDTO> => {
     const req = new GetWardRequest()
     req.setId(id)
-    const res = await APIServices.ward.getWard(req, getAuthenticatedGrpcMetadata(organisationId))
+    const res = await APIServices.ward.getWard(req, getAuthenticatedGrpcMetadata())
 
     if (!res.toObject()) {
       console.error('error in Ward query')
@@ -89,14 +89,14 @@ export const useWardQuery = (id: string, organisationId?: string) => useQuery({
   }
 })
 
-export const useWardUpdateMutation = (organisationId?: string, callback: (ward: WardMinimalDTO) => void = noop) => {
+export const useWardUpdateMutation = (callback: (ward: WardMinimalDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward: WardMinimalDTO) => {
       const req = new UpdateWardRequest()
       req.setId(ward.id)
       req.setName(ward.name)
-      await APIServices.ward.updateWard(req, getAuthenticatedGrpcMetadata(organisationId))
+      await APIServices.ward.updateWard(req, getAuthenticatedGrpcMetadata())
 
       callback(ward)
     },
@@ -106,13 +106,13 @@ export const useWardUpdateMutation = (organisationId?: string, callback: (ward: 
   })
 }
 
-export const useWardCreateMutation = (organisationId?: string, callback: (ward: WardMinimalDTO) => void = noop) => {
+export const useWardCreateMutation = (callback: (ward: WardMinimalDTO) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (ward: WardMinimalDTO) => {
       const createWardRequest = new CreateWardRequest()
       createWardRequest.setName(ward.name)
-      const res = await APIServices.ward.createWard(createWardRequest, getAuthenticatedGrpcMetadata(organisationId))
+      const res = await APIServices.ward.createWard(createWardRequest, getAuthenticatedGrpcMetadata())
       const newWard: WardMinimalDTO = {
         ...ward,
         id: res.getId()
@@ -126,13 +126,13 @@ export const useWardCreateMutation = (organisationId?: string, callback: (ward: 
   })
 }
 
-export const useWardDeleteMutation = (organisationId?: string, callback: () => void = noop) => {
+export const useWardDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (wardId: string) => {
       const req = new DeleteWardRequest()
       req.setId(wardId)
-      await APIServices.ward.deleteWard(req, getAuthenticatedGrpcMetadata(organisationId))
+      await APIServices.ward.deleteWard(req, getAuthenticatedGrpcMetadata())
 
       callback()
     },

@@ -11,6 +11,7 @@ import { ProvideUpdates } from '@helpwave/api-services/util/useUpdates'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
 import '../globals.css'
+import { InitializationChecker } from '@/components/layout/InitializationChecker'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -34,24 +35,26 @@ function MyApp({
       {!isMobile ? (
         <QueryClientProvider client={queryClient}>
           <ProvideAuth>
-            <ProvideUpdates>
-              <Head>
-                <title>{titleWrapper()}</title>
-                <style>{`
+            <InitializationChecker>
+              <ProvideUpdates>
+                <Head>
+                  <title>{titleWrapper()}</title>
+                  <style>{`
             :root {
               --font-inter: ${inter.style.fontFamily};
               --font-space: ${spaceGrotesk.style.fontFamily};
             }
             `}</style>
-              </Head>
+                </Head>
 
-              <ModalRegister>
-                <div className="font-sans" id={modalRootName}>
-                  <Component {...pageProps} />
-                </div>
-              </ModalRegister>
-              <ReactQueryDevtools position="bottom-left"/>
-            </ProvideUpdates>
+                <ModalRegister>
+                  <div className="font-sans" id={modalRootName}>
+                    <Component {...pageProps} />
+                  </div>
+                </ModalRegister>
+                <ReactQueryDevtools position="bottom-left"/>
+              </ProvideUpdates>
+            </InitializationChecker>
           </ProvideAuth>
         </QueryClientProvider>
       ) : (<MobileInterceptor {...pageProps} />)}

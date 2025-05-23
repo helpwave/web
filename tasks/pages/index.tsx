@@ -14,7 +14,6 @@ import {
   useTranslation
 } from '@helpwave/hightide'
 import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
-import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { NewsFeed } from '@/components/layout/NewsFeed'
@@ -53,21 +52,20 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
                                                                                                     overwriteTranslation
                                                                                                   }) => {
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
-  const { user } = useAuth()
-  const { data: organizations, isLoading } = useOrganizationsForUserQuery()
+  const { isLoading, isError } = useOrganizationsForUserQuery()
 
-  const [isStagingDiclaimerOpen, setStagingDiclaimerOpen] = useState(false)
+  const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
   const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
 
   const dismissStagingDisclaimer = () => {
     setLastTimeStagingDisclaimerDismissed(new Date().getTime())
-    setStagingDiclaimerOpen(false)
+    setStagingDisclaimerOpen(false)
   }
 
   useEffect(() => {
     const ONE_DAY = 1000 * 60 * 60 * 24
     if (config.showStagingDisclaimerModal && new Date().getTime() - lastTimeStagingDisclaimerDismissed > ONE_DAY) {
-      setStagingDiclaimerOpen(true)
+      setStagingDisclaimerOpen(true)
     }
   }, [lastTimeStagingDisclaimerDismissed])
 
@@ -82,31 +80,29 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
       <StagingDisclaimerModal
         id="main-staging-disclaimer-modal"
         onConfirm={dismissStagingDisclaimer}
-        isOpen={isStagingDiclaimerOpen}
+        isOpen={isStagingDisclaimerOpen}
       />
 
       <LoadingAndErrorComponent
-        isLoading={isLoading || !user || !organizations}
+        isLoading={isLoading}
+        hasError={isError}
         loadingProps={{ classname: '!h-full' }}
       >
-        {organizations && (
-          <TwoColumn
-            disableResize={false}
-            left={width => ((
-                <DashboardDisplay
-                  width={width}
-                />
-              )
-            )}
-            right={width => (
-              <NewsFeed
+        <TwoColumn
+          disableResize={false}
+          left={width => ((
+              <DashboardDisplay
                 width={width}
-                // TODO fix typing
-                localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
               />
-            )}
-          />
-        )}
+            )
+          )}
+          right={width => (
+            <NewsFeed
+              width={width}
+              localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
+            />
+          )}
+        />
       </LoadingAndErrorComponent>
     </PageWithHeader>
   )

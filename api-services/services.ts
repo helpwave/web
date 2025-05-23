@@ -17,17 +17,6 @@ import {
 } from '@helpwave/proto-ts/services/property_svc/v1/property_views_svc_grpc_web_pb'
 import { UpdatesServicePromiseClient } from '@helpwave/proto-ts/services/updates_svc/v1/updates_svc_grpc_web_pb'
 import { APIServiceUrls } from './config/wrapper'
-import { WardOfflineServicePromiseClient } from './offline/tasks/ward_service'
-import { RoomOfflineServicePromiseClient } from './offline/tasks/room_service'
-import { BedOfflineServicePromiseClient } from './offline/tasks/bed_service'
-import { PatientOfflineServicePromiseClient } from './offline/tasks/patient_service'
-import { TaskOfflineServicePromiseClient } from './offline/tasks/task_service'
-import { TaskTemplateOfflineServicePromiseClient } from './offline/tasks/task_template_service'
-import { PropertyOfflineServicePromiseClient } from './offline/properties/property_service'
-import { PropertyValueOfflineServicePromiseClient } from './offline/properties/property_value_service'
-import { getAPIServiceConfig } from './config/config'
-import { OrganizationOfflineServicePromiseClient } from './offline/users/organization_service'
-import { UserOfflineServicePromiseClient } from './offline/users/user_service'
 
 type APIServicesType = {
   organization: OrganizationServicePromiseClient,
@@ -44,21 +33,6 @@ type APIServicesType = {
   updates: UpdatesServicePromiseClient,
 }
 
-const offlineServices: APIServicesType = {
-  organization: new OrganizationOfflineServicePromiseClient(APIServiceUrls.users),
-  user: new UserOfflineServicePromiseClient(APIServiceUrls.users),
-  ward: new WardOfflineServicePromiseClient(APIServiceUrls.tasks),
-  room: new RoomOfflineServicePromiseClient(APIServiceUrls.tasks),
-  bed: new BedOfflineServicePromiseClient(APIServiceUrls.tasks),
-  patient: new PatientOfflineServicePromiseClient(APIServiceUrls.tasks),
-  task: new TaskOfflineServicePromiseClient(APIServiceUrls.tasks),
-  taskTemplates: new TaskTemplateOfflineServicePromiseClient(APIServiceUrls.tasks),
-  property: new PropertyOfflineServicePromiseClient(APIServiceUrls.property),
-  propertyValues: new PropertyValueOfflineServicePromiseClient(APIServiceUrls.property),
-  propertyViewSource: new PropertyViewsServicePromiseClient(APIServiceUrls.property), // TODO replace with an offline client
-  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates) // TODO replace with an offline client
-}
-
 const onlineServices: APIServicesType = {
   organization: new OrganizationServicePromiseClient(APIServiceUrls.users),
   user: new UserServicePromiseClient(APIServiceUrls.users),
@@ -71,7 +45,7 @@ const onlineServices: APIServicesType = {
   property: new PropertyServicePromiseClient(APIServiceUrls.property),
   propertyValues: new PropertyValueServicePromiseClient(APIServiceUrls.property),
   propertyViewSource: new PropertyViewsServicePromiseClient(APIServiceUrls.property),
-  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates) // TODO replace with an offline client
+  updates: new UpdatesServicePromiseClient(APIServiceUrls.updates)
 }
 
-export const APIServices: APIServicesType = getAPIServiceConfig().offlineAPI ? offlineServices : onlineServices
+export const APIServices: APIServicesType = onlineServices

@@ -1,6 +1,5 @@
 packages:
   - tasks
-  - landing-page
   - scripts
   - api-services
   - customer

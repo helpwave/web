@@ -73,13 +73,12 @@ export type WardDetailProps = {
  */
 export const WardDetail = ({
   overwriteTranslation,
-  organizationId,
   ward,
 }: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
   const translation = useTranslation(defaultWardDetailTranslations, overwriteTranslation)
 
   const context = useContext(OrganizationOverviewContext)
-  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organizationId)
+  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId)
 
   const isCreatingNewWard = context.state.wardId === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
@@ -93,11 +92,11 @@ export const WardDetail = ({
     }
   }, [data, isCreatingNewWard])
 
-  const createWardMutation = useWardCreateMutation(organizationId, (ward) => context.updateContext({ ...context.state, wardId: ward.id }))
-  const updateWardMutation = useWardUpdateMutation(organizationId, (ward) => {
+  const createWardMutation = useWardCreateMutation((ward) => context.updateContext({ ...context.state, wardId: ward.id }))
+  const updateWardMutation = useWardUpdateMutation((ward) => {
     setNewWard({ ...newWard, name: ward.name })
   })
-  const deleteWardMutation = useWardDeleteMutation(organizationId, () => context.updateContext({ ...context.state, wardId: '' }))
+  const deleteWardMutation = useWardDeleteMutation(() => context.updateContext({ ...context.state, wardId: '' }))
 
   return (
     <div className="col py-4 px-6">

@@ -8,6 +8,7 @@ import type { Languages } from '@helpwave/hightide'
 import { Avatar } from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { getAPIServiceConfig } from '@helpwave/api-services/config/config'
+import clsx from 'clsx'
 
 const config = getAPIServiceConfig()
 
@@ -42,24 +43,29 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
   }
 }
 
+type UserMenuProps = {
+  className?: string,
+}
+
 /**
  * A component showing a menu for user actions. For example editing the profile, language and logout.
  */
 export const UserMenu = ({
-  overwriteTranslation,
-}: PropsForTranslation<UserMenuTranslation>) => {
+                           overwriteTranslation,
+                           className,
+                         }: PropsForTranslation<UserMenuTranslation, UserMenuProps>) => {
   const translation = useTranslation(defaultUserMenuTranslations, overwriteTranslation)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const { user, signOut } = useAuth()
   const router = useRouter()
 
-  if (!user) return null
+  if (!user) return (<div></div>)
 
   // The settings path "/ui/settings" is hardcoded. It depends strongly on the implementation of the Ory UI.
   const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
 
   return (
-    <div className="row relative z-10">
+    <div className={clsx('row relative z-10', className)}>
       <LanguageModal
         id="userMenu-LanguageModal"
         onDone={() => setLanguageModalOpen(false)}
@@ -76,26 +82,40 @@ export const UserMenu = ({
         </div>
       )}>
         <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
-        <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem
-          alignment="left">{translation.language}</MenuItem></div>
-        <div className="cursor-pointer" onClick={() => router.push('/templates')}>
-          <MenuItem alignment="left">{translation.taskTemplates}</MenuItem>
-        </div>
-        <div className="cursor-pointer" onClick={() => router.push('/properties')}>
-          <MenuItem alignment="left">{translation.properties}</MenuItem>
-        </div>
-        <div className="cursor-pointer" onClick={() => router.push('/organizations')}>
-          <MenuItem alignment="left">{translation.organizations}</MenuItem>
-        </div>
-        <div className="cursor-pointer" onClick={() => router.push('/invitations')}>
-          <MenuItem alignment="left">{translation.invitations}</MenuItem>
-        </div>
-        <div
-          className="cursor-pointer text-negative hover:brightness-75"
+        <MenuItem
+          alignment="left" className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}>
+          {translation.language}
+        </MenuItem>
+        <MenuItem
+          alignment="left" className="cursor-pointer"
+          onClick={() => router.push('/templates')}
+        >
+          {translation.taskTemplates}
+        </MenuItem>
+        <MenuItem
+          alignment="left" className="cursor-pointer"
+          onClick={() => router.push('/properties')}
+        >
+          {translation.properties}
+        </MenuItem>
+        <MenuItem
+          alignment="left" className="cursor-pointer"
+          onClick={() => router.push('/organizations')}
+        >
+          {translation.organizations}
+        </MenuItem>
+        <MenuItem
+          alignment="left" className="cursor-pointer"
+          onClick={() => router.push('/invitations')}
+        >
+          {translation.invitations}
+        </MenuItem>
+        <MenuItem
+          alignment="left" className="text-negative cursor-pointer"
           onClick={() => signOut()}
         >
-          <MenuItem alignment="left">{translation.signOut}</MenuItem>
-        </div>
+          {translation.signOut}
+        </MenuItem>
       </Menu>
     </div>
   )

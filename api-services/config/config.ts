@@ -84,7 +84,6 @@ const getAPIServiceConfig = () => {
   const maybeConfig = configSchema.safeParse({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
-    NEXT_PUBLIC_OFFLINE_API: process.env['NEXT_PUBLIC_OFFLINE_API'],
     NEXT_PUBLIC_REQUEST_LOGGING: process.env['NEXT_PUBLIC_REQUEST_LOGGING'],
     NEXT_PUBLIC_OAUTH_ISSUER_URL: process.env['NEXT_PUBLIC_OAUTH_ISSUER_URL'],
     NEXT_PUBLIC_OAUTH_REDIRECT_URI: process.env['NEXT_PUBLIC_OAUTH_REDIRECT_URI'],

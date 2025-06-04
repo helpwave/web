@@ -47,7 +47,7 @@ const configSchema = z.object({
       name: z.string()
     })
   }).default({
-    sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984',
+    sub: '36def75c-2c0d-4c68-b7c6-b258c3ddef56',
     email: 'max.mustermann@helpwave.de',
     email_verified: true,
     name: 'Max Mustermann',

@@ -55,7 +55,7 @@ const configSchema = z.object({
     given_name: 'Max',
     family_name: 'Mustermann',
     organization: {
-      id: '3b25c6f5-4705-4074-9fc6-a50c28eba406',
+      id: '3813bd26-0f6d-470d-a35c-6bb0a3974f08',
       name: 'helpwave test'
     }
   }),

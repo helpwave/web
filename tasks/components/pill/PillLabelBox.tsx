@@ -21,18 +21,18 @@ const PillLabelBox = ({ unscheduled, inProgress, done }: PillLabelBoxProps) => {
     borderRightWidth: between,
   }
   return (
-    <div className="row h-6">
+    <div className="row gap-x-0 h-6">
       <div
         className="row rounded-l-md pl-2 pr-1 items-center bg-tag-red-background text-tag-red-text">
-        <div className="rounded-full w-2 h-2 text-tag-red-icon mr-1"/>
+        <div className="rounded-full w-2 h-2 bg-tag-red-icon mr-1"/>
         {unscheduled}
       </div>
       <div
-        className="w-0 h-0 border-solid border-r-transparent border-b-transparent bg-tag-red-background"
+        className="w-0 h-0 border-solid border-r-transparent border-b-transparent border-tag-red-background"
         style={borderStyle}
       />
       <div
-        className="w-0 h-0 bg-tag-yellow-background border-solid border-l-transparent border-t-transparent"
+        className="w-0 h-0 border-tag-yellow-background border-solid border-l-transparent border-t-transparent"
         style={borderStyle}
       />
       <div className="row px-1 items-center bg-tag-yellow-background text-tag-yellow-text">
@@ -40,11 +40,11 @@ const PillLabelBox = ({ unscheduled, inProgress, done }: PillLabelBoxProps) => {
         {inProgress}
       </div>
       <div
-        className="w-0 h-0 bg-tag-yellow-background border-solid border-r-transparent border-b-transparent"
+        className="w-0 h-0 border-tag-yellow-background border-solid border-r-transparent border-b-transparent"
         style={borderStyle}
       />
       <div
-        className="w-0 h-0 bg-tag-green-background border-solid border-l-transparent border-t-transparent"
+        className="w-0 h-0 border-tag-green-background border-solid border-l-transparent border-t-transparent"
         style={borderStyle}
       />
       <div

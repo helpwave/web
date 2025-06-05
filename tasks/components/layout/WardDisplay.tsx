@@ -47,7 +47,7 @@ export const WardDisplay = ({
   selectedWardId ??= context.state.wardId
 
   return (
-    <div className="py-4 px-6 container">
+    <div className="py-4 px-6 @container">
       <ColumnTitle title={translation.wards}/>
       <LoadingAndErrorComponent
         isLoading={isLoading}

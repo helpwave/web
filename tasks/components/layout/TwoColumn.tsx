@@ -144,7 +144,7 @@ export const TwoColumn = ({
             className={clsx(`row relative h-full justify-center`, { '!cursor-col-resize': !disableResize })}
             style={{ width: `${dividerHitBoxWidth}px` }}
           >
-              <div className="bg-gray-300 my-4 rounded-lg w-0.5 h-full" />
+              <div className="bg-gray-300 my-4 rounded-lg w-0.5" />
             {!disableResize && (
               <div
                 className="absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] col justify-center items-center"

@@ -29,7 +29,7 @@ export const PageWithHeader = ({
   if (!user) return null
 
   return (
-    <div className="col w-screen h-screen overflow-hidden">
+    <div className="col gap-y-0 w-screen h-screen overflow-hidden">
       <Header
         title={title}
         withIcon={withIcon}

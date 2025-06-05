@@ -31,7 +31,6 @@ const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisp
 export type OrganizationDisplayProps = {
   selectedOrganizationId?: string,
   organizations?: OrganizationDTO[],
-  width?: number,
 }
 
 /**

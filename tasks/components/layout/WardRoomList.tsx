@@ -1,10 +1,7 @@
 import { useContext, useEffect } from 'react'
 
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import type { Languages } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { SolidButton } from '@helpwave/hightide'
-import Link from 'next/link'
+import { LoadingAndErrorComponent, type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
@@ -12,26 +9,25 @@ import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { RoomOverview } from '../RoomOverview'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
+import { AddCard } from '@/components/cards/AddCard'
+import { router } from 'next/client'
 
 type WardRoomListTranslation = {
   roomOverview: string,
   showPatientList: string,
-  editWard: string,
-  noRooms: string,
+  addRooms: string,
 }
 
 const defaultWardRoomListTranslation: Record<Languages, WardRoomListTranslation> = {
   en: {
     roomOverview: 'Ward Overview',
     showPatientList: 'Show Patient List',
-    editWard: 'Edit Ward',
-    noRooms: 'This Ward has no rooms with beds.'
+    addRooms: 'Add Rooms',
   },
   de: {
     roomOverview: 'Stationsübersicht',
     showPatientList: 'Patientenliste',
-    editWard: 'Station bearbeiten',
-    noRooms: 'Diese Station hat keine Räume mit Betten.'
+    addRooms: 'Räume hinzufügen',
   }
 }
 
@@ -44,9 +40,9 @@ export type WardRoomListProps = {
  * The left side component of the page showing all Rooms of a Ward
  */
 export const WardRoomList = ({
-  overwriteTranslation,
-  rooms
-}: PropsForTranslation<WardRoomListTranslation, WardRoomListProps>) => {
+                               overwriteTranslation,
+                               rooms
+                             }: PropsForTranslation<WardRoomListTranslation, WardRoomListProps>) => {
   const translation = useTranslation(defaultWardRoomListTranslation, overwriteTranslation)
   const {
     state: contextState,
@@ -71,7 +67,7 @@ export const WardRoomList = ({
   }, [observeAttribute, refetch])
 
   return (
-    <div className="col px-6 py-4"
+    <div className="col px-6 py-4 @container"
          onClick={() => updateContext({ wardId: contextState.wardId })}
     >
       <div className="row justify-between items-center pb-4">
@@ -94,12 +90,10 @@ export const WardRoomList = ({
               room={room}
             />
           )) : (
-            <div className="col gap-y-2 items-center">
-              <span>{translation.noRooms}</span>
-              <Link href={`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`}>
-                <SolidButton>{translation.editWard}</SolidButton>
-              </Link>
-            </div>
+            <AddCard
+              text={translation.addRooms}
+              onClick={() => router.push(`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`)}
+            />
           )}
       </LoadingAndErrorComponent>
     </div>

@@ -110,7 +110,7 @@ export const UserMenu = ({
         <div ref={ref} onClick={onClick}
              className="row relative items-center group cursor-pointer select-none">
           {/* TODO set this color in the css config */}
-          <div className="text-sm font-semibold text-gray-700 group-hover:text-primary">{user.name}</div>
+          <div className="text-sm font-semibold text-description group-hover:text-primary">{user.name}</div>
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
         </div>
       )}>

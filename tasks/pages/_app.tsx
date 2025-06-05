@@ -12,6 +12,7 @@ import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
 import '../globals.css'
 import { InitializationChecker } from '@/components/layout/InitializationChecker'
+import { getConfig } from '@/utils/config'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,6 +30,7 @@ function MyApp({
                  Component,
                  pageProps
                }: AppProps) {
+  const config = getConfig()
   return (
     <ProvideLanguage>
       <ThemeProvider>
@@ -53,7 +55,7 @@ function MyApp({
                       <Component {...pageProps} />
                     </div>
                   </ModalRegister>
-                  <ReactQueryDevtools position="bottom-left"/>
+                  {config.env === 'development' && <ReactQueryDevtools position="bottom-left"/>}
                 </ProvideUpdates>
               </InitializationChecker>
             </ProvideAuth>

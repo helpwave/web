@@ -2,3 +2,16 @@
 @import '@helpwave/hightide/css/uncompiled/globals.css';
 
 @source "./node_modules/@helpwave/hightide";
+
+@theme {
+  --color-header-background: var(--color-white);
+  --color-header-text: var(--color-black);
+}
+
+@layer base {
+  /* Here are overrides for the light theme */
+  @variant dark {
+    --color-header-background: var(--color-black);
+    --color-header-text: var(--color-white);
+  }
+}

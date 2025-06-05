@@ -1,9 +1,12 @@
 import clsx from 'clsx'
 import type { Languages } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { Input } from '@helpwave/hightide'
-import { validateEmail } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import {
+  Input,
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  useTranslation,
+  validateEmail
+} from '@helpwave/hightide'
 import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
 import { emptyOrganization } from '@helpwave/api-services/types/users/organizations'
 
@@ -91,10 +94,10 @@ export type OrganizationFormProps = {
  * The state is manged by the parent
  */
 export const OrganizationForm = ({
-  overwriteTranslation,
-  organizationForm = emptyOrganizationForm,
-  onChange = () => undefined,
-}: PropsForTranslation<OrganizationFormTranslation, OrganizationFormProps>) => {
+                                   overwriteTranslation,
+                                   organizationForm = emptyOrganizationForm,
+                                   onChange = () => undefined,
+                                 }: PropsForTranslation<OrganizationFormTranslation, OrganizationFormProps>) => {
   const translation = useTranslation(defaultOrganizationFormTranslations, overwriteTranslation)
 
   const minShortNameLength = 2
@@ -156,58 +159,87 @@ export const OrganizationForm = ({
       loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[350px]' }}
       minimumLoadingDuration={200} // prevents errors flickering
     >
-      <span className="textstyle-title-normal">{translation.general}</span>
-      <div className="mt-2 mb-1">
-        <Input
-          id="shortName"
-          value={organizationForm.organization.shortName}
-          label={{ name: translation.shortName }}
-          onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, shortName: true })}
-          onChange={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, false, { ...organizationForm.touched })}
-          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, true, { ...organizationForm.touched, shortName: true })}
-          maxLength={maxShortNameLength}
-          className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
-        />
-        {isDisplayingShortNameError && <span className="textstyle-form-error">{shortNameErrorMessage}</span>}
-      </div>
-      <span className="textstyle-form-description">{translation.shortNameDescription}</span>
-      <div className="mt-2 mb-1">
-        <Input
-          id="longName"
-          value={organizationForm.organization.longName}
-          label={{ name: translation.longName }}
-          onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, longName: true })}
-          onChange={text => triggerOnChange({ ...organizationForm.organization, longName: text }, false, { ...organizationForm.touched })}
-          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, longName: text }, true, { ...organizationForm.touched, longName: true })}
-          maxLength={maxLongNameLength}
-          className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
-        />
-        {isDisplayingLongNameError && <span className="textstyle-form-error">{longNameErrorMessage}</span>}
-      </div>
-      <span className="textstyle-form-description">{translation.longNameDescription}</span>
-      <div className="mt-2 mb-1">
-        <div className="row items-end">
-          <div className="flex-1 mr-2">
-            <Input
-              id="email"
-              value={organizationForm.organization.email}
-              label={{ name: translation.contactEmail }}
-              type="email"
-              onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, email: true })}
-              onChange={text => triggerOnChange({ ...organizationForm.organization, email: text }, false, { ...organizationForm.touched })}
-              onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, email: text }, true, { ...organizationForm.touched, email: true })}
-              maxLength={maxMailLength}
-              className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
-            />
-          </div>
-          {
-            !organizationForm.organization.isVerified &&
-            <span className="text-negative mb-3">{translation.notVerified}</span>
-          }
+      <div className="col gap-y-4">
+        <span className="textstyle-title-normal">{translation.general}</span>
+        <div className="col gap-y-1">
+          <Input
+            id="shortName"
+            value={organizationForm.organization.shortName}
+            label={{ name: translation.shortName }}
+            onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
+              ...organizationForm.touched,
+              shortName: true
+            })}
+            onChange={text => triggerOnChange({
+              ...organizationForm.organization,
+              shortName: text
+            }, false, { ...organizationForm.touched })}
+            onEditCompleted={text => triggerOnChange({
+              ...organizationForm.organization,
+              shortName: text
+            }, true, { ...organizationForm.touched, shortName: true })}
+            maxLength={maxShortNameLength}
+            className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
+          />
+          {isDisplayingShortNameError && <span className="textstyle-form-error">{shortNameErrorMessage}</span>}
+          <span className="textstyle-form-description">{translation.shortNameDescription}</span>
         </div>
-        {isDisplayingEmailNameError && <span className="textstyle-form-error">{emailErrorMessage}</span>}
+        <div className="col gap-y-1">
+          <Input
+            id="longName"
+            value={organizationForm.organization.longName}
+            label={{ name: translation.longName }}
+            onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
+              ...organizationForm.touched,
+              longName: true
+            })}
+            onChange={text => triggerOnChange({
+              ...organizationForm.organization,
+              longName: text
+            }, false, { ...organizationForm.touched })}
+            onEditCompleted={text => triggerOnChange({
+              ...organizationForm.organization,
+              longName: text
+            }, true, { ...organizationForm.touched, longName: true })}
+            maxLength={maxLongNameLength}
+            className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
+          />
+          {isDisplayingLongNameError && <span className="textstyle-form-error">{longNameErrorMessage}</span>}
+          <span className="textstyle-form-description">{translation.longNameDescription}</span>
+        </div>
+        <div className="col gap-y-1">
+          <div className="row items-end">
+            <div className="flex-1 mr-2">
+              <Input
+                id="email"
+                value={organizationForm.organization.email}
+                label={{ name: translation.contactEmail }}
+                type="email"
+                onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
+                  ...organizationForm.touched,
+                  email: true
+                })}
+                onChange={text => triggerOnChange({
+                  ...organizationForm.organization,
+                  email: text
+                }, false, { ...organizationForm.touched })}
+                onEditCompleted={text => triggerOnChange({
+                  ...organizationForm.organization,
+                  email: text
+                }, true, { ...organizationForm.touched, email: true })}
+                maxLength={maxMailLength}
+                className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
+              />
+            </div>
+            {
+              !organizationForm.organization.isVerified &&
+              <span className="text-negative mb-3">{translation.notVerified}</span>
+            }
+          </div>
+          {isDisplayingEmailNameError && <span className="textstyle-form-error">{emailErrorMessage}</span>}
+          <span className="textstyle-form-description">{translation.contactEmailDescription}</span>
+        </div>
       </div>
-      <span className="textstyle-form-description">{translation.contactEmailDescription}</span>
     </LoadingAndErrorComponent>
   )
 }

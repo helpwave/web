@@ -1,11 +1,20 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Menu, MenuItem } from '@helpwave/hightide'
-import { LanguageModal } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import type { Languages } from '@helpwave/hightide'
-import { Avatar } from '@helpwave/hightide'
+import type { Languages, ThemeTypeTranslation ,
+  ThemeType } from '@helpwave/hightide'
+import {
+  Avatar,
+  defaultThemeTypeTranslation,
+  LanguageModal,
+  Menu,
+  MenuItem,
+  Modal,
+  type PropsForTranslation,
+  Select,
+  useTheme,
+  useTranslation
+} from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { getAPIServiceConfig } from '@helpwave/api-services/config/config'
 import clsx from 'clsx'
@@ -20,7 +29,8 @@ type UserMenuTranslation = {
   invitations: string,
   organizations: string,
   properties: string,
-}
+  theme: string,
+} & ThemeTypeTranslation
 
 const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
   en: {
@@ -30,7 +40,9 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     taskTemplates: 'Task Templates',
     invitations: 'Invitations',
     organizations: 'Organizations',
-    properties: 'Properties'
+    properties: 'Properties',
+    theme: 'Theme',
+    ...defaultThemeTypeTranslation.en,
   },
   de: {
     profile: 'Profil',
@@ -39,7 +51,9 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     taskTemplates: 'Vorlagen',
     invitations: 'Einladungen',
     organizations: 'Organisationen',
-    properties: 'Properties'
+    properties: 'Properties',
+    theme: 'Hell/Dunkel',
+    ...defaultThemeTypeTranslation.de,
   }
 }
 
@@ -56,6 +70,9 @@ export const UserMenu = ({
                          }: PropsForTranslation<UserMenuTranslation, UserMenuProps>) => {
   const translation = useTranslation(defaultUserMenuTranslations, overwriteTranslation)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
+  const [isThemeModalOpen, setThemeModalOpen] = useState(false)
+  const { theme, setTheme } = useTheme()
+  const allowedThemes : ThemeType[] = ['light', 'dark']
   const { user, signOut } = useAuth()
   const router = useRouter()
 
@@ -73,6 +90,22 @@ export const UserMenu = ({
         onCloseClick={() => setLanguageModalOpen(false)}
         isOpen={isLanguageModalOpen}
       />
+      <Modal
+        id="themeModal"
+        isOpen={isThemeModalOpen}
+        onBackgroundClick={() => setThemeModalOpen(false)}
+        onCloseClick={() => setThemeModalOpen(false)}
+        titleText={translation.theme}
+      >
+        <Select<ThemeType>
+          value={theme}
+          onChange={setTheme}
+          options={allowedThemes.map(value => ({
+            label: translation[value],
+            value
+          }))}
+        />
+      </Modal>
       <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
         <div ref={ref} onClick={onClick}
              className="row relative items-center group cursor-pointer select-none">
@@ -83,8 +116,12 @@ export const UserMenu = ({
       )}>
         <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
         <MenuItem
-          alignment="left" className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}>
+          alignment="left" onClick={() => setLanguageModalOpen(true)}>
           {translation.language}
+        </MenuItem>
+        <MenuItem
+          alignment="left" onClick={() => setThemeModalOpen(true)}>
+          {translation.theme}
         </MenuItem>
         <MenuItem
           alignment="left" className="cursor-pointer"

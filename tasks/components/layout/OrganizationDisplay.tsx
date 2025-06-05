@@ -55,14 +55,14 @@ export const OrganizationDisplay = ({
 
   const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
-    <div className="py-4 px-6">
+    <div className="py-4 px-6 @container">
       <ColumnTitle title={translation.yourOrganizations}/>
-      <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-6">
+      <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
         {usedOrganizations.map(organization => (
           <OrganizationCard
             key={organization.id}
             organization={organization}
-            className={clsx('h-full border-2 hover:border-primary', { 'border-primary border-solid': usedSelectedId === organization.id })}
+            className={clsx('h-full shadow border-2 border-transparent hover:border-primary', { 'border-primary border-solid': usedSelectedId === organization.id })}
             onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
             onClick={() => {
               router.push(`/organizations/${organization.id}`)

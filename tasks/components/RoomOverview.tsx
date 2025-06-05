@@ -1,5 +1,4 @@
-
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef } from 'react'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import type { BedMinimalDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { PatientDTO } from '@helpwave/api-services/types/tasks/patient'
@@ -20,7 +19,6 @@ export type RoomOverviewProps = {
 export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const context = useContext(WardOverviewContext)
   const ref = useRef<HTMLDivElement>(null)
-  const [columns, setColumns] = useState(3)
 
   const setSelectedBed = (room: RoomOverviewDTO, bed: BedMinimalDTO, patientId?: string, patient?: PatientDTO) =>
     context.updateContext({
@@ -31,28 +29,20 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
       patient
     })
 
-  useEffect(() => {
-    if (ref.current?.offsetWidth) {
-      setColumns(Math.min(Math.max(1, Math.floor(ref.current?.offsetWidth / 200)), 4))
-    }
-  }, [ref.current?.offsetWidth])
-
   const selectedBedId = context.state.bedId
 
   return (
-    <div className="col w-full" ref={ref}>
+    <div className="col w-full @container" ref={ref}>
       <div className="row items-center mb-1">
         <div className="w-2 h-2 mx-2 rounded-full bg-gray-300"/>
         <span className="textstyle-title-normal">{room.name}</span>
       </div>
-      <div className={`grid grid-cols-${columns} gap-4`}>
+      <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4">
         {room.beds.map((bed) => bed.patient && bed.patient?.id ?
             (
               <Droppable id={bed.id} key={bed.id} data={{ bed, room, patient: bed.patient }}>
                 {({ isOver }) => bed.patient && bed.patient?.id && (
-                  <DragCard
-                    className="!p-0 !border-0"
-                  >
+                  <DragCard className="!p-0 !border-0">
                     <Draggable id={bed.patient.id + 'roomOverview'} data={{ bed, room, patient: bed.patient }}>
                       {() => bed.patient && bed.patient?.id && (
                         <PatientCard

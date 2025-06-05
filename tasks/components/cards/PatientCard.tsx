@@ -3,6 +3,7 @@ import type { Languages } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import { DragCard, type DragCardProps } from './DragCard'
+import clsx from 'clsx'
 
 type PatientCardTranslation = {
   bedNotAssigned: string,
@@ -37,11 +38,12 @@ export const PatientCard = ({
   doneTasks,
   isSelected,
   onClick,
+  className,
   ...restCardProps
 }: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
   const translation = useTranslation(defaultPatientCardTranslations, overwriteTranslation)
   return (
-    <DragCard isSelected={isSelected} onClick={onClick} {...restCardProps}>
+    <DragCard isSelected={isSelected} onClick={onClick} className={clsx('min-h-40',className)} {...restCardProps}>
       <div className="row justify-between">
         <span className="textstyle-title-sm whitespace-nowrap" >{bedName ?? translation.bedNotAssigned}</span>
         <span className="ml-2 truncate">{patientName}</span>

@@ -7,6 +7,7 @@ import type { Languages } from '@helpwave/hightide'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
+import clsx from 'clsx'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,
@@ -41,7 +42,7 @@ export type TaskTemplateDisplayProps = {
 export const TaskTemplateDisplay = ({
   overwriteTranslation,
   wardId,
-  //selectedId,
+  selectedId,
   onSelectChange,
   taskTemplates,
   variant,
@@ -52,7 +53,7 @@ export const TaskTemplateDisplay = ({
 
   const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
   return (
-    <div className="py-4 px-6">
+    <div className="py-4 px-6 @container">
       <div className="row items-center justify-between mb-4">
         <span className="textstyle-title-normal">
           {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
@@ -70,20 +71,25 @@ export const TaskTemplateDisplay = ({
         )}
       </div>
       {/* TODO replace onClick function to something different */}
-      <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-6">
+      <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
         {taskTemplates.map(taskTemplate => (
           <TaskTemplateCard
             key={taskTemplate.id}
             name={taskTemplate.name}
             subtaskCount={taskTemplate.subtasks.length}
-            //TODO isSelected={selectedId === taskTemplate.id}
+            className={clsx('border-2', {
+              'border-primary': selectedId === taskTemplate.id,
+              'border-transparent': selectedId !== taskTemplate.id,
+            })}
             onEditClick={() => onSelectChange(taskTemplate)}
             onClick={() => onSelectChange(taskTemplate)}
           />
         ))}
         <AddCard
-          //TODO isSelected={selectedId === ''}
           onClick={() => onSelectChange(undefined)}
+          className={clsx({
+            'border-primary border-2': selectedId === ''
+          })}
           text={translation.addNewTaskTemplate}
         />
       </div>

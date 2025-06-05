@@ -1,19 +1,22 @@
 import clsx from 'clsx'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { Plus } from 'lucide-react'
 import type { Languages } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import { Plus } from 'lucide-react'
 import { DragCard, type DragCardProps } from './DragCard'
 
 type BedCardTranslation = {
   nobody: string,
+  addPatient: string,
 }
 
 const defaultBedCardTranslation: Record<Languages, BedCardTranslation> = {
   en: {
     nobody: 'nobody',
+    addPatient: 'Add Patient'
   },
   de: {
     nobody: 'frei',
+    addPatient: 'Patient hinzufügen',
   }
 }
 
@@ -37,14 +40,21 @@ export const BedCard = ({
   const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
   return (
     (
-      <DragCard onClick={onClick} isSelected={isSelected}
-                className={clsx('min-h-[148px] col', className)} {...restCardProps}>
+      <DragCard
+        onClick={onClick}
+        isSelected={isSelected}
+        className={clsx('min-h-40 col', className)}
+        {...restCardProps}
+      >
         <div className="row justify-between">
           <span className="textstyle-title-sm">{bedName}</span>
           <span>{translation.nobody}</span>
         </div>
-        <div className="flex-1 justify-center items-center">
-          <Plus/>
+        <div className="col grow justify-center items-center">
+          <div className="row text-description">
+            <Plus/>
+            {translation.addPatient}
+          </div>
         </div>
       </DragCard>
     )

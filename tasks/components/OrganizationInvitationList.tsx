@@ -1,15 +1,22 @@
 import { useContext, useState } from 'react'
 
 import type { Languages } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { defaultTableStatePagination, Table, type TableState } from '@helpwave/hightide'
-import { SolidButton, TextButton } from '@helpwave/hightide'
-import { InputModal } from '@helpwave/hightide'
-import { validateEmail } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import {
+  defaultTableStatePagination,
+  InputModal,
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  SolidButton,
+  Table,
+  type TableState,
+  TextButton,
+  useTranslation,
+  validateEmail
+} from '@helpwave/hightide'
 import {
   useInvitationsByOrganizationQuery,
-  useInviteMemberMutation, useInviteRevokeMutation
+  useInviteMemberMutation,
+  useInviteRevokeMutation
 } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { InvitationState } from '@helpwave/api-services/types/users/invitations'
 import { OrganizationContext } from '@/pages/organizations'
@@ -57,11 +64,11 @@ export type OrganizationInvitationListProps = {
  * A List showing all members invited to an organization
  */
 export const OrganizationInvitationList = ({
-  overwriteTranslation,
-  organizationId,
-  invitations,
-  onChange
-}: PropsForTranslation<OrganizationInvitationListTranslation, OrganizationInvitationListProps>) => {
+                                             overwriteTranslation,
+                                             organizationId,
+                                             invitations,
+                                             onChange
+                                           }: PropsForTranslation<OrganizationInvitationListTranslation, OrganizationInvitationListProps>) => {
   const translation = useTranslation(defaultOrganizationInvitationListTranslation, overwriteTranslation)
 
   const context = useContext(OrganizationContext)
@@ -134,42 +141,44 @@ export const OrganizationInvitationList = ({
           { disabled: !isValidEmail, color: 'primary', text: translation.add }
         ]}
       />
-      <div className="row justify-between">
-        <span className="textstyle-table-name">{`${translation.invitations} (${usedInvitations.length})`}</span>
-        <SolidButton
-          color="positive"
-          onClick={() => setInviteMemberModalEmail('')}
-        >
-          {translation.inviteMember}
-        </SolidButton>
+      <div className="col gap-y-2">
+        <div className="row justify-between">
+          <span className="textstyle-table-name">{`${translation.invitations} (${usedInvitations.length})`}</span>
+          <SolidButton
+            color="positive"
+            onClick={() => setInviteMemberModalEmail('')}
+          >
+            {translation.inviteMember}
+          </SolidButton>
+        </div>
+        <Table
+          data={usedInvitations}
+          stateManagement={[tableState, setTableState]}
+          identifierMapping={idMapping}
+          header={[
+            <span key="organization" className="textstyle-table-header">{translation.email}</span>,
+            <></>
+          ]}
+          rowMappingToCells={invite => [
+            <div key="email" className="row justify-start gap-x-2">
+              <span>{invite.email}</span>
+            </div>,
+            <div key="remove" className="row justify-end">
+              <TextButton
+                color="negative"
+                onClick={() => {
+                  if (!isCreatingOrganization) {
+                    revokeInviteMutation.mutate(invite.id)
+                  }
+                  onChange(usedInvitations.filter(value => idMapping(value) !== idMapping(invite)))
+                }}
+              >
+                {translation.remove}
+              </TextButton>
+            </div>
+          ]}
+        />
       </div>
-      <Table
-        data={usedInvitations}
-        stateManagement={[tableState, setTableState]}
-        identifierMapping={idMapping}
-        header={[
-          <span key="organization" className="textstyle-table-header">{translation.email}</span>,
-          <></>
-        ]}
-        rowMappingToCells={invite => [
-          <div key="email" className="row justify-start gap-x-2">
-            <span>{invite.email}</span>
-          </div>,
-          <div key="remove" className="row justify-end">
-            <TextButton
-              color="negative"
-              onClick={() => {
-                if (!isCreatingOrganization) {
-                  revokeInviteMutation.mutate(invite.id)
-                }
-                onChange(usedInvitations.filter(value => idMapping(value) !== idMapping(invite)))
-              }}
-            >
-              {translation.remove}
-            </TextButton>
-          </div>
-        ]}
-      />
     </LoadingAndErrorComponent>
   )
 }

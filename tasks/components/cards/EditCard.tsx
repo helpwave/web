@@ -13,12 +13,22 @@ export type EditCardProps = PropsWithChildren<{
  */
 export const EditCard = ({
                            children,
+                           onClick,
                            onEditClick,
                            className,
                          }: EditCardProps) => {
   return (
     <div
-      className={clsx('card-md row w-full h-full gap-x-4 justify-between overflow-hidden', { 'pr-2': !!onEditClick }, className)}>
+      className={clsx(
+        'card-md row w-full h-full gap-x-4 justify-between overflow-hidden',
+        {
+          'pr-2': !!onEditClick,
+          'cursor-pointer': !!onClick,
+        },
+        className
+      )}
+      onClick={onClick}
+    >
       {children}
       {onEditClick && (
         <button

@@ -1,18 +1,20 @@
 import { useContext, useState } from 'react'
 
 import type { Languages } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { SolidButton, TextButton } from '@helpwave/hightide'
-import { ConfirmDialog } from '@helpwave/hightide'
 import {
+  Avatar,
+  ConfirmDialog,
   defaultTableStatePagination,
   defaultTableStateSelection,
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
   removeFromTableSelection,
+  SolidButton,
   Table,
-  type TableState
+  type TableState,
+  TextButton,
+  useTranslation
 } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
-import { Avatar } from '@helpwave/hightide'
 import type { OrganizationMember } from '@helpwave/api-services/types/users/organization_member'
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 import { useRemoveMemberMutation } from '@helpwave/api-services/mutations/users/organization_mutations'
@@ -73,12 +75,15 @@ export type OrganizationMemberListProps = {
  * A table for showing and editing the members of an organization
  */
 export const OrganizationMemberList = ({
-  overwriteTranslation,
-  organizationId,
-  members
-}: PropsForTranslation<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
+                                         overwriteTranslation,
+                                         organizationId,
+                                         members
+                                       }: PropsForTranslation<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation(defaultOrganizationMemberListTranslations, overwriteTranslation)
-  const [tableState, setTableState] = useState<TableState>({ pagination: defaultTableStatePagination, selection: defaultTableStateSelection })
+  const [tableState, setTableState] = useState<TableState>({
+    pagination: defaultTableStatePagination,
+    selection: defaultTableStateSelection
+  })
 
   const context = useContext(OrganizationContext)
   organizationId ??= context.state.organizationId
@@ -163,7 +168,7 @@ export const OrganizationMemberList = ({
           rowMappingToCells={orgMember => [
             <div key="member" className="row items-center h-12 overflow-hidden max-w-[200px]">
               <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
-              <div className="col ml-2">
+              <div className="col gap-y-0 ml-2">
                 <span className="font-bold truncate">{orgMember.name}</span>
                 <a href={`mailto:${orgMember.email}`}>
                   <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
@@ -171,12 +176,13 @@ export const OrganizationMemberList = ({
               </div>
             </div>,
             <div key="role" className="row items-center mr-2">
-              <button className="row items-center" onClick={() => { /* TODO allow changing roles */
-              }}>
-                <span className="font-semibold">
-                  {'N.A.' /* translation.roleTypes[orgMember.role] */}
-                </span>
-              </button>
+              <TextButton
+                className="row items-center"
+                onClick={() => { /* TODO allow changing roles */
+                }}
+              >
+                {'N.A.' /* translation.roleTypes[orgMember.role] */}
+              </TextButton>
             </div>,
             <div key="remove" className="row justify-end">
               <TextButton
@@ -188,7 +194,7 @@ export const OrganizationMemberList = ({
               </TextButton>
             </div>
           ]}
-         identifierMapping={idMapping}
+          identifierMapping={idMapping}
         />
       </LoadingAndErrorComponent>
     </div>

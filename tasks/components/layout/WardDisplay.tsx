@@ -1,13 +1,13 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
 import type { Languages } from '@helpwave/hightide'
-import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import { LoadingAndErrorComponent, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
+import clsx from 'clsx'
 
 type WardDisplayTranslation = {
   wards: string,
@@ -34,10 +34,10 @@ export type WardDisplayProps = {
  * The left side of the organizations/[organizationId].tsx page showing the wards within the organizations
  */
 export const WardDisplay = ({
-  overwriteTranslation,
-  organizationId,
-  selectedWardId,
-}: PropsForTranslation<WardDisplayTranslation, WardDisplayProps>) => {
+                              overwriteTranslation,
+                              organizationId,
+                              selectedWardId,
+                            }: PropsForTranslation<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation(defaultWardDisplayTranslations, overwriteTranslation)
   const router = useRouter()
   const context = useContext(OrganizationOverviewContext)
@@ -47,19 +47,18 @@ export const WardDisplay = ({
   selectedWardId ??= context.state.wardId
 
   return (
-    <div className="py-4 px-6">
+    <div className="py-4 px-6 @container">
       <ColumnTitle title={translation.wards}/>
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
       >
         {wards && (
-          <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-6">
+          <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
             {wards.map(ward => (
               <WardCard
                 key={ward.id}
                 ward={ward}
-                // TODO isSelected={selectedWardId === ward.id}
                 onEditClick={() => context.updateContext({
                   ...context.state,
                   wardId: ward.id
@@ -67,6 +66,9 @@ export const WardDisplay = ({
                 onClick={() => {
                   router.push(`/ward/${ward.id}`).catch(console.error)
                 }}
+                className={clsx({
+                  'border-2 border-primary': selectedWardId === ward.id
+                })}
               />
             ))}
             <AddCard

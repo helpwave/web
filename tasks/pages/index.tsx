@@ -54,6 +54,8 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
   const { isLoading, isError } = useOrganizationsForUserQuery()
 
+  console.log('isError', isError)
+  console.log('isloading', isLoading)
   const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
   const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
 
@@ -91,9 +93,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
         <TwoColumn
           disableResize={false}
           left={width => ((
-              <DashboardDisplay
-                width={width}
-              />
+              <DashboardDisplay width={width}/>
             )
           )}
           right={width => (

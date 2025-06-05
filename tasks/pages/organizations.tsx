@@ -70,8 +70,8 @@ const OrganizationsPage: NextPage = ({ overwriteTranslation }: PropsForTranslati
       <OrganizationContext.Provider value={{ state: context, updateContext: setContext }}>
         <TwoColumn
           disableResize={false}
-          left={width => (
-            <OrganizationDisplay width={width} selectedOrganizationId={context.organizationId}/>
+          left={() => (
+            <OrganizationDisplay selectedOrganizationId={context.organizationId}/>
           )}
           right={width => (
             <OrganizationDetail

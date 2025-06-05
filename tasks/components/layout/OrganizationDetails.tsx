@@ -173,7 +173,7 @@ export const OrganizationDetail = ({
         }}
       />
       <ColumnTitle title={translation.organizationDetail}/>
-      <div className="col gap-y-4 max-w-[500px]">
+      <div className="col gap-y-8 max-w-[500px]">
         <OrganizationForm
           organizationForm={organizationForm}
           onChange={(organizationForm, shouldUpdate) => {

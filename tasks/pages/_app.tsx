@@ -4,7 +4,7 @@ import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { isMobile } from 'react-device-detect'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { modalRootName, ModalRegister, ProvideLanguage } from '@helpwave/hightide'
+import { ModalRegister, modalRootName, ProvideLanguage, ThemeProvider } from '@helpwave/hightide'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production'
 import { ProvideAuth } from '@helpwave/api-services/authentication/useAuth'
 import { ProvideUpdates } from '@helpwave/api-services/util/useUpdates'
@@ -12,6 +12,7 @@ import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
 import '../globals.css'
 import { InitializationChecker } from '@/components/layout/InitializationChecker'
+import { getConfig } from '@/utils/config'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,35 +30,38 @@ function MyApp({
                  Component,
                  pageProps
                }: AppProps) {
+  const config = getConfig()
   return (
     <ProvideLanguage>
-      { /* v Scans the user agent */}
-      {!isMobile ? (
-        <QueryClientProvider client={queryClient}>
-          <ProvideAuth>
-            <InitializationChecker>
-              <ProvideUpdates>
-                <Head>
-                  <title>{titleWrapper()}</title>
-                  <style>{`
+      <ThemeProvider>
+        { /* v Scans the user agent */}
+        {!isMobile ? (
+          <QueryClientProvider client={queryClient}>
+            <ProvideAuth>
+              <InitializationChecker>
+                <ProvideUpdates>
+                  <Head>
+                    <title>{titleWrapper()}</title>
+                    <style>{`
             :root {
               --font-inter: ${inter.style.fontFamily};
               --font-space: ${spaceGrotesk.style.fontFamily};
             }
             `}</style>
-                </Head>
+                  </Head>
 
-                <ModalRegister>
-                  <div className="font-sans" id={modalRootName}>
-                    <Component {...pageProps} />
-                  </div>
-                </ModalRegister>
-                <ReactQueryDevtools position="bottom-left"/>
-              </ProvideUpdates>
-            </InitializationChecker>
-          </ProvideAuth>
-        </QueryClientProvider>
-      ) : (<MobileInterceptor {...pageProps} />)}
+                  <ModalRegister>
+                    <div className="font-sans" id={modalRootName}>
+                      <Component {...pageProps} />
+                    </div>
+                  </ModalRegister>
+                  {config.env === 'development' && <ReactQueryDevtools position="bottom-left"/>}
+                </ProvideUpdates>
+              </InitializationChecker>
+            </ProvideAuth>
+          </QueryClientProvider>
+        ) : (<MobileInterceptor {...pageProps} />)}
+      </ThemeProvider>
     </ProvideLanguage>
   )
 }

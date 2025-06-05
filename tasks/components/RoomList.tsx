@@ -205,7 +205,7 @@ export const RoomList = ({
           }]}
           identifierMapping={identifierMapping}
           header={[
-            <span key="name" className="textstyle-table-header">{translation.roomName}</span>,
+            <span key="name" className="textstyle-table-header min-w-48 text-start">{translation.roomName}</span>,
             <span key="bedcount" className="textstyle-table-header">{translation.bedCount}</span>,
             <span key="manage" className="textstyle-table-header">{translation.manageBeds}</span>,
             <></>

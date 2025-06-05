@@ -46,7 +46,7 @@ export const TaskTemplateCard = ({
   const translation = useTranslation(defaultTaskTemplateCardTranslations, overwriteTranslation)
   return (
     <EditCard
-      className={clsx('group col bg-white', className)}
+      className={clsx('group row bg-white', className)}
       {...editCardProps}
     >
       <div className="overflow-hidden h-full">

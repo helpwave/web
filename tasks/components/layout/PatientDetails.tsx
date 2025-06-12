@@ -167,7 +167,7 @@ export const PatientDetail = ({
                 className="text-lg font-semibold"
                 id="humanReadableIdentifier"
                 value={newPatient.name}
-                onChange={name => changeSavedValue({
+                onChangeText={name => changeSavedValue({
                   ...newPatient,
                   name
                 })}

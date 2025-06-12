@@ -38,9 +38,9 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
         <span className="textstyle-title-normal">{room.name}</span>
       </div>
       <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4">
-        {room.beds.map((bed) => bed.patient && bed.patient?.id ?
+        {room.beds.map((bed, index) => bed.patient && bed.patient?.id ?
             (
-              <Droppable id={bed.id} key={bed.id} data={{ bed, room, patient: bed.patient }}>
+              <Droppable id={bed.id} key={index} data={{ bed, room, patient: bed.patient }}>
                 {({ isOver }) => bed.patient && bed.patient?.id && (
                   <DragCard className="!p-0 !border-0">
                     <Draggable id={bed.patient.id + 'roomOverview'} data={{ bed, room, patient: bed.patient }}>

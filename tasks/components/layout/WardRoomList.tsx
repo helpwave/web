@@ -84,9 +84,9 @@ export const WardRoomList = ({
         hasError={isError}
       >
         {displayableRooms.length > 0 ?
-          displayableRooms.map(room => (
+          displayableRooms.map((room, index) => (
             <RoomOverview
-              key={room.id}
+              key={index}
               room={room}
             />
           )) : (

@@ -24,6 +24,10 @@ export const AssigneeSelect = ({
     <LoadingAndErrorComponent
       isLoading={isLoading}
       hasError={isError}
+      loadingProps={{
+        loadingText: '',
+        classname: 'bg-gray-100 pulsing max-h-8 rounded-md',
+      }}
     >
       <SearchableSelect
         // TODO update later with avatar of assignee

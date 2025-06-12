@@ -95,7 +95,7 @@ export const TwoColumn = ({
       setLeftWidth(calcPosition(leftWidth / fullWidth * newFullWidth))
     }
     setFullWidth(newFullWidth)
-  }, [ref, fullWidth, baseLayoutValue, calcPosition, leftWidth])
+  }, [ref, baseLayoutValue]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const leftFocus = convertToLeftWidth(baseLayoutValue, fullWidth) < leftWidth - dividerHitBoxWidth / 2
   const [scrollbarsBarMaxHeight, setScrollbarsBarMaxHeight] = useState(800)

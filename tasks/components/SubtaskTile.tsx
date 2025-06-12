@@ -63,8 +63,8 @@ export const SubtaskTile = ({
         />
       </div>
       <ToggleableInput
-        value={subtask.name}
-        onChange={name => setLocalSubtask({
+        value={localSubtask.name}
+        onChangeText={name => setLocalSubtask({
           ...subtask,
           name
         })}

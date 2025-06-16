@@ -86,24 +86,20 @@ export const DashboardDisplay = ({
       </LoadingAndErrorComponent>
       <LoadingAndErrorComponent isLoading={isLoadingWards}>
         <div className="col gap-y-1">
-          {wards && wards.length > 0 && (
-            <>
-              <span className="textstyle-title-normal">{translation.wards}</span>
-              <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
-                {wards?.map(ward => (
-                  <WardCard
-                    key={ward.id}
-                    ward={ward}
-                    onClick={() => router.push(`/ward/${ward.id}`)}
-                  />
-                ))}
-                <AddCard
-                  text={translation.addWard}
-                  onClick={() => router.push(`/organizations/${organization?.id}`)}
-                />
-              </div>
-            </>
-          )}
+          <span className="textstyle-title-normal">{translation.wards}</span>
+          <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
+            {wards && wards.length > 0 && wards?.map(ward => (
+              <WardCard
+                key={ward.id}
+                ward={ward}
+                onClick={() => router.push(`/ward/${ward.id}`)}
+              />
+            ))}
+            <AddCard
+              text={translation.addWard}
+              onClick={() => router.push(`/organizations/${organization?.id}`)}
+            />
+          </div>
         </div>
       </LoadingAndErrorComponent>
     </div>

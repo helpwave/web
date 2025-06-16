@@ -8,7 +8,6 @@ import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/u
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
-import { AddCard } from '../cards/AddCard'
 import { OrganizationContext } from '@/pages/organizations'
 import clsx from 'clsx'
 
@@ -50,7 +49,9 @@ export const OrganizationDisplay = ({
   const { organizations: tokenOrganizations } = useAuth()
   const { fakeTokenEnable } = getAPIServiceConfig()
 
-  usedOrganizations = usedOrganizations.filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
+  usedOrganizations = usedOrganizations
+    .filter((organization) => fakeTokenEnable || tokenOrganizations.includes(organization.id))
+    .filter((organization) => tokenOrganizations.includes(organization.id))
 
   const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
@@ -68,11 +69,15 @@ export const OrganizationDisplay = ({
             }}
           />
         ))}
-        <AddCard
-          text={translation.addOrganization}
-          onClick={() => context.updateContext({ ...context.state, organizationId: '' })}
-          className={clsx('h-full', { 'border-primary border-solid': usedSelectedId === '' })}
-        />
+        {
+          /* Show again when multi organization should be re-enabled
+          <AddCard
+            text={translation.addOrganization}
+            onClick={() => context.updateContext({ ...context.state, organizationId: '' })}
+            className={clsx('h-full', { 'border-primary border-solid': usedSelectedId === '' })}
+          />
+          */
+        }
       </div>
     </div>
   )

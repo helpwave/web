@@ -10,6 +10,7 @@ export type DroppableProps<DraggableData, DroppableData> = {
   children: ((droppableBuilderProps: DroppableBuilderProps<DraggableData, DroppableData>) => React.ReactNode | undefined),
   id: string,
   data: DroppableData,
+  className?: string,
 }
 
 /**
@@ -18,12 +19,13 @@ export type DroppableProps<DraggableData, DroppableData> = {
 export const Droppable = <DraggableData, DroppableData>({
   children,
   id,
-  data
+  data,
+  className,
 }: DroppableProps<DraggableData, DroppableData>) => {
   const { setNodeRef, ...droppableBuilderProps } = useDroppable<DraggableData, DroppableData>({ id, data })
 
   return (
-    <div ref={setNodeRef}>
+    <div ref={setNodeRef} className={className}>
       {children(droppableBuilderProps)}
     </div>
   )

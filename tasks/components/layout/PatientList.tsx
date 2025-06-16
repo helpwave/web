@@ -100,10 +100,10 @@ export type PatientListProps = {
  * The right side of the ward/[wardId].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
-  overwriteTranslation,
-  wardId,
-  initialOpenedSections = defaultPatientListOpenedSections
-}: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
+                              overwriteTranslation,
+                              wardId,
+                              initialOpenedSections = defaultPatientListOpenedSections
+                            }: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
   const translation = useTranslation(defaultPatientListTranslations, overwriteTranslation)
   const [search, setSearch] = useState('')
   const {
@@ -211,16 +211,21 @@ export const PatientList = ({
               header={<span className="textstyle-accent">{`${translation.active} (${filteredActive.length})`}</span>}
             >
               {filteredActive.map(patient => (
-                <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
-                  patient: {
-                    id: patient.id,
-                    name: patient.name
-                  },
-                  discharged: false
-                }}>
+                <Draggable
+                  id={patient.id + 'patientList'}
+                  key={patient.id}
+                  data={{
+                    patient: {
+                      id: patient.id,
+                      name: patient.name
+                    },
+                    discharged: false
+                  }}
+                  className="not-last:border-b-2 border-b-gray-300"
+                >
                   {() => (
                     <div
-                      className="row pt-2 border-b-2 justify-between items-center cursor-pointer"
+                      className="row pt-2 justify-between items-center cursor-pointer"
                       onClick={() => updateContext({
                         ...context,
                         patientId: patient.id,
@@ -262,14 +267,19 @@ export const PatientList = ({
                   )}
                 >
                   {filteredUnassigned.map((patient) => (
-                    <Draggable id={patient.id} key={patient.id} data={{
-                      patient,
-                      discharged: false
-                    }}>
+                    <Draggable
+                      id={patient.id}
+                      key={patient.id}
+                      data={{
+                        patient,
+                        discharged: false
+                      }}
+                      className="not-last:border-b-2 border-b-gray-300"
+                    >
                       {() => (
                         <div
                           key={patient.id}
-                          className="row pt-2 border-b-2 items-center cursor-pointer"
+                          className="row pt-2 items-center cursor-pointer"
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id
@@ -304,17 +314,25 @@ export const PatientList = ({
                 <HideableContentSection
                   initiallyOpen={initialOpenedSections?.discharged}
                   disabled={filteredDischarged.length <= 0}
-                  header={<span className="textstyle-accent">{`${translation.discharged} (${filteredDischarged.length})`}</span>}
+                  header={(
+                    <span
+                      className="textstyle-accent">{`${translation.discharged} (${filteredDischarged.length})`}</span>
+                  )}
                 >
                   {filteredDischarged.map(patient => (
-                    <Draggable id={patient.id} key={patient.id} data={{
-                      patient,
-                      discharged: true
-                    }}>
+                    <Draggable
+                      id={patient.id}
+                      key={patient.id}
+                      data={{
+                        patient,
+                        discharged: true
+                      }}
+                      className="not-last:border-b-2 border-b-gray-300"
+                    >
                       {() => (
                         <div
                           key={patient.id}
-                          className="row pt-2 border-b-2 justify-between items-center"
+                          className="row pt-2 justify-between items-center"
                           onClick={() => updateContext({
                             wardId: context.wardId,
                             patientId: patient.id

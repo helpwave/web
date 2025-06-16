@@ -11,16 +11,16 @@ importers:
   api-services:
     dependencies:
       '@helpwave/hightide':
-        specifier: ^0.0.17
+        specifier: 0.0.17
         version: 0.0.17(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)
       '@helpwave/proto-ts':
         specifier: 0.64.0-89e2023.0
         version: 0.64.0-89e2023.0
       '@tanstack/react-query':
-        specifier: ^4.36.1
+        specifier: 4.36.1
         version: 4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query-devtools':
-        specifier: ^4.36.1
+        specifier: 4.36.1
         version: 4.36.1(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/google-protobuf':
         specifier: 3.15.12
@@ -54,7 +54,7 @@ importers:
         version: 3.24.1
     devDependencies:
       '@helpwave/eslint-config':
-        specifier: ^0.0.11
+        specifier: 0.0.11
         version: 0.0.11(jiti@2.4.2)
       '@types/js-cookie':
         specifier: 3.0.6
@@ -72,40 +72,40 @@ importers:
   customer:
     dependencies:
       '@helpwave/hightide':
-        specifier: ^0.0.17
+        specifier: 0.0.17
         version: 0.0.17(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)
       '@radix-ui/react-checkbox':
         specifier: 1.1.3
         version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@stripe/react-stripe-js':
-        specifier: ^3.6.0
+        specifier: 3.7.0
         version: 3.7.0(@stripe/stripe-js@7.3.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@stripe/stripe-js':
-        specifier: ^7.0.0
+        specifier: 7.3.0
         version: 7.3.0
       '@tailwindcss/postcss':
-        specifier: ^4.1.5
+        specifier: 4.1.5
         version: 4.1.5
       '@tanstack/react-query':
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       clsx:
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       csstype:
         specifier: 3.1.3
         version: 3.1.3
       js-cookie:
-        specifier: ^3.0.5
+        specifier: 3.0.5
         version: 3.0.5
       lucide-react:
         specifier: 0.468.0
         version: 0.468.0(react@18.3.1)
       next:
-        specifier: ^15.2.4
+        specifier: 15.2.4
         version: 15.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       oidc-client-ts:
-        specifier: ^3.1.0
+        specifier: 3.2.1
         version: 3.2.1
       react:
         specifier: 18.3.1
@@ -117,7 +117,7 @@ importers:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-hook-form:
-        specifier: ^7.55.0
+        specifier: 7.56.2
         version: 7.56.2(react@18.3.1)
       react-hot-toast:
         specifier: 2.4.1
@@ -126,17 +126,17 @@ importers:
         specifier: 9.14.0
         version: 9.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwindcss:
-        specifier: ^4.1.3
+        specifier: 4.1.7
         version: 4.1.7
       vanilla-cookieconsent:
         specifier: 3.0.1
         version: 3.0.1
     devDependencies:
       '@helpwave/eslint-config':
-        specifier: ^0.0.11
+        specifier: 0.0.11
         version: 0.0.11(jiti@2.4.2)
       '@types/js-cookie':
-        specifier: ^3.0.5
+        specifier: 3.0.6
         version: 3.0.6
       '@types/node':
         specifier: 20.17.10
@@ -161,7 +161,7 @@ importers:
         version: 12.1.0
     devDependencies:
       '@helpwave/eslint-config':
-        specifier: ^0.0.11
+        specifier: 0.0.11
         version: 0.0.11(jiti@2.4.2)
 
   tasks:
@@ -179,19 +179,19 @@ importers:
         specifier: workspace:*
         version: link:../api-services
       '@helpwave/hightide':
-        specifier: ^0.0.19
+        specifier: 0.0.19
         version: 0.0.19(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)
       '@radix-ui/react-checkbox':
         specifier: 1.1.3
         version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tailwindcss/postcss':
-        specifier: ^4.1.3
+        specifier: 4.1.5
         version: 4.1.5
       '@tanstack/react-query':
-        specifier: ^4.36.1
+        specifier: 4.36.1
         version: 4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query-devtools':
-        specifier: ^4.36.1
+        specifier: 4.36.1
         version: 4.36.1(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: 8.20.6
@@ -200,7 +200,7 @@ importers:
         specifier: 3.15.12
         version: 3.15.12
       clsx:
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       cookies-next:
         specifier: 2.1.2
@@ -218,13 +218,13 @@ importers:
         specifier: 0.468.0
         version: 0.468.0(react@18.3.1)
       next:
-        specifier: ^15.3.2
+        specifier: 15.3.2
         version: 15.3.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       oauth4webapi:
         specifier: 2.17.0
         version: 2.17.0
       postcss:
-        specifier: ^8.5.3
+        specifier: 8.5.3
         version: 8.5.3
       react:
         specifier: 18.3.1
@@ -248,7 +248,7 @@ importers:
         specifier: 3.3.0
         version: 3.3.0(react@18.3.1)
       tailwindcss:
-        specifier: ^4.1.3
+        specifier: 4.1.7
         version: 4.1.7
       typescript:
         specifier: 5.7.2
@@ -258,7 +258,7 @@ importers:
         version: 3.24.1
     devDependencies:
       '@helpwave/eslint-config':
-        specifier: ^0.0.11
+        specifier: 0.0.11
         version: 0.0.11(jiti@2.4.2)
       '@types/js-cookie':
         specifier: 3.0.6
@@ -311,9 +311,6 @@ packages:
     resolution: {integrity: sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg==}
     peerDependencies:
       react: '>=16.8.0'
-
-  '@emnapi/runtime@1.3.1':
-    resolution: {integrity: sha512-kEBmG8KyqtxJZv+ygbEim+KCGtIq1fC22Ms3S4ziXmYKm8uyoLX0MHONVKwp+9opg390VaKRNt4a7A9NwmpNhw==}
 
   '@emnapi/runtime@1.4.3':
     resolution: {integrity: sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==}
@@ -1468,10 +1465,6 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
 
-  detect-libc@2.0.3:
-    resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
-    engines: {node: '>=8'}
-
   detect-libc@2.0.4:
     resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
@@ -2336,11 +2329,6 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
-  semver@7.7.1:
-    resolution: {integrity: sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   semver@7.7.2:
     resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
     engines: {node: '>=10'}
@@ -2619,11 +2607,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       tslib: 2.8.1
-
-  '@emnapi/runtime@1.3.1':
-    dependencies:
-      tslib: 2.8.1
-    optional: true
 
   '@emnapi/runtime@1.4.3':
     dependencies:
@@ -2906,7 +2889,7 @@ snapshots:
 
   '@img/sharp-wasm32@0.33.5':
     dependencies:
-      '@emnapi/runtime': 1.3.1
+      '@emnapi/runtime': 1.4.3
     optional: true
 
   '@img/sharp-wasm32@0.34.2':
@@ -3454,7 +3437,7 @@ snapshots:
       fast-glob: 3.3.2
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.1
+      semver: 7.7.2
       ts-api-utils: 2.1.0(typescript@5.7.2)
       typescript: 5.7.2
     transitivePeerDependencies:
@@ -3688,9 +3671,6 @@ snapshots:
       object-keys: 1.1.1
 
   detect-libc@1.0.3: {}
-
-  detect-libc@2.0.3:
-    optional: true
 
   detect-libc@2.0.4: {}
 
@@ -4647,10 +4627,7 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.7.1: {}
-
-  semver@7.7.2:
-    optional: true
+  semver@7.7.2: {}
 
   set-function-length@1.2.2:
     dependencies:
@@ -4677,8 +4654,8 @@ snapshots:
   sharp@0.33.5:
     dependencies:
       color: 4.2.3
-      detect-libc: 2.0.3
-      semver: 7.7.1
+      detect-libc: 2.0.4
+      semver: 7.7.2
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.33.5
       '@img/sharp-darwin-x64': 0.33.5

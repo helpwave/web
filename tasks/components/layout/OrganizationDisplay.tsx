@@ -18,7 +18,7 @@ type OrganizationDisplayTranslation = {
 
 const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisplayTranslation> = {
   en: {
-    addOrganization: 'Add new Organization',
+    addOrganization: 'Add Organization',
     yourOrganizations: 'Your Organizations'
   },
   de: {

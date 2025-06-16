@@ -20,7 +20,7 @@ export const EditCard = ({
   return (
     <div
       className={clsx(
-        'card-md row w-full h-full gap-x-4 justify-between overflow-hidden',
+        'card-md row w-full h-full gap-x-4 justify-between overflow-hidden min-h-28',
         {
           'pr-2': !!onEditClick,
           'cursor-pointer': !!onClick,

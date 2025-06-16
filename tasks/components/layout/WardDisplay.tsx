@@ -53,35 +53,32 @@ export const WardDisplay = ({
         isLoading={isLoading}
         hasError={isError}
       >
-        {wards && (
-          <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
-            {wards.map(ward => (
-              <WardCard
-                key={ward.id}
-                ward={ward}
-                onEditClick={() => context.updateContext({
-                  ...context.state,
-                  wardId: ward.id
-                })}
-                onClick={() => {
-                  router.push(`/ward/${ward.id}`).catch(console.error)
-                }}
-                className={clsx({
-                  'border-2 border-primary': selectedWardId === ward.id
-                })}
-              />
-            ))}
-            <AddCard
-              className="min-h-[76px]"
-              text={translation.addWard}
-              onClick={() => context.updateContext({
+        <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
+          {wards && wards.map(ward => (
+            <WardCard
+              key={ward.id}
+              ward={ward}
+              onEditClick={() => context.updateContext({
                 ...context.state,
-                wardId: ''
+                wardId: ward.id
               })}
-              // TODO isSelected={!selectedWardId}
+              onClick={() => {
+                router.push(`/ward/${ward.id}`).catch(console.error)
+              }}
+              className={clsx({
+                'border-2 border-primary': selectedWardId === ward.id
+              })}
             />
-          </div>
-        )}
+          ))}
+          <AddCard
+            text={translation.addWard}
+            onClick={() => context.updateContext({
+              ...context.state,
+              wardId: ''
+            })}
+            // TODO isSelected={!selectedWardId}
+          />
+        </div>
       </LoadingAndErrorComponent>
     </div>
   )

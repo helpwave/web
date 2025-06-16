@@ -19,7 +19,7 @@ export const AddCard = ({
     <div
       onClick={onClick}
       className={clsx(
-        'card-md row justify-center items-center gap-x-1 text-gray-400 border-gray-400 h-full border-2 border-dashed hover:brightness-95',
+        'card-md row justify-center items-center gap-x-1 text-gray-400 border-gray-400 h-full border-2 border-dashed hover:brightness-95 min-h-28',
         { 'cursor-pointer': !!onClick },
         className
       )}

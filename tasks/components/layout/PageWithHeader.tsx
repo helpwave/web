@@ -5,7 +5,6 @@ import { BreadCrumb } from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { UserMenu } from '@/components/UserMenu'
 import { Header, type HeaderProps } from '@/components/Header'
-import { FeedbackButton } from '@/components/FeedbackButton'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
   crumbs?: Crumb[],
@@ -24,7 +23,7 @@ export const PageWithHeader = ({
                                  rightSide,
                                  crumbs
                                }: PropsWithChildren<PageWithHeaderProps>) => {
-  const { user, redirectUserToOrganizationSelection } = useAuth()
+  const { user } = useAuth()
 
   if (!user) return null
 
@@ -38,12 +37,6 @@ export const PageWithHeader = ({
         leftSideClassName="max-tablet:hidden"
         rightSide={[
           ...(rightSide ?? []),
-          (<FeedbackButton key="feedback"/>),
-          (
-            <button key="organization" onClick={() => redirectUserToOrganizationSelection()}>
-              {user?.organization?.name}
-            </button>
-          ),
           (<UserMenu key="usermenu"/>),
         ]}
       />

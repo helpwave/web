@@ -1,8 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
-import { ConfirmDialog } from '@helpwave/hightide'
+import { ConfirmModal, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import { useWardQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
@@ -25,6 +24,7 @@ import { PatientList } from '@/components/layout/PatientList'
 import { DragCard } from '@/components/cards/DragCard'
 import { PatientCard } from '@/components/cards/PatientCard'
 import { useRouteParameters } from '@/hooks/useRouteParameters'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 
 type WardOverviewTranslation = {
   beds: string,
@@ -86,7 +86,6 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
   const translation = useTranslation(defaultWardOverviewTranslation, overwriteTranslation)
 
 
-
   // TODO: could we differentiate between the two using two different states?
   const [draggedPatient, setDraggedPatient] = useState<{
     patient?: PatientMinimalDTO,
@@ -94,6 +93,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
   }>()
   const wardId = useRouteParameters<'wardId'>().wardId
   const { data: ward, refetch } = useWardQuery(wardId)
+  const { organization } = useAuth()
 
   const { observeAttribute } = useUpdates()
   useEffect(() => {
@@ -240,11 +240,11 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
         {
           // TODO fix later
           display: translation.organization,
-          link: `/organizations`
+          link: `/organizations/?organizationId${organization?.id}`
         },
         {
           display: ward?.name ?? translation.ward,
-          link: `/organizations/?wardId=${wardId}`
+          link: `/organizations/${organization}?wardId=${wardId}`
         },
         {
           display: translation.room,
@@ -255,10 +255,9 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
       <Head>
         <title>{titleWrapper(translation.roomOverview)}</title>
       </Head>
-      <ConfirmDialog
-        id="WardOverview-AddPatientDialog"
+      <ConfirmModal
         isOpen={isShowingPatientDialog}
-        titleText={translation.addPatientDialogTitle}
+        headerProps={{ titleText: translation.addPatientDialogTitle }}
         onConfirm={() => {
           if (contextState.patient) {
             createPatient()
@@ -270,21 +269,14 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
             })
           }
         }}
+        onDecline={() => {
+          setContextState({
+            ...emptyWardOverviewContextState,
+            wardId: contextState.wardId,
+            patient: undefined
+          })
+        }}
         onCancel={() => {
-          setContextState({
-            ...emptyWardOverviewContextState,
-            wardId: contextState.wardId,
-            patient: undefined
-          })
-        }}
-        onCloseClick={() => {
-          setContextState({
-            ...emptyWardOverviewContextState,
-            wardId: contextState.wardId,
-            patient: undefined
-          })
-        }}
-        onBackgroundClick={() => {
           setContextState({
             ...emptyWardOverviewContextState,
             wardId: contextState.wardId,
@@ -309,30 +301,28 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
               left: { min: '33%' }
             }}
             baseLayoutValue="-580px"
-            left={() => (<WardRoomList key={wardId} />)}
+            left={() => (<WardRoomList key={wardId}/>)}
             right={width =>
               isShowingPatientList ? (
-                <PatientList width={width} wardId={wardId} />
-              ) :
+                  <PatientList width={width} wardId={wardId}/>
+                ) :
                 contextState.patientId && (
-                  <div>
-                    <PatientDetail
-                      key={contextState.patient?.id}
-                      wardId={wardId}
-                      width={width}
-                    />
-                  </div>
+                  <PatientDetail
+                    key={contextState.patient?.id}
+                    wardId={wardId}
+                    width={width}
+                  />
                 )
             }
           />
           {/* TODO Later reenable the dropAnimation */}
           <DragOverlay style={{ width: '200px' }} dropAnimation={null}>
             {draggedPatient && (draggedPatient.patient ? (
-              <DragCard cardDragProperties={{ isDragging: true }}>
-                <span>{draggedPatient.patient.name}</span>
-              </DragCard>
-            )
-              : draggedPatient.bed && draggedPatient.bed.patient && (
+                  <DragCard cardDragProperties={{ isDragging: true }}>
+                    <span>{draggedPatient.patient.name}</span>
+                  </DragCard>
+                )
+                : draggedPatient.bed && draggedPatient.bed.patient && (
                 <PatientCard
                   bedName={draggedPatient.bed.name}
                   patientName={draggedPatient.bed.patient.name}

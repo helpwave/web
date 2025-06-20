@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { ConfirmModalProps, Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/hightide'
-import { Input } from '@helpwave/hightide'
+import { Input, ConfirmModal } from '@helpwave/hightide'
 import { noop } from '@helpwave/hightide'
 import { useAssignBedMutation, usePatientCreateMutation } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import { emptyPatient } from '@helpwave/api-services/types/tasks/patient'
@@ -17,7 +16,7 @@ type AddPatientModalTranslation = {
   noBedSelected: string,
 }
 
-const defaultAddPatientModalTranslation: Record<Languages, AddPatientModalTranslation> = {
+const defaultAddPatientModalTranslation: Translation<AddPatientModalTranslation> = {
   en: {
     addPatient: 'Add Patient',
     name: 'Name',
@@ -32,7 +31,7 @@ const defaultAddPatientModalTranslation: Record<Languages, AddPatientModalTransl
   }
 }
 
-export type AddPatientModalProps = ConfirmDialogProps & {
+export type AddPatientModalProps = ConfirmModalProps & {
   wardId: string,
 }
 
@@ -42,7 +41,7 @@ export type AddPatientModalProps = ConfirmDialogProps & {
 export const AddPatientModal = ({
   overwriteTranslation,
   wardId,
-  titleText,
+  headerProps,
   onConfirm = noop,
   ...modalProps
 }: PropsForTranslation<AddPatientModalTranslation, AddPatientModalProps>) => {
@@ -67,11 +66,14 @@ export const AddPatientModal = ({
     })
 
   return (
-    <ConfirmDialog
-      titleText={titleText ?? translation.addPatient}
+    <ConfirmModal
+      headerProps={{
+        ...headerProps,
+        titleText: headerProps?.titleText ?? translation.addPatient
+      }}
       onConfirm={() => {
         onConfirm()
-        createPatient()
+        createPatient().catch(console.error)
       }}
       buttonOverwrites={[{}, {}, { disabled: !validPatientName }]}
       {...modalProps}
@@ -81,7 +83,7 @@ export const AddPatientModal = ({
           <span className="textstyle-label-md">{translation.name}</span>
           <Input
             value={patientName}
-            onChange={(text) => {
+            onChangeText={(text) => {
               setTouched(true)
               setPatientName(text)
             }}
@@ -96,6 +98,6 @@ export const AddPatientModal = ({
         />
         <span className={clsx({ 'text-warning': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</span>
       </div>
-    </ConfirmDialog>
+    </ConfirmModal>
   )
 }

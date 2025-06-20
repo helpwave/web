@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { SolidButton } from '@helpwave/hightide'
 import { Textarea } from '@helpwave/hightide'
@@ -37,7 +37,7 @@ type PatientDetailTranslation = {
   readmit: string,
 }
 
-const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
+const defaultPatientDetailTranslations: Translation<PatientDetailTranslation> = {
   en: {
     patientDetails: 'Details',
     notes: 'Notes',
@@ -131,11 +131,8 @@ export const PatientDetail = ({
         )
       }
       <PatientDischargeModal
-        id="PatientDetail-DischargeDialog"
         isOpen={isShowingDischargeDialog}
         onCancel={() => setIsShowingDischargeDialog(false)}
-        onBackgroundClick={() => setIsShowingDischargeDialog(false)}
-        onCloseClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
           dischargeMutation.mutate(newPatient.id)
           setIsShowingDischargeDialog(false)
@@ -144,9 +141,7 @@ export const PatientDetail = ({
       />
       {/* taskId === '' is create and if set it's the tasks id */}
       <TaskDetailModal
-        id="PatientDetail-TaskDetailModal"
         isOpen={isShowingTask}
-        onBackgroundClick={() => setTaskId(undefined)}
         onClose={() => setTaskId(undefined)}
         wardId={wardId}
         taskId={taskId}
@@ -196,7 +191,7 @@ export const PatientDetail = ({
             <Textarea
               headline={translation.notes}
               value={newPatient.note}
-              onChange={text => changeSavedValue({
+              onChangeText={text => changeSavedValue({
                 ...newPatient,
                 note: text
               })}

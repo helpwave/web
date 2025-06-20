@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import clsx from 'clsx'
 import { Pencil } from 'lucide-react'
+import { IconButton } from '@helpwave/hightide'
 
 export type EditCardProps = PropsWithChildren<{
   onClick?: () => void,
@@ -31,15 +32,16 @@ export const EditCard = ({
     >
       {children}
       {onEditClick && (
-        <button
+        <IconButton
           onClick={event => {
             event.stopPropagation()
             onEditClick()
           }}
-          className="col justify-center items-center px-2 bg-gray-100 hover:bg-gray-200 rounded-md"
+          className="h-full justify-center items-center"
+          color="neutral"
         >
           <Pencil size={24}/>
-        </button>
+        </IconButton>
       )}
     </div>
   )

@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -42,7 +42,7 @@ type ProductsTranslation = {
   noTermsAndConditions: string,
 } & ProductPlanTypeTranslation
 
-const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
+const defaultProductsTranslations: Translation<ProductsTranslation> = {
   en: {
     ...defaultProductPlanTypeTranslation.en,
     checkout: 'Checkout',

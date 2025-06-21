@@ -1,6 +1,5 @@
 import Head from 'next/head'
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { UserInvitationList } from '@/components/UserInvitationList'
@@ -10,7 +9,7 @@ type InvitationsPageTranslation = {
   invitations: string,
 }
 
-const defaultInvitationsPageTranslation: Record<Languages, InvitationsPageTranslation> = {
+const defaultInvitationsPageTranslation: Translation<InvitationsPageTranslation> = {
   en: {
     invitations: 'Invitations'
   },

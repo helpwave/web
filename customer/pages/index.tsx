@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -13,7 +13,7 @@ type DashboardTranslation = {
   dashboard: string,
 }
 
-const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
+const defaultDashboardTranslations: Translation<DashboardTranslation> = {
   en: {
     dashboard: 'Dashboard'
   },

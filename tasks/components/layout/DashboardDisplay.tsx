@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { LoadingAndErrorComponent, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { useRouter } from 'next/router'
 import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
@@ -19,7 +19,7 @@ type DashboardDisplayTranslation = {
   addWard: string,
 }
 
-const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTranslation> = {
+const defaultDashboardDisplayTranslations: Translation<DashboardDisplayTranslation> = {
   en: {
     patients: 'Patients',
     organizations: 'Organizations',
@@ -38,7 +38,7 @@ const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTra
   }
 }
 
-export type DashboardDisplayProps = Record<string, unknown>
+export type DashboardDisplayProps = Translation<unknown>
 
 /**
  * The left side of the DashboardPage

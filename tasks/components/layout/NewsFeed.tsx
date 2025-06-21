@@ -1,5 +1,4 @@
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { useLanguage } from '@helpwave/hightide'
 import { filterNews, type LocalizedNews } from '@helpwave/hightide'
@@ -11,7 +10,7 @@ type NewsFeedTranslation = {
   noNews: string,
 }
 
-const defaultNewsFeedTranslations: Record<Languages, NewsFeedTranslation> = {
+const defaultNewsFeedTranslations: Translation<NewsFeedTranslation> = {
   en: {
     title: 'What\'s new in helpwave tasks?',
     noNews: 'No News in your language found'

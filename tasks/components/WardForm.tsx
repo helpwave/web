@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { Input } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
+import { Input, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 
 type WardFormTranslation = {
   general: string,
@@ -14,7 +13,7 @@ type WardFormTranslation = {
   duplicateName: string,
 }
 
-const defaultWardFormTranslations: Record<Languages, WardFormTranslation> = {
+const defaultWardFormTranslations: Translation<WardFormTranslation> = {
   en: {
     general: 'General',
     name: 'Name',
@@ -49,11 +48,11 @@ export type WardFormProps = {
  * A form for editing the information of a Ward
  */
 export const WardForm = ({
-  overwriteTranslation,
-  ward,
-  onChange = () => undefined,
-  isShowingErrorsDirectly = false
-}: PropsForTranslation<WardFormTranslation, WardFormProps>) => {
+                           overwriteTranslation,
+                           ward,
+                           onChange = () => undefined,
+                           isShowingErrorsDirectly = false
+                         }: PropsForTranslation<WardFormTranslation, WardFormProps>) => {
   const translation = useTranslation(defaultWardFormTranslations, overwriteTranslation)
   const [touched, setTouched] = useState({ name: isShowingErrorsDirectly })
 
@@ -86,11 +85,12 @@ export const WardForm = ({
   return (
     <form>
       <div className="mt-2 mb-1">
-        <Input id="name" value={ward.name} label={{ name: translation.name }}
-               onBlur={() => setTouched({ ...touched, name: true })}
-               onChange={text => triggerOnChange({ ...ward, name: text })}
-               maxLength={maxWardNameLength}
-               className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
+        <Input
+          id="name" value={ward.name} label={{ name: translation.name }}
+          onBlur={() => setTouched({ ...touched, name: true })}
+          onChangeText={text => triggerOnChange({ ...ward, name: text })}
+          maxLength={maxWardNameLength}
+          className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
         {isDisplayingShortNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
       </div>

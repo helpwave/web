@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { LoadingAndErrorComponent, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { ColumnTitle } from '../ColumnTitle'
@@ -14,7 +14,7 @@ type WardDisplayTranslation = {
   addWard: string,
 }
 
-const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> = {
+const defaultWardDisplayTranslations: Translation<WardDisplayTranslation> = {
   en: {
     wards: 'Wards',
     addWard: 'Add new Ward'

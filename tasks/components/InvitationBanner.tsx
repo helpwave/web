@@ -1,6 +1,5 @@
 import { Mail } from 'lucide-react'
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import Link from 'next/link'
 import { useInvitationsByUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
@@ -10,7 +9,7 @@ type InvitationBannerTranslation = {
   openInvites: string,
 }
 
-const defaultInvitationBannerTranslation: Record<Languages, InvitationBannerTranslation> = {
+const defaultInvitationBannerTranslation: Translation<InvitationBannerTranslation> = {
   en: {
     openInvites: 'Open invites'
   },

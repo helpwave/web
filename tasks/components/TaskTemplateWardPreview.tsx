@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { SolidButton } from '@helpwave/hightide'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
@@ -14,7 +13,7 @@ type TaskTemplateWardPreviewTranslation = {
   taskTemplates: (numberOfTemplates: number) => string,
 }
 
-const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateWardPreviewTranslation> = {
+const defaultTaskTemplateWardPreviewTranslation: Translation<TaskTemplateWardPreviewTranslation> = {
   en: {
     showAllTaskTemplates: 'Show all Task Templates',
     taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`

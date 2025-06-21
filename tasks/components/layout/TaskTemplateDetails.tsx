@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
+import { ConfirmModal } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { SolidButton, TextButton } from '@helpwave/hightide'
-import { ConfirmDialog } from '@helpwave/hightide'
 import { Input } from '@helpwave/hightide'
 import { Textarea } from '@helpwave/hightide'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
@@ -26,7 +26,7 @@ type TaskTemplateDetailsTranslation = {
   required: string,
 }
 
-const defaultTaskTemplateDetailsTranslations: Record<Languages, TaskTemplateDetailsTranslation> = {
+const defaultTaskTemplateDetailsTranslations: Translation<TaskTemplateDetailsTranslation> = {
   en: {
     updateTaskTemplate: 'Update Task Template',
     updateTaskTemplateDescription: 'Here you can update details about the Task Template',
@@ -103,13 +103,12 @@ export const TaskTemplateDetails = ({
 
   return (
     <div className="col py-4 px-6">
-      <ConfirmDialog
-        id="TaskTemplateDetails-DeleteDialog"
-        titleText={translation.deleteConfirmText}
+      <ConfirmModal
+        headerProps={{
+          titleText: translation.deleteConfirmText
+        }}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
-        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
-        onCloseClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
           onDelete(context.state.template)
@@ -128,7 +127,7 @@ export const TaskTemplateDetails = ({
             label={{ name: translation.name }}
             type="text"
             onBlur={() => setTouched({ name: true })}
-            onChange={text => {
+            onChangeText={text => {
               context.updateContext({
                 template: { ...context.state.template, name: text },
                 isValid: validateName(text) === undefined,
@@ -145,7 +144,7 @@ export const TaskTemplateDetails = ({
           headline={translation.notes}
           id="notes"
           value={context.state.template.notes}
-          onChange={text => {
+          onChangeText={text => {
             context.updateContext({
               template: { ...context.state.template, notes: text },
               isValid: context.state.isValid,

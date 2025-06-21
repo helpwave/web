@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -11,7 +11,7 @@ type CreateOrganizationTranslation = {
   createOrganizationDescription: string,
 }
 
-const defaultCreateOrganizationTranslations: Record<Languages, CreateOrganizationTranslation> = {
+const defaultCreateOrganizationTranslations: Translation<CreateOrganizationTranslation> = {
   en: {
     createOrganization: 'Create Organization',
     createOrganizationDescription: 'You must create a Organization to use our Service.'

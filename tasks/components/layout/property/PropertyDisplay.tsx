@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import type { PropsForTranslation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
@@ -26,7 +26,7 @@ type PropertyDisplayTranslation = {
   name: string,
 } & { [key in SubjectType | FieldType]: string }
 
-const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTranslation> = {
+const defaultPropertyDisplayTranslation: Translation<PropertyDisplayTranslation> = {
   en: {
     properties: 'Properties',
     addProperty: 'Add Property',
@@ -110,7 +110,7 @@ export const PropertyDisplay = ({
             <Input
               // TODO Search Icon
               value={search}
-              onChange={setSearch}
+              onChangeText={setSearch}
               onEditCompleted={setSearch}
               placeholder={translation.search}
             />

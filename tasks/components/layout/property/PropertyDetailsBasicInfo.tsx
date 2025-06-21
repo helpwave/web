@@ -1,8 +1,6 @@
-import type { Languages } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
+import { Expandable } from '@helpwave/hightide'
+import type { PropsForTranslation , Translation , ExpandableProps } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
-import type { InputGroupProps } from '@helpwave/hightide'
-import { InputGroup } from '@helpwave/hightide'
 import { Input } from '@helpwave/hightide'
 import { Textarea } from '@helpwave/hightide'
 import type { Property } from '@helpwave/api-services/types/properties/property'
@@ -18,7 +16,7 @@ type PropertyDetailsBasicInfoTranslation = {
   writeYourDescription: string,
 }
 
-const defaultPropertyDetailsBasicInfoTranslation: Record<Languages, PropertyDetailsBasicInfoTranslation> = {
+const defaultPropertyDetailsBasicInfoTranslation: Translation<PropertyDetailsBasicInfoTranslation> = {
   en: {
     basicInfo: 'Basic Information',
     subjectType: 'Subject Type',
@@ -39,7 +37,7 @@ export type PropertyDetailsBasicInfoProps = {
   value: PropertyBasicInfo,
   onChange: (value: PropertyBasicInfo) => void,
   onEditComplete: (value: PropertyBasicInfo) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>,
+  inputGroupProps?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
@@ -54,7 +52,7 @@ export const PropertyDetailsBasicInfo = ({
 }: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
   const translation = useTranslation(defaultPropertyDetailsBasicInfoTranslation, overwriteTranslation)
   return (
-    <InputGroup {...inputGroupProps} title={translation.basicInfo}>
+    <Expandable {...inputGroupProps} label={translation.basicInfo}>
       <PropertySubjectTypeSelect
         value={value.subjectType}
         label={{ name: translation.subjectType, labelType: 'labelMedium' }}
@@ -67,16 +65,16 @@ export const PropertyDetailsBasicInfo = ({
       <Input
         label={{ name: translation.propertyName, labelType: 'labelMedium' }}
         value={value.name}
-        onChange={name => onChange({ ...value, name })}
+        onChangeText={name => onChange({ ...value, name })}
         onEditCompleted={name => onEditComplete({ ...value, name })}
       />
       <Textarea
         label={{ name: translation.description, labelType: 'labelMedium' }}
         value={value.description}
         placeholder={translation.writeYourDescription}
-        onChange={description => onChange({ ...value, description })}
+        onChangeText={description => onChange({ ...value, description })}
         onEditCompleted={description => onEditComplete({ ...value, description })}
       />
-    </InputGroup>
+    </Expandable>
   )
 }

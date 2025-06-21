@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
+import { ConfirmModal } from '@helpwave/hightide'
 import {
   Avatar,
-  ConfirmDialog,
   defaultTableStatePagination,
   defaultTableStateSelection,
   LoadingAndErrorComponent,
@@ -34,7 +34,7 @@ type OrganizationMemberListTranslation = {
   deleteConfirmText: (single: boolean) => string,
 }
 
-const defaultOrganizationMemberListTranslations: Record<Languages, OrganizationMemberListTranslation> = {
+const defaultOrganizationMemberListTranslations: Translation<OrganizationMemberListTranslation> = {
   en: {
     edit: 'Edit',
     remove: 'Remove',
@@ -114,13 +114,13 @@ export const OrganizationMemberList = ({
 
   return (
     <div className="col">
-      <ConfirmDialog
-        id="organizationMemberList-DeleteDialog"
-        title={translation.deleteConfirmText(hasSelectedMultiple)}
-        description={translation.dangerZoneText(hasSelectedMultiple)}
+      <ConfirmModal
+        headerProps={{
+         titleText: translation.deleteConfirmText(hasSelectedMultiple),
+         descriptionText: translation.dangerZoneText(hasSelectedMultiple)
+        }}
         isOpen={deleteDialogState.isShowing}
         onCancel={() => setDeleteDialogState(defaultDeleteDialogState)}
-        onBackgroundClick={() => setDeleteDialogState(defaultDeleteDialogState)}
         onConfirm={() => {
           if (deleteDialogState.member) {
             setTableState(removeFromTableSelection(tableState, [deleteDialogState.member], usedMembers.length, idMapping))

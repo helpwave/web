@@ -1,6 +1,6 @@
 
 import { Mail } from 'lucide-react'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { AvatarGroup } from '@helpwave/hightide'
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
@@ -11,7 +11,7 @@ type OrganizationCardTranslation = {
   members: string,
 }
 
-const defaultOrganizationCardTranslation: Record<Languages, OrganizationCardTranslation> = {
+const defaultOrganizationCardTranslation: Translation<OrganizationCardTranslation> = {
   en: {
     member: 'Member',
     members: 'Members'

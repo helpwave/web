@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 
 import type {
-  Languages,
+  Translation,
   LocalizedNews,
   PropsForTranslation
 } from '@helpwave/hightide'
@@ -29,7 +29,7 @@ type DashboardTranslation = {
   dashboard: string,
 }
 
-const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
+const defaultDashboardTranslations: Translation<DashboardTranslation> = {
   en: {
     dashboard: 'Dashboard'
   },
@@ -80,7 +80,6 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
       </Head>
 
       <StagingDisclaimerModal
-        id="main-staging-disclaimer-modal"
         onConfirm={dismissStagingDisclaimer}
         isOpen={isStagingDisclaimerOpen}
       />

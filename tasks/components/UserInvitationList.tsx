@@ -1,6 +1,5 @@
 import { useState } from 'react'
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { defaultTableStatePagination, Table, type TableState } from '@helpwave/hightide'
 import { SolidButton } from '@helpwave/hightide'
@@ -14,7 +13,7 @@ import {
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import type { Invitation } from '@helpwave/api-services/types/users/invitations'
 import { InvitationState } from '@helpwave/api-services/types/users/invitations'
-import { ReSignInModal } from '@/components/modals/ReSignInModal'
+import { ReSignInDialog } from '@/components/modals/ReSignInDialog'
 
 type UserInvitationListTranslation = {
   accept: string,
@@ -22,7 +21,7 @@ type UserInvitationListTranslation = {
   organization: string,
 }
 
-const defaultUserInvitationListTranslation: Record<Languages, UserInvitationListTranslation> = {
+const defaultUserInvitationListTranslation: Translation<UserInvitationListTranslation> = {
   en: {
     accept: 'Accept',
     decline: 'Decline',
@@ -59,8 +58,7 @@ export const UserInvitationList = ({
 
   return (
     <>
-      <ReSignInModal
-        id="OrganizationDetail-ReSignInModal"
+      <ReSignInDialog
         isOpen={isShowingReSignInDialog}
         onConfirm={() => {
           setIsShowingReSignInDialog(false)

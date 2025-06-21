@@ -1,15 +1,18 @@
 import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { SolidButton, TextButton } from '@helpwave/hightide'
-import { ConfirmDialog } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
+import { ConfirmModal } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  SolidButton,
+  useTranslation
+} from '@helpwave/hightide'
 import {
   useWardCreateMutation,
   useWardDeleteMutation,
-  useWardUpdateMutation,
-  useWardDetailsQuery
+  useWardDetailsQuery,
+  useWardUpdateMutation
 } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import type { WardDetailDTO } from '@helpwave/api-services/types/tasks/wards'
 import { emptyWard } from '@helpwave/api-services/types/tasks/wards'
@@ -33,7 +36,7 @@ type WardDetailTranslation = {
   roomsNotOnCreate: string,
 }
 
-const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = {
+const defaultWardDetailTranslations: Translation<WardDetailTranslation> = {
   en: {
     updateWard: 'Update Ward',
     updateWardSubtitle: 'Here you can update details about the ward such as rooms',
@@ -72,9 +75,9 @@ export type WardDetailProps = {
  * the Ward
  */
 export const WardDetail = ({
-  overwriteTranslation,
-  ward,
-}: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
+                             overwriteTranslation,
+                             ward,
+                           }: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
   const translation = useTranslation(defaultWardDetailTranslations, overwriteTranslation)
 
   const context = useContext(OrganizationOverviewContext)
@@ -106,14 +109,13 @@ export const WardDetail = ({
         loadingProps={{ classname: '!h-full' }}
         errorProps={{ classname: '!h-full' }}
       >
-        <ConfirmDialog
-          id="WardDetail-DeleteDialog"
-          titleText={translation.deleteConfirmText}
-          descriptionText={translation.dangerZoneText}
+        <ConfirmModal
+          headerProps={{
+            titleText: translation.deleteConfirmText,
+            descriptionText: translation.dangerZoneText,
+          }}
           isOpen={isShowingConfirmDialog}
           onCancel={() => setIsShowingConfirmDialog(false)}
-          onBackgroundClick={() => setIsShowingConfirmDialog(false)}
-          onCloseClick={() => setIsShowingConfirmDialog(false)}
           onConfirm={() => {
             setIsShowingConfirmDialog(false)
             deleteWardMutation.mutate(newWard.id)
@@ -138,10 +140,10 @@ export const WardDetail = ({
         {isCreatingNewWard ?
           <span>{translation.roomsNotOnCreate}</span>
           : (
-          <div className="max-w-[600px] mt-6">
-            <RoomList/>
-          </div>
-            )}
+            <div className="max-w-[600px] mt-6">
+              <RoomList/>
+            </div>
+          )}
         <div className="row justify-end mt-6">
           <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
@@ -159,13 +161,12 @@ export const WardDetail = ({
         <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
           <span className="textstyle-title-normal">{translation.dangerZone}</span>
           <span className="textstyle-description">{translation.dangerZoneText}</span>
-          <TextButton
+          <button
             onClick={() => setIsShowingConfirmDialog(true)}
-            className="px-0 font-bold justify-start"
-            color="negative"
+            className="px-0 font-bold justify-start text-negative w-min text-nowrap"
           >
             {translation.deleteWard}
-          </TextButton>
+          </button>
         </div>
       </LoadingAndErrorComponent>
     </div>

@@ -1,8 +1,7 @@
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
+import { ConfirmModal } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
-import { ConfirmDialog } from '@helpwave/hightide'
 import { SolidButton, TextButton } from '@helpwave/hightide'
 import { Input } from '@helpwave/hightide'
 import {
@@ -39,7 +38,7 @@ type RoomListTranslation = {
   deleteConfirmText: (single: boolean) => string,
 }
 
-const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
+const defaultRoomListTranslations: Translation<RoomListTranslation> = {
   en: {
     edit: 'Edit',
     remove: 'Remove',
@@ -145,14 +144,13 @@ export const RoomList = ({
 
   return (
     <div className="col">
-      <ConfirmDialog
-        id="roomlist-DeleteBedsDialog"
-        titleText={translation.deleteConfirmText(multipleInDelete)}
-        descriptionText={translation.dangerZoneText(multipleInDelete)}
+      <ConfirmModal
+        headerProps={{
+          titleText: translation.deleteConfirmText(multipleInDelete),
+          descriptionText: translation.dangerZoneText(multipleInDelete),
+        }}
         isOpen={deletionConfirmDialogElement !== undefined}
         onCancel={() => setDeletionConfirmDialogElement(undefined)}
-        onBackgroundClick={() => setDeletionConfirmDialogElement(undefined)}
-        onCloseClick={() => setDeletionConfirmDialogElement(undefined)}
         onConfirm={() => {
           let toDeleteElements: RoomListRoomRepresentation[]
           if (deletionConfirmDialogElement) {
@@ -167,12 +165,10 @@ export const RoomList = ({
         confirmType="negative"
       />
       <ManageBedsModal
-        id="roomlist-ManageBedModal"
         isOpen={!!managedRoom}
         wardId={context.state.wardId}
         roomId={managedRoom ?? ''}
-        onBackgroundClick={() => setManagedRoom(undefined)}
-        onCloseClick={() => setManagedRoom(undefined)}
+        onClose={() => setManagedRoom(undefined)}
       />
       <LoadingAndErrorComponent
         isLoading={isLoading}
@@ -215,7 +211,7 @@ export const RoomList = ({
               <Input
                 value={room.name}
                 type="text"
-                onChange={text => {
+                onChangeText={text => {
                   setIsEditing(true)
                   setUsedRooms(usedRooms.map(value => identifierMapping(value) === identifierMapping(room) ? {
                     ...room,

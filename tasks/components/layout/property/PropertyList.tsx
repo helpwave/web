@@ -1,5 +1,5 @@
 
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import type { PropsForTranslation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Tile } from '@helpwave/hightide'
@@ -29,7 +29,7 @@ type PropertyListTranslation = {
   addProperty: string,
 }
 
-const defaultPropertyListTranslation: Record<Languages, PropertyListTranslation> = {
+const defaultPropertyListTranslation: Translation<PropertyListTranslation> = {
   en: {
     properties: 'Properties',
     addProperty: 'Add Property'

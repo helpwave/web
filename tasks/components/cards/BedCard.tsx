@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { Plus } from 'lucide-react'
 import { DragCard, type DragCardProps } from './DragCard'
@@ -9,7 +9,7 @@ type BedCardTranslation = {
   addPatient: string,
 }
 
-const defaultBedCardTranslation: Record<Languages, BedCardTranslation> = {
+const defaultBedCardTranslation: Translation<BedCardTranslation> = {
   en: {
     nobody: 'nobody',
     addPatient: 'Add Patient'

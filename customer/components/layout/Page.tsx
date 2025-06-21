@@ -7,7 +7,7 @@ import type { HeaderProps } from '@/components/layout/Header'
 import { Header } from '@/components/layout/Header'
 import Link from 'next/link'
 import { Helpwave } from '@helpwave/hightide'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Menu, MessageCircleQuestionIcon, Package, Receipt, Section, Settings } from 'lucide-react'
 import Head from 'next/head'
@@ -15,7 +15,7 @@ import { MobileNavigationOverlay } from '@/components/layout/MobileNavigationOve
 
 type PageTranslation = { customer: string }
 
-const defaultPageTranslationTranslation: Record<Languages, PageTranslation> = {
+const defaultPageTranslationTranslation: Translation<PageTranslation> = {
   en: {
     customer: 'customer',
   },

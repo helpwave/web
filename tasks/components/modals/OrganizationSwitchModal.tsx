@@ -1,11 +1,6 @@
-import type { Languages } from '@helpwave/hightide'
-import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
-import type { ModalProps } from '@helpwave/hightide'
-import { Modal } from '@helpwave/hightide'
-import type { SelectOption } from '@helpwave/hightide'
-import { Select } from '@helpwave/hightide'
+import type { ModalProps, SelectOption, Translation } from '@helpwave/hightide'
+import { Modal, type PropsForTranslation, Select, SolidButton, useTranslation } from '@helpwave/hightide'
 import { useMemo, useState } from 'react'
-import { SolidButton } from '@helpwave/hightide'
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationSwitchModalTranslation = {
@@ -19,7 +14,7 @@ type OrganizationSwitchModalProps = ModalProps & {
   onDone: (organization?: OrganizationDTO) => void,
 }
 
-const defaultOrganizationSwitchModalTranslation: Record<Languages, OrganizationSwitchModalTranslation> = {
+const defaultOrganizationSwitchModalTranslation: Translation<OrganizationSwitchModalTranslation> = {
   en: {
     switchOrganization: 'Switch organization',
     ok: 'Ok',
@@ -37,7 +32,14 @@ const organizationsToOptions = (organizations?: OrganizationDTO[]): SelectOption
   }))
 }
 
-export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneToCaller, currentOrganization, organizations, ...modalProps }: PropsForTranslation<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
+export const OrganizationSwitchModal = ({
+                                          overwriteTranslation,
+                                          onDone: onDoneToCaller,
+                                          currentOrganization,
+                                          organizations,
+                                          headerProps,
+                                          ...modalProps
+                                        }: PropsForTranslation<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
   const translation = useTranslation(defaultOrganizationSwitchModalTranslation, overwriteTranslation)
   const [organization, setOrganization] = useState(currentOrganization ?? '')
   const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])
@@ -50,7 +52,10 @@ export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneTo
 
   return (
     <Modal
-      titleText={translation.switchOrganization}
+      headerProps={{
+        ...headerProps,
+        titleText: headerProps?.titleText ?? translation.switchOrganization
+      }}
       {...modalProps}
     >
       <div className="w-[320px]">

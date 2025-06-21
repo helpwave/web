@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Undo2, X } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Select } from '@helpwave/hightide'
 import { noop } from '@helpwave/hightide'
@@ -20,7 +20,7 @@ type RoomBedSelectTranslation = {
   submitting: string,
 }
 
-const defaultRoomBedSelectTranslation: Record<Languages, RoomBedSelectTranslation> = {
+const defaultRoomBedSelectTranslation: Translation<RoomBedSelectTranslation> = {
   en: {
     saved: 'saved',
     unsaved: 'not saved',

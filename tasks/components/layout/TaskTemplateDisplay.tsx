@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router'
-
 import { LucideArrowLeftRight } from 'lucide-react'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { SolidButton } from '@helpwave/hightide'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
@@ -15,7 +14,7 @@ export type TaskTemplateDisplayTranslation = {
   wardTaskTemplates: string,
 }
 
-const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDisplayTranslation> = {
+const defaultTaskTemplateDisplayTranslation: Translation<TaskTemplateDisplayTranslation> = {
   en: {
     addNewTaskTemplate: 'Add new template',
     personalTaskTemplates: 'Personal Task Templates',

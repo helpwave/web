@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import type { PropsForTranslation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { useContractsForProductsQuery } from '@/api/mutations/contract_mutations'
@@ -12,7 +12,7 @@ type ContractListTranslation = {
   show: string,
 }
 
-const defaultContractListTranslations: Record<Languages, ContractListTranslation> = {
+const defaultContractListTranslations: Translation<ContractListTranslation> = {
   en: {
     contracts: 'Contracts',
     noContracts: 'No Contracts',

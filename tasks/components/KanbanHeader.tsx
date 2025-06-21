@@ -1,5 +1,4 @@
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Input } from '@helpwave/hightide'
 import { ChevronDown } from 'lucide-react'
@@ -11,7 +10,7 @@ type KanbanHeaderTranslation = {
   search: string,
 }
 
-const defaultKanbanHeaderTranslations: Record<Languages, KanbanHeaderTranslation> = {
+const defaultKanbanHeaderTranslations: Translation<KanbanHeaderTranslation> = {
   en: {
     tasks: 'Tasks',
     status: 'Status',
@@ -54,7 +53,7 @@ export const KanbanHeader = ({
           {translation.label}
           <ChevronDown className="stroke-black"/>
         </div>
-        <Input id="search" value={searchValue} placeholder={translation.search} onChange={onSearchChange}/>
+        <Input id="search" value={searchValue} placeholder={translation.search} onChangeText={onSearchChange}/>
       </div>
     </div>
   )

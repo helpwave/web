@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -22,7 +22,7 @@ type TeamTranslation = {
   enabled: string,
 } & UserRoleTranslation
 
-const defaultTeamTranslations: Record<Languages, TeamTranslation> = {
+const defaultTeamTranslations: Translation<TeamTranslation> = {
   en: {
     ...defaultUserRoleTranslation.en,
     team: 'Team',

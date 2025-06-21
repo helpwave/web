@@ -1,10 +1,8 @@
-
-import type { Languages } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
+import { ConfirmModal } from '@helpwave/hightide'
+import type { PropsForTranslation , Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
 import { TextButton } from '@helpwave/hightide'
-import { ConfirmDialog } from '@helpwave/hightide'
 import type { StepperInformation } from '@helpwave/hightide'
 import { StepperBar } from '@helpwave/hightide'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
@@ -30,7 +28,7 @@ type PropertyDetailsTranslation = {
   newEntry: string,
 }
 
-const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTranslation> = {
+const defaultPropertyDetailsTranslation: Translation<PropertyDetailsTranslation> = {
   en: {
     propertyDetails: 'Property Details',
     archiveProperty: 'Archive Property',
@@ -92,17 +90,16 @@ export const PropertyDetails = ({
 
   return (
     <div className="py-4 px-6 col gap-y-4 bg-gray-100 min-h-full">
-      <ConfirmDialog
-        id="confirmArchiveModal"
+      <ConfirmModal
+        headerProps={{
+          titleText: translation.archivePropertyDialogTitle,
+          descriptionText: translation.archivePropertyDialogDescription
+        }}
         isOpen={showArchiveConfirm}
-        titleText={translation.archivePropertyDialogTitle}
-        descriptionText={translation.archivePropertyDialogDescription}
         onCancel={() => setArchiveConfirm(false)}
         onConfirm={() => {
           updatePropertyMutation.mutate({ ...value, isArchived: true })
         }}
-        onCloseClick={() => setArchiveConfirm(false)}
-        onBackgroundClick={() => setArchiveConfirm(false)}
         confirmType="negative"
       />
       <div className="top-0 row justify-between items-center">

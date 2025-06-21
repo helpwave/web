@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -14,7 +14,7 @@ type KanbanColumnsTranslation = {
   addTask: string,
 }
 
-const defaultKanbanColumnsTranslations: Record<Languages, KanbanColumnsTranslation> = {
+const defaultKanbanColumnsTranslations: Translation<KanbanColumnsTranslation> = {
   en: {
     addTask: 'Add new Tasks'
   },

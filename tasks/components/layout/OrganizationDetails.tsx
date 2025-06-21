@@ -1,9 +1,9 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
+import { ConfirmModal } from '@helpwave/hightide'
 import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
 import { SolidButton } from '@helpwave/hightide'
-import { ConfirmDialog } from '@helpwave/hightide'
 import {
   useInviteMemberMutation,
   useOrganizationCreateMutation,
@@ -18,7 +18,7 @@ import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
 import { OrganizationContext } from '@/pages/organizations'
-import { ReSignInModal } from '@/components/modals/ReSignInModal'
+import { ReSignInDialog } from '@/components/modals/ReSignInDialog'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -30,7 +30,7 @@ type OrganizationDetailTranslation = {
   update: string,
 }
 
-const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetailTranslation> = {
+const defaultOrganizationDetailTranslations: Translation<OrganizationDetailTranslation> = {
   en: {
     organizationDetail: 'Organization Details',
     dangerZone: 'Danger Zone',
@@ -135,32 +135,22 @@ export const OrganizationDetail = ({
       key={contextState.organizationId}
       className="col py-4 px-6"
     >
-      <ConfirmDialog
-        id="organizationDetail-DeleteDialog"
-        titleText={translation.deleteConfirmText}
-        descriptionText={translation.dangerZoneText}
+      <ConfirmModal
+        headerProps={{
+          titleText: translation.deleteConfirmText,
+          descriptionText: translation.dangerZoneText,
+        }}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
-        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
-        onCloseClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          deleteOrganization(contextState.organizationId)
+          deleteOrganization(contextState.organizationId).catch(console.error)
         }}
         confirmType="negative"
       />
-      <ReSignInModal
-        id="organizationDetail-ReSignInModal"
+      <ReSignInDialog
         isOpen={!!isShowingReSignInDialog}
-        onBackgroundClick={() => {
-          setIsShowingReSignInDialog(undefined)
-          resetForm()
-        }}
         onDecline={() => {
-          setIsShowingReSignInDialog(undefined)
-          resetForm()
-        }}
-        onCloseClick={() => {
           setIsShowingReSignInDialog(undefined)
           resetForm()
         }}
@@ -179,7 +169,7 @@ export const OrganizationDetail = ({
           onChange={(organizationForm, shouldUpdate) => {
             setOrganizationForm(organizationForm)
             if (shouldUpdate) {
-              updateOrganization(organizationForm.organization)
+              updateOrganization(organizationForm.organization).catch(console.error)
             }
           }}
         />

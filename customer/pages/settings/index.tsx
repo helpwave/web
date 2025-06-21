@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -29,7 +29,7 @@ type SettingsTranslation = {
   save: string,
 }
 
-const defaultSettingsTranslations: Record<Languages, SettingsTranslation> = {
+const defaultSettingsTranslations: Translation<SettingsTranslation> = {
   en: {
     settings: 'Settings',
     settingsDescription: 'Here you can change the settings and information of your organization.',

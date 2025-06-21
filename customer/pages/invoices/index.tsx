@@ -37,7 +37,7 @@ type InvoicesTranslation = {
   allPayed: string,
 } & InvoiceStatusTranslation & ProductPlanTypeTranslation
 
-const defaultInvoicesTranslations: Record<Languages, InvoicesTranslation> = {
+const defaultInvoicesTranslations: Translation<InvoicesTranslation> = {
   en: {
     ...defaultInvoiceStatusTranslation.en,
     ...defaultProductPlanTypeTranslation.en,

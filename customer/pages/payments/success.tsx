@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import { Section } from '@/components/layout/Section'
@@ -20,7 +20,7 @@ type CheckOutReturnTranslation = {
   backToInvoice: string,
 }
 
-const defaultCheckOutReturnTranslation: Record<Languages, CheckOutReturnTranslation> = {
+const defaultCheckOutReturnTranslation: Translation<CheckOutReturnTranslation> = {
   en: {
     payment: 'Payment',
     paidSucessfully: 'Payment was successful!',

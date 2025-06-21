@@ -1,5 +1,5 @@
 
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { PillLabelsColumn } from '../pill/PillLabelsColumn'
 import { DragCard, type DragCardProps } from './DragCard'
@@ -9,7 +9,7 @@ type PatientCardTranslation = {
   bedNotAssigned: string,
 }
 
-const defaultPatientCardTranslations: Record<Languages, PatientCardTranslation> = {
+const defaultPatientCardTranslations: Translation<PatientCardTranslation> = {
   en: {
     bedNotAssigned: 'Not Assigned',
   },

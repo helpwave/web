@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import {
   defaultTableStatePagination,
   InputModal,
@@ -30,7 +29,7 @@ type OrganizationInvitationListTranslation = {
   inviteMember: string,
 }
 
-const defaultOrganizationInvitationListTranslation: Record<Languages, OrganizationInvitationListTranslation> = {
+const defaultOrganizationInvitationListTranslation: Translation<OrganizationInvitationListTranslation> = {
   en: {
     remove: 'Remove',
     email: 'Email',
@@ -99,10 +98,9 @@ export const OrganizationInvitationList = ({
       loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl' }}
     >
       <InputModal
-        id="inviteMemberModal"
-        modalClassName="min-w-[400px]"
+        className="min-w-[400px]"
         isOpen={isShowingInviteMemberModal}
-        onBackgroundClick={() => setInviteMemberModalEmail(undefined)}
+        onCancel={() => setInviteMemberModalEmail(undefined)}
         onConfirm={() => {
           if (!isShowingInviteMemberModal) {
             return
@@ -133,7 +131,7 @@ export const OrganizationInvitationList = ({
         inputs={[{
           label: { name: translation.email },
           value: inviteMemberModalEmail ?? '',
-          onChange: text => setInviteMemberModalEmail(text)
+          onChangeText: text => setInviteMemberModalEmail(text)
         }]}
         buttonOverwrites={[
           {},

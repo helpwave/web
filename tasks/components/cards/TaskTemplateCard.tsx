@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Chip } from '@helpwave/hightide'
 import { EditCard, type EditCardProps } from './EditCard'
@@ -11,7 +11,7 @@ type TaskTemplateCardTranslation = {
   ward: string,
 }
 
-const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTranslation> = {
+const defaultTaskTemplateCardTranslations: Translation<TaskTemplateCardTranslation> = {
   en: {
     subtask: 'Subtasks',
     edit: 'Edit',

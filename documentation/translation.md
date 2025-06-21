@@ -17,7 +17,7 @@ type TitleTranslation = {
   page: (page: number) => string
 }
 
-const defaultTitleTranslations: Record<Languages, TitleTranslation> = {
+const defaultTitleTranslations: Translation<TitleTranslation> = {
   en: {
     welcome: 'Welcome',
     goodToSeeYou: 'Good to see you',

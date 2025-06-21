@@ -1,9 +1,8 @@
 import { Helpwave } from '@helpwave/hightide'
-
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import Head from 'next/head'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import type { PropsForTranslation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import titleWrapper from '@/utils/titleWrapper'
@@ -16,7 +15,7 @@ type NotFoundTranslation = {
   homePage:string,
 }
 
-const defaultNotFoundTranslation: Record<Languages, NotFoundTranslation> = {
+const defaultNotFoundTranslation: Translation<NotFoundTranslation> = {
   en: {
     notFound: '404 - Page not found',
     notFoundDescription1: 'This is definitely not the page you\'re looking for',

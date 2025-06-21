@@ -1,8 +1,6 @@
-import type { Languages } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
+import { Expandable } from '@helpwave/hightide'
+import type { PropsForTranslation , ExpandableProps, Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
-import type { InputGroupProps } from '@helpwave/hightide'
-import { InputGroup } from '@helpwave/hightide'
 import { Select } from '@helpwave/hightide'
 import { Tile } from '@helpwave/hightide'
 import { Checkbox } from '@helpwave/hightide'
@@ -25,7 +23,7 @@ type PropertySelectOptionsUpdaterPropsTranslation = {
   values: string,
 }
 
-const defaultPropertySelectOptionsUpdaterPropsTranslation: Record<Languages, PropertySelectOptionsUpdaterPropsTranslation> = {
+const defaultPropertySelectOptionsUpdaterPropsTranslation: Translation<PropertySelectOptionsUpdaterPropsTranslation> = {
   en: {
     newEntry: 'New Entry',
     values: 'Values',
@@ -81,7 +79,7 @@ export const PropertySelectOptionsUpdater = ({
               <Input
                 value={entry.name ?? ''}
                 placeholder={`${translation.newEntry} ${index + 1}`}
-                onChange={text => {
+                onChangeText={text => {
                   const newList = [...data.options]
                   const newEntry = { ...entry, name: text }
                   newList[index] = newEntry
@@ -131,7 +129,7 @@ type PropertyDetailsFieldTranslation = {
   allowCustomValuesDescription: string,
 } & { [key in FieldType]: string }
 
-const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsFieldTranslation> = {
+const defaultPropertyDetailsFieldTranslation: Translation<PropertyDetailsFieldTranslation> = {
   en: {
     field: 'Field',
     fieldType: 'Field Type',
@@ -163,7 +161,7 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
 export type PropertyDetailsFieldProps = {
   value: PropertyFieldDetails,
   onChange: (value: PropertyFieldDetails, update?: SelectDataUpdate) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>,
+  inputGroupProps?: Omit<ExpandableProps, 'title'>,
 }
 
 /**
@@ -184,7 +182,7 @@ export const PropertyDetailsField = ({
   }, [value])
 
   return (
-    <InputGroup {...inputGroupProps} title={translation.field}>
+    <Expandable {...inputGroupProps} label={translation.field}>
       <Select
         // TODO add icons
         value={usedValue.fieldType}
@@ -220,6 +218,6 @@ export const PropertyDetailsField = ({
           className="mt-4"
         />
       )}
-    </InputGroup>
+    </Expandable>
   )
 }

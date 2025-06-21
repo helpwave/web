@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { useProductsAvailableQuery } from '@/api/mutations/product_mutations'
 import { Section } from '@/components/layout/Section'
@@ -46,7 +46,7 @@ type ProductsTranslation = {
   lookAt: string,
 } & ProductPlanTranslation
 
-const defaultProductsTranslations: Record<Languages, ProductsTranslation> = {
+const defaultProductsTranslations: Translation<ProductsTranslation> = {
   en: {
     ...defaultProductPlanTranslation.en,
     bookProduct: 'Book Product',

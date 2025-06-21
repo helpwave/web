@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
@@ -16,7 +16,7 @@ type OrganizationDisplayTranslation = {
   yourOrganizations: string,
 }
 
-const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisplayTranslation> = {
+const defaultOrganizationDisplayTranslations: Translation<OrganizationDisplayTranslation> = {
   en: {
     addOrganization: 'Add Organization',
     yourOrganizations: 'Your Organizations'

@@ -76,7 +76,7 @@ const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wards
   return (
     <PageWithHeader
       crumbs={[
-        { display: organization?.shortName ?? translation.organizations, link: `/organizations?organizationId=${organizationId}` },
+        { display: organization?.longName ?? translation.organizations, link: `/organizations?organizationId=${organizationId}` },
         { display: translation.wards, link: `/organizations/${organizationId}` }
       ]}
     >

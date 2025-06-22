@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { Chip } from '@helpwave/hightide'
+import { Chip, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { EditCard, type EditCardProps } from './EditCard'
 
 type TaskTemplateCardTranslation = {
@@ -36,33 +35,32 @@ export type TaskTemplateCardProps = EditCardProps & {
  * A Card showing a TaskTemplate
  */
 export const TaskTemplateCard = ({
-  overwriteTranslation,
-  name,
-  subtaskCount,
-  typeForLabel,
-  className,
-  ...editCardProps
-}: PropsForTranslation<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
+                                   overwriteTranslation,
+                                   name,
+                                   subtaskCount,
+                                   typeForLabel,
+                                   className,
+                                   ...editCardProps
+                                 }: PropsForTranslation<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
   const translation = useTranslation(defaultTaskTemplateCardTranslations, overwriteTranslation)
   return (
     <EditCard
-      className={clsx('group row bg-white', className)}
+      className={clsx('gap-y-0', className)}
       {...editCardProps}
     >
-      <div className="overflow-hidden h-full">
-        <div className="row items-start overflow-hidden gap-x-1">
-          <span className="textstyle-title-sm">{name}</span>
-          {typeForLabel && (
-            <Chip
-              // TODO use correct colors
-              color={typeForLabel === 'ward' ? 'dark' : 'default'}
-              variant="fullyRounded"
-            >
-              {typeForLabel === 'ward' ? translation.ward : translation.personal}
-            </Chip>
-          )}
-        </div>
-        <span>{subtaskCount + ' ' + translation.subtask}</span>
+      <div className="col w-full gap-y-0">
+      <div className="row items-center justify-between overflow-hidden gap-x-1">
+        <h4 className="textstyle-title-sm">{name}</h4>
+        {typeForLabel && (
+          <Chip
+            color={typeForLabel === 'ward' ? 'red' : 'default'}
+            variant="fullyRounded"
+          >
+            {typeForLabel === 'ward' ? translation.ward : translation.personal}
+          </Chip>
+        )}
+      </div>
+      <span>{subtaskCount + ' ' + translation.subtask}</span>
       </div>
     </EditCard>
   )

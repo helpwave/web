@@ -76,12 +76,10 @@ export const TaskTemplateDisplay = ({
             key={taskTemplate.id}
             name={taskTemplate.name}
             subtaskCount={taskTemplate.subtasks.length}
-            className={clsx('border-2', {
-              'border-primary': selectedId === taskTemplate.id,
-              'border-transparent': selectedId !== taskTemplate.id,
-            })}
+            isSelected={selectedId === taskTemplate.id}
             onEditClick={() => onSelectChange(taskTemplate)}
             onClick={() => onSelectChange(taskTemplate)}
+            className="min-h-auto"
           />
         ))}
         <AddCard

@@ -4,6 +4,7 @@ import { Plus } from 'lucide-react'
 export type AddCardProps = {
   onClick?: () => void,
   text?: string,
+  isSelected?: boolean,
   className?: string,
 }
 
@@ -13,14 +14,19 @@ export type AddCardProps = {
 export const AddCard = ({
                           onClick,
                           text,
+                          isSelected = false,
                           className,
                         }: AddCardProps) => {
   return (
     <div
       onClick={onClick}
       className={clsx(
-        'card-md row justify-center items-center gap-x-1 text-gray-400 border-gray-400 h-full border-2 border-dashed hover:brightness-95 min-h-28',
+        'card-md row justify-center items-center gap-x-1 text-gray-400 border-2 hover:border-primary h-full hover:brightness-[98%] min-h-28',
         { 'cursor-pointer': !!onClick },
+        {
+          'border-primary': isSelected,
+          'border-transparent': !isSelected
+        },
         className
       )}
     >

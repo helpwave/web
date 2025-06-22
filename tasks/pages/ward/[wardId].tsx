@@ -31,7 +31,7 @@ type WardOverviewTranslation = {
   roomOverview: string,
   organization: string,
   ward: string,
-  room: string,
+  rooms: string,
   addPatientDialogTitle: string,
 }
 
@@ -41,7 +41,7 @@ const defaultWardOverviewTranslation = {
     roomOverview: 'Ward Overview',
     organization: 'Organization',
     ward: 'Ward',
-    room: 'Room',
+    rooms: 'Rooms',
     addPatientDialogTitle: 'Do you want to add a new patient?'
   },
   de: {
@@ -49,7 +49,7 @@ const defaultWardOverviewTranslation = {
     roomOverview: 'Stationsübersicht',
     organization: 'Organisation',
     ward: 'Station',
-    room: 'Raum',
+    rooms: 'Räume',
     addPatientDialogTitle: 'Willst du einen neuen Patienten hinzufügen?'
   }
 }
@@ -238,16 +238,15 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     <PageWithHeader
       crumbs={[
         {
-          // TODO fix later
-          display: translation.organization,
+          display: organization?.name ?? translation.organization,
           link: `/organizations/?organizationId${organization?.id}`
         },
         {
           display: ward?.name ?? translation.ward,
-          link: `/organizations/${organization}?wardId=${wardId}`
+          link: `/organizations/${organization?.id ?? ''}?wardId=${wardId}`
         },
         {
-          display: translation.room,
+          display: translation.rooms,
           link: `/ward/${wardId}`
         }
       ]}

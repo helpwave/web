@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import clsx from 'clsx'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Edit } from 'lucide-react'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
@@ -60,17 +59,15 @@ export const TaskTemplateListColumn = ({
       <div className="overflow-hidden h-full" ref={ref}>
         <div>
           <Scrollbars autoHeight autoHeightMin={height} autoHide>
-            <div className="col gap-y-2 pr-3">
-              {templates.map((taskTemplateExtension, index) => (
+            <div className="col gap-y-2">
+              {templates.map((taskTemplateExtension) => (
                 <TaskTemplateCard
                   key={taskTemplateExtension.taskTemplate.id}
                   name={taskTemplateExtension.taskTemplate.name}
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
                   onClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
-                  className={clsx('border-2 border-gray-300 !pr-2', {
-                    'mb-2': index === templates.length - 1,
-                    'border-primary': activeId === taskTemplateExtension.taskTemplate.id,
-                  })}
+                  className="min-h-auto"
+                  isSelected={activeId === taskTemplateExtension.taskTemplate.id}
                   typeForLabel={taskTemplateExtension.type}
                 />
               ))}

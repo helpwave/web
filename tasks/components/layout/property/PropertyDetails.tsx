@@ -1,9 +1,8 @@
 import { ConfirmModal } from '@helpwave/hightide'
-import type { PropsForTranslation , Translation } from '@helpwave/hightide'
+import type { PropsForTranslation , Translation , StepperState } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
 import { TextButton } from '@helpwave/hightide'
-import type { StepperInformation } from '@helpwave/hightide'
 import { StepperBar } from '@helpwave/hightide'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import {
@@ -59,9 +58,8 @@ export const PropertyDetails = ({
 
   const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
   const lastStep = 2
-  const [stepper, setStepper] = useState<StepperInformation>({
-    step: 0,
-    lastStep,
+  const [stepperState, setStepperState] = useState<StepperState>({
+    currentStep: 0,
     seenSteps: new Set([0])
   })
   const {
@@ -86,10 +84,10 @@ export const PropertyDetails = ({
     }
   }, [data, isCreatingNewProperty])
 
-  const { step } = stepper
+  const { currentStep: step } = stepperState
 
   return (
-    <div className="py-4 px-6 col gap-y-4 bg-gray-100 min-h-full">
+    <div className="py-4 px-6 col gap-y-4 min-h-full">
       <ConfirmModal
         headerProps={{
           titleText: translation.archivePropertyDialogTitle,
@@ -136,10 +134,9 @@ export const PropertyDetails = ({
               })
             }
           }
-          inputGroupProps={{
-            expanded: !isCreatingNewProperty || step === 0 || step === lastStep,
-            isExpandable: !isCreatingNewProperty,
-            disabled: isCreatingNewProperty && step !== 0 && step !== lastStep
+          expandableProps={{
+            isExpanded: !isCreatingNewProperty || step === 0 || step === lastStep,
+            disabled: isCreatingNewProperty && step !== 0 && step !== lastStep,
           }}
         />
         <PropertyDetailsField
@@ -176,21 +173,22 @@ export const PropertyDetails = ({
               }
             }
           }
-          inputGroupProps={{
-            expanded: !isCreatingNewProperty || step === 1 || step === lastStep,
-            isExpandable: !isCreatingNewProperty,
+          expandableProps={{
+            isExpanded: !isCreatingNewProperty || step === 1 || step === lastStep,
             disabled: isCreatingNewProperty && step !== 1 && step !== lastStep
           }}
         />
         <div className="grow"></div>
         {isCreatingNewProperty && (
           <StepperBar
-            stepper={stepper}
-            onChange={setStepper}
+            state={stepperState}
+            disabledSteps={new Set<number>()}
+            numberOfSteps={2}
+            onChange={setStepperState}
             onFinish={() => {
               propertyCreateMutation.mutate(value)
             }}
-            className="sticky bottom-4 right-6 left-6 bg-white"
+            className="sticky bottom-4 right-6 left-6 p-2 rounded-xl shadow-around-lg bg-surface text-on-surface"
           />
         )}
       </LoadingAndErrorComponent>

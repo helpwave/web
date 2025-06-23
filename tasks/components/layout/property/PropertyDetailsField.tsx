@@ -1,4 +1,4 @@
-import { Expandable } from '@helpwave/hightide'
+import { Expandable, IconButton } from '@helpwave/hightide'
 import type { PropsForTranslation , ExpandableProps, Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Select } from '@helpwave/hightide'
@@ -64,16 +64,17 @@ export const PropertySelectOptionsUpdater = ({
     <div className="col mt-2 gap-y-1">
       <div className="row justify-between items-center">
         <span className="textstyle-label-md">{translation.values}</span>
-        <Plus
-          className="text-white bg-primary hover:brightness-90 rounded-full mr-3"
-          size={20}
+        <IconButton
           onClick={() => {
             onChange({ ...data }, { ...update, create: update.create + 1 })
           }}
-        />
+          size="small"
+        >
+          <Plus className="w-full h-full"/>
+        </IconButton>
       </div>
-      <Scrollbars autoHide autoHeight autoHeightMax={400}>
-        <div className="col gap-y-2 mr-3">
+      <Scrollbars autoHide autoHeight autoHeightMax="24rem">
+        <div className="col gap-y-2">
           {data.options.map((entry, index) => (
             <div key={index} className="row items-center justify-between gap-x-4">
               <Input
@@ -159,9 +160,9 @@ const defaultPropertyDetailsFieldTranslation: Translation<PropertyDetailsFieldTr
 }
 
 export type PropertyDetailsFieldProps = {
-  value: PropertyFieldDetails,
+  value: Property,
   onChange: (value: PropertyFieldDetails, update?: SelectDataUpdate) => void,
-  inputGroupProps?: Omit<ExpandableProps, 'title'>,
+  expandableProps?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
@@ -171,7 +172,7 @@ export const PropertyDetailsField = ({
                                        overwriteTranslation,
                                        value,
                                        onChange,
-                                       inputGroupProps
+                                       expandableProps
                                      }: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
   const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
   const [usedValue, setUsedValue] = useState<PropertyFieldDetails>(value)
@@ -182,7 +183,7 @@ export const PropertyDetailsField = ({
   }, [value])
 
   return (
-    <Expandable {...inputGroupProps} label={translation.field}>
+    <Expandable {...expandableProps} label={translation.field}>
       <Select
         // TODO add icons
         value={usedValue.fieldType}
@@ -192,6 +193,7 @@ export const PropertyDetailsField = ({
           const newValue = { ...usedValue, fieldType }
           onChange(newValue)
         }}
+        isDisabled={!!value.id}
       />
       {isSelectType && (
         <PropertySelectOptionsUpdater

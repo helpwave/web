@@ -91,8 +91,8 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
       >
         <TwoColumn
           disableResize={false}
-          left={width => ((
-              <DashboardDisplay width={width}/>
+          left={() => ((
+              <DashboardDisplay/>
             )
           )}
           right={width => (

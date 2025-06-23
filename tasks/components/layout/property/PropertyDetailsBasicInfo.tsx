@@ -37,7 +37,7 @@ export type PropertyDetailsBasicInfoProps = {
   value: PropertyBasicInfo,
   onChange: (value: PropertyBasicInfo) => void,
   onEditComplete: (value: PropertyBasicInfo) => void,
-  inputGroupProps?: Omit<ExpandableProps, 'label'>,
+  expandableProps?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
@@ -48,11 +48,11 @@ export const PropertyDetailsBasicInfo = ({
   value,
   onChange,
   onEditComplete,
-  inputGroupProps = {},
+  expandableProps = {},
 }: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
   const translation = useTranslation(defaultPropertyDetailsBasicInfoTranslation, overwriteTranslation)
   return (
-    <Expandable {...inputGroupProps} label={translation.basicInfo}>
+    <Expandable {...expandableProps} label={translation.basicInfo}>
       <PropertySubjectTypeSelect
         value={value.subjectType}
         label={{ name: translation.subjectType, labelType: 'labelMedium' }}

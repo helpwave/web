@@ -38,7 +38,7 @@ const defaultDashboardDisplayTranslations: Translation<DashboardDisplayTranslati
   }
 }
 
-export type DashboardDisplayProps = Translation<unknown>
+export type DashboardDisplayProps = Record<string, unknown>
 
 /**
  * The left side of the DashboardPage

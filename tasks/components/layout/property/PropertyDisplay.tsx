@@ -105,8 +105,8 @@ export const PropertyDisplay = ({
         <span className="textstyle-title-lg">{translation.properties}</span>
       </div>
       <div className="col gap-y-2">
-        <div className="row justify-between">
-          <div className="row gap-x-2">
+        <div className="row justify-between items-center">
+          <div className="row items-center gap-x-2">
             <Input
               // TODO Search Icon
               value={search}
@@ -115,7 +115,7 @@ export const PropertyDisplay = ({
               placeholder={translation.search}
             />
             <PropertySubjectTypeSelect
-              className="w-full"
+              className="w-full text-nowrap"
               value={contextState.subjectType}
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation.subjectType}

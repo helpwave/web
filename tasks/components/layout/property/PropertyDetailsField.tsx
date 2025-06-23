@@ -1,8 +1,6 @@
-import type { Languages } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
+import { Expandable, IconButton } from '@helpwave/hightide'
+import type { PropsForTranslation , ExpandableProps, Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
-import type { InputGroupProps } from '@helpwave/hightide'
-import { InputGroup } from '@helpwave/hightide'
 import { Select } from '@helpwave/hightide'
 import { Tile } from '@helpwave/hightide'
 import { Checkbox } from '@helpwave/hightide'
@@ -25,7 +23,7 @@ type PropertySelectOptionsUpdaterPropsTranslation = {
   values: string,
 }
 
-const defaultPropertySelectOptionsUpdaterPropsTranslation: Record<Languages, PropertySelectOptionsUpdaterPropsTranslation> = {
+const defaultPropertySelectOptionsUpdaterPropsTranslation: Translation<PropertySelectOptionsUpdaterPropsTranslation> = {
   en: {
     newEntry: 'New Entry',
     values: 'Values',
@@ -66,22 +64,23 @@ export const PropertySelectOptionsUpdater = ({
     <div className="col mt-2 gap-y-1">
       <div className="row justify-between items-center">
         <span className="textstyle-label-md">{translation.values}</span>
-        <Plus
-          className="text-white bg-primary hover:brightness-90 rounded-full mr-3"
-          size={20}
+        <IconButton
           onClick={() => {
             onChange({ ...data }, { ...update, create: update.create + 1 })
           }}
-        />
+          size="small"
+        >
+          <Plus className="w-full h-full"/>
+        </IconButton>
       </div>
-      <Scrollbars autoHide autoHeight autoHeightMax={400}>
-        <div className="col gap-y-2 mr-3">
+      <Scrollbars autoHide autoHeight autoHeightMax="24rem">
+        <div className="col gap-y-2">
           {data.options.map((entry, index) => (
             <div key={index} className="row items-center justify-between gap-x-4">
               <Input
                 value={entry.name ?? ''}
                 placeholder={`${translation.newEntry} ${index + 1}`}
-                onChange={text => {
+                onChangeText={text => {
                   const newList = [...data.options]
                   const newEntry = { ...entry, name: text }
                   newList[index] = newEntry
@@ -131,7 +130,7 @@ type PropertyDetailsFieldTranslation = {
   allowCustomValuesDescription: string,
 } & { [key in FieldType]: string }
 
-const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsFieldTranslation> = {
+const defaultPropertyDetailsFieldTranslation: Translation<PropertyDetailsFieldTranslation> = {
   en: {
     field: 'Field',
     fieldType: 'Field Type',
@@ -161,9 +160,9 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
 }
 
 export type PropertyDetailsFieldProps = {
-  value: PropertyFieldDetails,
+  value: Property,
   onChange: (value: PropertyFieldDetails, update?: SelectDataUpdate) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>,
+  expandableProps?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
@@ -173,7 +172,7 @@ export const PropertyDetailsField = ({
                                        overwriteTranslation,
                                        value,
                                        onChange,
-                                       inputGroupProps
+                                       expandableProps
                                      }: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
   const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
   const [usedValue, setUsedValue] = useState<PropertyFieldDetails>(value)
@@ -184,7 +183,7 @@ export const PropertyDetailsField = ({
   }, [value])
 
   return (
-    <InputGroup {...inputGroupProps} title={translation.field}>
+    <Expandable {...expandableProps} label={translation.field}>
       <Select
         // TODO add icons
         value={usedValue.fieldType}
@@ -194,6 +193,7 @@ export const PropertyDetailsField = ({
           const newValue = { ...usedValue, fieldType }
           onChange(newValue)
         }}
+        isDisabled={!!value.id}
       />
       {isSelectType && (
         <PropertySelectOptionsUpdater
@@ -220,6 +220,6 @@ export const PropertyDetailsField = ({
           className="mt-4"
         />
       )}
-    </InputGroup>
+    </Expandable>
   )
 }

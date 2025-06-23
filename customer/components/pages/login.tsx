@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -12,7 +12,7 @@ type LoginTranslation = {
   register: string,
 }
 
-const defaultLoginTranslations: Record<Languages, LoginTranslation> = {
+const defaultLoginTranslations: Translation<LoginTranslation> = {
   en: {
     login: 'Login',
     email: 'Email',

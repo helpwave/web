@@ -2,9 +2,8 @@ import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Inter, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { isMobile } from 'react-device-detect'
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ModalRegister, modalRootName, ProvideLanguage, ThemeProvider } from '@helpwave/hightide'
+import { LanguageProvider, ThemeProvider } from '@helpwave/hightide'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production'
 import { ProvideAuth } from '@helpwave/api-services/authentication/useAuth'
 import { ProvideUpdates } from '@helpwave/api-services/util/useUpdates'
@@ -32,7 +31,7 @@ function MyApp({
                }: AppProps) {
   const config = getConfig()
   return (
-    <ProvideLanguage>
+    <LanguageProvider>
       <ThemeProvider>
         { /* v Scans the user agent */}
         {!isMobile ? (
@@ -49,12 +48,7 @@ function MyApp({
             }
             `}</style>
                   </Head>
-
-                  <ModalRegister>
-                    <div className="font-sans" id={modalRootName}>
-                      <Component {...pageProps} />
-                    </div>
-                  </ModalRegister>
+                  <Component {...pageProps} />
                   {config.env === 'development' && <ReactQueryDevtools position="bottom-left"/>}
                 </ProvideUpdates>
               </InitializationChecker>
@@ -62,7 +56,7 @@ function MyApp({
           </QueryClientProvider>
         ) : (<MobileInterceptor {...pageProps} />)}
       </ThemeProvider>
-    </ProvideLanguage>
+    </LanguageProvider>
   )
 }
 

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Modal, type ModalProps } from '@helpwave/hightide'
 import { SolidButton, TextButton } from '@helpwave/hightide'
@@ -26,7 +26,7 @@ type ManageBedsModalTranslation = {
   close: string,
 }
 
-const defaultManageBedsModalTranslation: Record<Languages, ManageBedsModalTranslation> = {
+const defaultManageBedsModalTranslation: Translation<ManageBedsModalTranslation> = {
   en: {
     manageBedsIn: 'Manage beds in',
     bed: 'Bed',
@@ -61,8 +61,8 @@ export const ManageBedsModal = ({
   overwriteTranslation,
   wardId,
   roomId,
-  modalClassName,
-  titleText,
+  className,
+  headerProps,
   ...modalProps
 }: PropsForTranslation<ManageBedsModalTranslation, ManageBedsModalProps>) => {
   const translation = useTranslation(defaultManageBedsModalTranslation, overwriteTranslation)
@@ -91,8 +91,11 @@ export const ManageBedsModal = ({
   const identifierMapping = (bed: BedWithPatientWithTasksNumberDTO) => bed.id
   return (
     <Modal
-      titleText={titleText ?? (room ? `${translation.manageBedsIn} ${room.name}` : '')}
-      modalClassName={clsx('min-w-[600px]', modalClassName)}
+      headerProps={{
+        ...headerProps,
+        titleText: headerProps?.titleText ?? (room ? `${translation.manageBedsIn} ${room.name}` : ''),
+      }}
+      className={clsx('min-w-[600px]', className)}
       {...modalProps}
     >
       <LoadingAndErrorComponent
@@ -121,7 +124,7 @@ export const ManageBedsModal = ({
                   <Input
                     value={bed.name}
                     maxLength={maxBedNameLength}
-                    onChange={(text) => {
+                    onChangeText={(text) => {
                       setBeds(beds.map(value => value.id === bed.id ? { ...value, name: text } : value))
                     }}
                     onEditCompleted={(text) => updateBedMutation.mutate({ id: bed.id, name: text, roomId: room.id })}

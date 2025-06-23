@@ -33,7 +33,7 @@ const Header = ({
                   withIcon = true
                 }: HeaderProps) => {
   return (
-    <div className="row h-16 py-4 relative items-center justify-between border-b bg-header-background text-header-text border-divider">
+    <div className="row h-16 py-4 relative items-center justify-between bg-header-background text-header-text shadow-md">
       <div className="row w-full gap-x-8 justify-between mx-4">
         <div className="row relative items-center align-center">
           {withIcon && (

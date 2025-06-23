@@ -1,6 +1,5 @@
 import { useContext, useEffect } from 'react'
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { LoadingAndErrorComponent, type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
@@ -18,7 +17,7 @@ type WardRoomListTranslation = {
   addRooms: string,
 }
 
-const defaultWardRoomListTranslation: Record<Languages, WardRoomListTranslation> = {
+const defaultWardRoomListTranslation: Translation<WardRoomListTranslation> = {
   en: {
     roomOverview: 'Ward Overview',
     showPatientList: 'Show Patient List',

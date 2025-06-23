@@ -1,10 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Plus } from 'lucide-react'
-
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { SolidButton } from '@helpwave/hightide'
-import type { Languages } from '@helpwave/hightide'
 import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
 import {
   useSubTaskAddMutation,
@@ -21,7 +20,7 @@ type SubtaskViewTranslation = {
   newSubtask: string,
 }
 
-const defaultSubtaskViewTranslation: Record<Languages, SubtaskViewTranslation> = {
+const defaultSubtaskViewTranslation: Translation<SubtaskViewTranslation> = {
   en: {
     subtasks: 'Subtasks',
     remove: 'Remove',

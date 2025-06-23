@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { SolidButton } from '@helpwave/hightide'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
@@ -14,7 +13,7 @@ type TaskTemplateWardPreviewTranslation = {
   taskTemplates: (numberOfTemplates: number) => string,
 }
 
-const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateWardPreviewTranslation> = {
+const defaultTaskTemplateWardPreviewTranslation: Translation<TaskTemplateWardPreviewTranslation> = {
   en: {
     showAllTaskTemplates: 'Show all Task Templates',
     taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
@@ -54,7 +53,7 @@ export const TaskTemplateWardPreview = ({
       errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
     >
       {taskTemplates && (
-        <div className="col">
+        <div className="@container col">
           <div className="row justify-between items-center mb-4">
             <span className="textstyle-table-name">{translation.taskTemplates(taskTemplates.length)}</span>
             <SolidButton
@@ -64,12 +63,13 @@ export const TaskTemplateWardPreview = ({
               {translation.showAllTaskTemplates}
             </SolidButton>
           </div>
-          <div className="grid mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-4">
+          <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4">
             {taskTemplates.map((taskTemplate, index) => (
               <TaskTemplateCard
                 key={index}
                 name={taskTemplate.name}
                 subtaskCount={taskTemplate.subtasks.length}
+                className="min-h-auto"
                 onClick={() => {
                   router.push(`/ward/${wardId}/templates?templateId=${taskTemplate.id}`).catch(console.error)
                 }}

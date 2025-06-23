@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import type { PropsForTranslation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
@@ -26,7 +26,7 @@ type PropertyDisplayTranslation = {
   name: string,
 } & { [key in SubjectType | FieldType]: string }
 
-const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTranslation> = {
+const defaultPropertyDisplayTranslation: Translation<PropertyDisplayTranslation> = {
   en: {
     properties: 'Properties',
     addProperty: 'Add Property',
@@ -105,17 +105,17 @@ export const PropertyDisplay = ({
         <span className="textstyle-title-lg">{translation.properties}</span>
       </div>
       <div className="col gap-y-2">
-        <div className="row justify-between">
-          <div className="row gap-x-2">
+        <div className="row justify-between items-center">
+          <div className="row items-center gap-x-2">
             <Input
               // TODO Search Icon
               value={search}
-              onChange={setSearch}
+              onChangeText={setSearch}
               onEditCompleted={setSearch}
               placeholder={translation.search}
             />
             <PropertySubjectTypeSelect
-              className="w-full"
+              className="w-full text-nowrap"
               value={contextState.subjectType}
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation.subjectType}

@@ -79,9 +79,7 @@ const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<
             <PropertyDisplay/>
           )}
           right={() => (
-            <PropertyDetails
-              key={context.propertyId}
-            />
+            <PropertyDetails key={context.propertyId}/>
           )}
         />
       </PropertyContext.Provider>

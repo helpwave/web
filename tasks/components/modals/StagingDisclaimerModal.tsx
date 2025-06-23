@@ -1,16 +1,12 @@
 import { type PropsWithChildren } from 'react'
-import type { ConfirmDialogProps } from '@helpwave/hightide'
-import { ConfirmDialog } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
-import { useTranslation } from '@helpwave/hightide'
-import { MarkdownInterpreter } from '@helpwave/hightide'
-import type { Languages } from '@helpwave/hightide'
+import type { ConfirmDialogProps, PropsForTranslation, Translation } from '@helpwave/hightide'
+import { ConfirmDialog, MarkdownInterpreter, useTranslation } from '@helpwave/hightide'
 import Link from 'next/link'
 import { getConfig } from '@/utils/config'
 
 const config = getConfig()
 
-type StagingDisclaimerModalTranslation = {
+type StagingDisclaimerDialogTranslation = {
   title: string,
   message: string,
   dismiss: string,
@@ -18,7 +14,7 @@ type StagingDisclaimerModalTranslation = {
   privacy: string,
 }
 
-const defaultStagingDisclaimerTranslation: Record<Languages, StagingDisclaimerModalTranslation> = {
+const defaultStagingDisclaimerTranslation: Translation<StagingDisclaimerDialogTranslation> = {
   en: {
     title: 'Development and preview instance',
     message: 'This public instance of helpwave tasks is for \\b{development and preview purposes}. Please make sure to \\b{only} enter \\b{non-confidential testing data}. This instance can be \\negative{\\b{deleted at any time}}.',
@@ -35,7 +31,7 @@ const defaultStagingDisclaimerTranslation: Record<Languages, StagingDisclaimerMo
   }
 }
 
-type StagingDisclaimerModalProps = Pick<ConfirmDialogProps, 'id' | 'isOpen' | 'onConfirm' | 'onBackgroundClick' | 'onCloseClick' | 'onCancel'>
+type StagingDisclaimerModalProps = Pick<ConfirmDialogProps, 'isOpen' | 'onConfirm'>
 
 /**
  * A Modal for selecting the Language
@@ -43,28 +39,30 @@ type StagingDisclaimerModalProps = Pick<ConfirmDialogProps, 'id' | 'isOpen' | 'o
  * The State of open needs to be managed by the parent
  */
 export const StagingDisclaimerModal = ({
-  overwriteTranslation,
-  ...modalProps
-}: PropsForTranslation<StagingDisclaimerModalTranslation, PropsWithChildren<StagingDisclaimerModalProps>>) => {
+                                         overwriteTranslation,
+                                         ...modalProps
+                                       }: PropsForTranslation<StagingDisclaimerDialogTranslation, PropsWithChildren<StagingDisclaimerModalProps>>) => {
   const translation = useTranslation(defaultStagingDisclaimerTranslation, overwriteTranslation)
 
   return (
     <ConfirmDialog
       {...modalProps}
-      titleText={translation.title}
-      description={(
-        <>
-          <p><MarkdownInterpreter text={translation.message}/></p>
-          <div className="row gap-x-8 mt-2">
-            <Link className="text-primary hover:brightness-75 font-bold" href={config.imprintUrl}>
-              {translation.imprint}
-            </Link>
-            <Link className="text-primary hover:brightness-75 font-bold" href={config.privacyUrl}>
-              {translation.privacy}
-            </Link>
-          </div>
-        </>
-      )}
+      headerProps={{
+        titleText: translation.title,
+        description: (
+          <>
+            <p><MarkdownInterpreter text={translation.message}/></p>
+            <div className="row gap-x-8 mt-2">
+              <Link className="text-primary hover:brightness-75 font-bold" href={config.imprintUrl}>
+                {translation.imprint}
+              </Link>
+              <Link className="text-primary hover:brightness-75 font-bold" href={config.privacyUrl}>
+                {translation.privacy}
+              </Link>
+            </div>
+          </>
+        )
+      }}
     />
   )
 }

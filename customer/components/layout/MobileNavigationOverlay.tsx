@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { languagesLocalNames } from '@helpwave/hightide'
 import { useLanguage } from '@helpwave/hightide'
 import { useRouter } from 'next/router'
@@ -16,7 +16,7 @@ import { SolidButton } from '@helpwave/hightide'
 
 type MobileNavigationOverlayTranslation = { navigation: string, logout: string }
 
-const defaultMobileNavigationOverlayTranslation: Record<Languages, MobileNavigationOverlayTranslation> = {
+const defaultMobileNavigationOverlayTranslation: Translation<MobileNavigationOverlayTranslation> = {
   en: {
     navigation: 'Navigation',
     logout: 'Logout'

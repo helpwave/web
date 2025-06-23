@@ -1,8 +1,6 @@
-import type { Languages } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
+import { Expandable } from '@helpwave/hightide'
+import type { PropsForTranslation , ExpandableProps, Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
-import type { InputGroupProps } from '@helpwave/hightide'
-import { InputGroup } from '@helpwave/hightide'
 import { Tile } from '@helpwave/hightide'
 import { Checkbox } from '@helpwave/hightide'
 import type { Property } from '@helpwave/api-services/types/properties/property'
@@ -15,7 +13,7 @@ type PropertyDetailsRulesTranslation = {
   alwaysVisibleDescription: string,
 }
 
-const defaultPropertyDetailsRulesTranslation: Record<Languages, PropertyDetailsRulesTranslation> = {
+const defaultPropertyDetailsRulesTranslation: Translation<PropertyDetailsRulesTranslation> = {
   en: {
     rules: 'Rules',
     importance: 'Importance',
@@ -38,7 +36,7 @@ export type PropertyDetailsRulesProps = {
   value: PropertyRules,
   onChange: (value: PropertyRules) => void,
   onEditComplete: (value: PropertyRules) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>,
+  inputGroupProps?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
@@ -53,7 +51,7 @@ export const PropertyDetailsRules = ({
 }: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
   const translation = useTranslation(defaultPropertyDetailsRulesTranslation, overwriteTranslation)
   return (
-    <InputGroup {...inputGroupProps} title={translation.rules}>
+    <Expandable {...inputGroupProps} label={translation.rules}>
       <Tile
         title={{ value: translation.alwaysVisible, className: 'textstyle-label-md' }}
         description={{ value: translation.alwaysVisibleDescription }}
@@ -70,6 +68,6 @@ export const PropertyDetailsRules = ({
         )}
         className="mt-4"
       />
-    </InputGroup>
+    </Expandable>
   )
 }

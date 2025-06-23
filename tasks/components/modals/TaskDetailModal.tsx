@@ -1,18 +1,23 @@
-import { Modal, type ModalProps, type ModalHeaderProps } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import type { OverlayHeaderProps, Translation } from '@helpwave/hightide'
+import {
+  ConfirmModal,
+  Input,
+  LoadingAndErrorComponent,
+  LoadingAnimation,
+  Modal,
+  type ModalProps,
+  type PropsForTranslation,
+  SolidButton,
+  Textarea,
+  TextButton,
+  TimeDisplay,
+  ToggleableInput,
+  useTranslation
+} from '@helpwave/hightide'
 import clsx from 'clsx'
-import { ToggleableInput } from '@helpwave/hightide'
-import { Textarea } from '@helpwave/hightide'
-import { SolidButton, TextButton } from '@helpwave/hightide'
 import { X } from 'lucide-react'
-import { TimeDisplay } from '@helpwave/hightide'
-import { Input } from '@helpwave/hightide'
-import type { Languages } from '@helpwave/hightide'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { LoadingAnimation } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
-import { ConfirmDialog } from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import type { TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import { emptyTask } from '@helpwave/api-services/types/tasks/task'
@@ -29,7 +34,6 @@ import {
   useUnassignTaskMutation
 } from '@helpwave/api-services/mutations/tasks/task_mutations'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
-import { formatDate } from '@helpwave/hightide'
 import { TaskTemplateListColumn } from '../TaskTemplateListColumn'
 import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
@@ -57,7 +61,7 @@ type TaskDetailViewTranslation = {
   finish: string,
 }
 
-const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslation> = {
+const defaultTaskDetailViewTranslation: Translation<TaskDetailViewTranslation> = {
   en: {
     close: 'Close',
     notes: 'Notes',
@@ -101,6 +105,18 @@ const defaultTaskDetailViewTranslation: Record<Languages, TaskDetailViewTranslat
 }
 
 
+function formatDateForDatetimeLocal(date: Date): string {
+  const pad = (n: number) => n.toString().padStart(2, '0')
+
+  const year = date.getFullYear()
+  const month = pad(date.getMonth() + 1) // Months are zero-indexed
+  const day = pad(date.getDate())
+  const hours = pad(date.getHours())
+  const minutes = pad(date.getMinutes())
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+}
+
 type TaskDetailViewSidebarProps = {
   task: TaskDTO,
   setTask: (task: TaskDTO) => void,
@@ -132,12 +148,9 @@ const TaskDetailViewSidebar = ({
 
   return (
     <div className="col min-w-[250px] gap-y-4">
-      <ConfirmDialog
-        id="TaskDetailView-PublishDialog"
+      <ConfirmModal
         isOpen={isShowingPublicDialog}
-        onBackgroundClick={() => setIsShowingPublicDialog(false)}
         onCancel={() => setIsShowingPublicDialog(false)}
-        onCloseClick={() => setIsShowingPublicDialog(false)}
         onConfirm={() => {
           setIsShowingPublicDialog(false)
           const newTask = {
@@ -147,8 +160,10 @@ const TaskDetailViewSidebar = ({
           setTask(newTask)
           updateTaskLocallyAndExternally(newTask)
         }}
-        titleText={translation.publishTask}
-        descriptionText={translation.publishTaskDescription}
+        headerProps={{
+          titleText: translation.publishTask,
+          descriptionText: translation.publishTaskDescription,
+        }}
       />
       <div>
         <label className="textstyle-label-md">{translation.assignee}</label>
@@ -184,19 +199,16 @@ const TaskDetailViewSidebar = ({
         <label className="textstyle-label-md">{translation.dueDate}</label>
         <div className="row items-center gap-x-2">
           <Input
-            value={task.dueDate ? formatDate(task.dueDate) : ''}
+            value={task.dueDate ? formatDateForDatetimeLocal(task.dueDate) : ''}
             type="datetime-local"
-            onChangeEvent={(event) => {
-              if (!event.target.value) {
-                event.preventDefault()
-                return
-              }
-              const dueDate = new Date(event.target.value)
+            onChangeText={(text) => {
+              const dueDate = new Date(text)
               updateTaskLocallyAndExternally({
                 ...task,
                 dueDate
               })
             }}
+            className="w-full"
           />
           { /* TODO reenable when backend has implemented a remove duedate
           <Button
@@ -255,7 +267,7 @@ const TaskDetailViewSidebar = ({
   )
 }
 
-export type TaskDetailModalProps = Omit<ModalProps, keyof ModalHeaderProps> & {
+export type TaskDetailModalProps = Omit<ModalProps, keyof OverlayHeaderProps> & {
   /**
    * A not set or empty taskId is seen as creating a new task
    */
@@ -276,7 +288,7 @@ export const TaskDetailModal = ({
                                   wardId,
                                   initialStatus,
                                   onClose,
-                                  modalClassName,
+                                  className,
                                   ...modalProps
                                 }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailModalProps>) => {
   const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
@@ -341,7 +353,7 @@ export const TaskDetailModal = ({
   }
 
   const buttons = (
-    <div className="row justify-end gap-x-8">
+    <div className="row justify-end gap-x-4">
       {!isCreating ?
         (
           <>
@@ -361,9 +373,7 @@ export const TaskDetailModal = ({
               </SolidButton>
             )}
           </>
-        )
-        :
-        (
+        ) : (
           <SolidButton onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
             {translation.create}
           </SolidButton>
@@ -380,7 +390,7 @@ export const TaskDetailModal = ({
             <Textarea
               headline={translation.notes}
               value={task.notes}
-              onChange={(description) => setTask({ ...task, notes: description })}
+              onChangeText={(description) => setTask({ ...task, notes: description })}
               onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
             />
           </div>
@@ -428,39 +438,40 @@ export const TaskDetailModal = ({
 
   return (
     <>
-      <ConfirmDialog
-        id="deleteTaskDialog"
+      <ConfirmModal
         isOpen={isShowingDeleteDialog}
-        titleText={`${translation.deleteTask}?`}
-        descriptionText={`${translation.deleteTaskDescription}`}
+        headerProps={{
+          titleText: `${translation.deleteTask}?`,
+          descriptionText: `${translation.deleteTaskDescription}`
+        }}
         onConfirm={() => {
           // deleteTaskMutation.mutate(task.id)
           setIsShowingDeleteDialog(false)
         }}
         onCancel={() => setIsShowingDeleteDialog(false)}
-        onCloseClick={() => setIsShowingDeleteDialog(false)}
-        onBackgroundClick={() => setIsShowingDeleteDialog(false)}
         buttonOverwrites={[{}, {}, { color: 'negative' }]}
       />
       <Modal
-        modalClassName={clsx('relative gap-y-0 max-w-[800px] w-[calc(100vw-532px)]', {
+        className={clsx('relative gap-y-0 max-w-[800px] w-[calc(100vw-532px)]', {
           'rounded-l-none': isCreating,
-        }, modalClassName)}
-        title={(
-          <ToggleableInput
-            autoFocus={isCreating}
-            initialState="editing"
-            id="name"
-            value={task.name}
-            onChangeText={(name) => setTask({ ...task, name })}
-            onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, name: text })}
-            labelClassName="text-2xl font-bold"
-            minLength={minTaskNameLength}
-            maxLength={maxTaskNameLength}
-            size={24}
-          />
-        )}
-        onCloseClick={onClose}
+        }, className)}
+        headerProps={{
+          title: (
+            <ToggleableInput
+              autoFocus={isCreating}
+              initialState="editing"
+              id="name"
+              value={task.name}
+              onChangeText={(name) => setTask({ ...task, name })}
+              onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, name: text })}
+              labelClassName="text-2xl font-bold"
+              minLength={minTaskNameLength}
+              maxLength={maxTaskNameLength}
+              size={20}
+            />
+          )
+        }}
+        onClose={onClose}
         {...modalProps}
       >
         {isCreating && templateSidebar}

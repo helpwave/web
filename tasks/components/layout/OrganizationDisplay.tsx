@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
@@ -9,14 +9,13 @@ import type { OrganizationDTO } from '@helpwave/api-services/types/users/organiz
 import { ColumnTitle } from '../ColumnTitle'
 import { OrganizationCard } from '../cards/OrganizationCard'
 import { OrganizationContext } from '@/pages/organizations'
-import clsx from 'clsx'
 
 type OrganizationDisplayTranslation = {
   addOrganization: string,
   yourOrganizations: string,
 }
 
-const defaultOrganizationDisplayTranslations: Record<Languages, OrganizationDisplayTranslation> = {
+const defaultOrganizationDisplayTranslations: Translation<OrganizationDisplayTranslation> = {
   en: {
     addOrganization: 'Add Organization',
     yourOrganizations: 'Your Organizations'
@@ -36,10 +35,10 @@ export type OrganizationDisplayProps = {
  * The right side of the organizations page showing the list of organizations
  */
 export const OrganizationDisplay = ({
-  overwriteTranslation,
-  selectedOrganizationId,
-  organizations,
-}: PropsForTranslation<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
+                                      overwriteTranslation,
+                                      selectedOrganizationId,
+                                      organizations,
+                                    }: PropsForTranslation<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
   const translation = useTranslation(defaultOrganizationDisplayTranslations, overwriteTranslation)
   const router = useRouter()
 
@@ -62,7 +61,7 @@ export const OrganizationDisplay = ({
           <OrganizationCard
             key={organization.id}
             organization={organization}
-            className={clsx('h-full shadow border-2 border-transparent hover:border-primary', { 'border-primary border-solid': usedSelectedId === organization.id })}
+            isSelected={usedSelectedId === organization.id}
             onEditClick={() => context.updateContext({ ...context.state, organizationId: organization.id })}
             onClick={() => {
               router.push(`/organizations/${organization.id}`)
@@ -74,7 +73,7 @@ export const OrganizationDisplay = ({
           <AddCard
             text={translation.addOrganization}
             onClick={() => context.updateContext({ ...context.state, organizationId: '' })}
-            className={clsx('h-full', { 'border-primary border-solid': usedSelectedId === '' })}
+            isSelected={!!usedSelectedId}
           />
           */
         }

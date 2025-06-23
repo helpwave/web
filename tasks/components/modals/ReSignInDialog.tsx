@@ -1,17 +1,16 @@
-import type { Languages } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
+import { ConfirmDialog, type ConfirmDialogProps, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 
-type ReSignInModalTranslation = {
+type ReSignInDialogTranslation = {
   pleaseReSignIn: string,
   description: string,
   yes: string,
   no: string,
 }
 
-type ReSignInModalProps = Omit<ConfirmDialogProps, 'title'|'description'|'children'>
+type ReSignInDialogProps = Omit<ConfirmDialogProps, 'title' | 'description' | 'children'>
 
-const defaultReSignInModalTranslation: Record<Languages, ReSignInModalTranslation> = {
+const defaultReSignInModalTranslation: Translation<ReSignInDialogTranslation> = {
   en: {
     pleaseReSignIn: 'You triggered an action that requires a Re-Signin!',
     description: 'To see your organizational changes, you need to re-signin into helpwave tasks. Your changes will be visible afterwards.',
@@ -25,15 +24,22 @@ const defaultReSignInModalTranslation: Record<Languages, ReSignInModalTranslatio
     no: 'Nein, später.'
   }
 }
-export const ReSignInModal = ({ overwriteTranslation, titleText, ...modalProps }: PropsForTranslation<ReSignInModalTranslation, ReSignInModalProps>) => {
+export const ReSignInDialog = ({
+                                overwriteTranslation,
+                                headerProps,
+                                ...modalProps
+                              }: PropsForTranslation<ReSignInDialogTranslation, ReSignInDialogProps>) => {
   const translation = useTranslation(defaultReSignInModalTranslation, overwriteTranslation)
 
   return (
     <ConfirmDialog
       backgroundClassName="w-5"
-      titleText={titleText ?? translation.pleaseReSignIn}
+      headerProps={{
+        ...headerProps,
+        titleText: headerProps?.titleText ?? translation.pleaseReSignIn,
+        descriptionText: headerProps?.descriptionText ?? translation.description,
+      }}
       buttonOverwrites={[
-        {},
         {
           text: translation.no,
           color: 'negative'
@@ -44,8 +50,6 @@ export const ReSignInModal = ({ overwriteTranslation, titleText, ...modalProps }
         }
       ]}
       {...modalProps}
-    >
-      <span>{translation.description}</span>
-    </ConfirmDialog>
+    />
   )
 }

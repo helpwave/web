@@ -1,4 +1,4 @@
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import type { PropsForTranslation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import type { SelectProps } from '@helpwave/hightide'
@@ -8,7 +8,7 @@ import { subjectTypeList } from '@helpwave/api-services/types/properties/propert
 
 type PropertySubjectTypeSelectTranslation = { [key in SubjectType]: string }
 
-const defaultPropertySubjectTypeSelectTranslation: Record<Languages, PropertySubjectTypeSelectTranslation> = {
+const defaultPropertySubjectTypeSelectTranslation: Translation<PropertySubjectTypeSelectTranslation> = {
   en: {
     patient: 'Patient',
     task: 'Task',

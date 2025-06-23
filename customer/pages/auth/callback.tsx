@@ -1,7 +1,7 @@
 'use client'
 
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -18,7 +18,7 @@ type AuthCallbackTranslation = {
   home: string,
 }
 
-const defaultAuthCallbackTranslations: Record<Languages, AuthCallbackTranslation> = {
+const defaultAuthCallbackTranslations: Translation<AuthCallbackTranslation> = {
   en: {
     callback: 'Authentication-Callback',
     authenticationFailure: 'There was an error during authentication.',

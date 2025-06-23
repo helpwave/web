@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -59,7 +59,7 @@ type CartOverviewTranslation = {
   referralError: string,
 } & ProductPlanTranslation
 
-const defaultCartOverviewTranslations: Record<Languages, CartOverviewTranslation> = {
+const defaultCartOverviewTranslations: Translation<CartOverviewTranslation> = {
   en: {
     ...defaultProductPlanTranslation.en,
     removeFromCart: 'Remove',

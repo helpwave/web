@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { ProgressIndicator } from '@helpwave/hightide'
 import { LockIcon } from 'lucide-react'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Avatar } from '@helpwave/hightide'
 import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
@@ -11,7 +11,7 @@ type TaskCardTranslation = {
   assigned: string,
 }
 
-const defaultTaskCardTranslations: Record<Languages, TaskCardTranslation> = {
+const defaultTaskCardTranslations: Translation<TaskCardTranslation> = {
   en: {
     assigned: 'assigned'
   },

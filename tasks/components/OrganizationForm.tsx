@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import {
   Input,
   LoadingAndErrorComponent,
@@ -26,7 +26,7 @@ type OrganizationFormTranslation = {
   invalidEmail: string,
 }
 
-const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTranslation> = {
+const defaultOrganizationFormTranslations: Translation<OrganizationFormTranslation> = {
   en: {
     general: 'General',
     saveChanges: 'Save changes',
@@ -170,7 +170,7 @@ export const OrganizationForm = ({
               ...organizationForm.touched,
               shortName: true
             })}
-            onChange={text => triggerOnChange({
+            onChangeText={text => triggerOnChange({
               ...organizationForm.organization,
               shortName: text
             }, false, { ...organizationForm.touched })}
@@ -193,7 +193,7 @@ export const OrganizationForm = ({
               ...organizationForm.touched,
               longName: true
             })}
-            onChange={text => triggerOnChange({
+            onChangeText={text => triggerOnChange({
               ...organizationForm.organization,
               longName: text
             }, false, { ...organizationForm.touched })}
@@ -219,7 +219,7 @@ export const OrganizationForm = ({
                   ...organizationForm.touched,
                   email: true
                 })}
-                onChange={text => triggerOnChange({
+                onChangeText={text => triggerOnChange({
                   ...organizationForm.organization,
                   email: text
                 }, false, { ...organizationForm.touched })}

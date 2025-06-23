@@ -1,20 +1,19 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { LoadingAndErrorComponent, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { ColumnTitle } from '../ColumnTitle'
 import { AddCard } from '../cards/AddCard'
 import { WardCard } from '../cards/WardCard'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
-import clsx from 'clsx'
 
 type WardDisplayTranslation = {
   wards: string,
   addWard: string,
 }
 
-const defaultWardDisplayTranslations: Record<Languages, WardDisplayTranslation> = {
+const defaultWardDisplayTranslations: Translation<WardDisplayTranslation> = {
   en: {
     wards: 'Wards',
     addWard: 'Add new Ward'
@@ -46,6 +45,8 @@ export const WardDisplay = ({
   const wards = data
   selectedWardId ??= context.state.wardId
 
+  console.log(selectedWardId)
+
   return (
     <div className="py-4 px-6 @container">
       <ColumnTitle title={translation.wards}/>
@@ -65,9 +66,7 @@ export const WardDisplay = ({
               onClick={() => {
                 router.push(`/ward/${ward.id}`).catch(console.error)
               }}
-              className={clsx({
-                'border-2 border-primary': selectedWardId === ward.id
-              })}
+              isSelected={selectedWardId === ward.id }
             />
           ))}
           <AddCard
@@ -76,7 +75,7 @@ export const WardDisplay = ({
               ...context.state,
               wardId: ''
             })}
-            // TODO isSelected={!selectedWardId}
+            isSelected={!selectedWardId}
           />
         </div>
       </LoadingAndErrorComponent>

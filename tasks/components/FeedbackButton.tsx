@@ -1,13 +1,13 @@
 import { SolidButton } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import type { Languages } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { getConfig } from '@/utils/config'
 
 type FeedbackButtonTranslation = {
   text: string,
 }
 
-const defaultFeedbackButtonTranslation: Record<Languages, FeedbackButtonTranslation> = {
+const defaultFeedbackButtonTranslation: Translation<FeedbackButtonTranslation> = {
   en: {
     text: 'Issue or Feedback?'
   },

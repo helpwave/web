@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { type Languages } from '@helpwave/hightide'
+import { type Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Page } from '@/components/layout/Page'
 import titleWrapper from '@/utils/titleWrapper'
@@ -37,7 +37,7 @@ type InvoicesTranslation = {
   allPayed: string,
 } & InvoiceStatusTranslation & ProductPlanTypeTranslation
 
-const defaultInvoicesTranslations: Record<Languages, InvoicesTranslation> = {
+const defaultInvoicesTranslations: Translation<InvoicesTranslation> = {
   en: {
     ...defaultInvoiceStatusTranslation.en,
     ...defaultProductPlanTypeTranslation.en,

@@ -1,4 +1,3 @@
-import type { Languages } from '@helpwave/hightide'
 import { languagesLocalNames } from '@helpwave/hightide'
 import { useLanguage } from '@helpwave/hightide'
 import clsx from 'clsx'
@@ -16,7 +15,7 @@ import { useTranslation } from '@helpwave/hightide'
 import { OIDC_PROVIDER } from '@/api/config'
 
 export type NavItem = {
-  name: Record<Languages, string>,
+  name: Translation<string>,
   icon?: ReactNode,
   url: string,
   isExternal?: boolean,

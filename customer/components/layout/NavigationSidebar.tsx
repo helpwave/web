@@ -1,4 +1,3 @@
-import type { Translation } from '@helpwave/hightide'
 import { languagesLocalNames } from '@helpwave/hightide'
 import { useLanguage } from '@helpwave/hightide'
 import clsx from 'clsx'

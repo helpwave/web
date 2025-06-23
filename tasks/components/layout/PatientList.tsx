@@ -194,7 +194,7 @@ export const PatientList = ({
       >
         <div className="col gap-y-4 mb-8">
           <Expandable
-            initialExpansion={initialOpenedSections?.active}
+            isExpanded={initialOpenedSections?.active}
             disabled={filteredActive.length <= 0}
             label={<span className="textstyle-accent">{`${translation.active} (${filteredActive.length})`}</span>}
             className={clsx('border-2 border-transparent bg-transparent !shadow-none')}
@@ -243,7 +243,7 @@ export const PatientList = ({
           <Droppable id="patientListUnassigned" data={{ patientListSection: 'unassigned' }}>
             {({ isOver }) => (
               <Expandable
-                initialExpansion={initialOpenedSections?.unassigned}
+                isExpanded={initialOpenedSections?.unassigned}
                 disabled={filteredUnassigned.length <= 0}
                 label={(
                   <span className="textstyle-accent text-tag-yellow-text">
@@ -297,7 +297,7 @@ export const PatientList = ({
           <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
             {({ isOver }) => (
               <Expandable
-                initialExpansion={initialOpenedSections?.discharged}
+                isExpanded={initialOpenedSections?.discharged}
                 disabled={filteredDischarged.length <= 0}
                 label={(
                   <span className="textstyle-accent">

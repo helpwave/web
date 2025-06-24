@@ -2,7 +2,7 @@
 const nextConfig = {
   distDir: 'build',
   reactStrictMode: true,
-  transpilePackages: ['@helpwave/hightide'],
+  transpilePackages: ['@helpwave/api-services'],
   output: 'standalone',
   images: {
     dangerouslyAllowSVG: true,

@@ -16,5 +16,9 @@
     "allowSyntheticDefaultImports": true,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true
-  }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+  ]
 }

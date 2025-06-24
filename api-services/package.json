@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "tsc --noEmit && eslint ."
   },
+  "type": "module",
   "dependencies": {
     "@helpwave/hightide": "^0.0.17",
     "@helpwave/proto-ts": "0.64.0-89e2023.0",

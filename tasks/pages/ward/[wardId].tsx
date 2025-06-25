@@ -239,7 +239,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
       crumbs={[
         {
           display: organization?.name ?? translation.organization,
-          link: `/organizations/?organizationId${organization?.id}`
+          link: `/organizations/?organizationId=${organization?.id}`
         },
         {
           display: ward?.name ?? translation.ward,

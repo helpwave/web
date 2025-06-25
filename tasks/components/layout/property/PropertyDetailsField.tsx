@@ -145,8 +145,8 @@ const defaultPropertyDetailsFieldTranslation: Translation<PropertyDetailsFieldTr
     allowCustomValuesDescription: 'Let users enter a free text when the predefined values are not enough.',
   },
   de: {
-    field: 'Property Eingabe', // TODO better translation
-    fieldType: 'Property Typ',
+    field: 'Eingabe',
+    fieldType: 'Eigenschaftstyp',
     multiSelect: 'Multi Select',
     singleSelect: 'Single Select',
     number: 'Zahl',

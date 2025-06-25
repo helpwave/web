@@ -56,7 +56,7 @@ export const OrganizationDisplay = ({
   return (
     <div className="py-4 px-6 @container">
       <ColumnTitle title={translation.yourOrganizations}/>
-      <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
+      <div className="grid @max-md:grid-cols-1 gap-6">
         {usedOrganizations.map(organization => (
           <OrganizationCard
             key={organization.id}

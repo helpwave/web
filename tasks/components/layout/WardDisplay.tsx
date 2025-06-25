@@ -45,8 +45,6 @@ export const WardDisplay = ({
   const wards = data?.sort((a, b) => a.name.localeCompare(b.name))
   selectedWardId ??= context.state.wardId
 
-  console.log(selectedWardId)
-
   return (
     <div className="py-4 px-6 @container">
       <ColumnTitle title={translation.wards}/>

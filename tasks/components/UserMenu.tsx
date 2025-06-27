@@ -46,7 +46,7 @@ const defaultUserMenuTranslations: Translation<UserMenuTranslation> = {
     taskTemplates: 'Vorlagen',
     invitations: 'Einladungen',
     organizations: 'Organisationen',
-    properties: 'Properties',
+    properties: 'Eigenschaften',
     theme: 'Farbschema',
   }
 }

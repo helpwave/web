@@ -42,10 +42,8 @@ export const WardDisplay = ({
   const context = useContext(OrganizationOverviewContext)
   const { data, isLoading, isError } = useWardOverviewsQuery(organizationId)
 
-  const wards = data
+  const wards = data?.sort((a, b) => a.name.localeCompare(b.name))
   selectedWardId ??= context.state.wardId
-
-  console.log(selectedWardId)
 
   return (
     <div className="py-4 px-6 @container">

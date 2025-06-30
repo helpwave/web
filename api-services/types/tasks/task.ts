@@ -1,3 +1,5 @@
+import type { Translation } from '@helpwave/hightide'
+
 export type SubTaskDTO = {
   id: string,
   name: string,
@@ -9,6 +11,25 @@ export type CreateSubTaskDTO = SubTaskDTO & {
 }
 
 export type TaskStatus = 'done' | 'inProgress' | 'todo'
+
+export type TaskStatusTranslation = Record<TaskStatus, string>
+
+const translation: Translation<TaskStatusTranslation> = {
+  en: {
+    done: 'Done',
+    inProgress: 'In Progress',
+    todo: 'Todo',
+  },
+  de: {
+    done: 'Fertig',
+    inProgress: 'In Arbeit',
+    todo: 'Todo',
+  }
+}
+
+export const TaskStatusUtil = {
+  translation
+}
 
 export type TaskDTO = {
   id: string,

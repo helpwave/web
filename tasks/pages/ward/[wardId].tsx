@@ -217,7 +217,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
 
   const createPatientMutation = usePatientCreateMutation()
 
-  // TOOD: can we somehow assert that the patient is not undefined here?
+  // TODO: can we somehow assert that the patient is not undefined here?
   const createPatient = () => contextState.patient && createPatientMutation.mutateAsync(contextState.patient)
     .then((patient) => {
       // TODO: is it a good idea to have this much state in one object?, also this shouldn't be called context I think

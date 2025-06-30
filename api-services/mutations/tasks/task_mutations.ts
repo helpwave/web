@@ -4,21 +4,15 @@ import {
   AssignTaskRequest,
   CreateSubtaskRequest,
   CreateTaskRequest,
-  DeleteSubtaskRequest,
+  DeleteSubtaskRequest, DeleteTaskRequest,
   GetTaskRequest,
   GetTasksByPatientRequest,
   UnassignTaskRequest,
   UpdateSubtaskRequest,
   UpdateTaskRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
-import type {
-  CreateSubTaskDTO,
-  SubTaskDTO,
-  TaskDTO
-} from '../../types/tasks/task'
-import {
-  emptyTask
-} from '../../types/tasks/task'
+import type { CreateSubTaskDTO, SubTaskDTO, TaskDTO } from '../../types/tasks/task'
+import { emptyTask } from '../../types/tasks/task'
 import { QueryKeys } from '../query_keys'
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
@@ -107,12 +101,19 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
   return useMutation({
     mutationFn: async (task: TaskDTO) => {
       const req = new CreateTaskRequest()
-      req.setName(task.name)
-      req.setPatientId(patientId)
-      req.setDescription(task.notes)
-      req.setPublic(task.isPublicVisible)
-      req.setInitialStatus(GRPCConverter.taskStatusToGrpc(task.status))
-      req.setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
+        .setName(task.name)
+        .setPatientId(patientId)
+        .setDescription(task.notes)
+        .setPublic(task.isPublicVisible)
+        .setInitialStatus(GRPCConverter.taskStatusToGrpc(task.status))
+        .setDueAt(task.dueDate ? GRPCConverter.dateToTimestamp(task.dueDate) : undefined)
+        .setSubtasksList(task.subtasks.map(subtask => (new CreateTaskRequest.SubTask())
+          .setName(subtask.name)
+          .setDone(subtask.isDone)))
+
+      if(task.assignee) {
+        req.setAssignedUserId(task.assignee)
+      }
 
       const res = await APIServices.task.createTask(req, getAuthenticatedGrpcMetadata())
       const newTask: TaskDTO = {
@@ -154,25 +155,23 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
   })
 }
 
-/* TODO re-allow when backen implements this
 export const useTaskDeleteMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (taskId: string) => {
       const req = new DeleteTaskRequest()
       req.setId(taskId)
-      await APIServices.task.(req, getAuthenticatedGrpcMetadata())
+      await APIServices.task.deleteTask(req, getAuthenticatedGrpcMetadata())
 
       callback()
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).then()
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).then()
+      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
     }
   })
 }
- */
 
 // TODO: taskId: string | undefined => taskId: string -> A taskId is always required to create a SubTask
 export const useSubTaskAddMutation = (taskId: string | undefined, callback: (subtask: SubTaskDTO) => void = noop) => {
@@ -252,9 +251,9 @@ export const useAssignTaskMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
-      taskId,
-      userId
-    }: TaskAssignmentRequestProps) => {
+                         taskId,
+                         userId
+                       }: TaskAssignmentRequestProps) => {
       const req = new AssignTaskRequest()
       req.setTaskId(taskId)
       req.setUserId(userId)
@@ -277,9 +276,9 @@ export const useUnassignTaskMutation = (callback: () => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
-      taskId,
-      userId
-    }: TaskAssignmentRequestProps) => {
+                         taskId,
+                         userId
+                       }: TaskAssignmentRequestProps) => {
       const req = new UnassignTaskRequest()
       req.setTaskId(taskId)
       req.setUserId(userId)

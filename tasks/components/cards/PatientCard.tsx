@@ -1,7 +1,7 @@
 
 import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { PillLabelsColumn } from '../pill/PillLabelsColumn'
+import { PillLabelsColumn } from '../PillLabel'
 import { DragCard, type DragCardProps } from './DragCard'
 import clsx from 'clsx'
 

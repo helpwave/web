@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { Bed } from 'lucide-react'
 import type { WardOverviewDTO } from '@helpwave/api-services/types/tasks/wards'
-import { PillLabelBox } from '../pill/PillLabelBox'
+import { PillLabelBox } from '../PillLabel'
 import { EditCard, type EditCardProps } from './EditCard'
 
 export type WardCardProps = EditCardProps & {

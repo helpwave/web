@@ -8,7 +8,7 @@ import type { TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/tas
 import { emptyTask } from '@helpwave/api-services/types/tasks/task'
 import { Sortable } from './dnd-kit/Sortable'
 import { TaskCard } from './cards/TaskCard'
-import { PillLabel } from './pill/PillLabel'
+import { PillLabel } from './PillLabel'
 
 type KanbanColumnsTranslation = {
   addTask: string,

@@ -50,7 +50,7 @@ export const TaskCard = ({
         'border-primary': isSelected,
       })}
     >
-      <div className="col overflow-hidden">
+      <div className="col gap-y-0 overflow-hidden">
         <div className="row overflow-hidden items-center gap-x-1">
           {!task.isPublicVisible && <div className="w-[12px]"><LockIcon size={12}/></div>}
           <span className="textstyle-title-sm truncate">{task.name}</span>

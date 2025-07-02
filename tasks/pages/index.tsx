@@ -54,8 +54,6 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
   const { isLoading, isError } = useOrganizationsForUserQuery()
 
-  console.log('isError', isError)
-  console.log('isloading', isLoading)
   const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
   const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
 

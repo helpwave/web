@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           isLoading: false,
         })
         onTokenExpiringCallback(async () => {
-          console.log('Token expiring, refreshing...')
+          console.debug('Token expiring, refreshing...')
           const identity = await renewToken()
           setAuthState({
             identity: identity ?? undefined,

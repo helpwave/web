@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import type { Translation } from '@helpwave/hightide'
 import {
@@ -91,45 +90,29 @@ export const UserMenu = ({
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
         </div>
       )}>
-        <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => setLanguageModalOpen(true)}
-        >
+        <MenuItem onClick={() => router.push(settingsURL, '_blank')}>
+          {translation.profile}
+        </MenuItem>
+        <MenuItem onClick={() => setLanguageModalOpen(true)}>
           {translation.language}
         </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => setThemeModalOpen(true)}
-        >
+        <MenuItem onClick={() => setThemeModalOpen(true)}>
           {translation.theme}
         </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => router.push('/templates')}
-        >
+        <MenuItem onClick={() => router.push('/templates')}>
           {translation.taskTemplates}
         </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => router.push('/properties')}
-        >
+        <MenuItem onClick={() => router.push('/properties')}>
           {translation.properties}
         </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => router.push('/organizations')}
-        >
+        <MenuItem onClick={() => router.push('/organizations')}>
           {translation.organizations}
         </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => router.push('/invitations')}
-        >
+        <MenuItem onClick={() => router.push('/invitations')}>
           {translation.invitations}
         </MenuItem>
         <MenuItem
-          alignment="left" className="text-negative cursor-pointer"
+          className="text-negative hover:!bg-negative/20"
           onClick={() => signOut()}
         >
           {translation.signOut}

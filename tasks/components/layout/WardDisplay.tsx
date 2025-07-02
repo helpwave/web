@@ -37,7 +37,7 @@ export const WardDisplay = ({
                               organizationId,
                               selectedWardId,
                             }: PropsForTranslation<WardDisplayTranslation, WardDisplayProps>) => {
-  const translation = useTranslation(defaultWardDisplayTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultWardDisplayTranslations], overwriteTranslation)
   const router = useRouter()
   const context = useContext(OrganizationOverviewContext)
   const { data, isLoading, isError } = useWardOverviewsQuery(organizationId)
@@ -47,7 +47,7 @@ export const WardDisplay = ({
 
   return (
     <div className="py-4 px-6 @container">
-      <ColumnTitle title={translation.wards}/>
+      <ColumnTitle title={translation('wards')}/>
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
@@ -68,7 +68,7 @@ export const WardDisplay = ({
             />
           ))}
           <AddCard
-            text={translation.addWard}
+            text={translation('addWard')}
             onClick={() => context.updateContext({
               ...context.state,
               wardId: ''

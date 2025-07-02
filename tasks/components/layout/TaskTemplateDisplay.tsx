@@ -46,7 +46,7 @@ export const TaskTemplateDisplay = ({
   taskTemplates,
   variant,
 }: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
-  const translation = useTranslation(defaultTaskTemplateDisplayTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultTaskTemplateDisplayTranslation], overwriteTranslation)
 
   const router = useRouter()
 
@@ -55,7 +55,7 @@ export const TaskTemplateDisplay = ({
     <div className="py-4 px-6 @container">
       <div className="row items-center justify-between mb-4">
         <span className="textstyle-title-normal">
-          {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
+          {variant === 'personalTemplates' ? translation('personalTaskTemplates') : translation('wardTaskTemplates')}
         </span>
         { (variant === 'wardTemplates' || wardId) && (
           <SolidButton
@@ -65,7 +65,7 @@ export const TaskTemplateDisplay = ({
             className="row gap-x-1 items-center w-auto"
           >
             <LucideArrowLeftRight/>
-            {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}
+            {variant === 'personalTemplates' ? translation('wardTaskTemplates') : translation('personalTaskTemplates')}
           </SolidButton>
         )}
       </div>
@@ -87,7 +87,7 @@ export const TaskTemplateDisplay = ({
           className={clsx({
             'border-primary border-2': selectedId === ''
           })}
-          text={translation.addNewTaskTemplate}
+          text={translation('addNewTaskTemplate')}
         />
       </div>
     </div>

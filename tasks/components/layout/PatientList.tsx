@@ -105,7 +105,7 @@ export const PatientList = ({
                               wardId,
                               initialOpenedSections = defaultPatientListOpenedSections
                             }: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
-  const translation = useTranslation(defaultPatientListTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultPatientListTranslations], overwriteTranslation)
   const [search, setSearch] = useState('')
   const {
     state: context,
@@ -133,8 +133,7 @@ export const PatientList = ({
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => patient.room.wardId === wardId
     ? `${patient.room.name} - ${patient.bed.name}`
-    : translation.otherWard
-
+    : translation('otherWard')
   const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
   const filteredUnassigned = !data ? [] : SimpleSearchWithMapping(search, data.unassigned, value => value.name)
   const filteredDischarged = !data ? [] : SimpleSearchWithMapping(search, data.discharged, value => value.name)
@@ -151,7 +150,7 @@ export const PatientList = ({
         }}
         confirmType="negative"
         onCancel={() => setDeletePatient(undefined)}
-        headerProps={{ titleText: translation.deleteConfirmText, descriptionText: translation.deleteDescriptionText }}
+        headerProps={{ titleText: translation('deleteConfirmText'), descriptionText: translation('deleteDescriptionText') }}
       />
       <PatientDischargeModal
         isOpen={!!dischargingPatient}
@@ -172,9 +171,9 @@ export const PatientList = ({
         wardId={context.wardId}
       />
       <div className="row gap-x-8 items-center justify-between">
-        <span className="textstyle-title-md pr-4">{translation.patients}</span>
+        <span className="textstyle-title-md pr-4">{translation('patients')}</span>
         <div className="row gap-x-2">
-          <Input placeholder={translation.search} value={search} onChangeText={setSearch} className="h-10"/>
+          <Input placeholder={translation('search')} value={search} onChangeText={setSearch} className="h-10"/>
           <SolidButton
             className="whitespace-nowrap"
             color="positive"
@@ -182,7 +181,7 @@ export const PatientList = ({
               setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
             }}
           >
-            {translation.addPatient}
+            {translation('addPatient')}
           </SolidButton>
         </div>
       </div>
@@ -196,7 +195,7 @@ export const PatientList = ({
           <Expandable
             isExpanded={initialOpenedSections?.active}
             disabled={filteredActive.length <= 0}
-            label={<span className="textstyle-accent">{`${translation.active} (${filteredActive.length})`}</span>}
+            label={<span className="textstyle-accent">{`${translation('active')} (${filteredActive.length})`}</span>}
             className={clsx('border-2 border-transparent bg-transparent !shadow-none')}
             headerClassName="bg-transparent"
           >
@@ -232,7 +231,7 @@ export const PatientList = ({
                         event.stopPropagation()
                         setDischargingPatient(patient)
                       }}>
-                        {translation.discharge}
+                        {translation('discharge')}
                       </TextButton>
                     </div>
                   </div>
@@ -247,7 +246,7 @@ export const PatientList = ({
                 disabled={filteredUnassigned.length <= 0}
                 label={(
                   <span className="textstyle-accent text-tag-yellow-text">
-                      {`${translation.unassigned} (${filteredUnassigned.length})`}
+                      {`${translation('unassigned')} (${filteredUnassigned.length})`}
                   </span>
                 )}
                 className={clsx('border-2 border-dashed bg-transparent !shadow-none', {
@@ -278,13 +277,13 @@ export const PatientList = ({
                         <span className="textstyle-title-sm w-1/3 text-ellipsis">{patient.name}</span>
                         <div className="row flex-1 justify-between items-center">
                           <Chip color="yellow" variant="fullyRounded" className="min-w-40 justify-center">
-                            {`${translation.unassigned}`}
+                            {`${translation('unassigned')}`}
                           </Chip>
                           <TextButton color="negative" onClick={event => {
                             event.stopPropagation()
                             setDischargingPatient(patient)
                           }}>
-                            {translation.discharge}
+                            {translation('discharge')}
                           </TextButton>
                         </div>
                       </div>
@@ -301,7 +300,7 @@ export const PatientList = ({
                 disabled={filteredDischarged.length <= 0}
                 label={(
                   <span className="textstyle-accent">
-                      {`${translation.discharged} (${filteredDischarged.length})`}
+                      {`${translation('discharged')} (${filteredDischarged.length})`}
                     </span>
                 )}
                 className={clsx('border-2 border-dashed bg-transparent !shadow-none', {
@@ -335,7 +334,7 @@ export const PatientList = ({
                             event.stopPropagation()
                             readmitPatientMutation.mutate(patient.id)
                           }}>
-                            {translation.readmit}
+                            {translation('readmit')}
                           </TextButton>
                           <TextButton
                             color="negative"
@@ -346,7 +345,7 @@ export const PatientList = ({
                             // TODO enable when patient delete is possible again
                             disabled={true}
                           >
-                            {translation.delete}
+                            {translation('delete')}
                           </TextButton>
                         </div>
                       </div>

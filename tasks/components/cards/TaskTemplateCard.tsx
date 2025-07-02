@@ -42,7 +42,7 @@ export const TaskTemplateCard = ({
                                    className,
                                    ...editCardProps
                                  }: PropsForTranslation<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
-  const translation = useTranslation(defaultTaskTemplateCardTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultTaskTemplateCardTranslations], overwriteTranslation)
   return (
     <EditCard
       className={clsx('gap-y-0', className)}
@@ -56,11 +56,11 @@ export const TaskTemplateCard = ({
             color={typeForLabel === 'ward' ? 'red' : 'default'}
             variant="fullyRounded"
           >
-            {typeForLabel === 'ward' ? translation.ward : translation.personal}
+            {typeForLabel === 'ward' ? translation('ward') : translation('personal')}
           </Chip>
         )}
       </div>
-      <span>{subtaskCount + ' ' + translation.subtask}</span>
+      <span>{subtaskCount + ' ' + translation('subtask')}</span>
       </div>
     </EditCard>
   )

@@ -42,7 +42,7 @@ export const WardRoomList = ({
                                overwriteTranslation,
                                rooms
                              }: PropsForTranslation<WardRoomListTranslation, WardRoomListProps>) => {
-  const translation = useTranslation(defaultWardRoomListTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultWardRoomListTranslation], overwriteTranslation)
   const {
     state: contextState,
     updateContext
@@ -70,12 +70,12 @@ export const WardRoomList = ({
          onClick={() => updateContext({ wardId: contextState.wardId })}
     >
       <div className="row justify-between items-center pb-4">
-        <span className="textstyle-title-md">{translation.roomOverview}</span>
+        <span className="textstyle-title-md">{translation('roomOverview')}</span>
         <SolidButton onClick={event => {
           event.stopPropagation()
           updateContext({ wardId: contextState.wardId })
         }}>
-          {translation.showPatientList}
+          {translation('showPatientList')}
         </SolidButton>
       </div>
       <LoadingAndErrorComponent
@@ -90,7 +90,7 @@ export const WardRoomList = ({
             />
           )) : (
             <AddCard
-              text={translation.addRooms}
+              text={translation('addRooms')}
               onClick={() => router.push(`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`)}
             />
           )}

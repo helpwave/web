@@ -21,8 +21,8 @@ type OrganizationFormTranslation = {
   contactEmailDescription: string,
   notVerified: string,
   required: string,
-  tooLong: (maxCharacters: number) => string,
-  tooShort: (minCharacters: number) => string,
+  tooLong: string,
+  tooShort: string,
   invalidEmail: string,
 }
 
@@ -38,8 +38,8 @@ const defaultOrganizationFormTranslations: Translation<OrganizationFormTranslati
     contactEmailDescription: 'Is visible to outside members.',
     notVerified: 'Not verified yet!',
     required: 'Required Field, cannot be empty',
-    tooLong: (maxCharacters) => `Too long, at most ${maxCharacters} characters`,
-    tooShort: (minCharacters) => `Too short, at least ${minCharacters} characters`,
+    tooLong: `Too long, at most {{characters}} characters`,
+    tooShort: `Too short, at least {{characters}} characters`,
     invalidEmail: 'Invalid email address'
   },
   de: {
@@ -53,8 +53,8 @@ const defaultOrganizationFormTranslations: Translation<OrganizationFormTranslati
     contactEmailDescription: 'Sichtbar für Nicht-Mitglieder.',
     notVerified: 'Noch nicht bestätigt!',
     required: 'Benötigter Wert, darf nicht leer sein',
-    tooLong: (maxCharacters) => `Zu lang, maximal ${maxCharacters} Zeichen`,
-    tooShort: (minCharacters) => `Zu kurz, mindestens ${minCharacters} Zeichen`,
+    tooLong: `Zu lang, maximal {{characters}} Zeichen`,
+    tooShort: `Zu kurz, mindestens {{characters}} Zeichen`,
     invalidEmail: 'Ungültige Email Adresse'
   }
 }
@@ -98,7 +98,7 @@ export const OrganizationForm = ({
                                    organizationForm = emptyOrganizationForm,
                                    onChange = () => undefined,
                                  }: PropsForTranslation<OrganizationFormTranslation, OrganizationFormProps>) => {
-  const translation = useTranslation(defaultOrganizationFormTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationFormTranslations], overwriteTranslation)
 
   const minShortNameLength = 2
   const minLongNameLength = 4
@@ -112,32 +112,28 @@ export const OrganizationForm = ({
   function validateShortName(organization: OrganizationMinimalDTO) {
     const shortName = organization.shortName.trim()
     if (shortName === '') {
-      return translation.required
-    } else if (shortName.length < minShortNameLength) {
-      return translation.tooShort(minShortNameLength)
+      return translation('required')    } else if (shortName.length < minShortNameLength) {
+      return translation('tooShort', { replacements: { characters: minShortNameLength.toString() } })
     } else if (shortName.length > maxShortNameLength) {
-      return translation.tooLong(maxShortNameLength)
+      return translation('tooLong', { replacements: { characters: maxShortNameLength.toString() } })
     }
   }
 
   function validateLongName(organization: OrganizationMinimalDTO) {
     const longName = organization.longName.trim()
     if (longName === '') {
-      return translation.required
-    } else if (longName.length < minLongNameLength) {
-      return translation.tooShort(minLongNameLength)
+      return translation('required')    } else if (longName.length < minLongNameLength) {
+      return translation('tooShort', { replacements: { characters: minLongNameLength.toString() } })
     } else if (longName.length > maxLongNameLength) {
-      return translation.tooLong(maxLongNameLength)
+      return translation('tooLong', { replacements: { characters: maxLongNameLength.toString() } })
     }
   }
 
   function validateEmailWithOrganization(organization: OrganizationMinimalDTO) {
     const email = organization.email.trim()
     if (email === '') {
-      return translation.required
-    } else if (!validateEmail(organization.email)) {
-      return translation.invalidEmail
-    }
+      return translation('required')    } else if (!validateEmail(organization.email)) {
+      return translation('invalidEmail')    }
   }
 
   function triggerOnChange(newOrganization: OrganizationMinimalDTO, shouldUpdate: boolean, touched: OrganizationFormTouchedType) {
@@ -160,12 +156,12 @@ export const OrganizationForm = ({
       minimumLoadingDuration={200} // prevents errors flickering
     >
       <div className="col gap-y-4">
-        <span className="textstyle-title-normal">{translation.general}</span>
+        <span className="textstyle-title-normal">{translation('general')}</span>
         <div className="col gap-y-1">
           <Input
             id="shortName"
             value={organizationForm.organization.shortName}
-            label={{ name: translation.shortName }}
+            label={{ name: translation('shortName') }}
             onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
               ...organizationForm.touched,
               shortName: true
@@ -182,13 +178,13 @@ export const OrganizationForm = ({
             className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
           />
           {isDisplayingShortNameError && <span className="textstyle-form-error">{shortNameErrorMessage}</span>}
-          <span className="textstyle-form-description">{translation.shortNameDescription}</span>
+          <span className="textstyle-form-description">{translation('shortNameDescription')}</span>
         </div>
         <div className="col gap-y-1">
           <Input
             id="longName"
             value={organizationForm.organization.longName}
-            label={{ name: translation.longName }}
+            label={{ name: translation('longName') }}
             onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
               ...organizationForm.touched,
               longName: true
@@ -205,7 +201,7 @@ export const OrganizationForm = ({
             className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
           />
           {isDisplayingLongNameError && <span className="textstyle-form-error">{longNameErrorMessage}</span>}
-          <span className="textstyle-form-description">{translation.longNameDescription}</span>
+          <span className="textstyle-form-description">{translation('longNameDescription')}</span>
         </div>
         <div className="col gap-y-1">
           <div className="row items-end">
@@ -213,7 +209,7 @@ export const OrganizationForm = ({
               <Input
                 id="email"
                 value={organizationForm.organization.email}
-                label={{ name: translation.contactEmail }}
+                label={{ name: translation('contactEmail') }}
                 type="email"
                 onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
                   ...organizationForm.touched,
@@ -233,11 +229,11 @@ export const OrganizationForm = ({
             </div>
             {
               !organizationForm.organization.isVerified &&
-              <span className="text-negative mb-3">{translation.notVerified}</span>
+              <span className="text-negative mb-3">{translation('notVerified')}</span>
             }
           </div>
           {isDisplayingEmailNameError && <span className="textstyle-form-error">{emailErrorMessage}</span>}
-          <span className="textstyle-form-description">{translation.contactEmailDescription}</span>
+          <span className="textstyle-form-description">{translation('contactEmailDescription')}</span>
         </div>
       </div>
     </LoadingAndErrorComponent>

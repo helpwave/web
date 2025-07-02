@@ -76,7 +76,7 @@ export const PropertyDisplay = ({
   overwriteTranslation,
   searchValue: initialSearchValue = '',
 }: PropsForTranslation<PropertyDisplayTranslation, PropertyDisplayProps>) => {
-  const translation = useTranslation(defaultPropertyDisplayTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPropertyDisplayTranslation], overwriteTranslation)
 
   const {
     state: contextState,
@@ -102,7 +102,7 @@ export const PropertyDisplay = ({
     <div className="py-4 px-6 col gap-y-4">
       <div className="row gap-x-1 items-center">
         <Tag className="text-primary" size={20}/>
-        <span className="textstyle-title-lg">{translation.properties}</span>
+        <span className="textstyle-title-lg">{translation('properties')}</span>
       </div>
       <div className="col gap-y-2">
         <div className="row justify-between items-center">
@@ -112,13 +112,13 @@ export const PropertyDisplay = ({
               value={search}
               onChangeText={setSearch}
               onEditCompleted={setSearch}
-              placeholder={translation.search}
+              placeholder={translation('search')}
             />
             <PropertySubjectTypeSelect
               className="w-full text-nowrap"
               value={contextState.subjectType}
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
-              hintText={translation.subjectType}
+              hintText={translation('subjectType')}
             />
             <TextButton
               className="w-full px-0"
@@ -128,7 +128,7 @@ export const PropertyDisplay = ({
                 setSearch('')
               }}
             >
-              {translation.removeFilter}
+              {translation('removeFilter')}
             </TextButton>
           </div>
           <SolidButton onClick={() => updateContext({
@@ -137,7 +137,7 @@ export const PropertyDisplay = ({
           })}>
             <div className="row gap-x-2 items-center">
               <Plus/>
-              <span>{translation.addProperty}</span>
+              <span>{translation('addProperty')}</span>
             </div>
           </SolidButton>
         </div>
@@ -154,21 +154,21 @@ export const PropertyDisplay = ({
             (<Tile
               key="field-type-cell"
               title={{ value: property.name }}
-              description={{ value: translation[property.fieldType] }}
+              description={{ value: translation(property.fieldType) }}
             />),
             (<div key="subject-type-cell" className="row gap-x-2">
               <SubjectTypeIcon subjectType={property.subjectType}/>
-              <span>{translation[property.subjectType]}</span>
+              <span>{translation(property.subjectType)}</span>
             </div>),
             (<div key="edit-button-cell" className="row justify-end">
               <TextButton onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
-                <span>{translation.edit}</span>
+                <span>{translation('edit')}</span>
               </TextButton>
             </div>)
           ]}
           header={[
-            <span key="headerName" className="textstyle-table-header">{translation.name}</span>,
-            <span key="headerSubjectType" className="textstyle-table-header">{translation.subjectType}</span>,
+            <span key="headerName" className="textstyle-table-header">{translation('name')}</span>,
+            <span key="headerSubjectType" className="textstyle-table-header">{translation('subjectType')}</span>,
             <></>
           ]}
         />

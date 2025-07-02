@@ -1,26 +1,24 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
 import type { Translation } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { SolidButton } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import { LoadingAndErrorComponent, type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
 import { useWardTaskTemplateQuery } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
-  taskTemplates: (numberOfTemplates: number) => string,
+  taskTemplatesCount: string,
 }
 
 const defaultTaskTemplateWardPreviewTranslation: Translation<TaskTemplateWardPreviewTranslation> = {
   en: {
     showAllTaskTemplates: 'Show all Task Templates',
-    taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
+    taskTemplatesCount: `Task Templates ({{amount}})`
   },
   de: {
     showAllTaskTemplates: 'Alle Vorlagen anzeigen',
-    taskTemplates: (numberOfTemplates) => `Vorlagen (${numberOfTemplates})`
+    taskTemplatesCount: `Vorlagen ({{amount}})`
   }
 }
 
@@ -32,10 +30,10 @@ export type TaskTemplateWardPreviewProps = {
  * A TaskTemplateWardPreview for showing all TaskTemplate within a ward
  */
 export const TaskTemplateWardPreview = ({
-  overwriteTranslation,
-  wardId,
-}: PropsForTranslation<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
-  const translation = useTranslation(defaultTaskTemplateWardPreviewTranslation, overwriteTranslation)
+                                          overwriteTranslation,
+                                          wardId,
+                                        }: PropsForTranslation<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
+  const translation = useTranslation([defaultTaskTemplateWardPreviewTranslation], overwriteTranslation)
   const router = useRouter()
 
   const context = useContext(OrganizationOverviewContext)
@@ -55,12 +53,14 @@ export const TaskTemplateWardPreview = ({
       {taskTemplates && (
         <div className="@container col">
           <div className="row justify-between items-center mb-4">
-            <span className="textstyle-table-name">{translation.taskTemplates(taskTemplates.length)}</span>
+            <span className="textstyle-table-name">
+              {translation('taskTemplatesCount', { replacements: { amount: taskTemplates.length.toString() } })}
+            </span>
             <SolidButton
               className="w-auto"
               onClick={() => router.push(`/ward/${wardId}/templates`)}
             >
-              {translation.showAllTaskTemplates}
+              {translation('showAllTaskTemplates')}
             </SolidButton>
           </div>
           <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4">

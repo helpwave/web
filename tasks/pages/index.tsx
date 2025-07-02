@@ -51,7 +51,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
                                                                                                     jsonFeed,
                                                                                                     overwriteTranslation
                                                                                                   }) => {
-  const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultDashboardTranslations], overwriteTranslation)
   const { isLoading, isError } = useOrganizationsForUserQuery()
 
   const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
@@ -71,7 +71,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
 
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.dashboard, link: '/' }]}
+      crumbs={[{ display: translation('dashboard'), link: '/' }]}
     >
       <Head>
         <title>{titleWrapper()}</title>

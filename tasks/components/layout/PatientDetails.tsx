@@ -75,7 +75,7 @@ export const PatientDetail = ({
   patient = emptyPatientDetails
 }: PropsForTranslation<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
-  const translation = useTranslation(defaultPatientDetailTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultPatientDetailTranslations], overwriteTranslation)
 
   const context = useContext(WardOverviewContext)
 
@@ -126,7 +126,7 @@ export const PatientDetail = ({
           <div
             className="absolute top-2 right-2 bg-positive text-on-positive rounded-lg px-2 py-1 animate-pulse"
           >
-            {translation.saved}
+            {translation('saved')}
           </div>
         )
       }
@@ -148,7 +148,7 @@ export const PatientDetail = ({
         patientId={newPatient.id}
         initialStatus={initialTaskStatus}
       />
-      <ColumnTitle title={translation.patientDetails}/>
+      <ColumnTitle title={translation('patientDetails')}/>
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
@@ -189,7 +189,7 @@ export const PatientDetail = ({
           </div>
           <div className="flex-1">
             <Textarea
-              headline={translation.notes}
+              headline={translation('notes')}
               value={newPatient.note}
               onChangeText={text => changeSavedValue({
                 ...newPatient,
@@ -219,21 +219,21 @@ export const PatientDetail = ({
               (
               <>
                 <SolidButton color="warning" onClick={() => unassignMutation.mutate(newPatient.id)}>
-                  {translation.unassign}
+                  {translation('unassign')}
                 </SolidButton>
                 <SolidButton color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
-                  {translation.dischargePatient}
+                  {translation('dischargePatient')}
                 </SolidButton>
               </>
               ) : (
               <SolidButton color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
-                {translation.readmit}
+                {translation('readmit')}
               </SolidButton>
               )}
           <SolidButton color="primary" onClick={() => {
             clearUpdateTimer(true)
             updateMutation.mutate(newPatient)
-          }}>{translation.saveChanges}</SolidButton>
+          }}>{translation('saveChanges')}</SolidButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

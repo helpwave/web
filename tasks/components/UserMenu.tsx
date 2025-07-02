@@ -61,7 +61,7 @@ export const UserMenu = ({
                            overwriteTranslation,
                            className,
                          }: PropsForTranslation<UserMenuTranslation, UserMenuProps>) => {
-  const translation = useTranslation(defaultUserMenuTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultUserMenuTranslations], overwriteTranslation)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const [isThemeModalOpen, setThemeModalOpen] = useState(false)
   const { user, signOut } = useAuth()
@@ -91,31 +91,31 @@ export const UserMenu = ({
         </div>
       )}>
         <MenuItem onClick={() => router.push(settingsURL, '_blank')}>
-          {translation.profile}
+          {translation('profile')}
         </MenuItem>
         <MenuItem onClick={() => setLanguageModalOpen(true)}>
-          {translation.language}
+          {translation('language')}
         </MenuItem>
         <MenuItem onClick={() => setThemeModalOpen(true)}>
-          {translation.theme}
+          {translation('theme')}
         </MenuItem>
         <MenuItem onClick={() => router.push('/templates')}>
-          {translation.taskTemplates}
+          {translation('taskTemplates')}
         </MenuItem>
         <MenuItem onClick={() => router.push('/properties')}>
-          {translation.properties}
+          {translation('properties')}
         </MenuItem>
         <MenuItem onClick={() => router.push('/organizations')}>
-          {translation.organizations}
+          {translation('organizations')}
         </MenuItem>
         <MenuItem onClick={() => router.push('/invitations')}>
-          {translation.invitations}
+          {translation('invitations')}
         </MenuItem>
         <MenuItem
           className="text-negative hover:!bg-negative/20"
           onClick={() => signOut()}
         >
-          {translation.signOut}
+          {translation('signOut')}
         </MenuItem>
       </Menu>
     </div>

@@ -74,7 +74,7 @@ export const RoomBedSelect = ({
   isClearable = false,
   onChange = noop
 }: PropsForTranslation<RoomBedSelectTranslation, RoomBedSelectProps>) => {
-  const translation = useTranslation(defaultRoomBedSelectTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultRoomBedSelectTranslation], overwriteTranslation)
   const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardId)
   const [currentSelection, setCurrentSelection] = useState<RoomBedSelectIds>({ ...initialRoomAndBed })
   const ref = useRef<HTMLDivElement>(null)
@@ -137,7 +137,7 @@ export const RoomBedSelect = ({
             disabled={!hasChanges}
           >
             <div className="row gap-x-2 items-center">
-              {translation.revert}
+              {translation('revert')}
               <Undo2 size={16}/>
             </div>
           </TextButton>
@@ -155,7 +155,7 @@ export const RoomBedSelect = ({
             color="negative"
           >
             <div className="row gap-x-2 items-center">
-              {translation.revert}
+              {translation('revert')}
               <X size={16}/>
             </div>
           </TextButton>
@@ -166,7 +166,7 @@ export const RoomBedSelect = ({
           '!text-negative': hasChanges,
           '!text-positive': !hasChanges
         })}>
-          {hasChanges ? translation.unsaved : translation.saved}
+          {hasChanges ? translation('unsaved') : translation('saved')}
         </span>
       )}
       {touched && !isSubmitting && isCreating && (
@@ -174,12 +174,12 @@ export const RoomBedSelect = ({
           '!text-positive': currentSelection.roomId && currentSelection.bedId,
           '!text-negative': !(currentSelection.roomId && currentSelection.bedId)
         })}>
-          {currentSelection.roomId && currentSelection.bedId ? translation.valid : translation.invalid}
+          {currentSelection.roomId && currentSelection.bedId ? translation('valid') : translation('invalid')}
         </span>
       )}
       {isSubmitting && (
         <span>
-          {`${translation.submitting}...`}
+          {`${translation('submitting')}...`}
         </span>
       )}
     </div>
@@ -190,8 +190,8 @@ export const RoomBedSelect = ({
         <table className="min-w-[200px] border-spacing-y-2 border-separate">
           <thead>
             <tr>
-              <th><span className="textstyle-table-header row justify-start">{translation.room}</span></th>
-              <th><span className="textstyle-table-header row justify-start">{translation.bed}</span></th>
+              <th><span className="textstyle-table-header row justify-start">{translation('room')}</span></th>
+              <th><span className="textstyle-table-header row justify-start">{translation('bed')}</span></th>
             </tr>
           </thead>
           <tbody>
@@ -215,13 +215,13 @@ export const RoomBedSelect = ({
         <thead/>
         <tbody>
           <tr>
-            <td><span className="textstyle-table-header">{translation.room}</span></td>
+            <td><span className="textstyle-table-header">{translation('room')}</span></td>
             <td>
               {roomSelect}
             </td>
           </tr>
           <tr>
-            <td><span className="textstyle-table-header">{translation.bed}</span></td>
+            <td><span className="textstyle-table-header">{translation('bed')}</span></td>
             <td>
               {bedSelect}
             </td>

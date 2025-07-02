@@ -54,7 +54,7 @@ export type PropertyDetailsProps = NonNullable<unknown>
 export const PropertyDetails = ({
   overwriteTranslation,
 }: PropsForTranslation<PropertyDetailsTranslation, PropertyDetailsProps>) => {
-  const translation = useTranslation(defaultPropertyDetailsTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPropertyDetailsTranslation], overwriteTranslation)
 
   const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
   const lastStep = 2
@@ -90,9 +90,8 @@ export const PropertyDetails = ({
     <div className="py-4 px-6 col gap-y-4 min-h-full">
       <ConfirmModal
         headerProps={{
-          titleText: translation.archivePropertyDialogTitle,
-          descriptionText: translation.archivePropertyDialogDescription
-        }}
+          titleText: translation('archivePropertyDialogTitle'),
+          descriptionText: translation('archivePropertyDialogDescription')        }}
         isOpen={showArchiveConfirm}
         onCancel={() => setArchiveConfirm(false)}
         onConfirm={() => {
@@ -101,10 +100,10 @@ export const PropertyDetails = ({
         confirmType="negative"
       />
       <div className="top-0 row justify-between items-center">
-        <span className="textstyle-title-lg">{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</span>
+        <span className="textstyle-title-lg">{isCreatingNewProperty ? translation('createProperty') : translation('propertyDetails')}</span>
         {!isCreatingNewProperty && (
           <TextButton color="negative" onClick={() => setArchiveConfirm(true)}>
-            {translation.archiveProperty}
+            {translation('archiveProperty')}
           </TextButton>
         )}
       </div>
@@ -150,7 +149,7 @@ export const PropertyDetails = ({
                   if (isSelect) {
                     selectData ??= emptySelectData
                     if (selectUpdate) {
-                      selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({ id: '', name: `${translation.newEntry} ${index + 1}`, description: '', isCustom: false })))
+                      selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({ id: '', name: `${translation('newEntry')} ${index + 1}`, description: '', isCustom: false })))
                     }
                   }
                   return { ...prevState, fieldType: fieldDetails.fieldType, selectData }
@@ -167,7 +166,7 @@ export const PropertyDetails = ({
                 updateSelectDataMutation.mutate({
                   propertyId: value.id,
                   update: selectUpdate.update,
-                  add: range(0, selectUpdate.create - 1).map(index => ({ id: '', name: `${translation.newEntry} ${index + 1}`, description: '', isCustom: false })),
+                  add: range(0, selectUpdate.create - 1).map(index => ({ id: '', name: `${translation('newEntry')} ${index + 1}`, description: '', isCustom: false })),
                   remove: selectUpdate.delete.map(value1 => value1.id)
                 })
               }

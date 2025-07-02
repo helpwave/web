@@ -121,7 +121,7 @@ export const TaskTemplateDetails = ({
       />
       <ColumnTitle
         title={isCreatingNewTemplate ? translation('createTaskTemplate') : translation('updateTaskTemplate')}
-        subtitle={!isCreatingNewTemplate ? translation('updateTaskTemplateDescription') : undefined}
+        description={!isCreatingNewTemplate ? translation('updateTaskTemplateDescription') : undefined}
       />
       <div className=" col gap-y-4 max-w-[400px] mb-4">
         <div>

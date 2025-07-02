@@ -15,6 +15,7 @@ import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
 import { PropertyContext } from '@/pages/properties'
 import { SubjectTypeIcon } from '@/components/layout/property/SubjectTypeIcon'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type PropertyDisplayTranslation = {
   properties: string,
@@ -100,10 +101,25 @@ export const PropertyDisplay = ({
 
   return (
     <div className="py-4 px-6 col gap-y-4">
-      <div className="row gap-x-1 items-center">
-        <Tag className="text-primary" size={20}/>
-        <span className="textstyle-title-lg">{translation('properties')}</span>
-      </div>
+      <ColumnTitle
+        title={(
+          <div className="row gap-x-2 items-center">
+            <Tag className="text-primary" size={20}/>
+            <span>{translation('properties')}</span>
+          </div>
+        )}
+        actions={(
+          <SolidButton onClick={() => updateContext({
+            ...contextState,
+            propertyId: undefined
+          })}>
+            <div className="row gap-x-2 items-center">
+              <Plus/>
+              <span>{translation('addProperty')}</span>
+            </div>
+          </SolidButton>
+        )}
+      />
       <div className="col gap-y-2">
         <div className="row justify-between items-center">
           <div className="row items-center gap-x-2">
@@ -115,13 +131,12 @@ export const PropertyDisplay = ({
               placeholder={translation('search')}
             />
             <PropertySubjectTypeSelect
-              className="w-full text-nowrap"
+              className="text-nowrap min-w-48"
               value={contextState.subjectType}
               onChange={subjectType => updateContext({ ...contextState, subjectType })}
               hintText={translation('subjectType')}
             />
             <TextButton
-              className="w-full px-0"
               color="negative"
               onClick={() => {
                 updateContext({ ...contextState, subjectType: undefined })
@@ -131,15 +146,6 @@ export const PropertyDisplay = ({
               {translation('removeFilter')}
             </TextButton>
           </div>
-          <SolidButton onClick={() => updateContext({
-            ...contextState,
-            propertyId: undefined
-          })}>
-            <div className="row gap-x-2 items-center">
-              <Plus/>
-              <span>{translation('addProperty')}</span>
-            </div>
-          </SolidButton>
         </div>
       </div>
       <LoadingAndErrorComponent

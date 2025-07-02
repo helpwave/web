@@ -25,6 +25,7 @@ import { Draggable, Droppable } from '../dnd-kit-instances/patients'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
 import { AddPatientModal } from '@/components/modals/AddPatientModal'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type PatientListTranslation = {
   patients: string,
@@ -170,21 +171,23 @@ export const PatientList = ({
         onCancel={() => setIsShowingAddPatientModal(0)}
         wardId={context.wardId}
       />
-      <div className="row gap-x-8 items-center justify-between">
-        <span className="textstyle-title-md pr-4">{translation('patients')}</span>
-        <div className="row gap-x-2">
-          <Input placeholder={translation('search')} value={search} onChangeText={setSearch} className="h-10"/>
-          <SolidButton
-            className="whitespace-nowrap"
-            color="positive"
-            onClick={() => {
-              setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
-            }}
-          >
-            {translation('addPatient')}
-          </SolidButton>
-        </div>
-      </div>
+      <ColumnTitle
+        title={translation('patients')}
+        actions={(
+          <div className="row gap-x-2">
+            <Input placeholder={translation('search')} value={search} onChangeText={setSearch} className="h-10"/>
+            <SolidButton
+              className="whitespace-nowrap"
+              color="positive"
+              onClick={() => {
+                setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
+              }}
+            >
+              {translation('addPatient')}
+            </SolidButton>
+          </div>
+        )}
+      />
       <LoadingAndErrorComponent
         hasError={isError || !data}
         isLoading={isLoading}

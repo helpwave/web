@@ -19,6 +19,7 @@ import {
 } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { InvitationState } from '@helpwave/api-services/types/users/invitations'
 import { OrganizationContext } from '@/pages/organizations'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type OrganizationInvitationListTranslation = {
   remove: string,
@@ -140,15 +141,19 @@ export const OrganizationInvitationList = ({
         ]}
       />
       <div className="col gap-y-2">
-        <div className="row justify-between">
-          <span className="textstyle-table-name">{`${translation('invitations')} (${usedInvitations.length})`}</span>
-          <SolidButton
-            color="positive"
-            onClick={() => setInviteMemberModalEmail('')}
-          >
-            {translation('inviteMember')}
-          </SolidButton>
-        </div>
+        <ColumnTitle
+          title={`${translation('invitations')} (${usedInvitations.length})`}
+          actions={(
+            <SolidButton
+              color="positive"
+              onClick={() => setInviteMemberModalEmail('')}
+              size="small"
+            >
+              {translation('inviteMember')}
+            </SolidButton>
+          )}
+          type="subtitle"
+        />
         <Table
           data={usedInvitations}
           stateManagement={[tableState, setTableState]}

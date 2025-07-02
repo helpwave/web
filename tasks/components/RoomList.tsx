@@ -20,6 +20,8 @@ import {
 } from '@helpwave/api-services/mutations/tasks/room_mutations'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 import { ManageBedsModal } from '@/components/modals/ManageBedsModal'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { Plus, Trash } from 'lucide-react'
 
 type RoomListTranslation = {
   edit: string,
@@ -156,7 +158,7 @@ export const RoomList = ({
   }
 
   return (
-    <div className="col">
+    <div className="col gap-y-4">
       <ConfirmModal
         headerProps={{
           titleText: translation('deleteConfirmText', { count: tableState.selection?.currentSelection.length }),
@@ -183,28 +185,33 @@ export const RoomList = ({
         roomId={managedRoom ?? ''}
         onClose={() => setManagedRoom(undefined)}
       />
+      <ColumnTitle
+        title={translation('room', { count: 2 /* Always use plural */ }) + ((!isLoading && !isError) ?` (${usedRooms.length})` : '')}
+        actions={!isLoading && !isError && (
+          <div className="row gap-x-2">
+            {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
+              <SolidButton
+                onClick={() => setDeletionConfirmDialogElement('')}
+                color="negative"
+                size="small"
+                startIcon={<Trash size={18}/>}
+              >
+                {translation('removeSelection')}
+              </SolidButton>
+            )}
+            <SolidButton onClick={addRoom} color="positive" size="small" startIcon={<Plus size={18}/>}>
+              {translation('addRoom')}
+            </SolidButton>
+          </div>
+        )}
+        type="subtitle"
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
         loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
         errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
       >
-        <div className="row justify-between items-center mb-2">
-          <span className="textstyle-table-name">{translation('room', { count: 2 /* Always use plural */ }) + ` (${usedRooms.length})`}</span>
-          <div className="row gap-x-2">
-            {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
-              <SolidButton
-                onClick={() => setDeletionConfirmDialogElement('')}
-                color="negative"
-              >
-                {translation('removeSelection')}
-              </SolidButton>
-            )}
-            <SolidButton onClick={addRoom} color="positive">
-              {translation('addRoom')}
-            </SolidButton>
-          </div>
-        </div>
         <Table
           focusElement={focusElement}
           data={usedRooms}

@@ -7,6 +7,7 @@ import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_t
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
 import clsx from 'clsx'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,
@@ -53,11 +54,9 @@ export const TaskTemplateDisplay = ({
   const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
   return (
     <div className="py-4 px-6 @container">
-      <div className="row items-center justify-between mb-4">
-        <span className="textstyle-title-normal">
-          {variant === 'personalTemplates' ? translation('personalTaskTemplates') : translation('wardTaskTemplates')}
-        </span>
-        { (variant === 'wardTemplates' || wardId) && (
+      <ColumnTitle
+        title={variant === 'personalTemplates' ? translation('personalTaskTemplates') : translation('wardTaskTemplates')}
+        actions={(variant === 'wardTemplates' || wardId) && (
           <SolidButton
             onClick={() => {
               router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).catch(console.error)
@@ -68,8 +67,7 @@ export const TaskTemplateDisplay = ({
             {variant === 'personalTemplates' ? translation('wardTaskTemplates') : translation('personalTaskTemplates')}
           </SolidButton>
         )}
-      </div>
-      {/* TODO replace onClick function to something different */}
+      />
       <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
         {taskTemplates.map(taskTemplate => (
           <TaskTemplateCard

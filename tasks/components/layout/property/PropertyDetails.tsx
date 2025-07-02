@@ -1,10 +1,6 @@
-import { ConfirmModal } from '@helpwave/hightide'
-import type { PropsForTranslation , Translation , StepperState } from '@helpwave/hightide'
-import { useTranslation } from '@helpwave/hightide'
+import type { PropsForTranslation, StepperState, Translation } from '@helpwave/hightide'
+import { ConfirmModal, LoadingAndErrorComponent, range, StepperBar, TextButton, useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
-import { TextButton } from '@helpwave/hightide'
-import { StepperBar } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import {
   usePropertyChangeSelectOptionMutation,
   usePropertyCreateMutation,
@@ -13,10 +9,10 @@ import {
 } from '@helpwave/api-services/mutations/properties/property_mutations'
 import type { Property, SelectData } from '@helpwave/api-services/types/properties/property'
 import { emptyProperty, emptySelectData } from '@helpwave/api-services/types/properties/property'
-import { range } from '@helpwave/hightide'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
 import { PropertyContext } from '@/pages/properties'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type PropertyDetailsTranslation = {
   propertyDetails: string,
@@ -52,8 +48,8 @@ export type PropertyDetailsProps = NonNullable<unknown>
  * A component for showing and changing properties Details
  */
 export const PropertyDetails = ({
-  overwriteTranslation,
-}: PropsForTranslation<PropertyDetailsTranslation, PropertyDetailsProps>) => {
+                                  overwriteTranslation,
+                                }: PropsForTranslation<PropertyDetailsTranslation, PropertyDetailsProps>) => {
   const translation = useTranslation([defaultPropertyDetailsTranslation], overwriteTranslation)
 
   const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
@@ -91,7 +87,8 @@ export const PropertyDetails = ({
       <ConfirmModal
         headerProps={{
           titleText: translation('archivePropertyDialogTitle'),
-          descriptionText: translation('archivePropertyDialogDescription')        }}
+          descriptionText: translation('archivePropertyDialogDescription')
+        }}
         isOpen={showArchiveConfirm}
         onCancel={() => setArchiveConfirm(false)}
         onConfirm={() => {
@@ -99,14 +96,14 @@ export const PropertyDetails = ({
         }}
         confirmType="negative"
       />
-      <div className="top-0 row justify-between items-center">
-        <span className="textstyle-title-lg">{isCreatingNewProperty ? translation('createProperty') : translation('propertyDetails')}</span>
-        {!isCreatingNewProperty && (
+      <ColumnTitle
+        title={isCreatingNewProperty ? translation('createProperty') : translation('propertyDetails')}
+        actions={!isCreatingNewProperty && (
           <TextButton color="negative" onClick={() => setArchiveConfirm(true)}>
             {translation('archiveProperty')}
           </TextButton>
         )}
-      </div>
+      />
       <LoadingAndErrorComponent
         isLoading={!isCreatingNewProperty && isLoading}
         hasError={!isCreatingNewProperty && isError}
@@ -145,11 +142,16 @@ export const PropertyDetails = ({
               const isSelect = fieldDetails.fieldType === 'singleSelect' || fieldDetails.fieldType === 'multiSelect'
               if (isCreatingNewProperty) {
                 setValue(prevState => {
-                  let selectData : SelectData|undefined = fieldDetails.selectData ? { ...fieldDetails.selectData } : undefined
+                  let selectData: SelectData | undefined = fieldDetails.selectData ? { ...fieldDetails.selectData } : undefined
                   if (isSelect) {
                     selectData ??= emptySelectData
                     if (selectUpdate) {
-                      selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({ id: '', name: `${translation('newEntry')} ${index + 1}`, description: '', isCustom: false })))
+                      selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({
+                        id: '',
+                        name: `${translation('newEntry')} ${index + 1}`,
+                        description: '',
+                        isCustom: false
+                      })))
                     }
                   }
                   return { ...prevState, fieldType: fieldDetails.fieldType, selectData }
@@ -166,7 +168,12 @@ export const PropertyDetails = ({
                 updateSelectDataMutation.mutate({
                   propertyId: value.id,
                   update: selectUpdate.update,
-                  add: range(0, selectUpdate.create - 1).map(index => ({ id: '', name: `${translation('newEntry')} ${index + 1}`, description: '', isCustom: false })),
+                  add: range(0, selectUpdate.create - 1).map(index => ({
+                    id: '',
+                    name: `${translation('newEntry')} ${index + 1}`,
+                    description: '',
+                    isCustom: false
+                  })),
                   remove: selectUpdate.delete.map(value1 => value1.id)
                 })
               }

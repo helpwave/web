@@ -124,9 +124,9 @@ export const WardDetail = ({
         />
         <ColumnTitle
           title={isCreatingNewWard ? translation('createWard') : translation('updateWard')}
-          subtitle={isCreatingNewWard ? translation('createWardSubtitle') : translation('updateWardSubtitle')}
+          description={isCreatingNewWard ? translation('createWardSubtitle') : translation('updateWardSubtitle')}
         />
-        <div className="max-w-[400px]">
+        <div className="max-w-[300px]">
           <WardForm
             key={newWard.id}
             ward={newWard}
@@ -140,7 +140,7 @@ export const WardDetail = ({
         {isCreatingNewWard ?
           <span>{translation('roomsNotOnCreate')}</span>
           : (
-            <div className="max-w-[600px] mt-6">
+            <div className="mt-6">
               <RoomList/>
             </div>
           )}
@@ -159,8 +159,11 @@ export const WardDetail = ({
           )
         }
         <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
-          <span className="textstyle-title-normal">{translation('dangerZone')}</span>
-          <span className="textstyle-description">{translation('dangerZoneText')}</span>
+          <ColumnTitle
+            title={translation('dangerZone')}
+            description={translation('dangerZoneText')}
+            type="subtitle"
+          />
           <button
             onClick={() => setIsShowingConfirmDialog(true)}
             className="px-0 font-bold justify-start text-negative w-min text-nowrap"

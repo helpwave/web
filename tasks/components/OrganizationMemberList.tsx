@@ -19,6 +19,8 @@ import type { OrganizationMember } from '@helpwave/api-services/types/users/orga
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 import { useRemoveMemberMutation } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { OrganizationContext } from '@/pages/organizations'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { Trash } from 'lucide-react'
 
 type OrganizationMemberListTranslation = {
   edit: string,
@@ -154,19 +156,20 @@ export const OrganizationMemberList = ({
         errorProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
         loadingProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
       >
-        <div className="row justify-between items-center mb-2">
-          <span className="textstyle-table-name">{translation('member', { count: 2 /* Always use plural */ }) + ` (${usedMembers.length})`}</span>
-          <div className="row gap-x-2">
-            {tableState.selection && tableState.selection.currentSelection.length > 0 && (
-              <SolidButton
-                onClick={() => setDeleteDialogState({ isShowing: true })}
-                color="negative"
-              >
-                {translation('removeSelection')}
-              </SolidButton>
-            )}
-          </div>
-        </div>
+        <ColumnTitle
+          title={translation('member', { count: 2 /* Always use plural */ }) + ` (${usedMembers.length})`}
+          actions={tableState.selection && tableState.selection.currentSelection.length > 0 && (
+            <SolidButton
+              onClick={() => setDeleteDialogState({ isShowing: true })}
+              color="negative"
+              size="small"
+              startIcon={<Trash size={18}/>}
+            >
+              {translation('removeSelection')}
+            </SolidButton>
+          )}
+          type="subtitle"
+        />
         <Table
           data={usedMembers}
           stateManagement={[tableState, setTableState]}

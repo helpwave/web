@@ -49,7 +49,7 @@ export const PropertySelectOptionsUpdater = ({
                                                value,
                                                onChange,
                                              }: PropsForTranslation<PropertySelectOptionsUpdaterPropsTranslation, PropertySelectOptionsUpdaterProps>) => {
-  const translation = useTranslation(defaultPropertySelectOptionsUpdaterPropsTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPropertySelectOptionsUpdaterPropsTranslation], overwriteTranslation)
   const [state, setState] = useState<PropertySelectOptionsUpdaterState>({
     data: value,
     update: { create: 0, update: [], delete: [] }
@@ -63,7 +63,7 @@ export const PropertySelectOptionsUpdater = ({
   return (
     <div className="col mt-2 gap-y-1">
       <div className="row justify-between items-center">
-        <span className="textstyle-label-md">{translation.values}</span>
+        <span className="textstyle-label-md">{translation('values')}</span>
         <IconButton
           onClick={() => {
             onChange({ ...data }, { ...update, create: update.create + 1 })
@@ -79,7 +79,7 @@ export const PropertySelectOptionsUpdater = ({
             <div key={index} className="row items-center justify-between gap-x-4">
               <Input
                 value={entry.name ?? ''}
-                placeholder={`${translation.newEntry} ${index + 1}`}
+                placeholder={`${translation('newEntry')} ${index + 1}`}
                 onChangeText={text => {
                   const newList = [...data.options]
                   const newEntry = { ...entry, name: text }
@@ -174,7 +174,7 @@ export const PropertyDetailsField = ({
                                        onChange,
                                        expandableProps
                                      }: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
-  const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPropertyDetailsFieldTranslation], overwriteTranslation)
   const [usedValue, setUsedValue] = useState<PropertyFieldDetails>(value)
   const isSelectType = value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect'
 
@@ -183,12 +183,12 @@ export const PropertyDetailsField = ({
   }, [value])
 
   return (
-    <Expandable {...expandableProps} label={translation.field}>
+    <Expandable {...expandableProps} label={translation('field')}>
       <Select
         // TODO add icons
         value={usedValue.fieldType}
-        label={{ name: translation.fieldType, labelType: 'labelMedium' }}
-        options={fieldTypeList.map(fieldType => ({ value: fieldType, label: translation[fieldType] }))}
+        label={{ name: translation('fieldType'), labelType: 'labelMedium' }}
+        options={fieldTypeList.map(fieldType => ({ value: fieldType, label: translation(fieldType) }))}
         onChange={fieldType => {
           const newValue = { ...usedValue, fieldType }
           onChange(newValue)
@@ -203,8 +203,8 @@ export const PropertyDetailsField = ({
       )}
       {isSelectType && (
         <Tile
-          title={{ value: translation.allowCustomValues, className: 'textstyle-label-md' }}
-          description={{ value: translation.allowCustomValuesDescription }}
+          title={{ value: translation('allowCustomValues'), className: 'textstyle-label-md' }}
+          description={{ value: translation('allowCustomValuesDescription') }}
           suffix={(
             <Checkbox
               checked={usedValue.selectData!.isAllowingFreetext}

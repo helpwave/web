@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 
-import type { Translation } from '@helpwave/hightide'
-import { ConfirmModal } from '@helpwave/hightide'
+import type { Translation, TranslationPlural } from '@helpwave/hightide'
 import {
   Avatar,
+  ConfirmModal,
   defaultTableStatePagination,
   defaultTableStateSelection,
   LoadingAndErrorComponent,
@@ -19,6 +19,8 @@ import type { OrganizationMember } from '@helpwave/api-services/types/users/orga
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 import { useRemoveMemberMutation } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { OrganizationContext } from '@/pages/organizations'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { Trash } from 'lucide-react'
 
 type OrganizationMemberListTranslation = {
   edit: string,
@@ -26,12 +28,11 @@ type OrganizationMemberListTranslation = {
   removeSelection: string,
   deselectAll: string,
   selectAll: string,
-  members: string,
-  member: string,
+  member: TranslationPlural,
   saveChanges: string,
   role: string,
-  dangerZoneText: (single: boolean) => string,
-  deleteConfirmText: (single: boolean) => string,
+  dangerZoneText: TranslationPlural,
+  deleteConfirmText: TranslationPlural,
 }
 
 const defaultOrganizationMemberListTranslations: Translation<OrganizationMemberListTranslation> = {
@@ -41,12 +42,20 @@ const defaultOrganizationMemberListTranslations: Translation<OrganizationMemberL
     removeSelection: 'Remove Selected',
     deselectAll: 'Deselect all',
     selectAll: 'Select all',
-    members: 'Members',
-    member: 'Member',
+    member: {
+      one: 'Member',
+      other: 'Members'
+    },
     saveChanges: 'Save changes',
     role: 'Role',
-    dangerZoneText: (single) => `Deleting ${single ? `a ${defaultOrganizationMemberListTranslations.en.member}` : defaultOrganizationMemberListTranslations.en.members} is a permanent action and cannot be undone. Be careful!`,
-    deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultOrganizationMemberListTranslations.en.member : defaultOrganizationMemberListTranslations.en.members}?`,
+    dangerZoneText: {
+      one: 'Removing a member is a permanent action and cannot be undone. Be careful!',
+      other: 'Removing members is a permanent action and cannot be undone. Be careful!'
+    },
+    deleteConfirmText: {
+      one: 'Do you really want to remove the selected member?',
+      other: 'Do you really want to remove the selected members?',
+    },
   },
   de: {
     edit: 'Bearbeiten',
@@ -54,12 +63,20 @@ const defaultOrganizationMemberListTranslations: Translation<OrganizationMemberL
     removeSelection: 'Ausgewählte löschen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
-    members: 'Mitgliedern',
-    member: 'Mitglied',
+    member: {
+      one: 'Mitglied',
+      other: 'Mitglieder'
+    },
     saveChanges: 'Speichern',
     role: 'Rolle',
-    dangerZoneText: (single) => `Das Löschen ${single ? `eines ${defaultOrganizationMemberListTranslations.de.member}` : `von ${defaultOrganizationMemberListTranslations.de.member}`} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
-    deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? `das ausgewählte ${defaultOrganizationMemberListTranslations.de.member}` : `die ausgewählten ${defaultOrganizationMemberListTranslations.de.members}`}  löschen?`,
+    dangerZoneText: {
+      one: 'Das Entfernen eines Mitglieds ist a permanent permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+      other: 'Das Entfernen von Mitgliedern ist a permanent permanent und kann nicht rückgängig gemacht werden. Vorsicht!'
+    },
+    deleteConfirmText: {
+      one: 'Wollen Sie wirklich das ausgewählte Mitglied löschen?',
+      other: 'Wollen Sie wirklich die ausgewählten Mitglieder löschen?',
+    },
   }
 }
 
@@ -79,7 +96,7 @@ export const OrganizationMemberList = ({
                                          organizationId,
                                          members
                                        }: PropsForTranslation<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
-  const translation = useTranslation(defaultOrganizationMemberListTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationMemberListTranslations], overwriteTranslation)
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination,
     selection: defaultTableStateSelection
@@ -94,7 +111,6 @@ export const OrganizationMemberList = ({
 
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
 
-  const hasSelectedMultiple = !!tableState.selection && tableState.selection.currentSelection.length > 1
   const idMapping = (dataObject: OrganizationMember) => dataObject.id
 
   // TODO move this filtering to the Table component
@@ -116,8 +132,8 @@ export const OrganizationMemberList = ({
     <div className="col">
       <ConfirmModal
         headerProps={{
-         titleText: translation.deleteConfirmText(hasSelectedMultiple),
-         descriptionText: translation.dangerZoneText(hasSelectedMultiple)
+          titleText: translation('deleteConfirmText', { count: tableState.selection?.currentSelection.length }),
+          descriptionText: translation('dangerZoneText', { count: tableState.selection?.currentSelection.length }),
         }}
         isOpen={deleteDialogState.isShowing}
         onCancel={() => setDeleteDialogState(defaultDeleteDialogState)}
@@ -140,28 +156,29 @@ export const OrganizationMemberList = ({
         errorProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
         loadingProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
       >
-        <div className="row justify-between items-center mb-2">
-          <span className="textstyle-table-name">{translation.members + ` (${usedMembers.length})`}</span>
-          <div className="row gap-x-2">
-            {tableState.selection && tableState.selection.currentSelection.length > 0 && (
-              <SolidButton
-                onClick={() => setDeleteDialogState({ isShowing: true })}
-                color="negative"
-              >
-                {translation.removeSelection}
-              </SolidButton>
-            )}
-          </div>
-        </div>
+        <ColumnTitle
+          title={translation('member', { count: 2 /* Always use plural */ }) + ` (${usedMembers.length})`}
+          actions={tableState.selection && tableState.selection.currentSelection.length > 0 && (
+            <SolidButton
+              onClick={() => setDeleteDialogState({ isShowing: true })}
+              color="negative"
+              size="small"
+              startIcon={<Trash size={18}/>}
+            >
+              {translation('removeSelection')}
+            </SolidButton>
+          )}
+          type="subtitle"
+        />
         <Table
           data={usedMembers}
           stateManagement={[tableState, setTableState]}
           header={[
             <div key="member" className="row">
-              <span className="textstyle-table-header">{translation.member}</span>
+              <span className="textstyle-table-header">{translation('member')}</span>
             </div>,
             <div key="role" className="row">
-              <span className="textstyle-table-header">{translation.role}</span>
+              <span className="textstyle-table-header">{translation('role')}</span>
             </div>,
             <></>
           ]}
@@ -181,7 +198,7 @@ export const OrganizationMemberList = ({
                 onClick={() => { /* TODO allow changing roles */
                 }}
               >
-                {'N.A.' /* translation.roleTypes[orgMember.role] */}
+                {'N.A.' /* translation("roleTypes")[orgMember.role] */}
               </TextButton>
             </div>,
             <div key="remove" className="row justify-end">
@@ -190,7 +207,7 @@ export const OrganizationMemberList = ({
                 color="negative"
                 // disabled={orgMember.role === Role.admin}
               >
-                {translation.remove}
+                {translation('remove')}
               </TextButton>
             </div>
           ]}

@@ -19,6 +19,7 @@ import {
 } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { InvitationState } from '@helpwave/api-services/types/users/invitations'
 import { OrganizationContext } from '@/pages/organizations'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type OrganizationInvitationListTranslation = {
   remove: string,
@@ -68,7 +69,7 @@ export const OrganizationInvitationList = ({
                                              invitations,
                                              onChange
                                            }: PropsForTranslation<OrganizationInvitationListTranslation, OrganizationInvitationListProps>) => {
-  const translation = useTranslation(defaultOrganizationInvitationListTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationInvitationListTranslation], overwriteTranslation)
 
   const context = useContext(OrganizationContext)
   const usedOrganizationId = organizationId ?? context.state.organizationId
@@ -129,32 +130,36 @@ export const OrganizationInvitationList = ({
           setInviteMemberModalEmail('')
         }}
         inputs={[{
-          label: { name: translation.email },
+          label: { name: translation('email') },
           value: inviteMemberModalEmail ?? '',
           onChangeText: text => setInviteMemberModalEmail(text)
         }]}
         buttonOverwrites={[
           {},
-          { disabled: !isValidEmail, color: 'positive', text: translation.addAndNext },
-          { disabled: !isValidEmail, color: 'primary', text: translation.add }
+          { disabled: !isValidEmail, color: 'positive', text: translation('addAndNext') },
+          { disabled: !isValidEmail, color: 'primary', text: translation('add') }
         ]}
       />
       <div className="col gap-y-2">
-        <div className="row justify-between">
-          <span className="textstyle-table-name">{`${translation.invitations} (${usedInvitations.length})`}</span>
-          <SolidButton
-            color="positive"
-            onClick={() => setInviteMemberModalEmail('')}
-          >
-            {translation.inviteMember}
-          </SolidButton>
-        </div>
+        <ColumnTitle
+          title={`${translation('invitations')} (${usedInvitations.length})`}
+          actions={(
+            <SolidButton
+              color="positive"
+              onClick={() => setInviteMemberModalEmail('')}
+              size="small"
+            >
+              {translation('inviteMember')}
+            </SolidButton>
+          )}
+          type="subtitle"
+        />
         <Table
           data={usedInvitations}
           stateManagement={[tableState, setTableState]}
           identifierMapping={idMapping}
           header={[
-            <span key="organization" className="textstyle-table-header">{translation.email}</span>,
+            <span key="organization" className="textstyle-table-header">{translation('email')}</span>,
             <></>
           ]}
           rowMappingToCells={invite => [
@@ -171,7 +176,7 @@ export const OrganizationInvitationList = ({
                   onChange(usedInvitations.filter(value => idMapping(value) !== idMapping(invite)))
                 }}
               >
-                {translation.remove}
+                {translation('remove')}
               </TextButton>
             </div>
           ]}

@@ -33,7 +33,7 @@ export const SubtaskTile = ({
                               onRemoveClick,
                               onChange,
                             }: PropsForTranslation<SubtaskTileTranslation, SubtaskTileProps>) => {
-  const translation = useTranslation(defaultSubtaskTileTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultSubtaskTileTranslation], overwriteTranslation)
 
   const minTaskNameLength = 2
   const maxTaskNameLength = 64
@@ -78,10 +78,10 @@ export const SubtaskTile = ({
         <TextButton
           className="ml-4"
           onClick={onRemoveClick}
-          aria-label={translation.remove}
+          aria-label={translation('remove')}
           color="negative"
         >
-          {translation.remove}
+          {translation('remove')}
         </TextButton>
       </div>
     </div>

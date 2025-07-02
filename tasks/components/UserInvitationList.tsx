@@ -42,7 +42,7 @@ export type UserInvitationListProps = Record<string, never>
 export const UserInvitationList = ({
   overwriteTranslation,
 }: PropsForTranslation<UserInvitationListTranslation, UserInvitationListProps>) => {
-  const translation = useTranslation(defaultUserInvitationListTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultUserInvitationListTranslation], overwriteTranslation)
   const [tableState, setTableState] = useState<TableState>({ pagination: { ...defaultTableStatePagination, entriesPerPage: 10 } })
   const { data, isLoading, isError } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState(false)
@@ -77,7 +77,7 @@ export const UserInvitationList = ({
             stateManagement={[tableState, setTableState]}
             identifierMapping={idMapping}
             header={[
-              <span key="organization" className="textstyle-table-header">{translation.organization}</span>,
+              <span key="organization" className="textstyle-table-header">{translation('organization')}</span>,
               <></>,
               <></>
             ]}
@@ -91,14 +91,14 @@ export const UserInvitationList = ({
                 color="positive"
                 onClick={() => acceptInvite(invite.id)}
               >
-                {translation.accept}
+                {translation('accept')}
               </SolidButton>,
               <SolidButton
                 key="decline"
                 color="negative"
                 onClick={() => declineInviteMutation.mutate(invite.id)}
               >
-                {translation.decline}
+                {translation('decline')}
               </SolidButton>
             ]}
           />

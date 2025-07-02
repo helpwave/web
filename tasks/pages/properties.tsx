@@ -48,7 +48,7 @@ export const PropertyContext = createContext<PropertiesContextType>({
  * The page for showing all properties and to create new ones
  */
 const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<OrganizationsPageTranslation>) => {
-  const translation = useTranslation(defaultOrganizationsPageTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationsPageTranslation], overwriteTranslation)
   const { id: propertyId, subject: subjectType } = useRouteParameters<never, 'id' | 'subject'>()
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const [context, setContext] = useState<PropertiesContextState>(emptyPropertiesContextState)
@@ -65,12 +65,12 @@ const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<
   return (
     <PageWithHeader
       crumbs={[{
-        display: translation.properties,
+        display: translation('properties'),
         link: '/properties'
       }]}
     >
       <Head>
-        <title>{titleWrapper(translation.properties)}</title>
+        <title>{titleWrapper(translation('properties'))}</title>
       </Head>
       <PropertyContext.Provider value={{ state: context, updateContext: setContext }}>
         <TwoColumn

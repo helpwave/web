@@ -50,11 +50,11 @@ export const restoreSession = async (): Promise<User | undefined> => {
   // If access token is expired, refresh it
   if (user.expired) {
     try {
-      console.log('Access token expired, refreshing...')
+      console.debug('Access token expired, refreshing...')
       const refreshedUser = await renewToken()
       return refreshedUser ?? undefined
     } catch (error) {
-      console.error('Silent token renewal failed', error)
+      console.debug('Silent token renewal failed', error)
       return
     }
   }

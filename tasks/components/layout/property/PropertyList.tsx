@@ -53,7 +53,7 @@ export const PropertyList = ({
   subjectId,
   subjectType
 }: PropsForTranslation<PropertyListTranslation, PropertyListProps>) => {
-  const translation = useTranslation(defaultPropertyListTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPropertyListTranslation], overwriteTranslation)
   const {
     data: propertyList,
     isLoading: isLoadingPropertyList,
@@ -79,7 +79,7 @@ export const PropertyList = ({
     >
       <div className="col gap-y-2">
         <Tile
-          title={{ value: translation.properties, className: 'textstyle-title-lg' }}
+          title={{ value: translation('properties'), className: 'textstyle-title-lg' }}
           prefix={<Tag className="text-primary" size={20}/>}
           className="!gap-x-2"
         />
@@ -101,7 +101,7 @@ export const PropertyList = ({
               onClick={onClick}
             >
               <Plus size={20}/>
-              <span>{translation.addProperty}</span>
+              <span>{translation('addProperty')}</span>
             </div>
           )}
           menuClassName="min-w-[200px] p-2 "

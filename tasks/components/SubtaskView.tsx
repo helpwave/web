@@ -55,7 +55,7 @@ export const SubtaskView = ({
 }: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
 
-  const translation = useTranslation(defaultSubtaskViewTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultSubtaskViewTranslation], overwriteTranslation)
   const isCreatingTask = taskId === ''
   const addSubtaskMutation = useSubTaskAddMutation(taskId)
   const deleteSubtaskMutation = useSubTaskDeleteMutation()
@@ -91,10 +91,10 @@ export const SubtaskView = ({
   return (
     <div className="col gap-y-2">
       <div className="row items-center justify-between">
-        <span className="textstyle-title-normal">{translation.subtasks}</span>
+        <span className="textstyle-title-normal">{translation('subtasks')}</span>
         <SolidButton
           onClick={() => {
-            const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
+            const newSubtask = { id: '', name: `${translation('newSubtask')} ${subtasks.length + 1}`, isDone: false }
             onChange([...subtasks, newSubtask])
             if (!isCreatingTask) {
               addSubtaskMutation.mutate(newSubtask)
@@ -104,7 +104,7 @@ export const SubtaskView = ({
         >
           <div className="row items-center gap-x-2">
             <Plus size={18}/>
-            <span>{translation.addSubtask}</span>
+            <span>{translation('addSubtask')}</span>
           </div>
         </SolidButton>
       </div>

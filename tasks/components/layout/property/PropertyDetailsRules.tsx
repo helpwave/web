@@ -49,12 +49,12 @@ export const PropertyDetailsRules = ({
   onEditComplete,
   inputGroupProps
 }: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
-  const translation = useTranslation(defaultPropertyDetailsRulesTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPropertyDetailsRulesTranslation], overwriteTranslation)
   return (
-    <Expandable {...inputGroupProps} label={translation.rules}>
+    <Expandable {...inputGroupProps} label={translation('rules')}>
       <Tile
-        title={{ value: translation.alwaysVisible, className: 'textstyle-label-md' }}
-        description={{ value: translation.alwaysVisibleDescription }}
+        title={{ value: translation('alwaysVisible'), className: 'textstyle-label-md' }}
+        description={{ value: translation('alwaysVisibleDescription') }}
         suffix={(
           <Checkbox
             checked={value.alwaysIncludeForViewSource ?? false}

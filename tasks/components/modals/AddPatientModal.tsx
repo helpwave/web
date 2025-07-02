@@ -12,7 +12,7 @@ import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 type AddPatientModalTranslation = {
   addPatient: string,
   name: string,
-  minimumLength: (characters: number) => string,
+  minimumLength: string,
   noBedSelected: string,
 }
 
@@ -20,13 +20,13 @@ const defaultAddPatientModalTranslation: Translation<AddPatientModalTranslation>
   en: {
     addPatient: 'Add Patient',
     name: 'Name',
-    minimumLength: (characters: number) => `The Name must be at least ${characters} characters long`,
+    minimumLength: `The Name must be at least {{characters}} characters long`,
     noBedSelected: 'No bed selected, the patient won\'t be assigned directly'
   },
   de: {
     addPatient: 'Patient Hinzufügen',
     name: 'Name',
-    minimumLength: (characters: number) => `Der Name muss mindestens ${characters} characters lang sein`,
+    minimumLength: `Der Name muss mindestens {{characters}} characters lang sein`,
     noBedSelected: 'Kein Bett ausgewählt, der Patient wird nicht direkt zugeordnet'
   }
 }
@@ -45,7 +45,7 @@ export const AddPatientModal = ({
   onConfirm = noop,
   ...modalProps
 }: PropsForTranslation<AddPatientModalTranslation, AddPatientModalProps>) => {
-  const translation = useTranslation(defaultAddPatientModalTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultAddPatientModalTranslation], overwriteTranslation)
   const [dropdownId, setDropdownId] = useState<RoomBedSelectIds>({})
   const [patientName, setPatientName] = useState<string>('')
   const [touched, setTouched] = useState<boolean>(false)
@@ -69,8 +69,7 @@ export const AddPatientModal = ({
     <ConfirmModal
       headerProps={{
         ...headerProps,
-        titleText: headerProps?.titleText ?? translation.addPatient
-      }}
+        titleText: headerProps?.titleText ?? translation('addPatient')      }}
       onConfirm={() => {
         onConfirm()
         createPatient().catch(console.error)
@@ -80,7 +79,7 @@ export const AddPatientModal = ({
     >
       <div className="col gap-y-4 min-w-[300px]">
         <div className="col gap-y-1">
-          <span className="textstyle-label-md">{translation.name}</span>
+          <span className="textstyle-label-md">{translation('name')}</span>
           <Input
             value={patientName}
             onChangeText={(text) => {
@@ -88,7 +87,7 @@ export const AddPatientModal = ({
               setPatientName(text)
             }}
           />
-          {isShowingError && <span className="textstyle-form-error">{translation.minimumLength(minimumNameLength)}</span>}
+          {isShowingError && <span className="textstyle-form-error">{translation('minimumLength', { replacements: { characters: minimumNameLength.toString() } })}</span>}
         </div>
         <RoomBedSelect
           initialRoomAndBed={dropdownId}
@@ -96,7 +95,7 @@ export const AddPatientModal = ({
           onChange={(roomBedDropdownIds) => setDropdownId(roomBedDropdownIds)}
           isClearable={true}
         />
-        <span className={clsx({ 'text-warning': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</span>
+        <span className={clsx({ 'text-warning': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation('noBedSelected')}</span>
       </div>
     </ConfirmModal>
   )

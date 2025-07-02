@@ -53,7 +53,7 @@ export const OrganizationOverviewContext = createContext<OrganizationOverviewCon
  * The page for displaying and editing the wards within an organization
  */
 const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardsPageTranslation>) => {
-  const translation = useTranslation(defaultWardsPageTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultWardsPageTranslation], overwriteTranslation)
   const [contextState, setContextState] = useState<OrganizationOverviewContextState>(emptyOrganizationOverviewContextState)
   const [usedQueryParam, setUsedQueryParam] = useState(false)
 
@@ -76,12 +76,12 @@ const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wards
   return (
     <PageWithHeader
       crumbs={[
-        { display: organization?.longName ?? translation.organizations, link: `/organizations?organizationId=${organizationId}` },
-        { display: translation.wards, link: `/organizations/${organizationId}` }
+        { display: organization?.longName ?? translation('organizations'), link: `/organizations?organizationId=${organizationId}` },
+        { display: translation('wards'), link: `/organizations/${organizationId}` }
       ]}
     >
       <Head>
-        <title>{titleWrapper(translation.wards)}</title>
+        <title>{titleWrapper(translation('wards'))}</title>
       </Head>
       <OrganizationOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn

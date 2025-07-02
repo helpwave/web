@@ -14,13 +14,13 @@ const defaultTranslation: Translation<{ loggingIn: string }> = {
 }
 
 export const InitializationChecker = ({ children }: PropsWithChildren) => {
-  const translation = useTranslation(defaultTranslation)
+  const translation = useTranslation([defaultTranslation])
   const { user } = useAuth()
 
   if(!user) {
     return (
       <div className="col justify-center items-center w-screen h-screen">
-        <LoadingAnimation loadingText={translation.loggingIn}/>
+        <LoadingAnimation loadingText={translation('loggingIn')}/>
       </div>
     )
   }

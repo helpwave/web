@@ -44,7 +44,7 @@ export const OrganizationContext = createContext<OrganizationContextType>({
  * The page for showing all organizations a user is part of
  */
 const OrganizationsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<OrganizationsPageTranslation>) => {
-  const translation = useTranslation(defaultOrganizationsPageTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationsPageTranslation], overwriteTranslation)
   const organizationId = useRouteParameters<never, 'organizationId'>().organizationId
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const [context, setContext] = useState<OrganizationContextState>(emptyOrganizationContextState)
@@ -60,12 +60,12 @@ const OrganizationsPage: NextPage = ({ overwriteTranslation }: PropsForTranslati
   return (
     <PageWithHeader
       crumbs={[{
-        display: translation.organizations,
+        display: translation('organizations'),
         link: '/organizations'
       }]}
     >
       <Head>
-        <title>{titleWrapper(translation.organizations)}</title>
+        <title>{titleWrapper(translation('organizations'))}</title>
       </Head>
       <OrganizationContext.Provider value={{ state: context, updateContext: setContext }}>
         <TwoColumn

@@ -34,7 +34,7 @@ export const NewsFeed = ({
   localizedNews,
   width
 }: PropsForTranslation<NewsFeedTranslation, NewsFeedProps>) => {
-  const translation = useTranslation(defaultNewsFeedTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultNewsFeedTranslations], overwriteTranslation)
   // The value of how much space a FeatureDisplay needs before the title can be displayed on its left
   // Given in px
   const widthForAppearanceChange = 600
@@ -43,7 +43,7 @@ export const NewsFeed = ({
   const newsFilter = 'tasks'
   return (
     <div className="col py-4 px-6 gap-y-4">
-      <ColumnTitle title={translation.title}/>
+      <ColumnTitle title={translation('title')}/>
       {usedLanguage ? filterNews(localizedNews[usedLanguage], [newsFilter]).map(news => (
         <NewsDisplay
           key={news.title}
@@ -52,7 +52,7 @@ export const NewsFeed = ({
         />
       )) : (
         <div className="col items-center justify-center w-full h-20">
-          {translation.noNews}
+          {translation('noNews')}
         </div>
       )}
     </div>

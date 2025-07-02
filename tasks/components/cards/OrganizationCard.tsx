@@ -35,7 +35,7 @@ export const OrganizationCard = ({
   organization,
   ...editCardProps
 }: PropsForTranslation<OrganizationCardTranslation, OrganizationCardProps>) => {
-  const translation = useTranslation(defaultOrganizationCardTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationCardTranslation], overwriteTranslation)
   const organizationMemberCount = organization.members.length
 
   return (
@@ -53,7 +53,7 @@ export const OrganizationCard = ({
         </div>
         <div className="row justify-between">
           <div className="text-left my-1 font-semibold text-gray-600 text-sm truncate">
-            {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation.members : translation.member}`}
+            {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation('members') : translation('member')}`}
           </div>
           <AvatarGroup avatars={organization.members.map(user => ({ avatarUrl: user.avatarURL, alt: user.name }))}/>
         </div>

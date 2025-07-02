@@ -1,11 +1,15 @@
 import { useContext, useState } from 'react'
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
-import { ConfirmModal } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { SolidButton, TextButton } from '@helpwave/hightide'
-import { Input } from '@helpwave/hightide'
-import { Textarea } from '@helpwave/hightide'
+import {
+  ConfirmModal,
+  Input,
+  type PropsForTranslation,
+  SolidButton,
+  Textarea,
+  TextButton,
+  useTranslation
+} from '@helpwave/hightide'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { SubtaskView } from '../SubtaskView'
 import { ColumnTitle } from '../ColumnTitle'
@@ -21,8 +25,8 @@ type TaskTemplateDetailsTranslation = {
   deleteConfirmText: string,
   create: string,
   update: string,
-  tooLong: (maxCharacters: number) => string,
-  tooShort: (minCharacters: number) => string,
+  tooLong: string,
+  tooShort: string,
   required: string,
 }
 
@@ -37,8 +41,8 @@ const defaultTaskTemplateDetailsTranslations: Translation<TaskTemplateDetailsTra
     deleteConfirmText: 'Do you really want to delete this templates?',
     create: 'Create',
     update: 'Update',
-    tooLong: (maxCharacters) => `Too long, at most ${maxCharacters} characters`,
-    tooShort: (minCharacters) => `Too short, at least ${minCharacters} characters`,
+    tooLong: `Too long, at most {{characters}} characters`,
+    tooShort: `Too short, at least {{characters}} characters`,
     required: 'Required Field, cannot be empty'
   },
   de: {
@@ -51,8 +55,8 @@ const defaultTaskTemplateDetailsTranslations: Translation<TaskTemplateDetailsTra
     deleteConfirmText: 'Wollen Sie wirklich dieses Task Template löschen?',
     create: 'Erstellen',
     update: 'Ändern',
-    tooLong: (maxCharacters) => `Zu lang, maximal ${maxCharacters} Zeichen`,
-    tooShort: (minCharacters) => `Zu kurz, mindestens ${minCharacters} Zeichen`,
+    tooLong: `Zu lang, maximal {{characters}} Zeichen`,
+    tooShort: `Zu kurz, mindestens {{characters}} Zeichen`,
     required: 'Benötigter Wert, darf nicht leer sein'
   }
 }
@@ -67,14 +71,14 @@ export type TaskTemplateDetailsProps = {
  * The right side of the task templates page
  */
 export const TaskTemplateDetails = ({
-  overwriteTranslation,
-  onCreate,
-  onUpdate,
-  onDelete,
-}: PropsForTranslation<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
+                                      overwriteTranslation,
+                                      onCreate,
+                                      onUpdate,
+                                      onDelete,
+                                    }: PropsForTranslation<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
   const context = useContext(TaskTemplateContext)
 
-  const translation = useTranslation(defaultTaskTemplateDetailsTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultTaskTemplateDetailsTranslations], overwriteTranslation)
   const isCreatingNewTemplate = context.state.template.id === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [touched, setTouched] = useState({
@@ -90,11 +94,11 @@ export const TaskTemplateDetails = ({
   function validateName(name: string) {
     const taskTemplateName = name.trim()
     if (taskTemplateName === '') {
-      return translation.required
+      return translation('required')
     } else if (taskTemplateName.length < minNameLength) {
-      return translation.tooShort(minNameLength)
+      return translation('tooShort', { replacements: { characters: minNameLength.toString() } })
     } else if (taskTemplateName.length > maxNameLength) {
-      return translation.tooLong(maxNameLength)
+      return translation('tooLong', { replacements: { characters: maxNameLength.toString() } })
     }
   }
 
@@ -105,7 +109,7 @@ export const TaskTemplateDetails = ({
     <div className="col py-4 px-6">
       <ConfirmModal
         headerProps={{
-          titleText: translation.deleteConfirmText
+          titleText: translation('deleteConfirmText')
         }}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
@@ -116,15 +120,15 @@ export const TaskTemplateDetails = ({
         confirmType="negative"
       />
       <ColumnTitle
-        title={isCreatingNewTemplate ? translation.createTaskTemplate : translation.updateTaskTemplate}
-        subtitle={!isCreatingNewTemplate ? translation.updateTaskTemplateDescription : undefined}
+        title={isCreatingNewTemplate ? translation('createTaskTemplate') : translation('updateTaskTemplate')}
+        description={!isCreatingNewTemplate ? translation('updateTaskTemplateDescription') : undefined}
       />
       <div className=" col gap-y-4 max-w-[400px] mb-4">
         <div>
           <Input
             id="name"
             value={context.state.template.name}
-            label={{ name: translation.name }}
+            label={{ name: translation('name') }}
             type="text"
             onBlur={() => setTouched({ name: true })}
             onChangeText={text => {
@@ -141,7 +145,7 @@ export const TaskTemplateDetails = ({
           {isDisplayingNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
         </div>
         <Textarea
-          headline={translation.notes}
+          headline={translation('notes')}
           id="notes"
           value={context.state.template.notes}
           onChangeText={text => {
@@ -175,10 +179,13 @@ export const TaskTemplateDetails = ({
           onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state)}
           disabled={!context.state.isValid}
         >
-          {isCreatingNewTemplate ? translation.create : translation.update}
+          {isCreatingNewTemplate ? translation('create') : translation('update')}
         </SolidButton>
-        { !isCreatingNewTemplate &&
-          (<TextButton color="negative" onClick={() => setIsShowingConfirmDialog(true)}>{translation.deleteTaskTemplate}</TextButton>)
+        {!isCreatingNewTemplate &&
+          (
+<TextButton color="negative"
+                       onClick={() => setIsShowingConfirmDialog(true)}>{translation('deleteTaskTemplate')}</TextButton>
+)
         }
       </div>
     </div>

@@ -41,13 +41,13 @@ export const BedInRoomIndicator =
     roomName,
     bedPosition
   }: PropsForTranslation<BedInRoomIndicatorTranslation, BedInRoomIndicatorProps>) => {
-    const translation = useTranslation(defaultBedInRoomIndicatorTranslation, overwriteTranslation)
+    const translation = useTranslation([defaultBedInRoomIndicatorTranslation], overwriteTranslation)
 
     return (
       <div>
         {roomName !== undefined && (
           <span className="mb-1">
-            {`${translation.bed} ${bedPosition + 1} ${translation.in} ${roomName}`}
+            {`${translation('bed')} ${bedPosition + 1} ${translation('in')} ${roomName}`}
           </span>
         )}
         <div className="row gap-3">

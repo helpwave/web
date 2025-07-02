@@ -65,7 +65,7 @@ export const ManageBedsModal = ({
   headerProps,
   ...modalProps
 }: PropsForTranslation<ManageBedsModalTranslation, ManageBedsModalProps>) => {
-  const translation = useTranslation(defaultManageBedsModalTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultManageBedsModalTranslation], overwriteTranslation)
   const { data, isLoading, isError } = useRoomOverviewsQuery(wardId) // Todo use more optimized query later
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination
@@ -84,7 +84,7 @@ export const ManageBedsModal = ({
   const updateBedMutation = useBedUpdateMutation()
   const deleteBedMutation = useBedDeleteMutation()
 
-  const addBed = () => room && addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1}`, roomId })
+  const addBed = () => room && addBedMutation.mutate({ id: '', name: `${translation('bed')} ${room?.beds.length + 1}`, roomId })
 
   const maxBedNameLength = 16
 
@@ -93,7 +93,7 @@ export const ManageBedsModal = ({
     <Modal
       headerProps={{
         ...headerProps,
-        titleText: headerProps?.titleText ?? (room ? `${translation.manageBedsIn} ${room.name}` : ''),
+        titleText: headerProps?.titleText ?? (room ? `${translation('manageBedsIn')} ${room.name}` : ''),
       }}
       className={clsx('min-w-[600px]', className)}
       {...modalProps}
@@ -107,16 +107,16 @@ export const ManageBedsModal = ({
         {room && beds && (
           <>
             <div className="row justify-between items-end mb-2 mt-4">
-              <span className="textstyle-table-name">{`${translation.beds} (${beds.length})`}</span>
-              <SolidButton color="positive" onClick={addBed}>{translation.addBed}</SolidButton>
+              <span className="textstyle-table-name">{`${translation('beds')} (${beds.length})`}</span>
+              <SolidButton color="positive" onClick={addBed}>{translation('addBed')}</SolidButton>
             </div>
             <Table
               data={beds}
               stateManagement={[tableState, setTableState]}
               identifierMapping={identifierMapping}
               header={[
-                <span key="name" className="textstyle-table-header">{translation.name}</span>,
-                <span key="patient" className="textstyle-table-header">{translation.patient}</span>,
+                <span key="name" className="textstyle-table-header">{translation('name')}</span>,
+                <span key="patient" className="textstyle-table-header">{translation('patient')}</span>,
                 <></>
               ]}
               rowMappingToCells={bed => [
@@ -142,7 +142,7 @@ export const ManageBedsModal = ({
                     }}
                     color="negative"
                   >
-                    {translation.remove}
+                    {translation('remove')}
                   </TextButton>
                 </div>
               ]}

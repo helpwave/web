@@ -1,4 +1,4 @@
-import type { Translation } from '@helpwave/hightide'
+import type { Translation, TranslationPlural } from '@helpwave/hightide'
 import { ConfirmModal } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
@@ -20,6 +20,8 @@ import {
 } from '@helpwave/api-services/mutations/tasks/room_mutations'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 import { ManageBedsModal } from '@/components/modals/ManageBedsModal'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { Plus, Trash } from 'lucide-react'
 
 type RoomListTranslation = {
   edit: string,
@@ -28,14 +30,13 @@ type RoomListTranslation = {
   deselectAll: string,
   selectAll: string,
   roomName: string,
-  room: string,
-  rooms: string,
+  room: TranslationPlural,
   addRoom: string,
   bedCount: string,
   manageBeds: string,
   manage: string,
-  dangerZoneText: (single: boolean) => string,
-  deleteConfirmText: (single: boolean) => string,
+  dangerZoneText: TranslationPlural,
+  deleteConfirmText: TranslationPlural,
 }
 
 const defaultRoomListTranslations: Translation<RoomListTranslation> = {
@@ -46,14 +47,22 @@ const defaultRoomListTranslations: Translation<RoomListTranslation> = {
     deselectAll: 'Deselect All',
     selectAll: 'Select All',
     roomName: 'Room Name',
-    room: 'Room',
-    rooms: 'Rooms',
+    room: {
+      one: 'Room',
+      other: 'Rooms',
+    },
     addRoom: 'Add Room',
     bedCount: '#Beds',
     manageBeds: 'Manage Beds',
     manage: 'Manage',
-    dangerZoneText: (single) => `Deleting ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms} is a permanent action and cannot be undone. Be careful!`,
-    deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms}?`,
+    dangerZoneText: {
+      one: 'Deleting a room is a permanent action and cannot be undone. Be careful!',
+      other: 'Deleting rooms is a permanent action and cannot be undone. Be careful!',
+    },
+    deleteConfirmText: {
+      one: 'Do you really want to delete the selected room?',
+      other: 'Do you really want to delete the selected rooms?',
+    },
   },
   de: {
     edit: 'Bearbeiten',
@@ -61,15 +70,23 @@ const defaultRoomListTranslations: Translation<RoomListTranslation> = {
     removeSelection: 'Ausgewählte löschen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
-    roomName: 'Zimmer',
-    room: 'Raum',
-    rooms: 'Zimmer',
+    roomName: 'Zimmername',
+    room: {
+      one: 'Zimmer',
+      other: 'Zimmer',
+    },
     addRoom: 'Raum hinzufügen',
     bedCount: 'Bettenanzahl',
     manageBeds: 'Betten verwalten',
     manage: 'Verwalten',
-    dangerZoneText: (single) => `Das Löschen von ${single ? `einem ${defaultRoomListTranslations.de.room}` : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
-    deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? 'den' : 'die'} ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
+    dangerZoneText: {
+      one: 'Das Löschen von einem Raum ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+      other: 'Das Löschen von Räumen ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+    },
+    deleteConfirmText: {
+      one: 'Willst du wirklich den ausgewählten Raum löschen?',
+      other: 'Willst du wirklich die ausgewählten Räume löschen?',
+    },
   }
 }
 
@@ -89,7 +106,7 @@ export const RoomList = ({
                            overwriteTranslation,
                            rooms
                          }: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
-  const translation = useTranslation(defaultRoomListTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultRoomListTranslations], overwriteTranslation)
   const context = useContext(OrganizationOverviewContext)
   const [tableState, setTableState] = useState<TableState>({
     pagination: defaultTableStatePagination,
@@ -135,19 +152,17 @@ export const RoomList = ({
     // TODO remove below for an actual room add
     const newRoom = {
       id: '',
-      name: translation.room + (usedRooms.length + 1),
+      name: translation('room') + (usedRooms.length + 1),
     }
     creatRoomMutation.mutate(newRoom)
   }
 
-  const multipleInDelete = deletionConfirmDialogElement !== '' || tableState.selection?.currentSelection.length === 1
-
   return (
-    <div className="col">
+    <div className="col gap-y-4">
       <ConfirmModal
         headerProps={{
-          titleText: translation.deleteConfirmText(multipleInDelete),
-          descriptionText: translation.dangerZoneText(multipleInDelete),
+          titleText: translation('deleteConfirmText', { count: tableState.selection?.currentSelection.length }),
+          descriptionText: translation('dangerZoneText', { count:  tableState.selection?.currentSelection.length }),
         }}
         isOpen={deletionConfirmDialogElement !== undefined}
         onCancel={() => setDeletionConfirmDialogElement(undefined)}
@@ -170,28 +185,33 @@ export const RoomList = ({
         roomId={managedRoom ?? ''}
         onClose={() => setManagedRoom(undefined)}
       />
+      <ColumnTitle
+        title={translation('room', { count: 2 /* Always use plural */ }) + ((!isLoading && !isError) ?` (${usedRooms.length})` : '')}
+        actions={!isLoading && !isError && (
+          <div className="row gap-x-2">
+            {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
+              <SolidButton
+                onClick={() => setDeletionConfirmDialogElement('')}
+                color="negative"
+                size="small"
+                startIcon={<Trash size={18}/>}
+              >
+                {translation('removeSelection')}
+              </SolidButton>
+            )}
+            <SolidButton onClick={addRoom} color="positive" size="small" startIcon={<Plus size={18}/>}>
+              {translation('addRoom')}
+            </SolidButton>
+          </div>
+        )}
+        type="subtitle"
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
         loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
         errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
       >
-        <div className="row justify-between items-center mb-2">
-          <span className="textstyle-table-name">{translation.rooms + ` (${usedRooms.length})`}</span>
-          <div className="row gap-x-2">
-            {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
-              <SolidButton
-                onClick={() => setDeletionConfirmDialogElement('')}
-                color="negative"
-              >
-                {translation.removeSelection}
-              </SolidButton>
-            )}
-            <SolidButton onClick={addRoom} color="positive">
-              {translation.addRoom}
-            </SolidButton>
-          </div>
-        </div>
         <Table
           focusElement={focusElement}
           data={usedRooms}
@@ -201,9 +221,9 @@ export const RoomList = ({
           }]}
           identifierMapping={identifierMapping}
           header={[
-            <span key="name" className="textstyle-table-header min-w-48 text-start">{translation.roomName}</span>,
-            <span key="bedcount" className="textstyle-table-header">{translation.bedCount}</span>,
-            <span key="manage" className="textstyle-table-header">{translation.manageBeds}</span>,
+            <span key="name" className="textstyle-table-header min-w-48 text-start">{translation('roomName')}</span>,
+            <span key="bedcount" className="textstyle-table-header">{translation('bedCount')}</span>,
+            <span key="manage" className="textstyle-table-header">{translation('manageBeds')}</span>,
             <></>
           ]}
           rowMappingToCells={room => [
@@ -236,12 +256,12 @@ export const RoomList = ({
             </div>,
             <div key="manage" className="row justify-start min-w-[140px]">
               <TextButton onClick={() => setManagedRoom(room.id)}>
-                {translation.manage}
+                {translation('manage')}
               </TextButton>
             </div>,
             <div key="remove" className="row justify-end">
               <TextButton onClick={() => setDeletionConfirmDialogElement(room.id)} color="negative">
-                {translation.remove}
+                {translation('remove')}
               </TextButton>
             </div>
           ]}

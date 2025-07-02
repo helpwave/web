@@ -1,7 +1,8 @@
 import type { SelectProps } from '@helpwave/hightide'
+import { Avatar } from '@helpwave/hightide'
+import { Select } from '@helpwave/hightide'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import clsx from 'clsx'
-import { SearchableSelect } from '@helpwave/hightide'
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 
 export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {
@@ -15,7 +16,6 @@ export const AssigneeSelect = ({
   organizationId,
   value,
   className,
-  isHidingCurrentValue = false,
   onChange,
   ...selectProps
 } : AssigneeSelectProps) => {
@@ -30,19 +30,23 @@ export const AssigneeSelect = ({
         classname: 'bg-gray-100 pulsing max-h-8 rounded-md',
       }}
     >
-      <SearchableSelect
-        // TODO update later with avatar of assignee
+      <Select
         value={data?.find(user => user.id === value)}
         options={(data ?? []).map(value => ({
           value,
-          label: value.name
+          label: (
+            <div className="row items-center gap-x-1">
+              <Avatar alt="" avatarUrl={value.avatarURL} size="tiny"/>
+              {value.name}
+            </div>
+          ),
+          searchTags: [value.id, value.email],
         }))}
-        isHidingCurrentValue={isHidingCurrentValue}
         className={clsx('w-full', className)}
-        searchMapping={value => [value.value.id, value.value.email]}
         onChange={(user) => {
           onChange(user.id)
         }}
+        isSearchEnabled={true}
         {...selectProps}
       />
     </LoadingAndErrorComponent>

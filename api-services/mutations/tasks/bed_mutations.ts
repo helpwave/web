@@ -43,7 +43,7 @@ export const useBedCreateMutation = () => {
       const res = await APIServices.bed.createBed(req, getAuthenticatedGrpcMetadata())
 
       if (!res.toObject()) {
-        console.log('error in BedCreate')
+        console.error('error in BedCreate')
       }
 
       return { id: res.getId(), name: bed.name }

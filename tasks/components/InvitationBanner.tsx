@@ -29,7 +29,7 @@ export const InvitationBanner = ({
   overwriteTranslation,
   invitationCount
 }: PropsForTranslation<InvitationBannerTranslation, InvitationBannerProps>) => {
-  const translation = useTranslation(defaultInvitationBannerTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultInvitationBannerTranslation], overwriteTranslation)
   const { data, isError, isLoading } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   let openInvites = invitationCount
 
@@ -51,7 +51,7 @@ export const InvitationBanner = ({
     className="w-full bg-primary text-white py-2 px-4 rounded-xl cursor-pointer select-none row gap-x-2 items-center"
     href="/invitations"
   >
-    <Mail />{`${translation.openInvites}: ${openInvites}`}
+    <Mail />{`${translation('openInvites')}: ${openInvites}`}
   </Link>
   )
 }

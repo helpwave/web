@@ -26,13 +26,13 @@ export const PropertySubjectTypeSelect = ({
   overwriteTranslation,
   ...props
 }: PropsForTranslation<PropertySubjectTypeSelectTranslation, Omit<SelectProps<SubjectType>, 'options'>>) => {
-  const translation = useTranslation(defaultPropertySubjectTypeSelectTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPropertySubjectTypeSelectTranslation], overwriteTranslation)
   return (
     <Select
       {...props}
       options={subjectTypeList.map(subjectType => ({
         value: subjectType,
-        label: translation[subjectType]
+        label: translation(subjectType)
       }))}
     />
   )

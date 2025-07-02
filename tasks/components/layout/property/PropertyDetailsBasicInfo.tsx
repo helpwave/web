@@ -50,12 +50,12 @@ export const PropertyDetailsBasicInfo = ({
   onEditComplete,
   expandableProps = {},
 }: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
-  const translation = useTranslation(defaultPropertyDetailsBasicInfoTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPropertyDetailsBasicInfoTranslation], overwriteTranslation)
   return (
-    <Expandable {...expandableProps} label={translation.basicInfo}>
+    <Expandable {...expandableProps} label={translation('basicInfo')}>
       <PropertySubjectTypeSelect
         value={value.subjectType}
-        label={{ name: translation.subjectType, labelType: 'labelMedium' }}
+        label={{ name: translation('subjectType'), labelType: 'labelMedium' }}
         onChange={subjectType => {
           const newValue = { ...value, subjectType }
           onChange(newValue)
@@ -63,15 +63,15 @@ export const PropertyDetailsBasicInfo = ({
         }}
       />
       <Input
-        label={{ name: translation.propertyName, labelType: 'labelMedium' }}
+        label={{ name: translation('propertyName'), labelType: 'labelMedium' }}
         value={value.name}
         onChangeText={name => onChange({ ...value, name })}
         onEditCompleted={name => onEditComplete({ ...value, name })}
       />
       <Textarea
-        label={{ name: translation.description, labelType: 'labelMedium' }}
+        label={{ name: translation('description'), labelType: 'labelMedium' }}
         value={value.description}
-        placeholder={translation.writeYourDescription}
+        placeholder={translation('writeYourDescription')}
         onChangeText={description => onChange({ ...value, description })}
         onEditCompleted={description => onEditComplete({ ...value, description })}
       />

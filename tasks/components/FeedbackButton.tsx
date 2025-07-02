@@ -22,13 +22,13 @@ type FeedbackButtonProps = {
 
 export const FeedbackButton = ({ overwriteTranslation, className }: PropsForTranslation<FeedbackButtonTranslation, FeedbackButtonProps>) => {
   const config = getConfig()
-  const translation = useTranslation(defaultFeedbackButtonTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultFeedbackButtonTranslation], overwriteTranslation)
 
   const onClick = () => window.open(config.feedbackFormUrl, '_blank')
 
   return (
     <SolidButton color="primary" onClick={onClick} className={className}>
-      {translation.text}
+      {translation('text')}
     </SolidButton>
   )
 }

@@ -40,7 +40,7 @@ export const TaskTemplateListColumn = ({
                                          onColumnEditClick,
                                          overwriteTranslation: maybeLanguage
                                        }: PropsForTranslation<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
-  const translation = useTranslation(defaultTaskTemplateListColumnTranslation, maybeLanguage)
+  const translation = useTranslation([defaultTaskTemplateListColumnTranslation], maybeLanguage)
   const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -52,7 +52,7 @@ export const TaskTemplateListColumn = ({
     <div className="col overflow-hidden h-full">
       <div className="row overflow-hidden">
         <span className="textstyle-lg mb-4 flex-1">
-          {translation.template}
+          {translation('template')}
         </span>
         {onColumnEditClick && <Edit onClick={onColumnEditClick}/>}
       </div>

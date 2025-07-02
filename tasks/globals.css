@@ -4,14 +4,16 @@
 @source "./node_modules/@helpwave/hightide";
 
 @theme {
+  /* Header */
   --color-header-background: var(--color-white);
-  --color-header-text: var(--color-black);
+  --color-header-text: var(--color-text-dark);
 }
 
 @layer base {
   /* Here are overrides for the light theme */
   @variant dark {
+    /* Header */
     --color-header-background: var(--color-black);
-    --color-header-text: var(--color-white);
+    --color-header-text: var(--color-text-light);
   }
 }

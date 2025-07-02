@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import type { Translation } from '@helpwave/hightide'
 import {
@@ -62,7 +61,7 @@ export const UserMenu = ({
                            overwriteTranslation,
                            className,
                          }: PropsForTranslation<UserMenuTranslation, UserMenuProps>) => {
-  const translation = useTranslation(defaultUserMenuTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultUserMenuTranslations], overwriteTranslation)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
   const [isThemeModalOpen, setThemeModalOpen] = useState(false)
   const { user, signOut } = useAuth()
@@ -91,48 +90,32 @@ export const UserMenu = ({
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
         </div>
       )}>
-        <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => setLanguageModalOpen(true)}
-        >
-          {translation.language}
+        <MenuItem onClick={() => router.push(settingsURL, '_blank')}>
+          {translation('profile')}
+        </MenuItem>
+        <MenuItem onClick={() => setLanguageModalOpen(true)}>
+          {translation('language')}
+        </MenuItem>
+        <MenuItem onClick={() => setThemeModalOpen(true)}>
+          {translation('theme')}
+        </MenuItem>
+        <MenuItem onClick={() => router.push('/templates')}>
+          {translation('taskTemplates')}
+        </MenuItem>
+        <MenuItem onClick={() => router.push('/properties')}>
+          {translation('properties')}
+        </MenuItem>
+        <MenuItem onClick={() => router.push('/organizations')}>
+          {translation('organizations')}
+        </MenuItem>
+        <MenuItem onClick={() => router.push('/invitations')}>
+          {translation('invitations')}
         </MenuItem>
         <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => setThemeModalOpen(true)}
-        >
-          {translation.theme}
-        </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => router.push('/templates')}
-        >
-          {translation.taskTemplates}
-        </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => router.push('/properties')}
-        >
-          {translation.properties}
-        </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => router.push('/organizations')}
-        >
-          {translation.organizations}
-        </MenuItem>
-        <MenuItem
-          alignment="left" className="cursor-pointer"
-          onClick={() => router.push('/invitations')}
-        >
-          {translation.invitations}
-        </MenuItem>
-        <MenuItem
-          alignment="left" className="text-negative cursor-pointer"
+          className="text-negative hover:!bg-negative/20"
           onClick={() => signOut()}
         >
-          {translation.signOut}
+          {translation('signOut')}
         </MenuItem>
       </Menu>
     </div>

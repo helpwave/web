@@ -41,11 +41,11 @@ export const PatientCard = ({
   className,
   ...restCardProps
 }: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
-  const translation = useTranslation(defaultPatientCardTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultPatientCardTranslations], overwriteTranslation)
   return (
     <DragCard isSelected={isSelected} onClick={onClick} className={clsx('min-h-40',className)} {...restCardProps}>
       <div className="row justify-between">
-        <span className="textstyle-title-sm whitespace-nowrap" >{bedName ?? translation.bedNotAssigned}</span>
+        <span className="textstyle-title-sm whitespace-nowrap" >{bedName ?? translation('bedNotAssigned')}</span>
         <span className="ml-2 truncate">{patientName}</span>
       </div>
       <div className="min-w-[150px] max-w-[200px] mt-1">

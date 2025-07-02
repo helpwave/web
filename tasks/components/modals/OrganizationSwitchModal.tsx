@@ -40,7 +40,7 @@ export const OrganizationSwitchModal = ({
                                           headerProps,
                                           ...modalProps
                                         }: PropsForTranslation<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
-  const translation = useTranslation(defaultOrganizationSwitchModalTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationSwitchModalTranslation], overwriteTranslation)
   const [organization, setOrganization] = useState(currentOrganization ?? '')
   const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])
 
@@ -54,8 +54,7 @@ export const OrganizationSwitchModal = ({
     <Modal
       headerProps={{
         ...headerProps,
-        titleText: headerProps?.titleText ?? translation.switchOrganization
-      }}
+        titleText: headerProps?.titleText ?? translation('switchOrganization')      }}
       {...modalProps}
     >
       <div className="w-[320px]">
@@ -67,7 +66,7 @@ export const OrganizationSwitchModal = ({
         />
         <div className="row mt-3 gap-x-4 justify-end">
           <SolidButton autoFocus color="positive" disabled={!organization} onClick={onDone}>
-            {translation.ok}
+            {translation('ok')}
           </SolidButton>
         </div>
       </div>

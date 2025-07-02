@@ -78,7 +78,7 @@ export const WardDetail = ({
                              overwriteTranslation,
                              ward,
                            }: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
-  const translation = useTranslation(defaultWardDetailTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultWardDetailTranslations], overwriteTranslation)
 
   const context = useContext(OrganizationOverviewContext)
   const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId)
@@ -111,8 +111,8 @@ export const WardDetail = ({
       >
         <ConfirmModal
           headerProps={{
-            titleText: translation.deleteConfirmText,
-            descriptionText: translation.dangerZoneText,
+            titleText: translation('deleteConfirmText'),
+            descriptionText: translation('dangerZoneText'),
           }}
           isOpen={isShowingConfirmDialog}
           onCancel={() => setIsShowingConfirmDialog(false)}
@@ -123,10 +123,10 @@ export const WardDetail = ({
           confirmType="negative"
         />
         <ColumnTitle
-          title={isCreatingNewWard ? translation.createWard : translation.updateWard}
-          subtitle={isCreatingNewWard ? translation.createWardSubtitle : translation.updateWardSubtitle}
+          title={isCreatingNewWard ? translation('createWard') : translation('updateWard')}
+          description={isCreatingNewWard ? translation('createWardSubtitle') : translation('updateWardSubtitle')}
         />
-        <div className="max-w-[400px]">
+        <div className="max-w-[300px]">
           <WardForm
             key={newWard.id}
             ward={newWard}
@@ -138,9 +138,9 @@ export const WardDetail = ({
           />
         </div>
         {isCreatingNewWard ?
-          <span>{translation.roomsNotOnCreate}</span>
+          <span>{translation('roomsNotOnCreate')}</span>
           : (
-            <div className="max-w-[600px] mt-6">
+            <div className="mt-6">
               <RoomList/>
             </div>
           )}
@@ -148,7 +148,7 @@ export const WardDetail = ({
           <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
             disabled={!filledRequired}>
-            {isCreatingNewWard ? translation.create : translation.update}
+            {isCreatingNewWard ? translation('create') : translation('update')}
           </SolidButton>
         </div>
         {newWard.id !== '' &&
@@ -159,13 +159,16 @@ export const WardDetail = ({
           )
         }
         <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
-          <span className="textstyle-title-normal">{translation.dangerZone}</span>
-          <span className="textstyle-description">{translation.dangerZoneText}</span>
+          <ColumnTitle
+            title={translation('dangerZone')}
+            description={translation('dangerZoneText')}
+            type="subtitle"
+          />
           <button
             onClick={() => setIsShowingConfirmDialog(true)}
             className="px-0 font-bold justify-start text-negative w-min text-nowrap"
           >
-            {translation.deleteWard}
+            {translation('deleteWard')}
           </button>
         </div>
       </LoadingAndErrorComponent>

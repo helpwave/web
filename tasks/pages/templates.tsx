@@ -77,7 +77,7 @@ export const TaskTemplateContext = createContext<TaskTemplateContextType>({
 })
 
 const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<PersonalTaskTemplateTranslation>) => {
-  const translation = useTranslation(defaultPersonalTaskTemplateTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultPersonalTaskTemplateTranslations], overwriteTranslation)
   const templateId = useRouteParameters<never, 'templateId'>().templateId
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { user } = useAuth()
@@ -124,10 +124,10 @@ const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForT
 
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.taskTemplates, link: '/templates' }]}
+      crumbs={[{ display: translation('taskTemplates'), link: '/templates' }]}
     >
       <Head>
-        <title>{titleWrapper(translation.personalTaskTemplates)}</title>
+        <title>{titleWrapper(translation('personalTaskTemplates'))}</title>
       </Head>
       <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <LoadingAndErrorComponent isLoading={isLoading} hasError={isError || !data} loadingProps={{ classname: '!h-full' }} errorProps={{ classname: '!h-full' }}>

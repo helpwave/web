@@ -34,9 +34,9 @@ const options = program.opts()
 const args = program.args
 
 if(options.debug){
-  console.log('options', options)
-  console.log('args', args)
-  console.log('execute location', process.env.INIT_CWD)
+  console.debug('options', options)
+  console.debug('args', args)
+  console.debug('execute location', process.env.INIT_CWD)
 }
 
 
@@ -83,7 +83,7 @@ if (fs.existsSync(filePath) && !options.force) {
         console.error('Error creating directory:', err)
         process.exit(1)
       } else {
-        console.log(`Directory ${dir} created successfully.`)
+        console.debug(`Directory ${dir} created successfully.`)
       }
     })
   }
@@ -91,7 +91,7 @@ if (fs.existsSync(filePath) && !options.force) {
     if (err) {
       console.error('Error writing to file:', err)
     } else {
-      console.log(`File ${fileName} created successfully.`)
+      console.info(`File ${fileName} created successfully.`)
     }
   })
 }

@@ -39,7 +39,7 @@ export const OrganizationDisplay = ({
                                       selectedOrganizationId,
                                       organizations,
                                     }: PropsForTranslation<OrganizationDisplayTranslation, OrganizationDisplayProps>) => {
-  const translation = useTranslation(defaultOrganizationDisplayTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationDisplayTranslations], overwriteTranslation)
   const router = useRouter()
 
   const context = useContext(OrganizationContext)
@@ -55,7 +55,7 @@ export const OrganizationDisplay = ({
   const usedSelectedId = selectedOrganizationId ?? context.state.organizationId
   return (
     <div className="py-4 px-6 @container">
-      <ColumnTitle title={translation.yourOrganizations}/>
+      <ColumnTitle title={translation('yourOrganizations')}/>
       <div className="grid @max-md:grid-cols-1 gap-6">
         {usedOrganizations.map(organization => (
           <OrganizationCard
@@ -71,7 +71,7 @@ export const OrganizationDisplay = ({
         {
           /* Show again when multi organization should be re-enabled
           <AddCard
-            text={translation.addOrganization}
+            text={translation("addOrganization")}
             onClick={() => context.updateContext({ ...context.state, organizationId: '' })}
             isSelected={!!usedSelectedId}
           />

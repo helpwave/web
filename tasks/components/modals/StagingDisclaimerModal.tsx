@@ -42,22 +42,22 @@ export const StagingDisclaimerModal = ({
                                          overwriteTranslation,
                                          ...modalProps
                                        }: PropsForTranslation<StagingDisclaimerDialogTranslation, PropsWithChildren<StagingDisclaimerModalProps>>) => {
-  const translation = useTranslation(defaultStagingDisclaimerTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultStagingDisclaimerTranslation], overwriteTranslation)
 
   return (
     <ConfirmDialog
       {...modalProps}
       headerProps={{
-        titleText: translation.title,
+        titleText: translation('title'),
         description: (
           <>
-            <p><MarkdownInterpreter text={translation.message}/></p>
+            <p><MarkdownInterpreter text={translation('message')}/></p>
             <div className="row gap-x-8 mt-2">
               <Link className="text-primary hover:brightness-75 font-bold" href={config.imprintUrl}>
-                {translation.imprint}
+                {translation('imprint')}
               </Link>
               <Link className="text-primary hover:brightness-75 font-bold" href={config.privacyUrl}>
-                {translation.privacy}
+                {translation('privacy')}
               </Link>
             </div>
           </>

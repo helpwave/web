@@ -29,23 +29,23 @@ export const ReSignInDialog = ({
                                 headerProps,
                                 ...modalProps
                               }: PropsForTranslation<ReSignInDialogTranslation, ReSignInDialogProps>) => {
-  const translation = useTranslation(defaultReSignInModalTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultReSignInModalTranslation], overwriteTranslation)
 
   return (
     <ConfirmDialog
       backgroundClassName="w-5"
       headerProps={{
         ...headerProps,
-        titleText: headerProps?.titleText ?? translation.pleaseReSignIn,
-        descriptionText: headerProps?.descriptionText ?? translation.description,
+        titleText: headerProps?.titleText ?? translation('pleaseReSignIn'),
+        descriptionText: headerProps?.descriptionText ?? translation('description'),
       }}
       buttonOverwrites={[
         {
-          text: translation.no,
+          text: translation('no'),
           color: 'negative'
         },
         {
-          text: translation.yes,
+          text: translation('yes'),
           color: 'positive'
         }
       ]}

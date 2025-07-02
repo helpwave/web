@@ -112,10 +112,10 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
       if (!user) throw new Error('Invalid fake token')
       try {
         OrganizationService.getForUser().then(organizations => {
-          console.log(`Found ${organizations.length} organizations for fake token user`)
+          console.debug(`Found ${organizations.length} organizations for fake token user`)
           if (organizations.length > 0) {
             const organization = organizations[0]!
-            console.log(`Using ${organization.longName} for user.`, organization)
+            console.debug(`Using ${organization.longName} for user.`, organization)
             setUser(() => ({
               ...user,
               organization: {
@@ -126,7 +126,7 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
             setToken(config.fakeToken)
             didInit.current = true
           } else {
-            console.log('Creating a new organization')
+            console.debug('Creating a new organization')
             OrganizationService.create({
               id: '',
               email: 'test@helpwave.de',

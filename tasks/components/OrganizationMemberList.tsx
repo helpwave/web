@@ -1,17 +1,13 @@
-import { useContext, useState } from 'react'
-
+import { useContext, useMemo, useState } from 'react'
 import type { Translation, TranslationPlural } from '@helpwave/hightide'
 import {
   Avatar,
   ConfirmModal,
-  defaultTableStatePagination,
-  defaultTableStateSelection,
+  FillerRowElement,
   LoadingAndErrorComponent,
   type PropsForTranslation,
-  removeFromTableSelection,
   SolidButton,
-  Table,
-  type TableState,
+  TableWithSelection,
   TextButton,
   useTranslation
 } from '@helpwave/hightide'
@@ -21,6 +17,8 @@ import { useRemoveMemberMutation } from '@helpwave/api-services/mutations/users/
 import { OrganizationContext } from '@/pages/organizations'
 import { ColumnTitle } from '@/components/ColumnTitle'
 import { Trash } from 'lucide-react'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
+import type { OrganizationInvitation } from '@/components/OrganizationInvitationList'
 
 type OrganizationMemberListTranslation = {
   edit: string,
@@ -80,7 +78,12 @@ const defaultOrganizationMemberListTranslations: Translation<OrganizationMemberL
   }
 }
 
-type DeleteDialogState = { isShowing: boolean, member?: OrganizationMember }
+
+type DeleteDialogState = {
+  isShowing: boolean,
+  /** If not set, the entire selection will be deleted */
+  member?: OrganizationMember,
+}
 const defaultDeleteDialogState: DeleteDialogState = { isShowing: false }
 
 export type OrganizationMemberListProps = {
@@ -97,54 +100,107 @@ export const OrganizationMemberList = ({
                                          members
                                        }: PropsForTranslation<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
   const translation = useTranslation([defaultOrganizationMemberListTranslations], overwriteTranslation)
-  const [tableState, setTableState] = useState<TableState>({
-    pagination: defaultTableStatePagination,
-    selection: defaultTableStateSelection
-  })
 
   const context = useContext(OrganizationContext)
   organizationId ??= context.state.organizationId
   const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
-  const membersByOrganization = data ?? []
-  const usedMembers: OrganizationMember[] = members ?? membersByOrganization ?? []
+  const membersByOrganization = useMemo(() => data ?? [], [data])
+  const usedMembers: OrganizationMember[] = useMemo(
+    () => members ?? membersByOrganization ?? [], [members, membersByOrganization]
+  )
+
   const removeMemberMutation = useRemoveMemberMutation(organizationId)
-
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
-
-  const idMapping = (dataObject: OrganizationMember) => dataObject.id
-
-  // TODO move this filtering to the Table component
-  const admins: string[] = [] // usedMembers.filter(value => value.role === Role.admin).map(idMapping)
-  if (tableState.selection?.currentSelection.find(value => admins.find(adminId => adminId === value))) {
-    const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminId => adminId === value))
-    setTableState({
-      ...tableState,
-      selection: {
-        currentSelection: newSelection,
-        hasSelectedAll: false, // There is always one admin
-        hasSelectedSome: newSelection.length > 0,
-        hasSelectedNone: newSelection.length === 0,
+  const [selectionState, setSelectionState] = useState<RowSelectionState>({})
+  const columns = useMemo<ColumnDef<OrganizationInvitation>[]>(() => [
+    {
+      id: 'member',
+      header: translation('member'),
+      cell: ({ cell }) => {
+        const orgMember = usedMembers[cell.row.index]!
+        return (
+          <TextButton
+            className="row gap-x-2 items-center h-14 max-h-auto max-w-[200px] cursor-copy"
+            onClick={event => {
+              event.stopPropagation()
+              navigator.clipboard.writeText(orgMember.email).catch(console.error)
+            }}
+          >
+            <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
+            <div className="col items-start gap-y-0">
+              <span className="font-bold truncate">{orgMember.name}</span>
+              <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
+            </div>
+          </TextButton>
+        )
+      },
+      accessorKey: 'name',
+      sortingFn: 'text',
+      minSize: 200,
+      meta: {
+        filterType: 'text'
       }
-    })
-  }
+    },
+    /*
+    {
+      id: 'role',
+      header: translation("role"),
+      accessorFn: ({}) => {
+
+      },
+      minSize: 200,
+      maxSize: 200,
+      enableResizing: false,
+    },
+    */
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        const orgMember = usedMembers[cell.row.index]!
+        return (
+          <TextButton
+            onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
+            color="negative"
+            // disabled={orgMember.role === Role.admin}
+          >
+            {translation('remove')}
+          </TextButton>
+        )
+      },
+      minSize: 200,
+      maxSize: 200,
+      enableResizing: false,
+    }
+  ], [translation, usedMembers])
+
+  const selectedElements = Object.keys(selectionState ?? {}).length
 
   return (
     <div className="col">
       <ConfirmModal
         headerProps={{
-          titleText: translation('deleteConfirmText', { count: tableState.selection?.currentSelection.length }),
-          descriptionText: translation('dangerZoneText', { count: tableState.selection?.currentSelection.length }),
+          titleText: translation('deleteConfirmText', { count: selectedElements }),
+          descriptionText: translation('dangerZoneText', { count: selectedElements }),
         }}
         isOpen={deleteDialogState.isShowing}
         onCancel={() => setDeleteDialogState(defaultDeleteDialogState)}
         onConfirm={() => {
           if (deleteDialogState.member) {
-            setTableState(removeFromTableSelection(tableState, [deleteDialogState.member], usedMembers.length, idMapping))
+            if (selectionState[deleteDialogState.member.id]) {
+              const newSelection = { ...selectionState }
+              delete newSelection[deleteDialogState.member.id]
+              setSelectionState(newSelection)
+            }
             removeMemberMutation.mutate(deleteDialogState.member.id)
           } else {
-            const selected = usedMembers.filter(value => tableState.selection?.currentSelection.includes(idMapping(value)))
-            setTableState(removeFromTableSelection(tableState, selected, usedMembers.length, idMapping))
-            selected.forEach(value => removeMemberMutation.mutate(value.id))
+            Object.keys(selectionState).forEach(value => {
+              const member = usedMembers.find(member => member.id === value)
+              if (member) {
+                removeMemberMutation.mutate(member.id)
+              }
+            })
+            setSelectionState({})
           }
           setDeleteDialogState(defaultDeleteDialogState)
         }}
@@ -158,7 +214,7 @@ export const OrganizationMemberList = ({
       >
         <ColumnTitle
           title={translation('member', { count: 2 /* Always use plural */ }) + ` (${usedMembers.length})`}
-          actions={tableState.selection && tableState.selection.currentSelection.length > 0 && (
+          actions={selectedElements > 0 && (
             <SolidButton
               onClick={() => setDeleteDialogState({ isShowing: true })}
               color="negative"
@@ -170,48 +226,19 @@ export const OrganizationMemberList = ({
           )}
           type="subtitle"
         />
-        <Table
+        <TableWithSelection
           data={usedMembers}
-          stateManagement={[tableState, setTableState]}
-          header={[
-            <div key="member" className="row">
-              <span className="textstyle-table-header">{translation('member')}</span>
-            </div>,
-            <div key="role" className="row">
-              <span className="textstyle-table-header">{translation('role')}</span>
-            </div>,
-            <></>
-          ]}
-          rowMappingToCells={orgMember => [
-            <div key="member" className="row items-center h-12 overflow-hidden max-w-[200px]">
-              <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
-              <div className="col gap-y-0 ml-2">
-                <span className="font-bold truncate">{orgMember.name}</span>
-                <a href={`mailto:${orgMember.email}`}>
-                  <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
-                </a>
-              </div>
-            </div>,
-            <div key="role" className="row items-center mr-2">
-              <TextButton
-                className="row items-center"
-                onClick={() => { /* TODO allow changing roles */
-                }}
-              >
-                {'N.A.' /* translation("roleTypes")[orgMember.role] */}
-              </TextButton>
-            </div>,
-            <div key="remove" className="row justify-end">
-              <TextButton
-                onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
-                color="negative"
-                // disabled={orgMember.role === Role.admin}
-              >
-                {translation('remove')}
-              </TextButton>
-            </div>
-          ]}
-          identifierMapping={idMapping}
+          columns={columns}
+          rowSelection={selectionState}
+          onRowSelectionChange={setSelectionState}
+          initialState={{
+            pagination: {
+              pageSize: 5,
+            }
+          }}
+          fillerRow={(columnId) =>
+            (<FillerRowElement key={columnId} className="h-14"/>)
+          }
         />
       </LoadingAndErrorComponent>
     </div>

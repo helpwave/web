@@ -1,9 +1,10 @@
 import Head from 'next/head'
 import type { Translation } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { UserInvitationList } from '@/components/UserInvitationList'
 import titleWrapper from '@/utils/titleWrapper'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type InvitationsPageTranslation = {
   invitations: string,
@@ -24,8 +25,8 @@ export type InvitationsPageProps = Record<string, never>
  * Page for Invitations
  */
 export const InvitationsPage = ({
-  overwriteTranslation,
-}: PropsForTranslation<InvitationsPageTranslation, InvitationsPageProps>) => {
+                                  overwriteTranslation,
+                                }: PropsForTranslation<InvitationsPageTranslation, InvitationsPageProps>) => {
   const translation = useTranslation([defaultInvitationsPageTranslation], overwriteTranslation)
   return (
     <PageWithHeader
@@ -34,10 +35,9 @@ export const InvitationsPage = ({
       <Head>
         <title>{titleWrapper(translation('invitations'))}</title>
       </Head>
-      <div className="col items-center">
-          <div className="w-1/2">
-            <UserInvitationList/>
-          </div>
+      <div className="col w-full py-4 px-6">
+        <ColumnTitle title={translation('invitations')}></ColumnTitle>
+        <UserInvitationList/>
       </div>
     </PageWithHeader>
   )

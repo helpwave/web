@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 
 import type { Translation } from '@helpwave/hightide'
+import { useDelay } from '@helpwave/hightide'
 import {
   LoadingAndErrorComponent,
   type PropsForTranslation,
   SolidButton,
   Textarea,
   ToggleableInput,
-  useSaveDelay,
   useTranslation
 } from '@helpwave/hightide'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
@@ -112,12 +112,15 @@ export const PatientDetail = ({
 
   const {
     restartTimer,
-    clearUpdateTimer
-  } = useSaveDelay(setIsShowingSavedNotification, 3000)
+    clearTimer
+  } = useDelay({ delay: 3000 })
 
   const changeSavedValue = (patient: PatientDetailsDTO) => {
     setNewPatient(patient)
-    restartTimer(() => updateMutation.mutate(patient))
+    restartTimer(() => {
+      updateMutation.mutate(patient)
+      setIsShowingSavedNotification(false)
+    })
   }
 
   const isShowingTask = !!taskId || taskId === ''
@@ -233,7 +236,7 @@ export const PatientDetail = ({
               </SolidButton>
             )}
           <SolidButton color="primary" onClick={() => {
-            clearUpdateTimer(true)
+            clearTimer()
             updateMutation.mutate(newPatient)
           }}>{translation('saveChanges')}</SolidButton>
         </div>

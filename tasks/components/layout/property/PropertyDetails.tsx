@@ -146,7 +146,7 @@ export const PropertyDetails = ({
                   if (isSelect) {
                     selectData ??= emptySelectData
                     if (selectUpdate) {
-                      selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({
+                      selectData.options.push(...range(selectUpdate.create, { allowEmptyRange: true }).map(index => ({
                         id: '',
                         name: `${translation('newEntry')} ${index + 1}`,
                         description: '',
@@ -168,7 +168,7 @@ export const PropertyDetails = ({
                 updateSelectDataMutation.mutate({
                   propertyId: value.id,
                   update: selectUpdate.update,
-                  add: range(0, selectUpdate.create - 1).map(index => ({
+                  add: range(selectUpdate.create).map(index => ({
                     id: '',
                     name: `${translation('newEntry')} ${index + 1}`,
                     description: '',

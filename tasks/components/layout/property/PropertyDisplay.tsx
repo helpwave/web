@@ -1,21 +1,22 @@
-import type { Translation } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
-import { useTranslation } from '@helpwave/hightide'
-import { useContext, useEffect, useState } from 'react'
+import type { PropsForTranslation, Translation } from '@helpwave/hightide'
+import { FillerRowElement } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  SolidButton,
+  Table,
+  TextButton,
+  Tile,
+  useTranslation
+} from '@helpwave/hightide'
+import { useContext, useEffect, useMemo } from 'react'
 import { Plus, Tag } from 'lucide-react'
-import { Input } from '@helpwave/hightide'
-import { SolidButton, TextButton } from '@helpwave/hightide'
-import { MultiSubjectSearchWithMapping } from '@helpwave/hightide'
-import { Table } from '@helpwave/hightide'
-import { Tile } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import type { FieldType, Property, SubjectType } from '@helpwave/api-services/types/properties/property'
 import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { useUpdates } from '@helpwave/api-services/util/useUpdates'
-import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
 import { PropertyContext } from '@/pages/properties'
 import { SubjectTypeIcon } from '@/components/layout/property/SubjectTypeIcon'
 import { ColumnTitle } from '@/components/ColumnTitle'
+import type { ColumnDef } from '@tanstack/react-table'
 
 type PropertyDisplayTranslation = {
   properties: string,
@@ -66,17 +67,14 @@ const defaultPropertyDisplayTranslation: Translation<PropertyDisplayTranslation>
   }
 }
 
-export type PropertyDisplayProps = {
-  searchValue?: string,
-}
+export type PropertyDisplayProps = object
 
 /**
  * A component for showing and changing properties Details
  */
 export const PropertyDisplay = ({
-  overwriteTranslation,
-  searchValue: initialSearchValue = '',
-}: PropsForTranslation<PropertyDisplayTranslation, PropertyDisplayProps>) => {
+                                  overwriteTranslation,
+                                }: PropsForTranslation<PropertyDisplayTranslation, PropertyDisplayProps>) => {
   const translation = useTranslation([defaultPropertyDisplayTranslation], overwriteTranslation)
 
   const {
@@ -85,12 +83,9 @@ export const PropertyDisplay = ({
   } = useContext(PropertyContext)
   // TODO replace with backend request
   const { data: propertyList, isLoading, isError, refetch } = usePropertyListQuery(contextState.subjectType)
-  const [search, setSearch] = useState<string>(initialSearchValue)
   const { observeAttribute } = useUpdates()
 
-  // TODO could be computationally intensive consider forwarding to the backend later on
-  const filteredProperties: Property[] = propertyList ? MultiSubjectSearchWithMapping([contextState.subjectType ?? '', search], propertyList,
-    property => [property.name, property.description, property.subjectType]) : []
+  const filteredProperties: Property[] = propertyList ?? []
 
   useEffect(() => {
     const subscription = observeAttribute('aggregateType', 'property').subscribe(() => refetch())
@@ -98,6 +93,74 @@ export const PropertyDisplay = ({
       subscription.unsubscribe()
     }
   })
+
+  const columns = useMemo<ColumnDef<Property>[]>(() => [
+    {
+      id: 'name',
+      header: translation('name'),
+      cell: ({ cell } ) => {
+        if(!propertyList) {
+          return
+        }
+        const value = propertyList[cell.row.index]!
+        return (
+          <Tile
+            title={{ value: value.name }}
+            description={{ value: translation(value.fieldType) }}
+          />
+        )
+      },
+      accessorKey: 'name',
+      sortingFn: 'text',
+      minSize: 160,
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'subjectType',
+      header: translation('subjectType'),
+      cell: ({ cell } ) => {
+        if(!propertyList) {
+          return
+        }
+        const value = propertyList[cell.row.index]!
+        return (
+          <div className="row gap-x-2">
+            <SubjectTypeIcon subjectType={value.subjectType}/>
+            <span>{translation(value.subjectType)}</span>
+          </div>
+)
+      },
+      accessorFn: (property) => property.subjectType,
+      minSize: 160,
+      maxSize: 230,
+      sortingFn: 'text',
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        if(!propertyList) {
+          return
+        }
+        const value = propertyList[cell.row.index]!
+        return (
+          <div key="edit-button-cell" className="row justify-end">
+            <TextButton onClick={() => updateContext({ ...contextState, propertyId: value.id })} color="primary">
+              {translation('edit')}
+            </TextButton>
+          </div>
+        )
+      },
+      minSize: 120,
+      maxSize: 120,
+      enableResizing: false,
+    }
+  ], [contextState, propertyList, translation, updateContext])
 
   return (
     <div className="py-4 px-6 col gap-y-4">
@@ -120,34 +183,6 @@ export const PropertyDisplay = ({
           </SolidButton>
         )}
       />
-      <div className="col gap-y-2">
-        <div className="row justify-between items-center">
-          <div className="row items-center gap-x-2">
-            <Input
-              // TODO Search Icon
-              value={search}
-              onChangeText={setSearch}
-              onEditCompleted={setSearch}
-              placeholder={translation('search')}
-            />
-            <PropertySubjectTypeSelect
-              className="text-nowrap min-w-48"
-              value={contextState.subjectType}
-              onChange={subjectType => updateContext({ ...contextState, subjectType })}
-              hintText={translation('subjectType')}
-            />
-            <TextButton
-              color="negative"
-              onClick={() => {
-                updateContext({ ...contextState, subjectType: undefined })
-                setSearch('')
-              }}
-            >
-              {translation('removeFilter')}
-            </TextButton>
-          </div>
-        </div>
-      </div>
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
@@ -155,28 +190,9 @@ export const PropertyDisplay = ({
       >
         <Table
           data={filteredProperties}
-          identifierMapping={dataObject => dataObject.id}
-          rowMappingToCells={property => [
-            (<Tile
-              key="field-type-cell"
-              title={{ value: property.name }}
-              description={{ value: translation(property.fieldType) }}
-            />),
-            (<div key="subject-type-cell" className="row gap-x-2">
-              <SubjectTypeIcon subjectType={property.subjectType}/>
-              <span>{translation(property.subjectType)}</span>
-            </div>),
-            (<div key="edit-button-cell" className="row justify-end">
-              <TextButton onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
-                <span>{translation('edit')}</span>
-              </TextButton>
-            </div>)
-          ]}
-          header={[
-            <span key="headerName" className="textstyle-table-header">{translation('name')}</span>,
-            <span key="headerSubjectType" className="textstyle-table-header">{translation('subjectType')}</span>,
-            <></>
-          ]}
+          columns={columns}
+          initialState={{ pagination: { pageSize: 9 } }}
+          fillerRow={() => (<FillerRowElement className="h-14"/>)}
         />
       </LoadingAndErrorComponent>
     </div>

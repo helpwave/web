@@ -42,11 +42,11 @@ export const TaskStatusSelect = ({
   value,
   ...selectProps
 }: PropsForTranslation<TaskStatusSelectTranslation, TaskStatusSelectProps>) => {
-  const translation = useTranslation(defaultTaskStatusSelectTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultTaskStatusSelectTranslation], overwriteTranslation)
   const defaultOptions: { value: TaskStatus, label: string }[] = [
-    { value: 'todo', label: translation.unscheduled },
-    { value: 'inProgress', label: translation.inProgress },
-    { value: 'done', label: translation.done }
+    { value: 'todo', label: translation('unscheduled') },
+    { value: 'inProgress', label: translation('inProgress') },
+    { value: 'done', label: translation('done') }
   ]
 
   const filteredOptions = defaultOptions.filter(defaultValue => !removeOptions?.find(value2 => value2 === defaultValue.value))

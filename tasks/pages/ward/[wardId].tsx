@@ -83,7 +83,7 @@ export const WardOverviewContext = createContext<WardOverviewContextType>({
 })
 
 const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardOverviewTranslation>) => {
-  const translation = useTranslation(defaultWardOverviewTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultWardOverviewTranslation], overwriteTranslation)
 
 
   // TODO: could we differentiate between the two using two different states?
@@ -238,25 +238,25 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
     <PageWithHeader
       crumbs={[
         {
-          display: organization?.name ?? translation.organization,
+          display: organization?.name ?? translation('organization'),
           link: `/organizations/?organizationId=${organization?.id}`
         },
         {
-          display: ward?.name ?? translation.ward,
+          display: ward?.name ?? translation('ward'),
           link: `/organizations/${organization?.id ?? ''}?wardId=${wardId}`
         },
         {
-          display: translation.rooms,
+          display: translation('rooms'),
           link: `/ward/${wardId}`
         }
       ]}
     >
       <Head>
-        <title>{titleWrapper(translation.roomOverview)}</title>
+        <title>{titleWrapper(translation('roomOverview'))}</title>
       </Head>
       <ConfirmModal
         isOpen={isShowingPatientDialog}
-        headerProps={{ titleText: translation.addPatientDialogTitle }}
+        headerProps={{ titleText: translation('addPatientDialogTitle') }}
         onConfirm={() => {
           if (contextState.patient) {
             createPatient()

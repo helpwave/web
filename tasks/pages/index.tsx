@@ -1,27 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 
 import type {
   Translation,
-  LocalizedNews,
-  PropsForTranslation
+  PropsForTranslation } from '@helpwave/hightide'
+import { useResizeCallbackWrapper
 } from '@helpwave/hightide'
 import {
   LoadingAndErrorComponent,
-  localizedNewsSchema,
   useLocalStorage,
   useTranslation
 } from '@helpwave/hightide'
 import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
-import { TwoColumn } from '@/components/layout/TwoColumn'
-import { NewsFeed } from '@/components/layout/NewsFeed'
 import { DashboardDisplay } from '@/components/layout/DashboardDisplay'
 import titleWrapper from '@/utils/titleWrapper'
 import { fetchLocalizedNews } from '@/utils/news'
 import { getConfig } from '@/utils/config'
 import { StagingDisclaimerModal } from '@/components/modals/StagingDisclaimerModal'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 
 const config = getConfig()
 
@@ -48,14 +46,12 @@ export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = 
 }
 
 const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({
-                                                                                                    jsonFeed,
+                                                                                                    // jsonFeed,
                                                                                                     overwriteTranslation
                                                                                                   }) => {
-  const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultDashboardTranslations], overwriteTranslation)
   const { isLoading, isError } = useOrganizationsForUserQuery()
 
-  console.log('isError', isError)
-  console.log('isloading', isLoading)
   const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
   const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
 
@@ -71,9 +67,22 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
     }
   }, [lastTimeStagingDisclaimerDismissed])
 
+  const ref = useRef<HTMLDivElement>(null)
+  const [height, setHeight] = useState<number>()
+
+  useResizeCallbackWrapper(useCallback(() => {
+    setHeight(ref.current?.offsetHeight)
+  }, []))
+
+  useLayoutEffect(() => {
+    if(ref.current) {
+      setHeight(ref.current?.offsetHeight)
+    }
+  }, [isLoading, isError]) // Bound to loading state, because ref is not set before
+
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.dashboard, link: '/' }]}
+      crumbs={[{ display: translation('dashboard'), link: '/' }]}
     >
       <Head>
         <title>{titleWrapper()}</title>
@@ -89,19 +98,26 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
         hasError={isError}
         loadingProps={{ classname: '!h-full' }}
       >
-        <TwoColumn
-          disableResize={false}
-          left={() => ((
-              <DashboardDisplay/>
-            )
-          )}
-          right={width => (
-            <NewsFeed
-              width={width}
-              localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
-            />
-          )}
-        />
+        {/* TODO reenable once newsfeed is active again
+          <TwoColumn
+            disableResize={false}
+            left={() => ((
+                <DashboardDisplay/>
+              )
+            )}
+            right={width => (
+              <NewsFeed
+                width={width}
+                localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
+              />
+            )}
+          />
+        */}
+        <div ref={ref} className="w-full h-full">
+          <Scrollbars autoHeight={true} autoHeightMax={height}>
+            <DashboardDisplay/>
+          </Scrollbars>
+        </div>
       </LoadingAndErrorComponent>
     </PageWithHeader>
   )

@@ -37,7 +37,7 @@ export const BedCard = ({
                           className,
                           ...restCardProps
                         }: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
-  const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultBedCardTranslation], overwriteTranslation)
   return (
     (
       <DragCard
@@ -48,12 +48,12 @@ export const BedCard = ({
       >
         <div className="row justify-between">
           <span className="textstyle-title-sm">{bedName}</span>
-          <span>{translation.nobody}</span>
+          <span>{translation('nobody')}</span>
         </div>
         <div className="col grow justify-center items-center">
           <div className="row text-description">
             <Plus/>
-            {translation.addPatient}
+            {translation('addPatient')}
           </div>
         </div>
       </DragCard>

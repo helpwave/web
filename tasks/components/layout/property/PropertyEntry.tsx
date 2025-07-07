@@ -1,17 +1,19 @@
-import { TextProperty } from '@helpwave/hightide'
-import { NumberProperty } from '@helpwave/hightide'
-import { DateProperty } from '@helpwave/hightide'
-import { CheckboxProperty } from '@helpwave/hightide'
-import { SingleSelectProperty } from '@helpwave/hightide'
-import { MultiSelectProperty } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import {
+  CheckboxProperty,
+  DateProperty,
+  LoadingAndErrorComponent,
+  MultiSelectProperty,
+  NumberProperty,
+  SingleSelectProperty,
+  TextProperty
+} from '@helpwave/hightide'
 import type { Property } from '@helpwave/api-services/types/properties/property'
 import type {
   AttachedProperty,
   AttachPropertySelectValue
 } from '@helpwave/api-services/types/properties/attached_property'
-import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
+import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 
 type PropertyEntryDisplayProps = {
   property: Property,
@@ -26,13 +28,13 @@ type PropertyEntryDisplayProps = {
  * A component for displaying a PropertyEntry
  */
 export const PropertyEntryDisplay = ({
-  property,
-  attachedProperty,
-  onChange,
-  onEditComplete,
-  onRemove,
-  readOnly = false
-}: PropertyEntryDisplayProps) => {
+                                       property,
+                                       attachedProperty,
+                                       onChange,
+                                       onEditComplete,
+                                       onRemove,
+                                       readOnly = false
+                                     }: PropertyEntryDisplayProps) => {
   const commonProps = {
     name: property.name,
     readOnly,
@@ -139,9 +141,9 @@ export const PropertyEntryDisplay = ({
           options={property.selectData!.options
             .map(option => ({
               value: option,
-              label: option.name
+              label: option.name,
+              searchTags: [option.name]
             }))}
-          searchMapping={option => [option.value.name]}
           selectedDisplayOverwrite={attachedProperty.value.singleSelectValue?.name}
         />
       )
@@ -167,9 +169,11 @@ export const PropertyEntryDisplay = ({
             .map(option => ({
               value: option,
               label: option.name,
-              selected: !!attachedProperty.value.multiSelectValue.find(value => value.id === option.id)
+              selected: !!attachedProperty.value.multiSelectValue.find(value => value.id === option.id),
+              searchTags: [option.name]
             }))}
-          search={{ searchMapping: value => [value.value.name] }}
+          isSearchEnabled={true}
+          useChipDisplay={true}
         />
       )
     default:
@@ -186,9 +190,9 @@ export type PropertyEntryProps = Omit<PropertyEntryDisplayProps, 'property'>
  * It wraps the PropertyEntryDisplay with loading logic
  */
 export const PropertyEntry = ({
-  attachedProperty,
-  ...restProps
-}: PropertyEntryProps) => {
+                                attachedProperty,
+                                ...restProps
+                              }: PropertyEntryProps) => {
   const {
     data: property,
     isError,

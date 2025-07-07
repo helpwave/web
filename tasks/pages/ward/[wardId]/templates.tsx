@@ -42,7 +42,7 @@ const defaultWardTaskTemplateTranslations = {
 }
 
 const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardTaskTemplateTranslation>) => {
-  const translation = useTranslation(defaultWardTaskTemplateTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultWardTaskTemplateTranslations], overwriteTranslation)
   const { wardId, templateId } = useRouteParameters<'wardId', 'templateId'>()
   const [usedQueryParam, setUsedQueryParam] = useState(false)
   const { isLoading, isError, data } = useWardTaskTemplateQuery(wardId)
@@ -88,13 +88,13 @@ const WardTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForTrans
   return (
     <PageWithHeader
       crumbs={[
-        { display: organization?.name ?? translation.organization, link: `/organizations?organizationId=${organization?.id}` },
-        { display: ward?.name ?? translation.ward, link: `/organizations/${organization?.id}?wardId=${wardId}` },
-        { display: translation.taskTemplates, link: `/ward/${wardId}/templates` }
+        { display: organization?.name ?? translation('organization'), link: `/organizations?organizationId=${organization?.id}` },
+        { display: ward?.name ?? translation('ward'), link: `/organizations/${organization?.id}?wardId=${wardId}` },
+        { display: translation('taskTemplates'), link: `/ward/${wardId}/templates` }
       ]}
     >
       <Head>
-        <title>{titleWrapper(translation.wardTaskTemplates)}</title>
+        <title>{titleWrapper(translation('wardTaskTemplates'))}</title>
       </Head>
       <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn

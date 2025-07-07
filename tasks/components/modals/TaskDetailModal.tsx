@@ -129,7 +129,7 @@ const TaskDetailViewSidebar = ({
                                  onChange,
                                  isCreating
                                }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
-  const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultTaskDetailViewTranslation], overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
   const { organization } = useAuth()
@@ -161,12 +161,12 @@ const TaskDetailViewSidebar = ({
           updateTaskLocallyAndExternally(newTask)
         }}
         headerProps={{
-          titleText: translation.publishTask,
-          descriptionText: translation.publishTaskDescription,
+          titleText: translation('publishTask'),
+          descriptionText: translation('publishTaskDescription'),
         }}
       />
       <div>
-        <label className="textstyle-label-md">{translation.assignee}</label>
+        <label className="textstyle-label-md">{translation('assignee')}</label>
         <div className="row items-center gap-x-2">
           <AssigneeSelect
             organizationId={organization?.id ?? ''}
@@ -196,7 +196,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label className="textstyle-label-md">{translation.dueDate}</label>
+        <label className="textstyle-label-md">{translation('dueDate')}</label>
         <div className="row items-center gap-x-2">
           <Input
             value={task.dueDate ? formatDateForDatetimeLocal(task.dueDate) : ''}
@@ -223,7 +223,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label className="textstyle-label-md">{translation.status}</label>
+        <label className="textstyle-label-md">{translation('status')}</label>
         <TaskStatusSelect
           value={task.status}
           removeOptions={isCreating ? ['done'] : []}
@@ -237,13 +237,13 @@ const TaskDetailViewSidebar = ({
         />
       </div>
       <div className="select-none">
-        <label className="textstyle-label-md">{translation.visibility}</label>
+        <label className="textstyle-label-md">{translation('visibility')}</label>
         {!isCreating ? (
           <div className="row justify-between items-center">
-            <span>{task.isPublicVisible ? translation.public : translation.private}</span>
+            <span>{task.isPublicVisible ? translation('public') : translation('private')}</span>
             {!task.isPublicVisible && !isCreating && (
               <TextButton size="small" onClick={() => setIsShowingPublicDialog(true)}>
-                <span>{translation.publish}</span>
+                <span>{translation('publish')}</span>
               </TextButton>
             )}
           </div>
@@ -259,7 +259,7 @@ const TaskDetailViewSidebar = ({
       </div>
       {task.createdAt && (
         <div className="col gap-y-1">
-          <span className="textstyle-label-md">{translation.creationTime}</span>
+          <span className="textstyle-label-md">{translation('creationTime')}</span>
           <TimeDisplay date={new Date(task.createdAt)}/>
         </div>
       )}
@@ -291,7 +291,7 @@ export const TaskDetailModal = ({
                                   className,
                                   ...modalProps
                                 }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailModalProps>) => {
-  const translation = useTranslation(defaultTaskDetailViewTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultTaskDetailViewTranslation], overwriteTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
   const router = useRouter()
@@ -356,20 +356,20 @@ export const TaskDetailModal = ({
               color="negative"
               onClick={() => setIsShowingDeleteDialog(true)}
             >
-              {translation.delete}
+              {translation('delete')}
             </SolidButton>
             {task.status !== 'done' && (
               <SolidButton color="positive" onClick={() => {
                 updateTaskMutation.mutate({ ...task, status: 'done' })
                 onClose()
               }}>
-                {translation.finish}
+                {translation('finish')}
               </SolidButton>
             )}
           </>
         ) : (
           <SolidButton onClick={() => createTaskMutation.mutate(task)} disabled={!isValid}>
-            {translation.create}
+            {translation('create')}
           </SolidButton>
         )
       }
@@ -382,7 +382,7 @@ export const TaskDetailModal = ({
         <div className="col grow gap-y-8 min-w-[300px]">
           <div className="min-h-[25%]">
             <Textarea
-              headline={translation.notes}
+              headline={translation('notes')}
               value={task.notes}
               onChangeText={(description) => setTask({ ...task, notes: description })}
               onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
@@ -435,8 +435,8 @@ export const TaskDetailModal = ({
       <ConfirmModal
         isOpen={isShowingDeleteDialog}
         headerProps={{
-          titleText: `${translation.deleteTask}?`,
-          descriptionText: `${translation.deleteTaskDescription}`
+          titleText: `${translation('deleteTask')}?`,
+          descriptionText: `${translation('deleteTaskDescription')}`
         }}
         onConfirm={() => {
           deleteTaskMutation.mutate(task.id)

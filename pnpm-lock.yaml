@@ -127,7 +127,7 @@ importers:
         version: 9.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwindcss:
         specifier: ^4.1.3
-        version: 4.1.7
+        version: 4.1.10
       vanilla-cookieconsent:
         specifier: 3.0.1
         version: 3.0.1
@@ -172,18 +172,12 @@ importers:
       '@dnd-kit/sortable':
         specifier: 7.0.2
         version: 7.0.2(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
-      '@headlessui/react':
-        specifier: 1.7.19
-        version: 1.7.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@helpwave/api-services':
         specifier: workspace:*
         version: link:../api-services
       '@helpwave/hightide':
-        specifier: ^0.1.7-alpha.1
-        version: 0.1.7-alpha.1(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)
-      '@radix-ui/react-checkbox':
-        specifier: 1.1.3
-        version: 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^0.1.18
+        version: 0.1.18(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)
       '@tailwindcss/postcss':
         specifier: ^4.1.3
         version: 4.1.5
@@ -194,35 +188,17 @@ importers:
         specifier: ^4.36.1
         version: 4.36.1(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
-        specifier: 8.20.6
-        version: 8.20.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@types/google-protobuf':
-        specifier: 3.15.12
-        version: 3.15.12
+        specifier: ^8.21.3
+        version: 8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      cookies-next:
-        specifier: 2.1.2
-        version: 2.1.2
-      google-protobuf:
-        specifier: 3.21.4
-        version: 3.21.4
-      grpc-web:
-        specifier: 1.5.0
-        version: 1.5.0
-      js-cookie:
-        specifier: 3.0.5
-        version: 3.0.5
       lucide-react:
         specifier: 0.468.0
         version: 0.468.0(react@18.3.1)
       next:
         specifier: ^15.3.2
         version: 15.3.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      oauth4webapi:
-        specifier: 2.17.0
-        version: 2.17.0
       postcss:
         specifier: ^8.5.3
         version: 8.5.3
@@ -238,31 +214,19 @@ importers:
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
-      rxjs:
-        specifier: 7.8.1
-        version: 7.8.1
-      simplebar-core:
-        specifier: 1.3.0
-        version: 1.3.0
-      simplebar-react:
-        specifier: 3.3.0
-        version: 3.3.0(react@18.3.1)
       tailwindcss:
         specifier: ^4.1.3
-        version: 4.1.7
+        version: 4.1.10
       typescript:
         specifier: 5.7.2
         version: 5.7.2
       zod:
-        specifier: 3.24.1
-        version: 3.24.1
+        specifier: ^3.25.73
+        version: 3.25.73
     devDependencies:
       '@helpwave/eslint-config':
         specifier: ^0.0.11
         version: 0.0.11(jiti@2.4.2)
-      '@types/js-cookie':
-        specifier: 3.0.6
-        version: 3.0.6
       '@types/node':
         specifier: 20.17.10
         version: 20.17.10
@@ -372,8 +336,8 @@ packages:
   '@helpwave/hightide@0.0.17':
     resolution: {integrity: sha512-FTktcuyJ9/Vh3odP6r+LLFWHdqV+dHSxzJTOQrY9FZ4ikHSbhmAOfrszi4CZG69/K5KjGkv9WMuvmn+cK+YkQw==}
 
-  '@helpwave/hightide@0.1.7-alpha.1':
-    resolution: {integrity: sha512-HmoJjRNm4+V2JNt/tvpwxtFvzKaH2PWYqvFO2Kj9rgyOgyYludWqAVOnkSMHm/37qY/cnmZHLxpA0FKd1R6gIw==}
+  '@helpwave/hightide@0.1.18':
+    resolution: {integrity: sha512-3Uc/rgDZBpA/Pd0U5OBMEXqFp0rA4OPobDkMWSqGYND2AZXtvGHdadbnlnATtHVFgZ6/vytekQSPuf5oxXCSVw==}
 
   '@helpwave/proto-ts@0.64.0-89e2023.0':
     resolution: {integrity: sha512-EqHsZDOttnCBqcAZ0WiRO32rGMICwvGUxvhSltU0KahFsbIx8o5DZ3l9N8GdB3c/66qe5tabTvVKbUzxf66Yjw==}
@@ -1180,8 +1144,8 @@ packages:
       react-native:
         optional: true
 
-  '@tanstack/react-table@8.20.6':
-    resolution: {integrity: sha512-w0jluT718MrOKthRcr2xsjqzx+oEM7B7s/XXyfs19ll++hlId3fjTm+B2zrR3ijpANpkzBAr15j1XGVOMxpggQ==}
+  '@tanstack/react-table@8.21.3':
+    resolution: {integrity: sha512-5nNMTSETP4ykGegmVkhjcS8tTLW6Vl4axfEGQN3v0zdHYbK4UfoqfPChclTrJ4EoK9QynqAu9oUf8VEmrpZ5Ww==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16.8'
@@ -1193,8 +1157,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  '@tanstack/table-core@8.20.5':
-    resolution: {integrity: sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg==}
+  '@tanstack/table-core@8.21.3':
+    resolution: {integrity: sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==}
     engines: {node: '>=12'}
 
   '@tanstack/virtual-core@3.0.0':
@@ -2456,9 +2420,6 @@ packages:
   tailwindcss@4.1.5:
     resolution: {integrity: sha512-nYtSPfWGDiWgCkwQG/m+aX83XCwf62sBgg3bIlNiiOcggnS1x3uVRDAuyelBFL+vJdOPPCGElxv9DjHJjRHiVA==}
 
-  tailwindcss@4.1.7:
-    resolution: {integrity: sha512-kr1o/ErIdNhTz8uzAYL7TpaUuzKIE6QPQ4qmSdxnoX/lo+5wmUHQA6h3L5yIqEImSRnAAURDirLu/BgiXGPAhg==}
-
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
@@ -2579,6 +2540,9 @@ packages:
 
   zod@3.24.1:
     resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
+
+  zod@3.25.73:
+    resolution: {integrity: sha512-fuIKbQAWQl22Ba5d1quwEETQYjqnpKVyZIWAhbnnHgnDd3a+z4YgEfkI5SZ2xMELnLAXo/Flk2uXgysZNf0uaA==}
 
 snapshots:
 
@@ -2708,7 +2672,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       simplebar-core: 1.3.0
       simplebar-react: 3.3.0(react@18.3.1)
-      tailwindcss: 4.1.7
+      tailwindcss: 4.1.10
       tinycolor2: 1.6.0
       zod: 3.24.1
     transitivePeerDependencies:
@@ -2721,11 +2685,11 @@ snapshots:
       - babel-plugin-react-compiler
       - sass
 
-  '@helpwave/hightide@0.1.7-alpha.1(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)':
+  '@helpwave/hightide@0.1.18(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)':
     dependencies:
-      '@headlessui/react': 1.7.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-checkbox': 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tailwindcss/cli': 4.1.10
+      '@tanstack/react-table': 8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       clsx: 2.1.1
       lucide-react: 0.468.0(react@18.3.1)
       postcss: 8.5.3
@@ -2735,9 +2699,9 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       simplebar-core: 1.3.0
       simplebar-react: 3.3.0(react@18.3.1)
-      tailwindcss: 4.1.7
+      tailwindcss: 4.1.10
       tinycolor2: 1.6.0
-      zod: 3.24.1
+      zod: 3.25.73
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
@@ -3340,9 +3304,9 @@ snapshots:
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
 
-  '@tanstack/react-table@8.20.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-table@8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/table-core': 8.20.5
+      '@tanstack/table-core': 8.21.3
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
@@ -3352,7 +3316,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@tanstack/table-core@8.20.5': {}
+  '@tanstack/table-core@8.21.3': {}
 
   '@tanstack/virtual-core@3.0.0': {}
 
@@ -4828,8 +4792,6 @@ snapshots:
 
   tailwindcss@4.1.5: {}
 
-  tailwindcss@4.1.7: {}
-
   tapable@2.2.1: {}
 
   tar@7.4.3:
@@ -4985,3 +4947,5 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   zod@3.24.1: {}
+
+  zod@3.25.73: {}

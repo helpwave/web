@@ -31,16 +31,16 @@ const defaultMobileInterceptorTranslation = {
  * the helpwave app will be shown
  */
 const MobileInterceptor: NextPage = ({ overwriteTranslation }: PropsForTranslation<MobileInterceptorTranslation>) => {
-  const translation = useTranslation(defaultMobileInterceptorTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultMobileInterceptorTranslation], overwriteTranslation)
   const config = getConfig()
   const playStoreLink = config.appstoreLinks.playStore
   const appstoreLink = config.appstoreLinks.appStore
   return (
     <div className="w-screen h-[80vh] col items-center justify-center">
       <Helpwave className="w-1/3 mx-auto h-auto mb-2 text-black"/>
-      <span className="textstyle-title-normal mb-8">{translation.pleaseDownloadApp}</span>
-      <Link href={playStoreLink}>{translation.playStore}</Link>
-      <Link href={appstoreLink}>{translation.appStore}</Link>
+      <span className="textstyle-title-normal mb-8">{translation('pleaseDownloadApp')}</span>
+      <Link href={playStoreLink}>{translation('playStore')}</Link>
+      <Link href={appstoreLink}>{translation('appStore')}</Link>
     </div>
   )
 }

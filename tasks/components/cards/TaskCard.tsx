@@ -35,7 +35,7 @@ export const TaskCard = ({
                            isSelected = false,
                            onClick = () => undefined
                          }: PropsForTranslation<TaskCardTranslation, TaskCardProps>) => {
-  const translation = useTranslation(defaultTaskCardTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultTaskCardTranslations], overwriteTranslation)
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== 'done'
 
@@ -50,7 +50,7 @@ export const TaskCard = ({
         'border-primary': isSelected,
       })}
     >
-      <div className="col overflow-hidden">
+      <div className="col gap-y-0 overflow-hidden">
         <div className="row overflow-hidden items-center gap-x-1">
           {!task.isPublicVisible && <div className="w-[12px]"><LockIcon size={12}/></div>}
           <span className="textstyle-title-sm truncate">{task.name}</span>
@@ -61,7 +61,7 @@ export const TaskCard = ({
       </div>
       <div className="col gap-y-1 w-[24px]">
         {assignee && assignee.avatarUrl &&
-          <Avatar avatarUrl={assignee.avatarUrl} alt={translation.assigned} size="tiny"/>}
+          <Avatar avatarUrl={assignee.avatarUrl} alt={translation('assigned')} size="tiny"/>}
         {task.subtasks.length > 0 && (
           <ProgressIndicator progress={progress}/>
         )}

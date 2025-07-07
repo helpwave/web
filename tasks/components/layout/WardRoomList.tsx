@@ -10,6 +10,7 @@ import { RoomOverview } from '../RoomOverview'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { AddCard } from '@/components/cards/AddCard'
 import { router } from 'next/client'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type WardRoomListTranslation = {
   roomOverview: string,
@@ -42,7 +43,7 @@ export const WardRoomList = ({
                                overwriteTranslation,
                                rooms
                              }: PropsForTranslation<WardRoomListTranslation, WardRoomListProps>) => {
-  const translation = useTranslation(defaultWardRoomListTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultWardRoomListTranslation], overwriteTranslation)
   const {
     state: contextState,
     updateContext
@@ -66,18 +67,20 @@ export const WardRoomList = ({
   }, [observeAttribute, refetch])
 
   return (
-    <div className="col px-6 py-4 @container"
+    <div className="relative col px-6 py-4 @container"
          onClick={() => updateContext({ wardId: contextState.wardId })}
     >
-      <div className="row justify-between items-center pb-4">
-        <span className="textstyle-title-md">{translation.roomOverview}</span>
-        <SolidButton onClick={event => {
-          event.stopPropagation()
-          updateContext({ wardId: contextState.wardId })
-        }}>
-          {translation.showPatientList}
-        </SolidButton>
-      </div>
+      <ColumnTitle
+        title={translation('roomOverview')}
+        actions={(
+          <SolidButton onClick={event => {
+            event.stopPropagation()
+            updateContext({ wardId: contextState.wardId })
+          }}>
+            {translation('showPatientList')}
+          </SolidButton>
+        )}
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
@@ -90,7 +93,7 @@ export const WardRoomList = ({
             />
           )) : (
             <AddCard
-              text={translation.addRooms}
+              text={translation('addRooms')}
               onClick={() => router.push(`/organizations/${organization?.id ?? ''}?wardId=${contextState.wardId}`)}
             />
           )}

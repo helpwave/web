@@ -1,20 +1,23 @@
 import { useContext, useEffect, useState } from 'react'
 
 import type { Translation } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { SolidButton } from '@helpwave/hightide'
-import { Textarea } from '@helpwave/hightide'
-import { ToggleableInput } from '@helpwave/hightide'
-import { useSaveDelay } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
+import { useDelay } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  SolidButton,
+  Textarea,
+  ToggleableInput,
+  useTranslation
+} from '@helpwave/hightide'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import {
   useAssignBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,
-  useUnassignMutation,
-  useReadmitPatientMutation
+  useReadmitPatientMutation,
+  useUnassignMutation
 } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import type { PatientDetailsDTO } from '@helpwave/api-services/types/tasks/patient'
 import { emptyPatientDetails } from '@helpwave/api-services/types/tasks/patient'
@@ -39,7 +42,7 @@ type PatientDetailTranslation = {
 
 const defaultPatientDetailTranslations: Translation<PatientDetailTranslation> = {
   en: {
-    patientDetails: 'Details',
+    patientDetails: 'Patient Details',
     notes: 'Notes',
     saveChanges: 'Save Changes',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
@@ -49,7 +52,7 @@ const defaultPatientDetailTranslations: Translation<PatientDetailTranslation> = 
     readmit: 'Readmit'
   },
   de: {
-    patientDetails: 'Details',
+    patientDetails: 'Patienten Details',
     notes: 'Notizen',
     saveChanges: 'Speichern',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
@@ -70,12 +73,12 @@ export type PatientDetailProps = {
  * The right side of the ward/[wardId].tsx page showing the detailed information about the patient
  */
 export const PatientDetail = ({
-  overwriteTranslation,
-  wardId,
-  patient = emptyPatientDetails
-}: PropsForTranslation<PatientDetailTranslation, PatientDetailProps>) => {
+                                overwriteTranslation,
+                                wardId,
+                                patient = emptyPatientDetails
+                              }: PropsForTranslation<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
-  const translation = useTranslation(defaultPatientDetailTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultPatientDetailTranslations], overwriteTranslation)
 
   const context = useContext(WardOverviewContext)
 
@@ -109,27 +112,22 @@ export const PatientDetail = ({
 
   const {
     restartTimer,
-    clearUpdateTimer
-  } = useSaveDelay(setIsShowingSavedNotification, 3000)
+    clearTimer
+  } = useDelay({ delay: 3000 })
 
   const changeSavedValue = (patient: PatientDetailsDTO) => {
     setNewPatient(patient)
-    restartTimer(() => updateMutation.mutate(patient))
+    restartTimer(() => {
+      updateMutation.mutate(patient)
+      setIsShowingSavedNotification(false)
+    })
   }
 
   const isShowingTask = !!taskId || taskId === ''
 
   return (
     <div className="relative col py-4 px-6">
-      {isShowingSavedNotification &&
-        (
-          <div
-            className="absolute top-2 right-2 bg-positive text-on-positive rounded-lg px-2 py-1 animate-pulse"
-          >
-            {translation.saved}
-          </div>
-        )
-      }
+
       <PatientDischargeModal
         isOpen={isShowingDischargeDialog}
         onCancel={() => setIsShowingDischargeDialog(false)}
@@ -148,7 +146,14 @@ export const PatientDetail = ({
         patientId={newPatient.id}
         initialStatus={initialTaskStatus}
       />
-      <ColumnTitle title={translation.patientDetails}/>
+      <ColumnTitle
+        title={translation('patientDetails')}
+        actions={isShowingSavedNotification && (
+          <div className="bg-positive text-on-positive rounded-lg px-2 py-1 animate-pulse">
+            {translation('saved')}
+          </div>
+        )}
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
@@ -189,7 +194,7 @@ export const PatientDetail = ({
           </div>
           <div className="flex-1">
             <Textarea
-              headline={translation.notes}
+              headline={translation('notes')}
               value={newPatient.note}
               onChangeText={text => changeSavedValue({
                 ...newPatient,
@@ -216,24 +221,24 @@ export const PatientDetail = ({
         )}
         <div className="row justify-end mt-8 gap-x-4">
           {!newPatient.discharged ?
-              (
+            (
               <>
                 <SolidButton color="warning" onClick={() => unassignMutation.mutate(newPatient.id)}>
-                  {translation.unassign}
+                  {translation('unassign')}
                 </SolidButton>
-                <SolidButton color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
-                  {translation.dischargePatient}
+                <SolidButton color="negative" onClick={() => setIsShowingDischargeDialog(true)}>
+                  {translation('dischargePatient')}
                 </SolidButton>
               </>
-              ) : (
-              <SolidButton color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
-                {translation.readmit}
+            ) : (
+              <SolidButton color="positive" onClick={() => readmitMutation.mutate(newPatient.id)}>
+                {translation('readmit')}
               </SolidButton>
-              )}
+            )}
           <SolidButton color="primary" onClick={() => {
-            clearUpdateTimer(true)
+            clearTimer()
             updateMutation.mutate(newPatient)
-          }}>{translation.saveChanges}</SolidButton>
+          }}>{translation('saveChanges')}</SolidButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

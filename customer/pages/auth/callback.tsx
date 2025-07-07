@@ -45,7 +45,7 @@ const AuthCallback: NextPage<PropsForTranslation<AuthCallbackTranslation, AuthCa
     const checkAuthCallback = async () => {
       // Check if the URL contains OIDC callback params
       if (searchParams.get('code') && searchParams.get('state')) {
-        console.log('Processing OIDC callback...')
+        console.debug('Processing OIDC callback...')
         try {
           await handleCallback()
           const redirect = searchParams.get('redirect_uri')

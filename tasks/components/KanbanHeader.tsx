@@ -40,20 +40,20 @@ export const KanbanHeader = ({
   searchValue = '',
   onSearchChange
 }: PropsForTranslation<KanbanHeaderTranslation, KanbanHeaderProps>) => {
-  const translation = useTranslation(defaultKanbanHeaderTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultKanbanHeaderTranslations], overwriteTranslation)
   return (
     <div className="row justify-between items-center">
-      <span className="textstyle-table-name">{translation.tasks}</span>
+      <span className="textstyle-table-name">{translation('tasks')}</span>
       <div className="row gap-x-6">
         <div className="row gap-x-2 items-center hidden">
-          {translation.status}
+          {translation('status')}
           <ChevronDown className="stroke-black"/>
         </div>
         <div className="row gap-x-2 items-center hidden">
-          {translation.label}
+          {translation('label')}
           <ChevronDown className="stroke-black"/>
         </div>
-        <Input id="search" value={searchValue} placeholder={translation.search} onChangeText={onSearchChange}/>
+        <Input id="search" value={searchValue} placeholder={translation('search')} onChangeText={onSearchChange}/>
       </div>
     </div>
   )

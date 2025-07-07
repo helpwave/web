@@ -32,16 +32,16 @@ export const PatientDischargeModal = ({
                                         headerProps,
                                         ...confirmDialogProps
                                       }: PropsForTranslation<PatientDischargeModalTranslation, PatientDischargeModalProps>) => {
-  const translation = useTranslation(defaultPatientDischargeModalTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPatientDischargeModalTranslation], overwriteTranslation)
   return (
     <ConfirmModal
-      headerProps={{ ...headerProps, titleText: headerProps?.titleText ?? translation.dischargePatient }}
+      headerProps={{ ...headerProps, titleText: headerProps?.titleText ?? translation('dischargePatient') }}
       buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'negative' }]}
       {...confirmDialogProps}
     >
       {patient && (
         <>
-          <span className="mt-2">{`${translation.followingPatient}: `}</span>
+          <span className="mt-2">{`${translation('followingPatient')}: `}</span>
           <span className="font-medium">{patient.name}</span>
         </>
       )}

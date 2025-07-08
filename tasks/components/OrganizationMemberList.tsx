@@ -1,17 +1,13 @@
-import { useContext, useState } from 'react'
-
-import type { Translation } from '@helpwave/hightide'
-import { ConfirmModal } from '@helpwave/hightide'
+import { useContext, useMemo, useState } from 'react'
+import type { Translation, TranslationPlural } from '@helpwave/hightide'
 import {
   Avatar,
-  defaultTableStatePagination,
-  defaultTableStateSelection,
+  ConfirmModal,
+  FillerRowElement,
   LoadingAndErrorComponent,
   type PropsForTranslation,
-  removeFromTableSelection,
   SolidButton,
-  Table,
-  type TableState,
+  TableWithSelection,
   TextButton,
   useTranslation
 } from '@helpwave/hightide'
@@ -19,6 +15,10 @@ import type { OrganizationMember } from '@helpwave/api-services/types/users/orga
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 import { useRemoveMemberMutation } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { OrganizationContext } from '@/pages/organizations'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { Trash } from 'lucide-react'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
+import type { OrganizationInvitation } from '@/components/OrganizationInvitationList'
 
 type OrganizationMemberListTranslation = {
   edit: string,
@@ -26,12 +26,11 @@ type OrganizationMemberListTranslation = {
   removeSelection: string,
   deselectAll: string,
   selectAll: string,
-  members: string,
-  member: string,
+  member: TranslationPlural,
   saveChanges: string,
   role: string,
-  dangerZoneText: (single: boolean) => string,
-  deleteConfirmText: (single: boolean) => string,
+  dangerZoneText: TranslationPlural,
+  deleteConfirmText: TranslationPlural,
 }
 
 const defaultOrganizationMemberListTranslations: Translation<OrganizationMemberListTranslation> = {
@@ -41,12 +40,20 @@ const defaultOrganizationMemberListTranslations: Translation<OrganizationMemberL
     removeSelection: 'Remove Selected',
     deselectAll: 'Deselect all',
     selectAll: 'Select all',
-    members: 'Members',
-    member: 'Member',
+    member: {
+      one: 'Member',
+      other: 'Members'
+    },
     saveChanges: 'Save changes',
     role: 'Role',
-    dangerZoneText: (single) => `Deleting ${single ? `a ${defaultOrganizationMemberListTranslations.en.member}` : defaultOrganizationMemberListTranslations.en.members} is a permanent action and cannot be undone. Be careful!`,
-    deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultOrganizationMemberListTranslations.en.member : defaultOrganizationMemberListTranslations.en.members}?`,
+    dangerZoneText: {
+      one: 'Removing a member is a permanent action and cannot be undone. Be careful!',
+      other: 'Removing members is a permanent action and cannot be undone. Be careful!'
+    },
+    deleteConfirmText: {
+      one: 'Do you really want to remove the selected member?',
+      other: 'Do you really want to remove the selected members?',
+    },
   },
   de: {
     edit: 'Bearbeiten',
@@ -54,16 +61,29 @@ const defaultOrganizationMemberListTranslations: Translation<OrganizationMemberL
     removeSelection: 'Ausgewählte löschen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
-    members: 'Mitgliedern',
-    member: 'Mitglied',
+    member: {
+      one: 'Mitglied',
+      other: 'Mitglieder'
+    },
     saveChanges: 'Speichern',
     role: 'Rolle',
-    dangerZoneText: (single) => `Das Löschen ${single ? `eines ${defaultOrganizationMemberListTranslations.de.member}` : `von ${defaultOrganizationMemberListTranslations.de.member}`} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
-    deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? `das ausgewählte ${defaultOrganizationMemberListTranslations.de.member}` : `die ausgewählten ${defaultOrganizationMemberListTranslations.de.members}`}  löschen?`,
+    dangerZoneText: {
+      one: 'Das Entfernen eines Mitglieds ist a permanent permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+      other: 'Das Entfernen von Mitgliedern ist a permanent permanent und kann nicht rückgängig gemacht werden. Vorsicht!'
+    },
+    deleteConfirmText: {
+      one: 'Wollen Sie wirklich das ausgewählte Mitglied löschen?',
+      other: 'Wollen Sie wirklich die ausgewählten Mitglieder löschen?',
+    },
   }
 }
 
-type DeleteDialogState = { isShowing: boolean, member?: OrganizationMember }
+
+type DeleteDialogState = {
+  isShowing: boolean,
+  /** If not set, the entire selection will be deleted */
+  member?: OrganizationMember,
+}
 const defaultDeleteDialogState: DeleteDialogState = { isShowing: false }
 
 export type OrganizationMemberListProps = {
@@ -79,56 +99,108 @@ export const OrganizationMemberList = ({
                                          organizationId,
                                          members
                                        }: PropsForTranslation<OrganizationMemberListTranslation, OrganizationMemberListProps>) => {
-  const translation = useTranslation(defaultOrganizationMemberListTranslations, overwriteTranslation)
-  const [tableState, setTableState] = useState<TableState>({
-    pagination: defaultTableStatePagination,
-    selection: defaultTableStateSelection
-  })
+  const translation = useTranslation([defaultOrganizationMemberListTranslations], overwriteTranslation)
 
   const context = useContext(OrganizationContext)
   organizationId ??= context.state.organizationId
   const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
-  const membersByOrganization = data ?? []
-  const usedMembers: OrganizationMember[] = members ?? membersByOrganization ?? []
+  const membersByOrganization = useMemo(() => data ?? [], [data])
+  const usedMembers: OrganizationMember[] = useMemo(
+    () => members ?? membersByOrganization ?? [], [members, membersByOrganization]
+  )
+
   const removeMemberMutation = useRemoveMemberMutation(organizationId)
-
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
-
-  const hasSelectedMultiple = !!tableState.selection && tableState.selection.currentSelection.length > 1
-  const idMapping = (dataObject: OrganizationMember) => dataObject.id
-
-  // TODO move this filtering to the Table component
-  const admins: string[] = [] // usedMembers.filter(value => value.role === Role.admin).map(idMapping)
-  if (tableState.selection?.currentSelection.find(value => admins.find(adminId => adminId === value))) {
-    const newSelection = tableState.selection.currentSelection.filter(value => !admins.find(adminId => adminId === value))
-    setTableState({
-      ...tableState,
-      selection: {
-        currentSelection: newSelection,
-        hasSelectedAll: false, // There is always one admin
-        hasSelectedSome: newSelection.length > 0,
-        hasSelectedNone: newSelection.length === 0,
+  const [selectionState, setSelectionState] = useState<RowSelectionState>({})
+  const columns = useMemo<ColumnDef<OrganizationInvitation>[]>(() => [
+    {
+      id: 'member',
+      header: translation('member'),
+      cell: ({ cell }) => {
+        const orgMember = usedMembers[cell.row.index]!
+        return (
+          <TextButton
+            className="row gap-x-2 items-center h-14 max-h-auto max-w-[200px] cursor-copy"
+            onClick={event => {
+              event.stopPropagation()
+              navigator.clipboard.writeText(orgMember.email).catch(console.error)
+            }}
+          >
+            <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
+            <div className="col items-start gap-y-0">
+              <span className="font-bold truncate">{orgMember.name}</span>
+              <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
+            </div>
+          </TextButton>
+        )
+      },
+      accessorKey: 'name',
+      sortingFn: 'text',
+      minSize: 200,
+      meta: {
+        filterType: 'text'
       }
-    })
-  }
+    },
+    /*
+    {
+      id: 'role',
+      header: translation("role"),
+      accessorFn: ({}) => {
+
+      },
+      minSize: 200,
+      maxSize: 200,
+      enableResizing: false,
+    },
+    */
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        const orgMember = usedMembers[cell.row.index]!
+        return (
+          <TextButton
+            onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
+            color="negative"
+            // disabled={orgMember.role === Role.admin}
+          >
+            {translation('remove')}
+          </TextButton>
+        )
+      },
+      minSize: 200,
+      maxSize: 200,
+      enableResizing: false,
+    }
+  ], [translation, usedMembers])
+
+  const selectedElements = Object.keys(selectionState ?? {}).length
 
   return (
     <div className="col">
       <ConfirmModal
         headerProps={{
-         titleText: translation.deleteConfirmText(hasSelectedMultiple),
-         descriptionText: translation.dangerZoneText(hasSelectedMultiple)
+          titleText: translation('deleteConfirmText', { count: selectedElements }),
+          descriptionText: translation('dangerZoneText', { count: selectedElements }),
         }}
         isOpen={deleteDialogState.isShowing}
         onCancel={() => setDeleteDialogState(defaultDeleteDialogState)}
         onConfirm={() => {
           if (deleteDialogState.member) {
-            setTableState(removeFromTableSelection(tableState, [deleteDialogState.member], usedMembers.length, idMapping))
+            if (selectionState[deleteDialogState.member.id]) {
+              const newSelection = { ...selectionState }
+              delete newSelection[deleteDialogState.member.id]
+              setSelectionState(newSelection)
+            }
             removeMemberMutation.mutate(deleteDialogState.member.id)
           } else {
-            const selected = usedMembers.filter(value => tableState.selection?.currentSelection.includes(idMapping(value)))
-            setTableState(removeFromTableSelection(tableState, selected, usedMembers.length, idMapping))
-            selected.forEach(value => removeMemberMutation.mutate(value.id))
+            Object.keys(selectionState).forEach(value => {
+              const member = usedMembers.find(member => member.id === value)
+              if (member) {
+                removeMemberMutation.mutate(member.id)
+              }
+            })
+            setSelectionState({})
           }
           setDeleteDialogState(defaultDeleteDialogState)
         }}
@@ -140,61 +212,33 @@ export const OrganizationMemberList = ({
         errorProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
         loadingProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
       >
-        <div className="row justify-between items-center mb-2">
-          <span className="textstyle-table-name">{translation.members + ` (${usedMembers.length})`}</span>
-          <div className="row gap-x-2">
-            {tableState.selection && tableState.selection.currentSelection.length > 0 && (
-              <SolidButton
-                onClick={() => setDeleteDialogState({ isShowing: true })}
-                color="negative"
-              >
-                {translation.removeSelection}
-              </SolidButton>
-            )}
-          </div>
-        </div>
-        <Table
+        <ColumnTitle
+          title={translation('member', { count: 2 /* Always use plural */ }) + ` (${usedMembers.length})`}
+          actions={selectedElements > 0 && (
+            <SolidButton
+              onClick={() => setDeleteDialogState({ isShowing: true })}
+              color="negative"
+              size="small"
+              startIcon={<Trash size={18}/>}
+            >
+              {translation('removeSelection')}
+            </SolidButton>
+          )}
+          type="subtitle"
+        />
+        <TableWithSelection
           data={usedMembers}
-          stateManagement={[tableState, setTableState]}
-          header={[
-            <div key="member" className="row">
-              <span className="textstyle-table-header">{translation.member}</span>
-            </div>,
-            <div key="role" className="row">
-              <span className="textstyle-table-header">{translation.role}</span>
-            </div>,
-            <></>
-          ]}
-          rowMappingToCells={orgMember => [
-            <div key="member" className="row items-center h-12 overflow-hidden max-w-[200px]">
-              <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
-              <div className="col gap-y-0 ml-2">
-                <span className="font-bold truncate">{orgMember.name}</span>
-                <a href={`mailto:${orgMember.email}`}>
-                  <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
-                </a>
-              </div>
-            </div>,
-            <div key="role" className="row items-center mr-2">
-              <TextButton
-                className="row items-center"
-                onClick={() => { /* TODO allow changing roles */
-                }}
-              >
-                {'N.A.' /* translation.roleTypes[orgMember.role] */}
-              </TextButton>
-            </div>,
-            <div key="remove" className="row justify-end">
-              <TextButton
-                onClick={() => setDeleteDialogState({ isShowing: true, member: orgMember })}
-                color="negative"
-                // disabled={orgMember.role === Role.admin}
-              >
-                {translation.remove}
-              </TextButton>
-            </div>
-          ]}
-          identifierMapping={idMapping}
+          columns={columns}
+          rowSelection={selectionState}
+          onRowSelectionChange={setSelectionState}
+          initialState={{
+            pagination: {
+              pageSize: 5,
+            }
+          }}
+          fillerRow={(columnId) =>
+            (<FillerRowElement key={columnId} className="h-14"/>)
+          }
         />
       </LoadingAndErrorComponent>
     </div>

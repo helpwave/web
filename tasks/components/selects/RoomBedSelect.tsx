@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { Undo2, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { Select } from '@helpwave/hightide'
-import { noop } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
-import { TextButton } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  noop,
+  type PropsForTranslation,
+  Select,
+  TextButton,
+  useTranslation
+} from '@helpwave/hightide'
 import { usePatientAssignmentByWardQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 
 type RoomBedSelectTranslation = {
@@ -58,7 +61,7 @@ export type RoomBedSelectProps = {
   /**
    * Only triggers on valid input
    */
-  onChange?: (RoomBedSelectIds:RoomBedSelectIds) => void,
+  onChange?: (RoomBedSelectIds: RoomBedSelectIds) => void,
   isSubmitting?: boolean,
   isClearable?: boolean,
 }
@@ -67,14 +70,14 @@ export type RoomBedSelectProps = {
  * A Select to move a patient to a new bed
  */
 export const RoomBedSelect = ({
-  overwriteTranslation,
-  initialRoomAndBed,
-  wardId,
-  isSubmitting = false,
-  isClearable = false,
-  onChange = noop
-}: PropsForTranslation<RoomBedSelectTranslation, RoomBedSelectProps>) => {
-  const translation = useTranslation(defaultRoomBedSelectTranslation, overwriteTranslation)
+                                overwriteTranslation,
+                                initialRoomAndBed,
+                                wardId,
+                                isSubmitting = false,
+                                isClearable = false,
+                                onChange = noop
+                              }: PropsForTranslation<RoomBedSelectTranslation, RoomBedSelectProps>) => {
+  const translation = useTranslation([defaultRoomBedSelectTranslation], overwriteTranslation)
   const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardId)
   const [currentSelection, setCurrentSelection] = useState<RoomBedSelectIds>({ ...initialRoomAndBed })
   const ref = useRef<HTMLDivElement>(null)
@@ -90,7 +93,7 @@ export const RoomBedSelect = ({
 
   const roomSelect = (data && (
     <Select
-      className="min-w-[120px]"
+      className="min-w-[120px] w-full"
       value={currentSelection.roomId}
       options={data.map(room => ({ value: room.id, label: room.name, disabled: room.beds.length === 0 }))}
       onChange={value => {
@@ -106,10 +109,14 @@ export const RoomBedSelect = ({
 
   const bedSelect = (
     <Select
-      className="min-w-[150px]"
+      className="min-w-[150px] w-full"
       value={currentSelection.bedId}
       isDisabled={!currentSelection.roomId}
-      options={(currentRoom?.beds ?? []).map(value => ({ value: value.id, label: value.name, disabled: !!value.patient }))}
+      options={(currentRoom?.beds ?? []).map(value => ({
+        value: value.id,
+        label: value.name,
+        disabled: !!value.patient
+      }))}
       onChange={value => {
         const newSelection = {
           ...currentSelection,
@@ -137,7 +144,7 @@ export const RoomBedSelect = ({
             disabled={!hasChanges}
           >
             <div className="row gap-x-2 items-center">
-              {translation.revert}
+              {translation('revert')}
               <Undo2 size={16}/>
             </div>
           </TextButton>
@@ -155,7 +162,7 @@ export const RoomBedSelect = ({
             color="negative"
           >
             <div className="row gap-x-2 items-center">
-              {translation.revert}
+              {translation('revert')}
               <X size={16}/>
             </div>
           </TextButton>
@@ -166,7 +173,7 @@ export const RoomBedSelect = ({
           '!text-negative': hasChanges,
           '!text-positive': !hasChanges
         })}>
-          {hasChanges ? translation.unsaved : translation.saved}
+          {hasChanges ? translation('unsaved') : translation('saved')}
         </span>
       )}
       {touched && !isSubmitting && isCreating && (
@@ -174,63 +181,18 @@ export const RoomBedSelect = ({
           '!text-positive': currentSelection.roomId && currentSelection.bedId,
           '!text-negative': !(currentSelection.roomId && currentSelection.bedId)
         })}>
-          {currentSelection.roomId && currentSelection.bedId ? translation.valid : translation.invalid}
+          {currentSelection.roomId && currentSelection.bedId ? translation('valid') : translation('invalid')}
         </span>
       )}
       {isSubmitting && (
         <span>
-          {`${translation.submitting}...`}
+          {`${translation('submitting')}...`}
         </span>
       )}
     </div>
   )
 
-  const widthLayout = (
-    <div className="col">
-        <table className="min-w-[200px] border-spacing-y-2 border-separate">
-          <thead>
-            <tr>
-              <th><span className="textstyle-table-header row justify-start">{translation.room}</span></th>
-              <th><span className="textstyle-table-header row justify-start">{translation.bed}</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="pr-4">
-                {roomSelect}
-              </td>
-              <td>
-                {bedSelect}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        {changesAndSaveRow}
-    </div>
-  )
-
-  const heightLayout = (
-    <div className="col">
-      <table className="border-spacing-y-2 border-separate">
-        <thead/>
-        <tbody>
-          <tr>
-            <td><span className="textstyle-table-header">{translation.room}</span></td>
-            <td>
-              {roomSelect}
-            </td>
-          </tr>
-          <tr>
-            <td><span className="textstyle-table-header">{translation.bed}</span></td>
-            <td>
-              {bedSelect}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      {changesAndSaveRow}
-    </div>
-  )
+  const isUsingWidthLayout = ref.current?.offsetWidth && ref.current.offsetWidth > 300
 
   return (
     <div ref={ref}>
@@ -238,7 +200,34 @@ export const RoomBedSelect = ({
         isLoading={isLoading}
         hasError={isError || !data}
       >
-        {ref.current?.offsetWidth && ref.current.offsetWidth > 300 ? widthLayout : heightLayout}
+        <div className="col">
+          <div
+            className={clsx({
+              'col': !isUsingWidthLayout,
+              'row gap-x-4': isUsingWidthLayout
+            })}
+          >
+            <div className={clsx({
+              'col gap-y-1': isUsingWidthLayout,
+              'row items-center': !isUsingWidthLayout
+            })}>
+            <span className="row flex-1 textstyle-table-header justify-start min-w-20 max-w-20">
+              {translation('room')}
+            </span>
+              {roomSelect}
+            </div>
+            <div className={clsx({
+              'col gap-y-1': isUsingWidthLayout,
+              'row items-center': !isUsingWidthLayout
+            })}>
+            <span className="flex flex-1  textstyle-table-header row justify-start min-w-20 max-w-20">
+              {translation('bed')}
+            </span>
+              {bedSelect}
+            </div>
+          </div>
+          {changesAndSaveRow}
+        </div>
       </LoadingAndErrorComponent>
     </div>
   )

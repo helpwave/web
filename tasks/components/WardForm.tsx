@@ -8,8 +8,8 @@ type WardFormTranslation = {
   name: string,
   nameDescription: string,
   required: string,
-  tooLong: (maxCharacters: number) => string,
-  tooShort: (minCharacters: number) => string,
+  tooLong: string,
+  tooShort: string,
   duplicateName: string,
 }
 
@@ -19,8 +19,8 @@ const defaultWardFormTranslations: Translation<WardFormTranslation> = {
     name: 'Name',
     nameDescription: 'Should be short, prefer abbreviations.',
     required: 'Required Field, cannot be empty',
-    tooLong: (maxCharacters) => `Too long, at most ${maxCharacters} characters`,
-    tooShort: (minCharacters) => `Too short, at least ${minCharacters} characters`,
+    tooLong: `Too long, at most {{characters}} characters`,
+    tooShort: `Too short, at least {{characters}} characters`,
     duplicateName: 'Wards can\'t have the same name'
   },
   de: {
@@ -28,8 +28,8 @@ const defaultWardFormTranslations: Translation<WardFormTranslation> = {
     name: 'Name',
     nameDescription: 'Sollte kurz sein, Abbkürzungen werden präferiert.',
     required: 'Benötigter Wert, darf nicht leer sein',
-    tooLong: (maxCharacters) => `Zu lang, maximal ${maxCharacters} Zeichen`,
-    tooShort: (minCharacters) => `Zu kurz, mindestens ${minCharacters} Zeichen`,
+    tooLong: `Zu lang, maximal {{characters}} Zeichen`,
+    tooShort: `Zu kurz, mindestens {{characters}} Zeichen`,
     duplicateName: 'Stationen müssen unterschiedliche Namen haben'
   }
 }
@@ -53,7 +53,7 @@ export const WardForm = ({
                            onChange = () => undefined,
                            isShowingErrorsDirectly = false
                          }: PropsForTranslation<WardFormTranslation, WardFormProps>) => {
-  const translation = useTranslation(defaultWardFormTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultWardFormTranslations], overwriteTranslation)
   const [touched, setTouched] = useState({ name: isShowingErrorsDirectly })
 
   const minWardNameLength = 2
@@ -65,11 +65,10 @@ export const WardForm = ({
   function validateName(ward: WardFormInfoDTO) {
     const wardName = ward.name.trim()
     if (wardName === '') {
-      return translation.required
-    } else if (wardName.length < minWardNameLength) {
-      return translation.tooShort(minWardNameLength)
+      return translation('required')    } else if (wardName.length < minWardNameLength) {
+      return translation('tooShort', { replacements: { characters: minWardNameLength.toString() } })
     } else if (wardName.length > maxWardNameLength) {
-      return translation.tooLong(maxWardNameLength)
+      return translation('tooLong', { replacements: { characters: maxWardNameLength.toString() } })
     }
   }
 
@@ -86,7 +85,7 @@ export const WardForm = ({
     <form>
       <div className="mt-2 mb-1">
         <Input
-          id="name" value={ward.name} label={{ name: translation.name }}
+          id="name" value={ward.name} label={{ name: translation('name') }}
           onBlur={() => setTouched({ ...touched, name: true })}
           onChangeText={text => triggerOnChange({ ...ward, name: text })}
           maxLength={maxWardNameLength}
@@ -94,7 +93,7 @@ export const WardForm = ({
         />
         {isDisplayingShortNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
       </div>
-      <span className="textstyle-form-description">{translation.nameDescription}</span>
+      <span className="textstyle-form-description">{translation('nameDescription')}</span>
     </form>
   )
 }

@@ -61,7 +61,7 @@ export type OrganizationDetailProps = {
 export const OrganizationDetail = ({
   overwriteTranslation
 }: PropsForTranslation<OrganizationDetailTranslation, OrganizationDetailProps>) => {
-  const translation = useTranslation(defaultOrganizationDetailTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultOrganizationDetailTranslations], overwriteTranslation)
 
   const {
     state: contextState,
@@ -133,12 +133,12 @@ export const OrganizationDetail = ({
   return (
     <div
       key={contextState.organizationId}
-      className="col py-4 px-6"
+      className="col gap-y-0 py-4 px-6"
     >
       <ConfirmModal
         headerProps={{
-          titleText: translation.deleteConfirmText,
-          descriptionText: translation.dangerZoneText,
+          titleText: translation('deleteConfirmText'),
+          descriptionText: translation('dangerZoneText'),
         }}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
@@ -162,8 +162,8 @@ export const OrganizationDetail = ({
           signOut()
         }}
       />
-      <ColumnTitle title={translation.organizationDetail}/>
-      <div className="col gap-y-8 max-w-[500px]">
+      <ColumnTitle title={translation('organizationDetail')}/>
+      <div className="col gap-y-6">
         <OrganizationForm
           organizationForm={organizationForm}
           onChange={(organizationForm, shouldUpdate) => {
@@ -172,6 +172,7 @@ export const OrganizationDetail = ({
               updateOrganization(organizationForm.organization).catch(console.error)
             }
           }}
+          className="max-w-96"
         />
         {!isCreatingNewOrganization && (
           <OrganizationMemberList/>
@@ -186,17 +187,20 @@ export const OrganizationDetail = ({
             className="w-auto"
             onClick={() => isCreatingNewOrganization ? createOrganization(organizationForm.organization) : updateOrganization(organizationForm.organization)}
             disabled={!organizationForm.isValid}>
-            {isCreatingNewOrganization ? translation.create : translation.update}
+            {isCreatingNewOrganization ? translation('create') : translation('update')}
           </SolidButton>
         </div>
         <div className={clsx('col justify-start', { hidden: isCreatingNewOrganization })}>
-          <span className="textstyle-title-normal">{translation.dangerZone}</span>
-          <span className="textstyle-description">{translation.dangerZoneText}</span>
+          <ColumnTitle
+            title={translation('dangerZone')}
+            description={translation('dangerZoneText')}
+            type="subtitle"
+          />
           <button
             onClick={() => setIsShowingConfirmDialog(true)}
             className="text-negative font-bold text-left"
           >
-            {translation.deleteOrganization}
+            {translation('deleteOrganization')}
           </button>
         </div>
       </div>

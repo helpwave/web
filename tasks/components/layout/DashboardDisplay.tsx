@@ -9,6 +9,7 @@ import { InvitationBanner } from '../InvitationBanner'
 import { PatientCard } from '../cards/PatientCard'
 import { AddCard } from '@/components/cards/AddCard'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type DashboardDisplayTranslation = {
   patients: string,
@@ -46,7 +47,7 @@ export type DashboardDisplayProps = Record<string, unknown>
 export const DashboardDisplay = ({
                                    overwriteTranslation,
                                  }: PropsForTranslation<DashboardDisplayTranslation, DashboardDisplayProps>) => {
-  const translation = useTranslation(defaultDashboardDisplayTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultDashboardDisplayTranslations], overwriteTranslation)
   const { organization } = useAuth()
   const router = useRouter()
 
@@ -61,15 +62,15 @@ export const DashboardDisplay = ({
   } = useRecentPatientsQuery()
 
   return (
-    <div className="col py-4 px-6 gap-y-4 @container">
+    <div className="col py-4 px-6 @container">
       <InvitationBanner/>
-      <span className="textstyle-title-md">{translation.recent}</span>
+      <ColumnTitle title={translation('recent')}/>
       <LoadingAndErrorComponent
         isLoading={isLoadingPatients}
       >
         {patients && patients.length > 0 && (
           <>
-            <span className="textstyle-title-normal">{translation.patients}</span>
+            <ColumnTitle title={translation('patients')} type="subtitle"/>
             <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
               {patients?.map(patient => (
                 <PatientCard
@@ -86,7 +87,7 @@ export const DashboardDisplay = ({
       </LoadingAndErrorComponent>
       <LoadingAndErrorComponent isLoading={isLoadingWards}>
         <div className="col gap-y-1">
-          <span className="textstyle-title-normal">{translation.wards}</span>
+          <ColumnTitle title={translation('wards')} type="subtitle"/>
           <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
             {wards && wards.length > 0 && wards?.map(ward => (
               <WardCard
@@ -96,7 +97,7 @@ export const DashboardDisplay = ({
               />
             ))}
             <AddCard
-              text={translation.addWard}
+              text={translation('addWard')}
               onClick={() => router.push(`/organizations/${organization?.id}`)}
             />
           </div>

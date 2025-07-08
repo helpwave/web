@@ -1,16 +1,16 @@
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
 import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
-import type { TaskStatus, TaskStatusTranslation } from '@helpwave/api-services/types/tasks/task'
+import type { TaskStatus, TaskStatusTranslationType } from '@helpwave/api-services/types/tasks/task'
 import { TaskStatusUtil } from '@helpwave/api-services/types/tasks/task'
 
 //
 // PillLabel
 //
 
-type PillLabelTranslation = TaskStatusTranslation
+type PillLabelTranslation = TaskStatusTranslationType
 
-const defaultPillLabelTranslation: Translation<TaskStatusTranslation> = TaskStatusUtil.translation
+const defaultPillLabelTranslation: Translation<TaskStatusTranslationType> = TaskStatusUtil.translation
 
 const mapping = {
   todo: {
@@ -41,13 +41,13 @@ export const PillLabel = ({
                             taskStatus = 'todo'
                           }: PropsForTranslation<PillLabelTranslation, PillLabelProps>) => {
   const state = mapping[taskStatus]
-  const translation = useTranslation(defaultPillLabelTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultPillLabelTranslation], overwriteTranslation)
 
   return (
     <div className={clsx(`row items-center justify-between pl-2 pr-3 py-1 rounded-lg text-sm`, state.mainClassName)}>
       <div className="row gap-x-2 items-center">
         <div className={clsx(`rounded-full w-2 h-2`, state.iconClassName)}/>
-        <span>{translation[taskStatus]}</span>
+        <span>{translation(taskStatus)}</span>
       </div>
       {count ?? '-'}
     </div>

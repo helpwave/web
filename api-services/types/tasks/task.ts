@@ -33,25 +33,6 @@ export const TaskStatusUtil = {
   translation: taskStatusTranslation
 }
 
-export type TaskStatusTranslation = Record<TaskStatus, string>
-
-const translation: Translation<TaskStatusTranslation> = {
-  en: {
-    done: 'Done',
-    inProgress: 'In Progress',
-    todo: 'Todo',
-  },
-  de: {
-    done: 'Fertig',
-    inProgress: 'In Arbeit',
-    todo: 'Todo',
-  }
-}
-
-export const TaskStatusUtil = {
-  translation
-}
-
 export type TaskDTO = {
   id: string,
   name: string,

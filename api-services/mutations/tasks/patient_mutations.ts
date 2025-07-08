@@ -188,9 +188,9 @@ export const useRecentPatientsQuery = () => {
       for (const patient of res.getRecentPatientsList()) {
         const room = patient.getRoom()
         const bed = patient.getBed()
-        const wardId: string | undefined = undefined// TODO get wardId from query once implemented
+        let wardId: string | undefined
         if (room) {
-          // wardId = roomByQuery.data.id
+          wardId = room?.getWardId()
         }
 
         patients.push({

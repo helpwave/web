@@ -71,7 +71,7 @@ export const useUserSeatUpdateMutation = () => {
       return userSeat
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.customer]).catch(reason => console.error(reason))
+      queryClient.invalidateQueries([QueryKeys.customer]).catch(reason => console.error(reason))
     }
   })
 }

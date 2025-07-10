@@ -32,8 +32,8 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
   const selectedBedId = context.state.bedId
 
   return (
-    <div className="col w-full @container" ref={ref}>
-      <div className="row items-center mb-1">
+    <div className="col gap-y-1 w-full @container" ref={ref}>
+      <div className="row gap-x-1 items-center">
         <div className="w-2 h-2 mx-2 rounded-full bg-gray-300"/>
         <span className="textstyle-title-normal">{room.name}</span>
       </div>
@@ -54,7 +54,6 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                           onClick={(event) => {
                             event.stopPropagation()
                             if (bed.patient) {
-                              // LINTER: `bed.patient.id` gets evaluated as undefined without this if
                               setSelectedBed(room, bed, bed.patient.id)
                             }
                           }}

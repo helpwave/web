@@ -22,7 +22,7 @@ export const useCustomerCreateMutation = () => {
       return await CustomerAPI.create(customer, authHeader)
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.customer]).catch(reason => console.error(reason))
+      queryClient.invalidateQueries([QueryKeys.customer]).catch(reason => console.error(reason))
     }
   })
 }
@@ -35,7 +35,7 @@ export const useCustomerUpdateMutation = () => {
       return await CustomerAPI.update(customer, authHeader)
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.customer]).catch(reason => console.error(reason))
+      queryClient.invalidateQueries([QueryKeys.customer]).catch(reason => console.error(reason))
     }
   })
 }

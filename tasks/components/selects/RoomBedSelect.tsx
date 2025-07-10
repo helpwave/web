@@ -64,6 +64,7 @@ export type RoomBedSelectProps = {
   onChange?: (RoomBedSelectIds: RoomBedSelectIds) => void,
   isSubmitting?: boolean,
   isClearable?: boolean,
+  disabled?: boolean,
 }
 
 /**
@@ -75,7 +76,8 @@ export const RoomBedSelect = ({
                                 wardId,
                                 isSubmitting = false,
                                 isClearable = false,
-                                onChange = noop
+                                onChange = noop,
+                                disabled = false,
                               }: PropsForTranslation<RoomBedSelectTranslation, RoomBedSelectProps>) => {
   const translation = useTranslation([defaultRoomBedSelectTranslation], overwriteTranslation)
   const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardId)
@@ -91,6 +93,7 @@ export const RoomBedSelect = ({
 
   const hasChanges = initialRoomAndBed.bedId !== currentSelection.bedId || initialRoomAndBed.roomId !== currentSelection.roomId
 
+
   const roomSelect = (data && (
     <Select
       className="min-w-[120px] w-full"
@@ -104,6 +107,7 @@ export const RoomBedSelect = ({
         })
         setTouched(true)
       }}
+      isDisabled={disabled}
     />
   ))
 
@@ -111,7 +115,7 @@ export const RoomBedSelect = ({
     <Select
       className="min-w-[150px] w-full"
       value={currentSelection.bedId}
-      isDisabled={!currentSelection.roomId}
+      isDisabled={!currentSelection.roomId || disabled}
       options={(currentRoom?.beds ?? []).map(value => ({
         value: value.id,
         label: value.name,

@@ -109,34 +109,38 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
   const [draggingRoomId, setDraggingRoomId] = useState<string>()
   const [draggingBedId, setDraggingBedId] = useState<string>()
 
-  const assignBedMutation = useAssignBedMutation(bed => {
-    if (draggingRoomId) {
-      setContextState({
-        ...contextState,
-        bedId: bed.id,
-        patientId: bed.patientId,
-        roomId: draggingRoomId,
-        patient: undefined
-      })
-    } else {
-      setContextState({
-        ...contextState,
-        bedId: bed.id,
-        patientId: bed.patientId,
-        patient: undefined
-      })
-    }
+  const assignBedMutation = useAssignBedMutation({
+    onSuccess: (bed) => {
+      if (draggingRoomId) {
+        setContextState({
+          ...contextState,
+          bedId: bed.id,
+          patientId: bed.patientId,
+          roomId: draggingRoomId,
+          patient: undefined
+        })
+      } else {
+        setContextState({
+          ...contextState,
+          bedId: bed.id,
+          patientId: bed.patientId,
+          patient: undefined
+        })
+      }
 
-    setDraggingRoomId(undefined)
+      setDraggingRoomId(undefined)
+    }
   })
   const unassignMutation = useUnassignMutation()
   const dischargeMutation = usePatientDischargeMutation()
-  const readmitPatientMutation = useReadmitPatientMutation(patientId => {
-    if (draggingBedId) {
-      assignBedMutation.mutate({
-        id: draggingBedId,
-        patientId
-      })
+  const readmitPatientMutation = useReadmitPatientMutation({
+    onSuccess: (_, variables, _2) => {
+      if (draggingBedId) {
+        assignBedMutation.mutate({
+          id: draggingBedId,
+          patientId: variables
+        })
+      }
     }
   })
 

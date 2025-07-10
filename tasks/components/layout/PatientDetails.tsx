@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 
 import type { Translation } from '@helpwave/hightide'
-import { useDelay } from '@helpwave/hightide'
 import {
   LoadingAndErrorComponent,
   type PropsForTranslation,
   SolidButton,
   Textarea,
   ToggleableInput,
+  useDelay,
   useTranslation
 } from '@helpwave/hightide'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
@@ -84,8 +84,14 @@ export const PatientDetail = ({
 
   const updateMutation = usePatientUpdateMutation()
   const readmitMutation = useReadmitPatientMutation()
-  const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardId: context.state.wardId }))
-  const unassignMutation = useUnassignMutation(() => context.updateContext({ wardId: context.state.wardId }))
+  const dischargeMutation = usePatientDischargeMutation({
+    onSuccess: () =>
+      context.updateContext({ wardId: context.state.wardId })
+  })
+  const unassignMutation = useUnassignMutation({
+    onSuccess: () =>
+      context.updateContext({ wardId: context.state.wardId })
+  })
   const {
     data,
     isError,
@@ -106,8 +112,10 @@ export const PatientDetail = ({
   }, [data])
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const assignBedMutation = useAssignBedMutation(() => {
-    setIsSubmitting(false)
+  const assignBedMutation = useAssignBedMutation({
+    onSuccess: () => {
+      setIsSubmitting(false)
+    }
   })
 
   const {
@@ -181,7 +189,6 @@ export const PatientDetail = ({
               wardId={context.state.wardId}
               onChange={(roomBedDropdownIds) => {
                 if (roomBedDropdownIds.bedId && context.state.patientId) {
-                  readmitMutation.mutate(newPatient.id)
                   context.updateContext({ ...context.state, ...roomBedDropdownIds })
                   assignBedMutation.mutate({
                     id: roomBedDropdownIds.bedId,
@@ -190,6 +197,7 @@ export const PatientDetail = ({
                 }
               }}
               isSubmitting={isSubmitting}
+              disabled={newPatient.discharged}
             />
           </div>
           <div className="flex-1">

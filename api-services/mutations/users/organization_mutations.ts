@@ -107,7 +107,7 @@ export const useOrganizationCreateMutation = () => {
       return await OrganizationService.create(organization)
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     }
   })
 }
@@ -119,7 +119,7 @@ export const useOrganizationUpdateMutation = () => {
       return await OrganizationService.update(organization)
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     }
   })
 }
@@ -131,7 +131,7 @@ export const useOrganizationDeleteMutation = () => {
       return await OrganizationService.delete(organizationId)
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     },
   })
 }
@@ -153,7 +153,7 @@ export const useInviteDeclineMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
   })
 }
@@ -175,7 +175,7 @@ export const useInviteRevokeMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
   })
 }
@@ -206,7 +206,7 @@ export const useInviteMemberMutation = (organizationId: string, callback: (invit
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     }
   })
 }
@@ -227,7 +227,7 @@ export const useInviteAcceptMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
   })
 }
@@ -250,7 +250,7 @@ export const useRemoveMemberMutation = (organizationId: string) => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     }
   })
 }

@@ -67,7 +67,7 @@ export const PropertyList = ({
 
   useEffect(() => {
     if (data) {
-      setProperties(data)
+      setProperties([...data].sort((a, b) => a.name.localeCompare(b.name)))
     }
   }, [data])
 

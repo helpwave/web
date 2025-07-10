@@ -1,17 +1,17 @@
 import { useRouter } from 'next/router'
-import { LucideArrowLeftRight } from 'lucide-react'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { SolidButton } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation, SelectUncontrolled } from '@helpwave/hightide'
 import type { Translation } from '@helpwave/hightide'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
 import clsx from 'clsx'
 import { ColumnTitle } from '@/components/ColumnTitle'
+import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,
   personalTaskTemplates: string,
+  personal: string,
   wardTaskTemplates: string,
 }
 
@@ -19,11 +19,13 @@ const defaultTaskTemplateDisplayTranslation: Translation<TaskTemplateDisplayTran
   en: {
     addNewTaskTemplate: 'Add new template',
     personalTaskTemplates: 'Personal Task Templates',
+    personal: 'Personal',
     wardTaskTemplates: 'Ward Task Templates'
   },
   de: {
     addNewTaskTemplate: 'Neues Vorlagen hinzufügen',
     personalTaskTemplates: 'Meine Vorlagen',
+    personal: 'Persönliche',
     wardTaskTemplates: 'Stations Vorlagen'
   }
 }
@@ -50,23 +52,35 @@ export const TaskTemplateDisplay = ({
   const translation = useTranslation([defaultTaskTemplateDisplayTranslation], overwriteTranslation)
 
   const router = useRouter()
+  const { data: wards, isLoading: isLoadingWards, isError: isErrorWards } = useWardOverviewsQuery()
 
-  const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
   return (
     <div className="py-4 px-6 @container">
       <ColumnTitle
         title={variant === 'personalTemplates' ? translation('personalTaskTemplates') : translation('wardTaskTemplates')}
-        actions={(variant === 'wardTemplates' || wardId) && (
-          <SolidButton
-            onClick={() => {
-              router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).catch(console.error)
+        actions={(
+          <SelectUncontrolled<string>
+            value={variant === 'personalTemplates' ? 'personal' : wardId}
+            options={[...(wards ?? []).map(value => ({
+              label: value.name,
+              value: value.id,
+              searchTags: [value.name]
+            })),
+              {
+                label: translation('personal'),
+                value: 'personal',
+                searchTags: [translation('personal')]
+              }
+            ]}
+            onChange={value => {
+              const url = value === 'personal' ? `/templates` : `/ward/${value}/templates`
+              router.push(url).catch(console.error)
             }}
-            className="row gap-x-1 items-center w-auto"
-          >
-            <LucideArrowLeftRight/>
-            {variant === 'personalTemplates' ? translation('wardTaskTemplates') : translation('personalTaskTemplates')}
-          </SolidButton>
+            isDisabled={isLoadingWards || isErrorWards}
+            className="min-w-40"
+          />
         )}
+        containerClassName="mb-2"
       />
       <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
         {taskTemplates.map(taskTemplate => (

@@ -1,8 +1,8 @@
 import type { PropsForTranslation, StepperState, Translation } from '@helpwave/hightide'
 import { ConfirmModal, LoadingAndErrorComponent, range, StepperBar, TextButton, useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
+import type { PropertySelectDataUpdate } from '@helpwave/api-services/mutations/properties/property_mutations'
 import {
-  usePropertyChangeSelectOptionMutation,
   usePropertyCreateMutation,
   usePropertyQuery,
   usePropertyUpdateMutation
@@ -66,7 +66,6 @@ export const PropertyDetails = ({
 
   const { data, isError, isLoading } = usePropertyQuery(contextState.propertyId)
   const updatePropertyMutation = usePropertyUpdateMutation()
-  const updateSelectDataMutation = usePropertyChangeSelectOptionMutation()
   const [value, setValue] = useState<Property>({
     ...emptyProperty,
   })
@@ -92,7 +91,7 @@ export const PropertyDetails = ({
         isOpen={showArchiveConfirm}
         onCancel={() => setArchiveConfirm(false)}
         onConfirm={() => {
-          updatePropertyMutation.mutate({ ...value, isArchived: true })
+          updatePropertyMutation.mutate({ property: { ...value, isArchived: true } })
         }}
         confirmType="negative"
       />
@@ -124,10 +123,7 @@ export const PropertyDetails = ({
                 })
                 return
               }
-              updatePropertyMutation.mutate({
-                ...value,
-                ...basicInfo
-              })
+              updatePropertyMutation.mutate({ property: { ...value, ...basicInfo } })
             }
           }
           expandableProps={{
@@ -159,24 +155,20 @@ export const PropertyDetails = ({
                 return
               }
 
-              // TODO combine these
-              updatePropertyMutation.mutate({
-                ...value,
-                ...fieldDetails
-              })
+              let selectUpdateDate: PropertySelectDataUpdate | undefined = undefined
               if (selectUpdate) {
-                updateSelectDataMutation.mutate({
-                  propertyId: value.id,
+                selectUpdateDate = {
                   update: selectUpdate.update,
-                  add: range(selectUpdate.create).map(index => ({
+                  add: range(selectUpdate.create, { allowEmptyRange: true }).map(index => ({
                     id: '',
                     name: `${translation('newEntry')} ${index + 1}`,
                     description: '',
                     isCustom: false
                   })),
                   remove: selectUpdate.delete.map(value1 => value1.id)
-                })
+                }
               }
+              updatePropertyMutation.mutate({ property: { ...value, ...fieldDetails }, selectUpdate: selectUpdateDate })
             }
           }
           expandableProps={{

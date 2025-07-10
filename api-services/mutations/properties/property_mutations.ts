@@ -145,10 +145,21 @@ export const usePropertyCreateMutation = (callback: (property: Property) => void
   })
 }
 
+export type PropertySelectDataUpdate = {
+  add: SelectOption[],
+  update: SelectOption[],
+  remove: string[],
+}
+
+export type PropertyUpdateType = {
+  property: Property,
+  selectUpdate?: PropertySelectDataUpdate,
+}
+
 export const usePropertyUpdateMutation = (callback: (property: Property) => void = noop) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (property: Property) => {
+    mutationFn: async ({ property, selectUpdate }: PropertyUpdateType) => {
       const req = new UpdatePropertyRequest()
       req.setId(property.id)
       req.setName(property.name)
@@ -166,16 +177,30 @@ export const usePropertyUpdateMutation = (callback: (property: Property) => void
         }
         const selectDataVal = new UpdatePropertyRequest.SelectData()
         selectDataVal.setAllowFreetext(property.selectData.isAllowingFreetext)
-        /* This is done in a separate function
-          selectDataVal.set(properties.selectData.options.map(option => {
+        if(selectUpdate) {
+          const createList = selectUpdate.add.map(option => {
             const optionVal = new UpdatePropertyRequest.SelectData.SelectOption()
+            optionVal.setId('')
             optionVal.setName(option.name)
             if (option.description) {
               optionVal.setDescription(option.description)
             }
+            optionVal.setIsCustom(option.isCustom)
             return optionVal
-          }))
-          */
+          })
+          const updateList = selectUpdate.update.map(option => {
+            const optionVal = new UpdatePropertyRequest.SelectData.SelectOption()
+            optionVal.setId(option.id)
+            optionVal.setName(option.name)
+            if (option.description) {
+              optionVal.setDescription(option.description)
+            }
+            optionVal.setIsCustom(option.isCustom)
+            return optionVal
+          })
+          selectDataVal.setUpsertOptionsList([...updateList, ...createList])
+          selectDataVal.setRemoveOptionsList(selectUpdate.remove)
+        }
         req.setSelectData(selectDataVal)
       }
 
@@ -185,54 +210,6 @@ export const usePropertyUpdateMutation = (callback: (property: Property) => void
       }
       callback(property)
       return property
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.properties]).catch(console.error)
-    }
-  })
-}
-
-type ChangeSelectOptions = {
-  propertyId: string,
-  add: SelectOption[],
-  update: SelectOption[],
-  remove: string[],
-}
-export const usePropertyChangeSelectOptionMutation = (callback: () => void = noop) => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (changeSelectOptions: ChangeSelectOptions) => {
-      const req = new UpdatePropertyRequest()
-      req.setId(changeSelectOptions.propertyId)
-      const selectDataVal = new UpdatePropertyRequest.SelectData()
-      const createList = changeSelectOptions.update.map(option => {
-        const optionVal = new UpdatePropertyRequest.SelectData.SelectOption()
-        optionVal.setId('')
-        optionVal.setName(option.name)
-        if (option.description) {
-          optionVal.setDescription(option.description)
-        }
-        optionVal.setIsCustom(option.isCustom)
-        return optionVal
-      })
-      const updateList = changeSelectOptions.update.map(option => {
-        const optionVal = new UpdatePropertyRequest.SelectData.SelectOption()
-        optionVal.setId(option.id)
-        optionVal.setName(option.name)
-        if (option.description) {
-          optionVal.setDescription(option.description)
-        }
-        optionVal.setIsCustom(option.isCustom)
-        return optionVal
-      })
-      selectDataVal.setUpsertOptionsList([...updateList, ...createList])
-      req.setSelectData(selectDataVal)
-
-      const result = await APIServices.property.updateProperty(req, getAuthenticatedGrpcMetadata())
-      if (!result.toObject()) {
-        throw Error('usePropertyUpdateOrAddSelectDataMutation: error in result')
-      }
-      callback()
     },
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.properties]).catch(console.error)

@@ -1,16 +1,23 @@
-import { Expandable, IconButton } from '@helpwave/hightide'
-import type { PropsForTranslation , ExpandableProps, Translation } from '@helpwave/hightide'
-import { useTranslation } from '@helpwave/hightide'
-import { Select } from '@helpwave/hightide'
-import { Tile } from '@helpwave/hightide'
-import { Checkbox } from '@helpwave/hightide'
+import type { ExpandableProps, FormTranslationType, PropsForTranslation, Translation } from '@helpwave/hightide'
+import {
+  Checkbox,
+  ExpandableUncontrolled,
+  FillerRowElement,
+  formTranslation,
+  IconButton,
+  InputUncontrolled,
+  Select,
+  SolidButton,
+  TableWithSelection,
+  Tile,
+  useTranslation
+} from '@helpwave/hightide'
 import { Plus, X } from 'lucide-react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
-import { Input } from '@helpwave/hightide'
 import type { FieldType, Property, SelectData, SelectOption } from '@helpwave/api-services/types/properties/property'
 import { fieldTypeList } from '@helpwave/api-services/types/properties/property'
-import { useEffect, useState } from 'react'
-import { TextButton } from '@helpwave/hightide'
+import { useEffect, useMemo, useState } from 'react'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type SelectDataUpdate = {
   create: number,
@@ -22,6 +29,8 @@ type PropertySelectOptionsUpdaterPropsTranslation = {
   newEntry: string,
   values: string,
 }
+
+type TranslationType = FormTranslationType & PropertySelectOptionsUpdaterPropsTranslation
 
 const defaultPropertySelectOptionsUpdaterPropsTranslation: Translation<PropertySelectOptionsUpdaterPropsTranslation> = {
   en: {
@@ -48,75 +57,136 @@ export const PropertySelectOptionsUpdater = ({
                                                overwriteTranslation,
                                                value,
                                                onChange,
-                                             }: PropsForTranslation<PropertySelectOptionsUpdaterPropsTranslation, PropertySelectOptionsUpdaterProps>) => {
-  const translation = useTranslation([defaultPropertySelectOptionsUpdaterPropsTranslation], overwriteTranslation)
+                                             }: PropsForTranslation<TranslationType, PropertySelectOptionsUpdaterProps>) => {
+  const translation = useTranslation([formTranslation, defaultPropertySelectOptionsUpdaterPropsTranslation], overwriteTranslation)
   const [state, setState] = useState<PropertySelectOptionsUpdaterState>({
     data: value,
     update: { create: 0, update: [], delete: [] }
   })
+  const [selection, setSelection] = useState<RowSelectionState>({})
+
   const { data, update } = state
 
   useEffect(() => {
     setState({ data: value, update: { create: 0, update: [], delete: [] } })
+    setSelection({})
   }, [value])
+
+  const columns = useMemo<ColumnDef<SelectOption>[]>(() => [
+    {
+      id: 'value',
+      header: translation('values'),
+      cell: ({ cell }) => {
+        const index = cell.row.index
+        const entry = data.options[index]!
+        return (
+          <InputUncontrolled
+            value={entry.name}
+            onEditCompleted={text => {
+              const newList = [...data.options]
+              const newEntry = { ...entry, name: text }
+              newList[index] = newEntry
+              onChange(
+                { ...data, options: newList },
+                { ...update, update: [...update.update, { ...newEntry, index }] }
+              )
+            }}
+          />
+        )
+      },
+      accessorFn: (value) => value.name,
+      sortingFn: 'text',
+      minSize: 160,
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        const index = cell.row.index
+        const entry = data.options[index]!
+        return (
+          <IconButton
+            color="transparent"
+            onClick={() => {
+              const newList = data.options.filter((_, index1) => index1 !== index)
+              onChange(
+                { ...data, options: newList },
+                { ...update, delete: [...update.delete, { id: entry.id, index }] }
+              )
+            }}
+          >
+            <X size={20} className="text-negative"/>
+          </IconButton>
+        )
+      },
+      minSize: 80,
+      maxSize: 80,
+      enableResizing: false,
+    }
+  ], [data, onChange, translation, update])
+
+  const selectedIndexes = Object.keys(selection)
 
   return (
     <div className="col mt-2 gap-y-1">
-      <div className="row justify-between items-center">
-        <span className="textstyle-label-md">{translation('values')}</span>
-        <IconButton
-          onClick={() => {
-            onChange({ ...data }, { ...update, create: update.create + 1 })
-          }}
-          size="small"
-        >
-          <Plus className="w-full h-full"/>
-        </IconButton>
-      </div>
-      <Scrollbars autoHide autoHeight autoHeightMax="24rem">
-        <div className="col gap-y-2">
-          {data.options.map((entry, index) => (
-            <div key={index} className="row items-center justify-between gap-x-4">
-              <Input
-                value={entry.name ?? ''}
-                placeholder={`${translation('newEntry')} ${index + 1}`}
-                onChangeText={text => {
-                  const newList = [...data.options]
-                  const newEntry = { ...entry, name: text }
-                  newList[index] = newEntry
-                  setState(
+      <ColumnTitle
+        title={translation('values')}
+        type="subtitle"
+        actions={(
+          <div className="row items-center gap-x-2">
+            {selectedIndexes.length > 0 && (
+              <SolidButton
+                color="negative"
+                size="small"
+                onClick={() => {
+                  const newList = data.options.filter((_, index) => !selectedIndexes.find(value1 => value1 === index.toString()))
+                  onChange(
+                    { ...data, options: newList },
                     {
-                      data: { ...data, options: newList },
-                      update: { ...update, update: [...update.update, { ...newEntry, index }] }
+                      ...update,
+                      delete: [...update.delete, ...data.options
+                        .map((option, index) => ({
+                        ...option,
+                        index
+                      })).filter(value => !!selectedIndexes[value.index])
+                        .map(value => ({
+                        index: value.index,
+                        id: value.id
+                      }))]
                     }
                   )
                 }}
-                onEditCompleted={text => {
-                  const newList = [...data.options]
-                  const newEntry = { ...entry, name: text }
-                  newList[index] = newEntry
-                  onChange(
-                    { ...data, options: newList },
-                    { ...update, update: [...update.update, { ...newEntry, index }] }
-                  )
-                }}
-              />
-              <TextButton
-                color="negative"
-                onClick={() => {
-                  const newList = data.options.filter((_, index1) => index1 !== index)
-                  onChange(
-                    { ...data, options: newList },
-                    { ...update, delete: [...update.delete, { id: entry.id, index }] }
-                  )
-                }}
               >
-                <X size={20}/>
-              </TextButton>
-            </div>
-          ))}
-        </div>
-      </Scrollbars>
+                {translation('delete')}
+              </SolidButton>
+            )}
+            <IconButton
+              onClick={() => {
+                onChange({ ...data }, { ...update, create: update.create + 1 })
+              }}
+              size="small"
+            >
+              <Plus className="w-full h-full"/>
+            </IconButton>
+          </div>
+        )}
+      />
+      <div className="row justify-between items-center">
+        <span className="textstyle-label-md">{}</span>
+
+      </div>
+      <TableWithSelection
+        columns={columns}
+        data={data.options}
+        rowSelection={selection}
+        onRowSelectionChange={setSelection}
+        disableClickRowClickSelection={true}
+        initialState={{ pagination: { pageSize: 5 } }}
+        fillerRow={() => (<FillerRowElement className="h-10"/>)}
+      />
     </div>
   )
 }
@@ -183,7 +253,14 @@ export const PropertyDetailsField = ({
   }, [value])
 
   return (
-    <Expandable {...expandableProps} label={translation('field')}>
+    <ExpandableUncontrolled
+      {...expandableProps}
+      label={(
+        <h4 className="textstyle-title-sm">
+          {translation('field')}
+        </h4>
+      )}
+    >
       <Select
         // TODO add icons
         value={usedValue.fieldType}
@@ -220,6 +297,6 @@ export const PropertyDetailsField = ({
           className="mt-4"
         />
       )}
-    </Expandable>
+    </ExpandableUncontrolled>
   )
 }

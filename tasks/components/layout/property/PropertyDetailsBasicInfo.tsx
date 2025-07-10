@@ -1,4 +1,4 @@
-import { Expandable } from '@helpwave/hightide'
+import { ExpandableUncontrolled } from '@helpwave/hightide'
 import type { PropsForTranslation , Translation , ExpandableProps } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Input } from '@helpwave/hightide'
@@ -48,11 +48,19 @@ export const PropertyDetailsBasicInfo = ({
   value,
   onChange,
   onEditComplete,
-  expandableProps = {},
+  expandableProps,
 }: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
   const translation = useTranslation([defaultPropertyDetailsBasicInfoTranslation], overwriteTranslation)
   return (
-    <Expandable {...expandableProps} label={translation('basicInfo')}>
+    <ExpandableUncontrolled
+      {...expandableProps}
+      label={(
+        <h4 className="textstyle-title-md">
+          {translation('basicInfo')}
+        </h4>
+      )}
+      contentClassName="pb-4"
+    >
       <PropertySubjectTypeSelect
         value={value.subjectType}
         label={{ name: translation('subjectType'), labelType: 'labelMedium' }}
@@ -67,6 +75,7 @@ export const PropertyDetailsBasicInfo = ({
         value={value.name}
         onChangeText={name => onChange({ ...value, name })}
         onEditCompleted={name => onEditComplete({ ...value, name })}
+        className="w-full"
       />
       <Textarea
         label={{ name: translation('description'), labelType: 'labelMedium' }}
@@ -75,6 +84,6 @@ export const PropertyDetailsBasicInfo = ({
         onChangeText={description => onChange({ ...value, description })}
         onEditCompleted={description => onEditComplete({ ...value, description })}
       />
-    </Expandable>
+    </ExpandableUncontrolled>
   )
 }

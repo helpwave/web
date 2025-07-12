@@ -312,8 +312,6 @@ export const TaskDetailModal = ({
     }
   }, [data, taskId])
 
-  console.log(task)
-
   const {
     data: personalTaskTemplatesData,
     isLoading: personalTaskTemplatesIsLoading,

@@ -1,6 +1,6 @@
 import type { PropsForTranslation, Translation } from '@helpwave/hightide'
-import { FillerRowElement } from '@helpwave/hightide'
 import {
+  FillerRowElement,
   LoadingAndErrorComponent,
   SolidButton,
   Table,
@@ -98,8 +98,8 @@ export const PropertyDisplay = ({
     {
       id: 'name',
       header: translation('name'),
-      cell: ({ cell } ) => {
-        if(!propertyList) {
+      cell: ({ cell }) => {
+        if (!propertyList) {
           return
         }
         const value = propertyList[cell.row.index]!
@@ -120,8 +120,8 @@ export const PropertyDisplay = ({
     {
       id: 'subjectType',
       header: translation('subjectType'),
-      cell: ({ cell } ) => {
-        if(!propertyList) {
+      cell: ({ cell }) => {
+        if (!propertyList) {
           return
         }
         const value = propertyList[cell.row.index]!
@@ -130,7 +130,7 @@ export const PropertyDisplay = ({
             <SubjectTypeIcon subjectType={value.subjectType}/>
             <span>{translation(value.subjectType)}</span>
           </div>
-)
+        )
       },
       accessorFn: (property) => property.subjectType,
       minSize: 160,
@@ -144,7 +144,7 @@ export const PropertyDisplay = ({
       id: 'actions',
       header: '',
       cell: ({ cell }) => {
-        if(!propertyList) {
+        if (!propertyList) {
           return
         }
         const value = propertyList[cell.row.index]!

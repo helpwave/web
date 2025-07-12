@@ -44,10 +44,9 @@ export const TaskCard = ({
   return (
     <div
       onClick={onClick}
-      className={clsx('card-md row w-full justify-between !p-2', {
-        'border-negative hover:brightness-75': isOverDue,
-        'border-negative': isOverDue && isSelected,
-        'border-primary': isSelected,
+      className={clsx('card-md row w-full justify-between !p-2 border-2 hover:brightness-97 hover:border-primary cursor-pointer', {
+        'border-negative': isOverDue,
+        'border-primary': isSelected && !isOverDue,
       })}
     >
       <div className="col gap-y-0 overflow-hidden">

@@ -51,6 +51,7 @@ export const useTaskQuery = (taskId: string | undefined) => {
         assignee: res.getAssignedUserId(),
         subtasks: res.getSubtasksList().map(GRPCMapper.subtaskFromGRPC),
         createdAt: res.getCreatedAt() ? GRPCConverter.timestampToDate(res.getCreatedAt()!) : new Date(),
+        dueDate: res.getDueAt() ? GRPCConverter.timestampToDate(res.getCreatedAt()!) : new Date(),
         isPublicVisible: true, // TODO set when backend provides it
         // use res.getCreatedAt()
       }
@@ -146,7 +147,7 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       await APIServices.task.updateTask(updateTask, getAuthenticatedGrpcMetadata())
 
       callback()
-      return updateTask.toObject()
+      return !!updateTask.toObject()
     },
     onSuccess: () => {
       queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)

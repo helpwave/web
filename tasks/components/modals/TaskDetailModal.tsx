@@ -105,18 +105,6 @@ const defaultTaskDetailViewTranslation: Translation<TaskDetailViewTranslation> =
 }
 
 
-function formatDateForDatetimeLocal(date: Date): string {
-  const pad = (n: number) => n.toString().padStart(2, '0')
-
-  const year = date.getFullYear()
-  const month = pad(date.getMonth() + 1) // Months are zero-indexed
-  const day = pad(date.getDate())
-  const hours = pad(date.getHours())
-  const minutes = pad(date.getMinutes())
-
-  return `${year}-${month}-${day}T${hours}:${minutes}`
-}
-
 type TaskDetailViewSidebarProps = {
   task: TaskDTO,
   onChange: (task: TaskDTO) => void,
@@ -199,7 +187,7 @@ const TaskDetailViewSidebar = ({
         <label className="textstyle-label-md">{translation('dueDate')}</label>
         <div className="row items-center gap-x-2">
           <Input
-            value={task.dueDate ? formatDateForDatetimeLocal(task.dueDate) : ''}
+            value={task.dueDate ? task.dueDate.toISOString().substring(0, 19) : ''}
             type="datetime-local"
             onChangeText={(text) => {
               const dueDate = new Date(text)

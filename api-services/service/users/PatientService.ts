@@ -186,7 +186,6 @@ export const PatientService = {
     return !!res.toObject()
   },
   assignToBed: async function(bedWithPatientId: BedWithPatientId): Promise<BedWithPatientId> {
-    console.log(bedWithPatientId)
     const req = new AssignBedRequest()
     req.setId(bedWithPatientId.patientId)
     req.setBedId(bedWithPatientId.id)

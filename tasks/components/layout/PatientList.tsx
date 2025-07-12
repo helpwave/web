@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
+import { ExpandableUncontrolled } from '@helpwave/hightide'
 import {
   Chip,
   ConfirmModal,
-  Expandable,
   Input,
   LoadingAndErrorComponent,
   MultiSearchWithMapping,
@@ -151,7 +151,10 @@ export const PatientList = ({
         }}
         confirmType="negative"
         onCancel={() => setDeletePatient(undefined)}
-        headerProps={{ titleText: translation('deleteConfirmText'), descriptionText: translation('deleteDescriptionText') }}
+        headerProps={{
+          titleText: translation('deleteConfirmText'),
+          descriptionText: translation('deleteDescriptionText')
+        }}
       />
       <PatientDischargeModal
         isOpen={!!dischargingPatient}
@@ -195,7 +198,7 @@ export const PatientList = ({
         loadingProps={{ classname: 'min-h-[400px] border-2 border-gray-600 rounded-xl' }}
       >
         <div className="col gap-y-4 mb-8">
-          <Expandable
+          <ExpandableUncontrolled
             isExpanded={initialOpenedSections?.active}
             disabled={filteredActive.length <= 0}
             label={<span className="textstyle-accent">{`${translation('active')} (${filteredActive.length})`}</span>}
@@ -241,10 +244,10 @@ export const PatientList = ({
                 )}
               </Draggable>
             ))}
-          </Expandable>
+          </ExpandableUncontrolled>
           <Droppable id="patientListUnassigned" data={{ patientListSection: 'unassigned' }}>
             {({ isOver }) => (
-              <Expandable
+              <ExpandableUncontrolled
                 isExpanded={initialOpenedSections?.unassigned}
                 disabled={filteredUnassigned.length <= 0}
                 label={(
@@ -293,18 +296,18 @@ export const PatientList = ({
                     )}
                   </Draggable>
                 ))}
-              </Expandable>
+              </ExpandableUncontrolled>
             )}
           </Droppable>
           <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
             {({ isOver }) => (
-              <Expandable
+              <ExpandableUncontrolled
                 isExpanded={initialOpenedSections?.discharged}
                 disabled={filteredDischarged.length <= 0}
                 label={(
                   <span className="textstyle-accent">
-                      {`${translation('discharged')} (${filteredDischarged.length})`}
-                    </span>
+                    {`${translation('discharged')} (${filteredDischarged.length})`}
+                  </span>
                 )}
                 className={clsx('border-2 border-dashed bg-transparent !shadow-none', {
                   'border-primary': isOver,
@@ -355,7 +358,7 @@ export const PatientList = ({
                     )}
                   </Draggable>
                 ))}
-              </Expandable>
+              </ExpandableUncontrolled>
             )}
           </Droppable>
         </div>

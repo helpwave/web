@@ -126,8 +126,8 @@ export const useTaskCreateMutation = (callback: (task: TaskDTO) => void = noop, 
       return newTask
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks, QueryKeys.patients]).catch(console.error)
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.tasks, QueryKeys.patients]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
     }
   })
 }
@@ -150,8 +150,8 @@ export const useTaskUpdateMutation = (callback: () => void = noop) => {
       return !!updateTask.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
     }
   })
 }
@@ -168,8 +168,8 @@ export const useTaskDeleteMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
-      queryClient.refetchQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
     }
   })
 }
@@ -198,7 +198,7 @@ export const useSubTaskAddMutation = (taskId: string | undefined, callback: (sub
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }
@@ -225,7 +225,7 @@ export const useSubTaskUpdateMutation = (taskId?: string, callback: (subtask: Su
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }
@@ -243,7 +243,7 @@ export const useSubTaskDeleteMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }
@@ -268,7 +268,7 @@ export const useAssignTaskMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }
@@ -293,7 +293,7 @@ export const useUnassignTaskMutation = (callback: () => void = noop) => {
       return req.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.tasks]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.tasks]).catch(console.error)
     }
   })
 }

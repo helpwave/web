@@ -233,7 +233,7 @@ export const useSubTaskTemplateDeleteMutation = (callback: () => void = noop) =>
       const deleteSubtaskTaskTemplate = new DeleteTaskTemplateSubTaskRequest()
       deleteSubtaskTaskTemplate.setId(subtaskId)
       await APIServices.taskTemplates.deleteTaskTemplateSubTask(deleteSubtaskTaskTemplate, getAuthenticatedGrpcMetadata())
-      queryClient.refetchQueries(['personalTaskTemplates']).catch(console.error)
+      queryClient.invalidateQueries(['personalTaskTemplates']).catch(console.error)
       callback()
       return deleteSubtaskTaskTemplate.toObject()
     },
@@ -252,7 +252,7 @@ export const useSubTaskTemplateUpdateMutation = (callback: (subtask: SubTaskDTO)
       updateSubtaskTemplate.setSubtaskId(subtask.id)
       await APIServices.taskTemplates.updateTaskTemplateSubTask(updateSubtaskTemplate, getAuthenticatedGrpcMetadata())
       const newSubtask: SubTaskDTO = { ...subtask }
-      queryClient.refetchQueries(['wardTaskTemplates']).catch(console.error)
+      queryClient.invalidateQueries(['wardTaskTemplates']).catch(console.error)
       callback(newSubtask)
       return updateSubtaskTemplate.toObject()
     },
@@ -271,7 +271,7 @@ export const useSubTaskTemplateAddMutation = (taskTemplateId: string) => {
       createSubTaskTemplate.setTaskTemplateId(taskTemplateId)
       await APIServices.taskTemplates.createTaskTemplateSubTask(createSubTaskTemplate, getAuthenticatedGrpcMetadata())
 
-      queryClient.refetchQueries(['wardTaskTemplates']).catch(console.error)
+      queryClient.invalidateQueries(['wardTaskTemplates']).catch(console.error)
       return createSubTaskTemplate.toObject()
     },
   })

@@ -46,7 +46,7 @@ export const useCustomerProductDeleteMutation = () => {
       return await CustomerProductsAPI.delete(id, authHeader)
     },
     onSuccess: () => {
-      queryClient.refetchQueries([QueryKeys.customer]).catch(reason => console.error(reason))
+      queryClient.invalidateQueries([QueryKeys.customer]).catch(reason => console.error(reason))
     }
   })
 }

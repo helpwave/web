@@ -23,7 +23,7 @@ export const EditCard = ({
   return (
     <div
       className={clsx(
-        'card-md shadow row w-full h-full gap-x-4 border-2 justify-between overflow-hidden min-h-28 hover:border-primary',
+        'card-md row w-full h-full gap-x-4 border-2 justify-between overflow-hidden min-h-28 hover:border-primary',
         {
           'pr-2': !!onEditClick,
           'cursor-pointer': !!onClick,

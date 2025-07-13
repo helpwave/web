@@ -126,8 +126,8 @@ export const UserInvitationList = ({
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError}
-        loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
-        errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
+        className="min-h-157"
+        minimumLoadingDuration={200}
       >
         {data && (
           <Table

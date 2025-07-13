@@ -209,8 +209,8 @@ export const OrganizationMemberList = ({
       <LoadingAndErrorComponent
         hasError={(isError || !data) && !members}
         isLoading={!members && isLoading}
-        errorProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
-        loadingProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
+        className="min-h-131"
+        minimumLoadingDuration={200}
       >
         <ColumnTitle
           title={translation('member', { count: 2 /* Always use plural */ }) + ` (${usedMembers.length})`}

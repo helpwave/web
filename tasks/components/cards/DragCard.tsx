@@ -26,7 +26,7 @@ export const DragCard = ({
   className,
 }: DragCardProps) => {
   return (
-    <div className={clsx('card-md border-2 shadow', {
+    <div className={clsx('card-md border-2', {
       'hover:brightness-95 border-transparent hover:border-primary cursor-pointer': !cardDragProperties.isDragging && !cardDragProperties.isOver, // default
       'border-primary': isSelected,
       'cursor-grabbing': cardDragProperties.isDragging,

@@ -60,6 +60,7 @@ export const PropertyDetailsBasicInfo = ({
         </h4>
       )}
       contentClassName="pb-4"
+      contentExpandedClassName="max-h-128"
     >
       <PropertySubjectTypeSelect
         value={value.subjectType}

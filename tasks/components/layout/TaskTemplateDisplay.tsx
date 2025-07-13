@@ -76,7 +76,7 @@ export const TaskTemplateDisplay = ({
               const url = value === 'personal' ? `/templates` : `/ward/${value}/templates`
               router.push(url).catch(console.error)
             }}
-            isDisabled={isLoadingWards || isErrorWards}
+            disabled={isLoadingWards || isErrorWards}
             className="min-w-40"
           />
         )}

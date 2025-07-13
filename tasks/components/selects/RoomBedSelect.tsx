@@ -107,7 +107,7 @@ export const RoomBedSelect = ({
         })
         setTouched(true)
       }}
-      isDisabled={disabled}
+      disabled={disabled}
     />
   ))
 
@@ -115,7 +115,7 @@ export const RoomBedSelect = ({
     <Select
       className="min-w-[150px] w-full"
       value={currentSelection.bedId}
-      isDisabled={!currentSelection.roomId || disabled}
+      disabled={!currentSelection.roomId || disabled}
       options={(currentRoom?.beds ?? []).map(value => ({
         value: value.id,
         label: value.name,

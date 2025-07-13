@@ -1,6 +1,5 @@
-
-import type { Translation } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
+import { LoadingAnimation } from '@helpwave/hightide'
+import type { PropsForTranslation , Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Tile } from '@helpwave/hightide'
 import { Plus, Tag } from 'lucide-react'
@@ -75,7 +74,7 @@ export const PropertyList = ({
     <LoadingAndErrorComponent
       isLoading={isLoading}
       hasError={isError}
-      loadingProps={{ classname: 'min-h-[200px] border-2 border-black rounded-xl' }}
+      className="min-h-48"
     >
       <div className="col gap-y-2">
         <Tile
@@ -94,45 +93,49 @@ export const PropertyList = ({
             />
         ))}
         <Menu<HTMLDivElement>
-          trigger={(onClick, ref) => (
+          trigger={({ toggleOpen }, ref) => (
             <div
               ref={ref}
-              className="row px-4 py-2 gap-x-4 items-center border-2 border-dashed bg-gray-100 hover:border-primary rounded-2xl cursor-pointer"
-              onClick={onClick}
+              className="flex-row-4 px-4 py-2 items-center border-2 border-dashed bg-property-title-background text-property-title-text hover:border-primary rounded-xl cursor-pointer"
+              onClick={toggleOpen}
             >
               <Plus size={20}/>
               <span>{translation('addProperty')}</span>
             </div>
           )}
           menuClassName="min-w-[200px] p-2 "
-          alignment="t_"
+          alignmentVertical="topOutside"
         >
-          <LoadingAndErrorComponent
-            isLoading={isLoadingPropertyList}
-            hasError={isErrorPropertyList}
-          >
-            {/* TODO searchbar here, possibly in a new component for list search */}
-            {propertyList && properties && (
-              <SearchableList
-                list={propertyList
-                  .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))}
-                searchMapping={value => [value.name]}
-                itemMapper={property => (
-                  <MenuItem
-                    key={property.id}
-                    onClick={() => {
-                      const attachedProperty : AttachedProperty = { propertyId: property.id, subjectId, value: emptyPropertyValue }
-                      addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
-                      updateViewRulesMutation.mutate({ subjectId, appendToAlwaysInclude: [property.id] })
-                    }}
-                    className="rounded-md cursor-pointer"
-                  >
-                    {property.name}
-                  </MenuItem>
-                )}
-              />
-            )}
-          </LoadingAndErrorComponent>
+          {({ close }) => (
+            <LoadingAndErrorComponent
+              isLoading={isLoadingPropertyList}
+              hasError={isErrorPropertyList}
+              loadingComponent={<LoadingAnimation classname="min-h-20"/>}
+            >
+              {/* TODO searchbar here, possibly in a new component for list search */}
+              {propertyList && properties && (
+                <SearchableList
+                  list={propertyList
+                    .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))}
+                  searchMapping={value => [value.name]}
+                  itemMapper={property => (
+                    <MenuItem
+                      key={property.id}
+                      onClick={() => {
+                        const attachedProperty : AttachedProperty = { propertyId: property.id, subjectId, value: emptyPropertyValue }
+                        addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
+                        updateViewRulesMutation.mutate({ subjectId, appendToAlwaysInclude: [property.id] })
+                        close()
+                      }}
+                      className="rounded-md cursor-pointer"
+                    >
+                      {property.name}
+                    </MenuItem>
+                  )}
+                />
+              )}
+            </LoadingAndErrorComponent>
+          )}
         </Menu>
       </div>
     </LoadingAndErrorComponent>

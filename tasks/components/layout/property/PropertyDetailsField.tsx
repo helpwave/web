@@ -256,10 +256,11 @@ export const PropertyDetailsField = ({
     <ExpandableUncontrolled
       {...expandableProps}
       label={(
-        <h4 className="textstyle-title-sm">
+        <h4 className="textstyle-title-md">
           {translation('field')}
         </h4>
       )}
+      contentExpandedClassName="max-h-160"
     >
       <Select
         // TODO add icons
@@ -270,7 +271,7 @@ export const PropertyDetailsField = ({
           const newValue = { ...usedValue, fieldType }
           onChange(newValue)
         }}
-        isDisabled={!!value.id}
+        disabled={!!value.id}
       />
       {isSelectType && (
         <PropertySelectOptionsUpdater

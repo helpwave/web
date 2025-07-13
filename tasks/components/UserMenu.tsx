@@ -82,41 +82,54 @@ export const UserMenu = ({
         isOpen={isThemeModalOpen}
         onClose={() => setThemeModalOpen(false)}
       />
-      <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
-        <div ref={ref} onClick={onClick}
+      <Menu<HTMLDivElement> alignmentHorizontal="rightInside" trigger={({ toggleOpen }, ref) => (
+        <div ref={ref} onClick={toggleOpen}
              className="row relative items-center group cursor-pointer select-none">
           {/* TODO set this color in the css config */}
           <div className="text-sm font-semibold text-description group-hover:text-primary">{user.name}</div>
           <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
         </div>
       )}>
-        <MenuItem onClick={() => router.push(settingsURL, '_blank')}>
-          {translation('profile')}
-        </MenuItem>
-        <MenuItem onClick={() => setLanguageModalOpen(true)}>
-          {translation('language')}
-        </MenuItem>
-        <MenuItem onClick={() => setThemeModalOpen(true)}>
-          {translation('theme')}
-        </MenuItem>
-        <MenuItem onClick={() => router.push('/templates')}>
-          {translation('taskTemplates')}
-        </MenuItem>
-        <MenuItem onClick={() => router.push('/properties')}>
-          {translation('properties')}
-        </MenuItem>
-        <MenuItem onClick={() => router.push('/organizations')}>
-          {translation('organizations')}
-        </MenuItem>
-        <MenuItem onClick={() => router.push('/invitations')}>
-          {translation('invitations')}
-        </MenuItem>
-        <MenuItem
-          className="text-negative hover:!bg-negative/20"
-          onClick={() => signOut()}
-        >
-          {translation('signOut')}
-        </MenuItem>
+        {({ close }) => {
+          const withClose = (func: () => void) =>
+          {
+            return () => {
+              func()
+              close()
+            }
+          }
+          return (
+            <>
+              <MenuItem onClick={withClose(() => router.push(settingsURL, '_blank'))}>
+                {translation('profile')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => setLanguageModalOpen(true))}>
+                {translation('language')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => setThemeModalOpen(true))}>
+                {translation('theme')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => router.push('/templates'))}>
+                {translation('taskTemplates')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => router.push('/properties'))}>
+                {translation('properties')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => router.push('/organizations'))}>
+                {translation('organizations')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => router.push('/invitations'))}>
+                {translation('invitations')}
+              </MenuItem>
+              <MenuItem
+                className="text-negative hover:!bg-negative/20"
+                onClick={withClose(() => signOut())}
+              >
+                {translation('signOut')}
+              </MenuItem>
+            </>
+          )
+        }}
       </Menu>
     </div>
   )

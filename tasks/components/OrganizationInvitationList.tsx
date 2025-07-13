@@ -122,8 +122,8 @@ export const OrganizationInvitationList = ({
     <LoadingAndErrorComponent
       isLoading={isLoading && !!context.state.organizationId}
       hasError={isError && !!context.state.organizationId}
-      errorProps={{ classname: 'border-2 border-gray-500 rounded-xl' }}
-      loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl' }}
+      className="min-h-72"
+      minimumLoadingDuration={200}
     >
       <InputModal
         className="min-w-[400px]"

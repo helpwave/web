@@ -286,8 +286,8 @@ export const RoomList = ({
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
-        errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
+        className="min-h-101"
+        minimumLoadingDuration={200}
       >
         <TableWithSelection
           data={usedRooms}

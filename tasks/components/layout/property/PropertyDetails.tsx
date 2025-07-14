@@ -106,7 +106,8 @@ export const PropertyDetails = ({
       <LoadingAndErrorComponent
         isLoading={!isCreatingNewProperty && isLoading}
         hasError={!isCreatingNewProperty && isError}
-        loadingProps={{ classname: 'min-h-[400px] border-2 border-black rounded-xl' }}
+        className="min-h-128"
+        minimumLoadingDuration={200}
       >
         <PropertyDetailsBasicInfo
           value={value}

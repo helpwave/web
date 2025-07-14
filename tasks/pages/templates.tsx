@@ -2,7 +2,7 @@ import { createContext, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
-import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import { LoadingAnimation, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
@@ -130,7 +130,14 @@ const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForT
         <title>{titleWrapper(translation('personalTaskTemplates'))}</title>
       </Head>
       <TaskTemplateContext.Provider value={{ state: contextState, updateContext: setContextState }}>
-        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError || !data} loadingProps={{ classname: '!h-full' }} errorProps={{ classname: '!h-full' }}>
+        <LoadingAndErrorComponent
+          isLoading={isLoading}
+          hasError={isError || !data}
+          loadingComponent={(
+            <LoadingAnimation classname="h-full"/>
+          )}
+          minimumLoadingDuration={200}
+        >
           <TwoColumn
             disableResize={false}
             left={() => (

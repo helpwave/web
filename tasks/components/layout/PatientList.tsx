@@ -204,6 +204,7 @@ export const PatientList = ({
             label={<span className="textstyle-accent">{`${translation('active')} (${filteredActive.length})`}</span>}
             className={clsx('border-2 border-transparent bg-transparent !shadow-none')}
             headerClassName="bg-transparent"
+            contentClassName="!px-0"
           >
             {filteredActive.map(patient => (
               <Draggable
@@ -216,11 +217,11 @@ export const PatientList = ({
                   },
                   discharged: false
                 }}
-                className="not-last:border-b-2 not-last:pb-2 border-b-gray-300"
+                className="not-last:border-b-2 not-last:pb-2 border-b-divider"
               >
                 {() => (
                   <div
-                    className="row justify-between items-center cursor-pointer"
+                    className="row justify-between items-center cursor-pointer mx-2 px-2 py-1 hover:bg-primary/20 rounded-lg"
                     onClick={() => updateContext({
                       ...context,
                       patientId: patient.id,
@@ -228,7 +229,7 @@ export const PatientList = ({
                       bedId: patient.bed.id
                     })}
                   >
-                    <span className="textstyle-title-sm w-1/3 text-ellipsis">{patient.name}</span>
+                    <span className="textstyle-title-normal w-1/3 text-ellipsis">{patient.name}</span>
                     <div className="row flex-1 justify-between items-center">
                       <Chip color="blue" variant="fullyRounded" className="min-w-40 justify-center">
                         {activeLabelText(patient)}
@@ -269,18 +270,18 @@ export const PatientList = ({
                       patient,
                       discharged: false
                     }}
-                    className="not-last:border-b-2 not-last:pb-2 border-b-gray-300"
+                    className="not-last:border-b-2 not-last:pb-2 border-b-divider"
                   >
                     {() => (
                       <div
                         key={patient.id}
-                        className="row rounded items-center cursor-pointer"
+                        className="row rounded items-center cursor-pointer mx-2 px-2 py-1 hover:bg-primary/20 rounded-lg"
                         onClick={() => updateContext({
                           wardId: context.wardId,
                           patientId: patient.id
                         })}
                       >
-                        <span className="textstyle-title-sm w-1/3 text-ellipsis">{patient.name}</span>
+                        <span className="textstyle-title-normal w-1/3 text-ellipsis">{patient.name}</span>
                         <div className="row flex-1 justify-between items-center">
                           <Chip color="yellow" variant="fullyRounded" className="min-w-40 justify-center">
                             {`${translation('unassigned')}`}
@@ -323,18 +324,18 @@ export const PatientList = ({
                       patient,
                       discharged: true
                     }}
-                    className="not-last:border-b-2 not-last:pb-2 border-b-gray-300"
+                    className="not-last:border-b-2 not-last:pb-2 border-b-divider"
                   >
                     {() => (
                       <div
                         key={patient.id}
-                        className="row justify-between items-center"
+                        className="row justify-between items-center cursor-not-pointer mx-2 px-2 py-1 hover:bg-primary/20 rounded-lg"
                         onClick={() => updateContext({
                           wardId: context.wardId,
                           patientId: patient.id
                         })}
                       >
-                        <span className="textstyle-title-sm">{patient.name}</span>
+                        <span className="textstyle-title-normal">{patient.name}</span>
                         <div className="row gap-x-4">
                           <TextButton onClick={event => {
                             event.stopPropagation()

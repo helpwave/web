@@ -5,7 +5,8 @@ import {
   CreateTaskTemplateSubTaskRequest,
   DeleteTaskTemplateRequest,
   DeleteTaskTemplateSubTaskRequest,
-  GetAllTaskTemplatesRequest, UpdateTaskTemplateRequest,
+  GetAllTaskTemplatesRequest,
+  UpdateTaskTemplateRequest,
   UpdateTaskTemplateSubTaskRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_template_svc_pb'
 import type { TaskTemplateDTO, TaskTemplateFormType } from '../../types/tasks/tasks_templates'
@@ -22,7 +23,7 @@ export const useWardTaskTemplateQuery = (wardId?: string) => {
       let wardTaskTemplates: TaskTemplateDTO[] = []
       if (wardId !== undefined) {
         const req = new GetAllTaskTemplatesRequest()
-        req.setWardId(wardId)
+          .setWardId(wardId)
         const res = await APIServices.taskTemplates.getAllTaskTemplates(req, getAuthenticatedGrpcMetadata())
         wardTaskTemplates = res.getTemplatesList().map((template) => ({
           id: template.getId(),
@@ -32,7 +33,8 @@ export const useWardTaskTemplateQuery = (wardId?: string) => {
           subtasks: template.getSubtasksList().map((subtask) => ({
             id: subtask.getId(),
             name: subtask.getName(),
-            isDone: false
+            isDone: false,
+            taskId: template.getId(),
           })),
           isPublicVisible: template.getIsPublic()
         }))
@@ -46,14 +48,12 @@ export const useWardTaskTemplateQuery = (wardId?: string) => {
 
 type UseAllTaskTemplatesByCreatorProps = {
   createdBy?: string,
-  onSuccess: (data: TaskTemplateDTO[]) => void,
   type: QueryKey,
 }
 export const useAllTaskTemplatesByCreator = ({
-  createdBy,
-  onSuccess = noop,
-  type = 'wardTaskTemplates'
-}: UseAllTaskTemplatesByCreatorProps) => {
+                                               createdBy,
+                                               type = 'wardTaskTemplates'
+                                             }: UseAllTaskTemplatesByCreatorProps) => {
   const queryKey = type
   const onlyPrivate = type === 'personalTaskTemplates'
   return useQuery({
@@ -73,7 +73,8 @@ export const useAllTaskTemplatesByCreator = ({
           subtasks: template.getSubtasksList().map((subtask) => ({
             id: subtask.getId(),
             name: subtask.getName(),
-            isDone: false
+            isDone: false,
+            taskId: template.getId(),
           })),
           isPublicVisible: template.getIsPublic()
         }))
@@ -81,12 +82,11 @@ export const useAllTaskTemplatesByCreator = ({
       }
       return personalTaskTemplates
     },
-    onSuccess
   })
 }
 
-export const usePersonalTaskTemplateQuery = (createdBy?: string, onSuccess: (data: TaskTemplateDTO[]) => void = noop) => {
-  return useAllTaskTemplatesByCreator({ createdBy, onSuccess, type: 'personalTaskTemplates' })
+export const usePersonalTaskTemplateQuery = (createdBy?: string) => {
+  return useAllTaskTemplatesByCreator({ createdBy, type: 'personalTaskTemplates' })
 }
 
 export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate?: TaskTemplateDTO) => void) => {
@@ -147,7 +147,7 @@ export const useUpdateMutation = (queryKey: QueryKey, setTemplate: (taskTemplate
       queryClient.setQueryData<TaskTemplateDTO[]>(
         [queryKey],
         (old) => old
-)
+      )
       return { previousTaskTemplates }
     },
     onError: (_, newTodo, context) => {
@@ -214,7 +214,7 @@ export const useDeleteMutation = (queryKey: QueryKey, setTemplate: (task?: TaskT
       queryClient.setQueryData<TaskTemplateDTO[]>(
         [queryKey],
         (old) => old
-)
+      )
       return { previousTaskTemplate }
     },
     onError: (_, newTodo, context) => {

@@ -81,7 +81,6 @@ export const useWardQuery = (id: string) => useQuery({
     if (!res.toObject()) {
       console.error('error in Ward query')
     }
-
     return {
       id: res.getId(),
       name: res.getName(),

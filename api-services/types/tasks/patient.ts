@@ -18,7 +18,7 @@ export const emptyPatient: PatientDTO = {
 }
 
 export type PatientWithTasksNumberDTO = PatientMinimalDTO & {
-  tasksUnscheduled: number,
+  tasksTodo: number,
   tasksInProgress: number,
   tasksDone: number,
 }

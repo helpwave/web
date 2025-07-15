@@ -1,13 +1,11 @@
+import type { SubTaskDTO } from './task'
+
 export type TaskTemplateDTO = {
   wardId?: string,
   id: string,
   name: string,
   notes: string,
-  subtasks: {
-    isDone: boolean,
-    id: string,
-    name: string,
-  }[],
+  subtasks: SubTaskDTO[],
   isPublicVisible: boolean,
 }
 

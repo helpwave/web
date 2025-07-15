@@ -41,8 +41,10 @@ export const PatientService = {
         subtasks: task.getSubtasksList().map(subtask => ({
           id: subtask.getId(),
           name: subtask.getName(),
-          isDone: subtask.getDone()
-        }))
+          isDone: subtask.getDone(),
+          taskId: task.getId(),
+        })),
+        patientId: res.getId(),
       }))
     }
   },

@@ -48,9 +48,11 @@ export const RoomOverview = ({ room }: RoomOverviewProps) => {
                         <PatientCard
                           bedName={bed.name}
                           patientName={bed.patient.name}
-                          doneTasks={bed.patient.tasksDone}
-                          inProgressTasks={bed.patient.tasksInProgress}
-                          unscheduledTasks={bed.patient.tasksUnscheduled}
+                          taskCounts={{
+                            done: bed.patient.tasksDone,
+                            inProgress:bed.patient.tasksInProgress,
+                            todo: bed.patient.tasksTodo,
+                          }}
                           onClick={(event) => {
                             event.stopPropagation()
                             if (bed.patient) {

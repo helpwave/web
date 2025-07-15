@@ -57,9 +57,9 @@ export const SubtaskView = ({
 
   const translation = useTranslation([defaultSubtaskViewTranslation], overwriteTranslation)
   const isCreatingTask = taskId === ''
-  const addSubtaskMutation = useSubTaskAddMutation(taskId)
+  const addSubtaskMutation = useSubTaskAddMutation()
   const deleteSubtaskMutation = useSubTaskDeleteMutation()
-  const updateSubtaskMutation = useSubTaskUpdateMutation(taskId)
+  const updateSubtaskMutation = useSubTaskUpdateMutation()
 
   const scrollableRef = useRef<Scrollbars>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
@@ -94,7 +94,7 @@ export const SubtaskView = ({
         <span className="textstyle-title-normal">{translation('subtasks')}</span>
         <SolidButton
           onClick={() => {
-            const newSubtask = { id: '', name: `${translation('newSubtask')} ${subtasks.length + 1}`, isDone: false }
+            const newSubtask: SubTaskDTO = { id: '', name: `${translation('newSubtask')} ${subtasks.length + 1}`, isDone: false, taskId: taskId ?? '' }
             onChange([...subtasks, newSubtask])
             if (!isCreatingTask) {
               addSubtaskMutation.mutate(newSubtask)

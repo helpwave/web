@@ -7,9 +7,10 @@ interface GRPCSubTask {
 }
 
 export const GRPCMapper = {
-  subtaskFromGRPC: (subTask: GRPCSubTask): SubTaskDTO => ({
+  subtaskFromGRPC: (subTask: GRPCSubTask, taskId: string): SubTaskDTO => ({
     id: subTask.getId(),
     name: subTask.getName(),
     isDone: subTask.getDone(),
+    taskId
   })
 }

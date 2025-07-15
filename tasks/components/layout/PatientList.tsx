@@ -194,8 +194,8 @@ export const PatientList = ({
       <LoadingAndErrorComponent
         hasError={isError || !data}
         isLoading={isLoading}
-        errorProps={{ classname: 'min-h-[400px] border-2 border-gray-600 rounded-xl' }}
-        loadingProps={{ classname: 'min-h-[400px] border-2 border-gray-600 rounded-xl' }}
+        className="min-h-128"
+        minimumLoadingDuration={200}
       >
         <div className="col gap-y-4 mb-8">
           <ExpandableUncontrolled

@@ -52,11 +52,11 @@ export const TaskTemplateWardPreview = ({
     <LoadingAndErrorComponent
       isLoading={isLoading || !context.state.wardId}
       hasError={isError}
-      loadingProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
-      errorProps={{ classname: 'border-2 border-gray-500 rounded-xl min-h-[200px]' }}
+      className="min-h-27"
+      minimumLoadingDuration={200}
     >
       {taskTemplates && (
-        <div className="@container col gap-y-4">
+        <div className="@container flex-col-2">
           <ColumnTitle
             title={translation('taskTemplatesCount', { replacements: { amount: taskTemplates.length.toString() } })}
             actions={(
@@ -75,7 +75,7 @@ export const TaskTemplateWardPreview = ({
                 key={index}
                 name={taskTemplate.name}
                 subtaskCount={taskTemplate.subtasks.length}
-                className="min-h-auto"
+                className="!min-h-17"
                 onClick={() => {
                   router.push(`/ward/${wardId}/templates?templateId=${taskTemplate.id}`).catch(console.error)
                 }}
@@ -83,6 +83,7 @@ export const TaskTemplateWardPreview = ({
             ))}
             <AddCard
               text={translation('addTaskTemplate')}
+              className="!min-h-17"
               onClick={() => router.push(`/ward/${wardId}/templates`).catch(console.error)}
             />
           </div>

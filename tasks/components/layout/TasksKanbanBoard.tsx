@@ -2,11 +2,11 @@ import {
   closestCorners,
   defaultDropAnimation,
   DragOverlay,
+  type DropAnimation,
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors,
-  type DropAnimation
+  useSensors
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 
@@ -14,13 +14,16 @@ import { useEffect, useState } from 'react'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import type { SortedTasks, TaskDTO, TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import { emptySortedTasks } from '@helpwave/api-services/types/tasks/task'
-import {
-  useTasksByPatientQuery, useTaskUpdateMutation
-} from '@helpwave/api-services/mutations/tasks/task_mutations'
+import { useTasksByPatientQuery, useTaskUpdateMutation } from '@helpwave/api-services/mutations/tasks/task_mutations'
 import { KanbanColumn } from '../KanbanColumn'
 import { TaskCard } from '../cards/TaskCard'
 import { KanbanHeader } from '../KanbanHeader'
-import { DndContext, type DragEndEvent, type DragOverEvent, type DragStartEvent } from '@/components/dnd-kit-instances/tasks'
+import {
+  DndContext,
+  type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent
+} from '@/components/dnd-kit-instances/tasks'
 
 export type KanbanBoardObject = {
   draggedId?: string,
@@ -40,10 +43,10 @@ type KanbanBoardProps = {
  * The State is managed by the parent component
  */
 export const TasksKanbanBoard = ({
-  patientId,
-  onEditTask,
-  editedTaskId
-}: KanbanBoardProps) => {
+                                   patientId,
+                                   onEditTask,
+                                   editedTaskId
+                                 }: KanbanBoardProps) => {
   const { data, isLoading, isError } = useTasksByPatientQuery(patientId)
   const [boardObject, setBoardObject] = useState<KanbanBoardObject>({ searchValue: '' })
   const [sortedTasks, setSortedTasks] = useState<SortedTasks>(emptySortedTasks)
@@ -51,7 +54,7 @@ export const TasksKanbanBoard = ({
   const updateTaskMutation = useTaskUpdateMutation()
 
   const task = boardObject.draggedId ?
-      [...sortedTasks.todo, ...sortedTasks.inProgress, ...sortedTasks.done].find(value => value && value.id === boardObject.draggedId)
+    [...sortedTasks.todo, ...sortedTasks.inProgress, ...sortedTasks.done].find(value => value && value.id === boardObject.draggedId)
     : null
 
   useEffect(() => {
@@ -176,51 +179,55 @@ export const TasksKanbanBoard = ({
   }
 
   return (
-    <LoadingAndErrorComponent
-      isLoading={isLoading}
-      hasError={isError}
-      loadingProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
-      errorProps={{ classname: 'border-2 border-gray-600 rounded-xl min-h-[300px]' }}
-      minimumLoadingDuration={200}
-    >
+    <>
       <KanbanHeader
         searchValue={boardObject.searchValue}
         onSearchChange={text => setBoardObject({ ...boardObject, searchValue: text })}
       />
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
+      <LoadingAndErrorComponent
+        isLoading={isLoading}
+        hasError={isError}
+        minimumLoadingDuration={200}
+        className="min-h-78"
       >
-        <div className="grid grid-cols-3 gap-x-4 mt-6">
-          <KanbanColumn
-            type="todo"
-            tasks={filterBySearch(sortedTasks.todo)}
-            draggedTileId={boardObject.draggedId ?? editedTaskId}
-            isDraggedOver={boardObject.overColumn === 'todo'}
-            onEditTask={onEditTask}
-          />
-          <KanbanColumn
-            type="inProgress"
-            tasks={filterBySearch(sortedTasks.inProgress)}
-            draggedTileId={boardObject.draggedId ?? editedTaskId}
-            isDraggedOver={boardObject.overColumn === 'inProgress'}
-            onEditTask={onEditTask}
-          />
-          <KanbanColumn
-            type="done"
-            tasks={filterBySearch(sortedTasks.done)}
-            draggedTileId={boardObject.draggedId ?? editedTaskId}
-            isDraggedOver={boardObject.overColumn === 'done'}
-            onEditTask={onEditTask}
-          />
-          <DragOverlay dropAnimation={dropAnimation}>
-            {task && <TaskCard task={task} onClick={() => {}} isSelected={false}/>}
-          </DragOverlay>
-        </div>
-      </DndContext>
-    </LoadingAndErrorComponent>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+        >
+          <div className="grid grid-cols-3 gap-x-2">
+            <KanbanColumn
+              type="todo"
+              tasks={filterBySearch(sortedTasks.todo)}
+              draggedTileId={boardObject.draggedId ?? editedTaskId}
+              isDraggedOver={boardObject.overColumn === 'todo'}
+              onEditTask={onEditTask}
+            />
+            <KanbanColumn
+              type="inProgress"
+              tasks={filterBySearch(sortedTasks.inProgress)}
+              draggedTileId={boardObject.draggedId ?? editedTaskId}
+              isDraggedOver={boardObject.overColumn === 'inProgress'}
+              onEditTask={onEditTask}
+            />
+            <KanbanColumn
+              type="done"
+              tasks={filterBySearch(sortedTasks.done)}
+              draggedTileId={boardObject.draggedId ?? editedTaskId}
+              isDraggedOver={boardObject.overColumn === 'done'}
+              onEditTask={onEditTask}
+            />
+            <DragOverlay dropAnimation={dropAnimation}>
+              {task && (
+<TaskCard task={task} onClick={() => {
+              }} isSelected={false}/>
+)}
+            </DragOverlay>
+          </div>
+        </DndContext>
+      </LoadingAndErrorComponent>
+    </>
   )
 }

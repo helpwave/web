@@ -67,9 +67,7 @@ export const WardRoomList = ({
   }, [observeAttribute, refetch])
 
   return (
-    <div className="relative col px-6 py-4 @container"
-         onClick={() => updateContext({ wardId: contextState.wardId })}
-    >
+    <div className="relative col px-6 py-4 @container">
       <ColumnTitle
         title={translation('roomOverview')}
         actions={(

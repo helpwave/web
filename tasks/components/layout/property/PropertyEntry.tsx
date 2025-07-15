@@ -8,10 +8,7 @@ import {
   TextProperty
 } from '@helpwave/hightide'
 import type { Property } from '@helpwave/api-services/types/properties/property'
-import type {
-  AttachedProperty,
-  AttachPropertySelectValue
-} from '@helpwave/api-services/types/properties/attached_property'
+import type { AttachedProperty } from '@helpwave/api-services/types/properties/attached_property'
 import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
 import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 
@@ -128,28 +125,29 @@ export const PropertyEntryDisplay = ({
       )
     case 'singleSelect':
       return (
-        <SingleSelectProperty<AttachPropertySelectValue>
+        <SingleSelectProperty
           {...commonProps}
-          value={attachedProperty.value.singleSelectValue}
-          onChange={selectValue => {
-            const newProperty = updater(property1 => {
-              property1.value.singleSelectValue = selectValue
+          value={attachedProperty.value.singleSelectValue?.id}
+          onChange={selectedId => {
+            const newProperty = updater(prev => {
+              prev.value.singleSelectValue = property.selectData!.options.find(value => value.id === selectedId)
             })
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
           options={property.selectData!.options
             .map(option => ({
-              value: option,
+              value: option.id,
               label: option.name,
               searchTags: [option.name]
             }))}
           selectedDisplayOverwrite={attachedProperty.value.singleSelectValue?.name}
+          alignmentVertical="topOutside"
         />
       )
     case 'multiSelect':
       return (
-        <MultiSelectProperty<AttachPropertySelectValue>
+        <MultiSelectProperty
           {...commonProps}
           onChange={multiSelect => {
             const newProperty: AttachedProperty = {
@@ -158,7 +156,7 @@ export const PropertyEntryDisplay = ({
                 ...attachedProperty.value,
                 multiSelectValue: multiSelect
                   .filter(value => value.selected && value.value !== undefined)
-                  .map(value => value.value)
+                  .map(value => property.selectData!.options.find(option => option.id === value.value)!)
               }
             }
             onChange(newProperty)
@@ -167,13 +165,13 @@ export const PropertyEntryDisplay = ({
           options={property.selectData!.options
             .filter(option => option !== undefined)
             .map(option => ({
-              value: option,
+              value: option.id,
               label: option.name,
               selected: !!attachedProperty.value.multiSelectValue.find(value => value.id === option.id),
               searchTags: [option.name]
             }))}
-          isSearchEnabled={true}
           useChipDisplay={true}
+          alignmentVertical="topOutside"
         />
       )
     default:
@@ -203,7 +201,8 @@ export const PropertyEntry = ({
     <LoadingAndErrorComponent
       isLoading={isLoading}
       hasError={isError || !property}
-      minimumLoadingDuration={500}
+      minimumLoadingDuration={200}
+      className="min-h-15"
     >
       <PropertyEntryDisplay property={property!} attachedProperty={attachedProperty} {...restProps}/>
     </LoadingAndErrorComponent>

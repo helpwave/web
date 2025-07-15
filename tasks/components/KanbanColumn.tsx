@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { type PropsForTranslation, TextButton, useTranslation } from '@helpwave/hightide'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Plus } from 'lucide-react'
@@ -16,10 +16,10 @@ type KanbanColumnsTranslation = {
 
 const defaultKanbanColumnsTranslations: Translation<KanbanColumnsTranslation> = {
   en: {
-    addTask: 'Add new Tasks'
+    addTask: 'Add'
   },
   de: {
-    addTask: 'Aufgabe hinzufügen'
+    addTask: 'Hinzufügen'
   }
 }
 
@@ -35,13 +35,13 @@ type KanbanColumnProps = {
  * The Column of the KanbanBoard showing tasks and affording a reorder of these
  */
 export const KanbanColumn = ({
-  overwriteTranslation,
-  tasks,
-  type,
-  isDraggedOver,
-  draggedTileId,
-  onEditTask
-}: PropsForTranslation<KanbanColumnsTranslation, KanbanColumnProps>) => {
+                               overwriteTranslation,
+                               tasks,
+                               type,
+                               isDraggedOver,
+                               draggedTileId,
+                               onEditTask
+                             }: PropsForTranslation<KanbanColumnsTranslation, KanbanColumnProps>) => {
   const translation = useTranslation([defaultKanbanColumnsTranslations], overwriteTranslation)
 
   const { setNodeRef } = useDroppable({
@@ -50,8 +50,15 @@ export const KanbanColumn = ({
 
   return (
     <div
-      className={clsx({ 'border-primary': isDraggedOver, 'border-transparent': !isDraggedOver },
-        'col gap-y-4 border-2 border-dashed rounded-lg p-2')}
+      className={clsx(
+        { 'border-primary': isDraggedOver, 'border-transparent': !isDraggedOver },
+        'flex-col-2 border-2 border-dashed rounded-lg p-2',
+        {
+          'bg-tag-green-text/5': type === 'done',
+          'bg-tag-yellow-text/5': type === 'inProgress',
+          'bg-tag-red-text/5': type === 'todo',
+        }
+      )}
     >
       <PillLabel count={tasks.length} taskStatus={type}/>
       <SortableContext
@@ -59,7 +66,17 @@ export const KanbanColumn = ({
         items={tasks}
         strategy={verticalListSortingStrategy}
       >
-        <div ref={setNodeRef} className="col gap-y-4">
+        <div ref={setNodeRef} className="flex-col-2 min-h-64 max-h-64 overflow-y-auto">
+          <TextButton
+            onClick={() => onEditTask({
+              ...emptyTask,
+              status: type,
+              dueDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
+            })}
+            startIcon={<Plus/>}
+          >
+            {translation('addTask')}
+          </TextButton>
           {tasks.map((task) => (
             <Sortable key={task.id} id={task.id}>
               <TaskCard
@@ -71,17 +88,6 @@ export const KanbanColumn = ({
           ))}
         </div>
       </SortableContext>
-      <button
-        onClick={() => onEditTask({
-          ...emptyTask,
-          status: type,
-          dueDate: new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
-        })}
-        className="row ml-1 gap-x-1 text-gray-300"
-      >
-        <Plus/>
-        {translation('addTask')}
-      </button>
     </div>
   )
 }

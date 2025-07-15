@@ -160,9 +160,9 @@ const TaskDetailViewSidebar = ({
             organizationId={organization?.id ?? ''}
             value={task.assignee}
             onChange={(assignee) => {
-              onChange({ ...task, assignee })
+              onChange({ ...task, assignee: assignee.id })
               if (!isCreating) {
-                assignTaskToUserMutation.mutate({ taskId: task.id, userId: assignee })
+                assignTaskToUserMutation.mutate({ taskId: task.id, userId: assignee.id })
               }
             }}
           />
@@ -363,22 +363,19 @@ export const TaskDetailModal = ({
   )
 
   const tasksDetails = (
-    <div className={clsx('col')}>
-      <div className="row justify-between gap-x-8 mt-3">
-        <div className="col grow gap-y-8 min-w-[300px]">
-          <div className="min-h-[25%]">
-            <Textarea
-              headline={translation('notes')}
-              value={task.notes}
-              onChangeText={(description) => setTask({ ...task, notes: description })}
-              onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
-            />
-          </div>
-          <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
+    <div className="row justify-between gap-x-8">
+      <div className="col grow gap-y-8 min-w-[300px]">
+        <div className="min-h-[25%]">
+          <Textarea
+            headline={translation('notes')}
+            value={task.notes}
+            onChangeText={(description) => setTask({ ...task, notes: description })}
+            onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
+          />
         </div>
-        <TaskDetailViewSidebar task={task} onChange={setTask} isCreating={isCreating}/>
+        <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
       </div>
-      {buttons}
+      <TaskDetailViewSidebar task={task} onChange={setTask} isCreating={isCreating}/>
     </div>
   )
 
@@ -433,7 +430,8 @@ export const TaskDetailModal = ({
         buttonOverwrites={[{}, {}, { color: 'negative' }]}
       />
       <Modal
-        className={clsx('relative gap-y-0 max-w-[800px] w-[calc(100vw-532px)]', {
+        {...modalProps}
+        className={clsx('relative gap-y-2 max-w-[800px] w-[calc(100vw-532px)]', {
           'rounded-l-none': isCreating,
         }, className)}
         headerProps={{
@@ -453,16 +451,16 @@ export const TaskDetailModal = ({
           )
         }}
         onClose={onClose}
-        {...modalProps}
       >
         {isCreating && templateSidebar}
         <LoadingAndErrorComponent
           isLoading={(isLoading || !data) && !isCreating}
           hasError={isError}
-          loadingProps={{ classname: 'min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]' }}
-          errorProps={{ classname: 'min-h-[300px] min-w-[600px] h-[50vh] max-h-[600px]' }}
+          className="min-h-138"
+          minimumLoadingDuration={200}
         >
           {tasksDetails}
+          {buttons}
         </LoadingAndErrorComponent>
       </Modal>
     </>

@@ -2,14 +2,12 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 
-import type {
-  Translation,
-  PropsForTranslation } from '@helpwave/hightide'
-import { useResizeCallbackWrapper
-} from '@helpwave/hightide'
+import type { PropsForTranslation, Translation } from '@helpwave/hightide'
 import {
   LoadingAndErrorComponent,
+  LoadingAnimation,
   useLocalStorage,
+  useResizeCallbackWrapper,
   useTranslation
 } from '@helpwave/hightide'
 import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
@@ -75,7 +73,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   }, []))
 
   useLayoutEffect(() => {
-    if(ref.current) {
+    if (ref.current) {
       setHeight(ref.current?.offsetHeight)
     }
   }, [isLoading, isError]) // Bound to loading state, because ref is not set before
@@ -92,13 +90,14 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
         onConfirm={dismissStagingDisclaimer}
         isOpen={isStagingDisclaimerOpen}
       />
-
-      <LoadingAndErrorComponent
-        isLoading={isLoading}
-        hasError={isError}
-        loadingProps={{ classname: '!h-full' }}
-      >
-        {/* TODO reenable once newsfeed is active again
+      <div ref={ref} className="w-full h-full">
+        <LoadingAndErrorComponent
+          isLoading={isLoading}
+          hasError={isError}
+          loadingComponent={(<LoadingAnimation classname="h-full"/>)}
+          minimumLoadingDuration={200}
+        >
+          {/* TODO reenable once newsfeed is active again
           <TwoColumn
             disableResize={false}
             left={() => ((
@@ -113,12 +112,11 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
             )}
           />
         */}
-        <div ref={ref} className="w-full h-full">
           <Scrollbars autoHeight={true} autoHeightMax={height}>
             <DashboardDisplay/>
           </Scrollbars>
-        </div>
-      </LoadingAndErrorComponent>
+        </LoadingAndErrorComponent>
+      </div>
     </PageWithHeader>
   )
 }

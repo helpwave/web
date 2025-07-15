@@ -4,8 +4,10 @@ import { Select } from '@helpwave/hightide'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import clsx from 'clsx'
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
+import type { OrganizationMember } from '@helpwave/api-services/types/users/organization_member'
 
-export type AssigneeSelectProps = Omit<SelectProps<string>, 'options'> & {
+export type AssigneeSelectProps = Omit<SelectProps<OrganizationMember>, 'options' | 'value'> & {
+  value?: string,
   organizationId: string,
 }
 
@@ -25,10 +27,8 @@ export const AssigneeSelect = ({
     <LoadingAndErrorComponent
       isLoading={isLoading}
       hasError={isError}
-      loadingProps={{
-        loadingText: '',
-        classname: 'bg-gray-100 pulsing max-h-8 rounded-md',
-      }}
+      className="min-h-10 w-full"
+      minimumLoadingDuration={200}
     >
       <Select
         value={data?.find(user => user.id === value)}
@@ -40,13 +40,12 @@ export const AssigneeSelect = ({
               {value.name}
             </div>
           ),
-          searchTags: [value.id, value.email],
+          searchTags: [value.name, value.email],
         }))}
         className={clsx('w-full', className)}
         onChange={(user) => {
-          onChange(user.id)
+          onChange(user)
         }}
-        isSearchEnabled={true}
         {...selectProps}
       />
     </LoadingAndErrorComponent>

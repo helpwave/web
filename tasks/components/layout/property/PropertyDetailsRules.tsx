@@ -36,7 +36,7 @@ export type PropertyDetailsRulesProps = {
   value: PropertyRules,
   onChange: (value: PropertyRules) => void,
   onEditComplete: (value: PropertyRules) => void,
-  inputGroupProps?: Omit<ExpandableProps, 'label'>,
+  expandableOptions?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
@@ -47,11 +47,11 @@ export const PropertyDetailsRules = ({
   value,
   onChange,
   onEditComplete,
-  inputGroupProps
+  expandableOptions
 }: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
   const translation = useTranslation([defaultPropertyDetailsRulesTranslation], overwriteTranslation)
   return (
-    <Expandable {...inputGroupProps} label={translation('rules')}>
+    <Expandable {...expandableOptions} contentClassName="max-h-128" label={translation('rules')}>
       <Tile
         title={{ value: translation('alwaysVisible'), className: 'textstyle-label-md' }}
         description={{ value: translation('alwaysVisibleDescription') }}

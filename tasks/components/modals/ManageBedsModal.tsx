@@ -171,30 +171,28 @@ export const ManageBedsModal = ({
       className={clsx('min-w-[600px]', className)}
       {...modalProps}
     >
+      <ColumnTitle
+        title={`${translation('beds')} (${beds?.length ?? 0})`}
+        type="subtitle"
+        actions={room && beds && (
+          <SolidButton color="positive" onClick={addBed} size="small">
+            {translation('addBed')}
+          </SolidButton>
+        )}
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}
-        loadingProps={{ classname: '!h-full min-h-[400px]' }}
-        errorProps={{ classname: '!h-full min-h-[400px]' }}
+        className="min-h-116"
+        minimumLoadingDuration={200}
       >
         {room && beds && (
-          <>
-            <ColumnTitle
-              title={`${translation('beds')} (${beds.length})`}
-              type="subtitle"
-              actions={(
-                <SolidButton color="positive" onClick={addBed} size="small">
-                  {translation('addBed')}
-                </SolidButton>
-              )}
-            />
-            <Table
-              data={beds}
-              columns={columns}
-              fillerRow={() => (<FillerRowElement className="h-10"/>)}
-              initialState={{ pagination: { pageSize: 6 } }}
-            />
-          </>
+          <Table
+            data={beds}
+            columns={columns}
+            fillerRow={() => (<FillerRowElement className="h-10"/>)}
+            initialState={{ pagination: { pageSize: 6 } }}
+          />
         )}
       </LoadingAndErrorComponent>
     </Modal>

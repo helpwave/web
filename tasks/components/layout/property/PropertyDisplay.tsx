@@ -133,7 +133,7 @@ export const PropertyDisplay = ({
         )
       },
       accessorFn: (property) => property.subjectType,
-      minSize: 160,
+      minSize: 180,
       maxSize: 230,
       sortingFn: 'text',
       meta: {
@@ -186,7 +186,8 @@ export const PropertyDisplay = ({
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: 'min-h-[300px] border-2 border-black rounded-xl' }}
+        className="min-h-190"
+        minimumLoadingDuration={200}
       >
         <Table
           data={filteredProperties}

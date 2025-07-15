@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
-import { useTranslation, type PropsForTranslation, SelectUncontrolled } from '@helpwave/hightide'
 import type { Translation } from '@helpwave/hightide'
+import { type PropsForTranslation, SelectUncontrolled, useTranslation } from '@helpwave/hightide'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
@@ -17,13 +17,13 @@ export type TaskTemplateDisplayTranslation = {
 
 const defaultTaskTemplateDisplayTranslation: Translation<TaskTemplateDisplayTranslation> = {
   en: {
-    addNewTaskTemplate: 'Add new template',
+    addNewTaskTemplate: 'New template',
     personalTaskTemplates: 'Personal Task Templates',
     personal: 'Personal',
     wardTaskTemplates: 'Ward Task Templates'
   },
   de: {
-    addNewTaskTemplate: 'Neues Vorlagen hinzufügen',
+    addNewTaskTemplate: 'Neue Vorlage',
     personalTaskTemplates: 'Meine Vorlagen',
     personal: 'Persönliche',
     wardTaskTemplates: 'Stations Vorlagen'
@@ -42,13 +42,13 @@ export type TaskTemplateDisplayProps = {
  * A column for showing TaskTemplates either for Ward or Private templates
  */
 export const TaskTemplateDisplay = ({
-  overwriteTranslation,
-  wardId,
-  selectedId,
-  onSelectChange,
-  taskTemplates,
-  variant,
-}: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
+                                      overwriteTranslation,
+                                      wardId,
+                                      selectedId,
+                                      onSelectChange,
+                                      taskTemplates,
+                                      variant,
+                                    }: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
   const translation = useTranslation([defaultTaskTemplateDisplayTranslation], overwriteTranslation)
 
   const router = useRouter()
@@ -76,7 +76,7 @@ export const TaskTemplateDisplay = ({
               const url = value === 'personal' ? `/templates` : `/ward/${value}/templates`
               router.push(url).catch(console.error)
             }}
-            isDisabled={isLoadingWards || isErrorWards}
+            disabled={isLoadingWards || isErrorWards}
             className="min-w-40"
           />
         )}
@@ -91,14 +91,17 @@ export const TaskTemplateDisplay = ({
             isSelected={selectedId === taskTemplate.id}
             onEditClick={() => onSelectChange(taskTemplate)}
             onClick={() => onSelectChange(taskTemplate)}
-            className="min-h-auto"
+            className="!min-h-17 !h-auto"
           />
         ))}
         <AddCard
           onClick={() => onSelectChange(undefined)}
-          className={clsx({
-            'border-primary border-2': selectedId === ''
-          })}
+          className={clsx(
+            '!min-h-17 !h-auto',
+            {
+              'border-primary border-2': selectedId === ''
+            }
+          )}
           text={translation('addNewTaskTemplate')}
         />
       </div>

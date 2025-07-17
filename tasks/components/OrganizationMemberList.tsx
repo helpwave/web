@@ -126,7 +126,7 @@ export const OrganizationMemberList = ({
               navigator.clipboard.writeText(orgMember.email).catch(console.error)
             }}
           >
-            <Avatar avatarUrl={orgMember.avatarURL} alt="" size="small"/>
+            <Avatar image={{ avatarUrl: orgMember.avatarURL, alt: '' }} name={orgMember.name} size="lg" fullyRounded={true}/>
             <div className="col items-start gap-y-0">
               <span className="font-bold truncate">{orgMember.name}</span>
               <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
@@ -210,7 +210,6 @@ export const OrganizationMemberList = ({
         hasError={(isError || !data) && !members}
         isLoading={!members && isLoading}
         className="min-h-131"
-        minimumLoadingDuration={200}
       >
         <ColumnTitle
           title={translation('member', { count: 2 /* Always use plural */ }) + ` (${usedMembers.length})`}

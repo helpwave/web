@@ -39,6 +39,7 @@ export const useMyTasksQuery = () => {
 export const useTaskCreateMutation = (options?: UseMutationOptions<TaskDTO, unknown, TaskDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (task: TaskDTO) => {
       return await TaskService.create(task)
     },
@@ -55,6 +56,7 @@ export const useTaskCreateMutation = (options?: UseMutationOptions<TaskDTO, unkn
 export const useTaskUpdateMutation = (options?: UseMutationOptions<boolean, unknown, TaskDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (task: TaskDTO) => {
       return await TaskService.update(task)
     },
@@ -71,6 +73,7 @@ export const useTaskUpdateMutation = (options?: UseMutationOptions<boolean, unkn
 export const useTaskDeleteMutation = (options?: UseMutationOptions<boolean, unknown, string>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (taskId: string) => {
       return await TaskService.delete(taskId)
     },
@@ -87,6 +90,7 @@ export const useTaskDeleteMutation = (options?: UseMutationOptions<boolean, unkn
 export const useSubTaskAddMutation = (options?: UseMutationOptions<SubTaskDTO, unknown, SubTaskDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (subtask: SubTaskDTO) => {
       return await TaskSubtaskService.create(subtask)
     },
@@ -102,6 +106,7 @@ export const useSubTaskAddMutation = (options?: UseMutationOptions<SubTaskDTO, u
 export const useSubTaskUpdateMutation = (options?: UseMutationOptions<boolean, unknown, SubTaskDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (subtask: SubTaskDTO) => {
       return await TaskSubtaskService.update(subtask)
     },
@@ -117,6 +122,7 @@ export const useSubTaskUpdateMutation = (options?: UseMutationOptions<boolean, u
 export const useSubTaskDeleteMutation = (options?: UseMutationOptions<boolean, unknown, string>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (subtaskId: string) => {
       return await TaskSubtaskService.delete(subtaskId)
     },
@@ -132,6 +138,7 @@ export const useSubTaskDeleteMutation = (options?: UseMutationOptions<boolean, u
 export const useAssignTaskMutation = (options?: UseMutationOptions<boolean, unknown, TaskAssignmentRequestProps>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (props: TaskAssignmentRequestProps) => {
       return await TaskService.assign(props)
     },
@@ -147,6 +154,7 @@ export const useAssignTaskMutation = (options?: UseMutationOptions<boolean, unkn
 export const useUnassignTaskMutation = (options?: UseMutationOptions<boolean, unknown, TaskAssignmentRequestProps>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (props: TaskAssignmentRequestProps) => {
       return await TaskService.unassign(props)
     },

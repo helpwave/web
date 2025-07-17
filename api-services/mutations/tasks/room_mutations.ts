@@ -60,7 +60,7 @@ export const useRoomOverviewsQuery = (wardId: string | undefined) => {
             patient: !patient ? undefined : {
               id: patient.getId(),
               name: patient.getHumanReadableIdentifier(),
-              tasksUnscheduled: patient.getTasksUnscheduled(),
+              tasksTodo: patient.getTasksUnscheduled(),
               tasksInProgress: patient.getTasksInProgress(),
               tasksDone: patient.getTasksDone()
             }

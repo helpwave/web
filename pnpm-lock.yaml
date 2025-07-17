@@ -176,8 +176,8 @@ importers:
         specifier: workspace:*
         version: link:../api-services
       '@helpwave/hightide':
-        specifier: ^0.1.21
-        version: 0.1.21(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)
+        specifier: ^0.1.24
+        version: 0.1.24(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)
       '@tailwindcss/postcss':
         specifier: ^4.1.3
         version: 4.1.5
@@ -336,8 +336,8 @@ packages:
   '@helpwave/hightide@0.0.17':
     resolution: {integrity: sha512-FTktcuyJ9/Vh3odP6r+LLFWHdqV+dHSxzJTOQrY9FZ4ikHSbhmAOfrszi4CZG69/K5KjGkv9WMuvmn+cK+YkQw==}
 
-  '@helpwave/hightide@0.1.21':
-    resolution: {integrity: sha512-09XS2+Eidk2j+xRwezhgowdIbn8Ujk1RSDxuuKF2afK6AYA54EgaScdTg+qnmFnAUtrO/eJuDbJCROc4rQvGlA==}
+  '@helpwave/hightide@0.1.24':
+    resolution: {integrity: sha512-DPd8k9vFe+4gV8je50Vikt7lHl35fU6bTgcNxMu0VXNFLMnbHLdhAQ27uytC3eiCZ1x6haZBZBxWd7+0AhMKeQ==}
 
   '@helpwave/proto-ts@0.64.0-89e2023.0':
     resolution: {integrity: sha512-EqHsZDOttnCBqcAZ0WiRO32rGMICwvGUxvhSltU0KahFsbIx8o5DZ3l9N8GdB3c/66qe5tabTvVKbUzxf66Yjw==}
@@ -2685,7 +2685,7 @@ snapshots:
       - babel-plugin-react-compiler
       - sass
 
-  '@helpwave/hightide@0.1.21(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)':
+  '@helpwave/hightide@0.1.24(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)':
     dependencies:
       '@radix-ui/react-checkbox': 1.1.3(@types/react-dom@18.3.5(@types/react@18.3.17))(@types/react@18.3.17)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tailwindcss/cli': 4.1.10

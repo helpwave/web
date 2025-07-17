@@ -13,35 +13,16 @@ import type { TaskTemplateDTO, TaskTemplateFormType } from '../../types/tasks/ta
 import { APIServices } from '../../services'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import type { SubTaskDTO } from '../../types/tasks/task'
+import { TaskTemplateService } from '../../service/tasks/TaskTemplateService'
 
 type QueryKey = 'personalTaskTemplates' | 'wardTaskTemplates'
 
 export const useWardTaskTemplateQuery = (wardId?: string) => {
   return useQuery({
     queryKey: ['wardTaskTemplates', wardId],
+    enabled: !!wardId,
     queryFn: async () => {
-      let wardTaskTemplates: TaskTemplateDTO[] = []
-      if (wardId !== undefined) {
-        const req = new GetAllTaskTemplatesRequest()
-          .setWardId(wardId)
-        const res = await APIServices.taskTemplates.getAllTaskTemplates(req, getAuthenticatedGrpcMetadata())
-        wardTaskTemplates = res.getTemplatesList().map((template) => ({
-          id: template.getId(),
-          wardId,
-          name: template.getName(),
-          notes: template.getDescription(),
-          subtasks: template.getSubtasksList().map((subtask) => ({
-            id: subtask.getId(),
-            name: subtask.getName(),
-            isDone: false,
-            taskId: template.getId(),
-          })),
-          isPublicVisible: template.getIsPublic()
-        }))
-        return wardTaskTemplates
-      }
-
-      return wardTaskTemplates
+      return await TaskTemplateService.getWard(wardId!)
     },
   })
 }

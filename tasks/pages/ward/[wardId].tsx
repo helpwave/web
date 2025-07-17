@@ -110,7 +110,7 @@ const WardOverview: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wa
   const [draggingBedId, setDraggingBedId] = useState<string>()
 
   const assignBedMutation = useAssignBedMutation({
-    onSuccess: (bed) => {
+    onSuccess: (_, bed) => {
       if (draggingRoomId) {
         setContextState({
           ...contextState,

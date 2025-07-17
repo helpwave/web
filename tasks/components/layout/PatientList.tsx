@@ -195,7 +195,6 @@ export const PatientList = ({
         hasError={isError || !data}
         isLoading={isLoading}
         className="min-h-128"
-        minimumLoadingDuration={200}
       >
         <div className="col gap-y-4 mb-8">
           <ExpandableUncontrolled

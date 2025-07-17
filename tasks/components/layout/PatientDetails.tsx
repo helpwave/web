@@ -149,10 +149,12 @@ export const PatientDetail = ({
       <TaskDetailModal
         isOpen={isShowingTask}
         onClose={() => setTaskId(undefined)}
-        wardId={wardId}
+        createInformation={{
+          wardId,
+          patientId: newPatient.id,
+          initialStatus: initialTaskStatus ?? 'todo',
+        }}
         taskId={taskId}
-        patientId={newPatient.id}
-        initialStatus={initialTaskStatus}
       />
       <ColumnTitle
         title={translation('patientDetails')}

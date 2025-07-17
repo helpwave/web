@@ -87,12 +87,11 @@ export const UserMenu = ({
              className="row relative items-center group cursor-pointer select-none">
           {/* TODO set this color in the css config */}
           <div className="text-sm font-semibold text-description group-hover:text-primary">{user.name}</div>
-          <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
+          <Avatar image={{ avatarUrl: user.avatarUrl, alt: user.email }} name={user?.name} size="lg" fullyRounded={true} />
         </div>
       )}>
         {({ close }) => {
-          const withClose = (func: () => void) =>
-          {
+          const withClose = (func: () => void) => {
             return () => {
               func()
               close()

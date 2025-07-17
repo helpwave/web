@@ -95,7 +95,7 @@ export const DashboardDisplay = ({
       <InvitationBanner/>
       <ColumnTitle title={translation('recent')}/>
       <div className="flex-col-6">
-        <LoadingAndErrorComponent isLoading={isTasksLoading} className="min-h-29" minimumLoadingDuration={200}>
+        <LoadingAndErrorComponent isLoading={isTasksLoading} className="min-h-29">
           <div className="col gap-y-1">
             <ColumnTitle title={translation('myTasks')} type="subtitle"/>
             <Scrollbars autoHeight={true} autoHide={true}>
@@ -123,7 +123,7 @@ export const DashboardDisplay = ({
             </Scrollbars>
           </div>
         </LoadingAndErrorComponent>
-        <LoadingAndErrorComponent isLoading={isLoadingWards} className="min-h-28" minimumLoadingDuration={200}>
+        <LoadingAndErrorComponent isLoading={isLoadingWards} className="min-h-28">
           <div className="col gap-y-1">
             <ColumnTitle title={translation('wards')} type="subtitle"/>
             <Scrollbars autoHeight={true} autoHide={true}>
@@ -145,7 +145,7 @@ export const DashboardDisplay = ({
             </Scrollbars>
           </div>
         </LoadingAndErrorComponent>
-        <LoadingAndErrorComponent isLoading={isLoadingPatients} className="min-h-28" minimumLoadingDuration={200}>
+        <LoadingAndErrorComponent isLoading={isLoadingPatients} className="min-h-28">
           {patients && patients.length > 0 && (
             <div className="col gap-y-1">
               <ColumnTitle title={translation('patients')} type="subtitle"/>

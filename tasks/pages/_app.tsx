@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { LanguageProvider, ThemeProvider } from '@helpwave/hightide'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production'
 import { ProvideAuth } from '@helpwave/api-services/authentication/useAuth'
-import { ProvideUpdates } from '@helpwave/api-services/util/useUpdates'
 import titleWrapper from '@/utils/titleWrapper'
 import MobileInterceptor from '@/components/MobileInterceptor'
 import '../globals.css'
@@ -38,19 +37,19 @@ function MyApp({
           <QueryClientProvider client={queryClient}>
             <ProvideAuth>
               <InitializationChecker>
-                <ProvideUpdates>
                   <Head>
                     <title>{titleWrapper()}</title>
-                    <style>{`
-            :root {
-              --font-inter: ${inter.style.fontFamily};
-              --font-space: ${spaceGrotesk.style.fontFamily};
-            }
-            `}</style>
+                    <style>
+                      {
+                        `:root {
+                          --font-inter: ${inter.style.fontFamily};
+                          --font-space: ${spaceGrotesk.style.fontFamily};
+                        }`
+                      }
+                    </style>
                   </Head>
                   <Component {...pageProps} />
                   {config.env === 'development' && <ReactQueryDevtools position="bottom-left"/>}
-                </ProvideUpdates>
               </InitializationChecker>
             </ProvideAuth>
           </QueryClientProvider>

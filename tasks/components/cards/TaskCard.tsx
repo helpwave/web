@@ -86,8 +86,8 @@ export const TaskCard = ({
         )}
       </div>
       <div className="flex-col-2 min-w-6">
-        {(assignee && assignee.avatarUrl) ?
-          (<Avatar avatarUrl={assignee.avatarUrl} alt={translation('assigned')} size="tiny"/>):
+        {assignee ?
+          (<Avatar image={assignee?.avatarUrl ? { avatarUrl: assignee.avatarUrl, alt: '' } : undefined} name={assignee.name} size="md" fullyRounded={true}/>) :
           (<UserIcon className="min-w-6 bg-disabled-background text-disabled-text rounded-full" size={24}/>)
         }
         <ProgressIndicator progress={task.subtasks.length > 0 ? progress : 1}/>

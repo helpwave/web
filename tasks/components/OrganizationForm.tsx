@@ -161,7 +161,6 @@ export const OrganizationForm = ({
       <LoadingAndErrorComponent
         isLoading={!organizationForm}
         className="min-h-69"
-        minimumLoadingDuration={200} // prevents errors flickering
       >
         <div className="col gap-y-1">
           <Input

@@ -78,7 +78,7 @@ const Settings: NextPage<PropsForTranslation<SettingsTranslation>> = ({ overwrit
     <Page pageTitle={titleWrapper(translation.settings)}>
       <Section titleText={translation.settings}>
         <span>{translation.settingsDescription}</span>
-        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
+        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
           {!!data && (
             <ContactInformationForm
               initialValue={data}

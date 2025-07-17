@@ -54,7 +54,7 @@ const Team: NextPage<PropsForTranslation<TeamTranslation, TeamServerSideProps>> 
   return (
     <Page pageTitle={titleWrapper(translation.team)} mainContainerClassName="min-h-[auto] pb-6">
       <Section titleText={translation.team}>
-        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError} minimumLoadingDuration={200}>
+        <LoadingAndErrorComponent isLoading={isLoading} hasError={isError}>
           {!!data && (
             <div className="col gap-y-1">
               <span>{translation.teamDescription}</span>

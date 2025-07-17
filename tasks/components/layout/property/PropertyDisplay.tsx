@@ -10,7 +10,7 @@ import {
 } from '@helpwave/hightide'
 import { useContext, useEffect, useMemo } from 'react'
 import { Plus, Tag } from 'lucide-react'
-import type { FieldType, Property, SubjectType } from '@helpwave/api-services/types/properties/property'
+import type { FieldType, Property, PropertySubjectType } from '@helpwave/api-services/types/properties/property'
 import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { useUpdates } from '@helpwave/api-services/util/useUpdates'
 import { PropertyContext } from '@/pages/properties'
@@ -26,7 +26,7 @@ type PropertyDisplayTranslation = {
   search: string,
   edit: string,
   name: string,
-} & { [key in SubjectType | FieldType]: string }
+} & { [key in PropertySubjectType | FieldType]: string }
 
 const defaultPropertyDisplayTranslation: Translation<PropertyDisplayTranslation> = {
   en: {
@@ -105,8 +105,8 @@ export const PropertyDisplay = ({
         const value = propertyList[cell.row.index]!
         return (
           <Tile
-            title={{ value: value.name }}
-            description={{ value: translation(value.fieldType) }}
+            title={value.name}
+            description={translation(value.fieldType)}
           />
         )
       },
@@ -187,7 +187,6 @@ export const PropertyDisplay = ({
         isLoading={isLoading}
         hasError={isError}
         className="min-h-190"
-        minimumLoadingDuration={200}
       >
         <Table
           data={filteredProperties}

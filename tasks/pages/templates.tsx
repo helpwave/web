@@ -136,7 +136,6 @@ const PersonalTaskTemplatesPage: NextPage = ({ overwriteTranslation }: PropsForT
           loadingComponent={(
             <LoadingAnimation classname="h-full"/>
           )}
-          minimumLoadingDuration={200}
         >
           <TwoColumn
             disableResize={false}

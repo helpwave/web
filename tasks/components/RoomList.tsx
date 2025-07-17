@@ -287,7 +287,6 @@ export const RoomList = ({
         isLoading={isLoading}
         hasError={isError}
         className="min-h-101"
-        minimumLoadingDuration={200}
       >
         <TableWithSelection
           data={usedRooms}

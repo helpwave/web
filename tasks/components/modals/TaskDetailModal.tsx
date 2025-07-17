@@ -458,7 +458,6 @@ export const TaskDetailModal = ({
           isLoading={(isLoading || !data) && !isCreating}
           hasError={isError}
           className="min-h-138"
-          minimumLoadingDuration={200}
         >
           {tasksDetails}
           {buttons}

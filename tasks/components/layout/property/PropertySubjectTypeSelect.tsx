@@ -3,10 +3,10 @@ import type { PropsForTranslation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import type { SelectProps } from '@helpwave/hightide'
 import { Select } from '@helpwave/hightide'
-import type { SubjectType } from '@helpwave/api-services/types/properties/property'
+import type { PropertySubjectType } from '@helpwave/api-services/types/properties/property'
 import { subjectTypeList } from '@helpwave/api-services/types/properties/property'
 
-type PropertySubjectTypeSelectTranslation = { [key in SubjectType]: string }
+type PropertySubjectTypeSelectTranslation = { [key in PropertySubjectType]: string }
 
 const defaultPropertySubjectTypeSelectTranslation: Translation<PropertySubjectTypeSelectTranslation> = {
   en: {
@@ -25,7 +25,7 @@ const defaultPropertySubjectTypeSelectTranslation: Translation<PropertySubjectTy
 export const PropertySubjectTypeSelect = ({
   overwriteTranslation,
   ...props
-}: PropsForTranslation<PropertySubjectTypeSelectTranslation, Omit<SelectProps<SubjectType>, 'options'>>) => {
+}: PropsForTranslation<PropertySubjectTypeSelectTranslation, Omit<SelectProps<PropertySubjectType>, 'options'>>) => {
   const translation = useTranslation([defaultPropertySubjectTypeSelectTranslation], overwriteTranslation)
   return (
     <Select

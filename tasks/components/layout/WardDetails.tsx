@@ -107,7 +107,6 @@ export const WardDetail = ({
         isLoading={!isCreatingNewWard && ((isLoading && !ward) || !newWard.id)}
         hasError={isError && !isCreatingNewWard && !ward}
         className="h-full"
-        minimumLoadingDuration={200}
       >
         <ConfirmModal
           headerProps={{

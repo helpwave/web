@@ -28,7 +28,6 @@ export const AssigneeSelect = ({
       isLoading={isLoading}
       hasError={isError}
       className="min-h-10 w-full"
-      minimumLoadingDuration={200}
     >
       <Select
         value={data?.find(user => user.id === value)}
@@ -36,7 +35,7 @@ export const AssigneeSelect = ({
           value,
           label: (
             <div className="row items-center gap-x-1">
-              <Avatar alt="" avatarUrl={value.avatarURL} size="tiny"/>
+              <Avatar image={{ avatarUrl:value.avatarURL, alt: '' }}  name={value.name} size="md" fullyRounded={true}/>
               {value.name}
             </div>
           ),

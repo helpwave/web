@@ -3,7 +3,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useTranslation } from '@helpwave/hightide'
 import type { PropsForTranslation } from '@helpwave/hightide'
-import type { SubjectType } from '@helpwave/api-services/types/properties/property'
+import type { PropertySubjectType } from '@helpwave/api-services/types/properties/property'
 import { subjectTypeList } from '@helpwave/api-services/types/properties/property'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
@@ -27,7 +27,7 @@ const defaultOrganizationsPageTranslation = {
 
 export type PropertiesContextState = {
   propertyId?: string,
-  subjectType?: SubjectType,
+  subjectType?: PropertySubjectType,
 }
 
 export const emptyPropertiesContextState: PropertiesContextState = {
@@ -56,7 +56,7 @@ const PropertiesPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<
   if ((propertyId || subjectType) && !usedQueryParam) {
     setContext({
       ...context,
-      subjectType: subjectTypeList.find(value => value === subjectType) ? subjectType as SubjectType : undefined,
+      subjectType: subjectTypeList.find(value => value === subjectType) ? subjectType as PropertySubjectType : undefined,
       propertyId: propertyId as string
     })
     setUsedQueryParam(true)

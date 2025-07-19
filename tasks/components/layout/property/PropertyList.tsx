@@ -1,13 +1,12 @@
 import { LoadingAnimation } from '@helpwave/hightide'
-import type { PropsForTranslation , Translation } from '@helpwave/hightide'
+import type { PropsForTranslation, Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
-import { Tile } from '@helpwave/hightide'
 import { Plus, Tag } from 'lucide-react'
 import { LoadingAndErrorComponent } from '@helpwave/hightide'
 import { Menu, MenuItem } from '@helpwave/hightide'
 import { useEffect, useState } from 'react'
 import { SearchableList } from '@helpwave/hightide'
-import type { SubjectType } from '@helpwave/api-services/types/properties/property'
+import type { PropertySubjectType } from '@helpwave/api-services/types/properties/property'
 import {
   useAttachPropertyMutation,
   usePropertyWithValueListQuery
@@ -22,6 +21,7 @@ import {
   useUpdatePropertyViewRuleRequest
 } from '@helpwave/api-services/mutations/properties/property_view_src_mutations'
 import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type PropertyListTranslation = {
   properties: string,
@@ -41,17 +41,17 @@ const defaultPropertyListTranslation: Translation<PropertyListTranslation> = {
 
 export type PropertyListProps = {
   subjectId: string,
-  subjectType: SubjectType,
+  subjectType: PropertySubjectType,
 }
 
 /**
  * A component for listing properties for a subject
  */
 export const PropertyList = ({
-  overwriteTranslation,
-  subjectId,
-  subjectType
-}: PropsForTranslation<PropertyListTranslation, PropertyListProps>) => {
+                               overwriteTranslation,
+                               subjectId,
+                               subjectType
+                             }: PropsForTranslation<PropertyListTranslation, PropertyListProps>) => {
   const translation = useTranslation([defaultPropertyListTranslation], overwriteTranslation)
   const {
     data: propertyList,
@@ -77,20 +77,32 @@ export const PropertyList = ({
       className="min-h-48"
     >
       <div className="col gap-y-2">
-        <Tile
-          title={{ value: translation('properties'), className: 'textstyle-title-lg' }}
-          prefix={<Tag className="text-primary" size={20}/>}
-          className="!gap-x-2"
+        <ColumnTitle
+          type="subtitle"
+          title={(
+            <div className="flex-row-2 items-center">
+              <Tag className="text-primary" size={20}/>
+              {translation('properties')}
+            </div>
+          )}
         />
         {properties && properties.map((property, index) => (
-            <PropertyEntry
-              key={index}
-              attachedProperty={property}
-              onChange={value => setProperties(prevState => prevState
-                .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? { ...value1, ...value } : value1))}
-              onEditComplete={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
-              onRemove={value => addOrUpdatePropertyMutation.mutate({ previous: property, update: value, fieldType: property.fieldType })}
-            />
+          <PropertyEntry
+            key={index}
+            attachedProperty={property}
+            onChange={value => setProperties(prevState => prevState
+              .map(value1 => value1.propertyId === value.propertyId && value1.subjectId === value.subjectId ? { ...value1, ...value } : value1))}
+            onEditComplete={value => addOrUpdatePropertyMutation.mutate({
+              previous: property,
+              update: value,
+              fieldType: property.fieldType
+            })}
+            onRemove={value => addOrUpdatePropertyMutation.mutate({
+              previous: property,
+              update: value,
+              fieldType: property.fieldType
+            })}
+          />
         ))}
         <Menu<HTMLDivElement>
           trigger={({ toggleOpen }, ref) => (
@@ -122,8 +134,16 @@ export const PropertyList = ({
                     <MenuItem
                       key={property.id}
                       onClick={() => {
-                        const attachedProperty : AttachedProperty = { propertyId: property.id, subjectId, value: emptyPropertyValue }
-                        addOrUpdatePropertyMutation.mutate({ previous: attachedProperty, update: attachedProperty, fieldType: property.fieldType })
+                        const attachedProperty: AttachedProperty = {
+                          propertyId: property.id,
+                          subjectId,
+                          value: emptyPropertyValue
+                        }
+                        addOrUpdatePropertyMutation.mutate({
+                          previous: attachedProperty,
+                          update: attachedProperty,
+                          fieldType: property.fieldType
+                        })
                         updateViewRulesMutation.mutate({ subjectId, appendToAlwaysInclude: [property.id] })
                         close()
                       }}

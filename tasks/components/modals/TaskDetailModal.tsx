@@ -26,7 +26,7 @@ import {
   useWardTaskTemplateQuery
 } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import {
-  useAssignTaskMutation,
+  useAssignTaskMutation, useSubtaskAddMutation, useSubtaskDeleteMutation, useSubtaskUpdateMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
   useTaskQuery,
@@ -255,15 +255,17 @@ const TaskDetailViewSidebar = ({
   )
 }
 
-export type TaskDetailModalProps = Omit<ModalProps, keyof OverlayHeaderProps> & {
+type CreateInformation = {
+  wardId: string,
+  patientId: string,
+  initialStatus: TaskStatus,
+}
+export type TaskDetailModalProps = Omit<ModalProps, keyof OverlayHeaderProps> & Pick<ModalProps, 'onClose'> & {
   /**
    * A not set or empty taskId is seen as creating a new task
    */
   taskId?: string,
-  wardId: string,
-  patientId: string,
-  onClose: () => void,
-  initialStatus?: TaskStatus,
+  createInformation?: CreateInformation,
 }
 
 /**
@@ -271,11 +273,9 @@ export type TaskDetailModalProps = Omit<ModalProps, keyof OverlayHeaderProps> & 
  */
 export const TaskDetailModal = ({
                                   overwriteTranslation,
-                                  patientId,
                                   taskId = '',
-                                  wardId,
-                                  initialStatus,
                                   onClose,
+                                  createInformation,
                                   className,
                                   ...modalProps
                                 }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailModalProps>) => {
@@ -297,14 +297,19 @@ export const TaskDetailModal = ({
 
   const [task, setTask] = useState<TaskDTO>({
     ...emptyTask,
-    status: initialStatus ?? 'todo'
+    patientId: createInformation?.patientId ?? '',
+    status: createInformation?.initialStatus ?? 'todo'
   })
 
   const deleteTaskMutation = useTaskDeleteMutation()
   const updateTaskMutation = useTaskUpdateMutation()
-  const createTaskMutation = useTaskCreateMutation(() => {
-    onClose()
-  }, patientId)
+  const createTaskMutation = useTaskCreateMutation({
+    onSuccess: () => onClose()
+  })
+
+  const addSubtaskMutation = useSubtaskAddMutation()
+  const updateSubtaskMutation = useSubtaskUpdateMutation()
+  const deleteSubtaskMutation = useSubtaskDeleteMutation()
 
   useEffect(() => {
     if (data && taskId) {
@@ -321,7 +326,7 @@ export const TaskDetailModal = ({
     data: wardTaskTemplatesData,
     isLoading: wardTaskTemplatesIsLoading,
     error: wardTaskTemplatesError
-  } = useWardTaskTemplateQuery(wardId)
+  } = useWardTaskTemplateQuery(createInformation?.wardId)
 
   const taskNameMinimumLength = 1
   const isValid = task.name.length >= taskNameMinimumLength
@@ -373,7 +378,14 @@ export const TaskDetailModal = ({
             onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
           />
         </div>
-        <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
+        <SubtaskView
+          subtasks={task.subtasks}
+          taskOrTemplateId={taskId}
+          onChange={(subtasks) => setTask({ ...task, subtasks })}
+          onAdd={subtask => addSubtaskMutation.mutate(subtask)}
+          onUpdate={subtask => updateSubtaskMutation.mutate(subtask)}
+          onRemove={subtask => deleteSubtaskMutation.mutate(subtask)}
+        />
       </div>
       <TaskDetailViewSidebar task={task} onChange={setTask} isCreating={isCreating}/>
     </div>
@@ -395,7 +407,7 @@ export const TaskDetailModal = ({
 
   const templateSidebar = (
     <div
-      className="absolute left-[-250px] top-0 col w-[250px] overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full"
+      className="absolute left-[-250px] top-0 col w-[250px] overflow-hidden p-4 pb-0 rounded-l-xl h-full bg-task-modal-sidebar-background text-task-modal-sidebar-text"
     >
       {personalTaskTemplatesData && wardTaskTemplatesData && (
         <TaskTemplateListColumn
@@ -405,7 +417,7 @@ export const TaskDetailModal = ({
             setSelectedTemplateId(id)
             setTask({ ...task, name, notes, subtasks })
           }}
-          onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
+          onColumnEditClick={() => router.push(`/ward/${createInformation?.wardId}/templates`)}
         />
       )}
       {(personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading || personalTaskTemplatesError || wardTaskTemplatesError) ?
@@ -457,7 +469,6 @@ export const TaskDetailModal = ({
           isLoading={(isLoading || !data) && !isCreating}
           hasError={isError}
           className="min-h-138"
-          minimumLoadingDuration={200}
         >
           {tasksDetails}
           {buttons}

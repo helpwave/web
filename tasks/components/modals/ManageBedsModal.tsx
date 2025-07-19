@@ -184,7 +184,6 @@ export const ManageBedsModal = ({
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}
         className="min-h-116"
-        minimumLoadingDuration={200}
       >
         {room && beds && (
           <Table

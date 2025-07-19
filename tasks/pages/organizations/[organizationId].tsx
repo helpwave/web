@@ -76,7 +76,10 @@ const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wards
   return (
     <PageWithHeader
       crumbs={[
-        { display: organization?.longName ?? translation('organizations'), link: `/organizations?organizationId=${organizationId}` },
+        {
+          display: organization?.longName ?? translation('organizations'),
+          link: `/organizations?organizationId=${organizationId}`
+        },
         { display: translation('wards'), link: `/organizations/${organizationId}` }
       ]}
     >
@@ -86,10 +89,8 @@ const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wards
       <OrganizationOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn
           disableResize={false}
-          left={() => (<WardDisplay organizationId={organizationId} />)}
-          right={() => (
-            <WardDetail key={contextState.wardId} organizationId={organizationId}/>
-          )}
+          left={() => (<WardDisplay/>)}
+          right={() => (<WardDetail key={contextState.wardId}/>)}
         />
       </OrganizationOverviewContext.Provider>
     </PageWithHeader>

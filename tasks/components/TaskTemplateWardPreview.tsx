@@ -53,7 +53,6 @@ export const TaskTemplateWardPreview = ({
       isLoading={isLoading || !context.state.wardId}
       hasError={isError}
       className="min-h-27"
-      minimumLoadingDuration={200}
     >
       {taskTemplates && (
         <div className="@container flex-col-2">

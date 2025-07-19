@@ -4,18 +4,14 @@ import type { PatientDTO } from '../../types/tasks/patient'
 import { QueryKeys } from '../query_keys'
 import type { BedWithPatientId } from '../../types/tasks/bed'
 import { roomOverviewsQueryKey } from './room_mutations'
-import { PatientService } from '../../service/users/PatientService'
+import { PatientService } from '../../service/tasks/PatientService'
 
 export const usePatientDetailsQuery = (patientId?: string) => {
   return useQuery({
     queryKey: [QueryKeys.patients, patientId],
     enabled: !!patientId,
     queryFn: async () => {
-      if (!patientId) {
-        return
-      }
-
-      return await PatientService.getPatientDetails(patientId)
+      return await PatientService.getDetails(patientId!)
     },
   })
 }
@@ -57,33 +53,41 @@ export const useRecentPatientsQuery = () => {
   })
 }
 
-export const usePatientCreateMutation = () => {
+export const usePatientCreateMutation = (options?: UseMutationOptions<PatientDTO, unknown, PatientDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (patient: PatientDTO) => {
       return await PatientService.create(patient)
     },
-    onSuccess: () => {
+    onSuccess: (data, variables, context) => {
+      if(options?.onSuccess) {
+        options.onSuccess(data, variables, context)
+      }
       queryClient.invalidateQueries([QueryKeys.rooms]).catch(reason => console.error(reason))
       queryClient.invalidateQueries([QueryKeys.patients]).catch(reason => console.error(reason))
     }
   })
 }
 
-export const usePatientUpdateMutation = () => {
+export const usePatientUpdateMutation = (options?: UseMutationOptions<boolean, unknown, PatientDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (patient: PatientDTO) => {
       return await PatientService.update(patient)
     },
-    onSuccess: () => {
+    onSuccess: (data, variables, context) => {
+      if(options?.onSuccess) {
+        options.onSuccess(data, variables, context)
+      }
       queryClient.invalidateQueries([QueryKeys.patients]).catch(reason => console.error(reason))
       queryClient.invalidateQueries([QueryKeys.rooms]).catch(reason => console.error(reason))
     }
   })
 }
 
-export const useAssignBedMutation = (options?: UseMutationOptions<BedWithPatientId, unknown, BedWithPatientId, unknown>) => {
+export const useAssignBedMutation = (options?: UseMutationOptions<boolean, unknown, BedWithPatientId, unknown>) => {
   const queryClient = useQueryClient()
   return useMutation({
     ...options,

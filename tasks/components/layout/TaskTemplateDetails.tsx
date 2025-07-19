@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
 import {
@@ -10,10 +10,18 @@ import {
   TextButton,
   useTranslation
 } from '@helpwave/hightide'
-import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { SubtaskView } from '../SubtaskView'
 import { ColumnTitle } from '../ColumnTitle'
-import { TaskTemplateContext, type TaskTemplateFormType } from '@/pages/templates'
+import { emptyTaskTemplate } from '@/pages/templates'
+import { TaskTemplateContext } from '@/pages/templates'
+import {
+  useTaskTemplateCreateMutation,
+  useTaskTemplateDeleteMutation,
+  useTaskTemplateSubtaskCreateMutation,
+  useTaskTemplateSubtaskDeleteMutation,
+  useTaskTemplateSubtaskUpdateMutation,
+  useTaskTemplateUpdateMutation
+} from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 
 type TaskTemplateDetailsTranslation = {
   updateTaskTemplate: string,
@@ -43,7 +51,7 @@ const defaultTaskTemplateDetailsTranslations: Translation<TaskTemplateDetailsTra
     update: 'Update',
     tooLong: `Too long, at most {{characters}} characters`,
     tooShort: `Too short, at least {{characters}} characters`,
-    required: 'Required Field, cannot be empty'
+    required: 'Required Field, cannot be empty',
   },
   de: {
     updateTaskTemplate: 'Task Template bearbeiten',
@@ -61,32 +69,62 @@ const defaultTaskTemplateDetailsTranslations: Translation<TaskTemplateDetailsTra
   }
 }
 
-export type TaskTemplateDetailsProps = {
-  onCreate: (taskTemplate: TaskTemplateDTO) => void,
-  onUpdate: (taskTemplate: TaskTemplateFormType) => void,
-  onDelete: (taskTemplate: TaskTemplateDTO) => void,
-}
+export type TaskTemplateDetailsProps = object
 
 /**
  * The right side of the task templates page
  */
 export const TaskTemplateDetails = ({
                                       overwriteTranslation,
-                                      onCreate,
-                                      onUpdate,
-                                      onDelete,
                                     }: PropsForTranslation<TaskTemplateDetailsTranslation, TaskTemplateDetailsProps>) => {
-  const context = useContext(TaskTemplateContext)
-
+  const { state, updateContext } = useContext(TaskTemplateContext)
+  const { template, wardId } = state
   const translation = useTranslation([defaultTaskTemplateDetailsTranslations], overwriteTranslation)
-  const isCreatingNewTemplate = context.state.template.id === ''
+
+  const createMutation = useTaskTemplateCreateMutation({
+    onSuccess: (taskTemplate) => {
+      updateContext(prevState => ({
+        ...prevState,
+        hasChanges: false,
+        isValid: taskTemplate !== undefined,
+        template: taskTemplate
+      }))
+    }
+  })
+
+  const updateMutation = useTaskTemplateUpdateMutation({
+    onSuccess: () => {
+      updateContext(prevState => ({
+        ...prevState,
+        hasChanges: false,
+        isValid: true,
+      }))
+    },
+  })
+
+  const deleteMutation = useTaskTemplateDeleteMutation({
+    onSuccess: () => {
+      updateContext(prevState => ({
+        ...prevState,
+        hasChanges: false,
+        isValid: true,
+        template: emptyTaskTemplate
+      }))
+    },
+  })
+
+  const createSubtaskMutation = useTaskTemplateSubtaskCreateMutation()
+  const updateSubtaskMutation = useTaskTemplateSubtaskUpdateMutation()
+  const removeSubtaskMutation = useTaskTemplateSubtaskDeleteMutation()
+
+  const isCreatingNewTemplate = !template.id
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [touched, setTouched] = useState({
     name: !isCreatingNewTemplate
   })
 
   const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
-  const inputClasses = 'mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary'
+  const inputClasses = 'mt-1 block rounded-md w-full'
 
   const minNameLength = 2
   const maxNameLength = 32
@@ -102,8 +140,17 @@ export const TaskTemplateDetails = ({
     }
   }
 
-  const nameErrorMessage: string | undefined = validateName(context.state.template.name)
+  const nameErrorMessage: string | undefined = validateName(template.name)
   const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
+
+  useEffect(() => {
+    if(isCreatingNewTemplate && template.wardId !== wardId) {
+      updateContext(prevState => ({
+        ...prevState,
+        template: { ...template, wardId }
+      }))
+    }
+  }, [isCreatingNewTemplate, template, updateContext, wardId])
 
   return (
     <div className="col py-4 px-6">
@@ -115,7 +162,7 @@ export const TaskTemplateDetails = ({
         onCancel={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          onDelete(context.state.template)
+          deleteMutation.mutate(template.id)
         }}
         confirmType="negative"
       />
@@ -123,50 +170,54 @@ export const TaskTemplateDetails = ({
         title={isCreatingNewTemplate ? translation('createTaskTemplate') : translation('updateTaskTemplate')}
         description={!isCreatingNewTemplate ? translation('updateTaskTemplateDescription') : undefined}
       />
-      <div className=" col gap-y-4 max-w-[400px] mb-4">
-        <div>
-          <Input
-            id="name"
-            value={context.state.template.name}
-            label={{ name: translation('name') }}
-            type="text"
-            onBlur={() => setTouched({ name: true })}
-            onChangeText={text => {
-              context.updateContext({
-                template: { ...context.state.template, name: text },
-                isValid: validateName(text) === undefined,
-                hasChanges: true,
-                deletedSubtaskIds: context.state.deletedSubtaskIds
-              })
-            }}
-            maxLength={maxNameLength}
-            className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
-          />
-          {isDisplayingNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
-        </div>
+      <div className=" col gap-y-4 max-w-128 mb-4">
+        <Input
+          id="name"
+          value={template.name}
+          label={{ name: translation('name') }}
+          type="text"
+          onBlur={() => setTouched({ name: true })}
+          onChangeText={text => {
+            updateContext(prevState => ({
+              ...prevState,
+              template: { ...prevState.template, name: text },
+              isValid: validateName(text) === undefined,
+              hasChanges: true,
+              deletedSubtaskIds: state.deletedSubtaskIds
+            }))
+          }}
+          maxLength={maxNameLength}
+          className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
+        />
+        {isDisplayingNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
         <Textarea
           headline={translation('notes')}
           id="notes"
-          value={context.state.template.notes}
+          value={template.notes}
           onChangeText={text => {
-            context.updateContext({
-              template: { ...context.state.template, notes: text },
-              isValid: context.state.isValid,
+            updateContext(prevState => ({
+              ...prevState,
+              template: { ...state.template, notes: text },
+              isValid: state.isValid,
               hasChanges: true,
-              deletedSubtaskIds: context.state.deletedSubtaskIds
-            })
+              deletedSubtaskIds: state.deletedSubtaskIds
+            }))
           }}
         />
       </div>
       <SubtaskView
-        taskTemplateId={context.state.template.id}
-        subtasks={context.state.template.subtasks}
-        onChange={subtasks => context.updateContext({
+        taskOrTemplateId={template.id}
+        subtasks={template.subtasks}
+        onChange={subtasks => updateContext(prevState => ({
+          ...prevState,
           hasChanges: true,
-          isValid: context.state.isValid,
-          template: { ...context.state.template, subtasks },
-          deletedSubtaskIds: context.state.deletedSubtaskIds
-        })}
+          isValid: state.isValid,
+          template: { ...template, subtasks },
+          deletedSubtaskIds: state.deletedSubtaskIds
+        }))}
+        onAdd={subtask => createSubtaskMutation.mutate(subtask)}
+        onUpdate={subtask => updateSubtaskMutation.mutate(subtask)}
+        onRemove={subtask => removeSubtaskMutation.mutate(subtask.id)}
       />
       <div className={clsx('row mt-12',
         {
@@ -176,16 +227,26 @@ export const TaskTemplateDetails = ({
       >
         <SolidButton
           className="w-auto"
-          onClick={() => isCreatingNewTemplate ? onCreate(context.state.template) : onUpdate(context.state)}
-          disabled={!context.state.isValid}
+          onClick={() => {
+            if (isCreatingNewTemplate) {
+              createMutation.mutate(template)
+            } else {
+              updateMutation.mutate(template)
+            }
+          }}
+          disabled={!state.isValid}
         >
           {isCreatingNewTemplate ? translation('create') : translation('update')}
         </SolidButton>
         {!isCreatingNewTemplate &&
           (
-<TextButton color="negative"
-                       onClick={() => setIsShowingConfirmDialog(true)}>{translation('deleteTaskTemplate')}</TextButton>
-)
+            <TextButton
+              color="negative"
+              onClick={() => setIsShowingConfirmDialog(true)}
+            >
+              {translation('deleteTaskTemplate')}
+            </TextButton>
+          )
         }
       </div>
     </div>

@@ -13,7 +13,7 @@ import {
   useTranslation
 } from '@helpwave/hightide'
 import { Plus, X } from 'lucide-react'
-import type { FieldType, Property, SelectData, SelectOption } from '@helpwave/api-services/types/properties/property'
+import type { FieldType, Property, PropertySelectData, SelectOption } from '@helpwave/api-services/types/properties/property'
 import { fieldTypeList } from '@helpwave/api-services/types/properties/property'
 import { useEffect, useMemo, useState } from 'react'
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
@@ -44,12 +44,12 @@ const defaultPropertySelectOptionsUpdaterPropsTranslation: Translation<PropertyS
 }
 
 type PropertySelectOptionsUpdaterProps = {
-  value: SelectData,
-  onChange: (data: SelectData, update: SelectDataUpdate) => void,
+  value: PropertySelectData,
+  onChange: (data: PropertySelectData, update: SelectDataUpdate) => void,
 }
 
 type PropertySelectOptionsUpdaterState = {
-  data: SelectData,
+  data: PropertySelectData,
   update: SelectDataUpdate,
 }
 
@@ -281,8 +281,8 @@ export const PropertyDetailsField = ({
       )}
       {isSelectType && (
         <Tile
-          title={{ value: translation('allowCustomValues'), className: 'textstyle-label-md' }}
-          description={{ value: translation('allowCustomValuesDescription') }}
+          title={translation('allowCustomValues')}
+          description={translation('allowCustomValuesDescription')}
           suffix={(
             <Checkbox
               checked={usedValue.selectData!.isAllowingFreetext}

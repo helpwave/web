@@ -1,7 +1,9 @@
-import { createRef, useEffect, useState, type ReactNode } from 'react'
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { ChevronLeft, ChevronRight, GripVertical } from 'lucide-react'
 import clsx from 'clsx'
+import { useResizeCallbackWrapper } from '@helpwave/hightide'
+
 /**
  * Only px and %
  * e.g. 250px or 10%
@@ -12,7 +14,7 @@ type Constraint = {
 }
 
 type ColumnConstraints = {
-  left? : Constraint,
+  left?: Constraint,
   right?: Constraint,
 }
 
@@ -39,18 +41,16 @@ type TwoColumnProps = {
  * of the columns can be changed via the initialLayoutState
  */
 export const TwoColumn = ({
-  right,
-  left,
-  baseLayoutValue = '50%',
-  disableResize = true,
-  constraints = defaultConstraint
-}: TwoColumnProps) => {
-  const ref = createRef<HTMLDivElement>()
+                            right,
+                            left,
+                            baseLayoutValue = '50%',
+                            disableResize = true,
+                            constraints = defaultConstraint
+                          }: TwoColumnProps) => {
+  const ref = useRef<HTMLDivElement>(null)
   const [fullWidth, setFullWidth] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
-  const headerHeight = 64
-  const dividerHitBoxWidth = 24
   constraints = { ...defaultConstraint, ...constraints }
 
   const convertToLeftWidth = (constraint: string, usedFullWidth: number) => {
@@ -81,7 +81,7 @@ export const TwoColumn = ({
     let left = dragPosition
     if (dragPosition < leftMin) {
       left = leftMin
-    } else if (fullWidth - dragPosition - dividerHitBoxWidth < rightMin) {
+    } else if (fullWidth - dragPosition < rightMin) {
       left = fullWidth - rightMin
     }
     return left
@@ -97,29 +97,29 @@ export const TwoColumn = ({
     setFullWidth(newFullWidth)
   }, [ref, baseLayoutValue]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const leftFocus = convertToLeftWidth(baseLayoutValue, fullWidth) < leftWidth - dividerHitBoxWidth / 2
+  const leftFocus = convertToLeftWidth(baseLayoutValue, fullWidth) < leftWidth / 2
   const [scrollbarsBarMaxHeight, setScrollbarsBarMaxHeight] = useState(800)
 
-  const handleWindowResize = () => {
-    setScrollbarsBarMaxHeight(window.innerHeight - headerHeight)
-    setFullWidth(window.innerWidth)
-  }
+  useResizeCallbackWrapper(useCallback(() => {
+    if (ref.current?.scrollHeight) {
+      setScrollbarsBarMaxHeight(ref.current.scrollHeight)
+    }
+    if (ref.current?.offsetWidth) {
+      setFullWidth(ref.current.offsetWidth)
+    }
+  }, [ref]))
 
   useEffect(() => {
-    window.addEventListener('resize', handleWindowResize)
-    return () => {
-      window.removeEventListener('resize', handleWindowResize)
+    if (ref.current?.scrollHeight) {
+      setScrollbarsBarMaxHeight(ref.current.scrollHeight)
     }
   }, [])
 
-  useEffect(handleWindowResize)
-
-  const rightWidth = fullWidth - leftWidth - dividerHitBoxWidth
+  const rightWidth = fullWidth - leftWidth
   return (
     <div
       ref={ref}
-      className={clsx(`relative row`, { 'select-none': isDragging })}
-      style={{ height: `calc(100vh - ${headerHeight}px)` }}
+      className={clsx(`relative row h-full max-h-full`, { 'select-none': isDragging })}
       onMouseMove={event => isDragging ? setLeftWidth(calcPosition(event.pageX)) : undefined}
       onMouseUp={() => setIsDragging(false)}
       onTouchEnd={() => setIsDragging(false)}
@@ -130,41 +130,38 @@ export const TwoColumn = ({
       { /* TODO maybe use the loading animation or something else to create a smoother transition from showing nothing */}
       {fullWidth !== 0 && (
         <>
-          <div
-            className="overflow-hidden"
-            style={{ width: leftWidth + 'px' }}
-          >
+          <div className="overflow-hidden" style={{ width: leftWidth + 'px' }}>
             <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: leftWidth }}>
               {left(leftWidth)}
             </Scrollbars>
           </div>
           <div
-            onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
-            onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
-            className={clsx(`row relative h-full justify-center`, { '!cursor-col-resize': !disableResize })}
-            style={{ width: `${dividerHitBoxWidth}px` }}
+            className={clsx(`absolute flex-col-0 h-full justify-center`)}
+            style={{ left: leftWidth + 'px' }}
           >
-              <div className="bg-gray-300 my-4 rounded-lg w-0.5" />
+            <div className="bg-twocolum-background -translate-x-1/2 h-full my-4 rounded-lg w-0.5"/>
             {!disableResize && (
               <div
-                className="absolute top-[50%] bg-gray-300 rounded-xl w-4 h-12 -translate-y-[50%] col justify-center items-center"
+                className={clsx(
+                  'absolute top-1/2 -translate-y-1/2 -translate-x-1/2 bg-twocolum-background rounded-xl w-4 h-12 flex-col-0 justify-center items-center',
+                  { '!cursor-col-resize': !disableResize }
+                )}
+                onMouseDown={() => disableResize ? undefined : setIsDragging(true)}
+                onTouchStart={() => disableResize ? undefined : setIsDragging(true)}
               >
-                <GripVertical className="text-white"/>
+                <GripVertical className="text-twocolum-text"/>
               </div>
             )}
             {!disableResize && (
               <button
-                className="absolute top-[5%] rounded-full bg-gray-300 hover:bg-gray-400 z-[1] text-white p-0.5"
+                className="absolute top-1/20 -translate-x-1/2 rounded-full bg-twocolum-background text-twocolum-text hover:brightness-90 p-0.5 z-[2]"
                 onClick={() => setLeftWidth(leftFocus ? convertToLeftWidth(baseLayoutValue, fullWidth) : fullWidth - convertToLeftWidth(constraints.right?.min ?? defaultConstraint.right.min, fullWidth))}
               >
                 {leftFocus ? <ChevronLeft/> : <ChevronRight/>}
               </button>
             )}
           </div>
-          <div
-            className="overflow-hidden"
-            style={{ width: (rightWidth) + 'px' }}
-          >
+          <div className="overflow-hidden" style={{ width: (rightWidth) + 'px' }}>
             <Scrollbars autoHide={true} style={{ maxHeight: scrollbarsBarMaxHeight, maxWidth: rightWidth }}>
               {right(rightWidth)}
             </Scrollbars>

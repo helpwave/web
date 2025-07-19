@@ -109,7 +109,7 @@ export const OrganizationForm = ({
   const maxMailLength = 320
 
   const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
-  const inputClasses = 'mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary'
+  const inputClasses = 'mt-1 block rounded-md w-full'
 
   function validateShortName(organization: OrganizationMinimalDTO) {
     const shortName = organization.shortName.trim()
@@ -161,7 +161,6 @@ export const OrganizationForm = ({
       <LoadingAndErrorComponent
         isLoading={!organizationForm}
         className="min-h-69"
-        minimumLoadingDuration={200} // prevents errors flickering
       >
         <div className="col gap-y-1">
           <Input

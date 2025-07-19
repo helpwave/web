@@ -1,5 +1,5 @@
 export const subjectTypeList = ['patient', 'task'] as const
-export type SubjectType = typeof subjectTypeList[number]
+export type PropertySubjectType = typeof subjectTypeList[number]
 
 export const fieldTypeList = ['multiSelect', 'singleSelect', 'number', 'text', 'date', 'dateTime', 'checkbox'] as const
 export type FieldType = typeof fieldTypeList[number]
@@ -11,20 +11,20 @@ export type SelectOption = {
   isCustom: boolean,
 }
 
-export type SelectData = {
+export type PropertySelectData = {
   isAllowingFreetext: boolean,
   options: SelectOption[],
 }
 
 export type Property = {
   id: string,
-  subjectType: SubjectType,
+  subjectType: PropertySubjectType,
   fieldType: FieldType,
   name: string,
   description?: string,
   isArchived: boolean,
   setId?: string,
-  selectData?: SelectData,
+  selectData?: PropertySelectData,
   alwaysIncludeForViewSource?: boolean,
 }
 
@@ -35,7 +35,7 @@ export const emptySelectOption: SelectOption = {
   isCustom: false,
 }
 
-export const emptySelectData: SelectData = {
+export const emptySelectData: PropertySelectData = {
   isAllowingFreetext: true,
   options: [
     {

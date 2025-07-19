@@ -43,7 +43,9 @@ export const KanbanHeader = ({
   const translation = useTranslation([defaultKanbanHeaderTranslations], overwriteTranslation)
   return (
     <ColumnTitle
+      type="subtitle"
       title={translation('tasks')}
+      titleRowClassName="min-h-10"
       actions={(
         <Input
           value={searchValue}

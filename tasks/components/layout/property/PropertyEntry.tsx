@@ -10,7 +10,11 @@ import {
 import type { Property } from '@helpwave/api-services/types/properties/property'
 import type { AttachedProperty } from '@helpwave/api-services/types/properties/attached_property'
 import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
-import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import {
+  usePropertyQuery,
+  usePropertyUpdateMutation
+} from '@helpwave/api-services/mutations/properties/property_mutations'
+import { PropertyService } from '@helpwave/api-services/service/properties/PropertyService'
 
 type PropertyEntryDisplayProps = {
   property: Property,
@@ -49,6 +53,29 @@ export const PropertyEntryDisplay = ({
     update(newProperty)
     return newProperty
   }
+
+  const updatePropertyMutation = usePropertyUpdateMutation({
+    onSuccess: (success, variables) => {
+      if (!success) {
+        return
+      }
+      PropertyService.get(property.id).then((property) => {
+        const update = updater(attachedValue => {
+          const option = property.selectData?.options.find(value => value.name === variables.selectUpdate?.add[0]?.name)
+          if (!option) {
+            return
+          }
+          if (property.fieldType === 'singleSelect') {
+            attachedValue.value.singleSelectValue = option
+          } else if (property.fieldType === 'multiSelect') {
+            attachedValue.value.multiSelectValue = [...attachedValue.value.multiSelectValue, option]
+          }
+        })
+        onChange(update)
+        onEditComplete(update)
+      })
+    }
+  })
 
   switch (property.fieldType) {
     case 'text':
@@ -141,6 +168,22 @@ export const PropertyEntryDisplay = ({
               label: option.name,
               searchTags: [option.name]
             }))}
+          onAddNew={(name) => {
+            updatePropertyMutation.mutate({
+              property,
+              selectUpdate: {
+                add: [
+                  {
+                    id: '',
+                    name,
+                    isCustom: true,
+                  }
+                ],
+                update: [],
+                remove: []
+              },
+            })
+          }}
           selectedDisplayOverwrite={attachedProperty.value.singleSelectValue?.name}
           alignmentVertical="topOutside"
         />
@@ -170,6 +213,22 @@ export const PropertyEntryDisplay = ({
               selected: !!attachedProperty.value.multiSelectValue.find(value => value.id === option.id),
               searchTags: [option.name]
             }))}
+          onAddNew={(name) => {
+            updatePropertyMutation.mutate({
+              property,
+              selectUpdate: {
+                add: [
+                  {
+                    id: '',
+                    name,
+                    isCustom: true,
+                  }
+                ],
+                update: [],
+                remove: []
+              },
+            })
+          }}
           useChipDisplay={true}
           alignmentVertical="topOutside"
         />
@@ -201,7 +260,6 @@ export const PropertyEntry = ({
     <LoadingAndErrorComponent
       isLoading={isLoading}
       hasError={isError || !property}
-      minimumLoadingDuration={200}
       className="min-h-15"
     >
       <PropertyEntryDisplay property={property!} attachedProperty={attachedProperty} {...restProps}/>

@@ -60,7 +60,7 @@ export const WardForm = ({
   const maxWardNameLength = 32
 
   const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
-  const inputClasses = 'mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-primary focus:ring-primary'
+  const inputClasses = 'mt-1 block rounded-md w-full'
 
   function validateName(ward: WardFormInfoDTO) {
     const wardName = ward.name.trim()

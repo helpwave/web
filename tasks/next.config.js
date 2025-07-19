@@ -9,6 +9,7 @@ const nextConfig = {
     remotePatterns: [
       new URL('https://cdn.helpwave.de/**'),
       new URL('https://helpwave.de/**'),
+      new URL('https://source.boringavatars.com/**'),
     ],
   },
 }

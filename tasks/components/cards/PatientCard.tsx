@@ -1,6 +1,5 @@
-
 import type { Translation } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { PillLabelsColumn } from '../PillLabel'
 import { DragCard, type DragCardProps } from './DragCard'
 import clsx from 'clsx'
@@ -18,43 +17,47 @@ const defaultPatientCardTranslations: Translation<PatientCardTranslation> = {
   }
 }
 
+type TaskCounts = {
+  todo: number,
+  inProgress: number,
+  done: number,
+}
+
 export type PatientCardProps = DragCardProps & {
   bedName?: string,
   patientName: string,
-  unscheduledTasks?: number,
-  inProgressTasks?: number,
-  doneTasks?: number,
+  taskCounts?: TaskCounts,
 }
 
 /**
  * A Card for displaying a Patient and the tasks
  */
 export const PatientCard = ({
-  overwriteTranslation,
-  bedName,
-  patientName,
-  unscheduledTasks,
-  inProgressTasks,
-  doneTasks,
-  isSelected,
-  onClick,
-  className,
-  ...restCardProps
-}: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
+                              overwriteTranslation,
+                              bedName,
+                              patientName,
+                              taskCounts,
+                              isSelected,
+                              onClick,
+                              className,
+                              ...restCardProps
+                            }: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
   const translation = useTranslation([defaultPatientCardTranslations], overwriteTranslation)
   return (
-    <DragCard isSelected={isSelected} onClick={onClick} className={clsx('min-h-40',className)} {...restCardProps}>
+    <DragCard isSelected={isSelected} onClick={onClick} className={clsx('min-h-40', className)} {...restCardProps}>
       <div className="row justify-between">
-        <span className="textstyle-title-sm whitespace-nowrap" >{bedName ?? translation('bedNotAssigned')}</span>
+        <span className="textstyle-title-normal whitespace-nowrap">{bedName ?? translation('bedNotAssigned')}</span>
         <span className="ml-2 truncate">{patientName}</span>
       </div>
-      <div className="min-w-[150px] max-w-[200px] mt-1">
-        <PillLabelsColumn
-          doneCount={doneTasks}
-          inProgressCount={inProgressTasks}
-          unscheduledCount={unscheduledTasks}
-        />
-      </div>
+      {taskCounts && (
+        <div className="min-w-[150px] max-w-[200px] mt-1">
+          <PillLabelsColumn
+            doneCount={taskCounts.done}
+            inProgressCount={taskCounts.inProgress}
+            todoCount={taskCounts.todo}
+          />
+        </div>
+      )}
     </DragCard>
   )
 }

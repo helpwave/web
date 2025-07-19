@@ -12,21 +12,6 @@ type PillLabelTranslation = TaskStatusTranslationType
 
 const defaultPillLabelTranslation: Translation<TaskStatusTranslationType> = TaskStatusUtil.translation
 
-const mapping = {
-  todo: {
-    mainClassName: 'bg-tag-red-background text-tag-red-text',
-    iconClassName: 'bg-tag-red-icon',
-  },
-  inProgress: {
-    mainClassName: 'bg-tag-yellow-background text-tag-yellow-text',
-    iconClassName: 'bg-tag-yellow-icon',
-  },
-  done: {
-    mainClassName: 'bg-tag-green-background text-tag-green-text',
-    iconClassName: 'bg-tag-green-icon',
-  },
-} as const
-
 export type PillLabelProps = {
   count?: number,
   taskStatus?: TaskStatus,
@@ -40,13 +25,18 @@ export const PillLabel = ({
                             count,
                             taskStatus = 'todo'
                           }: PropsForTranslation<PillLabelTranslation, PillLabelProps>) => {
-  const state = mapping[taskStatus]
+  const taskStatusColor = TaskStatusUtil.colors[taskStatus]
+  const iconColor: Record<TaskStatus, string> = {
+    done: 'bg-done-icon',
+    inProgress: 'bg-inprogress-icon',
+    todo: 'bg-todo-icon',
+  }
   const translation = useTranslation([defaultPillLabelTranslation], overwriteTranslation)
 
   return (
-    <div className={clsx(`row items-center justify-between pl-2 pr-3 py-1 rounded-lg text-sm`, state.mainClassName)}>
+    <div className={clsx(`row items-center justify-between pl-2 pr-3 py-1 rounded-lg text-sm`, taskStatusColor.background, taskStatusColor.text)}>
       <div className="row gap-x-2 items-center">
-        <div className={clsx(`rounded-full w-2 h-2`, state.iconClassName)}/>
+        <div className={clsx(`rounded-full w-2 h-2`, iconColor[taskStatus])}/>
         <span>{translation(taskStatus)}</span>
       </div>
       {count ?? '-'}
@@ -59,7 +49,7 @@ export const PillLabel = ({
 //
 
 export type PillLabelsColumnProps = {
-  unscheduledCount?: number,
+  todoCount?: number,
   inProgressCount?: number,
   doneCount?: number,
 }
@@ -67,10 +57,10 @@ export type PillLabelsColumnProps = {
 /**
  * A column showing the all TaskStates with a PillLabel for each
  */
-export const PillLabelsColumn = ({ unscheduledCount, inProgressCount, doneCount }: PillLabelsColumnProps) => {
+export const PillLabelsColumn = ({ todoCount, inProgressCount, doneCount }: PillLabelsColumnProps) => {
   return (
     <div className="col gap-y-2">
-      <PillLabel count={unscheduledCount} taskStatus="todo"/>
+      <PillLabel count={todoCount} taskStatus="todo"/>
       <PillLabel count={inProgressCount} taskStatus="inProgress"/>
       <PillLabel count={doneCount} taskStatus="done"/>
     </div>
@@ -101,37 +91,38 @@ export const PillLabelBox = ({ unscheduled, inProgress, done }: PillLabelBoxProp
     borderLeftWidth: between,
     borderRightWidth: between,
   }
+
   return (
-    <div className="row gap-x-0 h-6">
+    <div className="flex-row-0 h-6">
       <div
-        className="row rounded-l-md pl-2 pr-1 items-center bg-tag-red-background text-tag-red-text"
+        className="row rounded-l-md pl-2 pr-1 items-center bg-todo-background text-todo-text"
       >
-        <div className="rounded-full w-2 h-2 bg-tag-red-icon mr-1"/>
+        <div className="rounded-full w-2 h-2 bg-todo-icon mr-1"/>
         {unscheduled}
       </div>
       <div
-        className="w-0 h-0 border-solid border-r-transparent border-b-transparent border-tag-red-background"
+        className="w-0 h-0 border-solid border-r-transparent border-b-transparent border-todo-background"
         style={borderStyle}
       />
       <div
-        className="w-0 h-0 border-tag-yellow-background border-solid border-l-transparent border-t-transparent"
+        className="w-0 h-0 border-inprogress-background border-solid border-l-transparent border-t-transparent"
         style={borderStyle}
       />
-      <div className="row px-1 items-center bg-tag-yellow-background text-tag-yellow-text">
-        <div className="rounded-full w-2 h-2 mr-1 bg-tag-yellow-icon"/>
+      <div className="row px-1 items-center bg-inprogress-background text-inprogress-text">
+        <div className="rounded-full w-2 h-2 mr-1 bg-inprogress-icon"/>
         {inProgress}
       </div>
       <div
-        className="w-0 h-0 border-tag-yellow-background border-solid border-r-transparent border-b-transparent"
+        className="w-0 h-0 border-inprogress-background border-solid border-r-transparent border-b-transparent"
         style={borderStyle}
       />
       <div
-        className="w-0 h-0 border-tag-green-background border-solid border-l-transparent border-t-transparent"
+        className="w-0 h-0 border-done-background border-solid border-l-transparent border-t-transparent"
         style={borderStyle}
       />
       <div
-        className="row bg-tag-green-background rounded-r-md pl-1 pr-2 items-center text-tag-green-text">
-        <div className="rounded-full w-2 h-2 bg-tag-green-icon mr-1"/>
+        className="row bg-done-background rounded-r-md pl-1 pr-2 items-center text-done-text">
+        <div className="rounded-full w-2 h-2 bg-done-icon mr-1"/>
         {done}
       </div>
     </div>

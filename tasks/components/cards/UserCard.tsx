@@ -1,4 +1,3 @@
-
 import { Avatar } from '@helpwave/hightide'
 import type { User } from '@helpwave/api-services/authentication/useAuth'
 
@@ -13,7 +12,7 @@ const UserCard = ({ user }: UserCardProps) => {
   return (
     <div className="row w-80 h-22 rounded-lg border-2">
       <div className="p-2">
-        <Avatar avatarUrl={user.avatarUrl} alt="profile picture" size="large" />
+        <Avatar image={{ avatarUrl: user.avatarUrl, alt: '' }} name={user.name} size="md" fullyRounded={true}/>
       </div>
       <div className="p-2 w-56 h-20">
         <div className="text-lg font-semibold leading-normal text-slate-600 truncate">{user.nickname}</div>

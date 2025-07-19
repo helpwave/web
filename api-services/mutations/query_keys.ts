@@ -8,6 +8,7 @@ export const QueryKeys = {
   beds: 'beds',
   patients: 'patients',
   tasks: 'tasks',
+  taskTemplates: 'taskTemplates',
   // Users
   invitations: 'invitations',
   organizations: 'organizations',

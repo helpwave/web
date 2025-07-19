@@ -25,7 +25,6 @@ const defaultWardDisplayTranslations: Translation<WardDisplayTranslation> = {
 }
 
 export type WardDisplayProps = {
-  organizationId: string,
   selectedWardId?: string,
 }
 
@@ -34,13 +33,12 @@ export type WardDisplayProps = {
  */
 export const WardDisplay = ({
                               overwriteTranslation,
-                              organizationId,
                               selectedWardId,
                             }: PropsForTranslation<WardDisplayTranslation, WardDisplayProps>) => {
   const translation = useTranslation([defaultWardDisplayTranslations], overwriteTranslation)
   const router = useRouter()
   const context = useContext(OrganizationOverviewContext)
-  const { data, isLoading, isError } = useWardOverviewsQuery(organizationId)
+  const { data, isLoading, isError } = useWardOverviewsQuery()
 
   const wards = data?.sort((a, b) => a.name.localeCompare(b.name))
   selectedWardId ??= context.state.wardId

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Checkbox, type PropsForTranslation, TextButton, ToggleableInput, useTranslation } from '@helpwave/hightide'
-import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
+import type { SubtaskDTO } from '@helpwave/api-services/types/tasks/task'
 
 type SubtaskTileTranslation = {
   subtasks: string,
@@ -19,9 +19,9 @@ const defaultSubtaskTileTranslation = {
 }
 
 type SubtaskTileProps = {
-  subtask: SubTaskDTO,
+  subtask: SubtaskDTO,
   onRemoveClick: () => void,
-  onChange: (subtask: SubTaskDTO) => void,
+  onChange: (subtask: SubtaskDTO) => void,
 }
 
 /**
@@ -37,7 +37,7 @@ export const SubtaskTile = ({
 
   const minTaskNameLength = 2
   const maxTaskNameLength = 64
-  const [localSubtask, setLocalSubtask] = useState<SubTaskDTO>({ ...subtask })
+  const [localSubtask, setLocalSubtask] = useState<SubtaskDTO>({ ...subtask })
 
   useEffect(() => {
     setLocalSubtask(subtask)
@@ -47,7 +47,7 @@ export const SubtaskTile = ({
     <div className="row gap-x-2 items-center overflow-x-hidden w-full">
       <Checkbox
         onChange={isDone => {
-          const newSubtask: SubTaskDTO = {
+          const newSubtask: SubtaskDTO = {
             ...localSubtask,
             isDone
           }
@@ -64,7 +64,7 @@ export const SubtaskTile = ({
             name
           })}
           onEditCompleted={name => {
-            const newSubtask: SubTaskDTO = {
+            const newSubtask: SubtaskDTO = {
               ...localSubtask,
               name
             }

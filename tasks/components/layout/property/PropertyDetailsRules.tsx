@@ -1,5 +1,5 @@
 import { Expandable } from '@helpwave/hightide'
-import type { PropsForTranslation , ExpandableProps, Translation } from '@helpwave/hightide'
+import type { PropsForTranslation, ExpandableProps, Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import { Tile } from '@helpwave/hightide'
 import { Checkbox } from '@helpwave/hightide'
@@ -43,18 +43,18 @@ export type PropertyDetailsRulesProps = {
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsRules = ({
-  overwriteTranslation,
-  value,
-  onChange,
-  onEditComplete,
-  expandableOptions
-}: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
+                                       overwriteTranslation,
+                                       value,
+                                       onChange,
+                                       onEditComplete,
+                                       expandableOptions
+                                     }: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
   const translation = useTranslation([defaultPropertyDetailsRulesTranslation], overwriteTranslation)
   return (
     <Expandable {...expandableOptions} contentClassName="max-h-128" label={translation('rules')}>
       <Tile
-        title={{ value: translation('alwaysVisible'), className: 'textstyle-label-md' }}
-        description={{ value: translation('alwaysVisibleDescription') }}
+        title={translation('alwaysVisible')}
+        description={translation('alwaysVisibleDescription')}
         suffix={(
           <Checkbox
             checked={value.alwaysIncludeForViewSource ?? false}

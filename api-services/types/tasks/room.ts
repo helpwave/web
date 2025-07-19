@@ -3,9 +3,6 @@ import type { BedDTO, BedWithMinimalPatientDTO, BedWithPatientWithTasksNumberDTO
 export type RoomMinimalDTO = {
   id: string,
   name: string,
-}
-
-export type RoomWithWardId = RoomMinimalDTO & {
   wardId: string,
 }
 
@@ -20,6 +17,7 @@ export type RoomOverviewDTO = RoomMinimalDTO & {
 export const emptyRoomOverview: RoomOverviewDTO = {
   id: '',
   name: '',
+  wardId: '',
   beds: []
 }
 

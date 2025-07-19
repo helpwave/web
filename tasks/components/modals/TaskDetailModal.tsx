@@ -26,7 +26,7 @@ import {
   useWardTaskTemplateQuery
 } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import {
-  useAssignTaskMutation,
+  useAssignTaskMutation, useSubtaskAddMutation, useSubtaskDeleteMutation, useSubtaskUpdateMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
   useTaskQuery,
@@ -307,6 +307,10 @@ export const TaskDetailModal = ({
     onSuccess: () => onClose()
   })
 
+  const addSubtaskMutation = useSubtaskAddMutation()
+  const updateSubtaskMutation = useSubtaskUpdateMutation()
+  const deleteSubtaskMutation = useSubtaskDeleteMutation()
+
   useEffect(() => {
     if (data && taskId) {
       setTask(data)
@@ -374,7 +378,14 @@ export const TaskDetailModal = ({
             onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
           />
         </div>
-        <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
+        <SubtaskView
+          subtasks={task.subtasks}
+          taskOrTemplateId={taskId}
+          onChange={(subtasks) => setTask({ ...task, subtasks })}
+          onAdd={subtask => addSubtaskMutation.mutate(subtask)}
+          onUpdate={subtask => updateSubtaskMutation.mutate(subtask)}
+          onRemove={subtask => deleteSubtaskMutation.mutate(subtask)}
+        />
       </div>
       <TaskDetailViewSidebar task={task} onChange={setTask} isCreating={isCreating}/>
     </div>

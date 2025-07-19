@@ -1,38 +1,15 @@
+import type { UseMutationOptions } from '@tanstack/react-query'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  CreateRoomRequest,
-  DeleteRoomRequest,
-  GetRoomOverviewsByWardRequest,
-  GetRoomRequest,
-  UpdateRoomRequest
-} from '@helpwave/proto-ts/services/tasks_svc/v1/room_svc_pb'
-import { noop } from '@helpwave/hightide'
-import type { RoomDTO, RoomMinimalDTO, RoomOverviewDTO } from '../../types/tasks/room'
-import { APIServices } from '../../services'
-import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
+import type { RoomMinimalDTO } from '../../types/tasks/room'
 import { QueryKeys } from '../query_keys'
+import { RoomService } from '../../service/tasks/RoomService'
 
 export const useRoomQuery = (roomId?: string) => {
   return useQuery({
     queryKey: [QueryKeys.rooms, roomId],
     enabled: !!roomId,
     queryFn: async () => {
-      const req = new GetRoomRequest()
-      if (roomId) {
-        req.setId(roomId)
-      }
-      const res = await APIServices.room.getRoom(req, getAuthenticatedGrpcMetadata())
-
-      const room: RoomDTO = {
-        id: res.getId(),
-        name: res.getName(),
-        beds: res.getBedsList().map(bed => ({
-          id: bed.getId(),
-          name: bed.getName()
-        }))
-      }
-
-      return room
+      return await RoomService.get(roomId!)
     },
   })
 }
@@ -43,98 +20,55 @@ export const useRoomOverviewsQuery = (wardId: string | undefined) => {
     queryKey: [QueryKeys.rooms, roomOverviewsQueryKey],
     enabled: !!wardId,
     queryFn: async () => {
-      const req = new GetRoomOverviewsByWardRequest()
-      if (wardId) {
-        req.setId(wardId)
-      }
-      const res = await APIServices.room.getRoomOverviewsByWard(req, getAuthenticatedGrpcMetadata())
-
-      const rooms: RoomOverviewDTO[] = res.getRoomsList().map((room) => ({
-        id: room.getId(),
-        name: room.getName(),
-        beds: room.getBedsList().map(bed => {
-          const patient = bed.getPatient()
-          return {
-            id: bed.getId(),
-            name: bed.getName(),
-            patient: !patient ? undefined : {
-              id: patient.getId(),
-              name: patient.getHumanReadableIdentifier(),
-              tasksTodo: patient.getTasksUnscheduled(),
-              tasksInProgress: patient.getTasksInProgress(),
-              tasksDone: patient.getTasksDone()
-            }
-          }
-        })
-      }))
-
-      return rooms
+      return await RoomService.getWardOverview(wardId!)
     },
   })
 }
 
-export const useRoomUpdateMutation = (callback: (room: RoomMinimalDTO) => void) => {
+export const useRoomCreateMutation = (options?: UseMutationOptions<RoomMinimalDTO, unknown, RoomMinimalDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
+    ...options,
     mutationFn: async (room: RoomMinimalDTO) => {
-      const req = new UpdateRoomRequest()
-      req.setId(room.id)
-      req.setName(room.name)
-      const res = await APIServices.room.updateRoom(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in RoomUpdate')
+      return await RoomService.create(room)
+    },
+    onSuccess: (data, variables, context) => {
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context)
       }
-
-      callback(room)
-      return room
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.rooms]).catch(console.error)
-    },
-  })
-}
-
-export const useRoomCreateMutation = (callback: (room: RoomMinimalDTO) => void = noop, wardId: string) => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (room: RoomMinimalDTO) => {
-      const req = new CreateRoomRequest()
-      req.setWardId(wardId)
-      req.setName(room.name)
-      const res = await APIServices.room.createRoom(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.getId()) {
-        console.error('RoomCreate failed')
-      }
-
-      room.id = res.getId()
-      callback(room)
-      return room
-    },
-    onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.rooms]).catch(console.error)
       queryClient.invalidateQueries([QueryKeys.wards]).catch(console.error)
     }
   })
 }
 
-export const useRoomDeleteMutation = (callback: () => void = noop) => {
+export const useRoomUpdateMutation = (options?: UseMutationOptions<boolean, unknown, RoomMinimalDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (roomId: string) => {
-      const req = new DeleteRoomRequest()
-      req.setId(roomId)
-      const res = await APIServices.room.deleteRoom(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('RoomDelete failed')
-      }
-
-      callback()
-      return req.toObject()
+    ...options,
+    mutationFn: async (room: RoomMinimalDTO) => {
+      return await RoomService.update(room)
     },
-    onSuccess: () => {
+    onSuccess: (data, variables, context) => {
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context)
+      }
+      queryClient.invalidateQueries([QueryKeys.rooms]).catch(console.error)
+    },
+  })
+}
+
+export const useRoomDeleteMutation = (options?: UseMutationOptions<boolean, unknown, string>) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    ...options,
+    mutationFn: async (roomId: string) => {
+      return await RoomService.delete(roomId)
+    },
+    onSuccess: (data, variables, context) => {
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context)
+      }
       queryClient.invalidateQueries([QueryKeys.rooms]).catch(console.error)
       queryClient.invalidateQueries([QueryKeys.wards]).catch(console.error)
     }

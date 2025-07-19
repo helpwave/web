@@ -1,4 +1,4 @@
-import type { SubTaskDTO } from '../../types/tasks/task'
+import type { SubtaskDTO } from '../../types/tasks/task'
 
 interface GRPCSubTask {
   getId: () => string,
@@ -7,7 +7,7 @@ interface GRPCSubTask {
 }
 
 export const GRPCMapper = {
-  subtaskFromGRPC: (subTask: GRPCSubTask, taskId: string): SubTaskDTO => ({
+  subtaskFromGRPC: (subTask: GRPCSubTask, taskId: string): SubtaskDTO => ({
     id: subTask.getId(),
     name: subTask.getName(),
     isDone: subTask.getDone(),

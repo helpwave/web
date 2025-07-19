@@ -1,10 +1,11 @@
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { SubTaskDTO, TaskDTO } from '../../types/tasks/task'
+import type { SubtaskDTO, TaskDTO } from '../../types/tasks/task'
 import { QueryKeys } from '../query_keys'
 import { roomOverviewsQueryKey } from './room_mutations'
 import type { TaskAssignmentRequestProps } from '../../service/tasks/TaskService'
 import { TaskService } from '../../service/tasks/TaskService'
+import type { SubtaskDeleteParameter } from '../../service/tasks/TaskSubtaskService'
 import { TaskSubtaskService } from '../../service/tasks/TaskSubtaskService'
 
 export const useTaskQuery = (taskId?: string) => {
@@ -87,11 +88,11 @@ export const useTaskDeleteMutation = (options?: UseMutationOptions<boolean, unkn
   })
 }
 
-export const useSubTaskAddMutation = (options?: UseMutationOptions<SubTaskDTO, unknown, SubTaskDTO>) => {
+export const useSubtaskAddMutation = (options?: UseMutationOptions<SubtaskDTO, unknown, SubtaskDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
     ...options,
-    mutationFn: async (subtask: SubTaskDTO) => {
+    mutationFn: async (subtask: SubtaskDTO) => {
       return await TaskSubtaskService.create(subtask)
     },
     onSuccess: (data, variables, context) => {
@@ -103,11 +104,11 @@ export const useSubTaskAddMutation = (options?: UseMutationOptions<SubTaskDTO, u
   })
 }
 
-export const useSubTaskUpdateMutation = (options?: UseMutationOptions<boolean, unknown, SubTaskDTO>) => {
+export const useSubtaskUpdateMutation = (options?: UseMutationOptions<boolean, unknown, SubtaskDTO>) => {
   const queryClient = useQueryClient()
   return useMutation({
     ...options,
-    mutationFn: async (subtask: SubTaskDTO) => {
+    mutationFn: async (subtask: SubtaskDTO) => {
       return await TaskSubtaskService.update(subtask)
     },
     onSuccess: (data, variables, context) => {
@@ -119,12 +120,12 @@ export const useSubTaskUpdateMutation = (options?: UseMutationOptions<boolean, u
   })
 }
 
-export const useSubTaskDeleteMutation = (options?: UseMutationOptions<boolean, unknown, string>) => {
+export const useSubtaskDeleteMutation = (options?: UseMutationOptions<boolean, unknown, SubtaskDeleteParameter>) => {
   const queryClient = useQueryClient()
   return useMutation({
     ...options,
-    mutationFn: async (subtaskId: string) => {
-      return await TaskSubtaskService.delete(subtaskId)
+    mutationFn: async (parameter: SubtaskDeleteParameter) => {
+      return await TaskSubtaskService.delete(parameter)
     },
     onSuccess: (data, variables, context) => {
       if (options?.onSuccess) {

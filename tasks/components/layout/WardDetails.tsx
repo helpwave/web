@@ -66,7 +66,6 @@ const defaultWardDetailTranslations: Translation<WardDetailTranslation> = {
 }
 
 export type WardDetailProps = {
-  organizationId: string,
   ward?: WardDetailDTO,
 }
 
@@ -95,11 +94,14 @@ export const WardDetail = ({
     }
   }, [data, isCreatingNewWard])
 
-  const createWardMutation = useWardCreateMutation((ward) => context.updateContext({ ...context.state, wardId: ward.id }))
-  const updateWardMutation = useWardUpdateMutation((ward) => {
-    setNewWard({ ...newWard, name: ward.name })
+  const createWardMutation = useWardCreateMutation({
+    onSuccess: (ward) => context.updateContext({
+      ...context.state,
+      wardId: ward.id
+    })
   })
-  const deleteWardMutation = useWardDeleteMutation(() => context.updateContext({ ...context.state, wardId: '' }))
+  const updateWardMutation = useWardUpdateMutation()
+  const deleteWardMutation = useWardDeleteMutation()
 
   return (
     <div className="col py-4 px-6">

@@ -1,4 +1,4 @@
-import type { SubTaskDTO } from '../../types/tasks/task'
+import type { SubtaskDTO } from '../../types/tasks/task'
 import { APIServices } from '../../services'
 import {
   CreateSubtaskRequest,
@@ -7,8 +7,13 @@ import {
 } from '@helpwave/proto-ts/services/tasks_svc/v1/task_svc_pb'
 import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 
+export type SubtaskDeleteParameter = {
+  id: string,
+  taskId: string,
+}
+
 export const TaskSubtaskService = {
-  create: async function (subtask: SubTaskDTO): Promise<SubTaskDTO> {
+  create: async function (subtask: SubtaskDTO): Promise<SubtaskDTO> {
     const req = new CreateSubtaskRequest()
       .setSubtask(new CreateSubtaskRequest.Subtask().setName(subtask.name))
       .setTaskId(subtask.taskId)
@@ -20,7 +25,7 @@ export const TaskSubtaskService = {
       isDone: false,
     }
   },
-  update: async function (subtask: SubTaskDTO): Promise<boolean> {
+  update: async function (subtask: SubtaskDTO): Promise<boolean> {
     const req = new UpdateSubtaskRequest()
     req.setSubtaskId(subtask.id)
       .setTaskId(subtask.taskId)
@@ -31,9 +36,10 @@ export const TaskSubtaskService = {
 
     return !!res.toObject()
   },
-  delete: async function (subtaskId: string): Promise<boolean> {
+  delete: async function ({ id, taskId }: SubtaskDeleteParameter): Promise<boolean> {
     const req = new DeleteSubtaskRequest()
-      .setSubtaskId(subtaskId)
+      .setSubtaskId(id)
+      .setTaskId(taskId)
     const res = await APIServices.task.deleteSubtask(req, getAuthenticatedGrpcMetadata())
     return !!res.toObject()
   },

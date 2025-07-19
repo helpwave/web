@@ -1,6 +1,6 @@
 import type { Translation } from '@helpwave/hightide'
 
-export type SubTaskDTO = {
+export type SubtaskDTO = {
   id: string,
   name: string,
   isDone: boolean,
@@ -66,7 +66,7 @@ export type TaskDTO = {
   assignee?: string,
   notes: string,
   status: TaskStatus,
-  subtasks: SubTaskDTO[],
+  subtasks: SubtaskDTO[],
   dueDate?: Date,
   createdAt?: Date,
   creatorId?: string,

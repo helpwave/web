@@ -4,12 +4,7 @@ import { Plus } from 'lucide-react'
 import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { SolidButton } from '@helpwave/hightide'
-import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
-import {
-  useSubTaskAddMutation,
-  useSubTaskDeleteMutation,
-  useSubTaskUpdateMutation
-} from '@helpwave/api-services/mutations/tasks/task_mutations'
+import type { SubtaskDTO } from '@helpwave/api-services/types/tasks/task'
 import { SubtaskTile } from './SubtaskTile'
 import { TaskTemplateContext } from '@/pages/templates'
 
@@ -36,12 +31,27 @@ const defaultSubtaskViewTranslation: Translation<SubtaskViewTranslation> = {
 }
 
 type SubtaskViewProps = {
-  // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
-  subtasks: SubTaskDTO[],
-  taskId?: string,
+  subtasks: SubtaskDTO[],
+  taskOrTemplateId?: string,
   createdBy?: string,
-  taskTemplateId?: string,
-  onChange: (subtasks: SubTaskDTO[]) => void,
+  /**
+   * Gives the full list with updates
+   *
+   * New items are only created locally
+   */
+  onChange: (subtasks: SubtaskDTO[]) => void,
+  /**
+   * Callback when an item is added and not creating
+   */
+  onAdd: (subtask: SubtaskDTO) => void,
+  /**
+   * Callback when an item is updated and not creating
+   */
+  onUpdate: (subtask: SubtaskDTO) => void,
+  /**
+   * Callback when an item is removed and not creating
+   */
+  onRemove: (subtask: SubtaskDTO) => void,
 }
 
 /**
@@ -50,16 +60,16 @@ type SubtaskViewProps = {
 export const SubtaskView = ({
   overwriteTranslation,
   subtasks,
-  taskId,
+  taskOrTemplateId,
   onChange,
+  onAdd,
+  onUpdate,
+  onRemove,
 }: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
 
   const translation = useTranslation([defaultSubtaskViewTranslation], overwriteTranslation)
-  const isCreatingTask = taskId === ''
-  const addSubtaskMutation = useSubTaskAddMutation()
-  const deleteSubtaskMutation = useSubTaskDeleteMutation()
-  const updateSubtaskMutation = useSubTaskUpdateMutation()
+  const isCreating = taskOrTemplateId === ''
 
   const scrollableRef = useRef<Scrollbars>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
@@ -72,10 +82,9 @@ export const SubtaskView = ({
     setScrollToBottom(false)
   }, [scrollToBottomFlag, subtasks])
 
-  const removeSubtask = (subtask: SubTaskDTO, index: number) => {
+  const removeSubtask = (subtask: SubtaskDTO, index: number) => {
     const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
-    // undefined because taskId === "" would mean task creation // TODO: this seems like a terrible way of differentiating things..
-    if (taskId === undefined) {
+    if (isCreating) {
       context.updateContext({
         ...context.state,
         template: { ...context.state.template, subtasks: filteredSubtasks },
@@ -84,7 +93,7 @@ export const SubtaskView = ({
       })
     } else {
       onChange(filteredSubtasks)
-      deleteSubtaskMutation.mutate(subtask.id)
+      onRemove(subtask)
     }
   }
 
@@ -94,10 +103,10 @@ export const SubtaskView = ({
         <span className="textstyle-title-normal">{translation('subtasks')}</span>
         <SolidButton
           onClick={() => {
-            const newSubtask: SubTaskDTO = { id: '', name: `${translation('newSubtask')} ${subtasks.length + 1}`, isDone: false, taskId: taskId ?? '' }
+            const newSubtask: SubtaskDTO = { id: '', name: `${translation('newSubtask')} ${subtasks.length + 1}`, isDone: false, taskId: taskOrTemplateId ?? '' }
             onChange([...subtasks, newSubtask])
-            if (!isCreatingTask) {
-              addSubtaskMutation.mutate(newSubtask)
+            if (!isCreating) {
+              onAdd(newSubtask)
             }
             setScrollToBottom(true)
           }}
@@ -119,7 +128,7 @@ export const SubtaskView = ({
                   const newSubtasks = [...subtasks]
                   newSubtasks[index] = newSubtask
                   if (subtask.id) {
-                    updateSubtaskMutation.mutate(newSubtask)
+                    onUpdate(newSubtask)
                   }
                   onChange(newSubtasks)
                 }}

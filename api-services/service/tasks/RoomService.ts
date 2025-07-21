@@ -6,6 +6,7 @@ import {
   GetRoomRequest, UpdateRoomRequest
 } from '@helpwave/proto-ts/services/tasks_svc/v1/room_svc_pb'
 import type { RoomDTO, RoomMinimalDTO, RoomOverviewDTO } from '../../types/tasks/room'
+import type { BedWithPatientWithTasksNumberDTO } from '../../types/tasks/bed'
 
 export const RoomService = {
   get: async (id: string): Promise<RoomDTO> => {
@@ -32,14 +33,16 @@ export const RoomService = {
       id: room.getId(),
       name: room.getName(),
       wardId,
-      beds: room.getBedsList().map(bed => {
+      beds: room.getBedsList().map<BedWithPatientWithTasksNumberDTO>(bed => {
         const patient = bed.getPatient()
         return {
           id: bed.getId(),
           name: bed.getName(),
           patient: !patient ? undefined : {
             id: patient.getId(),
-            name: patient.getHumanReadableIdentifier(),
+            humanReadableIdentifier: patient.getHumanReadableIdentifier(),
+            bedId: bed.getId(),
+            wardId: wardId,
             tasksTodo: patient.getTasksUnscheduled(),
             tasksInProgress: patient.getTasksInProgress(),
             tasksDone: patient.getTasksDone()

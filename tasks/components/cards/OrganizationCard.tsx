@@ -48,7 +48,7 @@ export const OrganizationCard = ({
         </div>
         <div className="row items-center overflow-hidden gap-x-2">
           <Mail/>
-          <span className="w-full truncate text-sm">{organization.email}</span>
+          <span className="w-full truncate text-sm">{organization.contactEmail}</span>
         </div>
         <div className="row justify-between">
           <div className="text-left my-1 font-semibold text-gray-600 text-sm truncate">
@@ -56,8 +56,8 @@ export const OrganizationCard = ({
           </div>
           <AvatarGroup
             avatars={organization.members.map(user => ({
-              image: { avatarUrl: user.avatarURL, alt: user.name },
-              name: user.name,
+              image: user.avatarURL ? { avatarUrl: user.avatarURL, alt: user.nickname } : undefined,
+              name: user.nickname,
             }))}
             fullyRounded={true}
           />

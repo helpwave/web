@@ -126,7 +126,7 @@ export const ManageBedsModal = ({
     {
       id: 'patientName',
       header: translation('patient'),
-      accessorFn: ({ patient }) => patient?.name ?? (<FillerRowElement/>),
+      accessorFn: ({ patient }) => patient?.humanReadableIdentifier ?? (<FillerRowElement/>),
       sortingFn: 'text',
       minSize: 190,
       meta: {

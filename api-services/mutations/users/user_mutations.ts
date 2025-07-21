@@ -1,21 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
-import { ReadPublicProfileRequest } from '@helpwave/proto-ts/services/user_svc/v1/user_svc_pb'
 import { QueryKeys } from '../query_keys'
-import { APIServices } from '../../services'
-import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
+import { UserService } from '../../service/users/UserService'
 
-export const useUserQuery = (userId: string | undefined) => {
-  const enabled = !!userId && userId !== '00000000-0000-0000-0000-000000000000'
+export const useUserQuery = (userId?: string) => {
+  const enabled = !!userId
   return useQuery({
     queryKey: [QueryKeys.users, userId],
     enabled,
     queryFn: async () => {
-      if (!enabled || !userId) return
-      const req = new ReadPublicProfileRequest()
-      req.setId(userId)
-
-      const res = await APIServices.user.readPublicProfile(req, getAuthenticatedGrpcMetadata())
-      return res.toObject()
+      return await UserService.get(userId!)
     },
   })
 }

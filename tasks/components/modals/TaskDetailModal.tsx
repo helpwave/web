@@ -120,10 +120,8 @@ const TaskDetailViewSidebar = ({
   const translation = useTranslation([defaultTaskDetailViewTranslation], overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
-  const { organization } = useAuth()
 
   const updateTaskMutation = useTaskUpdateMutation()
-
   const assignTaskToUserMutation = useAssignTaskMutation()
   const unassignTaskToUserMutation = useUnassignTaskMutation()
 
@@ -157,12 +155,11 @@ const TaskDetailViewSidebar = ({
         <label className="textstyle-label-md">{translation('assignee')}</label>
         <div className="row items-center gap-x-2">
           <AssigneeSelect
-            organizationId={organization?.id ?? ''}
             value={task.assignee}
             onChange={(assignee) => {
-              onChange({ ...task, assignee: assignee.id })
+              onChange({ ...task, assignee: assignee.userId })
               if (!isCreating) {
-                assignTaskToUserMutation.mutate({ taskId: task.id, userId: assignee.id })
+                assignTaskToUserMutation.mutate({ taskId: task.id, userId: assignee.userId })
               }
             }}
           />

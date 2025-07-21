@@ -1,9 +1,9 @@
 export type OrganizationMemberMinimalDTO = {
-  id: string,
+  userId: string,
 }
 
 export type OrganizationMember = OrganizationMemberMinimalDTO & {
   email: string,
-  name: string,
-  avatarURL: string,
+  nickname: string,
+  avatarURL?: string,
 }

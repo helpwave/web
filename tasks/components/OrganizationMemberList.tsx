@@ -18,7 +18,6 @@ import { OrganizationContext } from '@/pages/organizations'
 import { ColumnTitle } from '@/components/ColumnTitle'
 import { Trash } from 'lucide-react'
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
-import type { OrganizationInvitation } from '@/components/OrganizationInvitationList'
 
 type OrganizationMemberListTranslation = {
   edit: string,
@@ -103,7 +102,7 @@ export const OrganizationMemberList = ({
 
   const context = useContext(OrganizationContext)
   organizationId ??= context.state.organizationId
-  const { data, isLoading, isError } = useMembersByOrganizationQuery(organizationId)
+  const { data, isLoading, isError } = useMembersByOrganizationQuery()
   const membersByOrganization = useMemo(() => data ?? [], [data])
   const usedMembers: OrganizationMember[] = useMemo(
     () => members ?? membersByOrganization ?? [], [members, membersByOrganization]
@@ -112,7 +111,7 @@ export const OrganizationMemberList = ({
   const removeMemberMutation = useRemoveMemberMutation(organizationId)
   const [deleteDialogState, setDeleteDialogState] = useState<DeleteDialogState>(defaultDeleteDialogState)
   const [selectionState, setSelectionState] = useState<RowSelectionState>({})
-  const columns = useMemo<ColumnDef<OrganizationInvitation>[]>(() => [
+  const columns = useMemo<ColumnDef<OrganizationMember>[]>(() => [
     {
       id: 'member',
       header: translation('member'),
@@ -126,9 +125,14 @@ export const OrganizationMemberList = ({
               navigator.clipboard.writeText(orgMember.email).catch(console.error)
             }}
           >
-            <Avatar image={{ avatarUrl: orgMember.avatarURL, alt: '' }} name={orgMember.name} size="lg" fullyRounded={true}/>
+            <Avatar
+              image={orgMember.avatarURL ? { avatarUrl: orgMember.avatarURL, alt: '' } : undefined}
+              name={orgMember.nickname}
+              size="lg"
+              fullyRounded={true}
+            />
             <div className="col items-start gap-y-0">
-              <span className="font-bold truncate">{orgMember.name}</span>
+              <span className="font-bold truncate">{orgMember.nickname}</span>
               <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
             </div>
           </TextButton>
@@ -187,17 +191,17 @@ export const OrganizationMemberList = ({
         onCancel={() => setDeleteDialogState(defaultDeleteDialogState)}
         onConfirm={() => {
           if (deleteDialogState.member) {
-            if (selectionState[deleteDialogState.member.id]) {
+            if (selectionState[deleteDialogState.member.userId]) {
               const newSelection = { ...selectionState }
-              delete newSelection[deleteDialogState.member.id]
+              delete newSelection[deleteDialogState.member.userId]
               setSelectionState(newSelection)
             }
-            removeMemberMutation.mutate(deleteDialogState.member.id)
+            removeMemberMutation.mutate(deleteDialogState.member.userId)
           } else {
             Object.keys(selectionState).forEach(value => {
-              const member = usedMembers.find(member => member.id === value)
+              const member = usedMembers.find(member => member.userId === value)
               if (member) {
-                removeMemberMutation.mutate(member.id)
+                removeMemberMutation.mutate(member.userId)
               }
             })
             setSelectionState({})

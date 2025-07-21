@@ -1,5 +1,6 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import type { Translation } from '@helpwave/hightide'
+import { range } from '@helpwave/hightide'
 import { LoadingAndErrorComponent, type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
@@ -11,11 +12,14 @@ import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { AddCard } from '@/components/cards/AddCard'
 import { router } from 'next/client'
 import { ColumnTitle } from '@/components/ColumnTitle'
+import { AddPatientModal, type AddPatientModalValue } from '@/components/modals/AddPatientModal'
+import { usePatientCreateMutation } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 
 type WardRoomListTranslation = {
   roomOverview: string,
   showPatientList: string,
   addRooms: string,
+  patient: string,
 }
 
 const defaultWardRoomListTranslation: Translation<WardRoomListTranslation> = {
@@ -23,17 +27,25 @@ const defaultWardRoomListTranslation: Translation<WardRoomListTranslation> = {
     roomOverview: 'Ward Overview',
     showPatientList: 'Show Patient List',
     addRooms: 'Add Rooms',
+    patient: 'Patient',
   },
   de: {
     roomOverview: 'Stationsübersicht',
     showPatientList: 'Patientenliste',
     addRooms: 'Räume hinzufügen',
+    patient: 'Patient',
   }
+}
+
+type AddModalState = {
+  value: AddPatientModalValue,
+  isOpen: boolean,
 }
 
 export type WardRoomListProps = {
   selectedBed?: BedWithPatientWithTasksNumberDTO,
   rooms?: RoomOverviewDTO[],
+  wardId: string,
 }
 
 /**
@@ -41,7 +53,8 @@ export type WardRoomListProps = {
  */
 export const WardRoomList = ({
                                overwriteTranslation,
-                               rooms
+                               rooms,
+                               wardId
                              }: PropsForTranslation<WardRoomListTranslation, WardRoomListProps>) => {
   const translation = useTranslation([defaultWardRoomListTranslation], overwriteTranslation)
   const {
@@ -66,8 +79,33 @@ export const WardRoomList = ({
     }
   }, [observeAttribute, refetch])
 
+  const createPatientMutation = usePatientCreateMutation()
+  const [addModalState, setAddModalState] = useState<AddModalState>({
+    value: {
+      name: ''
+    },
+    isOpen: false
+  })
+
   return (
     <div className="relative col px-6 py-4 @container">
+      <AddPatientModal
+        isOpen={addModalState.isOpen}
+        onCancel={() => setAddModalState({ value: { name : '' },isOpen: false })}
+        onConfirm={() => {
+          createPatientMutation.mutate({
+            id: '',
+            humanReadableIdentifier: addModalState.value.name,
+            bedId: addModalState.value.bedId,
+            notes: '',
+            tasks: [],
+          })
+          setAddModalState({ value: { name: '' }, isOpen: false })
+        }}
+        onChange={(value) => setAddModalState(prevState => ({ ...prevState, value }))}
+        value={addModalState.value}
+        wardId={wardId}
+      />
       <ColumnTitle
         title={translation('roomOverview')}
         actions={(
@@ -88,6 +126,16 @@ export const WardRoomList = ({
             <RoomOverview
               key={index}
               room={room}
+              onBedClick={(bed) => {
+                setAddModalState({
+                  value: {
+                    name: `${translation('patient')} ${range(3).map(() => Math.floor(Math.random() * 10)).map(String).join('')}`,
+                    bedId: bed.id,
+                    roomId: room.id,
+                  },
+                  isOpen: true
+                })
+              }}
             />
           )) : (
             <AddCard

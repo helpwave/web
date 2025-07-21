@@ -134,10 +134,10 @@ export const OrganizationForm = ({
   }
 
   function validateEmailWithOrganization(organization: OrganizationMinimalDTO) {
-    const email = organization.email.trim()
+    const email = organization.contactEmail.trim()
     if (email === '') {
       return translation('required')
-    } else if (!validateEmail(organization.email)) {
+    } else if (!validateEmail(organization.contactEmail)) {
       return translation('invalidEmail')
     }
   }
@@ -213,7 +213,7 @@ export const OrganizationForm = ({
             <div className="flex-1 mr-2">
               <Input
                 id="email"
-                value={organizationForm.organization.email}
+                value={organizationForm.organization.contactEmail}
                 label={{ name: translation('contactEmail') }}
                 type="email"
                 onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
@@ -222,20 +222,16 @@ export const OrganizationForm = ({
                 })}
                 onChangeText={text => triggerOnChange({
                   ...organizationForm.organization,
-                  email: text
+                  contactEmail: text
                 }, false, { ...organizationForm.touched })}
                 onEditCompleted={text => triggerOnChange({
                   ...organizationForm.organization,
-                  email: text
+                  contactEmail: text
                 }, true, { ...organizationForm.touched, email: true })}
                 maxLength={maxMailLength}
                 className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
               />
             </div>
-            {
-              !organizationForm.organization.isVerified &&
-              <span className="text-negative mb-3">{translation('notVerified')}</span>
-            }
           </div>
           {isDisplayingEmailNameError && <span className="textstyle-form-error">{emailErrorMessage}</span>}
           <span className="textstyle-form-description">{translation('contactEmailDescription')}</span>

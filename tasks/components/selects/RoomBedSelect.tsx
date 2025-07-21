@@ -47,7 +47,7 @@ const defaultRoomBedSelectTranslation: Translation<RoomBedSelectTranslation> = {
   }
 }
 
-export type RoomBedSelectIds = {
+export type RoomBedSelectionValue = {
   /**
    * undefined value here means select a room and bed
    */
@@ -56,12 +56,12 @@ export type RoomBedSelectIds = {
 }
 
 export type RoomBedSelectProps = {
-  initialRoomAndBed: RoomBedSelectIds,
+  initialRoomAndBed: RoomBedSelectionValue,
   wardId: string,
   /**
    * Only triggers on valid input
    */
-  onChange?: (RoomBedSelectIds: RoomBedSelectIds) => void,
+  onChange?: (RoomBedSelectIds: RoomBedSelectionValue) => void,
   isSubmitting?: boolean,
   isClearable?: boolean,
   disabled?: boolean,
@@ -81,7 +81,7 @@ export const RoomBedSelect = ({
                               }: PropsForTranslation<RoomBedSelectTranslation, RoomBedSelectProps>) => {
   const translation = useTranslation([defaultRoomBedSelectTranslation], overwriteTranslation)
   const { data, isError, isLoading } = usePatientAssignmentByWardQuery(wardId)
-  const [currentSelection, setCurrentSelection] = useState<RoomBedSelectIds>({ ...initialRoomAndBed })
+  const [currentSelection, setCurrentSelection] = useState<RoomBedSelectionValue>({ ...initialRoomAndBed })
   const ref = useRef<HTMLDivElement>(null)
   const currentRoom = data?.find(value => value.id === currentSelection.roomId)
   const [touched, setTouched] = useState(false)
@@ -203,6 +203,12 @@ export const RoomBedSelect = ({
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError || !data}
+        className={clsx(
+          {
+            'min-h-17': isUsingWidthLayout,
+            'min-h-22': !isUsingWidthLayout,
+          }
+        )}
       >
         <div className="col">
           <div

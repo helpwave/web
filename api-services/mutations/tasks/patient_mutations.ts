@@ -87,7 +87,24 @@ export const usePatientUpdateMutation = (options?: UseMutationOptions<boolean, u
   })
 }
 
-export const useAssignBedMutation = (options?: UseMutationOptions<boolean, unknown, BedWithPatientId, unknown>) => {
+export const usePatientDeleteMutation = (options?: UseMutationOptions<boolean, unknown, string>) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    ...options,
+    mutationFn: async (id) => {
+      return await PatientService.delete(id)
+    },
+    onSuccess: (data, variables, context) => {
+      if(options?.onSuccess) {
+        options.onSuccess(data, variables, context)
+      }
+      queryClient.invalidateQueries([QueryKeys.patients]).catch(reason => console.error(reason))
+      queryClient.invalidateQueries([QueryKeys.rooms]).catch(reason => console.error(reason))
+    }
+  })
+}
+
+export const usePatientAssignToBedMutation = (options?: UseMutationOptions<boolean, unknown, BedWithPatientId, unknown>) => {
   const queryClient = useQueryClient()
   return useMutation({
     ...options,
@@ -104,7 +121,7 @@ export const useAssignBedMutation = (options?: UseMutationOptions<boolean, unkno
   })
 }
 
-export const useUnassignMutation = (options?: UseMutationOptions<boolean, unknown, string, unknown>) => {
+export const usePatientUnassignMutation = (options?: UseMutationOptions<boolean, unknown, string, unknown>) => {
   const queryClient = useQueryClient()
   return useMutation({
     ...options,
@@ -138,12 +155,39 @@ export const usePatientDischargeMutation = (options?: UseMutationOptions<boolean
   })
 }
 
-export const useReadmitPatientMutation = (options?: UseMutationOptions<boolean, unknown, string, unknown>) => {
+export const usePatientReadmitMutation = (options?: UseMutationOptions<boolean, unknown, string>) => {
   const queryClient = useQueryClient()
   return useMutation({
     ...options,
     mutationFn: async (patientId: string) => {
       return await PatientService.reAdmit(patientId)
+    },
+    onSuccess: (data, variables, context) => {
+      if(options?.onSuccess){
+        options.onSuccess(data, variables, context)
+      }
+      queryClient.invalidateQueries([QueryKeys.rooms, roomOverviewsQueryKey]).catch(console.error)
+      queryClient.invalidateQueries([QueryKeys.patients]).catch(console.error)
+    }
+  })
+}
+
+type PatientReadmitAndAssignVariable = {
+  patientId: string,
+  bedId: string,
+}
+export const usePatientReadmitAndAssignMutation = (options?: UseMutationOptions<boolean, unknown, PatientReadmitAndAssignVariable>) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    ...options,
+    mutationFn: async ({ patientId, bedId }) => {
+      await PatientService.reAdmit(patientId)
+      return await PatientService.assignToBed({ patientId, bedId })
+    },
+    onMutate: (variables) => {
+      if(options?.onMutate){
+        options.onMutate(variables)
+      }
     },
     onSuccess: (data, variables, context) => {
       if(options?.onSuccess){

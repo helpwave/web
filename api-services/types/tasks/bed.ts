@@ -34,6 +34,6 @@ export type BedWithMinimalPatientDTO = BedMinimalDTO & {
 }
 
 export type BedWithPatientId = {
-  id: string,
+  bedId: string,
   patientId: string,
 }

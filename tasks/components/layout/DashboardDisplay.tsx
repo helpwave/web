@@ -155,10 +155,16 @@ export const DashboardDisplay = ({
                     {patients?.filter((_, index) => index % 2 == 0).map(patient => (
                       <PatientCard
                         key={patient.id}
-                        className={clsx(cardWidth, '!min-h-12', { '!cursor-not-allowed': !patient.wardId })}
+                        className={clsx(cardWidth, '!min-h-12')}
                         bedName={patient.bed?.name}
-                        patientName={patient.name}
-                        onClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
+                        patientName={patient.humanReadableIdentifier}
+                        onClick={() => {
+                          if(patient.wardId) {
+                            router.push(`/ward/${patient.wardId}?patientId=${patient.id}`).catch(console.error)
+                          } else if(wards && wards.length > 0) {
+                            router.push(`/ward/${wards[0]!.id}?patientId=${patient.id}`).catch(console.error)
+                          }
+                        }}
                       />
                     ))}
                   </div>
@@ -166,10 +172,16 @@ export const DashboardDisplay = ({
                     {patients?.filter((_, index) => index % 2 == 1).map(patient => (
                       <PatientCard
                         key={patient.id}
-                        className={clsx(cardWidth, '!min-h-12', { '!cursor-not-allowed': !patient.wardId })}
+                        className={clsx(cardWidth, '!min-h-12')}
                         bedName={patient.bed?.name}
-                        patientName={patient.name}
-                        onClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
+                        patientName={patient.humanReadableIdentifier}
+                        onClick={() => {
+                          if(patient.wardId) {
+                            router.push(`/ward/${patient.wardId}?patientId=${patient.id}`).catch(console.error)
+                          } else if(wards && wards.length > 0) {
+                            router.push(`/ward/${wards[0]!.id}?patientId=${patient.id}`).catch(console.error)
+                          }
+                        }}
                       />
                     ))}
                   </div>

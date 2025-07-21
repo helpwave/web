@@ -12,12 +12,12 @@ import {
 } from '@helpwave/hightide'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import {
-  useAssignBedMutation,
+  usePatientAssignToBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,
-  useReadmitPatientMutation,
-  useUnassignMutation
+  usePatientReadmitMutation,
+  usePatientUnassignMutation
 } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import type { PatientDetailsDTO } from '@helpwave/api-services/types/tasks/patient'
 import { emptyPatientDetails } from '@helpwave/api-services/types/tasks/patient'
@@ -65,7 +65,6 @@ const defaultPatientDetailTranslations: Translation<PatientDetailTranslation> = 
 
 export type PatientDetailProps = {
   wardId: string,
-  patient?: PatientDetailsDTO,
   width?: number,
 }
 
@@ -75,7 +74,6 @@ export type PatientDetailProps = {
 export const PatientDetail = ({
                                 overwriteTranslation,
                                 wardId,
-                                patient = emptyPatientDetails
                               }: PropsForTranslation<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
   const translation = useTranslation([defaultPatientDetailTranslations], overwriteTranslation)
@@ -83,12 +81,12 @@ export const PatientDetail = ({
   const context = useContext(WardOverviewContext)
 
   const updateMutation = usePatientUpdateMutation()
-  const readmitMutation = useReadmitPatientMutation()
+  const readmitMutation = usePatientReadmitMutation()
   const dischargeMutation = usePatientDischargeMutation({
     onSuccess: () =>
       context.updateContext({ wardId: context.state.wardId })
   })
-  const unassignMutation = useUnassignMutation({
+  const unassignMutation = usePatientUnassignMutation({
     onSuccess: () =>
       context.updateContext({ wardId: context.state.wardId })
   })
@@ -98,7 +96,7 @@ export const PatientDetail = ({
     isLoading
   } = usePatientDetailsQuery(context.state.patientId)
 
-  const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
+  const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(emptyPatientDetails)
   const [taskId, setTaskId] = useState<string>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
   const [initialTaskStatus, setInitialTaskStatus] = useState<TaskStatus>()
@@ -112,7 +110,7 @@ export const PatientDetail = ({
   }, [data])
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const assignBedMutation = useAssignBedMutation({
+  const assignBedMutation = usePatientAssignToBedMutation({
     onSuccess: () => {
       setIsSubmitting(false)
     }
@@ -176,24 +174,24 @@ export const PatientDetail = ({
                 labelClassName="text-xl font-semibold"
                 className="text-lg font-semibold"
                 id="humanReadableIdentifier"
-                value={newPatient.name}
+                value={newPatient.humanReadableIdentifier}
                 onChangeText={name => changeSavedValue({
                   ...newPatient,
-                  name
+                  humanReadableIdentifier: name
                 })}
               />
             </div>
             <RoomBedSelect
               initialRoomAndBed={{
-                roomId: context.state.roomId ?? '',
-                bedId: context.state.bedId ?? ''
+                roomId: newPatient.room?.id,
+                bedId: newPatient.bed?.id,
               }}
               wardId={context.state.wardId}
               onChange={(roomBedDropdownIds) => {
                 if (roomBedDropdownIds.bedId && context.state.patientId) {
                   context.updateContext({ ...context.state, ...roomBedDropdownIds })
                   assignBedMutation.mutate({
-                    id: roomBedDropdownIds.bedId,
+                    bedId: roomBedDropdownIds.bedId,
                     patientId: context.state.patientId
                   })
                 }
@@ -205,10 +203,10 @@ export const PatientDetail = ({
           <div className="flex-1">
             <Textarea
               headline={translation('notes')}
-              value={newPatient.note}
+              value={newPatient.notes}
               onChangeText={text => changeSavedValue({
                 ...newPatient,
-                note: text
+                notes: text
               })}
             />
           </div>

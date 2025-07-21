@@ -129,12 +129,11 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
             console.debug('Creating a new organization')
             OrganizationService.create({
               id: '',
-              email: 'test@helpwave.de',
+              contactEmail: 'test@helpwave.de',
               longName: 'Test Organization',
               shortName: 'Test-Org',
               avatarURL: 'https://helpwave.de/favicon.ico',
               isPersonal: false,
-              isVerified: false,
             }).then(organization => {
               setUser(() => ({
                 ...user,

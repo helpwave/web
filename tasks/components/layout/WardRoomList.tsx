@@ -1,7 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import type { Translation } from '@helpwave/hightide'
-import { range } from '@helpwave/hightide'
-import { LoadingAndErrorComponent, type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  range,
+  SolidButton,
+  useTranslation
+} from '@helpwave/hightide'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
@@ -91,7 +96,7 @@ export const WardRoomList = ({
     <div className="relative col px-6 py-4 @container">
       <AddPatientModal
         isOpen={addModalState.isOpen}
-        onCancel={() => setAddModalState({ value: { name : '' },isOpen: false })}
+        onCancel={() => setAddModalState({ value: { name: '' }, isOpen: false })}
         onConfirm={() => {
           createPatientMutation.mutate({
             id: '',
@@ -127,6 +132,14 @@ export const WardRoomList = ({
               key={index}
               room={room}
               onBedClick={(bed) => {
+                if (bed.patient) {
+                  updateContext({
+                    patientId: bed.patient.id,
+                    bedId: bed.id,
+                    wardId: room.wardId,
+                  })
+                  return
+                }
                 setAddModalState({
                   value: {
                     name: `${translation('patient')} ${range(3).map(() => Math.floor(Math.random() * 10)).map(String).join('')}`,

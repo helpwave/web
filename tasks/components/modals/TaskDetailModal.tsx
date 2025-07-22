@@ -1,7 +1,9 @@
-import type { OverlayHeaderProps, Translation } from '@helpwave/hightide'
+import type { FormTranslationType, OverlayHeaderProps, Translation } from '@helpwave/hightide'
 import {
   ConfirmModal,
+  formTranslation,
   Input,
+  Label,
   LoadingAndErrorComponent,
   LoadingAnimation,
   Modal,
@@ -15,7 +17,7 @@ import {
   useTranslation
 } from '@helpwave/hightide'
 import clsx from 'clsx'
-import { X } from 'lucide-react'
+import { ChevronRight, Globe, LockIcon, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
@@ -26,7 +28,10 @@ import {
   useWardTaskTemplateQuery
 } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import {
-  useAssignTaskMutation, useSubtaskAddMutation, useSubtaskDeleteMutation, useSubtaskUpdateMutation,
+  useAssignTaskMutation,
+  useSubtaskAddMutation,
+  useSubtaskDeleteMutation,
+  useSubtaskUpdateMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
   useTaskQuery,
@@ -39,68 +44,41 @@ import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
 import { TaskStatusSelect } from '@/components/selects/TaskStatusSelect'
 import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
+import { usePatientDetailsQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import Link from 'next/link'
+import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import type { MedicalTranslationType } from '@/translation/medical'
+import { medicalTranslation } from '@/translation/medical'
+import type { TasksTranslationType } from '@/translation/tasks'
+import { tasksTranslation } from '@/translation/tasks'
 
-type TaskDetailViewTranslation = {
-  close: string,
-  notes: string,
-  subtasks: string,
-  assignee: string,
-  dueDate: string,
-  status: string,
-  visibility: string,
-  creationTime: string,
-  private: string,
-  public: string,
-  create: string,
-  delete: string,
+type TaskDetailViewAddonTranslation = {
+  finishTask: string,
   deleteTask: string,
   deleteTaskDescription: string,
-  publish: string,
   publishTask: string,
   publishTaskDescription: string,
-  finish: string,
 }
 
-const defaultTaskDetailViewTranslation: Translation<TaskDetailViewTranslation> = {
+type TranslationType = FormTranslationType
+  & MedicalTranslationType
+  & TasksTranslationType
+  & TaskDetailViewAddonTranslation
+
+const defaultTaskDetailViewTranslation: Translation<TaskDetailViewAddonTranslation> = {
   en: {
-    close: 'Close',
-    notes: 'Notes',
-    subtasks: 'Subtasks',
-    assignee: 'Assignee',
-    dueDate: 'Due date',
-    status: 'Status',
-    visibility: 'Visibility',
-    creationTime: 'Creation time',
-    private: 'private',
-    public: 'public',
-    create: 'Create',
-    delete: 'Delete',
+    finishTask: 'Finish Task',
     deleteTask: 'Delete Task',
     deleteTaskDescription: 'The Tasks will be irrevocably removed',
-    publish: 'Publish',
     publishTask: 'Publish task',
     publishTaskDescription: 'This cannot be undone',
-    finish: 'Finish task',
   },
   de: {
-    close: 'Schließen',
-    notes: 'Notizen',
-    subtasks: 'Unteraufgaben',
-    assignee: 'Verantwortlich',
-    dueDate: 'Fälligkeitsdatum',
-    status: 'Status',
-    visibility: 'Sichtbarkeit',
-    creationTime: 'Erstell Zeit',
-    private: 'privat',
-    public: 'öffentlich',
-    create: 'Hinzufügen',
-    delete: 'Löschen',
+    finishTask: 'Fertigstellen',
     deleteTask: 'Task löschen',
     deleteTaskDescription: 'Der Tasks wird unwiederruflich gelöscht',
-    publish: 'Veröffentlichen',
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
-    finish: 'Fertigstellen',
   }
 }
 
@@ -116,8 +94,8 @@ const TaskDetailViewSidebar = ({
                                  task,
                                  onChange,
                                  isCreating
-                               }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
-  const translation = useTranslation([defaultTaskDetailViewTranslation], overwriteTranslation)
+                               }: PropsForTranslation<TranslationType, TaskDetailViewSidebarProps>) => {
+  const translation = useTranslation([formTranslation, medicalTranslation, tasksTranslation, defaultTaskDetailViewTranslation], overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
 
@@ -131,6 +109,9 @@ const TaskDetailViewSidebar = ({
       updateTaskMutation.mutate(task)
     }
   }
+
+  const { data: patient, isLoading, isError } = usePatientDetailsQuery(task.patientId)
+  const { data: wards, isLoading: isLoadingWards, isError: isErrorWards } = useWardOverviewsQuery() // TODO use a more lightwheight querry
 
   return (
     <div className="col min-w-[250px] gap-y-4">
@@ -208,7 +189,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label className="textstyle-label-md">{translation('status')}</label>
+        <Label labelType="labelMedium">{translation('status')}</Label>
         <TaskStatusSelect
           value={task.status}
           removeOptions={isCreating ? ['done'] : []}
@@ -222,12 +203,16 @@ const TaskDetailViewSidebar = ({
         />
       </div>
       <div className="select-none">
-        <label className="textstyle-label-md">{translation('visibility')}</label>
+        <Label labelType="labelMedium">{translation('visibility')}</Label>
         {!isCreating ? (
-          <div className="row justify-between items-center">
-            <span>{task.isPublicVisible ? translation('public') : translation('private')}</span>
+          <div className="flex-row-4 justify-between items-center">
+            <div className="flex-row-1 items-center">
+              {task.isPublicVisible ? (<Globe size={18}/>) : (<LockIcon size={18}/>)}
+              <span
+                className="font-semibold">{task.isPublicVisible ? translation('public') : translation('private')}</span>
+            </div>
             {!task.isPublicVisible && !isCreating && (
-              <TextButton size="small" onClick={() => setIsShowingPublicDialog(true)}>
+              <TextButton size="small" color="primary" onClick={() => setIsShowingPublicDialog(true)}>
                 <span>{translation('publish')}</span>
               </TextButton>
             )}
@@ -242,9 +227,28 @@ const TaskDetailViewSidebar = ({
           />
         )}
       </div>
+      {!isCreating && (
+        <div className="flex-col-0">
+          <Label labelType="labelMedium">{translation('patient', { count: 1 })}</Label>
+          <LoadingAndErrorComponent
+            isLoading={isLoading || isLoadingWards}
+            hasError={isError || isErrorWards}
+            className="min-h-7"
+          >
+            <Link
+              href={`/ward/${patient?.wardId ?? (wards ?? [])[0]?.id}?patientId=${patient?.id}`}
+              className="flex-row-4 justify-between items-center group"
+            >
+              <span className="font-semibold">{patient?.humanReadableIdentifier}</span>
+              <ChevronRight size={20}
+                            className="min-h-7 min-w-7 p-1 rounded-md group-hover:bg-button-text-hover-background"/>
+            </Link>
+          </LoadingAndErrorComponent>
+        </div>
+      )}
       {task.createdAt && (
         <div className="col gap-y-1">
-          <span className="textstyle-label-md">{translation('creationTime')}</span>
+          <span className="textstyle-label-md">{translation('createdAt')}</span>
           <TimeDisplay date={new Date(task.createdAt)}/>
         </div>
       )}
@@ -275,8 +279,8 @@ export const TaskDetailModal = ({
                                   createInformation,
                                   className,
                                   ...modalProps
-                                }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailModalProps>) => {
-  const translation = useTranslation([defaultTaskDetailViewTranslation], overwriteTranslation)
+                                }: PropsForTranslation<TranslationType, TaskDetailModalProps>) => {
+  const translation = useTranslation([formTranslation, medicalTranslation, tasksTranslation, defaultTaskDetailViewTranslation], overwriteTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
   const router = useRouter()
@@ -351,7 +355,7 @@ export const TaskDetailModal = ({
                 updateTaskMutation.mutate({ ...task, status: 'done' })
                 onClose()
               }}>
-                {translation('finish')}
+                {translation('finishTask')}
               </SolidButton>
             )}
           </>

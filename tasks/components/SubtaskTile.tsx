@@ -80,6 +80,7 @@ export const SubtaskTile = ({
           onClick={onRemoveClick}
           aria-label={translation('remove')}
           color="negative"
+          size="small"
         >
           {translation('remove')}
         </TextButton>

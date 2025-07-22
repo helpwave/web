@@ -39,6 +39,7 @@ export const PatientService = {
       discharged: res.getIsDischarged(),
       bed: res.getBed()?.toObject(),
       room: res.getRoom()?.toObject(),
+      wardId: res.getRoom()?.getWardId(),
       tasks: res.getTasksList().map(task => ({
         id: task.getId(),
         name: task.getName(),
@@ -111,32 +112,23 @@ export const PatientService = {
       discharged: res.getDischargedPatientsList().map(value => value.toObject()),
       unassigned: res.getUnassignedPatientsList().map(value => value.toObject())
     }
-  }
-  ,
+  },
   getRecentPatients: async function (): Promise<RecentPatientDTO[]> {
     const req = new GetRecentPatientsRequest()
     const res = await APIServices.patient.getRecentPatients(req, getAuthenticatedGrpcMetadata())
 
     const patients: RecentPatientDTO[] = []
     for (const patient of res.getRecentPatientsList()) {
-      const room = patient.getRoom()
-      const bed = patient.getBed()
-      let wardId: string | undefined
-      if (room) {
-        wardId = room?.getWardId()
-      }
-
       patients.push({
         id: patient.getId(),
         humanReadableIdentifier: patient.getHumanReadableIdentifier(),
-        wardId,
-        bed: bed?.toObject(),
-        room: room?.toObject()
+        bed: patient.getBed()?.toObject(),
+        room: patient.getRoom()?.toObject(),
+        wardId: patient.getRoom()?.getWardId(),
       })
     }
     return patients
-  }
-  ,
+  },
   create: async function (patient: PatientDTO): Promise<PatientDTO> {
     const req = new CreatePatientRequest()
       .setNotes(patient.notes)
@@ -152,8 +144,7 @@ export const PatientService = {
     }
 
     return { ...patient, id: res.getId() }
-  }
-  ,
+  },
   update: async function (patient: PatientDTO): Promise<boolean> {
     const req = new UpdatePatientRequest()
       .setId(patient.id)
@@ -162,19 +153,14 @@ export const PatientService = {
 
     await APIServices.patient.updatePatient(req, getAuthenticatedGrpcMetadata())
     return true
-  }
-  ,
-  delete:
+  },
+  delete: async function (patientId: string): Promise<boolean> {
+    const req = new DeletePatientRequest()
+      .setId(patientId)
 
-    async function (patientId: string): Promise<boolean> {
-      const req = new DeletePatientRequest()
-        .setId(patientId)
-
-      await APIServices.patient.deletePatient(req, getAuthenticatedGrpcMetadata())
-      return true
-    }
-
-  ,
+    await APIServices.patient.deletePatient(req, getAuthenticatedGrpcMetadata())
+    return true
+  },
   assignToBed: async function (bedWithPatientId: BedWithPatientId): Promise<boolean> {
     const req = new AssignBedRequest()
       .setId(bedWithPatientId.patientId)
@@ -182,24 +168,21 @@ export const PatientService = {
 
     await APIServices.patient.assignBed(req, getAuthenticatedGrpcMetadata())
     return true
-  }
-  ,
+  },
   unassignFromBed: async function (patientId: string): Promise<boolean> {
     const req = new UnassignBedRequest()
       .setId(patientId)
 
     await APIServices.patient.unassignBed(req, getAuthenticatedGrpcMetadata())
     return true
-  }
-  ,
+  },
   discharge: async function (patientId: string): Promise<boolean> {
     const req = new DischargePatientRequest()
       .setId(patientId)
 
     await APIServices.patient.dischargePatient(req, getAuthenticatedGrpcMetadata())
     return true
-  }
-  ,
+  },
   reAdmit: async function (patientId: string): Promise<boolean> {
     const req = new ReadmitPatientRequest()
       .setPatientId(patientId)

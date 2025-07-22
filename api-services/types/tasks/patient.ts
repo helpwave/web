@@ -47,6 +47,7 @@ export type PatientDetailsDTO = PatientMinimalDTO & {
   discharged: boolean,
   room?: RoomMinimalDTO,
   bed?: BedMinimalDTO,
+  wardId?: string,
 }
 
 export const emptyPatientDetails: PatientDetailsDTO = {

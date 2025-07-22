@@ -110,6 +110,7 @@ export const SubtaskView = ({
             }
             setScrollToBottom(true)
           }}
+          size="small"
         >
           <div className="row items-center gap-x-2">
             <Plus size={18}/>

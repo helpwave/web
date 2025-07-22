@@ -1,6 +1,11 @@
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
-import { LoadingAndErrorComponent, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  TranslationPluralCount,
+  useTranslation
+} from '@helpwave/hightide'
 import { useRouter } from 'next/router'
 import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { useRecentPatientsQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
@@ -15,13 +20,11 @@ import { Scrollbars } from 'react-custom-scrollbars-2'
 import { TaskCard } from '@/components/cards/TaskCard'
 import { useMemo, useState } from 'react'
 import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
-import { TaskStatusUtil } from '@helpwave/api-services/types/tasks/task'
 import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
+import type { MedicalTranslationType } from '@/translation/medical'
+import { medicalTranslation } from '@/translation/medical'
 
 type DashboardDisplayTranslation = {
-  patients: string,
-  organizations: string,
-  wards: string,
   recent: string,
   showAllOrganizations: string,
   addWard: string,
@@ -29,11 +32,10 @@ type DashboardDisplayTranslation = {
   noTasks: string,
 }
 
+type TranslationType = MedicalTranslationType & DashboardDisplayTranslation
+
 const defaultDashboardDisplayTranslations: Translation<DashboardDisplayTranslation> = {
   en: {
-    patients: 'Patients',
-    organizations: 'Organizations',
-    wards: 'Wards',
     recent: 'Recently used',
     showAllOrganizations: 'Show all organizations',
     addWard: 'Add Ward',
@@ -41,9 +43,6 @@ const defaultDashboardDisplayTranslations: Translation<DashboardDisplayTranslati
     noTasks: 'No tasks'
   },
   de: {
-    patients: 'Patienten',
-    organizations: 'Organisationen',
-    wards: 'Stationen',
     recent: 'Kürzlich Benutzt',
     showAllOrganizations: 'Alle Organisationen anzeigen',
     addWard: 'Station hinzufügen',
@@ -59,8 +58,8 @@ export type DashboardDisplayProps = Record<string, unknown>
  */
 export const DashboardDisplay = ({
                                    overwriteTranslation,
-                                 }: PropsForTranslation<DashboardDisplayTranslation, DashboardDisplayProps>) => {
-  const translation = useTranslation([defaultDashboardDisplayTranslations], overwriteTranslation)
+                                 }: PropsForTranslation<TranslationType, DashboardDisplayProps>) => {
+  const translation = useTranslation([medicalTranslation, defaultDashboardDisplayTranslations], overwriteTranslation)
   const { organization } = useAuth()
   const router = useRouter()
   const [taskDetailModalId, setTaskDetailModalId] = useState<string>()
@@ -79,9 +78,16 @@ export const DashboardDisplay = ({
     isLoading: isTasksLoading
   } = useMyTasksQuery()
 
-  const sortedTasks = useMemo<TaskDTO[]>(() => {
-    return [...(tasks ?? [])].sort((a, b) => TaskStatusUtil.compare(a.status, b.status) * -1)
+  const todo = useMemo<TaskDTO[]>(() => {
+    return (tasks ?? []).filter(value => value.status === 'todo')
   }, [tasks])
+  const inProgress = useMemo<TaskDTO[]>(() => {
+    return (tasks ?? []).filter(value => value.status === 'inProgress')
+  }, [tasks])
+  const done = useMemo<TaskDTO[]>(() => {
+    return (tasks ?? []).filter(value => value.status === 'done')
+  }, [tasks])
+
 
   const cardWidth = 'min-w-64 max-w-64'
 
@@ -98,34 +104,67 @@ export const DashboardDisplay = ({
         <LoadingAndErrorComponent isLoading={isTasksLoading} className="min-h-29">
           <div className="col gap-y-1">
             <ColumnTitle title={translation('myTasks')} type="subtitle"/>
-            <Scrollbars autoHeight={true} autoHide={true}>
-              <div className="flex-row-4">
-                {sortedTasks.length > 0 && sortedTasks.map(task => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    onClick={() => {
-                      setTaskDetailModalId(task.id)
-                    }}
-                    isSelected={false}
-                    showStatus={true}
-                    className={cardWidth}
-                  />
-                ))}
-                {sortedTasks.length === 0 && (
-                  <div
-                    className="card-md flex-row-0 items-center justify-center bg-disabled-background text-disabled-text min-w-64 max-w-64 max-h-30 min-h-30"
-                  >
-                    {translation('noTasks')}
+            <div className="flex-col-4">
+              {todo.length > 0 && (
+                <Scrollbars autoHeight={true} autoHide={true}>
+                  <div className="flex-row-4">
+                    {todo.map(task => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onClick={() => {
+                          setTaskDetailModalId(task.id)
+                        }}
+                        isSelected={false}
+                        showStatus={true}
+                        className={cardWidth}
+                      />
+                    ))}
                   </div>
-                )}
-              </div>
-            </Scrollbars>
+                </Scrollbars>
+              )}
+              {inProgress.length > 0 && (
+                <Scrollbars autoHeight={true} autoHide={true}>
+                  <div className="flex-row-4">
+                    {inProgress.map(task => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onClick={() => {
+                          setTaskDetailModalId(task.id)
+                        }}
+                        isSelected={false}
+                        showStatus={true}
+                        className={cardWidth}
+                      />
+                    ))}
+                  </div>
+                </Scrollbars>
+              )}
+              {done.length > 0 && (
+                <Scrollbars autoHeight={true} autoHide={true}>
+                  <div className="flex-row-4">
+                    {done.map(task => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onClick={() => {
+                          setTaskDetailModalId(task.id)
+                        }}
+                        isSelected={false}
+                        showStatus={true}
+                        className={cardWidth}
+                      />
+                    ))}
+                  </div>
+                </Scrollbars>
+              )}
+            </div>
           </div>
         </LoadingAndErrorComponent>
         <LoadingAndErrorComponent isLoading={isLoadingWards} className="min-h-28">
           <div className="col gap-y-1">
-            <ColumnTitle title={translation('wards')} type="subtitle"/>
+            <ColumnTitle title={translation('ward', { count: TranslationPluralCount.many })} type="subtitle"/>
             <Scrollbars autoHeight={true} autoHide={true}>
               <div className="flex-row-4">
                 {wards && wards.length > 0 && wards?.map(ward => (
@@ -148,7 +187,7 @@ export const DashboardDisplay = ({
         <LoadingAndErrorComponent isLoading={isLoadingPatients} className="min-h-28">
           {patients && patients.length > 0 && (
             <div className="col gap-y-1">
-              <ColumnTitle title={translation('patients')} type="subtitle"/>
+              <ColumnTitle title={translation('patient', { count: TranslationPluralCount.many })} type="subtitle"/>
               <Scrollbars autoHeight={true} autoHide={true}>
                 <div className="flex-col-4">
                   <div className="flex-row-4">
@@ -159,9 +198,9 @@ export const DashboardDisplay = ({
                         bedName={patient.bed?.name}
                         patientName={patient.humanReadableIdentifier}
                         onClick={() => {
-                          if(patient.wardId) {
+                          if (patient.wardId) {
                             router.push(`/ward/${patient.wardId}?patientId=${patient.id}`).catch(console.error)
-                          } else if(wards && wards.length > 0) {
+                          } else if (wards && wards.length > 0) {
                             router.push(`/ward/${wards[0]!.id}?patientId=${patient.id}`).catch(console.error)
                           }
                         }}
@@ -176,9 +215,9 @@ export const DashboardDisplay = ({
                         bedName={patient.bed?.name}
                         patientName={patient.humanReadableIdentifier}
                         onClick={() => {
-                          if(patient.wardId) {
+                          if (patient.wardId) {
                             router.push(`/ward/${patient.wardId}?patientId=${patient.id}`).catch(console.error)
-                          } else if(wards && wards.length > 0) {
+                          } else if (wards && wards.length > 0) {
                             router.push(`/ward/${wards[0]!.id}?patientId=${patient.id}`).catch(console.error)
                           }
                         }}

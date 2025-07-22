@@ -49,9 +49,9 @@ export const TaskTemplateListColumn = ({
   }, [ref.current?.clientHeight])
 
   return (
-    <div className="col overflow-hidden h-full">
-      <div className="row overflow-hidden">
-        <span className="textstyle-lg mb-4 flex-1">
+    <div className="flex-col-2 overflow-hidden h-full">
+      <div className="row overflow-hidden min-h-8">
+        <span className="textstyle-title-md flex-1">
           {translation('template')}
         </span>
         {onColumnEditClick && <Edit onClick={onColumnEditClick}/>}
@@ -59,14 +59,14 @@ export const TaskTemplateListColumn = ({
       <div className="overflow-hidden h-full" ref={ref}>
         <div>
           <Scrollbars autoHeight autoHeightMin={height} autoHide>
-            <div className="col gap-y-2">
+            <div className="col gap-y-2 pb-4">
               {templates.map((taskTemplateExtension) => (
                 <TaskTemplateCard
                   key={taskTemplateExtension.taskTemplate.id}
                   name={taskTemplateExtension.taskTemplate.name}
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
                   onClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
-                  className="min-h-auto"
+                  className="min-h-auto px-2 py-1"
                   isSelected={activeId === taskTemplateExtension.taskTemplate.id}
                   typeForLabel={taskTemplateExtension.type}
                 />

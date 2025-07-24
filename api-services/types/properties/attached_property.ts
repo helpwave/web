@@ -1,4 +1,4 @@
-import type { FieldType, SelectOption, SubjectType } from './property'
+import type { FieldType, SelectOption, PropertySubjectType } from './property'
 
 export type AttachPropertySelectValue = Omit<SelectOption, 'isCustom'>
 
@@ -39,7 +39,7 @@ export type AttachedProperty = {
 }
 
 export type DisplayableAttachedProperty = AttachedProperty & {
-  subjectType: SubjectType,
+  subjectType: PropertySubjectType,
   fieldType: FieldType,
   name: string,
   description?: string,

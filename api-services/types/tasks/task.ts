@@ -1,15 +1,13 @@
 import type { Translation } from '@helpwave/hightide'
 
-export type SubTaskDTO = {
+export type SubtaskDTO = {
   id: string,
   name: string,
   isDone: boolean,
+  taskId: string,
 }
 
-export type CreateSubTaskDTO = SubTaskDTO & {
-  taskId?: string,
-}
-
+// The order in the array defines the sorting order
 const taskStatus = ['done', 'inProgress', 'todo'] as const
 
 export type TaskStatus = typeof taskStatus[number]
@@ -28,9 +26,38 @@ const taskStatusTranslation: Translation<TaskStatusTranslationType> = {
     done: 'Fertig'
   }
 }
+
+type TaskStatusColor = {
+  background: string,
+  icon: string,
+  text: string,
+}
+
+const taskColorMapping: Record<TaskStatus, TaskStatusColor> = {
+  todo: {
+    background: 'bg-todo-background',
+    text: 'text-todo-text',
+    icon: 'text-todo-icon',
+  },
+  inProgress: {
+    background: 'bg-inprogress-background',
+    text: 'text-inprogress-text',
+    icon: 'text-inprogress-icon',
+  },
+  done: {
+    background: 'bg-done-background',
+    text: 'text-done-text',
+    icon: 'text-done-icon',
+  },
+}
+
 export const TaskStatusUtil = {
   taskStatus,
-  translation: taskStatusTranslation
+  translation: taskStatusTranslation,
+  compare: (a: TaskStatus, b: TaskStatus): number => {
+    return taskStatus.indexOf(a) - taskStatus.indexOf(b)
+  },
+  colors: taskColorMapping
 }
 
 export type TaskDTO = {
@@ -39,10 +66,11 @@ export type TaskDTO = {
   assignee?: string,
   notes: string,
   status: TaskStatus,
-  subtasks: SubTaskDTO[],
+  subtasks: SubtaskDTO[],
   dueDate?: Date,
   createdAt?: Date,
   creatorId?: string,
+  patientId: string,
   isPublicVisible: boolean,
 }
 
@@ -52,6 +80,7 @@ export const emptyTask: TaskDTO = {
   notes: '',
   status: 'todo',
   subtasks: [],
+  patientId: '',
   isPublicVisible: false
 }
 

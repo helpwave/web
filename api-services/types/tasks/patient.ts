@@ -1,47 +1,38 @@
 import type { TaskDTO, TaskMinimalDTO } from './task'
+import type { RoomMinimalDTO } from './room'
+import type { BedMinimalDTO } from './bed'
 
 export type PatientMinimalDTO = {
   id: string,
-  name: string,
+  humanReadableIdentifier: string,
+  bedId?: string,
+}
+
+export type PatientWithBedIdDTO = PatientMinimalDTO & {
+  notes: string,
+  bedId?: string,
 }
 
 export type PatientDTO = PatientMinimalDTO & {
-  note: string,
+  notes: string,
   tasks: TaskMinimalDTO[],
 }
 
-export const emptyPatient: PatientDTO = {
-  id: '',
-  note: '',
-  name: '',
-  tasks: []
-}
-
 export type PatientWithTasksNumberDTO = PatientMinimalDTO & {
-  tasksUnscheduled: number,
+  tasksTodo: number,
   tasksInProgress: number,
   tasksDone: number,
 }
 
-export type PatientCompleteDTO = PatientMinimalDTO & {
-  note: string,
-  tasks: TaskDTO[],
-}
-
-export const emptyPatientMinimal: PatientMinimalDTO = {
-  id: '',
-  name: ''
-}
-
 export type PatientWithBedAndRoomDTO = PatientMinimalDTO & {
-  room: { id: string, name: string, wardId: string },
-  bed: { id: string, name: string },
+  room: RoomMinimalDTO,
+  bed: BedMinimalDTO,
 }
 
 export type RecentPatientDTO = PatientMinimalDTO & {
   wardId?: string,
-  room?: { id: string, name: string },
-  bed?: { id: string, name: string },
+  room?: RoomMinimalDTO,
+  bed?: BedMinimalDTO,
 }
 
 export type PatientListDTO = {
@@ -50,21 +41,19 @@ export type PatientListDTO = {
   discharged: PatientMinimalDTO[],
 }
 
-export type PatientWithBedIdDTO = PatientMinimalDTO & {
-  note: string,
-  bedId: string,
-}
-
 export type PatientDetailsDTO = PatientMinimalDTO & {
-  note: string,
+  notes: string,
   tasks: TaskDTO[],
   discharged: boolean,
+  room?: RoomMinimalDTO,
+  bed?: BedMinimalDTO,
+  wardId?: string,
 }
 
 export const emptyPatientDetails: PatientDetailsDTO = {
   id: '',
-  name: '',
-  note: '',
+  humanReadableIdentifier: '',
+  notes: '',
   tasks: [],
   discharged: false
 }

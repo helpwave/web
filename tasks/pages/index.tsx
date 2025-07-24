@@ -95,7 +95,6 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
           isLoading={isLoading}
           hasError={isError}
           loadingComponent={(<LoadingAnimation classname="h-full"/>)}
-          minimumLoadingDuration={200}
         >
           {/* TODO reenable once newsfeed is active again
           <TwoColumn

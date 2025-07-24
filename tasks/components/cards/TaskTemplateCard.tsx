@@ -49,18 +49,19 @@ export const TaskTemplateCard = ({
       {...editCardProps}
     >
       <div className="col w-full gap-y-0">
-      <div className="row items-center justify-between overflow-hidden gap-x-1">
-        <h4 className="textstyle-title-sm">{name}</h4>
-        {typeForLabel && (
-          <Chip
-            color={typeForLabel === 'ward' ? 'red' : 'default'}
-            variant="fullyRounded"
-          >
-            {typeForLabel === 'ward' ? translation('ward') : translation('personal')}
-          </Chip>
-        )}
-      </div>
-      <span>{subtaskCount + ' ' + translation('subtask')}</span>
+        <div className="row items-center justify-between overflow-hidden gap-x-1">
+          <h4 className="textstyle-title-normal truncate">{name}</h4>
+          {typeForLabel && (
+            <Chip
+              color={typeForLabel === 'ward' ? 'red' : 'blue'}
+              variant="fullyRounded"
+              className="!font-semibold text-xs"
+            >
+              {typeForLabel === 'ward' ? translation('ward') : translation('personal')}
+            </Chip>
+          )}
+        </div>
+        <span>{subtaskCount + ' ' + translation('subtask')}</span>
       </div>
     </EditCard>
   )

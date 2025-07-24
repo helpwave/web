@@ -71,7 +71,7 @@ export const UserInvitationList = ({
         const invite = data[cell.row.index]!
         return (
           <div key="name" className="row justify-start items-center gap-x-2 h-8">
-            <Avatar avatarUrl={invite.organization.id} alt="" size="small"/>
+            <Avatar image={{ avatarUrl: invite.organization.id, alt: '' }} name={invite.organization.longName} size="md" fullyRounded={true}/>
             <span>{invite.organization.longName}</span>
           </div>
         )
@@ -127,7 +127,6 @@ export const UserInvitationList = ({
         isLoading={isLoading || !data}
         hasError={isError}
         className="min-h-157"
-        minimumLoadingDuration={200}
       >
         {data && (
           <Table

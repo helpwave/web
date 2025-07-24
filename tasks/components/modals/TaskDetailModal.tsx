@@ -1,7 +1,9 @@
-import type { OverlayHeaderProps, Translation } from '@helpwave/hightide'
+import type { FormTranslationType, OverlayHeaderProps, Translation } from '@helpwave/hightide'
 import {
   ConfirmModal,
+  formTranslation,
   Input,
+  Label,
   LoadingAndErrorComponent,
   LoadingAnimation,
   Modal,
@@ -15,7 +17,7 @@ import {
   useTranslation
 } from '@helpwave/hightide'
 import clsx from 'clsx'
-import { X } from 'lucide-react'
+import { ChevronRight, Globe, LockIcon, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
@@ -27,6 +29,9 @@ import {
 } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import {
   useAssignTaskMutation,
+  useSubtaskAddMutation,
+  useSubtaskDeleteMutation,
+  useSubtaskUpdateMutation,
   useTaskCreateMutation,
   useTaskDeleteMutation,
   useTaskQuery,
@@ -39,68 +44,41 @@ import { SubtaskView } from '../SubtaskView'
 import { TaskVisibilitySelect } from '@/components/selects/TaskVisibilitySelect'
 import { TaskStatusSelect } from '@/components/selects/TaskStatusSelect'
 import { AssigneeSelect } from '@/components/selects/AssigneeSelect'
+import { usePatientDetailsQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
+import Link from 'next/link'
+import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import type { MedicalTranslationType } from '@/translation/medical'
+import { medicalTranslation } from '@/translation/medical'
+import type { TasksTranslationType } from '@/translation/tasks'
+import { tasksTranslation } from '@/translation/tasks'
 
-type TaskDetailViewTranslation = {
-  close: string,
-  notes: string,
-  subtasks: string,
-  assignee: string,
-  dueDate: string,
-  status: string,
-  visibility: string,
-  creationTime: string,
-  private: string,
-  public: string,
-  create: string,
-  delete: string,
+type TaskDetailViewAddonTranslation = {
+  finishTask: string,
   deleteTask: string,
   deleteTaskDescription: string,
-  publish: string,
   publishTask: string,
   publishTaskDescription: string,
-  finish: string,
 }
 
-const defaultTaskDetailViewTranslation: Translation<TaskDetailViewTranslation> = {
+type TranslationType = FormTranslationType
+  & MedicalTranslationType
+  & TasksTranslationType
+  & TaskDetailViewAddonTranslation
+
+const defaultTaskDetailViewTranslation: Translation<TaskDetailViewAddonTranslation> = {
   en: {
-    close: 'Close',
-    notes: 'Notes',
-    subtasks: 'Subtasks',
-    assignee: 'Assignee',
-    dueDate: 'Due date',
-    status: 'Status',
-    visibility: 'Visibility',
-    creationTime: 'Creation time',
-    private: 'private',
-    public: 'public',
-    create: 'Create',
-    delete: 'Delete',
+    finishTask: 'Finish Task',
     deleteTask: 'Delete Task',
     deleteTaskDescription: 'The Tasks will be irrevocably removed',
-    publish: 'Publish',
     publishTask: 'Publish task',
     publishTaskDescription: 'This cannot be undone',
-    finish: 'Finish task',
   },
   de: {
-    close: 'Schließen',
-    notes: 'Notizen',
-    subtasks: 'Unteraufgaben',
-    assignee: 'Verantwortlich',
-    dueDate: 'Fälligkeitsdatum',
-    status: 'Status',
-    visibility: 'Sichtbarkeit',
-    creationTime: 'Erstell Zeit',
-    private: 'privat',
-    public: 'öffentlich',
-    create: 'Hinzufügen',
-    delete: 'Löschen',
+    finishTask: 'Fertigstellen',
     deleteTask: 'Task löschen',
     deleteTaskDescription: 'Der Tasks wird unwiederruflich gelöscht',
-    publish: 'Veröffentlichen',
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
-    finish: 'Fertigstellen',
   }
 }
 
@@ -116,14 +94,12 @@ const TaskDetailViewSidebar = ({
                                  task,
                                  onChange,
                                  isCreating
-                               }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailViewSidebarProps>) => {
-  const translation = useTranslation([defaultTaskDetailViewTranslation], overwriteTranslation)
+                               }: PropsForTranslation<TranslationType, TaskDetailViewSidebarProps>) => {
+  const translation = useTranslation([formTranslation, medicalTranslation, tasksTranslation, defaultTaskDetailViewTranslation], overwriteTranslation)
 
   const [isShowingPublicDialog, setIsShowingPublicDialog] = useState(false)
-  const { organization } = useAuth()
 
   const updateTaskMutation = useTaskUpdateMutation()
-
   const assignTaskToUserMutation = useAssignTaskMutation()
   const unassignTaskToUserMutation = useUnassignTaskMutation()
 
@@ -133,6 +109,9 @@ const TaskDetailViewSidebar = ({
       updateTaskMutation.mutate(task)
     }
   }
+
+  const { data: patient, isLoading, isError } = usePatientDetailsQuery(task.patientId)
+  const { data: wards, isLoading: isLoadingWards, isError: isErrorWards } = useWardOverviewsQuery() // TODO use a more lightwheight querry
 
   return (
     <div className="col min-w-[250px] gap-y-4">
@@ -157,12 +136,11 @@ const TaskDetailViewSidebar = ({
         <label className="textstyle-label-md">{translation('assignee')}</label>
         <div className="row items-center gap-x-2">
           <AssigneeSelect
-            organizationId={organization?.id ?? ''}
             value={task.assignee}
             onChange={(assignee) => {
-              onChange({ ...task, assignee: assignee.id })
+              onChange({ ...task, assignee: assignee.userId })
               if (!isCreating) {
-                assignTaskToUserMutation.mutate({ taskId: task.id, userId: assignee.id })
+                assignTaskToUserMutation.mutate({ taskId: task.id, userId: assignee.userId })
               }
             }}
           />
@@ -211,7 +189,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label className="textstyle-label-md">{translation('status')}</label>
+        <Label labelType="labelMedium">{translation('status')}</Label>
         <TaskStatusSelect
           value={task.status}
           removeOptions={isCreating ? ['done'] : []}
@@ -225,12 +203,16 @@ const TaskDetailViewSidebar = ({
         />
       </div>
       <div className="select-none">
-        <label className="textstyle-label-md">{translation('visibility')}</label>
+        <Label labelType="labelMedium">{translation('visibility')}</Label>
         {!isCreating ? (
-          <div className="row justify-between items-center">
-            <span>{task.isPublicVisible ? translation('public') : translation('private')}</span>
+          <div className="flex-row-4 justify-between items-center">
+            <div className="flex-row-1 items-center">
+              {task.isPublicVisible ? (<Globe size={18}/>) : (<LockIcon size={18}/>)}
+              <span
+                className="font-semibold">{task.isPublicVisible ? translation('public') : translation('private')}</span>
+            </div>
             {!task.isPublicVisible && !isCreating && (
-              <TextButton size="small" onClick={() => setIsShowingPublicDialog(true)}>
+              <TextButton size="small" color="primary" onClick={() => setIsShowingPublicDialog(true)}>
                 <span>{translation('publish')}</span>
               </TextButton>
             )}
@@ -245,9 +227,28 @@ const TaskDetailViewSidebar = ({
           />
         )}
       </div>
+      {!isCreating && (
+        <div className="flex-col-0">
+          <Label labelType="labelMedium">{translation('patient', { count: 1 })}</Label>
+          <LoadingAndErrorComponent
+            isLoading={isLoading || isLoadingWards}
+            hasError={isError || isErrorWards}
+            className="min-h-7"
+          >
+            <Link
+              href={`/ward/${patient?.wardId ?? (wards ?? [])[0]?.id}?patientId=${patient?.id}`}
+              className="flex-row-4 justify-between items-center group"
+            >
+              <span className="font-semibold">{patient?.humanReadableIdentifier}</span>
+              <ChevronRight size={20}
+                            className="min-h-7 min-w-7 p-1 rounded-md group-hover:bg-button-text-hover-background"/>
+            </Link>
+          </LoadingAndErrorComponent>
+        </div>
+      )}
       {task.createdAt && (
         <div className="col gap-y-1">
-          <span className="textstyle-label-md">{translation('creationTime')}</span>
+          <span className="textstyle-label-md">{translation('createdAt')}</span>
           <TimeDisplay date={new Date(task.createdAt)}/>
         </div>
       )}
@@ -255,15 +256,17 @@ const TaskDetailViewSidebar = ({
   )
 }
 
-export type TaskDetailModalProps = Omit<ModalProps, keyof OverlayHeaderProps> & {
+type CreateInformation = {
+  wardId: string,
+  patientId: string,
+  initialStatus: TaskStatus,
+}
+export type TaskDetailModalProps = Omit<ModalProps, keyof OverlayHeaderProps> & Pick<ModalProps, 'onClose'> & {
   /**
    * A not set or empty taskId is seen as creating a new task
    */
   taskId?: string,
-  wardId: string,
-  patientId: string,
-  onClose: () => void,
-  initialStatus?: TaskStatus,
+  createInformation?: CreateInformation,
 }
 
 /**
@@ -271,15 +274,13 @@ export type TaskDetailModalProps = Omit<ModalProps, keyof OverlayHeaderProps> & 
  */
 export const TaskDetailModal = ({
                                   overwriteTranslation,
-                                  patientId,
                                   taskId = '',
-                                  wardId,
-                                  initialStatus,
                                   onClose,
+                                  createInformation,
                                   className,
                                   ...modalProps
-                                }: PropsForTranslation<TaskDetailViewTranslation, TaskDetailModalProps>) => {
-  const translation = useTranslation([defaultTaskDetailViewTranslation], overwriteTranslation)
+                                }: PropsForTranslation<TranslationType, TaskDetailModalProps>) => {
+  const translation = useTranslation([formTranslation, medicalTranslation, tasksTranslation, defaultTaskDetailViewTranslation], overwriteTranslation)
   const [selectedTemplateId, setSelectedTemplateId] = useState<TaskTemplateDTO['id'] | undefined>(undefined)
   const [isShowingDeleteDialog, setIsShowingDeleteDialog] = useState(false)
   const router = useRouter()
@@ -297,14 +298,19 @@ export const TaskDetailModal = ({
 
   const [task, setTask] = useState<TaskDTO>({
     ...emptyTask,
-    status: initialStatus ?? 'todo'
+    patientId: createInformation?.patientId ?? '',
+    status: createInformation?.initialStatus ?? 'todo'
   })
 
   const deleteTaskMutation = useTaskDeleteMutation()
   const updateTaskMutation = useTaskUpdateMutation()
-  const createTaskMutation = useTaskCreateMutation(() => {
-    onClose()
-  }, patientId)
+  const createTaskMutation = useTaskCreateMutation({
+    onSuccess: () => onClose()
+  })
+
+  const addSubtaskMutation = useSubtaskAddMutation()
+  const updateSubtaskMutation = useSubtaskUpdateMutation()
+  const deleteSubtaskMutation = useSubtaskDeleteMutation()
 
   useEffect(() => {
     if (data && taskId) {
@@ -321,7 +327,7 @@ export const TaskDetailModal = ({
     data: wardTaskTemplatesData,
     isLoading: wardTaskTemplatesIsLoading,
     error: wardTaskTemplatesError
-  } = useWardTaskTemplateQuery(wardId)
+  } = useWardTaskTemplateQuery(createInformation?.wardId)
 
   const taskNameMinimumLength = 1
   const isValid = task.name.length >= taskNameMinimumLength
@@ -349,7 +355,7 @@ export const TaskDetailModal = ({
                 updateTaskMutation.mutate({ ...task, status: 'done' })
                 onClose()
               }}>
-                {translation('finish')}
+                {translation('finishTask')}
               </SolidButton>
             )}
           </>
@@ -373,7 +379,14 @@ export const TaskDetailModal = ({
             onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
           />
         </div>
-        <SubtaskView subtasks={task.subtasks} taskId={taskId} onChange={(subtasks) => setTask({ ...task, subtasks })}/>
+        <SubtaskView
+          subtasks={task.subtasks}
+          taskOrTemplateId={taskId}
+          onChange={(subtasks) => setTask({ ...task, subtasks })}
+          onAdd={subtask => addSubtaskMutation.mutate(subtask)}
+          onUpdate={subtask => updateSubtaskMutation.mutate(subtask)}
+          onRemove={subtask => deleteSubtaskMutation.mutate(subtask)}
+        />
       </div>
       <TaskDetailViewSidebar task={task} onChange={setTask} isCreating={isCreating}/>
     </div>
@@ -395,7 +408,7 @@ export const TaskDetailModal = ({
 
   const templateSidebar = (
     <div
-      className="absolute left-[-250px] top-0 col w-[250px] overflow-hidden p-4 pb-0 bg-gray-100 rounded-l-xl h-full"
+      className="absolute left-[-250px] top-0 col w-[250px] overflow-hidden p-4 pb-0 rounded-l-xl h-full bg-task-modal-sidebar-background text-task-modal-sidebar-text"
     >
       {personalTaskTemplatesData && wardTaskTemplatesData && (
         <TaskTemplateListColumn
@@ -405,7 +418,7 @@ export const TaskDetailModal = ({
             setSelectedTemplateId(id)
             setTask({ ...task, name, notes, subtasks })
           }}
-          onColumnEditClick={() => router.push(`/ward/${wardId}/templates`)}
+          onColumnEditClick={() => router.push(`/ward/${createInformation?.wardId}/templates`)}
         />
       )}
       {(personalTaskTemplatesIsLoading || wardTaskTemplatesIsLoading || personalTaskTemplatesError || wardTaskTemplatesError) ?
@@ -457,7 +470,6 @@ export const TaskDetailModal = ({
           isLoading={(isLoading || !data) && !isCreating}
           hasError={isError}
           className="min-h-138"
-          minimumLoadingDuration={200}
         >
           {tasksDetails}
           {buttons}

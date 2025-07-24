@@ -42,7 +42,7 @@ export const PatientDischargeModal = ({
       {patient && (
         <>
           <span className="mt-2">{`${translation('followingPatient')}: `}</span>
-          <span className="font-medium">{patient.name}</span>
+          <span className="font-medium">{patient.humanReadableIdentifier}</span>
         </>
       )}
     </ConfirmModal>

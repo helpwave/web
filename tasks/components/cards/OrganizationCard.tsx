@@ -1,4 +1,3 @@
-
 import { Mail } from 'lucide-react'
 import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
@@ -31,10 +30,10 @@ export type OrganizationCardProps = EditCardProps & {
  * A Card displaying a Organization
  */
 export const OrganizationCard = ({
-  overwriteTranslation,
-  organization,
-  ...editCardProps
-}: PropsForTranslation<OrganizationCardTranslation, OrganizationCardProps>) => {
+                                   overwriteTranslation,
+                                   organization,
+                                   ...editCardProps
+                                 }: PropsForTranslation<OrganizationCardTranslation, OrganizationCardProps>) => {
   const translation = useTranslation([defaultOrganizationCardTranslation], overwriteTranslation)
   const organizationMemberCount = organization.members.length
 
@@ -49,13 +48,19 @@ export const OrganizationCard = ({
         </div>
         <div className="row items-center overflow-hidden gap-x-2">
           <Mail/>
-          <span className="w-full truncate text-sm">{organization.email}</span>
+          <span className="w-full truncate text-sm">{organization.contactEmail}</span>
         </div>
         <div className="row justify-between">
           <div className="text-left my-1 font-semibold text-gray-600 text-sm truncate">
             {`${organizationMemberCount} ${organizationMemberCount > 1 ? translation('members') : translation('member')}`}
           </div>
-          <AvatarGroup avatars={organization.members.map(user => ({ avatarUrl: user.avatarURL, alt: user.name }))}/>
+          <AvatarGroup
+            avatars={organization.members.map(user => ({
+              image: user.avatarURL ? { avatarUrl: user.avatarURL, alt: user.nickname } : undefined,
+              name: user.nickname,
+            }))}
+            fullyRounded={true}
+          />
         </div>
       </div>
     </EditCard>

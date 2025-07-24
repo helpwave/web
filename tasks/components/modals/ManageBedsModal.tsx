@@ -126,7 +126,7 @@ export const ManageBedsModal = ({
     {
       id: 'patientName',
       header: translation('patient'),
-      accessorFn: ({ patient }) => patient?.name ?? (<FillerRowElement/>),
+      accessorFn: ({ patient }) => patient?.humanReadableIdentifier ?? (<FillerRowElement/>),
       sortingFn: 'text',
       minSize: 190,
       meta: {
@@ -184,7 +184,6 @@ export const ManageBedsModal = ({
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}
         className="min-h-116"
-        minimumLoadingDuration={200}
       >
         {room && beds && (
           <Table

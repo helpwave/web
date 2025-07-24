@@ -7,7 +7,7 @@ import {
   usePropertyQuery,
   usePropertyUpdateMutation
 } from '@helpwave/api-services/mutations/properties/property_mutations'
-import type { Property, SelectData } from '@helpwave/api-services/types/properties/property'
+import type { Property, PropertySelectData } from '@helpwave/api-services/types/properties/property'
 import { emptyProperty, emptySelectData } from '@helpwave/api-services/types/properties/property'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
@@ -69,8 +69,10 @@ export const PropertyDetails = ({
   const [value, setValue] = useState<Property>({
     ...emptyProperty,
   })
-  const propertyCreateMutation = usePropertyCreateMutation(property => {
-    updateContext({ ...contextState, propertyId: property.id })
+  const propertyCreateMutation = usePropertyCreateMutation({
+    onSuccess: property => {
+      updateContext({ ...contextState, propertyId: property.id })
+    }
   })
 
   useEffect(() => {
@@ -107,7 +109,6 @@ export const PropertyDetails = ({
         isLoading={!isCreatingNewProperty && isLoading}
         hasError={!isCreatingNewProperty && isError}
         className="min-h-128"
-        minimumLoadingDuration={200}
       >
         <PropertyDetailsBasicInfo
           value={value}
@@ -139,7 +140,7 @@ export const PropertyDetails = ({
               const isSelect = fieldDetails.fieldType === 'singleSelect' || fieldDetails.fieldType === 'multiSelect'
               if (isCreatingNewProperty) {
                 setValue(prevState => {
-                  let selectData: SelectData | undefined = fieldDetails.selectData ? { ...fieldDetails.selectData } : undefined
+                  let selectData: PropertySelectData | undefined = fieldDetails.selectData ? { ...fieldDetails.selectData } : undefined
                   if (isSelect) {
                     selectData ??= emptySelectData
                     if (selectUpdate) {

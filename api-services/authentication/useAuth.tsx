@@ -26,7 +26,7 @@ const UserFromIdTokenClaims = IdTokenClaimsSchema.transform((obj) => ({
   email: obj.email,
   name: obj.name,
   nickname: obj.preferred_username,
-  avatarUrl: `https://cdn.helpwave.de/boringavatar.svg#${obj.sub}`,
+  avatarUrl: `https://cdn.helpwave.de/boringavatar.svg`,
   organization: obj.organization
 }))
 
@@ -129,12 +129,11 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
             console.debug('Creating a new organization')
             OrganizationService.create({
               id: '',
-              email: 'test@helpwave.de',
+              contactEmail: 'test@helpwave.de',
               longName: 'Test Organization',
               shortName: 'Test-Org',
               avatarURL: 'https://helpwave.de/favicon.ico',
               isPersonal: false,
-              isVerified: false,
             }).then(organization => {
               setUser(() => ({
                 ...user,

@@ -21,7 +21,7 @@ export const AddCard = ({
     <div
       onClick={onClick}
       className={clsx(
-        'card-md row justify-center items-center gap-x-1 text-gray-400 border-2 hover:border-primary h-full hover:brightness-[98%] min-h-28',
+        'card-md flex-col-1 justify-center items-center gap-x-1 text-description border-2 hover:border-primary h-full min-h-28',
         { 'cursor-pointer': !!onClick },
         {
           'border-primary': isSelected,

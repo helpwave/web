@@ -187,7 +187,6 @@ export const TasksKanbanBoard = ({
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        minimumLoadingDuration={200}
         className="min-h-78"
       >
         <DndContext

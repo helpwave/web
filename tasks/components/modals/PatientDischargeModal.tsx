@@ -1,5 +1,5 @@
-import type { Translation } from '@helpwave/hightide'
-import { ConfirmModal, type ConfirmModalProps, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import type { ConfirmDialogProps, Translation } from '@helpwave/hightide'
+import { ConfirmDialog, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import type { PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
 
 type PatientDischargeModalTranslation = {
@@ -18,7 +18,7 @@ const defaultPatientDischargeModalTranslation: Translation<PatientDischargeModal
   }
 }
 
-export type PatientDischargeModalProps = Omit<ConfirmModalProps, 'title' | 'descriptionText'> & {
+export type PatientDischargeModalProps = Omit<ConfirmDialogProps, 'titleElement' | 'description'> & {
   patient?: PatientMinimalDTO,
 }
 
@@ -29,22 +29,19 @@ export const PatientDischargeModal = ({
                                         overwriteTranslation,
                                         patient,
                                         buttonOverwrites,
-                                        headerProps,
                                         ...confirmDialogProps
                                       }: PropsForTranslation<PatientDischargeModalTranslation, PatientDischargeModalProps>) => {
   const translation = useTranslation([defaultPatientDischargeModalTranslation], overwriteTranslation)
   return (
-    <ConfirmModal
-      headerProps={{ ...headerProps, titleText: headerProps?.titleText ?? translation('dischargePatient') }}
+    <ConfirmDialog
       buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'negative' }]}
       {...confirmDialogProps}
+      titleElement={translation('dischargePatient')}
+      description={`${translation('followingPatient')}:`}
     >
       {patient && (
-        <>
-          <span className="mt-2">{`${translation('followingPatient')}: `}</span>
-          <span className="font-medium">{patient.humanReadableIdentifier}</span>
-        </>
+        <span className="font-medium">{patient.humanReadableIdentifier}</span>
       )}
-    </ConfirmModal>
+    </ConfirmDialog>
   )
 }

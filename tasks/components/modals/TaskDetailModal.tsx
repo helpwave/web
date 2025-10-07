@@ -1,13 +1,12 @@
-import type { FormTranslationType, OverlayHeaderProps, Translation } from '@helpwave/hightide'
+import type { DialogProps, FormTranslationType, Translation } from '@helpwave/hightide'
 import {
-  ConfirmModal,
+  ConfirmDialog,
+  Dialog,
   formTranslation,
   Input,
   Label,
   LoadingAndErrorComponent,
   LoadingAnimation,
-  Modal,
-  type ModalProps,
   type PropsForTranslation,
   SolidButton,
   Textarea,
@@ -58,6 +57,7 @@ type TaskDetailViewAddonTranslation = {
   deleteTaskDescription: string,
   publishTask: string,
   publishTaskDescription: string,
+  notesPlaceHolder: string,
 }
 
 type TranslationType = FormTranslationType
@@ -72,6 +72,7 @@ const defaultTaskDetailViewTranslation: Translation<TaskDetailViewAddonTranslati
     deleteTaskDescription: 'The Tasks will be irrevocably removed',
     publishTask: 'Publish task',
     publishTaskDescription: 'This cannot be undone',
+    notesPlaceHolder: 'e.g. your notes and thoughts',
   },
   de: {
     finishTask: 'Fertigstellen',
@@ -79,6 +80,7 @@ const defaultTaskDetailViewTranslation: Translation<TaskDetailViewAddonTranslati
     deleteTaskDescription: 'Der Tasks wird unwiederruflich gelöscht',
     publishTask: 'Task Veröffentlichen',
     publishTaskDescription: 'Diese Handlung kann nicht rückgängig gemacht werden',
+    notesPlaceHolder: 'z.B. deine Notizen und Gedanken zu der Aufgabe',
   }
 }
 
@@ -114,8 +116,8 @@ const TaskDetailViewSidebar = ({
   const { data: wards, isLoading: isLoadingWards, isError: isErrorWards } = useWardOverviewsQuery() // TODO use a more lightwheight querry
 
   return (
-    <div className="col min-w-[250px] gap-y-4">
-      <ConfirmModal
+    <div className="col min-w-72 gap-y-4">
+      <ConfirmDialog
         isOpen={isShowingPublicDialog}
         onCancel={() => setIsShowingPublicDialog(false)}
         onConfirm={() => {
@@ -127,17 +129,16 @@ const TaskDetailViewSidebar = ({
           onChange(newTask)
           updateTaskLocallyAndExternally(newTask)
         }}
-        headerProps={{
-          titleText: translation('publishTask'),
-          descriptionText: translation('publishTaskDescription'),
-        }}
+        titleElement={translation('publishTask')}
+        description={translation('publishTaskDescription')}
+        className="!z-200"
       />
       <div>
-        <label className="textstyle-label-md">{translation('assignee')}</label>
+        <label className="typography-label-md">{translation('assignee')}</label>
         <div className="row items-center gap-x-2">
           <AssigneeSelect
             value={task.assignee}
-            onChange={(assignee) => {
+            onValueChanged={(assignee) => {
               onChange({ ...task, assignee: assignee.userId })
               if (!isCreating) {
                 assignTaskToUserMutation.mutate({ taskId: task.id, userId: assignee.userId })
@@ -162,7 +163,7 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <label className="textstyle-label-md">{translation('dueDate')}</label>
+        <label className="typography-label-md">{translation('dueDate')}</label>
         <div className="row items-center gap-x-2">
           <Input
             value={task.dueDate ? task.dueDate.toISOString().substring(0, 19) : ''}
@@ -189,11 +190,11 @@ const TaskDetailViewSidebar = ({
         </div>
       </div>
       <div>
-        <Label labelType="labelMedium">{translation('status')}</Label>
+        <Label size="md">{translation('status')}</Label>
         <TaskStatusSelect
           value={task.status}
           removeOptions={isCreating ? ['done'] : []}
-          onChange={(status) => {
+          onValueChanged={(status) => {
             const newTask = { ...task, status }
             if (!isCreating) {
               updateTaskMutation.mutate(newTask)
@@ -203,7 +204,7 @@ const TaskDetailViewSidebar = ({
         />
       </div>
       <div className="select-none">
-        <Label labelType="labelMedium">{translation('visibility')}</Label>
+        <Label size="md">{translation('visibility')}</Label>
         {!isCreating ? (
           <div className="flex-row-4 justify-between items-center">
             <div className="flex-row-1 items-center">
@@ -221,7 +222,7 @@ const TaskDetailViewSidebar = ({
         {isCreating && (
           <TaskVisibilitySelect
             value={task.isPublicVisible}
-            onChange={() => {
+            onValueChanged={() => {
               onChange({ ...task, isPublicVisible: !task.isPublicVisible })
             }}
           />
@@ -229,7 +230,7 @@ const TaskDetailViewSidebar = ({
       </div>
       {!isCreating && (
         <div className="flex-col-0">
-          <Label labelType="labelMedium">{translation('patient', { count: 1 })}</Label>
+          <Label size="md">{translation('patient', { count: 1 })}</Label>
           <LoadingAndErrorComponent
             isLoading={isLoading || isLoadingWards}
             hasError={isError || isErrorWards}
@@ -240,15 +241,17 @@ const TaskDetailViewSidebar = ({
               className="flex-row-4 justify-between items-center group"
             >
               <span className="font-semibold">{patient?.humanReadableIdentifier}</span>
-              <ChevronRight size={20}
-                            className="min-h-7 min-w-7 p-1 rounded-md group-hover:bg-button-text-hover-background"/>
+              <ChevronRight
+                size={20}
+                className="min-h-7 min-w-7 p-1 rounded-md group-hover:bg-button-text-hover-background"
+              />
             </Link>
           </LoadingAndErrorComponent>
         </div>
       )}
       {task.createdAt && (
         <div className="col gap-y-1">
-          <span className="textstyle-label-md">{translation('createdAt')}</span>
+          <span className="typography-label-md">{translation('createdAt')}</span>
           <TimeDisplay date={new Date(task.createdAt)}/>
         </div>
       )}
@@ -261,7 +264,7 @@ type CreateInformation = {
   patientId: string,
   initialStatus: TaskStatus,
 }
-export type TaskDetailModalProps = Omit<ModalProps, keyof OverlayHeaderProps> & Pick<ModalProps, 'onClose'> & {
+export type TaskDetailModalProps = Omit<DialogProps, 'titleElement' | 'description'> & {
   /**
    * A not set or empty taskId is seen as creating a new task
    */
@@ -305,7 +308,7 @@ export const TaskDetailModal = ({
   const deleteTaskMutation = useTaskDeleteMutation()
   const updateTaskMutation = useTaskUpdateMutation()
   const createTaskMutation = useTaskCreateMutation({
-    onSuccess: () => onClose()
+    onSuccess: () => onClose?.()
   })
 
   const addSubtaskMutation = useSubtaskAddMutation()
@@ -353,7 +356,7 @@ export const TaskDetailModal = ({
             {task.status !== 'done' && (
               <SolidButton color="positive" onClick={() => {
                 updateTaskMutation.mutate({ ...task, status: 'done' })
-                onClose()
+                onClose?.()
               }}>
                 {translation('finishTask')}
               </SolidButton>
@@ -370,14 +373,17 @@ export const TaskDetailModal = ({
 
   const tasksDetails = (
     <div className="row justify-between gap-x-8">
-      <div className="col grow gap-y-8 min-w-[300px]">
-        <div className="min-h-[25%]">
+      <div className="col grow gap-y-8 min-w-72">
+        <div className="min-h-48 relative">
           <Textarea
-            headline={translation('notes')}
             value={task.notes}
             onChangeText={(description) => setTask({ ...task, notes: description })}
             onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, notes: text })}
-          />
+            placeholder={translation('notesPlaceHolder')}
+            className="pt-8 shadow-sm h-full w-full"
+          >
+          </Textarea>
+          <Label size="lg" className="absolute left-3 top-3">{translation('notes')}</Label>
         </div>
         <SubtaskView
           subtasks={task.subtasks}
@@ -408,7 +414,7 @@ export const TaskDetailModal = ({
 
   const templateSidebar = (
     <div
-      className="absolute left-[-250px] top-0 col w-[250px] overflow-hidden p-4 pb-0 rounded-l-xl h-full bg-task-modal-sidebar-background text-task-modal-sidebar-text"
+      className="absolute -left-64 top-0 col w-64 overflow-hidden p-4 pb-0 rounded-l-xl h-full bg-task-modal-sidebar-background text-task-modal-sidebar-text"
     >
       {personalTaskTemplatesData && wardTaskTemplatesData && (
         <TaskTemplateListColumn
@@ -428,53 +434,52 @@ export const TaskDetailModal = ({
 
   return (
     <>
-      <ConfirmModal
+      <ConfirmDialog
         isOpen={isShowingDeleteDialog}
-        headerProps={{
-          titleText: `${translation('deleteTask')}?`,
-          descriptionText: `${translation('deleteTaskDescription')}`
-        }}
+        titleElement={`${translation('deleteTask')}?`}
+        description={translation('deleteTaskDescription')}
         onConfirm={() => {
           deleteTaskMutation.mutate(task.id)
           setIsShowingDeleteDialog(false)
-          onClose()
+          onClose?.()
         }}
         onCancel={() => setIsShowingDeleteDialog(false)}
         buttonOverwrites={[{}, {}, { color: 'negative' }]}
+        className="!z-200"
       />
-      <Modal
+      <Dialog
         {...modalProps}
-        className={clsx('relative gap-y-2 max-w-[800px] w-[calc(100vw-532px)]', {
+        description={undefined}
+        titleElement={(
+          <ToggleableInput
+            autoFocus={isCreating}
+            initialState="editing"
+            id="name"
+            value={task.name}
+            onChangeText={(name) => setTask({ ...task, name })}
+            onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, name: text })}
+            className="text-2xl font-bold"
+            minLength={minTaskNameLength}
+            maxLength={maxTaskNameLength}
+            size={20}
+          />
+        )}
+
+        onClose={onClose}
+
+        className={clsx('gap-y-2 min-h-192 min-w-180 max-w-[calc(100vw_-_128rem_-_2rem)]]', {
           'rounded-l-none': isCreating,
         }, className)}
-        headerProps={{
-          title: (
-            <ToggleableInput
-              autoFocus={isCreating}
-              initialState="editing"
-              id="name"
-              value={task.name}
-              onChangeText={(name) => setTask({ ...task, name })}
-              onEditCompleted={(text) => updateTaskLocallyAndExternally({ ...task, name: text })}
-              labelClassName="text-2xl font-bold"
-              minLength={minTaskNameLength}
-              maxLength={maxTaskNameLength}
-              size={20}
-            />
-          )
-        }}
-        onClose={onClose}
       >
         {isCreating && templateSidebar}
         <LoadingAndErrorComponent
           isLoading={(isLoading || !data) && !isCreating}
           hasError={isError}
-          className="min-h-138"
         >
           {tasksDetails}
           {buttons}
         </LoadingAndErrorComponent>
-      </Modal>
+      </Dialog>
     </>
   )
 }

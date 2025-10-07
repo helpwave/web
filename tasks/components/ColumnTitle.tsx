@@ -34,8 +34,8 @@ export const ColumnTitle = ({
         },
         titleRowClassName
       )}>
-        {type === 'main' && <h2 className="textstyle-title-lg">{title}</h2>}
-        {type === 'subtitle' && <h3 className="textstyle-title-md">{title}</h3>}
+        {type === 'main' && <h2 className="typography-title-lg">{title}</h2>}
+        {type === 'subtitle' && <h3 className="typography-title-md">{title}</h3>}
         {actions}
       </div>
       {description && (<span className="leading-4 text-description">{description}</span>)}

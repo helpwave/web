@@ -44,9 +44,14 @@ export const PatientCard = ({
                             }: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
   const translation = useTranslation([defaultPatientCardTranslations], overwriteTranslation)
   return (
-    <DragCard isSelected={isSelected} onClick={onClick} className={clsx('min-h-40', className)} {...restCardProps}>
-      <div className="row justify-between">
-        <span className="textstyle-title-normal whitespace-nowrap">{bedName ?? translation('bedNotAssigned')}</span>
+    <DragCard
+      isSelected={isSelected}
+      onClick={onClick}
+      className={clsx('min-h-40', { 'justify-center': !taskCounts }, className)}
+      {...restCardProps}
+    >
+      <div className="flex-row-4 items-center justify-between">
+        <span className="typography-title-md whitespace-nowrap">{bedName ?? translation('bedNotAssigned')}</span>
         <span className="ml-2 truncate">{patientName}</span>
       </div>
       {taskCounts && (

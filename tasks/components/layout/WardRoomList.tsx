@@ -107,7 +107,7 @@ export const WardRoomList = ({
           })
           setAddModalState({ value: { name: '' }, isOpen: false })
         }}
-        onChange={(value) => setAddModalState(prevState => ({ ...prevState, value }))}
+        onValueChange={(value) => setAddModalState(prevState => ({ ...prevState, value }))}
         value={addModalState.value}
         wardId={wardId}
       />

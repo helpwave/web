@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
 import {
-  ConfirmModal,
+  ConfirmDialog,
+  FormElementWrapper,
   Input,
   type PropsForTranslation,
   SolidButton,
@@ -12,8 +13,7 @@ import {
 } from '@helpwave/hightide'
 import { SubtaskView } from '../SubtaskView'
 import { ColumnTitle } from '../ColumnTitle'
-import { emptyTaskTemplate } from '@/pages/templates'
-import { TaskTemplateContext } from '@/pages/templates'
+import { emptyTaskTemplate, TaskTemplateContext } from '@/pages/templates'
 import {
   useTaskTemplateCreateMutation,
   useTaskTemplateDeleteMutation,
@@ -123,9 +123,6 @@ export const TaskTemplateDetails = ({
     name: !isCreatingNewTemplate
   })
 
-  const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
-  const inputClasses = 'mt-1 block rounded-md w-full'
-
   const minNameLength = 2
   const maxNameLength = 32
 
@@ -144,7 +141,7 @@ export const TaskTemplateDetails = ({
   const isDisplayingNameError: boolean = touched.name && nameErrorMessage !== undefined
 
   useEffect(() => {
-    if(isCreatingNewTemplate && template.wardId !== wardId) {
+    if (isCreatingNewTemplate && template.wardId !== wardId) {
       updateContext(prevState => ({
         ...prevState,
         template: { ...template, wardId }
@@ -154,10 +151,9 @@ export const TaskTemplateDetails = ({
 
   return (
     <div className="col py-4 px-6">
-      <ConfirmModal
-        headerProps={{
-          titleText: translation('deleteConfirmText')
-        }}
+      <ConfirmDialog
+        titleElement={translation('deleteConfirmText')}
+        description={undefined}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
@@ -171,39 +167,50 @@ export const TaskTemplateDetails = ({
         description={!isCreatingNewTemplate ? translation('updateTaskTemplateDescription') : undefined}
       />
       <div className=" col gap-y-4 max-w-128 mb-4">
-        <Input
+        <FormElementWrapper
           id="name"
-          value={template.name}
-          label={{ name: translation('name') }}
-          type="text"
-          onBlur={() => setTouched({ name: true })}
-          onChangeText={text => {
-            updateContext(prevState => ({
-              ...prevState,
-              template: { ...prevState.template, name: text },
-              isValid: validateName(text) === undefined,
-              hasChanges: true,
-              deletedSubtaskIds: state.deletedSubtaskIds
-            }))
-          }}
-          maxLength={maxNameLength}
-          className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingNameError })}
-        />
-        {isDisplayingNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
-        <Textarea
-          headline={translation('notes')}
+          label={translation('name')}
+          error={isDisplayingNameError}
+          isShowingError={touched.name}
+        >
+          {({ isShowingError: _, setIsShowingError: _2, ...bag }) => (
+            <Input
+              {...bag}
+              value={template.name}
+              onBlur={() => setTouched({ name: true })}
+              onChangeText={text => {
+                updateContext(prevState => ({
+                  ...prevState,
+                  template: { ...prevState.template, name: text },
+                  isValid: validateName(text) === undefined,
+                  hasChanges: true,
+                  deletedSubtaskIds: state.deletedSubtaskIds
+                }))
+              }}
+              maxLength={maxNameLength}
+            />
+          )}
+        </FormElementWrapper>
+        <FormElementWrapper
           id="notes"
-          value={template.notes}
-          onChangeText={text => {
-            updateContext(prevState => ({
-              ...prevState,
-              template: { ...state.template, notes: text },
-              isValid: state.isValid,
-              hasChanges: true,
-              deletedSubtaskIds: state.deletedSubtaskIds
-            }))
-          }}
-        />
+          label={translation('notes')}
+        >
+          {({ isShowingError: _, setIsShowingError: _2, ...bag }) => (
+            <Textarea
+              {...bag}
+              value={template.notes}
+              onChangeText={text => {
+                updateContext(prevState => ({
+                  ...prevState,
+                  template: { ...state.template, notes: text },
+                  isValid: state.isValid,
+                  hasChanges: true,
+                  deletedSubtaskIds: state.deletedSubtaskIds
+                }))
+              }}
+            />
+          )}
+        </FormElementWrapper>
       </div>
       <SubtaskView
         taskOrTemplateId={template.id}

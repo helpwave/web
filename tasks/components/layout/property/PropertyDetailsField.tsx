@@ -6,14 +6,20 @@ import {
   formTranslation,
   IconButton,
   InputUncontrolled,
+  Label,
   Select,
+  SelectOption as SelectOptionDisplay,
   SolidButton,
   TableWithSelection,
-  Tile,
   useTranslation
 } from '@helpwave/hightide'
 import { Plus, X } from 'lucide-react'
-import type { FieldType, Property, PropertySelectData, SelectOption } from '@helpwave/api-services/types/properties/property'
+import type {
+  FieldType,
+  Property,
+  PropertySelectData,
+  SelectOption
+} from '@helpwave/api-services/types/properties/property'
 import { fieldTypeList } from '@helpwave/api-services/types/properties/property'
 import { useEffect, useMemo, useState } from 'react'
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
@@ -149,13 +155,13 @@ export const PropertySelectOptionsUpdater = ({
                       ...update,
                       delete: [...update.delete, ...data.options
                         .map((option, index) => ({
-                        ...option,
-                        index
-                      })).filter(value => !!selectedIndexes[value.index])
+                          ...option,
+                          index
+                        })).filter(value => !!selectedIndexes[value.index])
                         .map(value => ({
-                        index: value.index,
-                        id: value.id
-                      }))]
+                          index: value.index,
+                          id: value.id
+                        }))]
                     }
                   )
                 }}
@@ -175,7 +181,7 @@ export const PropertySelectOptionsUpdater = ({
         )}
       />
       <div className="row justify-between items-center">
-        <span className="textstyle-label-md">{}</span>
+        <span className="typography-label-md">{}</span>
 
       </div>
       <TableWithSelection
@@ -256,23 +262,28 @@ export const PropertyDetailsField = ({
     <ExpandableUncontrolled
       {...expandableProps}
       label={(
-        <h4 className="textstyle-title-md">
+        <h4 className="typography-title-md">
           {translation('field')}
         </h4>
       )}
       contentExpandedClassName="max-h-160"
     >
+      <Label>{translation('fieldType')}</Label>
       <Select
         // TODO add icons
         value={usedValue.fieldType}
-        label={{ name: translation('fieldType'), labelType: 'labelMedium' }}
-        options={fieldTypeList.map(fieldType => ({ value: fieldType, label: translation(fieldType) }))}
-        onChange={fieldType => {
-          const newValue = { ...usedValue, fieldType }
+        onValueChanged={fieldType => {
+          const newValue = { ...usedValue, fieldType: fieldType as FieldType }
           onChange(newValue)
         }}
         disabled={!!value.id}
-      />
+      >
+        {fieldTypeList.map(fieldType => (
+          <SelectOptionDisplay key={fieldType} value={fieldType}>
+            {translation(fieldType)}
+          </SelectOptionDisplay>
+        ))}
+      </Select>
       {isSelectType && (
         <PropertySelectOptionsUpdater
           value={usedValue.selectData!}
@@ -280,23 +291,22 @@ export const PropertyDetailsField = ({
         />
       )}
       {isSelectType && (
-        <Tile
-          title={translation('allowCustomValues')}
-          description={translation('allowCustomValuesDescription')}
-          suffix={(
-            <Checkbox
-              checked={usedValue.selectData!.isAllowingFreetext}
-              onChange={isAllowingFreetext => {
-                const newValue: PropertyFieldDetails = {
-                  ...value,
-                  selectData: { ...usedValue.selectData!, isAllowingFreetext }
-                }
-                onChange(newValue)
-              }}
-            />
-          )}
-          className="mt-4"
-        />
+        <div className="flex-row-4 justify-between">
+          <div className="flex-col-1">
+            <span>{translation('allowCustomValues')}</span>
+            <span className="text-description">{translation('allowCustomValuesDescription')}</span>
+          </div>
+          <Checkbox
+            checked={usedValue.selectData!.isAllowingFreetext}
+            onChange={isAllowingFreetext => {
+              const newValue: PropertyFieldDetails = {
+                ...value,
+                selectData: { ...usedValue.selectData!, isAllowingFreetext }
+              }
+              onChange(newValue)
+            }}
+          />
+        </div>
       )}
     </ExpandableUncontrolled>
   )

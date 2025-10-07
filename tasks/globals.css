@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '@helpwave/hightide/css/uncompiled/globals.css';
+@import '@helpwave/hightide/style/uncompiled/globals.css';
 
 @source "./node_modules/@helpwave/hightide";
 
@@ -19,11 +19,11 @@
 
   /* Header */
   --color-header-background: var(--color-white);
-  --color-header-text: var(--color-text-default);
+  --color-header-text: var(--color-black);
 
   /* TaskModalSidebar */
-  --color-task-modal-sidebar-background: var(--color-background);
-  --color-task-modal-sidebar-text: var(--color-text-default);
+  --color-task-modal-sidebar-background: var(--color-surface-variant);
+  --color-task-modal-sidebar-text: var(--color-on-surface);
 
   /* TwoColumn */
   --color-twocolum-background: #C6C6C6;
@@ -35,6 +35,7 @@
   @variant dark {
     /* Header */
     --color-header-background: var(--color-black);
+    --color-header-text: var(--color-white);
 
     /* TwoColumn */
     --color-twocolum-background: #363636;

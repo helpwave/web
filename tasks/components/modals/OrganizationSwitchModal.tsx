@@ -1,6 +1,8 @@
-import type { ModalProps, SelectOption, Translation } from '@helpwave/hightide'
-import { Modal, type PropsForTranslation, Select, SolidButton, useTranslation } from '@helpwave/hightide'
-import { useMemo, useState } from 'react'
+import type { DialogProps, Translation } from '@helpwave/hightide'
+import { SelectOption } from '@helpwave/hightide'
+import { Dialog } from '@helpwave/hightide'
+import { type PropsForTranslation, Select, SolidButton, useTranslation } from '@helpwave/hightide'
+import { useState } from 'react'
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationSwitchModalTranslation = {
@@ -8,7 +10,7 @@ type OrganizationSwitchModalTranslation = {
   ok: string,
 }
 
-type OrganizationSwitchModalProps = ModalProps & {
+type OrganizationSwitchModalProps = DialogProps & {
   currentOrganization?: string,
   organizations?: OrganizationDTO[],
   onDone: (organization?: OrganizationDTO) => void,
@@ -25,24 +27,15 @@ const defaultOrganizationSwitchModalTranslation: Translation<OrganizationSwitchM
   }
 }
 
-const organizationsToOptions = (organizations?: OrganizationDTO[]): SelectOption<string>[] => {
-  return (organizations ?? []).map((organization) => ({
-    value: organization.id,
-    label: `${organization.longName} (${organization.shortName})`,
-  }))
-}
-
 export const OrganizationSwitchModal = ({
                                           overwriteTranslation,
                                           onDone: onDoneToCaller,
                                           currentOrganization,
                                           organizations,
-                                          headerProps,
                                           ...modalProps
                                         }: PropsForTranslation<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
   const translation = useTranslation([defaultOrganizationSwitchModalTranslation], overwriteTranslation)
   const [organization, setOrganization] = useState(currentOrganization ?? '')
-  const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])
 
   const onDone = () => {
     if (!organization) return
@@ -51,25 +44,37 @@ export const OrganizationSwitchModal = ({
   }
 
   return (
-    <Modal
-      headerProps={{
-        ...headerProps,
-        titleText: headerProps?.titleText ?? translation('switchOrganization')      }}
+    <Dialog
       {...modalProps}
+      titleElement={modalProps?.titleElement ?? translation('switchOrganization')}
     >
       <div className="w-[320px]">
         <Select
-          className="mt-2"
           value={organization}
-          options={organizationOptions}
-          onChange={setOrganization}
-        />
+          onValueChanged={setOrganization}
+          buttonProps={{
+            className: 'mt-2',
+            selectedDisplay: (selected) => {
+              const organization = organizations?.find(value => value.id === selected)
+              if(!organization) {
+                return '-'
+              }
+              return `${organization.longName} (${organization.shortName})`
+            }
+        }}
+        >
+          {organizations?.map((organization) => (
+            <SelectOption key={organization.id} value={organization.id}>
+              {`${organization.longName} (${organization.shortName})`}
+            </SelectOption>
+          ))}
+        </Select>
         <div className="row mt-3 gap-x-4 justify-end">
           <SolidButton autoFocus color="positive" disabled={!organization} onClick={onDone}>
             {translation('ok')}
           </SolidButton>
         </div>
       </div>
-    </Modal>
+    </Dialog>
   )
 }

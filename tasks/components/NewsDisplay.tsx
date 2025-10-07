@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 import { TimeDisplay } from '@helpwave/hightide'
-import type { News } from '@helpwave/hightide'
 import Image from 'next/image'
+import type { News } from '@/utils/news'
 
 export type NewsDisplayProps = {
   news: News,
@@ -22,7 +22,7 @@ export const NewsDisplay = ({ news, titleOnTop = true }: NewsDisplayProps) => {
         <div className="min-w-[100px]">
           <TimeDisplay date={news.date} mode="date"/>
         </div>
-        <span className="textstyle-title-md text-primary">{news.title}</span>
+        <span className="typography-title-md text-primary">{news.title}</span>
       </div>
       <div className="col gap-y-2 flex-1">
         {news.description.map((value, index) => value instanceof URL ? (

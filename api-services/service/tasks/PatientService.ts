@@ -140,7 +140,7 @@ export const PatientService = {
         await PatientService.assignToBed({ patientId: res.getId(), bedId: patient.bedId })
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
 
     return { ...patient, id: res.getId() }

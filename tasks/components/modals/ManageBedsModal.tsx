@@ -1,11 +1,10 @@
 import clsx from 'clsx'
-import type { Translation } from '@helpwave/hightide'
+import type { DialogProps, Translation } from '@helpwave/hightide'
 import {
+  Dialog,
   FillerRowElement,
   InputUncontrolled,
   LoadingAndErrorComponent,
-  Modal,
-  type ModalProps,
   type PropsForTranslation,
   SolidButton,
   Table,
@@ -32,6 +31,7 @@ type ManageBedsModalTranslation = {
   remove: string,
   addBed: string,
   close: string,
+  manageBeds: string,
 }
 
 const defaultManageBedsModalTranslation: Translation<ManageBedsModalTranslation> = {
@@ -43,7 +43,8 @@ const defaultManageBedsModalTranslation: Translation<ManageBedsModalTranslation>
     patient: 'Patient',
     remove: 'Remove',
     addBed: 'Add Bed',
-    close: 'Close'
+    close: 'Close',
+    manageBeds: 'Change the beds in the ward by renaming, adding or deleting them.'
   },
   de: {
     manageBedsIn: 'Betten verwalten in',
@@ -53,11 +54,12 @@ const defaultManageBedsModalTranslation: Translation<ManageBedsModalTranslation>
     patient: 'Patient',
     remove: 'Entfernen',
     addBed: 'Hinzufügen',
-    close: 'Schließen'
+    close: 'Schließen',
+    manageBeds: 'Ändere die Betten in der Station durch umbennen, hinzufügen oder löschen.'
   }
 }
 
-export type ManageBedsModalProps = ModalProps & {
+export type ManageBedsModalProps = Omit<DialogProps, 'titleElement' | 'description'> & {
   wardId: string, // TODO remove later
   roomId: string,
 }
@@ -70,7 +72,6 @@ export const ManageBedsModal = ({
                                   wardId,
                                   roomId,
                                   className,
-                                  headerProps,
                                   ...modalProps
                                 }: PropsForTranslation<ManageBedsModalTranslation, ManageBedsModalProps>) => {
   const translation = useTranslation([defaultManageBedsModalTranslation], overwriteTranslation)
@@ -163,13 +164,11 @@ export const ManageBedsModal = ({
   }
 
   return (
-    <Modal
-      headerProps={{
-        ...headerProps,
-        titleText: headerProps?.titleText ?? (room ? `${translation('manageBedsIn')} ${room.name}` : ''),
-      }}
-      className={clsx('min-w-[600px]', className)}
+    <Dialog
       {...modalProps}
+      className={clsx('min-w-[600px]', className)}
+      titleElement={room ? `${translation('manageBedsIn')} ${room.name}` : translation('beds')}
+      description={translation('manageBeds')}
     >
       <ColumnTitle
         title={`${translation('beds')} (${beds?.length ?? 0})`}
@@ -183,7 +182,6 @@ export const ManageBedsModal = ({
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}
-        className="min-h-116"
       >
         {room && beds && (
           <Table
@@ -194,6 +192,6 @@ export const ManageBedsModal = ({
           />
         )}
       </LoadingAndErrorComponent>
-    </Modal>
+    </Dialog>
   )
 }

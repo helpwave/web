@@ -26,7 +26,7 @@ export const RoomOverview = ({ room, onBedClick = noop }: RoomOverviewProps) => 
     <div className="col gap-y-1 w-full @container" ref={ref}>
       <div className="row gap-x-1 items-center">
         <div className="w-2 h-2 mx-2 rounded-full bg-gray-300"/>
-        <span className="textstyle-title-normal">{room.name}</span>
+        <span className="typography-title-md">{room.name}</span>
       </div>
       <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4">
         {room.beds.map((bed, index) => {

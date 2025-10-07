@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Undo2, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
+import { SelectOption } from '@helpwave/hightide'
 import {
   LoadingAndErrorComponent,
   noop,
@@ -38,8 +39,8 @@ const defaultRoomBedSelectTranslation: Translation<RoomBedSelectTranslation> = {
   de: {
     saved: 'gespeichert',
     unsaved: 'nicht gespeichert',
-    valid: 'okay',
-    invalid: 'nicht okay',
+    valid: 'Zulässig',
+    invalid: 'Nicht zulässig',
     room: 'Raum',
     bed: 'Bett',
     revert: 'Rückgängig',
@@ -96,32 +97,43 @@ export const RoomBedSelect = ({
 
   const roomSelect = (data && (
     <Select
-      className="min-w-[120px] w-full"
       value={currentSelection.roomId}
-      options={data.map(room => ({ value: room.id, label: room.name, disabled: room.beds.length === 0 }))}
-      onChange={value => {
-        setCurrentSelection({
-          ...currentSelection,
-          roomId: value,
-          bedId: undefined
-        })
-        setTouched(true)
+      onValueChanged={value => {
+        const room = data?.find(room => room.id === value)
+        if(room) {
+          setCurrentSelection({
+            ...currentSelection,
+            roomId: value,
+            bedId: undefined
+          })
+          setTouched(true)
+        }
+      }}
+      buttonProps={{
+        className: 'min-w-36 w-full',
+        selectedDisplay: (value) => {
+          const room = data?.find(room => room.id === value)
+          if(room) {
+            return room.name
+          }
+          return '-'
+        }
       }}
       disabled={disabled}
-    />
+    >
+      {data.map(room => (
+        <SelectOption key={room.id} value={room.id} disabled={room.beds.length === 0 }>
+          {room.name}
+        </SelectOption>
+      ))}
+    </Select>
   ))
 
   const bedSelect = (
     <Select
-      className="min-w-[150px] w-full"
       value={currentSelection.bedId}
       disabled={!currentSelection.roomId || disabled}
-      options={(currentRoom?.beds ?? []).map(value => ({
-        value: value.id,
-        label: value.name,
-        disabled: !!value.patient
-      }))}
-      onChange={value => {
+      onValueChanged={value => {
         const newSelection = {
           ...currentSelection,
           bedId: value
@@ -130,12 +142,28 @@ export const RoomBedSelect = ({
         setTouched(true)
         onChange(newSelection)
       }}
-    />
+      buttonProps={{
+        className: 'min-w-36 w-full',
+        selectedDisplay: (value) => {
+          const bed = currentRoom?.beds.find(bed => bed.id === value)
+          if(bed) {
+            return bed.name
+          }
+          return '-'
+        }
+      }}
+    >
+      {currentRoom?.beds.map(bed => (
+        <SelectOption key={bed.id} value={bed.id} disabled={!!bed.patient}>
+          {bed.name}
+        </SelectOption>
+      ))}
+    </Select>
   )
   const isShowingClear = isClearable && !isSubmitting && touched
   const isShowingRevert = touched && hasChanges && !isSubmitting && !isCreating && !isClearable
   const changesAndSaveRow = (
-    <div className="row justify-between items-center gap-x-4">
+    <div className="flex-row-4 justify-between items-center">
       <div>
         {isShowingRevert && (
           <TextButton
@@ -147,7 +175,7 @@ export const RoomBedSelect = ({
             }}
             disabled={!hasChanges}
           >
-            <div className="row gap-x-2 items-center">
+            <div className="flex-row-2 items-center">
               {translation('revert')}
               <Undo2 size={16}/>
             </div>
@@ -165,7 +193,7 @@ export const RoomBedSelect = ({
             }}
             color="negative"
           >
-            <div className="row gap-x-2 items-center">
+            <div className="flex-row-2 items-center">
               {translation('revert')}
               <X size={16}/>
             </div>
@@ -210,27 +238,27 @@ export const RoomBedSelect = ({
           }
         )}
       >
-        <div className="col">
+        <div className="flex-col-0">
           <div
             className={clsx({
-              'col': !isUsingWidthLayout,
-              'row gap-x-4': isUsingWidthLayout
+              'flex-col-2': !isUsingWidthLayout,
+              'flex-row-4': isUsingWidthLayout
             })}
           >
             <div className={clsx({
-              'col gap-y-1': isUsingWidthLayout,
-              'row items-center': !isUsingWidthLayout
+              'flex-col-1': isUsingWidthLayout,
+              'flex-row-2 items-center': !isUsingWidthLayout
             })}>
-            <span className="row flex-1 textstyle-table-header justify-start min-w-20 max-w-20">
+            <span className="flex-row-1 typography-label-md justify-start min-w-20 max-w-20">
               {translation('room')}
             </span>
               {roomSelect}
             </div>
             <div className={clsx({
-              'col gap-y-1': isUsingWidthLayout,
-              'row items-center': !isUsingWidthLayout
+              'flex-col-1': isUsingWidthLayout,
+              'flex-row-2 items-center': !isUsingWidthLayout
             })}>
-            <span className="flex flex-1  textstyle-table-header row justify-start min-w-20 max-w-20">
+            <span className="flex-row-1 typography-label-md justify-start min-w-20 max-w-20">
               {translation('bed')}
             </span>
               {bedSelect}

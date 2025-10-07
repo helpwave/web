@@ -1,9 +1,10 @@
 import type { Translation } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { useLanguage } from '@helpwave/hightide'
-import { filterNews, type LocalizedNews } from '@helpwave/hightide'
 import { NewsDisplay } from '../NewsDisplay'
 import { ColumnTitle } from '../ColumnTitle'
+import type { LocalizedNews } from '@/utils/news'
+import { filterNews } from '@/utils/news'
 
 type NewsFeedTranslation = {
   title: string,

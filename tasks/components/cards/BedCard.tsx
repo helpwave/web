@@ -47,7 +47,7 @@ export const BedCard = ({
         {...restCardProps}
       >
         <div className="row justify-between">
-          <span className="textstyle-title-normal">{bedName}</span>
+          <span className="typography-title-md">{bedName}</span>
           <span>{translation('nobody')}</span>
         </div>
         <div className="col grow justify-center items-center">

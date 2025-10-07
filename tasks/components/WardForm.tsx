@@ -1,7 +1,12 @@
-import { useState } from 'react'
-import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
-import { Input, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import {
+  FormElementWrapper,
+  Input,
+  type PropsForTranslation,
+  useTranslatedValidators,
+  useTranslation
+} from '@helpwave/hightide'
+import { useState } from 'react'
 
 type WardFormTranslation = {
   general: string,
@@ -54,46 +59,43 @@ export const WardForm = ({
                            isShowingErrorsDirectly = false
                          }: PropsForTranslation<WardFormTranslation, WardFormProps>) => {
   const translation = useTranslation([defaultWardFormTranslations], overwriteTranslation)
+  const validators = useTranslatedValidators()
   const [touched, setTouched] = useState({ name: isShowingErrorsDirectly })
 
   const minWardNameLength = 2
   const maxWardNameLength = 32
 
-  const inputErrorClasses = 'border-negative focus:border-negative focus:ring-negative border-2'
-  const inputClasses = 'mt-1 block rounded-md w-full'
-
   function validateName(ward: WardFormInfoDTO) {
-    const wardName = ward.name.trim()
-    if (wardName === '') {
-      return translation('required')    } else if (wardName.length < minWardNameLength) {
-      return translation('tooShort', { replacements: { characters: minWardNameLength.toString() } })
-    } else if (wardName.length > maxWardNameLength) {
-      return translation('tooLong', { replacements: { characters: maxWardNameLength.toString() } })
-    }
+    return validators.notEmpty(ward.name) ?? validators.length(ward.name, [minWardNameLength, maxWardNameLength])
   }
+
+  const error = validateName(ward)
 
   function triggerOnChange(newWard: WardFormInfoDTO) {
     const isValid = validateName(newWard) === undefined
     onChange(newWard, isValid)
   }
 
-  const nameErrorMessage: string | undefined = validateName(ward)
-
-  const isDisplayingShortNameError = nameErrorMessage && touched.name
-
   return (
-    <form>
-      <div className="mt-2 mb-1">
+    <FormElementWrapper
+      id="name"
+      label={translation('name')}
+      error={error}
+      errorProps={{ className: '!static' }}
+      isShowingError={touched.name}
+    >
+      {({ setIsShowingError: _, isShowingError: _2, ...bag }) => (
         <Input
-          id="name" value={ward.name} label={{ name: translation('name') }}
-          onBlur={() => setTouched({ ...touched, name: true })}
-          onChangeText={text => triggerOnChange({ ...ward, name: text })}
+          {...bag}
+          type="text"
+          value={ward.name}
+          onChangeText={text => {
+            triggerOnChange({ ...ward, name: text })
+            setTouched(prev => ({ ...prev, name: true }))
+          }}
           maxLength={maxWardNameLength}
-          className={clsx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
         />
-        {isDisplayingShortNameError && <span className="textstyle-form-error">{nameErrorMessage}</span>}
-      </div>
-      <span className="textstyle-form-description">{translation('nameDescription')}</span>
-    </form>
+      )}
+    </FormElementWrapper>
   )
 }

@@ -202,7 +202,7 @@ const Payment: NextPage = () => {
                     </span>
                   </div>
                 )
-              }) : <span className="textstyle-description">{translation.noTermsAndConditions}</span>}
+              }) : <span className="text-description">{translation.noTermsAndConditions}</span>}
               <div className="row justify-between">
                 <SolidButton
                   className="gap-x-2 w-[200px]"

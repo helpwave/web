@@ -1,8 +1,7 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
 
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { Helpwave } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation, HelpwaveLogo } from '@helpwave/hightide'
 import { getConfig } from '@/utils/config'
 
 type MobileInterceptorTranslation = {
@@ -37,8 +36,8 @@ const MobileInterceptor: NextPage = ({ overwriteTranslation }: PropsForTranslati
   const appstoreLink = config.appstoreLinks.appStore
   return (
     <div className="w-screen h-[80vh] col items-center justify-center">
-      <Helpwave className="w-1/3 mx-auto h-auto mb-2 text-black"/>
-      <span className="textstyle-title-normal mb-8">{translation('pleaseDownloadApp')}</span>
+      <HelpwaveLogo className="w-1/3 mx-auto h-auto mb-2 text-black"/>
+      <span className="typography-title-md mb-8">{translation('pleaseDownloadApp')}</span>
       <Link href={playStoreLink}>{translation('playStore')}</Link>
       <Link href={appstoreLink}>{translation('appStore')}</Link>
     </div>

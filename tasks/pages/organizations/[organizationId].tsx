@@ -55,19 +55,19 @@ export const OrganizationOverviewContext = createContext<OrganizationOverviewCon
 const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardsPageTranslation>) => {
   const translation = useTranslation([defaultWardsPageTranslation], overwriteTranslation)
   const [contextState, setContextState] = useState<OrganizationOverviewContextState>(emptyOrganizationOverviewContextState)
-  const [usedQueryParam, setUsedQueryParam] = useState(false)
 
   const { organizationId, wardId } = useRouteParameters<'organizationId', 'wardId'>()
   const { data: organization } = useOrganizationQuery(organizationId)
 
-  if (wardId && !usedQueryParam) {
-    setContextState({
-      ...emptyOrganizationOverviewContextState,
-      wardId,
-      organizationId
-    })
-    setUsedQueryParam(true)
-  }
+  useEffect(() => {
+    if(wardId && organizationId) {
+      setContextState({
+        ...emptyOrganizationOverviewContextState,
+        wardId,
+        organizationId
+      })
+    }
+  }, [wardId, organizationId])
 
   useEffect(() => {
     setContextState(contextState => ({ ...contextState, organizationId }))

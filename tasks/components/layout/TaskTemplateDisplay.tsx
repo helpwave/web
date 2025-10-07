@@ -1,7 +1,13 @@
 import { useRouter } from 'next/router'
-import type { Translation } from '@helpwave/hightide'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
-import { type PropsForTranslation, SelectUncontrolled, useTranslation } from '@helpwave/hightide'
+import type {
+  Translation } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  Select,
+  SelectOption,
+  useTranslation
+} from '@helpwave/hightide'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
 import clsx from 'clsx'
@@ -66,26 +72,28 @@ export const TaskTemplateDisplay = ({
       <ColumnTitle
         title={!isShowingWardTemplates ? translation('personalTaskTemplates') : translation('wardTaskTemplates')}
         actions={(
-          <SelectUncontrolled<string>
+          // TODO change to a menu
+          <Select
             value={!isShowingWardTemplates ? 'personal' : wardId}
-            options={[...(wards ?? []).map(value => ({
-              label: value.name,
-              value: value.id,
-              searchTags: [value.name]
-            })),
-              {
-                label: translation('personal'),
-                value: 'personal',
-                searchTags: [translation('personal')]
-              }
-            ]}
-            onChange={value => {
+            onValueChanged={value => {
               const url = value === 'personal' ? `/templates` : `/ward/${value}/templates`
               router.push(url).catch(console.error)
             }}
             disabled={isLoadingWards || isErrorWards}
-            className="min-w-40"
-          />
+            buttonProps={{
+              className: 'min-w-40'
+            }}
+
+          >
+            {wards?.map(value => (
+              <SelectOption key={value.id} value={value.id}>
+                {value.name}
+              </SelectOption>
+            ))}
+            <SelectOption key="personal" value="personal">
+              {translation('personal')}
+            </SelectOption>
+          </Select>
         )}
         containerClassName="mb-2"
       />

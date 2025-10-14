@@ -19,6 +19,7 @@ import { type OrganizationInvitation, OrganizationInvitationList } from '../Orga
 import { OrganizationContext } from '@/pages/organizations'
 import { ReSignInDialog } from '@/components/modals/ReSignInDialog'
 import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import Link from 'next/link'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -30,7 +31,7 @@ type OrganizationDetailTranslation = {
   update: string,
   properties: string,
   propertiesDescription: string,
-  manageProperties: string
+  manageProperties: string,
 }
 
 const defaultOrganizationDetailTranslations: Translation<OrganizationDetailTranslation> = {
@@ -195,18 +196,17 @@ export const OrganizationDetail = ({
           organizationId={contextState.organizationId}
         />
         {propertyData && !isCreatingNewOrganization && (
-          <DescriptionWithAction
-            title={`${translation.properties} (${propertyData.length})`}
-            description={translation.propertiesDescription}
-            trailing={(
-              <div className={clsx('flex flex-row justify-end items-center')}>
-                <Link href="/properties">
-                  <Button className="h-fit">{translation.manageProperties}</Button>
-                </Link>
-              </div>
-            )}
-            leadingIcon="label"
-          />
+          <div className="card-lg flex-row-0 justify-between">
+            <div className="flex-col-0">
+              <span className="textstyle-title-lg">{`${translation('properties')} (${propertyData.length})`}</span>
+              <span className="text-description">{`${translation('propertiesDescription')} (${propertyData.length})`}</span>
+            </div>
+            <div className={clsx('flex flex-row justify-end items-center')}>
+              <Link href="/properties" className="bg-primary text-on-primary">
+                {translation('manageProperties')}
+              </Link>
+            </div>
+          </div>
         )}
         <div className="row justify-end">
           <SolidButton

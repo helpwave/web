@@ -1,4 +1,4 @@
-import type { FieldType, SelectOption, SubjectType } from './property'
+import type { FieldType, SelectOption, PropertySubjectType } from './property'
 
 export type AttachPropertySelectValue = Omit<SelectOption, 'isCustom'>
 
@@ -9,7 +9,7 @@ export type PropertyValue = {
   dateValue?: Date,
   dateTimeValue?: Date,
   singleSelectValue?: AttachPropertySelectValue,
-  multiSelectValue: AttachPropertySelectValue[]
+  multiSelectValue: AttachPropertySelectValue[],
 }
 
 export const emptyPropertyValue: PropertyValue = {
@@ -35,12 +35,12 @@ export type AttachedProperty = {
    */
   propertyId: string,
   subjectId: string,
-  value: PropertyValue
+  value: PropertyValue,
 }
 
 export type DisplayableAttachedProperty = AttachedProperty & {
-  subjectType: SubjectType,
+  subjectType: PropertySubjectType,
   fieldType: FieldType,
   name: string,
-  description?: string
+  description?: string,
 }

@@ -1,12 +1,14 @@
-import { useState } from 'react'
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { defaultTableStatePagination, Table, type TableState } from '@helpwave/common/components/Table'
-import { Span } from '@helpwave/common/components/Span'
-import { Button } from '@helpwave/common/components/Button'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Avatar } from '@helpwave/common/components/Avatar'
+import { useCallback, useMemo, useState } from 'react'
+import type { Translation } from '@helpwave/hightide'
+import {
+  Avatar,
+  FillerRowElement,
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  SolidButton,
+  Table,
+  useTranslation
+} from '@helpwave/hightide'
 import {
   useInvitationsByUserQuery,
   useInviteAcceptMutation,
@@ -15,15 +17,16 @@ import {
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import type { Invitation } from '@helpwave/api-services/types/users/invitations'
 import { InvitationState } from '@helpwave/api-services/types/users/invitations'
-import { ReSignInModal } from '@/components/modals/ReSignInModal'
+import { ReSignInDialog } from '@/components/modals/ReSignInDialog'
+import type { ColumnDef } from '@tanstack/react-table'
 
 type UserInvitationListTranslation = {
   accept: string,
   decline: string,
-  organization: string
+  organization: string,
 }
 
-const defaultUserInvitationListTranslation: Record<Languages, UserInvitationListTranslation> = {
+const defaultUserInvitationListTranslation: Translation<UserInvitationListTranslation> = {
   en: {
     accept: 'Accept',
     decline: 'Decline',
@@ -42,10 +45,9 @@ export type UserInvitationListProps = Record<string, never>
  * A table that shows all organizations a user hast been invited to
  */
 export const UserInvitationList = ({
-  overwriteTranslation,
-}: PropsForTranslation<UserInvitationListTranslation, UserInvitationListProps>) => {
-  const translation = useTranslation(defaultUserInvitationListTranslation, overwriteTranslation)
-  const [tableState, setTableState] = useState<TableState>({ pagination: { ...defaultTableStatePagination, entriesPerPage: 10 } })
+                                     overwriteTranslation,
+                                   }: PropsForTranslation<UserInvitationListTranslation, UserInvitationListProps>) => {
+  const translation = useTranslation([defaultUserInvitationListTranslation], overwriteTranslation)
   const { data, isLoading, isError } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState(false)
   const { signOut } = useAuth()
@@ -53,16 +55,72 @@ export const UserInvitationList = ({
   const declineInviteMutation = useInviteDeclineMutation()
   const acceptInviteMutation = useInviteAcceptMutation()
 
-  const acceptInvite = (inviteId: string) => acceptInviteMutation.mutateAsync(inviteId)
-    .then(() => setIsShowingReSignInDialog(true))
+  const acceptInvite = useCallback((inviteId: string) => {
+    acceptInviteMutation.mutateAsync(inviteId)
+      .then(() => setIsShowingReSignInDialog(true))
+  }, [acceptInviteMutation])
 
-  const idMapping = (invite: Invitation) => invite.id
+  const columns = useMemo<ColumnDef<Invitation>[]>(() => [
+    {
+      id: 'organization',
+      header: translation('organization'),
+      cell: ({ cell }) => {
+        if (!data) {
+          return
+        }
+        const invite = data[cell.row.index]!
+        return (
+          <div key="name" className="row justify-start items-center gap-x-2 h-8">
+            <Avatar image={{ avatarUrl: invite.organization.id, alt: '' }} name={invite.organization.longName} size="md" fullyRounded={true}/>
+            <span>{invite.organization.longName}</span>
+          </div>
+        )
+      },
+      accessorFn: (invite) => invite.organization.longName,
+      sortingFn: 'text',
+      minSize: 200,
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        if (!data) {
+          return
+        }
+        const invite = data[cell.row.index]!
+        return (
+          <div className="row gap-x-4 items-center justify-end">
+            <SolidButton
+              key="accept"
+              color="positive"
+              onClick={() => acceptInvite(invite.id)}
+            >
+              {translation('accept')}
+            </SolidButton>
+            <SolidButton
+              key="decline"
+              color="negative"
+              onClick={() => declineInviteMutation.mutate(invite.id)}
+            >
+              {translation('decline')}
+            </SolidButton>
+          </div>
+        )
+      },
+      minSize: 240,
+    },
+  ], [acceptInvite, data, declineInviteMutation, translation])
 
   return (
     <>
-      <ReSignInModal
-        id="OrganizationDetail-ReSignInModal"
+      <ReSignInDialog
         isOpen={isShowingReSignInDialog}
+        onCancel={() => {
+          setIsShowingReSignInDialog(false)
+        }}
         onConfirm={() => {
           setIsShowingReSignInDialog(false)
           signOut()
@@ -71,39 +129,19 @@ export const UserInvitationList = ({
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError}
-        loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-        errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+        className="min-h-157"
       >
         {data && (
           <Table
             data={data}
-            stateManagement={[tableState, setTableState]}
-            identifierMapping={idMapping}
-            header={[
-              <Span key="organization" type="tableHeader">{translation.organization}</Span>,
-              <></>,
-              <></>
-            ]}
-            rowMappingToCells={invite => [
-              <div key="name" className={tw('flex flex-row justify-start items-center gap-x-2')}>
-                <Avatar avatarUrl={invite.organization.id} alt=""/>
-                <Span>{invite.organization.longName}</Span>
-              </div>,
-              <Button
-                key="accept"
-                color="positive"
-                onClick={() => acceptInvite(invite.id)}
-              >
-                {translation.accept}
-              </Button>,
-              <Button
-                key="decline"
-                color="negative"
-                onClick={() => declineInviteMutation.mutate(invite.id)}
-              >
-                {translation.decline}
-              </Button>
-            ]}
+            columns={columns}
+            initialState={{ pagination: { pageSize: 10 } }}
+            fillerRow={(columnId) => {
+              if (columnId === 'actions') {
+                return (<div/>)
+              }
+              return (<FillerRowElement className="h-8"/>)
+            }}
           />
         )}
       </LoadingAndErrorComponent>

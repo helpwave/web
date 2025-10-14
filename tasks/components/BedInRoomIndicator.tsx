@@ -1,10 +1,9 @@
-import { tw } from '@helpwave/common/twind'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
+import clsx from 'clsx'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide/'
 
 type BedInRoomIndicatorTranslation = {
   bed: string,
-  in: string
+  in: string,
 }
 
 const defaultBedInRoomIndicatorTranslation = {
@@ -27,7 +26,7 @@ export type BedInRoomIndicatorProps = {
   /*
    Omitting the room name will hide the label above the indicator
    */
-  roomName?: string
+  roomName?: string,
 }
 
 /**
@@ -42,19 +41,19 @@ export const BedInRoomIndicator =
     roomName,
     bedPosition
   }: PropsForTranslation<BedInRoomIndicatorTranslation, BedInRoomIndicatorProps>) => {
-    const translation = useTranslation(defaultBedInRoomIndicatorTranslation, overwriteTranslation)
+    const translation = useTranslation([defaultBedInRoomIndicatorTranslation], overwriteTranslation)
 
     return (
       <div>
         {roomName !== undefined && (
-          <Span className={tw('mb-1')}>
-            {`${translation.bed} ${bedPosition + 1} ${translation.in} ${roomName}`}
-          </Span>
+          <span className="mb-1">
+            {`${translation('bed')} ${bedPosition + 1} ${translation('in')} ${roomName}`}
+          </span>
         )}
-        <div className={tw(`flex flex-row gap-3`)}>
+        <div className="row gap-3">
           {Array.from(Array(bedsInRoom).keys()).map((_, index) => (
             <div key={bedPosition + index}
-                 className={tw(`bg-${bedPosition === index ? 'hw-primary-400' : 'gray-300'} rounded-sm h-8 w-5`)}
+                 className={clsx(`bg-${bedPosition === index ? 'primary' : 'gray-300'} rounded-sm h-8 w-5`)}
             />
           ))}
         </div>

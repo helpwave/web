@@ -4,33 +4,30 @@ export type OrganizationMinimalDTO = {
   id: string,
   shortName: string,
   longName: string,
-  email: string,
-  isVerified: boolean,
+  contactEmail: string,
   isPersonal: boolean,
-  avatarURL: string
+  avatarURL?: string,
 }
 
 export type OrganizationDTO = OrganizationMinimalDTO & {
-  members: OrganizationMember[]
+  members: OrganizationMember[],
 }
 
 export const emptyOrganization: OrganizationDTO = {
   id: '',
   shortName: '',
   longName: '',
-  email: '',
-  avatarURL: '',
+  contactEmail: '',
   isPersonal: false,
-  isVerified: false,
   members: []
 }
 
 export type OrganizationWithMinimalMemberDTO = OrganizationMinimalDTO & {
-  members: OrganizationMemberMinimalDTO[]
+  members: OrganizationMemberMinimalDTO[],
 }
 
 export type OrganizationDisplayableDTO = {
   id: string,
   longName: string,
-  avatarURL: string
+  avatarURL: string,
 }

@@ -2,8 +2,8 @@ import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { z } from 'zod'
 import keycloakInstance, { KeycloakService } from '../util/keycloak'
-import { createPersonalOrganization } from '../mutations/users/organization_mutations'
 import { getAPIServiceConfig } from '../config/config'
+import { OrganizationService } from '../service/users/OrganizationService'
 
 const IdTokenClaimsSchema = z.object({
   sub: z.string().uuid(),
@@ -19,20 +19,6 @@ const IdTokenClaimsSchema = z.object({
   }).optional()
 })
 
-export const fakeToken = IdTokenClaimsSchema.default({
-  sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984',
-  email: 'max.mustermann@helpwave.de',
-  email_verified: true,
-  name: 'Max Mustermann',
-  preferred_username: 'max.mustermann',
-  given_name: 'Max',
-  family_name: 'Mustermann',
-  organization: {
-    id: '3b25c6f5-4705-4074-9fc6-a50c28eba406',
-    name: 'helpwave fake'
-  }
-})
-
 const config = getAPIServiceConfig()
 
 const UserFromIdTokenClaims = IdTokenClaimsSchema.transform((obj) => ({
@@ -40,7 +26,7 @@ const UserFromIdTokenClaims = IdTokenClaimsSchema.transform((obj) => ({
   email: obj.email,
   name: obj.name,
   nickname: obj.preferred_username,
-  avatarUrl: `https://source.boringavatars.com/marble/80/${obj.sub}`,
+  avatarUrl: `https://cdn.helpwave.de/boringavatar.svg`,
   organization: obj.organization
 }))
 
@@ -63,7 +49,7 @@ const tokenToUser = (token: string): User | null => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  if (Object.keys(decoded?.organization).length === 0) delete decoded.organization
+  if (decoded.organization && Object.keys(decoded.organization).length === 0) delete decoded.organization
 
   const parsed = UserFromIdTokenClaims.safeParse(decoded)
   return parsed.success ? parsed.data : null
@@ -71,15 +57,15 @@ const tokenToUser = (token: string): User | null => {
 
 type AuthContextValue = {
   user?: User,
-  setUser?: Dispatch<SetStateAction<User|undefined>>,
+  setUser?: Dispatch<SetStateAction<User | undefined>>,
   token?: string,
   organization?: {
     id: string,
-    name: string
+    name: string,
   },
   organizations: string[],
   signOut: () => void,
-  redirectUserToOrganizationSelection: () => void
+  redirectUserToOrganizationSelection: () => void,
 }
 
 const defaultAuthContextValue: AuthContextValue = {
@@ -87,8 +73,10 @@ const defaultAuthContextValue: AuthContextValue = {
   token: undefined,
   organization: undefined,
   organizations: [],
-  signOut: () => {},
-  redirectUserToOrganizationSelection: () => {}
+  signOut: () => {
+  },
+  redirectUserToOrganizationSelection: () => {
+  }
 }
 
 const AuthContext = createContext<AuthContextValue>(defaultAuthContextValue)
@@ -108,7 +96,7 @@ export const useAuth = (): AuthContextValue => {
         }
         authContext.setUser(user)
       })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return authContext
 }
@@ -120,11 +108,48 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (config.fakeTokenEnable) {
-      const user = tokenToUser(config.fakeToken)
+      const user: User | null = tokenToUser(config.fakeToken)
       if (!user) throw new Error('Invalid fake token')
-      didInit.current = true
-      setUser(user)
-      setToken(config.fakeToken)
+      try {
+        OrganizationService.getForUser().then(organizations => {
+          console.debug(`Found ${organizations.length} organizations for fake token user`)
+          if (organizations.length > 0) {
+            const organization = organizations[0]!
+            console.debug(`Using ${organization.longName} for user.`, organization)
+            setUser(() => ({
+              ...user,
+              organization: {
+                id: organization.id,
+                name: organization.longName,
+              }
+            }))
+            setToken(config.fakeToken)
+            didInit.current = true
+          } else {
+            console.debug('Creating a new organization')
+            OrganizationService.create({
+              id: '',
+              contactEmail: 'test@helpwave.de',
+              longName: 'Test Organization',
+              shortName: 'Test-Org',
+              avatarURL: 'https://helpwave.de/favicon.ico',
+              isPersonal: false,
+            }).then(organization => {
+              setUser(() => ({
+                ...user,
+                organization: {
+                  id: organization.id,
+                  name: organization.longName,
+                }
+              }))
+              setToken(config.fakeToken)
+              didInit.current = true
+            })
+          }
+        })
+      } catch (e) {
+        console.error('Use auth with fake token failed', e)
+      }
       return
     }
 
@@ -147,7 +172,7 @@ export const ProvideAuth = ({ children }: PropsWithChildren) => {
 
       if (!user?.organization?.id) {
         console.info('after init keycloak, no organization found, creating personal')
-        createPersonalOrganization()
+        OrganizationService.createPersonal()
           .then(() => {
             keycloakInstance?.updateToken(-1)
               .then(() => {

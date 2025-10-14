@@ -1,63 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type {
-  CreatePersonalOrganizationResponse,
   InvitationState
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
 import {
   AcceptInvitationRequest,
-  AddMemberRequest,
-  CreateOrganizationRequest,
-  CreatePersonalOrganizationRequest,
   DeclineInvitationRequest,
-  DeleteOrganizationRequest,
   GetInvitationsByOrganizationRequest,
   GetInvitationsByUserRequest,
-  GetOrganizationRequest,
-  GetOrganizationsForUserRequest,
   InviteMemberRequest,
   RemoveMemberRequest,
-  RevokeInvitationRequest,
-  UpdateOrganizationRequest
+  RevokeInvitationRequest
 } from '@helpwave/proto-ts/services/user_svc/v1/organization_svc_pb'
-import { noop } from '@helpwave/common/util/noop'
+import { noop } from '@helpwave/hightide'
 import { QueryKeys } from '../query_keys'
 import { APIServices } from '../../services'
-import { getAuthenticatedGrpcMetadata, grpcWrapper } from '../../authentication/grpc_metadata'
+import { getAuthenticatedGrpcMetadata } from '../../authentication/grpc_metadata'
 import type {
-  OrganizationDTO,
-  OrganizationMinimalDTO,
-  OrganizationWithMinimalMemberDTO
+  OrganizationMinimalDTO
 } from '../../types/users/organizations'
 import type { Invitation, InvitationWithOrganizationId, InviteMemberType } from '../../types/users/invitations'
+import { OrganizationService } from '../../service/users/OrganizationService'
 
 export const useOrganizationQuery = (organizationId: string | undefined) => {
   return useQuery({
     queryKey: [QueryKeys.organizations, organizationId, 'get'],
     enabled: !!organizationId,
     queryFn: async () => {
-      const req = new GetOrganizationRequest()
-      // TODO: would `organizationId !== undefined` also work here or are empty strings also possible?
-      if (organizationId) {
-        req.setId(organizationId)
-      }
-
-      const res = await APIServices.organization.getOrganization(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('error in Organization')
-      }
-
-      const organization: OrganizationWithMinimalMemberDTO = {
-        id: res.getId(),
-        email: res.getContactEmail(),
-        isVerified: true, // TODO update later
-        longName: res.getLongName(),
-        shortName: res.getShortName(),
-        isPersonal: res.getIsPersonal(),
-        avatarURL: res.getAvatarUrl(),
-        members: res.getMembersList().map(member => ({ id: member.getUserId() }))
-      }
-      return organization
+      return await OrganizationService.get(organizationId!)
     },
   })
 }
@@ -66,30 +35,7 @@ export const useOrganizationsForUserQuery = () => {
   return useQuery({
     queryKey: [QueryKeys.organizations, 'organizationsForUser'],
     queryFn: async () => {
-      const req = new GetOrganizationsForUserRequest()
-      const res = await APIServices.organization.getOrganizationsForUser(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        console.error('OrganizationsByUser failed')
-      }
-
-      const organizations: OrganizationDTO[] = res.getOrganizationsList().map(organization => ({
-        id: organization.getId(),
-        email: organization.getContactEmail(),
-        isPersonal: organization.getIsPersonal(),
-        avatarUrl: organization.getAvatarUrl(),
-        longName: organization.getLongName(),
-        shortName: organization.getShortName(),
-        avatarURL: organization.getAvatarUrl(),
-        isVerified: true, // TODO change Later
-        members: organization.getMembersList().map(member => ({
-          id: member.getUserId(),
-          email: member.getEmail(),
-          name: member.getNickname(),
-          avatarURL: member.getAvatarUrl(),
-        }))
-      }))
-      return organizations
+      return await OrganizationService.getForUser()
     },
   })
 }
@@ -158,21 +104,10 @@ export const useOrganizationCreateMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organization: OrganizationMinimalDTO) => {
-      const req = new CreateOrganizationRequest()
-      req.setLongName(organization.longName)
-      req.setShortName(organization.shortName)
-      req.setIsPersonal(organization.isPersonal)
-      req.setContactEmail(organization.email)
-      const res = await APIServices.organization.createOrganization(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        throw new Error('error in OrganizationCreate')
-      }
-
-      return { ...organization, id: res.getId() }
+      return await OrganizationService.create(organization)
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).then()
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     }
   })
 }
@@ -181,23 +116,10 @@ export const useOrganizationUpdateMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organization: OrganizationMinimalDTO) => {
-      const req = new UpdateOrganizationRequest()
-      req.setId(organization.id)
-      req.setLongName(organization.longName)
-      req.setShortName(organization.shortName)
-      req.setIsPersonal(organization.isPersonal)
-      req.setAvatarUrl(organization.avatarURL)
-      req.setContactEmail(organization.email)
-      const res = await APIServices.organization.updateOrganization(req, getAuthenticatedGrpcMetadata())
-
-      if (!res.toObject()) {
-        throw new Error('error in OrganizationUpdate')
-      }
-
-      return organization
+      return await OrganizationService.update(organization)
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).then()
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     }
   })
 }
@@ -206,20 +128,10 @@ export const useOrganizationDeleteMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (organizationId: string) => {
-      const req = new DeleteOrganizationRequest()
-      req.setId(organizationId)
-      const res = await APIServices.organization.deleteOrganization(req, getAuthenticatedGrpcMetadata())
-
-      const obj = res.toObject() // TODO: what is the type of this?
-
-      if (!obj) {
-        throw new Error('error in OrganizationDelete')
-      }
-
-      return obj
+      return await OrganizationService.delete(organizationId)
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.organizations] }).then()
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.organizations] }).catch(console.error)
     },
   })
 }
@@ -232,7 +144,7 @@ export const useInviteDeclineMutation = () => {
       req.setInvitationId(inviteId)
       const res = await APIServices.organization.declineInvitation(req, getAuthenticatedGrpcMetadata())
 
-      const obj = res.toObject() // TODO: what is the type of this?
+      const obj = res.toObject()
 
       if (!obj) {
         throw new Error('error in InviteDecline')
@@ -241,7 +153,7 @@ export const useInviteDeclineMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
   })
 }
@@ -254,7 +166,7 @@ export const useInviteRevokeMutation = () => {
       req.setInvitationId(inviteId)
       const res = await APIServices.organization.revokeInvitation(req, getAuthenticatedGrpcMetadata())
 
-      const obj = res.toObject() // TODO: what is the type of this?
+      const obj = res.toObject()
 
       if (!obj) {
         throw new Error('error in InviteDecline')
@@ -263,7 +175,7 @@ export const useInviteRevokeMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
   })
 }
@@ -294,7 +206,7 @@ export const useInviteMemberMutation = (organizationId: string, callback: (invit
       return res.toObject()
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     }
   })
 }
@@ -315,31 +227,8 @@ export const useInviteAcceptMutation = () => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     },
-  })
-}
-
-export const useAddMemberMutation = (organizationId: string) => { // TODO: unused?
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (userId: string) => {
-      const req = new AddMemberRequest()
-      req.setId(organizationId)
-      req.setUserId(userId)
-
-      const res = await APIServices.organization.addMember(req, getAuthenticatedGrpcMetadata())
-      const obj = res.toObject() // TODO: what is the type of this?
-
-      if (!obj) {
-        throw new Error('DeclineInvitation failed')
-      }
-
-      return obj
-    },
-    onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
-    }
   })
 }
 
@@ -352,7 +241,7 @@ export const useRemoveMemberMutation = (organizationId: string) => {
       req.setUserId(userId)
 
       const res = await APIServices.organization.removeMember(req, getAuthenticatedGrpcMetadata())
-      const obj = res.toObject() // TODO: what is the type of this?
+      const obj = res.toObject()
 
       if (!obj) {
         throw new Error('DeclineInvitation failed')
@@ -361,20 +250,7 @@ export const useRemoveMemberMutation = (organizationId: string) => {
       return obj
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: [QueryKeys.invitations] }).then()
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.invitations] }).catch(console.error)
     }
   })
-}
-
-export const createPersonalOrganization = async (): Promise<CreatePersonalOrganizationResponse.AsObject> => {
-  const req = new CreatePersonalOrganizationRequest()
-
-  const res = await grpcWrapper(APIServices.organization.createPersonalOrganization, req)
-  const obj = res.toObject()
-
-  if (!obj) {
-    throw new Error('CreatePersonalOrganization failed')
-  }
-
-  return obj
 }

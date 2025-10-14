@@ -1,13 +1,13 @@
-import { Button } from '@helpwave/common/components/Button'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import { SolidButton } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import type { Translation } from '@helpwave/hightide'
 import { getConfig } from '@/utils/config'
 
 type FeedbackButtonTranslation = {
-  text: string
+  text: string,
 }
 
-const defaultFeedbackButtonTranslation: Record<Languages, FeedbackButtonTranslation> = {
+const defaultFeedbackButtonTranslation: Translation<FeedbackButtonTranslation> = {
   en: {
     text: 'Issue or Feedback?'
   },
@@ -16,15 +16,19 @@ const defaultFeedbackButtonTranslation: Record<Languages, FeedbackButtonTranslat
   }
 }
 
-export const FeedbackButton = ({ overwriteTranslation }: PropsForTranslation<FeedbackButtonTranslation>) => {
+type FeedbackButtonProps = {
+  className?: string,
+}
+
+export const FeedbackButton = ({ overwriteTranslation, className }: PropsForTranslation<FeedbackButtonTranslation, FeedbackButtonProps>) => {
   const config = getConfig()
-  const translation = useTranslation(defaultFeedbackButtonTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultFeedbackButtonTranslation], overwriteTranslation)
 
   const onClick = () => window.open(config.feedbackFormUrl, '_blank')
 
   return (
-    <Button variant="tertiary" color="neutral" onClick={onClick}>
-      {translation.text}
-    </Button>
+    <SolidButton color="primary" onClick={onClick} className={className}>
+      {translation('text')}
+    </SolidButton>
   )
 }

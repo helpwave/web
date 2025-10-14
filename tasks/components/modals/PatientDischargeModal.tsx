@@ -1,16 +1,13 @@
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
-import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
+import type { ConfirmDialogProps, Translation } from '@helpwave/hightide'
+import { ConfirmDialog, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import type { PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
 
 type PatientDischargeModalTranslation = {
   followingPatient: string,
-  dischargePatient: string
+  dischargePatient: string,
 }
 
-const defaultPatientDischargeModalTranslation: Record<Languages, PatientDischargeModalTranslation> = {
+const defaultPatientDischargeModalTranslation: Translation<PatientDischargeModalTranslation> = {
   en: {
     followingPatient: 'The following patient will be discharged',
     dischargePatient: 'Discharge Patient?',
@@ -21,32 +18,29 @@ const defaultPatientDischargeModalTranslation: Record<Languages, PatientDischarg
   }
 }
 
-export type PatientDischargeModalProps = Omit<ConfirmDialogProps, 'title' | 'descriptionText'> & {
-  patient?: PatientMinimalDTO
+export type PatientDischargeModalProps = Omit<ConfirmDialogProps, 'titleElement' | 'description'> & {
+  patient?: PatientMinimalDTO,
 }
 
 /**
  * A Modal to show when discharging Patients
  */
 export const PatientDischargeModal = ({
-  overwriteTranslation,
-  patient,
-  titleText,
-  buttonOverwrites,
-  ...confirmDialogProps
-}: PropsForTranslation<PatientDischargeModalTranslation, PatientDischargeModalProps>) => {
-  const translation = useTranslation(defaultPatientDischargeModalTranslation, overwriteTranslation)
+                                        overwriteTranslation,
+                                        patient,
+                                        buttonOverwrites,
+                                        ...confirmDialogProps
+                                      }: PropsForTranslation<PatientDischargeModalTranslation, PatientDischargeModalProps>) => {
+  const translation = useTranslation([defaultPatientDischargeModalTranslation], overwriteTranslation)
   return (
     <ConfirmDialog
-      titleText={titleText ?? translation.dischargePatient}
       buttonOverwrites={buttonOverwrites ?? [{}, {}, { color: 'negative' }]}
       {...confirmDialogProps}
+      titleElement={translation('dischargePatient')}
+      description={`${translation('followingPatient')}:`}
     >
       {patient && (
-        <>
-          <Span className={tw('mt-2')}>{`${translation.followingPatient}: `}</Span>
-          <Span className={tw('!font-medium')}>{patient.name}</Span>
-        </>
+        <span className="font-medium">{patient.humanReadableIdentifier}</span>
       )}
     </ConfirmDialog>
   )

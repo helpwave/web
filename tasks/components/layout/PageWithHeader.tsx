@@ -1,14 +1,13 @@
 import type { PropsWithChildren } from 'react'
-import { tw } from '@helpwave/common/twind'
-import type { Crumb } from '@helpwave/common/components/BreadCrumb'
-import { BreadCrumb } from '@helpwave/common/components/BreadCrumb'
+
+import type { Crumb } from '@helpwave/hightide'
+import { BreadCrumb } from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { UserMenu } from '@/components/UserMenu'
 import { Header, type HeaderProps } from '@/components/Header'
-import { FeedbackButton } from '@/components/FeedbackButton'
 
 type PageWithHeaderProps = Partial<HeaderProps> & {
-  crumbs?: Crumb[]
+  crumbs?: Crumb[],
 }
 
 /**
@@ -17,28 +16,29 @@ type PageWithHeaderProps = Partial<HeaderProps> & {
  * The page content will be passed as the children
  */
 export const PageWithHeader = ({
-  children,
-  title,
-  withIcon = true,
-  leftSide,
-  rightSide,
-  crumbs
-}: PropsWithChildren<PageWithHeaderProps>) => {
-  const { user, redirectUserToOrganizationSelection } = useAuth()
+                                 children,
+                                 title,
+                                 withIcon = true,
+                                 leftSide,
+                                 rightSide,
+                                 crumbs
+                               }: PropsWithChildren<PageWithHeaderProps>) => {
+  const { user } = useAuth()
 
   if (!user) return null
 
-  const feedbackButton = <FeedbackButton/>
-  const organization = <button onClick={() => redirectUserToOrganizationSelection()}>{user?.organization?.name}</button>
-  const userMenu = <UserMenu />
-
   return (
-    <div className={tw('w-screen h-screen flex flex-col')}>
+    <div className="col gap-y-0 w-screen h-screen overflow-hidden">
       <Header
         title={title}
         withIcon={withIcon}
-        leftSide={[(crumbs ? <BreadCrumb crumbs={crumbs}/> : undefined), ...(leftSide ?? [])]}
-        rightSide={[...(rightSide ?? []), feedbackButton, organization, userMenu]}
+        leftSide={[(crumbs ?
+          <BreadCrumb crumbs={crumbs} containerClassName="max-tablet:hidden"/> : undefined), ...(leftSide ?? [])]}
+        leftSideClassName="max-tablet:hidden"
+        rightSide={[
+          ...(rightSide ?? []),
+          (<UserMenu key="usermenu"/>),
+        ]}
       />
       {children}
     </div>

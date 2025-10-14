@@ -17,7 +17,7 @@ type TitleTranslation = {
   page: (page: number) => string
 }
 
-const defaultTitleTranslations: Record<Languages, TitleTranslation> = {
+const defaultTitleTranslations: Translation<TitleTranslation> = {
   en: {
     welcome: 'Welcome',
     goodToSeeYou: 'Good to see you',
@@ -33,10 +33,10 @@ const defaultTitleTranslations: Record<Languages, TitleTranslation> = {
 const Title = ({ overwriteTranslation, name }:PropsForTranslation<TitleTranslation, TitleProps>) => {
   const translation = useTranslation(defaultTitleTranslations, overwriteTranslation)
   return (
-    <p className={tw('rounded bg-gray-800 text-gray-200 p-1 px-2')}>
+    <p className={'rounded bg-gray-800 text-gray-200 p-1 px-2'}>
       {translation.welcome}{'! '}
       {translation.goodToSeeYou}{', '}
-      <span className={tw('text-green-300')}>{name}</span>{'. '}
+      <span className={'text-green-300'}>{name}</span>{'. '}
       {translation.page(123)}
     </p>
   )

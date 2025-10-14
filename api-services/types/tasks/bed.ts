@@ -2,11 +2,11 @@ import type { PatientDTO, PatientMinimalDTO, PatientWithTasksNumberDTO } from '.
 
 export type BedMinimalDTO = {
   id: string,
-  name: string
+  name: string,
 }
 
 export type BedDTO = BedMinimalDTO & {
-  patient?: PatientDTO
+  patient?: PatientDTO,
 }
 
 export const emptyBed: BedDTO = {
@@ -16,7 +16,7 @@ export const emptyBed: BedDTO = {
 }
 
 export type BedWithPatientWithTasksNumberDTO = BedMinimalDTO & {
-  patient?: PatientWithTasksNumberDTO
+  patient?: PatientWithTasksNumberDTO,
 }
 
 export const emptyBedWithPatientWithTasksNumber: BedWithPatientWithTasksNumberDTO = {
@@ -26,14 +26,14 @@ export const emptyBedWithPatientWithTasksNumber: BedWithPatientWithTasksNumberDT
 }
 
 export type BedWithRoomId = BedMinimalDTO & {
-  roomId: string
+  roomId: string,
 }
 
 export type BedWithMinimalPatientDTO = BedMinimalDTO & {
-  patient?: PatientMinimalDTO
+  patient?: PatientMinimalDTO,
 }
 
 export type BedWithPatientId = {
-  id: string,
-  patientId: string
+  bedId: string,
+  patientId: string,
 }

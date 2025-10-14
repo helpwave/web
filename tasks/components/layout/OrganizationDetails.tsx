@@ -1,11 +1,8 @@
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
+import clsx from 'clsx'
+import type { Translation } from '@helpwave/hightide'
+import { TextButton } from '@helpwave/hightide'
+import { ConfirmDialog, type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Span } from '@helpwave/common/components/Span'
-import Link from 'next/link'
 import {
   useInviteMemberMutation,
   useOrganizationCreateMutation,
@@ -15,14 +12,13 @@ import {
 } from '@helpwave/api-services/mutations/users/organization_mutations'
 import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
-import { DescriptionWithAction } from '@helpwave/common/components/DescriptionWithAction'
-import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { emptyOrganizationForm, OrganizationForm, type OrganizationFormType } from '../OrganizationForm'
 import { OrganizationMemberList } from '../OrganizationMemberList'
 import { ColumnTitle } from '../ColumnTitle'
 import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
 import { OrganizationContext } from '@/pages/organizations'
-import { ReSignInModal } from '@/components/modals/ReSignInModal'
+import { ReSignInDialog } from '@/components/modals/ReSignInDialog'
+import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -37,7 +33,7 @@ type OrganizationDetailTranslation = {
   manageProperties: string
 }
 
-const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetailTranslation> = {
+const defaultOrganizationDetailTranslations: Translation<OrganizationDetailTranslation> = {
   en: {
     organizationDetail: 'Organization Details',
     dangerZone: 'Danger Zone',
@@ -65,16 +61,16 @@ const defaultOrganizationDetailTranslations: Record<Languages, OrganizationDetai
 }
 
 export type OrganizationDetailProps = {
-  width?: number
+  width?: number,
 }
 
 /**
  * The left side of the organizations page
  */
 export const OrganizationDetail = ({
-  overwriteTranslation
-}: PropsForTranslation<OrganizationDetailTranslation, OrganizationDetailProps>) => {
-  const translation = useTranslation(defaultOrganizationDetailTranslations, overwriteTranslation)
+                                     overwriteTranslation
+                                   }: PropsForTranslation<OrganizationDetailTranslation, OrganizationDetailProps>) => {
+  const translation = useTranslation([defaultOrganizationDetailTranslations], overwriteTranslation)
 
   const {
     state: contextState,
@@ -147,34 +143,26 @@ export const OrganizationDetail = ({
   return (
     <div
       key={contextState.organizationId}
-      className={tw('flex flex-col py-4 px-6')}
+      className="col gap-y-0 py-4 px-6"
     >
       <ConfirmDialog
-        id="organizationDetail-DeleteDialog"
-        titleText={translation.deleteConfirmText}
-        descriptionText={translation.dangerZoneText}
+        titleElement={translation('deleteConfirmText')}
+        description={translation('dangerZoneText')}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
-        onBackgroundClick={() => setIsShowingConfirmDialog(false)}
-        onCloseClick={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
           setIsShowingConfirmDialog(false)
-          deleteOrganization(contextState.organizationId)
+          deleteOrganization(contextState.organizationId).catch(console.error)
         }}
         confirmType="negative"
       />
-      <ReSignInModal
-        id="organizationDetail-ReSignInModal"
+      <ReSignInDialog
         isOpen={!!isShowingReSignInDialog}
-        onBackgroundClick={() => {
+        onCancel={() => {
           setIsShowingReSignInDialog(undefined)
           resetForm()
         }}
         onDecline={() => {
-          setIsShowingReSignInDialog(undefined)
-          resetForm()
-        }}
-        onCloseClick={() => {
           setIsShowingReSignInDialog(undefined)
           resetForm()
         }}
@@ -186,16 +174,17 @@ export const OrganizationDetail = ({
           signOut()
         }}
       />
-      <ColumnTitle title={translation.organizationDetail}/>
-      <div className={tw('flex flex-col gap-y-4 max-w-[500px]')}>
+      <ColumnTitle title={translation('organizationDetail')}/>
+      <div className="col gap-y-6">
         <OrganizationForm
           organizationForm={organizationForm}
           onChange={(organizationForm, shouldUpdate) => {
             setOrganizationForm(organizationForm)
             if (shouldUpdate) {
-              updateOrganization(organizationForm.organization)
+              updateOrganization(organizationForm.organization).catch(console.error)
             }
           }}
+          className="max-w-96"
         />
         {!isCreatingNewOrganization && (
           <OrganizationMemberList/>
@@ -210,32 +199,36 @@ export const OrganizationDetail = ({
             title={`${translation.properties} (${propertyData.length})`}
             description={translation.propertiesDescription}
             trailing={(
-              <div className={tw('flex flex-row justify-end items-center')}>
+              <div className={clsx('flex flex-row justify-end items-center')}>
                 <Link href="/properties">
                   <Button className="h-fit">{translation.manageProperties}</Button>
                 </Link>
               </div>
-              )}
+            )}
             leadingIcon="label"
           />
         )}
-        <div className={tw('flex flex-row justify-end')}>
-          <Button
-            className={tw('w-auto')}
+        <div className="row justify-end">
+          <SolidButton
+            className="w-auto"
             onClick={() => isCreatingNewOrganization ? createOrganization(organizationForm.organization) : updateOrganization(organizationForm.organization)}
             disabled={!organizationForm.isValid}>
-            {isCreatingNewOrganization ? translation.create : translation.update}
-          </Button>
+            {isCreatingNewOrganization ? translation('create') : translation('update')}
+          </SolidButton>
         </div>
-        <div className={tx('flex flex-col justify-start', { hidden: isCreatingNewOrganization })}>
-          <Span type="subsectionTitle">{translation.dangerZone}</Span>
-          <Span type="description">{translation.dangerZoneText}</Span>
-          <button
+        <div className={clsx('col justify-start', { hidden: isCreatingNewOrganization })}>
+          <ColumnTitle
+            title={translation('dangerZone')}
+            description={translation('dangerZoneText')}
+            type="subtitle"
+          />
+          <TextButton
             onClick={() => setIsShowingConfirmDialog(true)}
-            className={tw('text-hw-negative-400 font-bold text-left')}
+            color="negative"
+            className="w-min"
           >
-            {translation.deleteOrganization}
-          </button>
+            {translation('deleteOrganization')}
+          </TextButton>
         </div>
       </div>
     </div>

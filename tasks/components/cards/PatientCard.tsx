@@ -1,15 +1,14 @@
-import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { PillLabelsColumn } from '../pill/PillLabelsColumn'
+import type { Translation } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import { PillLabelsColumn } from '../PillLabel'
 import { DragCard, type DragCardProps } from './DragCard'
+import clsx from 'clsx'
 
 type PatientCardTranslation = {
-  bedNotAssigned: string
+  bedNotAssigned: string,
 }
 
-const defaultPatientCardTranslations: Record<Languages, PatientCardTranslation> = {
+const defaultPatientCardTranslations: Translation<PatientCardTranslation> = {
   en: {
     bedNotAssigned: 'Not Assigned',
   },
@@ -18,42 +17,52 @@ const defaultPatientCardTranslations: Record<Languages, PatientCardTranslation> 
   }
 }
 
+type TaskCounts = {
+  todo: number,
+  inProgress: number,
+  done: number,
+}
+
 export type PatientCardProps = DragCardProps & {
   bedName?: string,
   patientName: string,
-  unscheduledTasks?: number,
-  inProgressTasks?: number,
-  doneTasks?: number
+  taskCounts?: TaskCounts,
 }
 
 /**
  * A Card for displaying a Patient and the tasks
  */
 export const PatientCard = ({
-  overwriteTranslation,
-  bedName,
-  patientName,
-  unscheduledTasks,
-  inProgressTasks,
-  doneTasks,
-  isSelected,
-  onTileClick,
-  ...restCardProps
-}: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
-  const translation = useTranslation(defaultPatientCardTranslations, overwriteTranslation)
+                              overwriteTranslation,
+                              bedName,
+                              patientName,
+                              taskCounts,
+                              isSelected,
+                              onClick,
+                              className,
+                              ...restCardProps
+                            }: PropsForTranslation<PatientCardTranslation, PatientCardProps>) => {
+  const translation = useTranslation([defaultPatientCardTranslations], overwriteTranslation)
   return (
-    <DragCard isSelected={isSelected} onTileClick={onTileClick} {...restCardProps}>
-      <div className={tw('flex flex-row justify-between')}>
-        <Span className={tw('whitespace-nowrap')} type="subsubsectionTitle">{bedName ?? translation.bedNotAssigned}</Span>
-        <Span className={tw('ml-2 truncate')}>{patientName}</Span>
+    <DragCard
+      isSelected={isSelected}
+      onClick={onClick}
+      className={clsx('min-h-40', { 'justify-center': !taskCounts }, className)}
+      {...restCardProps}
+    >
+      <div className="flex-row-4 items-center justify-between">
+        <span className="typography-title-md whitespace-nowrap">{bedName ?? translation('bedNotAssigned')}</span>
+        <span className="ml-2 truncate">{patientName}</span>
       </div>
-      <div className={tw('min-w-[150px] max-w-[200px] mt-1')}>
-        <PillLabelsColumn
-          doneCount={doneTasks}
-          inProgressCount={inProgressTasks}
-          unscheduledCount={unscheduledTasks}
-        />
-      </div>
+      {taskCounts && (
+        <div className="min-w-[150px] max-w-[200px] mt-1">
+          <PillLabelsColumn
+            doneCount={taskCounts.done}
+            inProgressCount={taskCounts.inProgress}
+            todoCount={taskCounts.todo}
+          />
+        </div>
+      )}
     </DragCard>
   )
 }

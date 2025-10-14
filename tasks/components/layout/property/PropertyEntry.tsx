@@ -1,17 +1,21 @@
-import { TextProperty } from '@helpwave/common/components/properties/TextProperty'
-import { NumberProperty } from '@helpwave/common/components/properties/NumberProperty'
-import { DateProperty } from '@helpwave/common/components/properties/DateProperty'
-import { CheckboxProperty } from '@helpwave/common/components/properties/CheckboxProperty'
-import { SingleSelectProperty } from '@helpwave/common/components/properties/SelectProperty'
-import { MultiSelectProperty } from '@helpwave/common/components/properties/MultiSelectProperty'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import {
+  CheckboxProperty,
+  DateProperty,
+  LoadingAndErrorComponent,
+  MultiSelectProperty,
+  NumberProperty,
+  SelectOption,
+  SingleSelectProperty,
+  TextProperty
+} from '@helpwave/hightide'
 import type { Property } from '@helpwave/api-services/types/properties/property'
-import type {
-  AttachedProperty,
-  AttachPropertySelectValue
-} from '@helpwave/api-services/types/properties/attached_property'
-import { usePropertyQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import type { AttachedProperty } from '@helpwave/api-services/types/properties/attached_property'
 import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
+import {
+  usePropertyQuery,
+  usePropertyUpdateMutation
+} from '@helpwave/api-services/mutations/properties/property_mutations'
+import { PropertyService } from '@helpwave/api-services/service/properties/PropertyService'
 
 type PropertyEntryDisplayProps = {
   property: Property,
@@ -19,20 +23,20 @@ type PropertyEntryDisplayProps = {
   onChange: (property: AttachedProperty) => void,
   onEditComplete: (property: AttachedProperty) => void,
   onRemove?: (property: AttachedProperty) => void,
-  readOnly?: boolean
+  readOnly?: boolean,
 }
 
 /**
  * A component for displaying a PropertyEntry
  */
 export const PropertyEntryDisplay = ({
-  property,
-  attachedProperty,
-  onChange,
-  onEditComplete,
-  onRemove,
-  readOnly = false
-}: PropertyEntryDisplayProps) => {
+                                       property,
+                                       attachedProperty,
+                                       onChange,
+                                       onEditComplete,
+                                       onRemove,
+                                       readOnly = false
+                                     }: PropertyEntryDisplayProps) => {
   const commonProps = {
     name: property.name,
     readOnly,
@@ -50,6 +54,29 @@ export const PropertyEntryDisplay = ({
     update(newProperty)
     return newProperty
   }
+
+  const updatePropertyMutation = usePropertyUpdateMutation({
+    onSuccess: (success, variables) => {
+      if (!success) {
+        return
+      }
+      PropertyService.get(property.id).then((property) => {
+        const update = updater(attachedValue => {
+          const option = property.selectData?.options.find(value => value.name === variables.selectUpdate?.add[0]?.name)
+          if (!option) {
+            return
+          }
+          if (property.fieldType === 'singleSelect') {
+            attachedValue.value.singleSelectValue = option
+          } else if (property.fieldType === 'multiSelect') {
+            attachedValue.value.multiSelectValue = [...attachedValue.value.multiSelectValue, option]
+          }
+        })
+        onChange(update)
+        onEditComplete(update)
+      })
+    }
+  })
 
   switch (property.fieldType) {
     case 'text':
@@ -126,51 +153,70 @@ export const PropertyEntryDisplay = ({
       )
     case 'singleSelect':
       return (
-        <SingleSelectProperty<AttachPropertySelectValue>
+        <SingleSelectProperty
           {...commonProps}
-          value={attachedProperty.value.singleSelectValue}
-          onChange={selectValue => {
-            const newProperty = updater(property1 => {
-              property1.value.singleSelectValue = selectValue
+          value={attachedProperty.value.singleSelectValue?.id}
+          onValueChanged={selectedId => {
+            const newProperty = updater(prev => {
+              prev.value.singleSelectValue = property.selectData!.options.find(value => value.id === selectedId)
             })
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.selectData!.options
-            .map(option => ({
-              value: option,
-              label: option.name
-            }))}
-          searchMapping={option => [option.value.name]}
-          selectedDisplayOverwrite={attachedProperty.value.singleSelectValue?.name}
-        />
+          onAddNew={(name) => {
+            updatePropertyMutation.mutate({
+              property,
+              selectUpdate: {
+                add: [
+                  {
+                    id: '',
+                    name,
+                    isCustom: true,
+                  }
+                ],
+                update: [],
+                remove: []
+              },
+            })
+          }}
+        >
+          {property.selectData!.options
+            .filter(option => option !== undefined)
+            .map(option => (
+              <SelectOption key={option.id} value={option.id}>
+                {option.name}
+              </SelectOption>
+            ))
+          }
+        </SingleSelectProperty>
       )
     case 'multiSelect':
       return (
-        <MultiSelectProperty<AttachPropertySelectValue>
+        <MultiSelectProperty
           {...commonProps}
-          onChange={multiSelect => {
+          values={attachedProperty.value.multiSelectValue.map(value => value.id)}
+          onValuesChanged={selection => {
             const newProperty: AttachedProperty = {
               ...attachedProperty,
               value: {
                 ...attachedProperty.value,
-                multiSelectValue: multiSelect
-                  .filter(value => value.selected && value.value !== undefined)
-                  .map(value => value.value)
+                multiSelectValue: property.selectData!.options
+                  .filter(value => selection.some(selected => selected === value.id))
               }
             }
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.selectData!.options
+        >
+          {property.selectData!.options
             .filter(option => option !== undefined)
-            .map(option => ({
-              value: option,
-              label: option.name,
-              selected: !!attachedProperty.value.multiSelectValue.find(value => value.id === option.id)
-            }))}
-          search={{ searchMapping: value => [value.value.name] }}
-        />
+            .map(option => (
+              <SelectOption key={option.id} value={option.id}>
+                {option.name}
+              </SelectOption>
+            ))
+          }
+        </MultiSelectProperty>
       )
     default:
       console.error(`Unimplemented property type used for PropertyEntry: ${property.fieldType}`)
@@ -186,9 +232,9 @@ export type PropertyEntryProps = Omit<PropertyEntryDisplayProps, 'property'>
  * It wraps the PropertyEntryDisplay with loading logic
  */
 export const PropertyEntry = ({
-  attachedProperty,
-  ...restProps
-}: PropertyEntryProps) => {
+                                attachedProperty,
+                                ...restProps
+                              }: PropertyEntryProps) => {
   const {
     data: property,
     isError,
@@ -199,7 +245,7 @@ export const PropertyEntry = ({
     <LoadingAndErrorComponent
       isLoading={isLoading}
       hasError={isError || !property}
-      minimumLoadingDuration={500}
+      className="min-h-15"
     >
       <PropertyEntryDisplay property={property!} attachedProperty={attachedProperty} {...restProps}/>
     </LoadingAndErrorComponent>

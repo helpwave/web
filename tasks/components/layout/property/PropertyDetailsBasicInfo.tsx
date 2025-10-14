@@ -1,10 +1,5 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
-import { InputGroup } from '@helpwave/common/components/InputGroup'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import { Textarea } from '@helpwave/common/components/user-input/Textarea'
+import type { ExpandableProps, PropsForTranslation, Translation } from '@helpwave/hightide'
+import { ExpandableUncontrolled, FormElementWrapper, Input, Textarea, useTranslation } from '@helpwave/hightide'
 import type { Property } from '@helpwave/api-services/types/properties/property'
 import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
 
@@ -15,10 +10,10 @@ type PropertyDetailsBasicInfoTranslation = {
   subjectType: string,
   propertyName: string,
   description: string,
-  writeYourDescription: string
+  writeYourDescription: string,
 }
 
-const defaultPropertyDetailsBasicInfoTranslation: Record<Languages, PropertyDetailsBasicInfoTranslation> = {
+const defaultPropertyDetailsBasicInfoTranslation: Translation<PropertyDetailsBasicInfoTranslation> = {
   en: {
     basicInfo: 'Basic Information',
     subjectType: 'Subject Type',
@@ -39,44 +34,78 @@ export type PropertyDetailsBasicInfoProps = {
   value: PropertyBasicInfo,
   onChange: (value: PropertyBasicInfo) => void,
   onEditComplete: (value: PropertyBasicInfo) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>
+  expandableProps?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsBasicInfo = ({
-  overwriteTranslation,
-  value,
-  onChange,
-  onEditComplete,
-  inputGroupProps = {},
-}: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
-  const translation = useTranslation(defaultPropertyDetailsBasicInfoTranslation, overwriteTranslation)
+                                           overwriteTranslation,
+                                           value,
+                                           onChange,
+                                           onEditComplete,
+                                           expandableProps,
+                                         }: PropsForTranslation<PropertyDetailsBasicInfoTranslation, PropertyDetailsBasicInfoProps>) => {
+  const translation = useTranslation([defaultPropertyDetailsBasicInfoTranslation], overwriteTranslation)
   return (
-    <InputGroup {...inputGroupProps} title={translation.basicInfo}>
-      <PropertySubjectTypeSelect
-        value={value.subjectType}
-        label={{ name: translation.subjectType, labelType: 'labelMedium' }}
-        onChange={subjectType => {
-          const newValue = { ...value, subjectType }
-          onChange(newValue)
-          onEditComplete(newValue)
-        }}
-      />
-      <Input
-        label={{ name: translation.propertyName, labelType: 'labelMedium' }}
-        value={value.name}
-        onChange={name => onChange({ ...value, name })}
-        onEditCompleted={name => onEditComplete({ ...value, name })}
-      />
-      <Textarea
-        label={{ name: translation.description, labelType: 'labelMedium' }}
-        value={value.description}
-        placeholder={translation.writeYourDescription}
-        onChange={description => onChange({ ...value, description })}
-        onEditCompleted={description => onEditComplete({ ...value, description })}
-      />
-    </InputGroup>
+    <ExpandableUncontrolled
+      {...expandableProps}
+      label={(
+        <h4 className="typography-title-md">
+          {translation('basicInfo')}
+        </h4>
+      )}
+      contentClassName="pb-4"
+      contentExpandedClassName="max-h-128"
+    >
+      <FormElementWrapper
+        required={true}
+        disabled={false}
+        label={translation('subjectType')}
+      >
+        {(bag) => (
+          <PropertySubjectTypeSelect
+            value={value.subjectType}
+            onValueChanged={subjectType => {
+              const newValue = { ...value, subjectType }
+              onChange(newValue)
+              onEditComplete(newValue)
+            }}
+            buttonProps={bag}
+          />
+        )}
+      </FormElementWrapper>
+      <FormElementWrapper
+        required={true}
+        disabled={false}
+        label={translation('propertyName')}
+      >
+        {bag => (
+          <Input
+            value={value.name}
+            onChangeText={name => onChange({ ...value, name })}
+            onEditCompleted={name => onEditComplete({ ...value, name })}
+            className="w-full"
+            {...bag}
+          />
+        )}
+      </FormElementWrapper>
+      <FormElementWrapper
+        required={true}
+        disabled={false}
+        label={translation('description')}
+      >
+        {bag => (
+          <Textarea
+            value={value.description}
+            placeholder={translation('writeYourDescription')}
+            onChangeText={description => onChange({ ...value, description })}
+            onEditCompleted={description => onEditComplete({ ...value, description })}
+            {...bag}
+          />
+        )}
+      </FormElementWrapper>
+    </ExpandableUncontrolled>
   )
 }

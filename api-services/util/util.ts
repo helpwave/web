@@ -5,7 +5,7 @@ import {
   SubjectType as GRPCSubjectType
 } from '@helpwave/proto-ts/services/property_svc/v1/types_pb'
 import type { TaskStatus } from '../types/tasks/task'
-import type { FieldType, SubjectType } from '../types/properties/property'
+import type { FieldType, PropertySubjectType } from '../types/properties/property'
 
 export const GRPCConverter = {
   taskStatusFromGRPC: (status: ProtoTaskStatus): TaskStatus => {
@@ -46,7 +46,7 @@ export const GRPCConverter = {
 
     return timestamp
   },
-  subjectTypeMapperToGRPC: (subjectType: SubjectType): GRPCSubjectType => {
+  subjectTypeMapperToGRPC: (subjectType: PropertySubjectType): GRPCSubjectType => {
     switch (subjectType) {
       case 'patient':
         return GRPCSubjectType.SUBJECT_TYPE_PATIENT
@@ -54,7 +54,7 @@ export const GRPCConverter = {
         return GRPCSubjectType.SUBJECT_TYPE_TASK
     }
   },
-  subjectTypeMapperFromGRPC: (subjectType: GRPCSubjectType): SubjectType => {
+  subjectTypeMapperFromGRPC: (subjectType: GRPCSubjectType): PropertySubjectType => {
     switch (subjectType) {
       case GRPCSubjectType.SUBJECT_TYPE_PATIENT:
         return 'patient'

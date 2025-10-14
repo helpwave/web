@@ -1,20 +1,24 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
-import { Textarea } from '@helpwave/common/components/user-input/Textarea'
-import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
-import useSaveDelay from '@helpwave/common/hooks/useSaveDelay'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+
+import type { Translation } from '@helpwave/hightide'
+import { Label } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  SolidButton,
+  Textarea,
+  ToggleableInput,
+  useDelay,
+  useTranslation
+} from '@helpwave/hightide'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 import {
-  useAssignBedMutation,
+  usePatientAssignToBedMutation,
   usePatientDetailsQuery,
   usePatientDischargeMutation,
   usePatientUpdateMutation,
-  useUnassignMutation,
-  useReadmitPatientMutation
+  usePatientReadmitMutation,
+  usePatientUnassignMutation
 } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import type { PatientDetailsDTO } from '@helpwave/api-services/types/tasks/patient'
 import { emptyPatientDetails } from '@helpwave/api-services/types/tasks/patient'
@@ -34,12 +38,12 @@ type PatientDetailTranslation = {
   dischargePatient: string,
   saved: string,
   unassign: string,
-  readmit: string
+  readmit: string,
 }
 
-const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslation> = {
+const defaultPatientDetailTranslations: Translation<PatientDetailTranslation> = {
   en: {
-    patientDetails: 'Details',
+    patientDetails: 'Patient Details',
     notes: 'Notes',
     saveChanges: 'Save Changes',
     dischargeConfirmText: 'Do you really want to discharge the patient?',
@@ -49,7 +53,7 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
     readmit: 'Readmit'
   },
   de: {
-    patientDetails: 'Details',
+    patientDetails: 'Patienten Details',
     notes: 'Notizen',
     saveChanges: 'Speichern',
     dischargeConfirmText: 'Willst du den Patienten wirklich entlassen?',
@@ -62,34 +66,38 @@ const defaultPatientDetailTranslations: Record<Languages, PatientDetailTranslati
 
 export type PatientDetailProps = {
   wardId: string,
-  patient?: PatientDetailsDTO,
-  width?: number
+  width?: number,
 }
 
 /**
  * The right side of the ward/[wardId].tsx page showing the detailed information about the patient
  */
 export const PatientDetail = ({
-  overwriteTranslation,
-  wardId,
-  patient = emptyPatientDetails
-}: PropsForTranslation<PatientDetailTranslation, PatientDetailProps>) => {
+                                overwriteTranslation,
+                                wardId,
+                              }: PropsForTranslation<PatientDetailTranslation, PatientDetailProps>) => {
   const [isShowingDischargeDialog, setIsShowingDischargeDialog] = useState(false)
-  const translation = useTranslation(defaultPatientDetailTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultPatientDetailTranslations], overwriteTranslation)
 
   const context = useContext(WardOverviewContext)
 
   const updateMutation = usePatientUpdateMutation()
-  const readmitMutation = useReadmitPatientMutation()
-  const dischargeMutation = usePatientDischargeMutation(() => context.updateContext({ wardId: context.state.wardId }))
-  const unassignMutation = useUnassignMutation(() => context.updateContext({ wardId: context.state.wardId }))
+  const readmitMutation = usePatientReadmitMutation()
+  const dischargeMutation = usePatientDischargeMutation({
+    onSuccess: () =>
+      context.updateContext({ wardId: context.state.wardId })
+  })
+  const unassignMutation = usePatientUnassignMutation({
+    onSuccess: () =>
+      context.updateContext({ wardId: context.state.wardId })
+  })
   const {
     data,
     isError,
     isLoading
   } = usePatientDetailsQuery(context.state.patientId)
 
-  const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(patient)
+  const [newPatient, setNewPatient] = useState<PatientDetailsDTO>(emptyPatientDetails)
   const [taskId, setTaskId] = useState<string>()
   const [isShowingSavedNotification, setIsShowingSavedNotification] = useState(false)
   const [initialTaskStatus, setInitialTaskStatus] = useState<TaskStatus>()
@@ -103,39 +111,33 @@ export const PatientDetail = ({
   }, [data])
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const assignBedMutation = useAssignBedMutation(() => {
-    setIsSubmitting(false)
+  const assignBedMutation = usePatientAssignToBedMutation({
+    onSuccess: () => {
+      setIsSubmitting(false)
+    }
   })
 
   const {
     restartTimer,
-    clearUpdateTimer
-  } = useSaveDelay(setIsShowingSavedNotification, 3000)
+    clearTimer
+  } = useDelay({ delay: 3000 })
 
   const changeSavedValue = (patient: PatientDetailsDTO) => {
     setNewPatient(patient)
-    restartTimer(() => updateMutation.mutate(patient))
+    restartTimer(() => {
+      updateMutation.mutate(patient)
+      setIsShowingSavedNotification(false)
+    })
   }
 
   const isShowingTask = !!taskId || taskId === ''
 
   return (
-    <div className={tw('relative flex flex-col py-4 px-6')}>
-      {isShowingSavedNotification &&
-        (
-          <div
-            className={tw('absolute top-2 right-2 bg-hw-positive-400 text-white rounded-lg px-2 py-1 animate-pulse')}
-          >
-            {translation.saved}
-          </div>
-        )
-      }
+    <div className="relative col py-4 px-6">
+
       <PatientDischargeModal
-        id="PatientDetail-DischargeDialog"
         isOpen={isShowingDischargeDialog}
         onCancel={() => setIsShowingDischargeDialog(false)}
-        onBackgroundClick={() => setIsShowingDischargeDialog(false)}
-        onCloseClick={() => setIsShowingDischargeDialog(false)}
         onConfirm={() => {
           dischargeMutation.mutate(newPatient.id)
           setIsShowingDischargeDialog(false)
@@ -144,63 +146,72 @@ export const PatientDetail = ({
       />
       {/* taskId === '' is create and if set it's the tasks id */}
       <TaskDetailModal
-        id="PatientDetail-TaskDetailModal"
         isOpen={isShowingTask}
-        onBackgroundClick={() => setTaskId(undefined)}
         onClose={() => setTaskId(undefined)}
-        wardId={wardId}
+        createInformation={{
+          wardId,
+          patientId: newPatient.id,
+          initialStatus: initialTaskStatus ?? 'todo',
+        }}
         taskId={taskId}
-        patientId={newPatient.id}
-        initialStatus={initialTaskStatus}
       />
-      <ColumnTitle title={translation.patientDetails}/>
+      <ColumnTitle
+        title={translation('patientDetails')}
+        actions={isShowingSavedNotification && (
+          <div className="bg-positive text-on-positive rounded-lg px-2 py-1 animate-pulse">
+            {translation('saved')}
+          </div>
+        )}
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
       >
-        <div className={tw('flex flex-row gap-x-6 mb-8')}>
-          <div className={tw('flex flex-col gap-y-2 w-5/12')}>
-            <div className={tw('h-12 w-full')}>
+        <div className="row gap-x-6 mb-8">
+          <div className="col gap-y-2 w-5/12">
+            <div className="h-12 w-full">
               <ToggleableInput
                 maxLength={maxHumanReadableIdentifierLength}
-                labelClassName={tw('text-xl font-semibold')}
-                className={tw('text-lg font-semibold')}
+                className="text-lg font-semibold"
                 id="humanReadableIdentifier"
-                value={newPatient.name}
-                onChange={name => changeSavedValue({
+                value={newPatient.humanReadableIdentifier}
+                onChangeText={name => changeSavedValue({
                   ...newPatient,
-                  name
+                  humanReadableIdentifier: name
                 })}
               />
             </div>
             <RoomBedSelect
               initialRoomAndBed={{
-                roomId: context.state.roomId ?? '',
-                bedId: context.state.bedId ?? ''
+                roomId: newPatient.room?.id,
+                bedId: newPatient.bed?.id,
               }}
               wardId={context.state.wardId}
               onChange={(roomBedDropdownIds) => {
                 if (roomBedDropdownIds.bedId && context.state.patientId) {
-                  readmitMutation.mutate(newPatient.id)
                   context.updateContext({ ...context.state, ...roomBedDropdownIds })
                   assignBedMutation.mutate({
-                    id: roomBedDropdownIds.bedId,
+                    bedId: roomBedDropdownIds.bedId,
                     patientId: context.state.patientId
                   })
                 }
               }}
               isSubmitting={isSubmitting}
+              disabled={newPatient.discharged}
             />
           </div>
-          <div className={tw('flex-1')}>
+          <div className="relative flex-1">
             <Textarea
-              headline={translation.notes}
-              value={newPatient.note}
-              onChange={text => changeSavedValue({
+              value={newPatient.notes}
+              onChangeText={text => changeSavedValue({
                 ...newPatient,
-                note: text
+                notes: text
               })}
+              className="pt-8"
             />
+            <Label className="absolute left-3 top-2">
+              {translation('notes')}
+            </Label>
           </div>
         </div>
         {!!newPatient.id && (
@@ -215,30 +226,30 @@ export const PatientDetail = ({
           />
         )}
         {!!newPatient.id && (
-          <div className={tw('mt-4')}>
+          <div className="mt-4">
             <PropertyList subjectId={newPatient.id} subjectType="patient"/>
           </div>
         )}
-        <div className={tw('flex flex-row justify-end mt-8 gap-x-4')}>
+        <div className="row justify-end mt-8 gap-x-4">
           {!newPatient.discharged ?
-              (
+            (
               <>
-                <Button color="warn" onClick={() => unassignMutation.mutate(newPatient.id)}>
-                  {translation.unassign}
-                </Button>
-                <Button color="negative" onClick={() => setIsShowingDischargeDialog(true)} >
-                  {translation.dischargePatient}
-                </Button>
+                <SolidButton color="warning" onClick={() => unassignMutation.mutate(newPatient.id)}>
+                  {translation('unassign')}
+                </SolidButton>
+                <SolidButton color="negative" onClick={() => setIsShowingDischargeDialog(true)}>
+                  {translation('dischargePatient')}
+                </SolidButton>
               </>
-              ) : (
-              <Button color="positive" onClick={() => readmitMutation.mutate(newPatient.id)} >
-                {translation.readmit}
-              </Button>
-              )}
-          <Button color="accent" onClick={() => {
-            clearUpdateTimer(true)
+            ) : (
+              <SolidButton color="positive" onClick={() => readmitMutation.mutate(newPatient.id)}>
+                {translation('readmit')}
+              </SolidButton>
+            )}
+          <SolidButton color="primary" onClick={() => {
+            clearTimer()
             updateMutation.mutate(newPatient)
-          }}>{translation.saveChanges}</Button>
+          }}>{translation('saveChanges')}</SolidButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

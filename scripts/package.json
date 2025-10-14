@@ -4,7 +4,11 @@
   "description": "A collection of custom tooling for helpwave/web.",
   "main": "index.js",
   "license": "MIT",
+  "type": "module",
   "peerDependencies": {
     "commander": "12.1.0"
+  },
+  "devDependencies": {
+    "@helpwave/eslint-config": "^0.0.11"
   }
 }

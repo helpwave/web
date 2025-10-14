@@ -1,27 +1,28 @@
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useContext, useEffect, useState } from 'react'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Button } from '@helpwave/common/components/Button'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import { Span } from '@helpwave/common/components/Span'
+import type { Translation, TranslationPlural } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
+import { FillerRowElement } from '@helpwave/hightide'
+import { InputUncontrolled } from '@helpwave/hightide'
 import {
-  defaultTableStatePagination,
-  defaultTableStateSelection,
-  removeFromTableSelection,
-  Table,
-  type TableState
-} from '@helpwave/common/components/Table'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import type { RoomMinimalDTO } from '@helpwave/api-services/types/tasks/room'
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  SolidButton,
+  TableWithSelection,
+  TextButton,
+  useTranslation
+} from '@helpwave/hightide'
+import { useContext, useMemo, useState } from 'react'
+import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import {
   useRoomCreateMutation,
-  useRoomDeleteMutation, useRoomOverviewsQuery,
+  useRoomDeleteMutation,
+  useRoomOverviewsQuery,
   useRoomUpdateMutation
 } from '@helpwave/api-services/mutations/tasks/room_mutations'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
 import { ManageBedsModal } from '@/components/modals/ManageBedsModal'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { Plus, Trash } from 'lucide-react'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 
 type RoomListTranslation = {
   edit: string,
@@ -30,17 +31,16 @@ type RoomListTranslation = {
   deselectAll: string,
   selectAll: string,
   roomName: string,
-  room: string,
-  rooms: string,
+  room: TranslationPlural,
   addRoom: string,
   bedCount: string,
   manageBeds: string,
   manage: string,
-  dangerZoneText: (single: boolean) => string,
-  deleteConfirmText: (single: boolean) => string
+  dangerZoneText: TranslationPlural,
+  deleteConfirmText: TranslationPlural,
 }
 
-const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
+const defaultRoomListTranslations: Translation<RoomListTranslation> = {
   en: {
     edit: 'Edit',
     remove: 'Remove',
@@ -48,14 +48,22 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     deselectAll: 'Deselect All',
     selectAll: 'Select All',
     roomName: 'Room Name',
-    room: 'Room',
-    rooms: 'Rooms',
+    room: {
+      one: 'Room',
+      other: 'Rooms',
+    },
     addRoom: 'Add Room',
     bedCount: '#Beds',
     manageBeds: 'Manage Beds',
     manage: 'Manage',
-    dangerZoneText: (single) => `Deleting ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms} is a permanent action and cannot be undone. Be careful!`,
-    deleteConfirmText: (single) => `Do you really want to delete the selected ${single ? defaultRoomListTranslations.en.room : defaultRoomListTranslations.en.rooms}?`,
+    dangerZoneText: {
+      one: 'Deleting a room is a permanent action and cannot be undone. Be careful!',
+      other: 'Deleting rooms is a permanent action and cannot be undone. Be careful!',
+    },
+    deleteConfirmText: {
+      one: 'Do you really want to delete the selected room?',
+      other: 'Do you really want to delete the selected rooms?',
+    },
   },
   de: {
     edit: 'Bearbeiten',
@@ -63,202 +71,219 @@ const defaultRoomListTranslations: Record<Languages, RoomListTranslation> = {
     removeSelection: 'Ausgewählte löschen',
     deselectAll: 'Auswahl aufheben',
     selectAll: 'Alle auswählen',
-    roomName: 'Zimmer',
-    room: 'Raum',
-    rooms: 'Zimmer',
+    roomName: 'Zimmername',
+    room: {
+      one: 'Zimmer',
+      other: 'Zimmer',
+    },
     addRoom: 'Raum hinzufügen',
     bedCount: 'Bettenanzahl',
     manageBeds: 'Betten verwalten',
     manage: 'Verwalten',
-    dangerZoneText: (single) => `Das Löschen von ${single ? `einem ${defaultRoomListTranslations.de.room}` : defaultRoomListTranslations.de.rooms} ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!`,
-    deleteConfirmText: (single) => `Wollen Sie wirklich ${single ? 'den' : 'die'} ausgewählten ${single ? defaultRoomListTranslations.de.room : defaultRoomListTranslations.de.rooms} löschen?`,
+    dangerZoneText: {
+      one: 'Das Löschen von einem Raum ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+      other: 'Das Löschen von Räumen ist permanent und kann nicht rückgängig gemacht werden. Vorsicht!',
+    },
+    deleteConfirmText: {
+      one: 'Willst du wirklich den ausgewählten Raum löschen?',
+      other: 'Willst du wirklich die ausgewählten Räume löschen?',
+    },
   }
 }
 
-export type RoomListRoomRepresentation = RoomMinimalDTO & {
-  bedCount: number
+type DeleteDialogState = {
+  isShowing: boolean,
+  /** If not set, the entire selection will be deleted */
+  value?: RoomOverviewDTO,
 }
 
 export type RoomListProps = {
-  rooms?: RoomListRoomRepresentation[], // TODO replace with more optimized RoomDTO
-  roomsPerPage?: number
+  roomsPerPage?: number,
 }
 
 /**
  * A table for showing and editing the rooms within a ward
  */
 export const RoomList = ({
-  overwriteTranslation,
-  rooms
-}: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
-  const translation = useTranslation(defaultRoomListTranslations, overwriteTranslation)
+                           overwriteTranslation,
+                           roomsPerPage = 5
+                         }: PropsForTranslation<RoomListTranslation, RoomListProps>) => {
+  const translation = useTranslation([defaultRoomListTranslations], overwriteTranslation)
   const context = useContext(OrganizationOverviewContext)
-  const [tableState, setTableState] = useState<TableState>({
-    pagination: defaultTableStatePagination,
-    selection: defaultTableStateSelection
-  })
-  const [usedRooms, setUsedRooms] = useState<RoomListRoomRepresentation[]>(rooms ?? [])
-  const [focusElement, setFocusElement] = useState<RoomListRoomRepresentation>()
-  const [isEditing, setIsEditing] = useState(false)
+  const [selectionState, setSelectionState] = useState<RowSelectionState>({})
+  const [deleteRoomDialogState, setDeleteRoomDialogState] = useState<DeleteDialogState>({ isShowing: false })
   const [managedRoom, setManagedRoom] = useState<string>()
 
-  const identifierMapping = (dataObject: RoomListRoomRepresentation) => dataObject.id
-  const creatRoomMutation = useRoomCreateMutation((room) => {
-    context.updateContext({ ...context.state })
-    setFocusElement({ ...room, bedCount: 0 })
-    setUsedRooms(prevState => [...prevState, { ...room, bedCount: 0 }])
-  }, context.state.wardId ?? '') // Not good but should be safe most of the time
-  const deleteRoomMutation = useRoomDeleteMutation(() => {
-    context.updateContext({ ...context.state })
-    setFocusElement(undefined)
-  })
-  const updateRoomMutation = useRoomUpdateMutation(() => context.updateContext({ ...context.state }))
+  const creatRoomMutation = useRoomCreateMutation()
+  const deleteRoomMutation = useRoomDeleteMutation()
+  const updateRoomMutation = useRoomUpdateMutation()
 
-  const { data, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId) // TODO use a more light weight query
-
-  useEffect(() => {
-    if (data && !isEditing) {
-      setUsedRooms(data.map(room => ({
-        id: room.id,
-        name: room.name,
-        bedCount: room.beds.length
-      })))
-    }
-  }, [data, isEditing])
-  // undefined = dont show
-  // ""        = take selcted
-  // "<id>"    = only the id
-  const [deletionConfirmDialogElement, setDeletionConfirmDialogElement] = useState<string>()
+  const { data: rooms, isError, isLoading } = useRoomOverviewsQuery(context.state.wardId) // TODO use a more light weight query
 
   const minRoomNameLength = 1
   const maxRoomNameLength = 32
 
-  const addRoom = () => {
-    // TODO remove below for an actual room add
-    const newRoom = {
-      id: '',
-      name: translation.room + (usedRooms.length + 1),
+  const columns = useMemo<ColumnDef<RoomOverviewDTO>[]>(() => [
+    {
+      id: 'room',
+      header: translation('roomName'),
+      cell: ({ cell }) => {
+        const room = (rooms ?? [])[cell.row.index]!
+        return (
+          <InputUncontrolled
+            value={room.name}
+            type="text"
+            onEditCompleted={(text) => {
+              updateRoomMutation.mutate({
+                ...room,
+                name: text
+              })
+            }}
+            id={room.name}
+            minLength={minRoomNameLength}
+            maxLength={maxRoomNameLength}
+            className="w-full"
+          />
+        )
+      },
+      accessorKey: 'name',
+      sortingFn: 'text',
+      minSize: 200,
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'bedCount',
+      header: translation('bedCount'),
+      accessorFn: room => room.beds.length,
+      sortingFn: 'text',
+      minSize: 190,
+      meta: {
+        filterType: 'range'
+      }
+    },
+    {
+      id: 'manage',
+      header: translation('manageBeds'),
+      cell: ({ cell }) => {
+        const room = (rooms ?? [])[cell.row.index]!
+        return (
+          <TextButton onClick={() => setManagedRoom(room.id)} color="primary">
+            {translation('manage')}
+          </TextButton>
+        )
+      },
+      minSize: 160,
+      maxSize: 200,
+    },
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        const room = (rooms ?? [])[cell.row.index]!
+        return (
+          <TextButton
+            onClick={() => setDeleteRoomDialogState({ isShowing: true, value: room })}
+            color="negative"
+          >
+            {translation('remove')}
+          </TextButton>
+        )
+      },
+      minSize: 140,
+      maxSize: 140,
+      enableResizing: false,
     }
-    creatRoomMutation.mutate(newRoom)
-  }
+  ], [translation, updateRoomMutation, rooms])
 
-  const multipleInDelete = deletionConfirmDialogElement !== '' || tableState.selection?.currentSelection.length === 1
+  const selectedElementCount = Object.keys(selectionState).length
 
   return (
-    <div className={tw('flex flex-col')}>
+    <div className="col gap-y-4">
       <ConfirmDialog
-        id="roomlist-DeleteBedsDialog"
-        titleText={translation.deleteConfirmText(multipleInDelete)}
-        descriptionText={translation.dangerZoneText(multipleInDelete)}
-        isOpen={deletionConfirmDialogElement !== undefined}
-        onCancel={() => setDeletionConfirmDialogElement(undefined)}
-        onBackgroundClick={() => setDeletionConfirmDialogElement(undefined)}
-        onCloseClick={() => setDeletionConfirmDialogElement(undefined)}
+        isOpen={deleteRoomDialogState.isShowing}
+        titleElement={translation('deleteConfirmText', { count: selectedElementCount })}
+        description={translation('dangerZoneText', { count: selectedElementCount })}
+
+        onCancel={() => setDeleteRoomDialogState({ isShowing: false })}
         onConfirm={() => {
-          let toDeleteElements: RoomListRoomRepresentation[]
-          if (deletionConfirmDialogElement) {
-            toDeleteElements = usedRooms.filter(value => identifierMapping(value) === deletionConfirmDialogElement)
+          if (deleteRoomDialogState.value) {
+            if (selectionState[deleteRoomDialogState.value.id]) {
+              const newSelection = { ...selectionState }
+              delete newSelection[deleteRoomDialogState.value.id]
+              setSelectionState(newSelection)
+            }
+            deleteRoomMutation.mutate(deleteRoomDialogState.value.id)
           } else {
-            toDeleteElements = usedRooms.filter(value => tableState.selection?.currentSelection.includes(identifierMapping(value)))
+            Object.keys(selectionState).forEach(value => {
+              const room = (rooms ?? []).find(room => room.id === value)
+              if (room) {
+                deleteRoomMutation.mutate(room.id)
+              }
+            })
+            setSelectionState({})
           }
-          toDeleteElements.forEach(value => deleteRoomMutation.mutate(value.id))
-          setTableState(removeFromTableSelection(tableState, toDeleteElements, usedRooms.length, identifierMapping))
-          setDeletionConfirmDialogElement(undefined)
+          setDeleteRoomDialogState({ isShowing: false })
         }}
         confirmType="negative"
       />
       <ManageBedsModal
-        id="roomlist-ManageBedModal"
         isOpen={!!managedRoom}
         wardId={context.state.wardId}
         roomId={managedRoom ?? ''}
-        onBackgroundClick={() => setManagedRoom(undefined)}
-        onCloseClick={() => setManagedRoom(undefined)}
+        onClose={() => setManagedRoom(undefined)}
+      />
+      <ColumnTitle
+        title={translation('room', { count: 2 /* Always use plural */ }) + ((!isLoading && !isError) ? ` (${rooms.length})` : '')}
+        actions={!isLoading && !isError && (
+          <div className="row gap-x-2">
+            {(selectedElementCount > 0) && (
+              <SolidButton
+                onClick={() => setDeleteRoomDialogState({ isShowing: true })}
+                color="negative"
+                size="small"
+                startIcon={<Trash size={18}/>}
+              >
+                {translation('removeSelection')}
+              </SolidButton>
+            )}
+            <SolidButton
+              onClick={() => {
+                creatRoomMutation.mutate({
+                  id: '',
+                  name: translation('room') + ' ' + (rooms.length + 1),
+                  wardId: context.state.wardId
+                })
+              }}
+              color="positive"
+              size="small"
+              startIcon={<Plus size={18}/>}
+            >
+              {translation('addRoom')}
+            </SolidButton>
+          </div>
+        )}
+        type="subtitle"
       />
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-        errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+        className="min-h-101"
       >
-        <div className={tw('flex flex-row justify-between items-center mb-2')}>
-          <Span type="tableName">{translation.rooms + ` (${usedRooms.length})`}</Span>
-          <div className={tw('flex flex-row gap-x-2')}>
-            {(tableState.selection && tableState.selection?.currentSelection.length > 0) && (
-              <Button
-                onClick={() => setDeletionConfirmDialogElement('')}
-                color="negative"
-              >
-                {translation.removeSelection}
-              </Button>
-            )}
-            <Button onClick={addRoom} color="positive">
-              {translation.addRoom}
-            </Button>
-          </div>
-        </div>
-        <Table
-          focusElement={focusElement}
-          data={usedRooms}
-          stateManagement={[tableState, tableState => {
-            setTableState(tableState)
-            setFocusElement(undefined)
-          }]}
-          identifierMapping={identifierMapping}
-          header={[
-            <Span key="name" type="tableHeader">{translation.roomName}</Span>,
-            <Span key="bedcount" type="tableHeader">{translation.bedCount}</Span>,
-            <Span key="manage" type="tableHeader" >{translation.manageBeds}</Span>,
-            <></>
-          ]}
-          rowMappingToCells={room => [
-            <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
-              <Input
-                value={room.name}
-                type="text"
-                onChange={text => {
-                  setIsEditing(true)
-                  setUsedRooms(usedRooms.map(value => identifierMapping(value) === identifierMapping(room) ? {
-                    ...room,
-                    name: text
-                  } : value))
-                  setFocusElement(room)
-                }}
-                onEditCompleted={(text) => {
-                  updateRoomMutation.mutate({
-                    ...room,
-                    name: text
-                  })
-                  setIsEditing(false)
-                }}
-                id={room.name}
-                minLength={minRoomNameLength}
-                maxLength={maxRoomNameLength}
-              />
-            </div>,
-            <div key="bedcount" className={tw('w-20')}>
-              <Span>{room.bedCount}</Span>
-            </div>,
-            <div key="manage" className={tw('flex flex-row justify-start min-w-[140px]')}>
-              <Button
-                onClick={() => setManagedRoom(room.id)}
-                variant="textButton"
-                color="neutral"
-              >
-                {translation.manage}
-              </Button>
-            </div>,
-            <div key="remove" className={tw('flex flex-row justify-end')}>
-              <Button
-                onClick={() => setDeletionConfirmDialogElement(room.id)}
-                color="negative"
-                variant="textButton"
-              >
-                {translation.remove}
-              </Button>
-            </div>
-          ]}
-        />
+        {rooms && (
+          <TableWithSelection
+            data={rooms}
+            columns={columns}
+            rowSelection={selectionState}
+            onRowSelectionChange={setSelectionState}
+            disableClickRowClickSelection={true}
+            fillerRow={() => (<FillerRowElement className="h-10"/>)}
+            initialState={{
+              pagination: { pageSize: roomsPerPage }
+            }}
+          />
+        )}
       </LoadingAndErrorComponent>
     </div>
   )

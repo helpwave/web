@@ -1,13 +1,17 @@
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Modal, type ModalProps } from '@helpwave/common/components/modals/Modal'
-import { Span } from '@helpwave/common/components/Span'
-import { Button } from '@helpwave/common/components/Button'
-import { defaultTableStatePagination, Table, updatePagination, type TableState } from '@helpwave/common/components/Table'
-import { useEffect, useState } from 'react'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { Input } from '@helpwave/common/components/user-input/Input'
+import clsx from 'clsx'
+import type { DialogProps, Translation } from '@helpwave/hightide'
+import {
+  Dialog,
+  FillerRowElement,
+  InputUncontrolled,
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  SolidButton,
+  Table,
+  TextButton,
+  useTranslation
+} from '@helpwave/hightide'
+import { useEffect, useMemo, useState } from 'react'
 import { useRoomOverviewsQuery } from '@helpwave/api-services/mutations/tasks/room_mutations'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import {
@@ -15,6 +19,8 @@ import {
   useBedDeleteMutation,
   useBedUpdateMutation
 } from '@helpwave/api-services/mutations/tasks/bed_mutations'
+import type { ColumnDef } from '@tanstack/react-table'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type ManageBedsModalTranslation = {
   manageBedsIn: string,
@@ -24,10 +30,11 @@ type ManageBedsModalTranslation = {
   patient: string,
   remove: string,
   addBed: string,
-  close: string
+  close: string,
+  manageBeds: string,
 }
 
-const defaultManageBedsModalTranslation: Record<Languages, ManageBedsModalTranslation> = {
+const defaultManageBedsModalTranslation: Translation<ManageBedsModalTranslation> = {
   en: {
     manageBedsIn: 'Manage beds in',
     bed: 'Bed',
@@ -36,7 +43,8 @@ const defaultManageBedsModalTranslation: Record<Languages, ManageBedsModalTransl
     patient: 'Patient',
     remove: 'Remove',
     addBed: 'Add Bed',
-    close: 'Close'
+    close: 'Close',
+    manageBeds: 'Change the beds in the ward by renaming, adding or deleting them.'
   },
   de: {
     manageBedsIn: 'Betten verwalten in',
@@ -46,31 +54,28 @@ const defaultManageBedsModalTranslation: Record<Languages, ManageBedsModalTransl
     patient: 'Patient',
     remove: 'Entfernen',
     addBed: 'Hinzufügen',
-    close: 'Schließen'
+    close: 'Schließen',
+    manageBeds: 'Ändere die Betten in der Station durch umbennen, hinzufügen oder löschen.'
   }
 }
 
-export type ManageBedsModalProps = ModalProps & {
+export type ManageBedsModalProps = Omit<DialogProps, 'titleElement' | 'description'> & {
   wardId: string, // TODO remove later
-  roomId: string
+  roomId: string,
 }
 
 /**
  * A Modal for managing beds
  */
 export const ManageBedsModal = ({
-  overwriteTranslation,
-  wardId,
-  roomId,
-  modalClassName,
-  titleText,
-  ...modalProps
-}: PropsForTranslation<ManageBedsModalTranslation, ManageBedsModalProps>) => {
-  const translation = useTranslation(defaultManageBedsModalTranslation, overwriteTranslation)
+                                  overwriteTranslation,
+                                  wardId,
+                                  roomId,
+                                  className,
+                                  ...modalProps
+                                }: PropsForTranslation<ManageBedsModalTranslation, ManageBedsModalProps>) => {
+  const translation = useTranslation([defaultManageBedsModalTranslation], overwriteTranslation)
   const { data, isLoading, isError } = useRoomOverviewsQuery(wardId) // Todo use more optimized query later
-  const [tableState, setTableState] = useState<TableState>({
-    pagination: defaultTableStatePagination
-  })
   const [beds, setBeds] = useState<BedWithPatientWithTasksNumberDTO[]>([])
   const room = data?.find(value => value.id === roomId)
 
@@ -85,70 +90,108 @@ export const ManageBedsModal = ({
   const updateBedMutation = useBedUpdateMutation()
   const deleteBedMutation = useBedDeleteMutation()
 
-  const addBed = () => room && addBedMutation.mutate({ id: '', name: `${translation.bed} ${room?.beds.length + 1}`, roomId })
-
   const maxBedNameLength = 16
 
-  const identifierMapping = (bed: BedWithPatientWithTasksNumberDTO) => bed.id
+  const columns = useMemo<ColumnDef<BedWithPatientWithTasksNumberDTO>[]>(() => [
+    {
+      id: 'name',
+      header: translation('name'),
+      cell: ({ cell }) => {
+        const bed = beds[cell.row.index]!
+        return (
+          <InputUncontrolled
+            value={bed.name}
+            type="text"
+            onEditCompleted={(text) => {
+              if (room?.id) {
+                updateBedMutation.mutate({
+                  ...bed,
+                  name: text,
+                  roomId: room.id
+                })
+              }
+            }}
+            minLength={3}
+            maxLength={maxBedNameLength}
+            className="w-full"
+          />
+        )
+      },
+      accessorKey: 'name',
+      sortingFn: 'text',
+      minSize: 200,
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'patientName',
+      header: translation('patient'),
+      accessorFn: ({ patient }) => patient?.humanReadableIdentifier ?? (<FillerRowElement/>),
+      sortingFn: 'text',
+      minSize: 190,
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        const bed = beds[cell.row.index]!
+        return (
+          <TextButton
+            onClick={() => {
+              deleteBedMutation.mutate(bed.id)
+            }}
+            color="negative"
+            disabled={!!bed?.patient}
+          >
+            {translation('remove')}
+          </TextButton>
+        )
+      },
+      minSize: 140,
+      maxSize: 140,
+      enableResizing: false,
+    }
+  ], [beds, deleteBedMutation, room?.id, translation, updateBedMutation])
+
+  const addBed = () => {
+    if (room) {
+      addBedMutation.mutate({ id: '', name: `${translation('bed')} ${room?.beds.length + 1}`, roomId })
+    }
+  }
+
   return (
-    <Modal
-      titleText={titleText ?? (room ? `${translation.manageBedsIn} ${room.name}` : '')}
-      modalClassName={tx('min-w-[600px]', modalClassName)}
+    <Dialog
       {...modalProps}
+      className={clsx('min-w-[600px]', className)}
+      titleElement={room ? `${translation('manageBedsIn')} ${room.name}` : translation('beds')}
+      description={translation('manageBeds')}
     >
+      <ColumnTitle
+        title={`${translation('beds')} (${beds?.length ?? 0})`}
+        type="subtitle"
+        actions={room && beds && (
+          <SolidButton color="positive" onClick={addBed} size="small">
+            {translation('addBed')}
+          </SolidButton>
+        )}
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading || !data}
         hasError={isError || !beds || !room}
-        loadingProps={{ classname: tw('!h-full min-h-[400px]') }}
-        errorProps={{ classname: tw('!h-full min-h-[400px]') }}
       >
         {room && beds && (
-          <>
-            <div className={tw('flex flex-row justify-between items-end mb-2 mt-4')}>
-              <Span type="tableName">{`${translation.beds} (${beds.length})`}</Span>
-              <Button color="positive" onClick={addBed}>{translation.addBed}</Button>
-            </div>
-            <Table
-              data={beds}
-              stateManagement={[tableState, setTableState]}
-              identifierMapping={identifierMapping}
-              header={[
-                <Span key="name" type="tableHeader">{translation.name}</Span>,
-                <Span key="patient" type="tableHeader">{translation.patient}</Span>,
-                <></>
-              ]}
-              rowMappingToCells={bed => [
-                <div key="name" className={tw('flex flex-row items-center w-10/12 min-w-[50px]')}>
-                  <Input
-                    value={bed.name}
-                    maxLength={maxBedNameLength}
-                    onChange={(text) => {
-                      setBeds(beds.map(value => value.id === bed.id ? { ...value, name: text } : value))
-                    }}
-                    onEditCompleted={(text) => updateBedMutation.mutate({ id: bed.id, name: text, roomId: room.id })}
-                  />
-                </div>,
-                <div key="patient" className={tw('w-20')}>
-                  <Span>{bed.patient ? bed.patient.name : '-'}</Span>
-                </div>,
-                <div key="remove" className={tw('flex flex-row justify-end')}>
-                  <Button
-                    disabled={!!bed.patient}
-                    onClick={() => {
-                      deleteBedMutation.mutate(bed.id)
-                      setTableState({ pagination: tableState.pagination ? updatePagination(tableState.pagination, beds.length - 1) : undefined })
-                    }}
-                    color="negative"
-                    variant="textButton"
-                  >
-                    {translation.remove}
-                  </Button>
-                </div>
-              ]}
-            />
-          </>
+          <Table
+            data={beds}
+            columns={columns}
+            fillerRow={() => (<FillerRowElement className="h-10"/>)}
+            initialState={{ pagination: { pageSize: 6 } }}
+          />
         )}
       </LoadingAndErrorComponent>
-    </Modal>
+    </Dialog>
   )
 }

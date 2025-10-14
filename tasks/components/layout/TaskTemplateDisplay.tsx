@@ -1,96 +1,131 @@
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/common/twind'
-import { LucideArrowLeftRight } from 'lucide-react'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
-import { Span } from '@helpwave/common/components/Span'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
+import type {
+  Translation } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  Select,
+  SelectOption,
+  useTranslation
+} from '@helpwave/hightide'
 import { AddCard } from '../cards/AddCard'
 import { TaskTemplateCard } from '../cards/TaskTemplateCard'
+import clsx from 'clsx'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
+import { useContext } from 'react'
+import { emptyTaskTemplate, TaskTemplateContext } from '@/pages/templates'
+import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 
 export type TaskTemplateDisplayTranslation = {
   addNewTaskTemplate: string,
   personalTaskTemplates: string,
-  wardTaskTemplates: string
+  personal: string,
+  wardTaskTemplates: string,
 }
 
-const defaultTaskTemplateDisplayTranslation: Record<Languages, TaskTemplateDisplayTranslation> = {
+const defaultTaskTemplateDisplayTranslation: Translation<TaskTemplateDisplayTranslation> = {
   en: {
-    addNewTaskTemplate: 'Add new template',
+    addNewTaskTemplate: 'New template',
     personalTaskTemplates: 'Personal Task Templates',
+    personal: 'Personal',
     wardTaskTemplates: 'Ward Task Templates'
   },
   de: {
-    addNewTaskTemplate: 'Neues Vorlagen hinzufügen',
+    addNewTaskTemplate: 'Neue Vorlage',
     personalTaskTemplates: 'Meine Vorlagen',
+    personal: 'Persönliche',
     wardTaskTemplates: 'Stations Vorlagen'
   }
 }
 
-export type TaskTemplateDisplayProps = {
-  wardId: string,
-  selectedId: string,
-  onSelectChange: (taskTemplate: TaskTemplateDTO | undefined) => void,
-  taskTemplates: TaskTemplateDTO[],
-  variant: 'wardTemplates' | 'personalTemplates',
-  width?: number
-}
+export type TaskTemplateDisplayProps = object
 
 /**
  * A column for showing TaskTemplates either for Ward or Private templates
  */
 export const TaskTemplateDisplay = ({
-  overwriteTranslation,
-  wardId,
-  selectedId,
-  onSelectChange,
-  taskTemplates,
-  variant,
-  width
-}: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
-  const translation = useTranslation(defaultTaskTemplateDisplayTranslation, overwriteTranslation)
+                                      overwriteTranslation,
+                                    }: PropsForTranslation<TaskTemplateDisplayTranslation, TaskTemplateDisplayProps>) => {
+  const translation = useTranslation([defaultTaskTemplateDisplayTranslation], overwriteTranslation)
+  const { state, updateContext } = useContext(TaskTemplateContext)
+  const { isLoading, template, wardId, hasError, templates } = state
 
   const router = useRouter()
-  const columns = width === undefined ? 3 : Math.max(1, Math.floor(width / 180))
+  const { data: wards, isLoading: isLoadingWards, isError: isErrorWards } = useWardOverviewsQuery()
 
-  const switchToPersonalLink = wardId ? `/templates?wardId=${wardId}` : '/templates'
+  const isShowingWardTemplates = !!wardId
+  const selectedId = template.id
+
+  const onChangeSelected = (taskTemplate: TaskTemplateDTO) => {
+    updateContext(prevState => ({
+      ...prevState,
+      template: taskTemplate,
+      hasChanges: false,
+      isValid: !!taskTemplate.id,
+      deletedSubtaskIds: []
+    }))
+  }
+
   return (
-    <div className={tw('py-4 px-6')}>
-      <div className={tw('flex flex-row items-center justify-between mb-4')}>
-        <Span type="subsectionTitle">
-          {variant === 'personalTemplates' ? translation.personalTaskTemplates : translation.wardTaskTemplates}
-        </Span>
-        { (variant === 'wardTemplates' || wardId) && (
-          <Button
-            onClick={() => {
-              router.push(variant === 'personalTemplates' ? `/ward/${wardId}/templates` : switchToPersonalLink).then()
+    <div className="py-4 px-6 @container">
+      <ColumnTitle
+        title={!isShowingWardTemplates ? translation('personalTaskTemplates') : translation('wardTaskTemplates')}
+        actions={(
+          // TODO change to a menu
+          <Select
+            value={!isShowingWardTemplates ? 'personal' : wardId}
+            onValueChanged={value => {
+              const url = value === 'personal' ? `/templates` : `/ward/${value}/templates`
+              router.push(url).catch(console.error)
             }}
-            className={tw('flex flex-row gap-x-1 items-center w-auto')}
+            disabled={isLoadingWards || isErrorWards}
+            buttonProps={{
+              className: 'min-w-40'
+            }}
+
           >
-            <LucideArrowLeftRight/>
-            {variant === 'personalTemplates' ? translation.wardTaskTemplates : translation.personalTaskTemplates}
-          </Button>
+            {wards?.map(value => (
+              <SelectOption key={value.id} value={value.id}>
+                {value.name}
+              </SelectOption>
+            ))}
+            <SelectOption key="personal" value="personal">
+              {translation('personal')}
+            </SelectOption>
+          </Select>
         )}
-      </div>
-      {/* TODO replace onClick function to something different */}
-      <div className={tw(`grid grid-cols-${columns} gap-6`)}>
-        {taskTemplates.map(taskTemplate => (
-          <TaskTemplateCard
-            key={taskTemplate.id}
-            name={taskTemplate.name}
-            subtaskCount={taskTemplate.subtasks.length}
-            isSelected={selectedId === taskTemplate.id}
-            onEditClick={() => onSelectChange(taskTemplate)}
-            onTileClick={() => onSelectChange(taskTemplate)}
+        containerClassName="mb-2"
+      />
+      <LoadingAndErrorComponent
+        isLoading={isLoading}
+        hasError={hasError}
+        className="min-h-40"
+      >
+        <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-6">
+          {templates && templates.map(taskTemplate => (
+            <TaskTemplateCard
+              key={taskTemplate.id}
+              name={taskTemplate.name}
+              subtaskCount={taskTemplate.subtasks.length}
+              isSelected={selectedId === taskTemplate.id}
+              onEditClick={() => onChangeSelected(taskTemplate)}
+              onClick={() => onChangeSelected(taskTemplate)}
+              className="!min-h-17 !h-auto"
+            />
+          ))}
+          <AddCard
+            onClick={() => onChangeSelected(emptyTaskTemplate)}
+            className={clsx(
+              '!min-h-17 !h-auto',
+              {
+                'border-primary border-2': selectedId === ''
+              }
+            )}
+            text={translation('addNewTaskTemplate')}
           />
-        ))}
-        <AddCard
-          isSelected={selectedId === ''}
-          onTileClick={() => onSelectChange(undefined)}
-          text={translation.addNewTaskTemplate}
-        />
-      </div>
+        </div>
+      </LoadingAndErrorComponent>
     </div>
   )
 }

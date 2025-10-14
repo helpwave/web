@@ -3,13 +3,14 @@ import { useDraggable, type Active, type Over } from './typesafety'
 export type DraggableBuilderProps<DraggableData, DroppableData> = {
   isDragging: boolean,
   active: Active<DraggableData> | null,
-  over: Over<DroppableData> | null
+  over: Over<DroppableData> | null,
 }
 
 export type DraggableProps<DraggableData, DroppableData> = {
   children: ((draggableBuilderProps: DraggableBuilderProps<DraggableData, DroppableData>) => React.ReactNode | undefined),
   id: string,
-  data: DraggableData
+  data: DraggableData,
+  className?: string,
 }
 
 /**
@@ -18,7 +19,8 @@ export type DraggableProps<DraggableData, DroppableData> = {
 export const Draggable = <DraggableData, DroppableData>({
   children,
   id,
-  data
+  data,
+  className,
 }: DraggableProps<DraggableData, DroppableData>) => {
   const { attributes, listeners, setNodeRef, transform, ...draggableBuilderProps } = useDraggable<DraggableData, DroppableData>({
     id,
@@ -30,7 +32,7 @@ export const Draggable = <DraggableData, DroppableData>({
   }
 
   return (
-    <div ref={setNodeRef} {...style} {...listeners} {...attributes}>
+    <div ref={setNodeRef} {...style} {...listeners} {...attributes} className={className}>
       {children(draggableBuilderProps)}
     </div>
   )

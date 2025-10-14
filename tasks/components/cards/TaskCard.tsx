@@ -1,72 +1,97 @@
-import { tw, tx } from '@helpwave/common/twind'
-import { Card, type CardProps } from '@helpwave/common/components/Card'
-import { ProgressIndicator } from '@helpwave/common/components/ProgressIndicator'
-import { Span } from '@helpwave/common/components/Span'
-import { LockIcon } from 'lucide-react'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Avatar } from '@helpwave/common/components/Avatar'
-import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
+import clsx from 'clsx'
+import type { Translation } from '@helpwave/hightide'
+import { Avatar, noop, ProgressIndicator, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import { LockIcon, UserIcon } from 'lucide-react'
+import type { TaskDTO, TaskStatusTranslationType } from '@helpwave/api-services/types/tasks/task'
+import { TaskStatusUtil } from '@helpwave/api-services/types/tasks/task'
 import { useUserQuery } from '@helpwave/api-services/mutations/users/user_mutations'
 
 type TaskCardTranslation = {
-  assigned: string
+  assigned: string,
+  noDescription: string,
 }
 
-const defaultTaskCardTranslations: Record<Languages, TaskCardTranslation> = {
+const defaultTaskCardTranslations: Translation<TaskCardTranslation> = {
   en: {
-    assigned: 'assigned'
+    assigned: 'assigned',
+    noDescription: 'No description',
   },
   de: {
-    assigned: 'zugewiesen'
+    assigned: 'zugewiesen',
+    noDescription: 'Keine Beschreibung',
   }
 }
 
-export type TaskCardProps = CardProps & {
-  task: TaskDTO
+type TranslationType = TaskCardTranslation & TaskStatusTranslationType
+
+export type TaskCardProps = {
+  task: TaskDTO,
+  onClick: () => void,
+  isSelected?: boolean,
+  showStatus?: boolean,
+  className?: string,
 }
 
 /**
  * A Card displaying the information about
  */
 export const TaskCard = ({
-  overwriteTranslation,
-  task,
-  isSelected = false,
-  onTileClick = () => undefined
-}: PropsForTranslation<TaskCardTranslation, TaskCardProps>) => {
-  const translation = useTranslation(defaultTaskCardTranslations, overwriteTranslation)
+                           overwriteTranslation,
+                           task,
+                           isSelected = false,
+                           showStatus = false,
+                           onClick = noop,
+                           className,
+                         }: PropsForTranslation<TranslationType, TaskCardProps>) => {
+  const translation = useTranslation([TaskStatusUtil.translation, defaultTaskCardTranslations], overwriteTranslation)
   const progress = task.subtasks.length === 0 ? 1 : task.subtasks.filter(value => value.isDone).length / task.subtasks.length
   const isOverDue = task.dueDate && task.dueDate < new Date() && task.status !== 'done'
 
   const { data: assignee } = useUserQuery(task.assignee)
 
   return (
-    <Card
-      onTileClick={onTileClick}
-      isSelected={isSelected}
-      className={tx('bg-white !p-2', {
-        '!border-hw-negative-400 !hover:border-hw-negative-600': isOverDue,
-        '!border-hw-negative-600': isOverDue && isSelected,
-      })}
+    <div
+      onClick={onClick}
+      className={clsx('card-md flex-row-2 w-full justify-between !p-2 border-2 hover:border-primary cursor-pointer', {
+        'border-negative': isOverDue,
+        'border-primary': isSelected && !isOverDue,
+      }, className)}
     >
-      <div className={tw('flex flex-row justify-between w-full gap-x-2')}>
-        <div className={tw('flex flex-col overflow-hidden')}>
-          <div className={tw('flex flex-row overflow-hidden items-center gap-x-1')}>
-            {!task.isPublicVisible && <div className={tw('w-[12px]')}><LockIcon size={12}/></div>}
-            <Span type="subsubsectionTitle" className={tw('truncate')}>{task.name}</Span>
+      <div className="flex-col-2 justify-between overflow-hidden">
+        <div className="flex-col-1 overflow-hidden">
+          <div className="flex-row-1 overflow-hidden items-center">
+            {!task.isPublicVisible && <div className="w-4"><LockIcon size={16}/></div>}
+            <span className="typography-title-md truncate">{task.name}</span>
           </div>
-          <Span className={tw('overflow-hidden w-full block text-gray-500 text-ellipsis whitespace-nowrap')}>
-            {task.notes}
-          </Span>
+          <span
+            className={clsx(
+              'truncate w-full',
+              {
+                'text-description': !!task.notes,
+                'text-disabled-text': !task.notes,
+              }
+            )}
+          >
+            {task.notes ? task.notes : translation('noDescription')}
+        </span>
         </div>
-        <div className={tw('flex flex-col gap-y-1 w-[24px]')}>
-          {assignee && assignee.avatarUrl && <Avatar avatarUrl={assignee.avatarUrl} alt={translation.assigned} size="tiny"/>}
-          {task.subtasks.length > 0 && (
-            <ProgressIndicator progress={progress}/>
-          )}
-        </div>
+        {showStatus && (
+          <div
+            className={clsx(
+              'chip justify-start w-min text-nowrap', TaskStatusUtil.colors[task.status].background, TaskStatusUtil.colors[task.status].text
+            )}
+          >
+            {translation(task.status)}
+          </div>
+        )}
       </div>
-    </Card>
+      <div className="flex-col-2 min-w-6">
+        {assignee ?
+          (<Avatar image={assignee?.avatarUrl ? { avatarUrl: assignee.avatarUrl, alt: '' } : undefined} name={assignee.name} size="md" fullyRounded={true}/>) :
+          (<UserIcon className="min-w-6 bg-disabled-background text-disabled-text rounded-full" size={24}/>)
+        }
+        <ProgressIndicator progress={task.subtasks.length > 0 ? progress : 1}/>
+      </div>
+    </div>
   )
 }

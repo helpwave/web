@@ -1,7 +1,5 @@
 packages:
-  - lib
   - tasks
-  - landing-page
-  - eslint-config
   - scripts
   - api-services
+  - customer

@@ -1,16 +1,19 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Span } from '@helpwave/common/components/Span'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import clsx from 'clsx'
+import type { Translation } from '@helpwave/hightide'
+import { TextButton } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  SolidButton,
+  useTranslation
+} from '@helpwave/hightide'
 import {
   useWardCreateMutation,
   useWardDeleteMutation,
-  useWardUpdateMutation,
-  useWardDetailsQuery
+  useWardDetailsQuery,
+  useWardUpdateMutation
 } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import type { WardDetailDTO } from '@helpwave/api-services/types/tasks/wards'
 import { emptyWard } from '@helpwave/api-services/types/tasks/wards'
@@ -31,10 +34,10 @@ type WardDetailTranslation = {
   deleteWard: string,
   create: string,
   update: string,
-  roomsNotOnCreate: string
+  roomsNotOnCreate: string,
 }
 
-const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = {
+const defaultWardDetailTranslations: Translation<WardDetailTranslation> = {
   en: {
     updateWard: 'Update Ward',
     updateWardSubtitle: 'Here you can update details about the ward such as rooms',
@@ -64,9 +67,7 @@ const defaultWardDetailTranslations: Record<Languages, WardDetailTranslation> = 
 }
 
 export type WardDetailProps = {
-  organizationId: string,
   ward?: WardDetailDTO,
-  width?: number
 }
 
 /**
@@ -74,15 +75,13 @@ export type WardDetailProps = {
  * the Ward
  */
 export const WardDetail = ({
-  overwriteTranslation,
-  organizationId,
-  ward,
-  width
-}: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
-  const translation = useTranslation(defaultWardDetailTranslations, overwriteTranslation)
+                             overwriteTranslation,
+                             ward,
+                           }: PropsForTranslation<WardDetailTranslation, WardDetailProps>) => {
+  const translation = useTranslation([defaultWardDetailTranslations], overwriteTranslation)
 
   const context = useContext(OrganizationOverviewContext)
-  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId, organizationId)
+  const { data, isError, isLoading } = useWardDetailsQuery(context.state.wardId)
 
   const isCreatingNewWard = context.state.wardId === ''
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
@@ -96,43 +95,40 @@ export const WardDetail = ({
     }
   }, [data, isCreatingNewWard])
 
-  const createWardMutation = useWardCreateMutation(organizationId, (ward) => context.updateContext({ ...context.state, wardId: ward.id }))
-  const updateWardMutation = useWardUpdateMutation(organizationId, (ward) => {
-    setNewWard({ ...newWard, name: ward.name })
+  const createWardMutation = useWardCreateMutation({
+    onSuccess: (ward) => context.updateContext({
+      ...context.state,
+      wardId: ward.id
+    })
   })
-  const deleteWardMutation = useWardDeleteMutation(organizationId, () => context.updateContext({ ...context.state, wardId: '' }))
-
-  // the value of how much space a TaskTemplateCard and the surrounding gap requires, given in px
-  const minimumWidthOfCards = 200
-  const columns = width === undefined ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
+  const updateWardMutation = useWardUpdateMutation()
+  const deleteWardMutation = useWardDeleteMutation()
 
   return (
-    <div className={tw('flex flex-col py-4 px-6')}>
+    <div className="col py-4 px-6">
       <LoadingAndErrorComponent
         isLoading={!isCreatingNewWard && ((isLoading && !ward) || !newWard.id)}
         hasError={isError && !isCreatingNewWard && !ward}
-        loadingProps={{ classname: tw('!h-full') }}
-        errorProps={{ classname: tw('!h-full') }}
+        className="h-full"
       >
         <ConfirmDialog
-          id="WardDetail-DeleteDialog"
-          titleText={translation.deleteConfirmText}
-          descriptionText={translation.dangerZoneText}
           isOpen={isShowingConfirmDialog}
+          titleElement={translation('deleteConfirmText')}
+          description={translation('dangerZoneText')}
+
           onCancel={() => setIsShowingConfirmDialog(false)}
-          onBackgroundClick={() => setIsShowingConfirmDialog(false)}
-          onCloseClick={() => setIsShowingConfirmDialog(false)}
           onConfirm={() => {
             setIsShowingConfirmDialog(false)
             deleteWardMutation.mutate(newWard.id)
           }}
           confirmType="negative"
+          className="z-300"
         />
         <ColumnTitle
-          title={isCreatingNewWard ? translation.createWard : translation.updateWard}
-          subtitle={isCreatingNewWard ? translation.createWardSubtitle : translation.updateWardSubtitle}
+          title={isCreatingNewWard ? translation('createWard') : translation('updateWard')}
+          description={isCreatingNewWard ? translation('createWardSubtitle') : translation('updateWardSubtitle')}
         />
-        <div className={tw('max-w-[400px]')}>
+        <div className="max-w-[300px]">
           <WardForm
             key={newWard.id}
             ward={newWard}
@@ -144,37 +140,39 @@ export const WardDetail = ({
           />
         </div>
         {isCreatingNewWard ?
-          <Span>{translation.roomsNotOnCreate}</Span>
+          <span className="mt-6">{translation('roomsNotOnCreate')}</span>
           : (
-          <div className={tw('max-w-[600px] mt-6')}>
-            <RoomList/>
-          </div>
-            )}
-        <div className={tw('flex flex-row justify-end mt-6')}>
-          <Button
+            <div className="mt-6">
+              <RoomList/>
+            </div>
+          )}
+        <div className="row justify-end mt-6">
+          <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
             disabled={!filledRequired}>
-            {isCreatingNewWard ? translation.create : translation.update}
-          </Button>
+            {isCreatingNewWard ? translation('create') : translation('update')}
+          </SolidButton>
         </div>
         {newWard.id !== '' &&
           (
-            <div className={tw('mt-6')}>
-              <TaskTemplateWardPreview wardId={newWard.id} columns={columns}/>
+            <div className="mt-6">
+              <TaskTemplateWardPreview wardId={newWard.id}/>
             </div>
           )
         }
-        <div className={tx('flex flex-col justify-start mt-6', { hidden: isCreatingNewWard })}>
-          <Span type="subsectionTitle">{translation.dangerZone}</Span>
-          <Span type="description">{translation.dangerZoneText}</Span>
-          <Button
+        <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
+          <ColumnTitle
+            title={translation('dangerZone')}
+            description={translation('dangerZoneText')}
+            type="subtitle"
+          />
+          <TextButton
             onClick={() => setIsShowingConfirmDialog(true)}
-            className={tw('px-0 font-bold text-left')}
             color="negative"
-            variant="textButton"
+            className="w-min"
           >
-            {translation.deleteWard}
-          </Button>
+            {translation('deleteWard')}
+          </TextButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

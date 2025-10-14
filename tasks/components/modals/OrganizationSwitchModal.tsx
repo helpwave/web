@@ -1,26 +1,22 @@
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { ModalProps } from '@helpwave/common/components/modals/Modal'
-import { Modal } from '@helpwave/common/components/modals/Modal'
-import type { SelectOption } from '@helpwave/common/components/user-input/Select'
-import { Select } from '@helpwave/common/components/user-input/Select'
-import { useMemo, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
+import type { DialogProps, Translation } from '@helpwave/hightide'
+import { SelectOption } from '@helpwave/hightide'
+import { Dialog } from '@helpwave/hightide'
+import { type PropsForTranslation, Select, SolidButton, useTranslation } from '@helpwave/hightide'
+import { useState } from 'react'
 import type { OrganizationDTO } from '@helpwave/api-services/types/users/organizations'
 
 type OrganizationSwitchModalTranslation = {
   switchOrganization: string,
-  ok: string
+  ok: string,
 }
 
-type OrganizationSwitchModalProps = ModalProps & {
+type OrganizationSwitchModalProps = DialogProps & {
   currentOrganization?: string,
   organizations?: OrganizationDTO[],
-  onDone: (organization?: OrganizationDTO) => void
+  onDone: (organization?: OrganizationDTO) => void,
 }
 
-const defaultOrganizationSwitchModalTranslation: Record<Languages, OrganizationSwitchModalTranslation> = {
+const defaultOrganizationSwitchModalTranslation: Translation<OrganizationSwitchModalTranslation> = {
   en: {
     switchOrganization: 'Switch organization',
     ok: 'Ok',
@@ -31,17 +27,15 @@ const defaultOrganizationSwitchModalTranslation: Record<Languages, OrganizationS
   }
 }
 
-const organizationsToOptions = (organizations?: OrganizationDTO[]): SelectOption<string>[] => {
-  return (organizations ?? []).map((organization) => ({
-    value: organization.id,
-    label: `${organization.longName} (${organization.shortName})`,
-  }))
-}
-
-export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneToCaller, currentOrganization, organizations, ...modalProps }: PropsForTranslation<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
-  const translation = useTranslation(defaultOrganizationSwitchModalTranslation, overwriteTranslation)
+export const OrganizationSwitchModal = ({
+                                          overwriteTranslation,
+                                          onDone: onDoneToCaller,
+                                          currentOrganization,
+                                          organizations,
+                                          ...modalProps
+                                        }: PropsForTranslation<OrganizationSwitchModalTranslation, OrganizationSwitchModalProps>) => {
+  const translation = useTranslation([defaultOrganizationSwitchModalTranslation], overwriteTranslation)
   const [organization, setOrganization] = useState(currentOrganization ?? '')
-  const organizationOptions = useMemo(() => organizationsToOptions(organizations), [organizations])
 
   const onDone = () => {
     if (!organization) return
@@ -50,23 +44,37 @@ export const OrganizationSwitchModal = ({ overwriteTranslation, onDone: onDoneTo
   }
 
   return (
-    <Modal
-      titleText={translation.switchOrganization}
+    <Dialog
       {...modalProps}
+      titleElement={modalProps?.titleElement ?? translation('switchOrganization')}
     >
-      <div className={tw('w-[320px]')}>
+      <div className="w-[320px]">
         <Select
-          className={tw('mt-2')}
           value={organization}
-          options={organizationOptions}
-          onChange={setOrganization}
-        />
-        <div className={tw('flex flex-row mt-3 gap-x-4 justify-end')}>
-          <Button autoFocus color="positive" disabled={!organization} onClick={onDone}>
-            {translation.ok}
-          </Button>
+          onValueChanged={setOrganization}
+          buttonProps={{
+            className: 'mt-2',
+            selectedDisplay: (selected) => {
+              const organization = organizations?.find(value => value.id === selected)
+              if(!organization) {
+                return '-'
+              }
+              return `${organization.longName} (${organization.shortName})`
+            }
+        }}
+        >
+          {organizations?.map((organization) => (
+            <SelectOption key={organization.id} value={organization.id}>
+              {`${organization.longName} (${organization.shortName})`}
+            </SelectOption>
+          ))}
+        </Select>
+        <div className="row mt-3 gap-x-4 justify-end">
+          <SolidButton autoFocus color="positive" disabled={!organization} onClick={onDone}>
+            {translation('ok')}
+          </SolidButton>
         </div>
       </div>
-    </Modal>
+    </Dialog>
   )
 }

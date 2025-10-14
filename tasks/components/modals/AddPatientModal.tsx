@@ -1,101 +1,110 @@
 import { useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { ConfirmDialog, type ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Span } from '@helpwave/common/components/Span'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import { noop } from '@helpwave/common/util/noop'
-import { useAssignBedMutation, usePatientCreateMutation } from '@helpwave/api-services/mutations/tasks/patient_mutations'
-import { emptyPatient } from '@helpwave/api-services/types/tasks/patient'
-import type { RoomBedSelectIds } from '@/components/selects/RoomBedSelect'
+import clsx from 'clsx'
+import type { ConfirmDialogProps, Translation } from '@helpwave/hightide'
+import {
+  ConfirmDialog,
+  FormElementWrapper,
+  InputUncontrolled,
+  type PropsForTranslation,
+  useTranslation
+} from '@helpwave/hightide'
+import type { RoomBedSelectionValue } from '@/components/selects/RoomBedSelect'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 
 type AddPatientModalTranslation = {
   addPatient: string,
   name: string,
-  minimumLength: (characters: number) => string,
-  noBedSelected: string
+  minimumLength: string,
+  noBedSelected: string,
 }
 
-const defaultAddPatientModalTranslation: Record<Languages, AddPatientModalTranslation> = {
+const defaultAddPatientModalTranslation: Translation<AddPatientModalTranslation> = {
   en: {
     addPatient: 'Add Patient',
     name: 'Name',
-    minimumLength: (characters: number) => `The Name must be at least ${characters} characters long`,
-    noBedSelected: 'No bed selected, the patient won\'t be assigned directly'
+    minimumLength: `The Name must be at least {{characters}} characters long`,
+    noBedSelected: 'No bed selected, the patient won\'t be assigned directly',
   },
   de: {
     addPatient: 'Patient Hinzufügen',
     name: 'Name',
-    minimumLength: (characters: number) => `Der Name muss mindestens ${characters} characters lang sein`,
+    minimumLength: `Der Name muss mindestens {{characters}} characters lang sein`,
     noBedSelected: 'Kein Bett ausgewählt, der Patient wird nicht direkt zugeordnet'
   }
 }
 
-export type AddPatientModalProps = ConfirmDialogProps & {
-  wardId: string
+export type AddPatientModalValue = RoomBedSelectionValue & {
+  name: string,
+}
+
+export type AddPatientModalProps = Omit<ConfirmDialogProps, 'titleElement' | 'description'> & {
+  wardId: string,
+  value: AddPatientModalValue,
+  onValueChange: (value: AddPatientModalValue) => void,
 }
 
 /**
  * A Modal for adding a Patient
  */
 export const AddPatientModal = ({
-  overwriteTranslation,
-  wardId,
-  titleText,
-  onConfirm = noop,
-  ...modalProps
-}: PropsForTranslation<AddPatientModalTranslation, AddPatientModalProps>) => {
-  const translation = useTranslation(defaultAddPatientModalTranslation, overwriteTranslation)
-  const [dropdownId, setDropdownId] = useState<RoomBedSelectIds>({})
-  const [patientName, setPatientName] = useState<string>('')
+                                  overwriteTranslation,
+                                  wardId,
+                                  value,
+                                  onValueChange,
+                                  ...modalProps
+                                }: PropsForTranslation<AddPatientModalTranslation, AddPatientModalProps>) => {
+  const translation = useTranslation([defaultAddPatientModalTranslation], overwriteTranslation)
   const [touched, setTouched] = useState<boolean>(false)
-  const assignBedMutation = useAssignBedMutation()
-  const createPatientMutation = usePatientCreateMutation()
+  const { name, roomId, bedId } = value
 
   const minimumNameLength = 4
-  const trimmedPatientName = patientName.trim()
+  const trimmedPatientName = name.trim()
   const validPatientName = trimmedPatientName.length >= minimumNameLength
-  const validRoomAndBed = dropdownId.roomId && dropdownId.bedId
+  const validRoomAndBed = roomId && bedId
   const isShowingError = touched && !validPatientName
-
-  const createPatient = () => createPatientMutation.mutateAsync({ ...emptyPatient, name: trimmedPatientName })
-    .then((patient) => {
-      if (dropdownId.bedId) {
-        return assignBedMutation.mutateAsync({ id: dropdownId.bedId, patientId: patient.id })
-      }
-    })
 
   return (
     <ConfirmDialog
-      titleText={titleText ?? translation.addPatient}
-      onConfirm={() => {
-        onConfirm()
-        createPatient()
-      }}
       buttonOverwrites={[{}, {}, { disabled: !validPatientName }]}
       {...modalProps}
+      titleElement={translation('addPatient')}
+      description={undefined}
     >
-      <div className={tw('flex flex-col gap-y-4 min-w-[300px]')}>
-        <div className={tw('flex flex-col gap-y-1')}>
-          <Span type="labelMedium">{translation.name}</Span>
-          <Input
-            value={patientName}
-            onChange={(text) => {
-              setTouched(true)
-              setPatientName(text)
-            }}
-          />
-          {isShowingError && <Span type="formError">{translation.minimumLength(minimumNameLength)}</Span>}
+      <div className="col gap-y-4 min-w-[300px]">
+        <div className="col gap-y-1">
+          <FormElementWrapper
+            required={true}
+            label={translation('name')}
+            error={isShowingError ? translation('minimumLength', { replacements: { characters: minimumNameLength.toString() } }) : undefined}
+            isShowingError={touched}
+          >
+            {({ isShowingError: _, setIsShowingError: _2, ...bag }) => (
+              <InputUncontrolled
+                value={name}
+                onEditCompleted={name => {
+                  setTouched(true)
+                  onValueChange({ ...value, name })
+                }}
+                className="max-w-72"
+                {...bag}
+              />
+            )}
+          </FormElementWrapper>
         </div>
         <RoomBedSelect
-          initialRoomAndBed={dropdownId}
+          initialRoomAndBed={{ roomId, bedId }}
           wardId={wardId}
-          onChange={(roomBedDropdownIds) => setDropdownId(roomBedDropdownIds)}
+          onChange={(roomBedDropdownIds) => onValueChange({ ...roomBedDropdownIds, name })}
           isClearable={true}
         />
-        <Span className={tx({ 'text-hw-warn-400': !validRoomAndBed, 'text-transparent': validRoomAndBed })}>{translation.noBedSelected}</Span>
+        <span
+          className={clsx({
+            'text-warning': !validRoomAndBed,
+            'text-transparent': validRoomAndBed
+          })}
+        >
+          {translation('noBedSelected')}
+        </span>
       </div>
     </ConfirmDialog>
   )

@@ -2,11 +2,10 @@ import type { Metadata } from 'grpc-web'
 import { KeycloakService } from '../util/keycloak'
 
 type AuthenticatedGrpcMetadata = {
-  Authorization: string
+  Authorization: string,
 }
 
-const defaultOrganization = `3b25c6f5-4705-4074-9fc6-a50c28eba406`
-export const getAuthenticatedGrpcMetadata = (_: string = defaultOrganization): AuthenticatedGrpcMetadata => {
+export const getAuthenticatedGrpcMetadata = (): AuthenticatedGrpcMetadata => {
   const token = KeycloakService.getCurrentTokenAndUpdateInBackground()
   return { Authorization: `Bearer ${token}` }
 }

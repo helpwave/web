@@ -1,18 +1,16 @@
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
-import { Chip } from '@helpwave/common/components/ChipList'
+import clsx from 'clsx'
+import type { Translation } from '@helpwave/hightide'
+import { Chip, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { EditCard, type EditCardProps } from './EditCard'
 
 type TaskTemplateCardTranslation = {
   subtask: string,
   edit: string,
   personal: string,
-  ward: string
+  ward: string,
 }
 
-const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTranslation> = {
+const defaultTaskTemplateCardTranslations: Translation<TaskTemplateCardTranslation> = {
   en: {
     subtask: 'Subtasks',
     edit: 'Edit',
@@ -30,39 +28,40 @@ const defaultTaskTemplateCardTranslations: Record<Languages, TaskTemplateCardTra
 export type TaskTemplateCardProps = EditCardProps & {
   name: string,
   subtaskCount: number,
-  typeForLabel?: 'ward' | 'personal'
+  typeForLabel?: 'ward' | 'personal',
 }
 
 /**
  * A Card showing a TaskTemplate
  */
 export const TaskTemplateCard = ({
-  overwriteTranslation,
-  name,
-  subtaskCount,
-  typeForLabel,
-  className,
-  ...editCardProps
-}: PropsForTranslation<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
-  const translation = useTranslation(defaultTaskTemplateCardTranslations, overwriteTranslation)
+                                   overwriteTranslation,
+                                   name,
+                                   subtaskCount,
+                                   typeForLabel,
+                                   className,
+                                   ...editCardProps
+                                 }: PropsForTranslation<TaskTemplateCardTranslation, TaskTemplateCardProps>) => {
+  const translation = useTranslation([defaultTaskTemplateCardTranslations], overwriteTranslation)
   return (
     <EditCard
-      className={tx('group flex flex-col bg-white', className)}
+      className={clsx('gap-y-0', className)}
       {...editCardProps}
     >
-      <div className={tw('overflow-hidden h-full')}>
-        <div className={tw('flex flex-row items-start overflow-hidden gap-x-1')}>
-          <Span type="subsubsectionTitle" className={tw('!flex-1')}>{name}</Span>
+      <div className="col w-full gap-y-0">
+        <div className="row items-center justify-between overflow-hidden gap-x-1">
+          <span className="typography-title-sm truncate">{name}</span>
           {typeForLabel && (
             <Chip
-              color={typeForLabel === 'ward' ? 'blue' : 'pink'}
+              color={typeForLabel === 'ward' ? 'red' : 'blue'}
               variant="fullyRounded"
+              className="!font-semibold text-xs"
             >
-              {typeForLabel === 'ward' ? translation.ward : translation.personal}
+              {typeForLabel === 'ward' ? translation('ward') : translation('personal')}
             </Chip>
           )}
         </div>
-        <Span>{subtaskCount + ' ' + translation.subtask}</Span>
+        <span>{subtaskCount + ' ' + translation('subtask')}</span>
       </div>
     </EditCard>
   )

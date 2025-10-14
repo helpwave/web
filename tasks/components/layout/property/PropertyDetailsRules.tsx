@@ -1,11 +1,5 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
-import { InputGroup } from '@helpwave/common/components/InputGroup'
-import { Tile } from '@helpwave/common/components/layout/Tile'
-import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { tw } from '@helpwave/common/twind'
+import type { ExpandableProps, PropsForTranslation, Translation } from '@helpwave/hightide'
+import { Checkbox, Expandable, useTranslation } from '@helpwave/hightide'
 import type { Property } from '@helpwave/api-services/types/properties/property'
 
 type PropertyDetailsRulesTranslation = {
@@ -13,10 +7,10 @@ type PropertyDetailsRulesTranslation = {
   importance: string,
   importanceDescription: string,
   alwaysVisible: string,
-  alwaysVisibleDescription: string
+  alwaysVisibleDescription: string,
 }
 
-const defaultPropertyDetailsRulesTranslation: Record<Languages, PropertyDetailsRulesTranslation> = {
+const defaultPropertyDetailsRulesTranslation: Translation<PropertyDetailsRulesTranslation> = {
   en: {
     rules: 'Rules',
     importance: 'Importance',
@@ -39,38 +33,38 @@ export type PropertyDetailsRulesProps = {
   value: PropertyRules,
   onChange: (value: PropertyRules) => void,
   onEditComplete: (value: PropertyRules) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>
+  expandableOptions?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsRules = ({
-  overwriteTranslation,
-  value,
-  onChange,
-  onEditComplete,
-  inputGroupProps
-}: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
-  const translation = useTranslation(defaultPropertyDetailsRulesTranslation, overwriteTranslation)
+                                       overwriteTranslation,
+                                       value,
+                                       onChange,
+                                       onEditComplete,
+                                       expandableOptions
+                                     }: PropsForTranslation<PropertyDetailsRulesTranslation, PropertyDetailsRulesProps>) => {
+  const translation = useTranslation([defaultPropertyDetailsRulesTranslation], overwriteTranslation)
   return (
-    <InputGroup {...inputGroupProps} title={translation.rules}>
-      <Tile
-        title={{ value: translation.alwaysVisible, type: 'labelMedium' }}
-        description={{ value: translation.alwaysVisibleDescription }}
-        suffix={(
-          <Checkbox
-            checked={value.alwaysIncludeForViewSource ?? false}
-            onChange={alwaysIncludeForViewSource => {
-              const newValue: PropertyRules = { ...value, alwaysIncludeForViewSource }
-              onChange(newValue)
-              onEditComplete(newValue)
-            }}
-            size={20}
-          />
-        )}
-        className={tw('mt-4')}
-      />
-    </InputGroup>
+    <Expandable {...expandableOptions} contentClassName="max-h-128" label={translation('rules')}>
+      <div className="flex-row-4 items-center justify-between">
+        <div className="flex-col-1">
+          <span>{translation('alwaysVisible')}</span>
+          <span>{translation('alwaysVisibleDescription')}</span>
+        </div>
+
+        <Checkbox
+          checked={value.alwaysIncludeForViewSource ?? false}
+          onChange={alwaysIncludeForViewSource => {
+            const newValue: PropertyRules = { ...value, alwaysIncludeForViewSource }
+            onChange(newValue)
+            onEditComplete(newValue)
+          }}
+          size="md"
+        />
+      </div>
+    </Expandable>
   )
 }

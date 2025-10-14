@@ -2,13 +2,15 @@
 const nextConfig = {
   distDir: 'build',
   reactStrictMode: true,
-  swcMinify: true,
-  transpilePackages: ['@helpwave/common'],
+  transpilePackages: ['@helpwave/api-services'],
   output: 'standalone',
   images: {
     dangerouslyAllowSVG: true,
-    domains: ['cdn.helpwave.de', 'helpwave.de', 'source.boringavatars.com'],
+    remotePatterns: [
+      new URL('https://cdn.helpwave.de/**'),
+      new URL('https://helpwave.de/**'),
+    ],
   },
 }
 
-module.exports = nextConfig
+export default nextConfig

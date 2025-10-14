@@ -1,25 +1,37 @@
-import { tw } from '@helpwave/common/twind'
+import clsx from 'clsx'
 import { Plus } from 'lucide-react'
-import { Card, type CardProps } from '@helpwave/common/components/Card'
-import { Span } from '@helpwave/common/components/Span'
 
-export type AddCardProps = CardProps & {
-  text?: string
+export type AddCardProps = {
+  onClick?: () => void,
+  text?: string,
+  isSelected?: boolean,
+  className?: string,
 }
 
 /**
  * A Card for adding something the text shown is configurable
  */
 export const AddCard = ({
-  text,
-  ...cardProps
-}: AddCardProps) => {
+                          onClick,
+                          text,
+                          isSelected = false,
+                          className,
+                        }: AddCardProps) => {
   return (
-    <Card {...cardProps}>
-      <div className={tw('flex flex-row justify-center items-center gap-x-1 text-gray-400 h-full')}>
-        <Plus/>
-        {text && <Span>{text}</Span>}
-      </div>
-    </Card>
+    <div
+      onClick={onClick}
+      className={clsx(
+        'card-md flex-col-1 justify-center items-center gap-x-1 text-description border-2 hover:border-primary h-full min-h-28',
+        { 'cursor-pointer': !!onClick },
+        {
+          'border-primary': isSelected,
+          'border-transparent': !isSelected
+        },
+        className
+      )}
+    >
+      <Plus/>
+      {text && <span>{text}</span>}
+    </div>
   )
 }

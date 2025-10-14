@@ -1,17 +1,18 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
-import { Helpwave } from '@helpwave/common/icons/Helpwave'
+import clsx from 'clsx'
+import { HelpwaveLogo } from '@helpwave/hightide'
 
 export type HeaderProps = {
   title?: string,
   leftSide?: ReactNode[],
+  leftSideClassName?: string,
   rightSide?: ReactNode[],
+  rightSideClassName?: string,
   /**
    * @default true
    */
-  withIcon?: boolean
+  withIcon?: boolean,
 }
 
 /**
@@ -23,31 +24,37 @@ export type HeaderProps = {
  *
  * each element in left and right is also seperated by the divider
  */
-const Header = ({ title, leftSide = [], rightSide = [], withIcon = true }: HeaderProps) => {
+const Header = ({
+                  title,
+                  leftSide = [],
+                  leftSideClassName,
+                  rightSide = [],
+                  rightSideClassName,
+                  withIcon = true
+                }: HeaderProps) => {
   return (
-    <div className={tw('h-16 py-4 relative flex items-center justify-between border-b border-slate-900/10')}>
-      <div className={tw('flex gap-4 w-full justify-between mx-4')}>
-        <div className={tw('w-full relative flex items-center align-center')}>
+    <div
+      className="row h-16 py-4 relative items-center justify-between bg-header-background text-header-text shadow-md z-[1]">
+      <div className="row w-full gap-x-8 justify-between mx-4">
+        <div className="row relative items-center align-center">
           {withIcon && (
-            <div className={tw('relative flex gap-2 align-center')}>
-              <Link href="/">
-                <Helpwave size={52} />
-              </Link>
-            </div>
+            <Link href="/">
+              <HelpwaveLogo className="min-h-12 min-w-12"/>
+            </Link>
           )}
-          {title && <Span type="title">{title}</Span>}
+          {title && <span className="typography-title-md">{title}</span>}
           {leftSide?.filter(value => value !== undefined).map((value, index) => (
-            <div key={'leftAction' + index} className={tw('flex flex-row items-center')}>
-              {(index !== 0 || title || withIcon) && <div className={tw('bg-gray-300 rounded h-8 w-0.5 mx-4')}/>}
+            <div key={'leftAction' + index} className={clsx('row items-center', leftSideClassName)}>
+              {(index !== 0 || title || withIcon) && <div className="bg-gray-300 rounded h-8 w-0.5 mx-4"/>}
               {value}
             </div>
           ))}
         </div>
-        <div className={tw('w-full flex items-center justify-end')}>
+        <div className="row items-center justify-end">
           {rightSide?.filter(value => value !== undefined).map((value, index) => (
-            <div key={'rightAction' + index} className={tw('flex flex-row items-center')}>
+            <div key={'rightAction' + index} className={clsx('row items-center', rightSideClassName)}>
               {value}
-              {index !== rightSide?.length - 1 && <div className={tw('bg-gray-300 rounded h-8 w-0.5 mx-3')}/>}
+              {index !== rightSide?.length - 1 && <div className="bg-gray-300 rounded h-8 w-0.5 mx-3"/>}
             </div>
           ))}
         </div>

@@ -26,10 +26,10 @@ import { z } from 'zod'
 
 const configSchema = z.object({
   NODE_ENV: z.literal('production').or(z.literal('development')).default('production'),
-  NEXT_PUBLIC_API_URL: z.string().url().default('https://api.helpwave.de'),
+  NEXT_PUBLIC_API_URL: z.string().url().default('https://services.helpwave.de'),
   NEXT_PUBLIC_OFFLINE_API: z.literal('true').or(z.literal('false')).optional(),
   NEXT_PUBLIC_REQUEST_LOGGING: z.literal('true').or(z.literal('false')).optional(),
-  NEXT_PUBLIC_OAUTH_ISSUER_URL: z.string().url().default('https://auth.helpwave.de'),
+  NEXT_PUBLIC_OAUTH_ISSUER_URL: z.string().url().default('https://id.helpwave.de'),
   NEXT_PUBLIC_OAUTH_REDIRECT_URI: z.string().url().default('https://tasks.helpwave.de/auth/callback'),
   NEXT_PUBLIC_OAUTH_CLIENT_ID: z.string().default('425f8b8d-c786-4ff7-b2bf-e52f505fb588'),
   NEXT_PUBLIC_OAUTH_SCOPES: z.string().default('openid,offline_access,email,nickname,name,organizations'),
@@ -47,7 +47,7 @@ const configSchema = z.object({
       name: z.string()
     })
   }).default({
-    sub: '18159713-5d4e-4ad5-94ad-fbb6bb147984',
+    sub: '36def75c-2c0d-4c68-b7c6-b258c3ddef56',
     email: 'max.mustermann@helpwave.de',
     email_verified: true,
     name: 'Max Mustermann',
@@ -55,7 +55,7 @@ const configSchema = z.object({
     given_name: 'Max',
     family_name: 'Mustermann',
     organization: {
-      id: '3b25c6f5-4705-4074-9fc6-a50c28eba406',
+      id: '3813bd26-0f6d-470d-a35c-6bb0a3974f08',
       name: 'helpwave test'
     }
   }),
@@ -83,15 +83,14 @@ const getAPIServiceConfig = () => {
   // Not using the index notation causes build errors
   const maybeConfig = configSchema.safeParse({
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OFFLINE_API: process.env['NEXT_PUBLIC_OFFLINE_API'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_REQUEST_LOGGING: process.env['NEXT_PUBLIC_REQUEST_LOGGING'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OAUTH_ISSUER_URL: process.env['NEXT_PUBLIC_OAUTH_ISSUER_URL'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OAUTH_REDIRECT_URI: process.env['NEXT_PUBLIC_OAUTH_REDIRECT_URI'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env['NEXT_PUBLIC_OAUTH_CLIENT_ID'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_OAUTH_SCOPES: process.env['NEXT_PUBLIC_OAUTH_SCOPES'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_FAKE_TOKEN_ENABLE: process.env['NEXT_PUBLIC_FAKE_TOKEN_ENABLE'], // eslint-disable-line dot-notation
-    NEXT_PUBLIC_FAKE_TOKEN: process.env['NEXT_PUBLIC_FAKE_TOKEN'], // eslint-disable-line dot-notation
+    NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'],
+    NEXT_PUBLIC_REQUEST_LOGGING: process.env['NEXT_PUBLIC_REQUEST_LOGGING'],
+    NEXT_PUBLIC_OAUTH_ISSUER_URL: process.env['NEXT_PUBLIC_OAUTH_ISSUER_URL'],
+    NEXT_PUBLIC_OAUTH_REDIRECT_URI: process.env['NEXT_PUBLIC_OAUTH_REDIRECT_URI'],
+    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env['NEXT_PUBLIC_OAUTH_CLIENT_ID'],
+    NEXT_PUBLIC_OAUTH_SCOPES: process.env['NEXT_PUBLIC_OAUTH_SCOPES'],
+    NEXT_PUBLIC_FAKE_TOKEN_ENABLE: process.env['NEXT_PUBLIC_FAKE_TOKEN_ENABLE'],
+    NEXT_PUBLIC_FAKE_TOKEN: process.env['NEXT_PUBLIC_FAKE_TOKEN'],
   })
 
   if (!maybeConfig.success) {

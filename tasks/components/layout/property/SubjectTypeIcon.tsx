@@ -1,9 +1,9 @@
 import type { LucideProps } from 'lucide-react'
 import { NotepadText, UserRound } from 'lucide-react'
-import type { SubjectType } from '@helpwave/api-services/types/properties/property'
+import type { PropertySubjectType } from '@helpwave/api-services/types/properties/property'
 
 export type SubjectTypeIconProps = {
-  subjectType: SubjectType
+  subjectType: PropertySubjectType,
 } & LucideProps
 
 export const SubjectTypeIcon = ({ subjectType, ...props }: SubjectTypeIconProps) => {

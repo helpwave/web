@@ -1,32 +1,44 @@
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { InputGroupProps } from '@helpwave/common/components/InputGroup'
-import { InputGroup } from '@helpwave/common/components/InputGroup'
-import { Select } from '@helpwave/common/components/user-input/Select'
-import { Tile } from '@helpwave/common/components/layout/Tile'
-import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { tw } from '@helpwave/common/twind'
-import { Span } from '@helpwave/common/components/Span'
+import type { ExpandableProps, FormTranslationType, PropsForTranslation, Translation } from '@helpwave/hightide'
+import {
+  Checkbox,
+  ExpandableUncontrolled,
+  FillerRowElement,
+  formTranslation,
+  IconButton,
+  InputUncontrolled,
+  Label,
+  Select,
+  SelectOption as SelectOptionDisplay,
+  SolidButton,
+  TableWithSelection,
+  useTranslation
+} from '@helpwave/hightide'
 import { Plus, X } from 'lucide-react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import type { FieldType, Property, SelectData, SelectOption } from '@helpwave/api-services/types/properties/property'
+import type {
+  FieldType,
+  Property,
+  PropertySelectData,
+  SelectOption
+} from '@helpwave/api-services/types/properties/property'
 import { fieldTypeList } from '@helpwave/api-services/types/properties/property'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type SelectDataUpdate = {
   create: number,
   update: (SelectOption & { index: number })[],
-  delete: { id: string, index: number }[]
+  delete: { id: string, index: number }[],
 }
 
 type PropertySelectOptionsUpdaterPropsTranslation = {
   newEntry: string,
-  values: string
+  values: string,
 }
 
-const defaultPropertySelectOptionsUpdaterPropsTranslation: Record<Languages, PropertySelectOptionsUpdaterPropsTranslation> = {
+type TranslationType = FormTranslationType & PropertySelectOptionsUpdaterPropsTranslation
+
+const defaultPropertySelectOptionsUpdaterPropsTranslation: Translation<PropertySelectOptionsUpdaterPropsTranslation> = {
   en: {
     newEntry: 'New Entry',
     values: 'Values',
@@ -38,79 +50,149 @@ const defaultPropertySelectOptionsUpdaterPropsTranslation: Record<Languages, Pro
 }
 
 type PropertySelectOptionsUpdaterProps = {
-  value: SelectData,
-  onChange: (data: SelectData, update: SelectDataUpdate) => void
+  value: PropertySelectData,
+  onChange: (data: PropertySelectData, update: SelectDataUpdate) => void,
 }
 
 type PropertySelectOptionsUpdaterState = {
-  data: SelectData,
-  update: SelectDataUpdate
+  data: PropertySelectData,
+  update: SelectDataUpdate,
 }
 
 export const PropertySelectOptionsUpdater = ({
-  overwriteTranslation,
-  value,
-  onChange,
-}: PropsForTranslation<PropertySelectOptionsUpdaterPropsTranslation, PropertySelectOptionsUpdaterProps>) => {
-  const translation = useTranslation(defaultPropertySelectOptionsUpdaterPropsTranslation, overwriteTranslation)
-  const [state, setState] = useState<PropertySelectOptionsUpdaterState>({ data: value, update: { create: 0, update: [], delete: [] } })
+                                               overwriteTranslation,
+                                               value,
+                                               onChange,
+                                             }: PropsForTranslation<TranslationType, PropertySelectOptionsUpdaterProps>) => {
+  const translation = useTranslation([formTranslation, defaultPropertySelectOptionsUpdaterPropsTranslation], overwriteTranslation)
+  const [state, setState] = useState<PropertySelectOptionsUpdaterState>({
+    data: value,
+    update: { create: 0, update: [], delete: [] }
+  })
+  const [selection, setSelection] = useState<RowSelectionState>({})
+
   const { data, update } = state
 
   useEffect(() => {
     setState({ data: value, update: { create: 0, update: [], delete: [] } })
+    setSelection({})
   }, [value])
 
+  const columns = useMemo<ColumnDef<SelectOption>[]>(() => [
+    {
+      id: 'value',
+      header: translation('values'),
+      cell: ({ cell }) => {
+        const index = cell.row.index
+        const entry = data.options[index]!
+        return (
+          <InputUncontrolled
+            value={entry.name}
+            onEditCompleted={text => {
+              const newList = [...data.options]
+              const newEntry = { ...entry, name: text }
+              newList[index] = newEntry
+              onChange(
+                { ...data, options: newList },
+                { ...update, update: [...update.update, { ...newEntry, index }] }
+              )
+            }}
+          />
+        )
+      },
+      accessorFn: (value) => value.name,
+      sortingFn: 'text',
+      minSize: 160,
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        const index = cell.row.index
+        const entry = data.options[index]!
+        return (
+          <IconButton
+            color="transparent"
+            onClick={() => {
+              const newList = data.options.filter((_, index1) => index1 !== index)
+              onChange(
+                { ...data, options: newList },
+                { ...update, delete: [...update.delete, { id: entry.id, index }] }
+              )
+            }}
+          >
+            <X size={20} className="text-negative"/>
+          </IconButton>
+        )
+      },
+      minSize: 80,
+      maxSize: 80,
+      enableResizing: false,
+    }
+  ], [data, onChange, translation, update])
+
+  const selectedIndexes = Object.keys(selection)
+
   return (
-    <div className={tw('flex flex-col mt-2 gap-y-1')}>
-      <div className={tw('flex flex-row justify-between items-center')}>
-        <Span type="labelMedium">{translation.values}</Span>
-        <Plus
-          className={tw('text-white bg-hw-primary-400 hover:text-gray-100 hover:bg-hw-primary-600 rounded-full mr-3')}
-          size={20}
-          onClick={() => {
-            onChange({ ...data }, { ...update, create: update.create + 1 })
-          }}
-        />
-      </div>
-      <Scrollbars autoHide autoHeight autoHeightMax={400}>
-        <div className={tw('flex flex-col gap-y-2 mr-3')}>
-          {data.options.map((entry, index) => (
-            <div key={index} className={tw('flex flex-row items-center justify-between gap-x-4')}>
-              <Input
-                value={entry.name ?? ''}
-                placeholder={`${translation.newEntry} ${index + 1}`}
-                onChange={text => {
-                  const newList = [...data.options]
-                  const newEntry = { ...entry, name: text }
-                  newList[index] = newEntry
-                  setState(
-                    { data: { ...data, options: newList }, update: { ...update, update: [...update.update, { ...newEntry, index }] } }
-                  )
-                }}
-                onEditCompleted={text => {
-                  const newList = [...data.options]
-                  const newEntry = { ...entry, name: text }
-                  newList[index] = newEntry
+    <div className="col mt-2 gap-y-1">
+      <ColumnTitle
+        title={translation('values')}
+        type="subtitle"
+        actions={(
+          <div className="row items-center gap-x-2">
+            {selectedIndexes.length > 0 && (
+              <SolidButton
+                color="negative"
+                size="small"
+                onClick={() => {
+                  const newList = data.options.filter((_, index) => !selectedIndexes.find(value1 => value1 === index.toString()))
                   onChange(
                     { ...data, options: newList },
-                    { ...update, update: [...update.update, { ...newEntry, index }] }
+                    {
+                      ...update,
+                      delete: [...update.delete, ...data.options
+                        .map((option, index) => ({
+                          ...option,
+                          index
+                        })).filter(value => !!selectedIndexes[value.index])
+                        .map(value => ({
+                          index: value.index,
+                          id: value.id
+                        }))]
+                    }
                   )
                 }}
-              />
-              <X
-                className={tw('text-hw-negative-400 hover:text-hw-negative-600')}
-                size={20}
-                onClick={() => {
-                  const newList = data.options.filter((_, index1) => index1 !== index)
-                  onChange({ ...data, options: newList },
-                    { ...update, delete: [...update.delete, { id: entry.id, index }] }
-                  )
-                }}
-              />
-            </div>
-          ))}
-        </div>
-      </Scrollbars>
+              >
+                {translation('delete')}
+              </SolidButton>
+            )}
+            <IconButton
+              onClick={() => {
+                onChange({ ...data }, { ...update, create: update.create + 1 })
+              }}
+              size="small"
+            >
+              <Plus className="w-full h-full"/>
+            </IconButton>
+          </div>
+        )}
+      />
+      <div className="row justify-between items-center">
+        <span className="typography-label-md">{}</span>
+
+      </div>
+      <TableWithSelection
+        columns={columns}
+        data={data.options}
+        rowSelection={selection}
+        onRowSelectionChange={setSelection}
+        disableClickRowClickSelection={true}
+        initialState={{ pagination: { pageSize: 5 } }}
+        fillerRow={() => (<FillerRowElement className="h-10"/>)}
+      />
     </div>
   )
 }
@@ -121,10 +203,10 @@ type PropertyDetailsFieldTranslation = {
   field: string,
   fieldType: string,
   allowCustomValues: string,
-  allowCustomValuesDescription: string
+  allowCustomValuesDescription: string,
 } & { [key in FieldType]: string }
 
-const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsFieldTranslation> = {
+const defaultPropertyDetailsFieldTranslation: Translation<PropertyDetailsFieldTranslation> = {
   en: {
     field: 'Field',
     fieldType: 'Field Type',
@@ -139,8 +221,8 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
     allowCustomValuesDescription: 'Let users enter a free text when the predefined values are not enough.',
   },
   de: {
-    field: 'Property Eingabe', // TODO better translation
-    fieldType: 'Property Typ',
+    field: 'Eingabe',
+    fieldType: 'Eigenschaftstyp',
     multiSelect: 'Multi Select',
     singleSelect: 'Single Select',
     number: 'Zahl',
@@ -154,21 +236,21 @@ const defaultPropertyDetailsFieldTranslation: Record<Languages, PropertyDetailsF
 }
 
 export type PropertyDetailsFieldProps = {
-  value: PropertyFieldDetails,
+  value: Property,
   onChange: (value: PropertyFieldDetails, update?: SelectDataUpdate) => void,
-  inputGroupProps?: Omit<InputGroupProps, 'title'>
+  expandableProps?: Omit<ExpandableProps, 'label'>,
 }
 
 /**
  * The Layout for the PropertyDetails basic information input
  */
 export const PropertyDetailsField = ({
-  overwriteTranslation,
-  value,
-  onChange,
-  inputGroupProps
-}: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
-  const translation = useTranslation(defaultPropertyDetailsFieldTranslation, overwriteTranslation)
+                                       overwriteTranslation,
+                                       value,
+                                       onChange,
+                                       expandableProps
+                                     }: PropsForTranslation<PropertyDetailsFieldTranslation, PropertyDetailsFieldProps>) => {
+  const translation = useTranslation([defaultPropertyDetailsFieldTranslation], overwriteTranslation)
   const [usedValue, setUsedValue] = useState<PropertyFieldDetails>(value)
   const isSelectType = value.fieldType === 'multiSelect' || value.fieldType === 'singleSelect'
 
@@ -177,17 +259,31 @@ export const PropertyDetailsField = ({
   }, [value])
 
   return (
-    <InputGroup {...inputGroupProps} title={translation.field}>
+    <ExpandableUncontrolled
+      {...expandableProps}
+      label={(
+        <h4 className="typography-title-md">
+          {translation('field')}
+        </h4>
+      )}
+      contentExpandedClassName="max-h-160"
+    >
+      <Label>{translation('fieldType')}</Label>
       <Select
         // TODO add icons
         value={usedValue.fieldType}
-        label={{ name: translation.fieldType, labelType: 'labelMedium' }}
-        options={fieldTypeList.map(fieldType => ({ value: fieldType, label: translation[fieldType] }))}
-        onChange={fieldType => {
-          const newValue = { ...usedValue, fieldType }
+        onValueChanged={fieldType => {
+          const newValue = { ...usedValue, fieldType: fieldType as FieldType }
           onChange(newValue)
         }}
-      />
+        disabled={!!value.id}
+      >
+        {fieldTypeList.map(fieldType => (
+          <SelectOptionDisplay key={fieldType} value={fieldType}>
+            {translation(fieldType)}
+          </SelectOptionDisplay>
+        ))}
+      </Select>
       {isSelectType && (
         <PropertySelectOptionsUpdater
           value={usedValue.selectData!}
@@ -195,22 +291,23 @@ export const PropertyDetailsField = ({
         />
       )}
       {isSelectType && (
-        <Tile
-          title={{ value: translation.allowCustomValues, type: 'labelMedium' }}
-          description={{ value: translation.allowCustomValuesDescription }}
-          suffix={(
-            <Checkbox
-              checked={usedValue.selectData!.isAllowingFreetext}
-              onChange={isAllowingFreetext => {
-                const newValue: PropertyFieldDetails = { ...value, selectData: { ...usedValue.selectData!, isAllowingFreetext } }
-                onChange(newValue)
-              }}
-              size={20}
-            />
-          )}
-          className={tw('mt-4')}
-        />
+        <div className="flex-row-4 justify-between">
+          <div className="flex-col-1">
+            <span>{translation('allowCustomValues')}</span>
+            <span className="text-description">{translation('allowCustomValuesDescription')}</span>
+          </div>
+          <Checkbox
+            checked={usedValue.selectData!.isAllowingFreetext}
+            onChange={isAllowingFreetext => {
+              const newValue: PropertyFieldDetails = {
+                ...value,
+                selectData: { ...usedValue.selectData!, isAllowingFreetext }
+              }
+              onChange(newValue)
+            }}
+          />
+        </div>
       )}
-    </InputGroup>
+    </ExpandableUncontrolled>
   )
 }

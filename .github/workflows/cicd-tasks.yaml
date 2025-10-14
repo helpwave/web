@@ -5,7 +5,6 @@ on:
     branches:
       - '*'
     paths:
-      - 'lib/**'
       - 'tasks/**'
       - 'api-services/**'
       - 'pnpm*.yaml'
@@ -17,7 +16,6 @@ on:
       - 'v*'
   pull_request:
     paths:
-      - 'lib/**'
       - 'tasks/**'
       - 'api-services/**'
       - 'pnpm*.yaml'
@@ -112,23 +110,3 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         run: |
           docker buildx imagetools inspect ${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
-
-  deploy:
-    name: Deploy to Fly
-    runs-on: ubuntu-latest
-    environment: staging
-    needs: build
-    concurrency:
-      group: ${{ github.workflow }}-${{ vars.FLY_APP }}
-      cancel-in-progress: true
-    if: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' }}
-    env:
-      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-    steps:
-      - name: Setup flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Deploy
-        run: flyctl deploy --config tasks/fly.toml --app $APP --image $IMAGE --remote-only
-        env:
-          APP: ${{ vars.FLY_APP }}
-          IMAGE: ${{ needs.build.outputs.IMAGE }}

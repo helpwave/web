@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { tw } from '@helpwave/common/twind'
-import { ToggleableInput } from '@helpwave/common/components/user-input/ToggleableInput'
-import { Checkbox } from '@helpwave/common/components/user-input/Checkbox'
-import { Button } from '@helpwave/common/components/Button'
-import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
+import { Checkbox, type PropsForTranslation, TextButton, ToggleableInput, useTranslation } from '@helpwave/hightide'
+import type { SubtaskDTO } from '@helpwave/api-services/types/tasks/task'
 
 type SubtaskTileTranslation = {
   subtasks: string,
   remove: string,
   addSubtask: string,
-  newSubtask: string
+  newSubtask: string,
 }
 
 const defaultSubtaskTileTranslation = {
@@ -23,73 +19,73 @@ const defaultSubtaskTileTranslation = {
 }
 
 type SubtaskTileProps = {
-  subtask: SubTaskDTO,
+  subtask: SubtaskDTO,
   onRemoveClick: () => void,
-  onChange: (subtask: SubTaskDTO) => void
+  onChange: (subtask: SubtaskDTO) => void,
 }
 
 /**
  * A tile for showing and editing a subtask used in the SubtaskView
  */
 export const SubtaskTile = ({
-  overwriteTranslation,
-  subtask,
-  onRemoveClick,
-  onChange,
-}: PropsForTranslation<SubtaskTileTranslation, SubtaskTileProps>) => {
-  const translation = useTranslation(defaultSubtaskTileTranslation, overwriteTranslation)
+                              overwriteTranslation,
+                              subtask,
+                              onRemoveClick,
+                              onChange,
+                            }: PropsForTranslation<SubtaskTileTranslation, SubtaskTileProps>) => {
+  const translation = useTranslation([defaultSubtaskTileTranslation], overwriteTranslation)
 
   const minTaskNameLength = 2
   const maxTaskNameLength = 64
-  const [localSubtask, setLocalSubtask] = useState<SubTaskDTO>({ ...subtask })
+  const [localSubtask, setLocalSubtask] = useState<SubtaskDTO>({ ...subtask })
 
   useEffect(() => {
     setLocalSubtask(subtask)
   }, [subtask])
 
   return (
-    <div className={tw('flex flex-row gap-x-2 items-center overflow-x-hidden')}>
-      <div>
-        <Checkbox
-          onChange={isDone => {
-            const newSubtask: SubTaskDTO = {
-              ...localSubtask,
-              isDone
-            }
-            onChange(newSubtask)
-            setLocalSubtask(newSubtask)
-          }}
-          checked={localSubtask.isDone}
-        />
-      </div>
-      <ToggleableInput
-        value={subtask.name}
-        className={tw('')}
-        onChange={name => setLocalSubtask({
-          ...subtask,
-          name
-        })}
-        onEditCompleted={name => {
-          const newSubtask: SubTaskDTO = {
+    <div className="row gap-x-2 p-1 items-center overflow-x-hidden w-full shrink-0">
+      <Checkbox
+        onChange={isDone => {
+          const newSubtask: SubtaskDTO = {
             ...localSubtask,
-            name
+            isDone
           }
           onChange(newSubtask)
           setLocalSubtask(newSubtask)
         }}
-        id={subtask.name}
-        minLength={minTaskNameLength}
-        maxLength={maxTaskNameLength}
+        checked={localSubtask.isDone}
+        className="min-w-6 min-h-6"
       />
-      <Button
-        className={tw('ml-4')}
-        onClick={onRemoveClick}
-        aria-label={translation.remove}
-        variant="textButton"
-        color="negative"
-      >
-        {translation.remove}
-      </Button>
+      <div className="row justify-between items-center w-full">
+        <ToggleableInput
+          value={localSubtask.name}
+          onChangeText={name => setLocalSubtask({
+            ...subtask,
+            name
+          })}
+          onEditCompleted={name => {
+            const newSubtask: SubtaskDTO = {
+              ...localSubtask,
+              name
+            }
+            onChange(newSubtask)
+            setLocalSubtask(newSubtask)
+          }}
+          id={subtask.name}
+          minLength={minTaskNameLength}
+          maxLength={maxTaskNameLength}
+        />
+        <TextButton
+          className="ml-4"
+          onClick={onRemoveClick}
+          aria-label={translation('remove')}
+          color="negative"
+          size="small"
+        >
+          {translation('remove')}
+        </TextButton>
+      </div>
     </div>
   )
 }

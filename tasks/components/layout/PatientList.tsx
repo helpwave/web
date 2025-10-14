@@ -1,30 +1,33 @@
 import { useContext, useEffect, useState } from 'react'
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
-import { Span } from '@helpwave/common/components/Span'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import { MultiSearchWithMapping, SimpleSearchWithMapping } from '@helpwave/common/util/simpleSearch'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { HideableContentSection } from '@helpwave/common/components/HideableContentSection'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import { Chip } from '@helpwave/common/components/ChipList'
+import clsx from 'clsx'
+import type { Translation } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
 import {
+  Chip,
+  ExpandableUncontrolled,
+  Input,
+  LoadingAndErrorComponent,
+  MultiSearchWithMapping,
+  type PropsForTranslation,
+  SimpleSearchWithMapping,
+  SolidButton,
+  TextButton,
+  useTranslation
+} from '@helpwave/hightide'
+import {
+  usePatientCreateMutation,
   usePatientDischargeMutation,
   usePatientListQuery,
-  useReadmitPatientMutation
+  usePatientReadmitMutation
 } from '@helpwave/api-services/mutations/tasks/patient_mutations'
-import type {
-  PatientDTO,
-  PatientMinimalDTO,
-  PatientWithBedAndRoomDTO
-} from '@helpwave/api-services/types/tasks/patient'
+import type { PatientDTO, PatientMinimalDTO, PatientWithBedAndRoomDTO } from '@helpwave/api-services/types/tasks/patient'
 import { useUpdates } from '@helpwave/api-services/util/useUpdates'
-import { Draggable, Droppable } from '../dnd-kit-instances/patients'
+import { WardOverviewDraggable, WardOverviewDroppable } from '../dnd-kit-instances/patients'
 import { WardOverviewContext } from '@/pages/ward/[wardId]'
 import { PatientDischargeModal } from '@/components/modals/PatientDischargeModal'
+import type { AddPatientModalValue } from '@/components/modals/AddPatientModal'
 import { AddPatientModal } from '@/components/modals/AddPatientModal'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type PatientListTranslation = {
   patients: string,
@@ -40,10 +43,10 @@ type PatientListTranslation = {
   addPatient: string,
   search: string,
   bed: string,
-  otherWard: string
+  otherWard: string,
 }
 
-const defaultPatientListTranslations: Record<Languages, PatientListTranslation> = {
+const defaultPatientListTranslations: Translation<PatientListTranslation> = {
   en: {
     patients: 'Patients',
     active: 'Assigned',
@@ -78,13 +81,20 @@ const defaultPatientListTranslations: Record<Languages, PatientListTranslation> 
   }
 }
 
-export type PatientListOpenedSectionsType = {
-  active: boolean,
-  unassigned: boolean,
-  discharged: boolean
+type AddModalState = {
+  value: AddPatientModalValue,
+  isOpen: boolean,
 }
 
-export const defaultPatientListOpenedSections: PatientListOpenedSectionsType = {
+type OpenedSectionsResolved = {
+  active: boolean,
+  unassigned: boolean,
+  discharged: boolean,
+}
+
+type OpenedSectionsOptions = Partial<OpenedSectionsResolved>
+
+export const defaultOpenedSectionsResolved: OpenedSectionsResolved = {
   active: true,
   unassigned: true,
   discharged: false
@@ -93,20 +103,22 @@ export const defaultPatientListOpenedSections: PatientListOpenedSectionsType = {
 export type PatientListProps = {
   onDischarge?: (patient: PatientDTO) => void,
   wardId: string,
-  initialOpenedSections?: PatientListOpenedSectionsType,
-  width?: number
+  initialOpenedSections?: OpenedSectionsOptions,
+  width?: number,
 }
 
 /**
  * The right side of the ward/[wardId].tsx page showing the detailed information about the patients in the ward
  */
 export const PatientList = ({
-  overwriteTranslation,
-  wardId,
-  initialOpenedSections = defaultPatientListOpenedSections
-}: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
-  const translation = useTranslation(defaultPatientListTranslations, overwriteTranslation)
+                              overwriteTranslation,
+                              wardId,
+                              initialOpenedSections = defaultOpenedSectionsResolved
+                            }: PropsForTranslation<PatientListTranslation, PatientListProps>) => {
+  const translation = useTranslation([defaultPatientListTranslations], overwriteTranslation)
   const [search, setSearch] = useState('')
+
+
   const {
     state: context,
     updateContext
@@ -116,10 +128,19 @@ export const PatientList = ({
     isLoading,
     isError,
     refetch: refetchPatientListQuery
-  } = usePatientListQuery(wardId) // TODO: is this the right organizationId?; related: https://github.com/helpwave/web/issues/793
-  const [isShowingAddPatientModal, setIsShowingAddPatientModal] = useState(0)
+  } = usePatientListQuery(wardId)
+
+  const [addPatientModalState, setAddPatientModalState] = useState<AddModalState>({
+    value: {
+      name: ''
+    },
+    isOpen: false
+  })
+
+  const createPatientMutation = usePatientCreateMutation()
+
   const dischargeMutation = usePatientDischargeMutation()
-  const readmitPatientMutation = useReadmitPatientMutation()
+  const readmitPatientMutation = usePatientReadmitMutation()
   const [dischargingPatient, setDischargingPatient] = useState<PatientMinimalDTO>()
   const [deletePatient, setDeletePatient] = useState<PatientMinimalDTO>()
 
@@ -133,19 +154,15 @@ export const PatientList = ({
 
   const activeLabelText = (patient: PatientWithBedAndRoomDTO) => patient.room.wardId === wardId
     ? `${patient.room.name} - ${patient.bed.name}`
-    : translation.otherWard
-
-  const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.name, activeLabelText(value)])
-  const filteredUnassigned = !data ? [] : SimpleSearchWithMapping(search, data.unassigned, value => value.name)
-  const filteredDischarged = !data ? [] : SimpleSearchWithMapping(search, data.discharged, value => value.name)
+    : translation('otherWard')
+  const filteredActive = !data ? [] : MultiSearchWithMapping(search, data.active, value => [value.humanReadableIdentifier, activeLabelText(value)])
+  const filteredUnassigned = !data ? [] : SimpleSearchWithMapping(search, data.unassigned, value => value.humanReadableIdentifier)
+  const filteredDischarged = !data ? [] : SimpleSearchWithMapping(search, data.discharged, value => value.humanReadableIdentifier)
 
   return (
-    <div className={tw('relative flex flex-col py-4 px-6')}>
+    <div className="relative col py-4 px-6">
       <ConfirmDialog
-        id="patientList-DeleteDialog"
         isOpen={!!deletePatient}
-        titleText={translation.deleteConfirmText}
-        descriptionText={translation.deleteDescriptionText}
         onConfirm={() => {
           if (deletePatient) {
             // deletePatientMutation.mutate(deletePatient.id)
@@ -153,16 +170,11 @@ export const PatientList = ({
           setDeletePatient(undefined)
         }}
         confirmType="negative"
-        onBackgroundClick={() => {
-          setDeletePatient(undefined)
-        }}
         onCancel={() => setDeletePatient(undefined)}
-        onCloseClick={() => setDeletePatient(undefined)}
-      >
-
-      </ConfirmDialog>
+        titleElement={ translation('deleteConfirmText')}
+        description={translation('deleteDescriptionText')}
+      />
       <PatientDischargeModal
-        id="patientList-DischargeDialog"
         isOpen={!!dischargingPatient}
         onConfirm={() => {
           if (dischargingPatient) {
@@ -170,185 +182,226 @@ export const PatientList = ({
           }
           setDischargingPatient(undefined)
         }}
-        onBackgroundClick={() => setDischargingPatient(undefined)}
         onCancel={() => setDischargingPatient(undefined)}
-        onCloseClick={() => setDischargingPatient(undefined)}
         patient={dischargingPatient}
       />
       <AddPatientModal
-        id="patientList-AddPatientModal"
-        key={isShowingAddPatientModal}
-        isOpen={isShowingAddPatientModal !== 0}
-        onConfirm={() => setIsShowingAddPatientModal(0)}
-        onCancel={() => setIsShowingAddPatientModal(0)}
-        onCloseClick={() => setIsShowingAddPatientModal(0)}
-        onBackgroundClick={() => setIsShowingAddPatientModal(0)}
+        isOpen={addPatientModalState.isOpen}
+        value={addPatientModalState.value}
+        onValueChange={value => setAddPatientModalState(prevState => ({ ...prevState, value: value }))}
+        onConfirm={() => {
+          createPatientMutation.mutate({
+            id: '', // TODO remove id from create Patient type
+            humanReadableIdentifier: addPatientModalState.value.name,
+            bedId: addPatientModalState.value.bedId,
+            notes: '',
+            tasks: []
+          })
+          setAddPatientModalState({ value: { name: '' }, isOpen: false })
+        }}
+        onCancel={() => setAddPatientModalState({ value: { name: '' }, isOpen: false })}
         wardId={context.wardId}
       />
-      <div className={tw('flex flex-row gap-x-2 items-center')}>
-        <Span type="subsectionTitle" className={tw('pr-4')}>{translation.patients}</Span>
-        <Input placeholder={translation.search} value={search} onChange={setSearch} className={tw('h-9')}/>
-        <Button
-          className={tw('whitespace-nowrap')}
-          color="positive"
-          onClick={() => {
-            setIsShowingAddPatientModal(Math.random() * 100000000 + 1)
-          }}
-        >
-          {translation.addPatient}
-        </Button>
-      </div>
+      <ColumnTitle
+        title={translation('patients')}
+        actions={(
+          <div className="row gap-x-2">
+            <Input placeholder={translation('search')} value={search} onChangeText={setSearch} className="h-10"/>
+            <SolidButton
+              className="whitespace-nowrap"
+              color="positive"
+              onClick={() => {
+                setAddPatientModalState(prevState => ({ ...prevState, isOpen: true }))
+              }}
+            >
+              {translation('addPatient')}
+            </SolidButton>
+          </div>
+        )}
+      />
       <LoadingAndErrorComponent
         hasError={isError || !data}
         isLoading={isLoading}
-        errorProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
-        loadingProps={{ classname: tw('min-h-[400px] border-2 border-gray-600 rounded-xl') }}
+        className="min-h-128"
       >
-        <div className={tw('flex flex-col gap-y-4 mb-8')}>
-          <div className={tx('p-2 border-2 border-transparent rounded-xl')}>
-            <HideableContentSection
-              initiallyOpen={initialOpenedSections?.active}
-              disabled={filteredActive.length <= 0}
-              header={<Span type="accent">{`${translation.active} (${filteredActive.length})`}</Span>}
-            >
-              {filteredActive.map(patient => (
-                <Draggable id={patient.id + 'patientList'} key={patient.id} data={{
-                  patient: {
-                    id: patient.id,
-                    name: patient.name
-                  },
-                  discharged: false
-                }}>
-                  {() => (
-                    <div
-                      className={tw('flex flex-row pt-2 border-b-2 justify-between items-center cursor-pointer')}
-                      onClick={() => updateContext({
-                        ...context,
-                        patientId: patient.id,
-                        roomId: patient.room.id,
-                        bedId: patient.bed.id
-                      })}
-                    >
-                      <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
-                      <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                        <Chip color="blue" variant="fullyRounded">
-                          {activeLabelText(patient)}
-                        </Chip>
-                        <Button color="negative" variant="textButton" onClick={event => {
-                          event.stopPropagation()
-                          setDischargingPatient(patient)
-                        }}>
-                          {translation.discharge}
-                        </Button>
-                      </div>
+        <div className="col gap-y-4 mb-8">
+          <ExpandableUncontrolled
+            isExpanded={initialOpenedSections?.active}
+            disabled={filteredActive.length <= 0}
+            label={<span className="typography-title-md text-description">{`${translation('active')} (${filteredActive.length})`}</span>}
+            className={clsx('border-2 border-transparent bg-transparent !shadow-none')}
+            headerClassName="bg-transparent"
+          >
+            {filteredActive.map(patient => (
+              <WardOverviewDraggable
+                id={patient.id + 'patientList'}
+                key={patient.id}
+                data={{
+                  type: 'patientListItem',
+                  patient,
+                  discharged: false,
+                  assigned: true,
+                }}
+                className="not-last:border-b-2 not-last:pb-2 border-b-divider"
+              >
+                {() => (
+                  <div
+                    className="row justify-between items-center cursor-pointer px-2 py-1 hover:bg-primary/20 rounded-lg"
+                    onClick={() => updateContext({
+                      ...context,
+                      patientId: patient.id,
+                      bedId: patient.bed.id
+                    })}
+                  >
+                    <span className="typography-title-md w-1/3 text-ellipsis">{patient.humanReadableIdentifier}</span>
+                    <div className="row flex-1 justify-between items-center">
+                      <Chip color="blue" variant="fullyRounded" className="min-w-40 justify-center">
+                        {activeLabelText(patient)}
+                      </Chip>
+                      <TextButton color="negative" onClick={event => {
+                        event.stopPropagation()
+                        setDischargingPatient(patient)
+                      }}>
+                        {translation('discharge')}
+                      </TextButton>
                     </div>
-                  )}
-                </Draggable>
-              ))}
-            </HideableContentSection>
-          </div>
-          <Droppable id="patientListUnassigned" data={{ patientListSection: 'unassigned' }}>
+                  </div>
+                )}
+              </WardOverviewDraggable>
+            ))}
+          </ExpandableUncontrolled>
+          <WardOverviewDroppable
+            id="patientListUnassigned"
+            data={{
+              type: 'section',
+              section: 'unassigned',
+            }}
+          >
             {({ isOver }) => (
-              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
-                'border-hw-primary-700': isOver,
-                'border-transparent': !isOver
-              })}>
-                <HideableContentSection
-                  initiallyOpen={initialOpenedSections?.unassigned}
-                  disabled={filteredUnassigned.length <= 0}
-                  header={(
-                    <Span type="accent" className={tw('text-hw-label-yellow-text')}>
-                      {`${translation.unassigned} (${filteredUnassigned.length})`}
-                    </Span>
-                  )}
-                >
-                  {filteredUnassigned.map((patient) => (
-                    <Draggable id={patient.id} key={patient.id} data={{
+              <ExpandableUncontrolled
+                isExpanded={initialOpenedSections?.unassigned}
+                disabled={filteredUnassigned.length <= 0}
+                label={(
+                  <span className="typography-title-md text-tag-yellow-text">
+                      {`${translation('unassigned')} (${filteredUnassigned.length})`}
+                  </span>
+                )}
+                className={clsx('border-2 border-dashed bg-transparent !shadow-none', {
+                  'border-primary': isOver,
+                  'border-transparent': !isOver
+                })}
+                headerClassName="bg-transparent"
+              >
+                {filteredUnassigned.map((patient) => (
+                  <WardOverviewDraggable
+                    id={patient.id}
+                    key={patient.id}
+                    data={{
+                      type: 'patientListItem',
                       patient,
-                      discharged: false
-                    }}>
-                      {() => (
-                        <div
-                          key={patient.id}
-                          className={tw('flex flex-row pt-2 border-b-2 items-center cursor-pointer')}
-                          onClick={() => updateContext({
-                            wardId: context.wardId,
-                            patientId: patient.id
-                          })}
-                        >
-                          <Span className={tw('font-space font-bold w-1/3 text-ellipsis')}>{patient.name}</Span>
-                          <div className={tw('flex flex-row flex-1 justify-between items-center')}>
-                            <Chip color="yellow" variant="fullyRounded">
-                              {`${translation.unassigned}`}
-                            </Chip>
-                            <Button color="negative" variant="textButton" onClick={event => {
-                              event.stopPropagation()
-                              setDischargingPatient(patient)
-                            }}>
-                              {translation.discharge}
-                            </Button>
-                          </div>
+                      discharged: false,
+                      assigned: false,
+                    }}
+                    className="not-last:border-b-2 not-last:pb-2 border-b-divider"
+                  >
+                    {() => (
+                      <div
+                        key={patient.id}
+                        className="row items-center cursor-pointer px-2 py-1 hover:bg-primary/20 rounded-lg"
+                        onClick={() => updateContext({
+                          wardId: context.wardId,
+                          patientId: patient.id
+                        })}
+                      >
+                        <span className="typography-title-md w-1/3 text-ellipsis">{patient.humanReadableIdentifier}</span>
+                        <div className="row flex-1 justify-between items-center">
+                          <Chip color="yellow" variant="fullyRounded" className="min-w-40 justify-center">
+                            {`${translation('unassigned')}`}
+                          </Chip>
+                          <TextButton color="negative" onClick={event => {
+                            event.stopPropagation()
+                            setDischargingPatient(patient)
+                          }}>
+                            {translation('discharge')}
+                          </TextButton>
                         </div>
-                      )}
-                    </Draggable>
-                  ))}
-                </HideableContentSection>
-              </div>
+                      </div>
+                    )}
+                  </WardOverviewDraggable>
+                ))}
+              </ExpandableUncontrolled>
             )}
-          </Droppable>
-          <Droppable id="patientListDischarged" data={{ patientListSection: 'discharged' }}>
+          </WardOverviewDroppable>
+          <WardOverviewDroppable
+            id="patientListDischarged"
+            data={{
+              type: 'section',
+              section: 'unassigned',
+            }}
+          >
             {({ isOver }) => (
-              <div className={tx('p-2 border-2 border-dashed rounded-xl', {
-                'border-hw-primary-700': isOver,
-                'border-transparent': !isOver
-              })}>
-                <HideableContentSection
-                  initiallyOpen={initialOpenedSections?.discharged}
-                  disabled={filteredDischarged.length <= 0}
-                  header={<Span type="accent">{`${translation.discharged} (${filteredDischarged.length})`}</Span>}
-                >
-                  {filteredDischarged.map(patient => (
-                    <Draggable id={patient.id} key={patient.id} data={{
+              <ExpandableUncontrolled
+                isExpanded={initialOpenedSections?.discharged}
+                disabled={filteredDischarged.length <= 0}
+                label={(
+                  <span className="typography-title-md text-description">
+                    {`${translation('discharged')} (${filteredDischarged.length})`}
+                  </span>
+                )}
+                className={clsx('border-2 border-dashed bg-transparent !shadow-none', {
+                  'border-primary': isOver,
+                  'border-transparent': !isOver
+                })}
+                headerClassName="bg-transparent"
+              >
+                {filteredDischarged.map(patient => (
+                  <WardOverviewDraggable
+                    id={patient.id}
+                    key={patient.id}
+                    data={{
+                      type: 'patientListItem',
                       patient,
-                      discharged: true
-                    }}>
-                      {() => (
-                        <div
-                          key={patient.id}
-                          className={tw('flex flex-row pt-2 border-b-2 justify-between items-center')}
-                          onClick={() => updateContext({
-                            wardId: context.wardId,
-                            patientId: patient.id
-                          })}
-                        >
-                          <Span className={tw('font-space font-bold')}>{patient.name}</Span>
-                          <div className={tw('flex flex-row gap-x-4')}>
-                            <Button color="accent" variant="textButton" onClick={event => {
+                      discharged: false,
+                      assigned: false,
+                    }}
+                    className="not-last:border-b-2 not-last:pb-2 border-b-divider"
+                  >
+                    {() => (
+                      <div
+                        key={patient.id}
+                        className="row justify-between items-center cursor-not-pointer px-2 py-1 hover:bg-primary/20 rounded-lg"
+                        onClick={() => updateContext({
+                          wardId: context.wardId,
+                          patientId: patient.id
+                        })}
+                      >
+                        <span className="typography-title-md">{patient.humanReadableIdentifier}</span>
+                        <div className="row gap-x-4">
+                          <TextButton onClick={event => {
+                            event.stopPropagation()
+                            readmitPatientMutation.mutate(patient.id)
+                          }}>
+                            {translation('readmit')}
+                          </TextButton>
+                          <TextButton
+                            color="negative"
+                            onClick={event => {
                               event.stopPropagation()
-                              readmitPatientMutation.mutate(patient.id)
-                            }}>
-                              {translation.readmit}
-                            </Button>
-                            <Button
-                              color="negative"
-                              variant="textButton" onClick={event => {
-                                event.stopPropagation()
-                                setDeletePatient(patient)
-                              }}
-                              // TODO enable when patient delete is possible again
-                              disabled={true}
-                            >
-                              {translation.delete}
-                            </Button>
-                          </div>
+                              setDeletePatient(patient)
+                            }}
+                            // TODO enable when patient delete is possible again
+                            disabled={true}
+                          >
+                            {translation('delete')}
+                          </TextButton>
                         </div>
-                      )}
-                    </Draggable>
-                  ))}
-                </HideableContentSection>
-              </div>
+                      </div>
+                    )}
+                  </WardOverviewDraggable>
+                ))}
+              </ExpandableUncontrolled>
             )}
-          </Droppable>
+          </WardOverviewDroppable>
         </div>
       </LoadingAndErrorComponent>
     </div>

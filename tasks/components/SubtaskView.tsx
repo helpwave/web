@@ -1,17 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
+import type { Scrollbars } from 'react-custom-scrollbars-2'
 import { Plus } from 'lucide-react'
-import { tw } from '@helpwave/common/twind'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Button } from '@helpwave/common/components/Button'
-import { Span } from '@helpwave/common/components/Span'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { SubTaskDTO } from '@helpwave/api-services/types/tasks/task'
-import {
-  useSubTaskAddMutation,
-  useSubTaskDeleteMutation,
-  useSubTaskUpdateMutation
-} from '@helpwave/api-services/mutations/tasks/task_mutations'
+import type { Translation } from '@helpwave/hightide'
+import { type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
+import type { SubtaskDTO } from '@helpwave/api-services/types/tasks/task'
 import { SubtaskTile } from './SubtaskTile'
 import { TaskTemplateContext } from '@/pages/templates'
 
@@ -19,10 +11,10 @@ type SubtaskViewTranslation = {
   subtasks: string,
   remove: string,
   addSubtask: string,
-  newSubtask: string
+  newSubtask: string,
 }
 
-const defaultSubtaskViewTranslation: Record<Languages, SubtaskViewTranslation> = {
+const defaultSubtaskViewTranslation: Translation<SubtaskViewTranslation> = {
   en: {
     subtasks: 'Subtasks',
     remove: 'Remove',
@@ -38,30 +30,45 @@ const defaultSubtaskViewTranslation: Record<Languages, SubtaskViewTranslation> =
 }
 
 type SubtaskViewProps = {
-  // TODO: This component should not decide between two mutate functions. Pass mutate function instead.
-  subtasks: SubTaskDTO[],
-  taskId?: string,
+  subtasks: SubtaskDTO[],
+  taskOrTemplateId?: string,
   createdBy?: string,
-  taskTemplateId?: string,
-  onChange: (subtasks: SubTaskDTO[]) => void
+  /**
+   * Gives the full list with updates
+   *
+   * New items are only created locally
+   */
+  onChange: (subtasks: SubtaskDTO[]) => void,
+  /**
+   * Callback when an item is added and not creating
+   */
+  onAdd: (subtask: SubtaskDTO) => void,
+  /**
+   * Callback when an item is updated and not creating
+   */
+  onUpdate: (subtask: SubtaskDTO) => void,
+  /**
+   * Callback when an item is removed and not creating
+   */
+  onRemove: (subtask: SubtaskDTO) => void,
 }
 
 /**
  * A view for editing and showing all subtasks of a task
  */
 export const SubtaskView = ({
-  overwriteTranslation,
-  subtasks,
-  taskId,
-  onChange,
-}: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
+                              overwriteTranslation,
+                              subtasks,
+                              taskOrTemplateId,
+                              onChange,
+                              onAdd,
+                              onUpdate,
+                              onRemove,
+                            }: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
 
-  const translation = useTranslation(defaultSubtaskViewTranslation, overwriteTranslation)
-  const isCreatingTask = taskId === ''
-  const addSubtaskMutation = useSubTaskAddMutation(taskId)
-  const deleteSubtaskMutation = useSubTaskDeleteMutation()
-  const updateSubtaskMutation = useSubTaskUpdateMutation(taskId)
+  const translation = useTranslation([defaultSubtaskViewTranslation], overwriteTranslation)
+  const isCreating = taskOrTemplateId === ''
 
   const scrollableRef = useRef<Scrollbars>(null)
   const [scrollToBottomFlag, setScrollToBottom] = useState(false)
@@ -74,10 +81,9 @@ export const SubtaskView = ({
     setScrollToBottom(false)
   }, [scrollToBottomFlag, subtasks])
 
-  const removeSubtask = (subtask: SubTaskDTO, index: number) => {
+  const removeSubtask = (subtask: SubtaskDTO, index: number) => {
     const filteredSubtasks = subtasks.filter((_, subtaskIndex) => subtaskIndex !== index)
-    // undefined because taskId === "" would mean task creation // TODO: this seems like a terrible way of differentiating things..
-    if (taskId === undefined) {
+    if (isCreating) {
       context.updateContext({
         ...context.state,
         template: { ...context.state.template, subtasks: filteredSubtasks },
@@ -86,50 +92,53 @@ export const SubtaskView = ({
       })
     } else {
       onChange(filteredSubtasks)
-      deleteSubtaskMutation.mutate(subtask.id)
+      onRemove(subtask)
     }
   }
 
   return (
-    <div className={tw('flex flex-col gap-y-2')}>
-      <div className={tw('flex flex-row items-center justify-between')}>
-        <Span type="subsectionTitle">{translation.subtasks}</Span>
-        <Button
+    <div className="flex-col-2">
+      <div className="flex-row-4 items-center justify-between">
+        <span className="typography-title-md">{translation('subtasks')}</span>
+        <SolidButton
           onClick={() => {
-            const newSubtask = { id: '', name: `${translation.newSubtask} ${subtasks.length + 1}`, isDone: false }
+            const newSubtask: SubtaskDTO = {
+              id: '',
+              name: `${translation('newSubtask')} ${subtasks.length + 1}`,
+              isDone: false,
+              taskId: taskOrTemplateId ?? ''
+            }
             onChange([...subtasks, newSubtask])
-            if (!isCreatingTask) {
-              addSubtaskMutation.mutate(newSubtask)
+            if (!isCreating) {
+              onAdd(newSubtask)
             }
             setScrollToBottom(true)
           }}
+          size="small"
         >
-          <div className={tw('flex flex-row items-center gap-x-2')}>
+          <div className="flex-row-2 items-center">
             <Plus size={18}/>
-            <Span>{translation.addSubtask}</Span>
+            <span>{translation('addSubtask')}</span>
           </div>
-        </Button>
+        </SolidButton>
       </div>
-      <div className={tw('max-h-[500px] overflow-hidden')}>
-        <Scrollbars autoHide={true} ref={scrollableRef} className={tw('h-screen')} style={{ minHeight: 250 }}>
-          <div className={tw('grid grid-cols-1 gap-y-2')}>
-            {subtasks.map((subtask, index) => (
-              <SubtaskTile
-                key={index}
-                subtask={subtask}
-                onChange={newSubtask => {
-                  const newSubtasks = [...subtasks]
-                  newSubtasks[index] = newSubtask
-                  if (subtask.id) {
-                    updateSubtaskMutation.mutate(newSubtask)
-                  }
-                  onChange(newSubtasks)
-                }}
-                onRemoveClick={() => removeSubtask(subtask, index)}
-              />
-            ))}
-          </div>
-        </Scrollbars>
+      <div className="flex-col-2 overflow-y-auto min-h-96 max-h-96">
+        {/* TODO add subtask tile if empty */}
+        {subtasks.toSorted((a, b) => a.id.localeCompare(b.id)).map((subtask, index) => (
+          <SubtaskTile
+            key={index}
+            subtask={subtask}
+            onChange={newSubtask => {
+              const newSubtasks = [...subtasks]
+              newSubtasks[index] = newSubtask
+              if (subtask.id) {
+                onUpdate(newSubtask)
+              }
+              onChange(newSubtasks)
+            }}
+            onRemoveClick={() => removeSubtask(subtask, index)}
+          />
+        ))}
       </div>
     </div>
   )

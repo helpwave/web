@@ -1,42 +1,51 @@
 import { type PropsWithChildren } from 'react'
-import type { ConfirmDialogProps } from '@helpwave/common/components/modals/ConfirmDialog'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { MarkdownInterpreter } from '@helpwave/common/components/MarkdownInterpreter'
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
+import type {
+  DialogProps,
+  PropsForTranslation,
+  Translation } from '@helpwave/hightide'
+import {
+  Dialog,
+  MarkdownInterpreter,
+  SolidButton,
+  useTranslation
+} from '@helpwave/hightide'
 import Link from 'next/link'
 import { getConfig } from '@/utils/config'
+import clsx from 'clsx'
 
 const config = getConfig()
 
-type StagingDisclaimerModalTranslation = {
+type StagingDisclaimerDialogTranslation = {
   title: string,
   message: string,
   dismiss: string,
   imprint: string,
-  privacy: string
+  privacy: string,
+  confirm: string,
 }
 
-const defaultStagingDisclaimerTranslation: Record<Languages, StagingDisclaimerModalTranslation> = {
+const defaultStagingDisclaimerTranslation: Translation<StagingDisclaimerDialogTranslation> = {
   en: {
     title: 'Development and preview instance',
     message: 'This public instance of helpwave tasks is for \\b{development and preview purposes}. Please make sure to \\b{only} enter \\b{non-confidential testing data}. This instance can be \\negative{\\b{deleted at any time}}.',
     dismiss: 'Dismiss',
     imprint: 'Imprint',
-    privacy: 'Privacy'
+    privacy: 'Privacy',
+    confirm: 'Confirm',
   },
   de: {
     title: 'Entwicklungs- und Vorschauinstanz',
     message: 'Diese öffentliche Instanz von helpwave tasks ist für \\b{Entwicklungs- und Vorschauzwecke} gedacht. Bitte stellen Sie sicher, dass Sie \\b{ausschließlich nicht-vertrauliche Testdaten} eingeben. Diese Instanz kann \\negative{\\b{jederzeit gelöscht}} werden.',
     dismiss: 'Schließen',
     imprint: 'Impressum',
-    privacy: 'Datenschutz'
+    privacy: 'Datenschutz',
+    confirm: 'Bestätigen',
   }
 }
 
-type StagingDisclaimerModalProps = Pick<ConfirmDialogProps, 'id' | 'isOpen' | 'onConfirm' | 'onBackgroundClick' | 'onCloseClick' | 'onCancel'>
+type StagingDisclaimerModalProps = Omit<DialogProps, 'titleElement' | 'description'> & {
+  onConfirm?: () => void,
+}
 
 /**
  * A Modal for selecting the Language
@@ -44,28 +53,33 @@ type StagingDisclaimerModalProps = Pick<ConfirmDialogProps, 'id' | 'isOpen' | 'o
  * The State of open needs to be managed by the parent
  */
 export const StagingDisclaimerModal = ({
-  overwriteTranslation,
-  ...modalProps
-}: PropsForTranslation<StagingDisclaimerModalTranslation, PropsWithChildren<StagingDisclaimerModalProps>>) => {
-  const translation = useTranslation(defaultStagingDisclaimerTranslation, overwriteTranslation)
+                                         overwriteTranslation,
+                                         onConfirm,
+                                         ...modalProps
+                                       }: PropsForTranslation<StagingDisclaimerDialogTranslation, PropsWithChildren<StagingDisclaimerModalProps>>) => {
+  const translation = useTranslation([defaultStagingDisclaimerTranslation], overwriteTranslation)
 
   return (
-    <ConfirmDialog
+    <Dialog
       {...modalProps}
-      titleText={translation.title}
-      description={(
-        <>
-          <p><MarkdownInterpreter text={translation.message}/></p>
-          <div className={tw('flex flex-row gap-x-8 mt-2')}>
-            <Link className={tw('text-hw-primary-600 hover:text-hw-primary-800 font-bold')} href={config.imprintUrl}>
-              {translation.imprint}
-            </Link>
-            <Link className={tw('text-hw-primary-600 hover:text-hw-primary-800 font-bold')} href={config.privacyUrl}>
-              {translation.privacy}
-            </Link>
-          </div>
-        </>
-      )}
-    />
+      titleElement={translation('title')}
+      description={(<MarkdownInterpreter text={translation('message')}/>)}
+      className={clsx('z-20', modalProps.className)}
+      backgroundClassName="z-10"
+    >
+      <div className="flex-row-8">
+        <Link className="text-primary hover:brightness-75 font-bold" href={config.imprintUrl}>
+          {translation('imprint')}
+        </Link>
+        <Link className="text-primary hover:brightness-75 font-bold" href={config.privacyUrl}>
+          {translation('privacy')}
+        </Link>
+      </div>
+      <div className="flex-row-0 justify-end">
+        <SolidButton color="positive" onClick={onConfirm}>
+          {translation('confirm')}
+        </SolidButton>
+      </div>
+    </Dialog>
   )
 }

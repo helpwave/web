@@ -1,18 +1,16 @@
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import { Span } from '@helpwave/common/components/Span'
-import { ChevronDown } from 'lucide-react'
+import type { Translation } from '@helpwave/hightide'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
+import { Input } from '@helpwave/hightide'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type KanbanHeaderTranslation = {
   tasks: string,
   status: string,
   label: string,
-  search: string
+  search: string,
 }
 
-const defaultKanbanHeaderTranslations: Record<Languages, KanbanHeaderTranslation> = {
+const defaultKanbanHeaderTranslations: Translation<KanbanHeaderTranslation> = {
   en: {
     tasks: 'Tasks',
     status: 'Status',
@@ -31,7 +29,7 @@ type KanbanHeaderProps = {
   sortingStatus?: string,
   sortingLabel?: string,
   searchValue: string,
-  onSearchChange: (search: string) => void
+  onSearchChange: (search: string) => void,
 }
 
 /**
@@ -42,21 +40,19 @@ export const KanbanHeader = ({
   searchValue = '',
   onSearchChange
 }: PropsForTranslation<KanbanHeaderTranslation, KanbanHeaderProps>) => {
-  const translation = useTranslation(defaultKanbanHeaderTranslations, overwriteTranslation)
+  const translation = useTranslation([defaultKanbanHeaderTranslations], overwriteTranslation)
   return (
-    <div className={tw('flex flex-row justify-between items-center')}>
-      <Span type="tableName">{translation.tasks}</Span>
-      <div className={tw('flex flex-row gap-x-6')}>
-        <div className={tw('flex flex-row gap-x-2 items-center hidden')}>
-          {translation.status}
-          <ChevronDown className={tw('stroke-black')}/>
-        </div>
-        <div className={tw('flex flex-row gap-x-2 items-center hidden')}>
-          {translation.label}
-          <ChevronDown className={tw('stroke-black')}/>
-        </div>
-        <Input id="search" value={searchValue} placeholder={translation.search} onChange={onSearchChange}/>
-      </div>
-    </div>
+    <ColumnTitle
+      type="subtitle"
+      title={translation('tasks')}
+      titleRowClassName="min-h-10"
+      actions={(
+        <Input
+          value={searchValue}
+          placeholder={translation('search')}
+          onChangeText={onSearchChange}
+        />
+      )}
+    />
   )
 }

@@ -1,4 +1,4 @@
-import type { PatientMinimalDTO } from '@helpwave/api-services/types/tasks/patient'
+import type { PatientMinimalDTO, PatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/patient'
 import type { BedWithPatientWithTasksNumberDTO } from '@helpwave/api-services/types/tasks/bed'
 import type { RoomOverviewDTO } from '@helpwave/api-services/types/tasks/room'
 import type {
@@ -12,30 +12,33 @@ import { DndContext as DndContextFree } from '@/components/dnd-kit/typesafety'
 import { Droppable as DroppableFree } from '@/components/dnd-kit/Droppable'
 import { Draggable as DraggableFree } from '@/components/dnd-kit/Draggable'
 
-type DraggableData = {
-  // patient from 'patient list'
+export type WardOverviewDraggableData = {
+  type: 'patientListItem',
   patient: PatientMinimalDTO,
-  discharged: boolean
+  discharged: boolean,
+  assigned: boolean,
 } | {
-  // patient from 'room overview'
+  type: 'assignedPatient',
   bed: BedWithPatientWithTasksNumberDTO,
   room: RoomOverviewDTO,
-  patient: PatientMinimalDTO
+  patient: PatientWithTasksNumberDTO,
 }
-type DroppableData = {
+export type WardOverViewDroppableData = {
+  type: 'bed',
   bed: BedWithPatientWithTasksNumberDTO,
   room: RoomOverviewDTO,
-  patient: PatientMinimalDTO | undefined
+  patient?: PatientMinimalDTO,
 } | {
-  patientListSection: 'unassigned' | 'discharged'
+  type: 'section',
+  section: 'unassigned' | 'discharged',
 }
 
-export const Droppable = DroppableFree<DraggableData, DroppableData>
-export const Draggable = DraggableFree<DraggableData, DroppableData>
-export const DndContext = DndContextFree<DraggableData, DroppableData>
+export const WardOverviewDroppable = DroppableFree<WardOverviewDraggableData, WardOverViewDroppableData>
+export const WardOverviewDraggable = DraggableFree<WardOverviewDraggableData, WardOverViewDroppableData>
+export const WardOverviewDndContext = DndContextFree<WardOverviewDraggableData, WardOverViewDroppableData>
 
-export type DragStartEvent = DragStartEventFree<DraggableData, DroppableData>
-export type DragMoveEvent = DragMoveEventFree<DraggableData, DroppableData>
-export type DragOverEvent = DragOverEventFree<DraggableData, DroppableData>
-export type DragEndEvent = DragEndEventFree<DraggableData, DroppableData>
-export type DragCancelEvent = DragCancelEventFree<DraggableData, DroppableData>
+export type WardOverviewDragStartEvent = DragStartEventFree<WardOverviewDraggableData, WardOverViewDroppableData>
+export type WardOverviewDragMoveEvent = DragMoveEventFree<WardOverviewDraggableData, WardOverViewDroppableData>
+export type WardOverviewDragOverEvent = DragOverEventFree<WardOverviewDraggableData, WardOverViewDroppableData>
+export type WardOverviewDragEndEvent = DragEndEventFree<WardOverviewDraggableData, WardOverViewDroppableData>
+export type WardOverviewDragCancelEvent = DragCancelEventFree<WardOverviewDraggableData, WardOverViewDroppableData>

@@ -2,6 +2,9 @@
   "name": "web-monorepo",
   "version": "1.0.0",
   "description": "monorepo for web-related projects",
+  "scripts": {
+    "lint": "pnpm run --filter \"@helpwave/*\" lint"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/helpwave/web.git"

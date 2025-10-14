@@ -1,30 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import useLocalStorage from '@helpwave/common/hooks/useLocalStorage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import { localizedNewsSchema, type LocalizedNews } from '@helpwave/common/util/news'
+
+import type { PropsForTranslation, Translation } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  LoadingAnimation,
+  useLocalStorage,
+  useResizeCallbackWrapper,
+  useTranslation
+} from '@helpwave/hightide'
 import { useOrganizationsForUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
-import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
-import { TwoColumn } from '@/components/layout/TwoColumn'
-import { NewsFeed } from '@/components/layout/NewsFeed'
 import { DashboardDisplay } from '@/components/layout/DashboardDisplay'
 import titleWrapper from '@/utils/titleWrapper'
 import { fetchLocalizedNews } from '@/utils/news'
 import { getConfig } from '@/utils/config'
 import { StagingDisclaimerModal } from '@/components/modals/StagingDisclaimerModal'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 
 const config = getConfig()
 
 type DashboardTranslation = {
-  dashboard: string
+  dashboard: string,
 }
 
-const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
+const defaultDashboardTranslations: Translation<DashboardTranslation> = {
   en: {
     dashboard: 'Dashboard'
   },
@@ -34,7 +35,7 @@ const defaultDashboardTranslations: Record<Languages, DashboardTranslation> = {
 }
 
 type DashboardServerSideProps = {
-  jsonFeed: unknown
+  jsonFeed: unknown,
 }
 
 export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = async () => {
@@ -42,63 +43,81 @@ export const getServerSideProps: GetServerSideProps<DashboardServerSideProps> = 
   return { props: { jsonFeed: json } }
 }
 
-const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({ jsonFeed, overwriteTranslation }) => {
-  const translation = useTranslation(defaultDashboardTranslations, overwriteTranslation)
-  const { user } = useAuth()
-  const { data: organizations, isLoading } = useOrganizationsForUserQuery()
+const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardServerSideProps>> = ({
+                                                                                                    // jsonFeed,
+                                                                                                    overwriteTranslation
+                                                                                                  }) => {
+  const translation = useTranslation([defaultDashboardTranslations], overwriteTranslation)
+  const { isLoading, isError } = useOrganizationsForUserQuery()
 
-  const [isStagingDiclaimerOpen, setStagingDiclaimerOpen] = useState(false)
-  const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
+  const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
+  const { value: lastTimeStagingDisclaimerDismissed, setValue: setLastTimeStagingDisclaimerDismissed } = useLocalStorage('staging-disclaimer-dismissed-time', 0)
 
   const dismissStagingDisclaimer = () => {
     setLastTimeStagingDisclaimerDismissed(new Date().getTime())
-    setStagingDiclaimerOpen(false)
+    setStagingDisclaimerOpen(false)
   }
 
   useEffect(() => {
     const ONE_DAY = 1000 * 60 * 60 * 24
     if (config.showStagingDisclaimerModal && new Date().getTime() - lastTimeStagingDisclaimerDismissed > ONE_DAY) {
-      setStagingDiclaimerOpen(true)
+      setStagingDisclaimerOpen(true)
     }
   }, [lastTimeStagingDisclaimerDismissed])
 
+  const ref = useRef<HTMLDivElement>(null)
+  const [height, setHeight] = useState<number>()
+
+  useResizeCallbackWrapper(useCallback(() => {
+    setHeight(ref.current?.offsetHeight)
+  }, []))
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      setHeight(ref.current?.offsetHeight)
+    }
+  }, [isLoading, isError]) // Bound to loading state, because ref is not set before
+
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.dashboard, link: '/' }]}
+      crumbs={[{ display: translation('dashboard'), link: '/' }]}
     >
       <Head>
         <title>{titleWrapper()}</title>
       </Head>
 
       <StagingDisclaimerModal
-        id="main-staging-disclaimer-modal"
+        isModal={false}
         onConfirm={dismissStagingDisclaimer}
-        isOpen={isStagingDiclaimerOpen}
+        isOpen={isStagingDisclaimerOpen}
+        className="w-200"
       />
-
-      <LoadingAndErrorComponent
-        isLoading={isLoading || !user || !organizations}
-        loadingProps={{ classname: tw('!h-full') }}
-      >
-        {organizations && (
+      <div ref={ref} className="w-full h-full">
+        <LoadingAndErrorComponent
+          isLoading={isLoading}
+          hasError={isError}
+          loadingComponent={(<LoadingAnimation classname="h-full"/>)}
+        >
+          {/* TODO reenable once newsfeed is active again
           <TwoColumn
             disableResize={false}
-            left={width => ((
-                <DashboardDisplay
-                  width={width}
-                />
-            )
+            left={() => ((
+                <DashboardDisplay/>
+              )
             )}
             right={width => (
               <NewsFeed
                 width={width}
-                // TODO fix typing
                 localizedNews={localizedNewsSchema.parse(jsonFeed) as LocalizedNews}
               />
             )}
           />
-        )}
-      </LoadingAndErrorComponent>
+        */}
+          <Scrollbars autoHeight={true} autoHeightMax={height}>
+            <DashboardDisplay/>
+          </Scrollbars>
+        </LoadingAndErrorComponent>
+      </div>
     </PageWithHeader>
   )
 }

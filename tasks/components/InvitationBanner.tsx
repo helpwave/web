@@ -1,16 +1,15 @@
 import { Mail } from 'lucide-react'
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { type PropsForTranslation, useTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Translation } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import Link from 'next/link'
 import { useInvitationsByUserQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { InvitationState } from '@helpwave/api-services/types/users/invitations'
 
 type InvitationBannerTranslation = {
-  openInvites: string
+  openInvites: string,
 }
 
-const defaultInvitationBannerTranslation: Record<Languages, InvitationBannerTranslation> = {
+const defaultInvitationBannerTranslation: Translation<InvitationBannerTranslation> = {
   en: {
     openInvites: 'Open invites'
   },
@@ -20,7 +19,7 @@ const defaultInvitationBannerTranslation: Record<Languages, InvitationBannerTran
 }
 
 export type InvitationBannerProps = {
-  invitationCount?: number
+  invitationCount?: number,
 }
 
 /**
@@ -30,7 +29,7 @@ export const InvitationBanner = ({
   overwriteTranslation,
   invitationCount
 }: PropsForTranslation<InvitationBannerTranslation, InvitationBannerProps>) => {
-  const translation = useTranslation(defaultInvitationBannerTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultInvitationBannerTranslation], overwriteTranslation)
   const { data, isError, isLoading } = useInvitationsByUserQuery(InvitationState.INVITATION_STATE_PENDING)
   let openInvites = invitationCount
 
@@ -49,10 +48,10 @@ export const InvitationBanner = ({
 
   return (
   <Link
-    className={tw('w-full bg-hw-primary-400 text-white py-2 px-4 rounded-xl cursor-pointer select-none flex flex-row gap-x-2 items-center')}
+    className="w-full bg-primary text-white py-2 px-4 rounded-xl cursor-pointer select-none row gap-x-2 items-center"
     href="/invitations"
   >
-    <Mail />{`${translation.openInvites}: ${openInvites}`}
+    <Mail />{`${translation('openInvites')}: ${openInvites}`}
   </Link>
   )
 }

@@ -1,9 +1,8 @@
-import { tw } from '@helpwave/common/twind'
-import { Avatar } from '@helpwave/common/components/Avatar'
+import { Avatar } from '@helpwave/hightide'
 import type { User } from '@helpwave/api-services/authentication/useAuth'
 
 export type UserCardProps = {
-  user: User
+  user: User,
 }
 
 /**
@@ -11,14 +10,14 @@ export type UserCardProps = {
  */
 const UserCard = ({ user }: UserCardProps) => {
   return (
-    <div className={tw('flex flex-row w-80 h-22 rounded-lg border-2')}>
-      <div className={tw('p-2')}>
-        <Avatar avatarUrl={user.avatarUrl} alt="profile picture" size="large" />
+    <div className="row w-80 h-22 rounded-lg border-2">
+      <div className="p-2">
+        <Avatar image={{ avatarUrl: user.avatarUrl, alt: '' }} name={user.name} size="md" fullyRounded={true}/>
       </div>
-      <div className={tw('p-2 w-56 h-20')}>
-        <div className={tw('text-lg font-semibold leading-normal text-slate-600 truncate')}>{user.nickname}</div>
-        <div className={tw('text-sm text-slate-500 truncate')}>{user.name}</div>
-        <div className={tw('text-sm text-slate-500 truncate')}>{user.email}</div>
+      <div className="p-2 w-56 h-20">
+        <div className="text-lg font-semibold leading-normal text-slate-600 truncate">{user.nickname}</div>
+        <div className="text-sm text-slate-500 truncate">{user.name}</div>
+        <div className="text-sm text-slate-500 truncate">{user.email}</div>
       </div>
     </div>
   )

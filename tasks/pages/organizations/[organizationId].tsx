@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { useOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_mutations'
 import { TwoColumn } from '@/components/layout/TwoColumn'
 import { WardDisplay } from '@/components/layout/WardDisplay'
@@ -12,7 +12,7 @@ import { useRouteParameters } from '@/hooks/useRouteParameters'
 
 type WardsPageTranslation = {
   wards: string,
-  organizations: string
+  organizations: string,
 }
 
 const defaultWardsPageTranslation = {
@@ -31,7 +31,7 @@ export type OrganizationOverviewContextState = {
    wardId === "" means creating a new ward
    */
   wardId: string,
-  organizationId: string
+  organizationId: string,
 }
 
 const emptyOrganizationOverviewContextState = {
@@ -41,7 +41,7 @@ const emptyOrganizationOverviewContextState = {
 
 export type OrganizationOverviewContextType = {
   state: OrganizationOverviewContextState,
-  updateContext: (context: OrganizationOverviewContextState) => void
+  updateContext: (context: OrganizationOverviewContextState) => void,
 }
 
 export const OrganizationOverviewContext = createContext<OrganizationOverviewContextType>({
@@ -53,21 +53,21 @@ export const OrganizationOverviewContext = createContext<OrganizationOverviewCon
  * The page for displaying and editing the wards within an organization
  */
 const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<WardsPageTranslation>) => {
-  const translation = useTranslation(defaultWardsPageTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultWardsPageTranslation], overwriteTranslation)
   const [contextState, setContextState] = useState<OrganizationOverviewContextState>(emptyOrganizationOverviewContextState)
-  const [usedQueryParam, setUsedQueryParam] = useState(false)
 
   const { organizationId, wardId } = useRouteParameters<'organizationId', 'wardId'>()
   const { data: organization } = useOrganizationQuery(organizationId)
 
-  if (wardId && !usedQueryParam) {
-    setContextState({
-      ...emptyOrganizationOverviewContextState,
-      wardId,
-      organizationId
-    })
-    setUsedQueryParam(true)
-  }
+  useEffect(() => {
+    if(wardId && organizationId) {
+      setContextState({
+        ...emptyOrganizationOverviewContextState,
+        wardId,
+        organizationId
+      })
+    }
+  }, [wardId, organizationId])
 
   useEffect(() => {
     setContextState(contextState => ({ ...contextState, organizationId }))
@@ -76,24 +76,21 @@ const WardsPage: NextPage = ({ overwriteTranslation }: PropsForTranslation<Wards
   return (
     <PageWithHeader
       crumbs={[
-        { display: organization?.shortName ?? translation.organizations, link: `/organizations?organizationId=${organizationId}` },
-        { display: translation.wards, link: `/organizations/${organizationId}` }
+        {
+          display: organization?.longName ?? translation('organizations'),
+          link: `/organizations?organizationId=${organizationId}`
+        },
+        { display: translation('wards'), link: `/organizations/${organizationId}` }
       ]}
     >
       <Head>
-        <title>{titleWrapper(translation.wards)}</title>
+        <title>{titleWrapper(translation('wards'))}</title>
       </Head>
       <OrganizationOverviewContext.Provider value={{ state: contextState, updateContext: setContextState }}>
         <TwoColumn
           disableResize={false}
-          left={width => (<WardDisplay organizationId={organizationId} width={width} />)}
-          right={width => (
-            <WardDetail
-              key={contextState.wardId}
-              organizationId={organizationId}
-              width={width}
-            />
-          )}
+          left={() => (<WardDisplay/>)}
+          right={() => (<WardDetail key={contextState.wardId}/>)}
         />
       </OrganizationOverviewContext.Provider>
     </PageWithHeader>

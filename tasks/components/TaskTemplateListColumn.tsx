@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { tw, tx } from '@helpwave/common/twind'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
+import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import { Edit } from 'lucide-react'
 import type { TaskTemplateDTO } from '@helpwave/api-services/types/tasks/tasks_templates'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 
 export type TaskTemplateListColumnTranslation = {
   addNewTaskTemplate: string,
-  template: string
+  template: string,
 }
 
 const defaultTaskTemplateListColumnTranslation = {
@@ -23,26 +21,26 @@ const defaultTaskTemplateListColumnTranslation = {
   }
 }
 
-export type TaskTemplateDTOExtension = {taskTemplate: TaskTemplateDTO, type: 'personal' | 'ward'}
+export type TaskTemplateDTOExtension = { taskTemplate: TaskTemplateDTO, type: 'personal' | 'ward' }
 
 export type TaskTemplateListColumnProps = {
   templates: TaskTemplateDTOExtension[],
-  activeId: string | undefined,
+  activeId?: string,
   onTileClick: (taskTemplate: TaskTemplateDTO) => void,
-  onColumnEditClick?: () => void
+  onColumnEditClick?: () => void,
 }
 
 /**
  * A column for showing TaskTemplates either for Ward or Private templates
  */
 export const TaskTemplateListColumn = ({
-  templates,
-  activeId,
-  onTileClick,
-  onColumnEditClick,
-  overwriteTranslation: maybeLanguage
-}: PropsForTranslation<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
-  const translation = useTranslation(defaultTaskTemplateListColumnTranslation, maybeLanguage)
+                                         templates,
+                                         activeId,
+                                         onTileClick,
+                                         onColumnEditClick,
+                                         overwriteTranslation: maybeLanguage
+                                       }: PropsForTranslation<TaskTemplateListColumnTranslation, TaskTemplateListColumnProps>) => {
+  const translation = useTranslation([defaultTaskTemplateListColumnTranslation], maybeLanguage)
   const [height, setHeight] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -51,25 +49,25 @@ export const TaskTemplateListColumn = ({
   }, [ref.current?.clientHeight])
 
   return (
-    <div className={tw('flex flex-col overflow-hidden h-full')}>
-      <div className={tw('flex flex-row overflow-hidden')}>
-        <Span className={tw('text-2xl font-space font-bold mb-4 flex-1')}>
-          {translation.template}
-        </Span>
-        {onColumnEditClick && <Edit onClick={onColumnEditClick} />}
+    <div className="flex-col-2 overflow-hidden h-full">
+      <div className="row overflow-hidden min-h-8">
+        <span className="typography-title-md flex-1">
+          {translation('template')}
+        </span>
+        {onColumnEditClick && <Edit onClick={onColumnEditClick}/>}
       </div>
-      <div className={tw('overflow-hidden h-full')} ref={ref}>
+      <div className="overflow-hidden h-full" ref={ref}>
         <div>
-          <Scrollbars autoHeight autoHeightMin={height} autoHide >
-            <div className={tw('flex flex-col gap-y-2 pr-3')}>
-              {templates.map((taskTemplateExtension, index) => (
+          <Scrollbars autoHeight autoHeightMin={height} autoHide>
+            <div className="col gap-y-2 pb-4">
+              {templates.map((taskTemplateExtension) => (
                 <TaskTemplateCard
                   key={taskTemplateExtension.taskTemplate.id}
                   name={taskTemplateExtension.taskTemplate.name}
                   subtaskCount={taskTemplateExtension.taskTemplate.subtasks.length}
+                  onClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
+                  className="min-h-auto px-2 py-1"
                   isSelected={activeId === taskTemplateExtension.taskTemplate.id}
-                  onTileClick={() => onTileClick(taskTemplateExtension.taskTemplate)}
-                  className={tx('border-2 border-gray-300 !pr-2', { 'mb-2': index === templates.length - 1 })}
                   typeForLabel={taskTemplateExtension.type}
                 />
               ))}

@@ -1,25 +1,27 @@
-import { tw, tx } from '@helpwave/common/twind'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import clsx from 'clsx'
+import type { Translation } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { Plus } from 'lucide-react'
-import { Span } from '@helpwave/common/components/Span'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
 import { DragCard, type DragCardProps } from './DragCard'
 
 type BedCardTranslation = {
-  nobody: string
+  nobody: string,
+  addPatient: string,
 }
 
-const defaultBedCardTranslation: Record<Languages, BedCardTranslation> = {
+const defaultBedCardTranslation: Translation<BedCardTranslation> = {
   en: {
     nobody: 'nobody',
+    addPatient: 'Add Patient'
   },
   de: {
     nobody: 'frei',
+    addPatient: 'Patient hinzufügen',
   }
 }
 
 export type BedCardProps = DragCardProps & {
-  bedName: string
+  bedName: string,
 }
 
 /**
@@ -28,23 +30,31 @@ export type BedCardProps = DragCardProps & {
  * Shown instead of a PatientCard, if there is no patient assigned to the bed
  */
 export const BedCard = ({
-  overwriteTranslation,
-  bedName,
-  onTileClick,
-  isSelected,
-  className,
-  ...restCardProps
-}: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
-  const translation = useTranslation(defaultBedCardTranslation, overwriteTranslation)
+                          overwriteTranslation,
+                          bedName,
+                          onClick,
+                          isSelected,
+                          className,
+                          ...restCardProps
+                        }: PropsForTranslation<BedCardTranslation, BedCardProps>) => {
+  const translation = useTranslation([defaultBedCardTranslation], overwriteTranslation)
   return (
     (
-      <DragCard onTileClick={onTileClick} isSelected={isSelected} className={tx('min-h-[148px] flex flex-col', className)} {...restCardProps}>
-        <div className={tw('flex flex-row justify-between')}>
-          <Span type="subsubsectionTitle">{bedName}</Span>
-          <Span>{translation.nobody}</Span>
+      <DragCard
+        onClick={onClick}
+        isSelected={isSelected}
+        className={clsx('min-h-40 col', className)}
+        {...restCardProps}
+      >
+        <div className="row justify-between">
+          <span className="typography-title-md">{bedName}</span>
+          <span>{translation('nobody')}</span>
         </div>
-        <div className={tw('flex flex-1 justify-center items-center')}>
-          <Plus/>
+        <div className="col grow justify-center items-center">
+          <div className="row text-description">
+            <Plus/>
+            {translation('addPatient')}
+          </div>
         </div>
       </DragCard>
     )

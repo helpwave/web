@@ -1,12 +1,16 @@
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import { Span } from '@helpwave/common/components/Span'
-import { validateEmail } from '@helpwave/common/util/emailValidation'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import clsx from 'clsx'
+import type { Translation } from '@helpwave/hightide'
+import {
+  FormElementWrapper,
+  Input,
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  useTranslatedValidators,
+  useTranslation
+} from '@helpwave/hightide'
 import type { OrganizationMinimalDTO } from '@helpwave/api-services/types/users/organizations'
 import { emptyOrganization } from '@helpwave/api-services/types/users/organizations'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type OrganizationFormTranslation = {
   general: string,
@@ -19,12 +23,12 @@ type OrganizationFormTranslation = {
   contactEmailDescription: string,
   notVerified: string,
   required: string,
-  tooLong: (maxCharacters: number) => string,
-  tooShort: (minCharacters: number) => string,
-  invalidEmail: string
+  tooLong: string,
+  tooShort: string,
+  invalidEmail: string,
 }
 
-const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTranslation> = {
+const defaultOrganizationFormTranslations: Translation<OrganizationFormTranslation> = {
   en: {
     general: 'General',
     saveChanges: 'Save changes',
@@ -36,8 +40,8 @@ const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTra
     contactEmailDescription: 'Is visible to outside members.',
     notVerified: 'Not verified yet!',
     required: 'Required Field, cannot be empty',
-    tooLong: (maxCharacters) => `Too long, at most ${maxCharacters} characters`,
-    tooShort: (minCharacters) => `Too short, at least ${minCharacters} characters`,
+    tooLong: `Too long, at most {{characters}} characters`,
+    tooShort: `Too short, at least {{characters}} characters`,
     invalidEmail: 'Invalid email address'
   },
   de: {
@@ -51,22 +55,22 @@ const defaultOrganizationFormTranslations: Record<Languages, OrganizationFormTra
     contactEmailDescription: 'Sichtbar für Nicht-Mitglieder.',
     notVerified: 'Noch nicht bestätigt!',
     required: 'Benötigter Wert, darf nicht leer sein',
-    tooLong: (maxCharacters) => `Zu lang, maximal ${maxCharacters} Zeichen`,
-    tooShort: (minCharacters) => `Zu kurz, mindestens ${minCharacters} Zeichen`,
+    tooLong: `Zu lang, maximal {{characters}} Zeichen`,
+    tooShort: `Zu kurz, mindestens {{characters}} Zeichen`,
     invalidEmail: 'Ungültige Email Adresse'
   }
 }
 export type OrganizationFormTouchedType = {
   shortName: boolean,
   longName: boolean,
-  email: boolean
+  email: boolean,
 }
 
 export type OrganizationFormType = {
   isValid: boolean,
   hasChanges: boolean,
   organization: OrganizationMinimalDTO,
-  touched: OrganizationFormTouchedType
+  touched: OrganizationFormTouchedType,
 }
 
 export const emptyOrganizationForm: OrganizationFormType = {
@@ -80,10 +84,10 @@ export const emptyOrganizationForm: OrganizationFormType = {
   }
 }
 
-// TODO make sure the Organization type only has the used values shortName, longName, email, isVerified
 export type OrganizationFormProps = {
   organizationForm: OrganizationFormType,
-  onChange: (organizationForm: OrganizationFormType, shouldUpdate: boolean) => void
+  onChange: (organizationForm: OrganizationFormType, shouldUpdate: boolean) => void,
+  className?: string,
 }
 
 /**
@@ -92,11 +96,14 @@ export type OrganizationFormProps = {
  * The state is manged by the parent
  */
 export const OrganizationForm = ({
-  overwriteTranslation,
-  organizationForm = emptyOrganizationForm,
-  onChange = () => undefined,
-}: PropsForTranslation<OrganizationFormTranslation, OrganizationFormProps>) => {
-  const translation = useTranslation(defaultOrganizationFormTranslations, overwriteTranslation)
+                                   overwriteTranslation,
+                                   organizationForm = emptyOrganizationForm,
+                                   onChange = () => undefined,
+                                   className,
+                                 }: PropsForTranslation<OrganizationFormTranslation, OrganizationFormProps>) => {
+  const translation = useTranslation([defaultOrganizationFormTranslations], overwriteTranslation)
+  const validators = useTranslatedValidators()
+  const { shortName, longName, contactEmail } = organizationForm.organization
 
   const minShortNameLength = 2
   const minLongNameLength = 4
@@ -104,111 +111,114 @@ export const OrganizationForm = ({
   const maxLongNameLength = 64
   const maxMailLength = 320
 
-  const inputErrorClasses = tw('border-hw-negative-500 focus:border-hw-negative-500 focus:ring-hw-negative-500 border-2')
-  const inputClasses = tw('mt-1 block rounded-md w-full border-gray-300 shadow-sm focus:outline-none focus:border-hw-primary-500 focus:ring-hw-primary-500')
-
-  function validateShortName(organization: OrganizationMinimalDTO) {
-    const shortName = organization.shortName.trim()
-    if (shortName === '') {
-      return translation.required
-    } else if (shortName.length < minShortNameLength) {
-      return translation.tooShort(minShortNameLength)
-    } else if (shortName.length > maxShortNameLength) {
-      return translation.tooLong(maxShortNameLength)
-    }
-  }
-
-  function validateLongName(organization: OrganizationMinimalDTO) {
-    const longName = organization.longName.trim()
-    if (longName === '') {
-      return translation.required
-    } else if (longName.length < minLongNameLength) {
-      return translation.tooShort(minLongNameLength)
-    } else if (longName.length > maxLongNameLength) {
-      return translation.tooLong(maxLongNameLength)
-    }
-  }
-
-  function validateEmailWithOrganization(organization: OrganizationMinimalDTO) {
-    const email = organization.email.trim()
-    if (email === '') {
-      return translation.required
-    } else if (!validateEmail(organization.email)) {
-      return translation.invalidEmail
-    }
-  }
+  const shortNameError = validators.notEmpty(shortName) ?? validators.length(shortName, [minShortNameLength, maxShortNameLength])
+  const longNameError = validators.notEmpty(longName) ?? validators.length(longName, [minLongNameLength, maxLongNameLength])
+  const emailError = validators.notEmpty(contactEmail) ?? validators.email(contactEmail) ?? validators.length(contactEmail, [undefined, maxMailLength])
 
   function triggerOnChange(newOrganization: OrganizationMinimalDTO, shouldUpdate: boolean, touched: OrganizationFormTouchedType) {
-    const isValid = validateShortName(newOrganization) === undefined && validateLongName(newOrganization) === undefined && validateEmailWithOrganization(newOrganization) === undefined
+    const isValid = !!shortNameError && !!longNameError && !!emailError
     onChange({ hasChanges: true, isValid, organization: newOrganization, touched }, shouldUpdate && isValid) // this might lead to confusing behaviour where changes aren't saved on invalid input
   }
 
-  const shortNameErrorMessage: string | undefined = validateShortName(organizationForm.organization)
-  const longNameErrorMessage: string | undefined = validateLongName(organizationForm.organization)
-  const emailErrorMessage: string | undefined = validateEmailWithOrganization(organizationForm.organization)
-
-  const isDisplayingShortNameError = shortNameErrorMessage && organizationForm.touched.shortName
-  const isDisplayingLongNameError = longNameErrorMessage && organizationForm.touched.longName
-  const isDisplayingEmailNameError = emailErrorMessage && organizationForm.touched.email
-
   return (
-    <LoadingAndErrorComponent
-      isLoading={!organizationForm}
-      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[350px]') }}
-      minimumLoadingDuration={200} // prevents errors flickering
-    >
-      <Span type="subsectionTitle">{translation.general}</Span>
-      <div className={tw('mt-2 mb-1')}>
-        <Input
+    <div className={clsx('col gap-y-6', className)}>
+      <ColumnTitle title={translation('general')} type="subtitle"/>
+      <LoadingAndErrorComponent
+        isLoading={!organizationForm}
+        className="min-h-69"
+      >
+        <FormElementWrapper
           id="shortName"
-          value={organizationForm.organization.shortName}
-          label={{ name: translation.shortName }}
-          onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, shortName: true })}
-          onChange={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, false, { ...organizationForm.touched })}
-          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, shortName: text }, true, { ...organizationForm.touched, shortName: true })}
-          maxLength={maxShortNameLength}
-          className={tx(inputClasses, { [inputErrorClasses]: isDisplayingShortNameError })}
-        />
-        {isDisplayingShortNameError && <Span type="formError">{shortNameErrorMessage}</Span>}
-      </div>
-      <Span type="formDescription">{translation.shortNameDescription}</Span>
-      <div className={tw('mt-2 mb-1')}>
-        <Input
-          id="longName"
-          value={organizationForm.organization.longName}
-          label={{ name: translation.longName }}
-          onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, longName: true })}
-          onChange={text => triggerOnChange({ ...organizationForm.organization, longName: text }, false, { ...organizationForm.touched })}
-          onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, longName: text }, true, { ...organizationForm.touched, longName: true })}
-          maxLength={maxLongNameLength}
-          className={tx(inputClasses, { [inputErrorClasses]: isDisplayingLongNameError })}
-        />
-        {isDisplayingLongNameError && <Span type="formError">{longNameErrorMessage}</Span>}
-      </div>
-      <Span type="formDescription">{translation.longNameDescription}</Span>
-      <div className={tw('mt-2 mb-1')}>
-        <div className={tw('flex flex-row items-end')}>
-          <div className={tw('flex-1 mr-2')}>
+          error={shortNameError}
+          description={translation('shortNameDescription')}
+          label={translation('shortName')}
+          required={true}
+          isShowingError={organizationForm.touched.shortName}
+        >
+          {({ setIsShowingError: _, isShowingError: _2, ...bag }) => (
             <Input
-              id="email"
-              value={organizationForm.organization.email}
-              label={{ name: translation.contactEmail }}
-              type="email"
-              onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, { ...organizationForm.touched, email: true })}
-              onChange={text => triggerOnChange({ ...organizationForm.organization, email: text }, false, { ...organizationForm.touched })}
-              onEditCompleted={text => triggerOnChange({ ...organizationForm.organization, email: text }, true, { ...organizationForm.touched, email: true })}
-              maxLength={maxMailLength}
-              className={tx(inputClasses, { [inputErrorClasses]: isDisplayingEmailNameError })}
+              {...bag}
+              value={organizationForm.organization.shortName}
+              onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
+                ...organizationForm.touched,
+                shortName: true
+              })}
+              onChangeText={text => {
+                triggerOnChange({
+                  ...organizationForm.organization,
+                  shortName: text
+                }, false, { ...organizationForm.touched })
+              }}
+              onEditCompleted={text => triggerOnChange({
+                ...organizationForm.organization,
+                shortName: text
+              }, true, { ...organizationForm.touched, shortName: true })}
+              maxLength={maxShortNameLength}
             />
-          </div>
-          {
-            !organizationForm.organization.isVerified &&
-            <Span className={tw('text-hw-negative-500 mb-3')}>{translation.notVerified}</Span>
-          }
-        </div>
-        {isDisplayingEmailNameError && <Span type="formError">{emailErrorMessage}</Span>}
-      </div>
-      <Span type="formDescription">{translation.contactEmailDescription}</Span>
-    </LoadingAndErrorComponent>
+          )}
+        </FormElementWrapper>
+        <FormElementWrapper
+          id="longName"
+          error={longNameError}
+          description={translation('longNameDescription')}
+          label={translation('longName')}
+          required={true}
+          isShowingError={organizationForm.touched.longName}
+        >
+          {({ setIsShowingError: _, isShowingError: _2, ...bag }) => (
+            <Input
+              {...bag}
+              value={longName}
+              onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
+                ...organizationForm.touched,
+                longName: true
+              })}
+              onChangeText={text => {
+                triggerOnChange({
+                  ...organizationForm.organization,
+                  longName: text
+                }, false, { ...organizationForm.touched })
+              }}
+              onEditCompleted={text => triggerOnChange({
+                ...organizationForm.organization,
+                longName: text
+              }, true, { ...organizationForm.touched, longName: true })}
+              maxLength={maxLongNameLength}
+            />
+          )}
+        </FormElementWrapper>
+        <FormElementWrapper
+          id="email"
+          error={emailError}
+          description={translation('contactEmailDescription')}
+          label={translation('contactEmail')}
+          required={true}
+          isShowingError={organizationForm.touched.email}
+        >
+          {({ setIsShowingError: _, isShowingError: _2, ...bag }) => (
+            <Input
+              {...bag}
+              value={organizationForm.organization.contactEmail}
+              type="email"
+              onBlur={() => triggerOnChange({ ...organizationForm.organization }, false, {
+                ...organizationForm.touched,
+                email: true
+              })}
+              onChangeText={text => {
+                triggerOnChange({
+                  ...organizationForm.organization,
+                  contactEmail: text
+                }, false, { ...organizationForm.touched })
+              }}
+              onEditCompleted={text => triggerOnChange({
+                ...organizationForm.organization,
+                contactEmail: text
+              }, true, { ...organizationForm.touched, email: true })}
+              maxLength={maxMailLength}
+            />
+          )}
+        </FormElementWrapper>
+      </LoadingAndErrorComponent>
+    </div>
   )
 }

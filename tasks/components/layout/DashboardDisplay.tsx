@@ -1,55 +1,69 @@
-import { tw, tx } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import clsx from 'clsx'
+import type { Translation } from '@helpwave/hightide'
+import {
+  LoadingAndErrorComponent,
+  type PropsForTranslation,
+  TranslationPluralCount,
+  useTranslation
+} from '@helpwave/hightide'
 import { useRouter } from 'next/router'
-import { Span } from '@helpwave/common/components/Span'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
 import { useWardOverviewsQuery } from '@helpwave/api-services/mutations/tasks/ward_mutations'
 import { useRecentPatientsQuery } from '@helpwave/api-services/mutations/tasks/patient_mutations'
 import { WardCard } from '../cards/WardCard'
 import { InvitationBanner } from '../InvitationBanner'
 import { PatientCard } from '../cards/PatientCard'
+import { AddCard } from '@/components/cards/AddCard'
+import { useAuth } from '@helpwave/api-services/authentication/useAuth'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { useMyTasksQuery } from '@helpwave/api-services/mutations/tasks/task_mutations'
+import { Scrollbars } from 'react-custom-scrollbars-2'
+import { TaskCard } from '@/components/cards/TaskCard'
+import { useMemo, useState } from 'react'
+import type { TaskDTO } from '@helpwave/api-services/types/tasks/task'
+import { TaskDetailModal } from '@/components/modals/TaskDetailModal'
+import type { MedicalTranslationType } from '@/translation/medical'
+import { medicalTranslation } from '@/translation/medical'
 
 type DashboardDisplayTranslation = {
-  patients: string,
-  organizations: string,
-  wards: string,
   recent: string,
-  showAllOrganizations: string
+  showAllOrganizations: string,
+  addWard: string,
+  myTasks: string,
+  noTasks: string,
 }
 
-const defaultDashboardDisplayTranslations: Record<Languages, DashboardDisplayTranslation> = {
+type TranslationType = MedicalTranslationType & DashboardDisplayTranslation
+
+const defaultDashboardDisplayTranslations: Translation<DashboardDisplayTranslation> = {
   en: {
-    patients: 'Patients',
-    organizations: 'Organizations',
-    wards: 'Wards',
     recent: 'Recently used',
-    showAllOrganizations: 'Show all organizations'
+    showAllOrganizations: 'Show all organizations',
+    addWard: 'Add Ward',
+    myTasks: 'My Tasks',
+    noTasks: 'No tasks'
   },
   de: {
-    patients: 'Patienten',
-    organizations: 'Organisationen',
-    wards: 'Stationen',
     recent: 'Kürzlich Benutzt',
-    showAllOrganizations: 'Alle Organisationen anzeigen'
+    showAllOrganizations: 'Alle Organisationen anzeigen',
+    addWard: 'Station hinzufügen',
+    myTasks: 'Meine Aufgaben',
+    noTasks: 'Keine Aufgaben',
   }
 }
 
-export type DashboardDisplayProps = {
-  width?: number
-}
+export type DashboardDisplayProps = Record<string, unknown>
 
 /**
  * The left side of the DashboardPage
  */
 export const DashboardDisplay = ({
-  overwriteTranslation,
-  width
-}: PropsForTranslation<DashboardDisplayTranslation, DashboardDisplayProps>) => {
-  const translation = useTranslation(defaultDashboardDisplayTranslations, overwriteTranslation)
+                                   overwriteTranslation,
+                                 }: PropsForTranslation<TranslationType, DashboardDisplayProps>) => {
+  const translation = useTranslation([medicalTranslation, defaultDashboardDisplayTranslations], overwriteTranslation)
+  const { organization } = useAuth()
   const router = useRouter()
-  const minimumWidthOfCards = 220 // the value of much space a card and the surrounding gap requires, given in px
-  const columns = !width ? 3 : Math.max(Math.floor(width / minimumWidthOfCards), 1)
+  const [taskDetailModalId, setTaskDetailModalId] = useState<string>()
+
   // TODO replace with recent wards later
   const {
     data: wards,
@@ -59,49 +73,163 @@ export const DashboardDisplay = ({
     data: patients,
     isLoading: isLoadingPatients
   } = useRecentPatientsQuery()
+  const {
+    data: tasks,
+    isLoading: isTasksLoading
+  } = useMyTasksQuery()
+
+  const todo = useMemo<TaskDTO[]>(() => {
+    return (tasks ?? []).filter(value => value.status === 'todo')
+  }, [tasks])
+  const inProgress = useMemo<TaskDTO[]>(() => {
+    return (tasks ?? []).filter(value => value.status === 'inProgress')
+  }, [tasks])
+  const done = useMemo<TaskDTO[]>(() => {
+    return (tasks ?? []).filter(value => value.status === 'done')
+  }, [tasks])
+
+
+  const cardWidth = 'min-w-64 max-w-64'
 
   return (
-    <div className={tw('flex flex-col py-4 px-6 gap-y-4')}>
+    <div className="flex-col-2 py-4 px-6 @container">
+      <TaskDetailModal
+        taskId={taskDetailModalId}
+        isOpen={!!taskDetailModalId}
+        onClose={() => setTaskDetailModalId(undefined)}
+      />
       <InvitationBanner/>
-      <Span type="title">{translation.recent}</Span>
-      <LoadingAndErrorComponent
-        isLoading={isLoadingPatients}
-      >
-        {patients && patients.length > 0 && (
-          <>
-            <Span type="subsectionTitle">{translation.patients}</Span>
-            <div className={tw(`grid grid-cols-${columns} gap-6`)}>
-              {patients?.map(patient => (
-                <PatientCard
-                  key={patient.id}
-                  className={tx({ '!cursor-not-allowed': !patient.wardId })}
-                  bedName={patient.bed?.name}
-                  patientName={patient.name}
-                  onTileClick={() => patient.wardId ? router.push(`/ward/${patient.wardId}`) : undefined}
-                />
-              ))}
+      <ColumnTitle title={translation('recent')}/>
+      <div className="flex-col-6">
+        <LoadingAndErrorComponent isLoading={isTasksLoading} className="min-h-29">
+          <div className="col gap-y-1">
+            <ColumnTitle title={translation('myTasks')} type="subtitle"/>
+            <div className="flex-col-4">
+              {todo.length > 0 && (
+                <Scrollbars autoHeight={true} autoHide={true}>
+                  <div className="flex-row-4">
+                    {todo.map(task => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onClick={() => {
+                          setTaskDetailModalId(task.id)
+                        }}
+                        isSelected={false}
+                        showStatus={true}
+                        className={cardWidth}
+                      />
+                    ))}
+                  </div>
+                </Scrollbars>
+              )}
+              {inProgress.length > 0 && (
+                <Scrollbars autoHeight={true} autoHide={true}>
+                  <div className="flex-row-4">
+                    {inProgress.map(task => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onClick={() => {
+                          setTaskDetailModalId(task.id)
+                        }}
+                        isSelected={false}
+                        showStatus={true}
+                        className={cardWidth}
+                      />
+                    ))}
+                  </div>
+                </Scrollbars>
+              )}
+              {done.length > 0 && (
+                <Scrollbars autoHeight={true} autoHide={true}>
+                  <div className="flex-row-4">
+                    {done.map(task => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onClick={() => {
+                          setTaskDetailModalId(task.id)
+                        }}
+                        isSelected={false}
+                        showStatus={true}
+                        className={cardWidth}
+                      />
+                    ))}
+                  </div>
+                </Scrollbars>
+              )}
             </div>
-          </>
-        )}
-      </LoadingAndErrorComponent>
-      <LoadingAndErrorComponent isLoading={isLoadingWards}>
-        <div className={tw('flex flex-col gap-y-1')}>
-          {wards && wards.length > 0 && (
-            <>
-              <Span type="subsectionTitle">{translation.wards}</Span>
-              <div className={tw(`grid grid-cols-${columns} gap-6`)}>
-                {wards?.map(ward => (
+          </div>
+        </LoadingAndErrorComponent>
+        <LoadingAndErrorComponent isLoading={isLoadingWards} className="min-h-28">
+          <div className="col gap-y-1">
+            <ColumnTitle title={translation('ward', { count: TranslationPluralCount.many })} type="subtitle"/>
+            <Scrollbars autoHeight={true} autoHide={true}>
+              <div className="flex-row-4">
+                {wards && wards.length > 0 && wards?.map(ward => (
                   <WardCard
                     key={ward.id}
                     ward={ward}
-                    onTileClick={() => router.push(`/ward/${ward.id}`)}
+                    onClick={() => router.push(`/ward/${ward.id}`)}
+                    className={cardWidth}
                   />
                 ))}
+                <AddCard
+                  text={translation('addWard')}
+                  onClick={() => router.push(`/organizations/${organization?.id}`)}
+                  className={cardWidth}
+                />
               </div>
-            </>
+            </Scrollbars>
+          </div>
+        </LoadingAndErrorComponent>
+        <LoadingAndErrorComponent isLoading={isLoadingPatients} className="min-h-28">
+          {patients && patients.length > 0 && (
+            <div className="col gap-y-1">
+              <ColumnTitle title={translation('patient', { count: TranslationPluralCount.many })} type="subtitle"/>
+              <Scrollbars autoHeight={true} autoHide={true}>
+                <div className="flex-col-4">
+                  <div className="flex-row-4">
+                    {patients?.filter((_, index) => index % 2 == 0).map(patient => (
+                      <PatientCard
+                        key={patient.id}
+                        className={clsx(cardWidth, '!min-h-12')}
+                        bedName={patient.bed?.name}
+                        patientName={patient.humanReadableIdentifier}
+                        onClick={() => {
+                          if (patient.wardId) {
+                            router.push(`/ward/${patient.wardId}?patientId=${patient.id}`).catch(console.error)
+                          } else if (wards && wards.length > 0) {
+                            router.push(`/ward/${wards[0]!.id}?patientId=${patient.id}`).catch(console.error)
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex-row-4">
+                    {patients?.filter((_, index) => index % 2 == 1).map(patient => (
+                      <PatientCard
+                        key={patient.id}
+                        className={clsx(cardWidth, '!min-h-12')}
+                        bedName={patient.bed?.name}
+                        patientName={patient.humanReadableIdentifier}
+                        onClick={() => {
+                          if (patient.wardId) {
+                            router.push(`/ward/${patient.wardId}?patientId=${patient.id}`).catch(console.error)
+                          } else if (wards && wards.length > 0) {
+                            router.push(`/ward/${wards[0]!.id}?patientId=${patient.id}`).catch(console.error)
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </Scrollbars>
+            </div>
           )}
-        </div>
-      </LoadingAndErrorComponent>
+        </LoadingAndErrorComponent>
+      </div>
     </div>
   )
 }

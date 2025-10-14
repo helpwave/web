@@ -1,16 +1,18 @@
-import type { PropsWithChildren } from 'react'
-import { tx } from '@helpwave/common/twind'
-import { Card, type CardProps } from '@helpwave/common/components/Card'
+import type { MouseEventHandler, PropsWithChildren } from 'react'
+import clsx from 'clsx'
 
 export type CardDragProperties = {
   isDragging?: boolean,
   isOver?: boolean,
   isDangerous?: boolean,
-  isInvalid?: boolean
+  isInvalid?: boolean,
 }
 
-export type DragCardProps = PropsWithChildren<CardProps & {
-  cardDragProperties?: CardDragProperties
+export type DragCardProps = PropsWithChildren<{
+  onClick?: MouseEventHandler<HTMLDivElement>,
+  isSelected?: boolean,
+  cardDragProperties?: CardDragProperties,
+  className?: string,
 }>
 
 /**
@@ -20,20 +22,19 @@ export const DragCard = ({
   children,
   cardDragProperties = {},
   isSelected,
+  onClick,
   className,
-  ...cardProps
 }: DragCardProps) => {
-  // For now fully equal to a normal card but, that might change later
   return (
-    <Card className={tx(className, 'border-2', {
-      'hover:border-hw-primary-800 cursor-pointer': !cardDragProperties.isDragging && !cardDragProperties.isOver, // default
-      'border-hw-primary-700': isSelected,
+    <div className={clsx('card-md border-2', {
+      'border-transparent hover:border-primary cursor-pointer': !cardDragProperties.isDragging && !cardDragProperties.isOver, // default
+      'border-primary': isSelected,
       'cursor-grabbing': cardDragProperties.isDragging,
-      'border-hw-warn-400 border-dashed': cardDragProperties.isOver && cardDragProperties.isDangerous,
-      'border-hw-primary-700 border-dashed': cardDragProperties.isOver && !cardDragProperties.isDangerous && !cardDragProperties.isInvalid,
-      'border-hw-negative-400': cardDragProperties.isOver && cardDragProperties.isInvalid,
-    })} {...cardProps}>
+      'border-warning border-dashed': cardDragProperties.isOver && cardDragProperties.isDangerous,
+      'border-primary border-dashed': cardDragProperties.isOver && !cardDragProperties.isDangerous && !cardDragProperties.isInvalid,
+      'border-negative': cardDragProperties.isOver && cardDragProperties.isInvalid,
+    }, className)} onClick={onClick}>
       {children}
-    </Card>
+    </div>
   )
 }

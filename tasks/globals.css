@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+@import '@helpwave/hightide/style/uncompiled/globals.css';
+
+@source "./node_modules/@helpwave/hightide";
+
+@theme {
+  /* Colors */
+  --color-todo-background: var(--color-tag-red-background);
+  --color-todo-text: var(--color-tag-red-text);
+  --color-todo-icon: var(--color-tag-red-icon);
+
+  --color-inprogress-background: var(--color-tag-yellow-background);
+  --color-inprogress-text: var(--color-tag-yellow-text);
+  --color-inprogress-icon: var(--color-tag-yellow-icon);
+
+  --color-done-background: var(--color-tag-green-background);
+  --color-done-text: var(--color-tag-green-text);
+  --color-done-icon: var(--color-tag-green-icon);
+
+  /* Header */
+  --color-header-background: var(--color-white);
+  --color-header-text: var(--color-black);
+
+  /* TaskModalSidebar */
+  --color-task-modal-sidebar-background: var(--color-surface-variant);
+  --color-task-modal-sidebar-text: var(--color-on-surface);
+
+  /* TwoColumn */
+  --color-twocolum-background: #C6C6C6;
+  --color-twocolum-text: #FFFFFF;
+}
+
+@layer base {
+  /* Here are overrides for the light theme */
+  @variant dark {
+    /* Header */
+    --color-header-background: var(--color-black);
+    --color-header-text: var(--color-white);
+
+    /* TwoColumn */
+    --color-twocolum-background: #363636;
+    --color-twocolum-text: var(--color-description);
+  }
+}

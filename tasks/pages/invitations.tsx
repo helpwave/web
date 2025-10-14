@@ -1,16 +1,16 @@
 import Head from 'next/head'
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
+import type { Translation } from '@helpwave/hightide'
+import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
 import { PageWithHeader } from '@/components/layout/PageWithHeader'
 import { UserInvitationList } from '@/components/UserInvitationList'
 import titleWrapper from '@/utils/titleWrapper'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type InvitationsPageTranslation = {
-  invitations: string
+  invitations: string,
 }
 
-const defaultInvitationsPageTranslation: Record<Languages, InvitationsPageTranslation> = {
+const defaultInvitationsPageTranslation: Translation<InvitationsPageTranslation> = {
   en: {
     invitations: 'Invitations'
   },
@@ -25,20 +25,19 @@ export type InvitationsPageProps = Record<string, never>
  * Page for Invitations
  */
 export const InvitationsPage = ({
-  overwriteTranslation,
-}: PropsForTranslation<InvitationsPageTranslation, InvitationsPageProps>) => {
-  const translation = useTranslation(defaultInvitationsPageTranslation, overwriteTranslation)
+                                  overwriteTranslation,
+                                }: PropsForTranslation<InvitationsPageTranslation, InvitationsPageProps>) => {
+  const translation = useTranslation([defaultInvitationsPageTranslation], overwriteTranslation)
   return (
     <PageWithHeader
-      crumbs={[{ display: translation.invitations, link: '/invitations' }]}
+      crumbs={[{ display: translation('invitations'), link: '/invitations' }]}
     >
       <Head>
-        <title>{titleWrapper(translation.invitations)}</title>
+        <title>{titleWrapper(translation('invitations'))}</title>
       </Head>
-      <div className={tw('flex flex-col items-center')}>
-          <div className={tw('w-1/2')}>
-            <UserInvitationList/>
-          </div>
+      <div className="col w-full py-4 px-6">
+        <ColumnTitle title={translation('invitations')}></ColumnTitle>
+        <UserInvitationList/>
       </div>
     </PageWithHeader>
   )

@@ -1,22 +1,21 @@
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
-import { useContext, useEffect, useState } from 'react'
+import type { PropsForTranslation, Translation } from '@helpwave/hightide'
+import {
+  FillerRowElement,
+  LoadingAndErrorComponent,
+  SolidButton,
+  Table,
+  TextButton,
+  useTranslation
+} from '@helpwave/hightide'
+import { useContext, useEffect, useMemo } from 'react'
 import { Plus, Tag } from 'lucide-react'
-import { Input } from '@helpwave/common/components/user-input/Input'
-import { Button } from '@helpwave/common/components/Button'
-import { MultiSubjectSearchWithMapping } from '@helpwave/common/util/simpleSearch'
-import { Table } from '@helpwave/common/components/Table'
-import { Tile } from '@helpwave/common/components/layout/Tile'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
-import type { FieldType, Property, SubjectType } from '@helpwave/api-services/types/properties/property'
+import type { FieldType, Property, PropertySubjectType } from '@helpwave/api-services/types/properties/property'
 import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { useUpdates } from '@helpwave/api-services/util/useUpdates'
-import { PropertySubjectTypeSelect } from '@/components/layout/property/PropertySubjectTypeSelect'
 import { PropertyContext } from '@/pages/properties'
 import { SubjectTypeIcon } from '@/components/layout/property/SubjectTypeIcon'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import type { ColumnDef } from '@tanstack/react-table'
 
 type PropertyDisplayTranslation = {
   properties: string,
@@ -25,10 +24,10 @@ type PropertyDisplayTranslation = {
   removeFilter: string,
   search: string,
   edit: string,
-  name: string
-} & { [key in SubjectType | FieldType]: string }
+  name: string,
+} & { [key in PropertySubjectType | FieldType]: string }
 
-const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTranslation> = {
+const defaultPropertyDisplayTranslation: Translation<PropertyDisplayTranslation> = {
   en: {
     properties: 'Properties',
     addProperty: 'Add Property',
@@ -67,18 +66,15 @@ const defaultPropertyDisplayTranslation: Record<Languages, PropertyDisplayTransl
   }
 }
 
-export type PropertyDisplayProps = {
-  searchValue?: string
-}
+export type PropertyDisplayProps = object
 
 /**
  * A component for showing and changing properties Details
  */
 export const PropertyDisplay = ({
-  overwriteTranslation,
-  searchValue: initialSearchValue = '',
-}: PropsForTranslation<PropertyDisplayTranslation, PropertyDisplayProps>) => {
-  const translation = useTranslation(defaultPropertyDisplayTranslation, overwriteTranslation)
+                                  overwriteTranslation,
+                                }: PropsForTranslation<PropertyDisplayTranslation, PropertyDisplayProps>) => {
+  const translation = useTranslation([defaultPropertyDisplayTranslation], overwriteTranslation)
 
   const {
     state: contextState,
@@ -86,12 +82,9 @@ export const PropertyDisplay = ({
   } = useContext(PropertyContext)
   // TODO replace with backend request
   const { data: propertyList, isLoading, isError, refetch } = usePropertyListQuery(contextState.subjectType)
-  const [search, setSearch] = useState<string>(initialSearchValue)
   const { observeAttribute } = useUpdates()
 
-  // TODO could be computationally intensive consider forwarding to the backend later on
-  const filteredProperties: Property[] = propertyList ? MultiSubjectSearchWithMapping([contextState.subjectType ?? '', search], propertyList,
-    property => [property.name, property.description, property.subjectType]) : []
+  const filteredProperties: Property[] = propertyList ?? []
 
   useEffect(() => {
     const subscription = observeAttribute('aggregateType', 'property').subscribe(() => refetch())
@@ -100,80 +93,105 @@ export const PropertyDisplay = ({
     }
   })
 
-  return (
-    <div className={tw('py-4 px-6 flex flex-col gap-y-4')}>
-      <div className={tw('flex flex-row gap-x-1 items-center')}>
-        <Tag className={tw('text-hw-primary-400')} size={20}/>
-        <Span type="heading">{translation.properties}</Span>
-      </div>
-      <div className={tw('flex flex-col gap-y-2')}>
-        <div className={tw('flex flex-row justify-between')}>
-          <div className={tw('flex flex-row gap-x-2')}>
-            <Input
-              // TODO Search Icon
-              value={search}
-              onChange={setSearch}
-              onEditCompleted={setSearch}
-              placeholder={translation.search}
-            />
-            <PropertySubjectTypeSelect
-              className={tw('w-full')}
-              value={contextState.subjectType}
-              onChange={subjectType => updateContext({ ...contextState, subjectType })}
-              hintText={translation.subjectType}
-            />
-            <Button
-              className={tw('w-full !px-0')}
-              variant="textButton"
-              color="negative"
-              onClick={() => {
-                updateContext({ ...contextState, subjectType: undefined })
-                setSearch('')
-              }}
-            >
-              {translation.removeFilter}
-            </Button>
+  const columns = useMemo<ColumnDef<Property>[]>(() => [
+    {
+      id: 'name',
+      header: translation('name'),
+      cell: ({ cell }) => {
+        if (!propertyList) {
+          return
+        }
+        const value = propertyList[cell.row.index]!
+        return (
+          <div className="flex-col-1">
+            <span>{value.name}</span>
+            <span>{translation(value.fieldType)}</span>
           </div>
-          <Button onClick={() => updateContext({
+        )
+      },
+      accessorKey: 'name',
+      sortingFn: 'text',
+      minSize: 160,
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'subjectType',
+      header: translation('subjectType'),
+      cell: ({ cell }) => {
+        if (!propertyList) {
+          return
+        }
+        const value = propertyList[cell.row.index]!
+        return (
+          <div className="row gap-x-2">
+            <SubjectTypeIcon subjectType={value.subjectType}/>
+            <span>{translation(value.subjectType)}</span>
+          </div>
+        )
+      },
+      accessorFn: (property) => property.subjectType,
+      minSize: 180,
+      maxSize: 230,
+      sortingFn: 'text',
+      meta: {
+        filterType: 'text'
+      }
+    },
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ cell }) => {
+        if (!propertyList) {
+          return
+        }
+        const value = propertyList[cell.row.index]!
+        return (
+          <div key="edit-button-cell" className="row justify-end">
+            <TextButton onClick={() => updateContext({ ...contextState, propertyId: value.id })} color="primary">
+              {translation('edit')}
+            </TextButton>
+          </div>
+        )
+      },
+      minSize: 120,
+      maxSize: 120,
+      enableResizing: false,
+    }
+  ], [contextState, propertyList, translation, updateContext])
+
+  return (
+    <div className="py-4 px-6 col gap-y-4">
+      <ColumnTitle
+        title={(
+          <div className="row gap-x-2 items-center">
+            <Tag className="text-primary" size={20}/>
+            <span>{translation('properties')}</span>
+          </div>
+        )}
+        actions={(
+          <SolidButton onClick={() => updateContext({
             ...contextState,
             propertyId: undefined
           })}>
-            <div className={tw('flex flex-row gap-x-2 items-center')}>
+            <div className="row gap-x-2 items-center">
               <Plus/>
-              <Span>{translation.addProperty}</Span>
+              <span>{translation('addProperty')}</span>
             </div>
-          </Button>
-        </div>
-      </div>
+          </SolidButton>
+        )}
+      />
       <LoadingAndErrorComponent
         isLoading={isLoading}
         hasError={isError}
-        loadingProps={{ classname: tw('min-h-[300px] border-2 border-black rounded-xl') }}
+        className="min-h-190"
       >
         <Table
           data={filteredProperties}
-          identifierMapping={dataObject => dataObject.id}
-          rowMappingToCells={property => [
-            (<Tile
-              key="field-type-cell"
-              title={{ value: property.name }}
-              description={{ value: translation[property.fieldType] }}
-            />),
-            (<div key="subject-type-cell" className={tw('flex flex-row gap-x-2')}>
-              <SubjectTypeIcon subjectType={property.subjectType}/>
-              <Span>{translation[property.subjectType]}</Span>
-            </div>),
-            (<div key="edit-button-cell" className={tw('flex flex-row justify-end')}>
-              <Button variant="textButton" onClick={() => updateContext({ ...contextState, propertyId: property.id })}>
-                <Span>{translation.edit}</Span>
-              </Button>
-            </div>)
-          ]}
-          header={[
-            <Span key="headerName" type="tableHeader">{translation.name}</Span>,
-            <Span key="headerSubjectType" type="tableHeader">{translation.subjectType}</Span>,
-            <></>
-          ]}
+          columns={columns}
+          initialState={{ pagination: { pageSize: 9 } }}
+          fillerRow={() => (<FillerRowElement className="h-14"/>)}
         />
       </LoadingAndErrorComponent>
     </div>

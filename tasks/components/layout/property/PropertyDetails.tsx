@@ -1,26 +1,19 @@
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import type { PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { useTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
+import type { PropsForTranslation, StepperState, Translation } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
+import { LoadingAndErrorComponent, range, StepperBar, TextButton, useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
-import { Button } from '@helpwave/common/components/Button'
-import { ConfirmDialog } from '@helpwave/common/components/modals/ConfirmDialog'
-import type { StepperInformation } from '@helpwave/common/components/StepperBar'
-import { StepperBar } from '@helpwave/common/components/StepperBar'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import type { PropertySelectDataUpdate } from '@helpwave/api-services/mutations/properties/property_mutations'
 import {
-  usePropertyChangeSelectOptionMutation,
   usePropertyCreateMutation,
   usePropertyQuery,
   usePropertyUpdateMutation
 } from '@helpwave/api-services/mutations/properties/property_mutations'
-import type { Property, SelectData } from '@helpwave/api-services/types/properties/property'
+import type { Property, PropertySelectData } from '@helpwave/api-services/types/properties/property'
 import { emptyProperty, emptySelectData } from '@helpwave/api-services/types/properties/property'
-import { range } from '@helpwave/common/util/array'
 import { PropertyDetailsBasicInfo } from '@/components/layout/property/PropertyDetailsBasicInfo'
 import { PropertyDetailsField } from '@/components/layout/property/PropertyDetailsField'
 import { PropertyContext } from '@/pages/properties'
+import { ColumnTitle } from '@/components/ColumnTitle'
 
 type PropertyDetailsTranslation = {
   propertyDetails: string,
@@ -28,10 +21,10 @@ type PropertyDetailsTranslation = {
   archivePropertyDialogTitle: string,
   archivePropertyDialogDescription: string,
   createProperty: string,
-  newEntry: string
+  newEntry: string,
 }
 
-const defaultPropertyDetailsTranslation: Record<Languages, PropertyDetailsTranslation> = {
+const defaultPropertyDetailsTranslation: Translation<PropertyDetailsTranslation> = {
   en: {
     propertyDetails: 'Property Details',
     archiveProperty: 'Archive Property',
@@ -56,15 +49,14 @@ export type PropertyDetailsProps = NonNullable<unknown>
  * A component for showing and changing properties Details
  */
 export const PropertyDetails = ({
-  overwriteTranslation,
-}: PropsForTranslation<PropertyDetailsTranslation, PropertyDetailsProps>) => {
-  const translation = useTranslation(defaultPropertyDetailsTranslation, overwriteTranslation)
+                                  overwriteTranslation,
+                                }: PropsForTranslation<PropertyDetailsTranslation, PropertyDetailsProps>) => {
+  const translation = useTranslation([defaultPropertyDetailsTranslation], overwriteTranslation)
 
   const [showArchiveConfirm, setArchiveConfirm] = useState<boolean>(false)
   const lastStep = 2
-  const [stepper, setStepper] = useState<StepperInformation>({
-    step: 0,
-    lastStep,
+  const [stepperState, setStepperState] = useState<StepperState>({
+    currentStep: 0,
     seenSteps: new Set([0])
   })
   const {
@@ -75,12 +67,13 @@ export const PropertyDetails = ({
 
   const { data, isError, isLoading } = usePropertyQuery(contextState.propertyId)
   const updatePropertyMutation = usePropertyUpdateMutation()
-  const updateSelectDataMutation = usePropertyChangeSelectOptionMutation()
   const [value, setValue] = useState<Property>({
     ...emptyProperty,
   })
-  const propertyCreateMutation = usePropertyCreateMutation(property => {
-    updateContext({ ...contextState, propertyId: property.id })
+  const propertyCreateMutation = usePropertyCreateMutation({
+    onSuccess: property => {
+      updateContext({ ...contextState, propertyId: property.id })
+    }
   })
 
   useEffect(() => {
@@ -89,39 +82,32 @@ export const PropertyDetails = ({
     }
   }, [data, isCreatingNewProperty])
 
-  const { step } = stepper
+  const { currentStep: step } = stepperState
 
   return (
-    <div className={tw('py-4 px-6 flex flex-col gap-y-4 bg-gray-100 min-h-full')}>
+    <div className="py-4 px-6 col gap-y-4 min-h-full">
       <ConfirmDialog
-        id="confirmArchiveModal"
+        titleElement={translation('archivePropertyDialogTitle')}
+        description={translation('archivePropertyDialogDescription')}
         isOpen={showArchiveConfirm}
-        titleText={translation.archivePropertyDialogTitle}
-        descriptionText={translation.archivePropertyDialogDescription}
         onCancel={() => setArchiveConfirm(false)}
         onConfirm={() => {
-          updatePropertyMutation.mutate({ ...value, isArchived: true })
+          updatePropertyMutation.mutate({ property: { ...value, isArchived: true } })
         }}
-        onCloseClick={() => setArchiveConfirm(false)}
-        onBackgroundClick={() => setArchiveConfirm(false)}
         confirmType="negative"
       />
-      <div className={tw('top-0 flex flex-row justify-between items-center')}>
-        <Span type="heading">{isCreatingNewProperty ? translation.createProperty : translation.propertyDetails}</Span>
-        {!isCreatingNewProperty && (
-          <Button
-            variant="textButton"
-            color="negative"
-            onClick={() => setArchiveConfirm(true)}
-          >
-            {translation.archiveProperty}
-          </Button>
+      <ColumnTitle
+        title={isCreatingNewProperty ? translation('createProperty') : translation('propertyDetails')}
+        actions={!isCreatingNewProperty && (
+          <TextButton color="negative" onClick={() => setArchiveConfirm(true)}>
+            {translation('archiveProperty')}
+          </TextButton>
         )}
-      </div>
+      />
       <LoadingAndErrorComponent
         isLoading={!isCreatingNewProperty && isLoading}
         hasError={!isCreatingNewProperty && isError}
-        loadingProps={{ classname: 'min-h-[400px] border-2 border-black rounded-xl' }}
+        className="min-h-128"
       >
         <PropertyDetailsBasicInfo
           value={value}
@@ -138,16 +124,12 @@ export const PropertyDetails = ({
                 })
                 return
               }
-              updatePropertyMutation.mutate({
-                ...value,
-                ...basicInfo
-              })
+              updatePropertyMutation.mutate({ property: { ...value, ...basicInfo } })
             }
           }
-          inputGroupProps={{
-            expanded: !isCreatingNewProperty || step === 0 || step === lastStep,
-            isExpandable: !isCreatingNewProperty,
-            disabled: isCreatingNewProperty && step !== 0 && step !== lastStep
+          expandableProps={{
+            isExpanded: !isCreatingNewProperty || step === 0 || step === lastStep,
+            disabled: isCreatingNewProperty && step !== 0 && step !== lastStep,
           }}
         />
         <PropertyDetailsField
@@ -157,11 +139,16 @@ export const PropertyDetails = ({
               const isSelect = fieldDetails.fieldType === 'singleSelect' || fieldDetails.fieldType === 'multiSelect'
               if (isCreatingNewProperty) {
                 setValue(prevState => {
-                  let selectData : SelectData|undefined = fieldDetails.selectData ? { ...fieldDetails.selectData } : undefined
+                  let selectData: PropertySelectData | undefined = fieldDetails.selectData ? { ...fieldDetails.selectData } : undefined
                   if (isSelect) {
                     selectData ??= emptySelectData
                     if (selectUpdate) {
-                      selectData.options.push(...range(0, selectUpdate.create - 1, true).map(index => ({ id: '', name: `${translation.newEntry} ${index + 1}`, description: '', isCustom: false })))
+                      selectData.options.push(...range(selectUpdate.create, { allowEmptyRange: true }).map(index => ({
+                        id: '',
+                        name: `${translation('newEntry')} ${index + 1}`,
+                        description: '',
+                        isCustom: false
+                      })))
                     }
                   }
                   return { ...prevState, fieldType: fieldDetails.fieldType, selectData }
@@ -169,36 +156,38 @@ export const PropertyDetails = ({
                 return
               }
 
-              // TODO combine these
-              updatePropertyMutation.mutate({
-                ...value,
-                ...fieldDetails
-              })
+              let selectUpdateDate: PropertySelectDataUpdate | undefined = undefined
               if (selectUpdate) {
-                updateSelectDataMutation.mutate({
-                  propertyId: value.id,
+                selectUpdateDate = {
                   update: selectUpdate.update,
-                  add: range(0, selectUpdate.create - 1).map(index => ({ id: '', name: `${translation.newEntry} ${index + 1}`, description: '', isCustom: false })),
+                  add: range(selectUpdate.create, { allowEmptyRange: true }).map(index => ({
+                    id: '',
+                    name: `${translation('newEntry')} ${index + 1}`,
+                    description: '',
+                    isCustom: false
+                  })),
                   remove: selectUpdate.delete.map(value1 => value1.id)
-                })
+                }
               }
+              updatePropertyMutation.mutate({ property: { ...value, ...fieldDetails }, selectUpdate: selectUpdateDate })
             }
           }
-          inputGroupProps={{
-            expanded: !isCreatingNewProperty || step === 1 || step === lastStep,
-            isExpandable: !isCreatingNewProperty,
+          expandableProps={{
+            isExpanded: !isCreatingNewProperty || step === 1 || step === lastStep,
             disabled: isCreatingNewProperty && step !== 1 && step !== lastStep
           }}
         />
-        <div className={tw('flex grow')}></div>
+        <div className="grow"></div>
         {isCreatingNewProperty && (
           <StepperBar
-            stepper={stepper}
-            onChange={setStepper}
+            state={stepperState}
+            disabledSteps={new Set<number>()}
+            numberOfSteps={2}
+            onChange={setStepperState}
             onFinish={() => {
               propertyCreateMutation.mutate(value)
             }}
-            className={tw('sticky bottom-4 right-6 left-6 bg-white')}
+            className="sticky bottom-4 right-6 left-6 p-2 rounded-xl shadow-around-lg bg-surface text-on-surface"
           />
         )}
       </LoadingAndErrorComponent>

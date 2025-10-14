@@ -1,45 +1,44 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/common/twind'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import { Span } from '@helpwave/common/components/Span'
-import { Button } from '@helpwave/common/components/Button'
-import { LoadingAndErrorComponent } from '@helpwave/common/components/LoadingAndErrorComponent'
+import type { Translation } from '@helpwave/hightide'
+import { LoadingAndErrorComponent, type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
 import { useWardTaskTemplateQuery } from '@helpwave/api-services/mutations/tasks/task_template_mutations'
 import { TaskTemplateCard } from './cards/TaskTemplateCard'
 import { OrganizationOverviewContext } from '@/pages/organizations/[organizationId]'
+import { ColumnTitle } from '@/components/ColumnTitle'
+import { AddCard } from '@/components/cards/AddCard'
 
 type TaskTemplateWardPreviewTranslation = {
   showAllTaskTemplates: string,
-  taskTemplates: (numberOfTemplates: number) => string
+  taskTemplatesCount: string,
+  addTaskTemplate: string,
 }
 
-const defaultTaskTemplateWardPreviewTranslation: Record<Languages, TaskTemplateWardPreviewTranslation> = {
+const defaultTaskTemplateWardPreviewTranslation: Translation<TaskTemplateWardPreviewTranslation> = {
   en: {
     showAllTaskTemplates: 'Show all Task Templates',
-    taskTemplates: (numberOfTemplates) => `Task Templates (${numberOfTemplates})`
+    taskTemplatesCount: `Task Templates ({{amount}})`,
+    addTaskTemplate: 'Add Task Template'
   },
   de: {
     showAllTaskTemplates: 'Alle Vorlagen anzeigen',
-    taskTemplates: (numberOfTemplates) => `Vorlagen (${numberOfTemplates})`
+    taskTemplatesCount: `Vorlagen ({{amount}})`,
+    addTaskTemplate: 'Neues Task Template'
   }
 }
 
 export type TaskTemplateWardPreviewProps = {
   wardId?: string,
-  columns?: number
 }
 
 /**
  * A TaskTemplateWardPreview for showing all TaskTemplate within a ward
  */
 export const TaskTemplateWardPreview = ({
-  overwriteTranslation,
-  wardId,
-  columns = 3
-}: PropsForTranslation<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
-  const translation = useTranslation(defaultTaskTemplateWardPreviewTranslation, overwriteTranslation)
+                                          overwriteTranslation,
+                                          wardId,
+                                        }: PropsForTranslation<TaskTemplateWardPreviewTranslation, TaskTemplateWardPreviewProps>) => {
+  const translation = useTranslation([defaultTaskTemplateWardPreviewTranslation], overwriteTranslation)
   const router = useRouter()
 
   const context = useContext(OrganizationOverviewContext)
@@ -53,31 +52,39 @@ export const TaskTemplateWardPreview = ({
     <LoadingAndErrorComponent
       isLoading={isLoading || !context.state.wardId}
       hasError={isError}
-      loadingProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
-      errorProps={{ classname: tw('border-2 border-gray-500 rounded-xl min-h-[200px]') }}
+      className="min-h-27"
     >
       {taskTemplates && (
-        <div className={tw('flex flex-col')}>
-          <div className={tw('flex flex-row justify-between items-center mb-4')}>
-            <Span type="tableName">{translation.taskTemplates(taskTemplates.length)}</Span>
-            <Button
-              className={tw('w-auto')}
-              onClick={() => router.push(`/ward/${wardId}/templates`)}
-            >
-              {translation.showAllTaskTemplates}
-            </Button>
-          </div>
-          <div className={tw(`grid grid-cols-${columns} gap-4`)}>
+        <div className="@container flex-col-2">
+          <ColumnTitle
+            title={translation('taskTemplatesCount', { replacements: { amount: taskTemplates.length.toString() } })}
+            actions={(
+              <SolidButton
+                size="small"
+                onClick={() => router.push(`/ward/${wardId}/templates`)}
+              >
+                {translation('showAllTaskTemplates')}
+              </SolidButton>
+            )}
+            type="subtitle"
+          />
+          <div className="grid @max-md:grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4">
             {taskTemplates.map((taskTemplate, index) => (
               <TaskTemplateCard
                 key={index}
                 name={taskTemplate.name}
                 subtaskCount={taskTemplate.subtasks.length}
-                onTileClick={() => {
-                  router.push(`/ward/${wardId}/templates?templateId=${taskTemplate.id}`).then()
+                className="!min-h-17"
+                onClick={() => {
+                  router.push(`/ward/${wardId}/templates?templateId=${taskTemplate.id}`).catch(console.error)
                 }}
               />
             ))}
+            <AddCard
+              text={translation('addTaskTemplate')}
+              className="!min-h-17"
+              onClick={() => router.push(`/ward/${wardId}/templates`).catch(console.error)}
+            />
           </div>
         </div>
       )}

@@ -1,14 +1,17 @@
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { tw } from '@helpwave/common/twind'
-import { Menu, MenuItem } from '@helpwave/common/components/user-input/Menu'
-import { LanguageModal } from '@helpwave/common/components/modals/LanguageModal'
-import { useTranslation, type PropsForTranslation } from '@helpwave/common/hooks/useTranslation'
-import type { Languages } from '@helpwave/common/hooks/useLanguage'
-import { Avatar } from '@helpwave/common/components/Avatar'
+import type { Translation } from '@helpwave/hightide'
+import { LanguageDialog, ThemeDialog } from '@helpwave/hightide'
+import {
+  Avatar,
+  Menu,
+  MenuItem,
+  type PropsForTranslation,
+  useTranslation
+} from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
 import { getAPIServiceConfig } from '@helpwave/api-services/config/config'
+import clsx from 'clsx'
 
 const config = getAPIServiceConfig()
 
@@ -19,10 +22,11 @@ type UserMenuTranslation = {
   taskTemplates: string,
   invitations: string,
   organizations: string,
-  properties: string
+  properties: string,
+  theme: string,
 }
 
-const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
+const defaultUserMenuTranslations: Translation<UserMenuTranslation> = {
   en: {
     profile: 'Profile',
     language: 'Language',
@@ -30,7 +34,8 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     taskTemplates: 'Task Templates',
     invitations: 'Invitations',
     organizations: 'Organizations',
-    properties: 'Properties'
+    properties: 'Properties',
+    theme: 'Theme',
   },
   de: {
     profile: 'Profil',
@@ -39,63 +44,90 @@ const defaultUserMenuTranslations: Record<Languages, UserMenuTranslation> = {
     taskTemplates: 'Vorlagen',
     invitations: 'Einladungen',
     organizations: 'Organisationen',
-    properties: 'Properties'
+    properties: 'Eigenschaften',
+    theme: 'Farbschema',
   }
+}
+
+type UserMenuProps = {
+  className?: string,
 }
 
 /**
  * A component showing a menu for user actions. For example editing the profile, language and logout.
  */
 export const UserMenu = ({
-  overwriteTranslation,
-}: PropsForTranslation<UserMenuTranslation>) => {
-  const translation = useTranslation(defaultUserMenuTranslations, overwriteTranslation)
+                           overwriteTranslation,
+                           className,
+                         }: PropsForTranslation<UserMenuTranslation, UserMenuProps>) => {
+  const translation = useTranslation([defaultUserMenuTranslations], overwriteTranslation)
   const [isLanguageModalOpen, setLanguageModalOpen] = useState(false)
+  const [isThemeModalOpen, setThemeModalOpen] = useState(false)
   const { user, signOut } = useAuth()
   const router = useRouter()
 
-  if (!user) return null
+  if (!user) return (<div></div>)
 
   // The settings path "/ui/settings" is hardcoded. It depends strongly on the implementation of the Ory UI.
   const settingsURL = `${config.oauth.issuerUrl}/ui/settings`
 
   return (
-    <div className={tw('relative z-10')}>
-      <LanguageModal
-        id="userMenu-LanguageModal"
-        onDone={() => setLanguageModalOpen(false)}
-        onBackgroundClick={() => setLanguageModalOpen(false)}
-        onCloseClick={() => setLanguageModalOpen(false)}
+    <div className={clsx('row relative z-10', className)}>
+      <LanguageDialog
         isOpen={isLanguageModalOpen}
+        onClose={() => setLanguageModalOpen(false)}
       />
-      <Menu<HTMLDivElement> alignment="_r" trigger={(onClick, ref) => (
-        <div ref={ref} onClick={onClick}
-             className={tw('flex gap-2 relative items-center group cursor-pointer select-none')}>
-          <div className={tw('text-sm font-semibold text-slate-700 group-hover:text-indigo-400')}>{user.name}</div>
-          <Avatar avatarUrl={user.avatarUrl} alt={user.email} size="small"/>
+      <ThemeDialog
+        isOpen={isThemeModalOpen}
+        onClose={() => setThemeModalOpen(false)}
+      />
+      <Menu<HTMLDivElement> alignmentHorizontal="rightInside" trigger={({ toggleOpen }, ref) => (
+        <div ref={ref} onClick={toggleOpen}
+             className="row relative items-center group cursor-pointer select-none">
+          {/* TODO set this color in the css config */}
+          <div className="text-sm font-semibold text-description group-hover:text-primary">{user.name}</div>
+          <Avatar image={{ avatarUrl: user.avatarUrl, alt: user.email }} name={user?.name} size="lg" fullyRounded={true} />
         </div>
       )}>
-        <Link href={settingsURL} target="_blank"><MenuItem alignment="left">{translation.profile}</MenuItem></Link>
-        <div className="cursor-pointer" onClick={() => setLanguageModalOpen(true)}><MenuItem
-          alignment="left">{translation.language}</MenuItem></div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/templates')}>
-          <MenuItem alignment="left">{translation.taskTemplates}</MenuItem>
-        </div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/properties')}>
-          <MenuItem alignment="left">{translation.properties}</MenuItem>
-        </div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/organizations')}>
-          <MenuItem alignment="left">{translation.organizations}</MenuItem>
-        </div>
-        <div className={tw('cursor-pointer')} onClick={() => router.push('/invitations')}>
-          <MenuItem alignment="left">{translation.invitations}</MenuItem>
-        </div>
-        <div
-          className={tw('cursor-pointer text-hw-negative-400 hover:text-hw-negative-500')}
-          onClick={() => signOut()}
-        >
-          <MenuItem alignment="left">{translation.signOut}</MenuItem>
-        </div>
+        {({ close }) => {
+          const withClose = (func: () => void) => {
+            return () => {
+              func()
+              close()
+            }
+          }
+          return (
+            <>
+              <MenuItem onClick={withClose(() => router.push(settingsURL, '_blank'))}>
+                {translation('profile')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => setLanguageModalOpen(true))}>
+                {translation('language')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => setThemeModalOpen(true))}>
+                {translation('theme')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => router.push('/templates'))}>
+                {translation('taskTemplates')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => router.push('/properties'))}>
+                {translation('properties')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => router.push('/organizations'))}>
+                {translation('organizations')}
+              </MenuItem>
+              <MenuItem onClick={withClose(() => router.push('/invitations'))}>
+                {translation('invitations')}
+              </MenuItem>
+              <MenuItem
+                className="text-negative hover:!bg-negative/20"
+                onClick={withClose(() => signOut())}
+              >
+                {translation('signOut')}
+              </MenuItem>
+            </>
+          )
+        }}
       </Menu>
     </div>
   )

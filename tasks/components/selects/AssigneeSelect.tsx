@@ -1,11 +1,12 @@
 import type { SelectProps } from '@helpwave/hightide'
-import { Avatar, LoadingAndErrorComponent, Select } from '@helpwave/hightide'
-import clsx from 'clsx'
+import { Avatar, LoadingAndErrorComponent, Select, SelectOption } from '@helpwave/hightide'
 import { useMembersByOrganizationQuery } from '@helpwave/api-services/mutations/users/organization_member_mutations'
 import type { OrganizationMember } from '@helpwave/api-services/types/users/organization_member'
+import clsx from 'clsx'
 
-export type AssigneeSelectProps = Omit<SelectProps<OrganizationMember>, 'options' | 'value'> & {
+export type AssigneeSelectProps = Omit<SelectProps, 'onValueChanged' | 'children'> & {
   value?: string,
+  onValueChanged?: (user: OrganizationMember) => void,
 }
 
 /**
@@ -13,8 +14,7 @@ export type AssigneeSelectProps = Omit<SelectProps<OrganizationMember>, 'options
  */
 export const AssigneeSelect = ({
                                  value,
-                                 className,
-                                 onChange,
+                                 onValueChanged,
                                  ...selectProps
                                }: AssigneeSelectProps) => {
   const { data, isLoading, isError } = useMembersByOrganizationQuery()
@@ -26,26 +26,48 @@ export const AssigneeSelect = ({
       className="min-h-10 w-full"
     >
       <Select
-        value={data?.find(user => user.userId === value)}
-        options={(data ?? []).map(value => ({
-          value,
-          label: (
+        {...selectProps}
+        value={value}
+        onValueChanged={(id: string) => {
+          const user = data?.find(user => user.userId === id)
+          if (user) {
+            onValueChanged?.(user)
+          }
+        }}
+        buttonProps={{
+          ...selectProps?.buttonProps,
+          className: clsx('w-full', selectProps?.buttonProps?.className),
+          selectedDisplay: (id: string) => {
+            const user = data?.find(user => user.userId === id)
+            if (user) {
+              return (
+                <div className="row items-center gap-x-1">
+                  <Avatar
+                    image={user.avatarURL ? { avatarUrl: user.avatarURL, alt: '' } : undefined} name={user.nickname}
+                    size="md"
+                    fullyRounded={true}
+                  />
+                  {user.nickname}
+                </div>
+              )
+            }
+            return '-'
+          }
+        }}
+      >
+        {(data ?? []).map(value => (
+          <SelectOption key={value.userId} value={value.userId}>
             <div className="row items-center gap-x-1">
               <Avatar
-                image={value.avatarURL ? { avatarUrl: value.avatarURL, alt: '' } : undefined} name={value.nickname} size="md"
+                image={value.avatarURL ? { avatarUrl: value.avatarURL, alt: '' } : undefined} name={value.nickname}
+                size="md"
                 fullyRounded={true}
               />
               {value.nickname}
             </div>
-          ),
-          searchTags: [value.nickname, value.email],
-        }))}
-        className={clsx('w-full', className)}
-        onChange={(user) => {
-          onChange(user)
-        }}
-        {...selectProps}
-      />
+          </SelectOption>
+        ))}
+      </Select>
     </LoadingAndErrorComponent>
   )
 }

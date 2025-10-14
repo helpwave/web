@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState } from 'react'
 import type { Translation } from '@helpwave/hightide'
 import {
-  InputModal,
+  InputDialog,
   LoadingAndErrorComponent,
   type PropsForTranslation,
   SolidButton,
@@ -27,6 +27,7 @@ type OrganizationInvitationListTranslation = {
   add: string,
   invitations: string,
   inviteMember: string,
+  description: string,
 }
 
 const defaultOrganizationInvitationListTranslation: Translation<OrganizationInvitationListTranslation> = {
@@ -36,7 +37,8 @@ const defaultOrganizationInvitationListTranslation: Translation<OrganizationInvi
     addAndNext: 'Add and next',
     add: 'Add',
     invitations: 'Invitations',
-    inviteMember: 'Invite Member'
+    inviteMember: 'Invite Member',
+    description: 'Enter the email of the members you want to add.'
   },
   de: {
     remove: 'Entfernen',
@@ -44,7 +46,8 @@ const defaultOrganizationInvitationListTranslation: Translation<OrganizationInvi
     addAndNext: 'Hinzufügen und Nächster',
     add: 'Hinzufügen',
     invitations: 'Einladungen',
-    inviteMember: 'Mitglied einladen'
+    inviteMember: 'Mitglied einladen',
+    description: 'Gebe die Email des einzuladenes Mitglieds ein.'
   }
 }
 
@@ -119,14 +122,12 @@ export const OrganizationInvitationList = ({
   ], [isCreatingOrganization, onChange, revokeInviteMutation, translation, usedInvitations])
 
   return (
-    <LoadingAndErrorComponent
-      isLoading={isLoading && !!context.state.organizationId}
-      hasError={isError && !!context.state.organizationId}
-      className="min-h-72"
-    >
-      <InputModal
-        className="min-w-[400px]"
+    <>
+      <InputDialog
         isOpen={isShowingInviteMemberModal}
+        titleElement={translation('inviteMember')}
+        description={translation('description')}
+
         onCancel={() => setInviteMemberModalEmail(undefined)}
         onConfirm={() => {
           if (!isShowingInviteMemberModal) {
@@ -155,8 +156,9 @@ export const OrganizationInvitationList = ({
           }])
           setInviteMemberModalEmail('')
         }}
+
+        className="min-w-[400px]"
         inputs={[{
-          label: { name: translation('email') },
           value: inviteMemberModalEmail ?? '',
           onChangeText: text => setInviteMemberModalEmail(text)
         }]}
@@ -166,28 +168,34 @@ export const OrganizationInvitationList = ({
           { disabled: !isValidEmail, color: 'primary', text: translation('add') }
         ]}
       />
-      <div className="col gap-y-2">
-        <ColumnTitle
-          title={`${translation('invitations')} (${usedInvitations.length})`}
-          actions={(
-            <SolidButton
-              color="positive"
-              onClick={() => setInviteMemberModalEmail('')}
-              size="small"
-            >
-              {translation('inviteMember')}
-            </SolidButton>
-          )}
-          type="subtitle"
-        />
-        <Table
-          data={usedInvitations}
-          columns={columns}
-          initialState={{
-            pagination: { pageSize: 4 },
-          }}
-        />
-      </div>
-    </LoadingAndErrorComponent>
+      <LoadingAndErrorComponent
+        isLoading={isLoading && !!context.state.organizationId}
+        hasError={isError && !!context.state.organizationId}
+        className="min-h-72"
+      >
+        <div className="col gap-y-2">
+          <ColumnTitle
+            title={`${translation('invitations')} (${usedInvitations.length})`}
+            actions={(
+              <SolidButton
+                color="positive"
+                onClick={() => setInviteMemberModalEmail('')}
+                size="small"
+              >
+                {translation('inviteMember')}
+              </SolidButton>
+            )}
+            type="subtitle"
+          />
+          <Table
+            data={usedInvitations}
+            columns={columns}
+            initialState={{
+              pagination: { pageSize: 4 },
+            }}
+          />
+        </div>
+      </LoadingAndErrorComponent>
+    </>
   )
 }

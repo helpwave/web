@@ -50,7 +50,7 @@ export const TaskTemplateCard = ({
     >
       <div className="col w-full gap-y-0">
         <div className="row items-center justify-between overflow-hidden gap-x-1">
-          <h4 className="textstyle-title-normal truncate">{name}</h4>
+          <span className="typography-title-sm truncate">{name}</span>
           {typeForLabel && (
             <Chip
               color={typeForLabel === 'ward' ? 'red' : 'blue'}

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { Helpwave } from '@helpwave/hightide'
 import clsx from 'clsx'
+import { HelpwaveLogo } from '@helpwave/hightide'
 
 export type HeaderProps = {
   title?: string,
@@ -33,17 +33,16 @@ const Header = ({
                   withIcon = true
                 }: HeaderProps) => {
   return (
-    <div className="row h-16 py-4 relative items-center justify-between bg-header-background text-header-text shadow-md z-[1]">
+    <div
+      className="row h-16 py-4 relative items-center justify-between bg-header-background text-header-text shadow-md z-[1]">
       <div className="row w-full gap-x-8 justify-between mx-4">
         <div className="row relative items-center align-center">
           {withIcon && (
-            <div className="row relative align-center">
-              <Link href="/">
-                <Helpwave size={52}/>
-              </Link>
-            </div>
+            <Link href="/">
+              <HelpwaveLogo className="min-h-12 min-w-12"/>
+            </Link>
           )}
-          {title && <span className="textstyle-title-md">{title}</span>}
+          {title && <span className="typography-title-md">{title}</span>}
           {leftSide?.filter(value => value !== undefined).map((value, index) => (
             <div key={'leftAction' + index} className={clsx('row items-center', leftSideClassName)}>
               {(index !== 0 || title || withIcon) && <div className="bg-gray-300 rounded h-8 w-0.5 mx-4"/>}

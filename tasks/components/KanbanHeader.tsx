@@ -51,7 +51,6 @@ export const KanbanHeader = ({
           value={searchValue}
           placeholder={translation('search')}
           onChangeText={onSearchChange}
-          containerClassName="!w-auto"
         />
       )}
     />

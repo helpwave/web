@@ -1,4 +1,4 @@
-import { Select, type SelectProps } from '@helpwave/hightide'
+import { Select, SelectOption, type SelectProps } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 import type { TaskStatus } from '@helpwave/api-services/types/tasks/task'
 
@@ -24,11 +24,12 @@ const defaultTaskStatusSelectTranslation = {
   }
 }
 
-type TaskStatusSelectProps = Omit<SelectProps<TaskStatus>, 'options'> & {
+type TaskStatusSelectProps = Omit<SelectProps, 'children' | 'onValueChanged'> & {
   /**
    * All entries within this array will be removed as options
    */
   removeOptions?: TaskStatus[],
+  onValueChanged?: (task: TaskStatus) => void,
 }
 
 /**
@@ -40,6 +41,7 @@ export const TaskStatusSelect = ({
   overwriteTranslation,
   removeOptions = [],
   value,
+  onValueChanged,
   ...selectProps
 }: PropsForTranslation<TaskStatusSelectTranslation, TaskStatusSelectProps>) => {
   const translation = useTranslation([defaultTaskStatusSelectTranslation], overwriteTranslation)
@@ -58,9 +60,21 @@ export const TaskStatusSelect = ({
 
   return (
     <Select
-      value={value}
-      options={filteredOptions}
       {...selectProps}
-    />
+      value={value}
+      onValueChanged={(value) => onValueChanged?.(value as TaskStatus)}
+      buttonProps={{
+        selectedDisplay: (value => {
+          const option = filteredOptions.find(status => status.value === value)
+          return option ? option.label : '-'
+        })
+      }}
+    >
+      {filteredOptions.map((option) => (
+        <SelectOption key={option.value} value={option.value}>
+          {option.label}
+        </SelectOption>
+      ))}
+    </Select>
   )
 }

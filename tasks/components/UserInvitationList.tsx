@@ -118,6 +118,9 @@ export const UserInvitationList = ({
     <>
       <ReSignInDialog
         isOpen={isShowingReSignInDialog}
+        onCancel={() => {
+          setIsShowingReSignInDialog(false)
+        }}
         onConfirm={() => {
           setIsShowingReSignInDialog(false)
           signOut()

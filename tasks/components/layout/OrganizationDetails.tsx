@@ -1,9 +1,8 @@
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
-import { ConfirmModal } from '@helpwave/hightide'
-import { type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import { TextButton } from '@helpwave/hightide'
+import { ConfirmDialog, type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
-import { SolidButton } from '@helpwave/hightide'
 import {
   useInviteMemberMutation,
   useOrganizationCreateMutation,
@@ -59,8 +58,8 @@ export type OrganizationDetailProps = {
  * The left side of the organizations page
  */
 export const OrganizationDetail = ({
-  overwriteTranslation
-}: PropsForTranslation<OrganizationDetailTranslation, OrganizationDetailProps>) => {
+                                     overwriteTranslation
+                                   }: PropsForTranslation<OrganizationDetailTranslation, OrganizationDetailProps>) => {
   const translation = useTranslation([defaultOrganizationDetailTranslations], overwriteTranslation)
 
   const {
@@ -135,11 +134,9 @@ export const OrganizationDetail = ({
       key={contextState.organizationId}
       className="col gap-y-0 py-4 px-6"
     >
-      <ConfirmModal
-        headerProps={{
-          titleText: translation('deleteConfirmText'),
-          descriptionText: translation('dangerZoneText'),
-        }}
+      <ConfirmDialog
+        titleElement={translation('deleteConfirmText')}
+        description={translation('dangerZoneText')}
         isOpen={isShowingConfirmDialog}
         onCancel={() => setIsShowingConfirmDialog(false)}
         onConfirm={() => {
@@ -150,6 +147,10 @@ export const OrganizationDetail = ({
       />
       <ReSignInDialog
         isOpen={!!isShowingReSignInDialog}
+        onCancel={() => {
+          setIsShowingReSignInDialog(undefined)
+          resetForm()
+        }}
         onDecline={() => {
           setIsShowingReSignInDialog(undefined)
           resetForm()
@@ -196,12 +197,13 @@ export const OrganizationDetail = ({
             description={translation('dangerZoneText')}
             type="subtitle"
           />
-          <button
+          <TextButton
             onClick={() => setIsShowingConfirmDialog(true)}
-            className="text-negative font-bold text-left"
+            color="negative"
+            className="w-min"
           >
             {translation('deleteOrganization')}
-          </button>
+          </TextButton>
         </div>
       </div>
     </div>

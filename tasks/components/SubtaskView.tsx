@@ -1,9 +1,8 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
+import type { Scrollbars } from 'react-custom-scrollbars-2'
 import { Plus } from 'lucide-react'
 import type { Translation } from '@helpwave/hightide'
-import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
-import { SolidButton } from '@helpwave/hightide'
+import { type PropsForTranslation, SolidButton, useTranslation } from '@helpwave/hightide'
 import type { SubtaskDTO } from '@helpwave/api-services/types/tasks/task'
 import { SubtaskTile } from './SubtaskTile'
 import { TaskTemplateContext } from '@/pages/templates'
@@ -58,14 +57,14 @@ type SubtaskViewProps = {
  * A view for editing and showing all subtasks of a task
  */
 export const SubtaskView = ({
-  overwriteTranslation,
-  subtasks,
-  taskOrTemplateId,
-  onChange,
-  onAdd,
-  onUpdate,
-  onRemove,
-}: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
+                              overwriteTranslation,
+                              subtasks,
+                              taskOrTemplateId,
+                              onChange,
+                              onAdd,
+                              onUpdate,
+                              onRemove,
+                            }: PropsForTranslation<SubtaskViewTranslation, SubtaskViewProps>) => {
   const context = useContext(TaskTemplateContext)
 
   const translation = useTranslation([defaultSubtaskViewTranslation], overwriteTranslation)
@@ -98,12 +97,17 @@ export const SubtaskView = ({
   }
 
   return (
-    <div className="col gap-y-2">
-      <div className="row items-center justify-between">
-        <span className="textstyle-title-normal">{translation('subtasks')}</span>
+    <div className="flex-col-2">
+      <div className="flex-row-4 items-center justify-between">
+        <span className="typography-title-md">{translation('subtasks')}</span>
         <SolidButton
           onClick={() => {
-            const newSubtask: SubtaskDTO = { id: '', name: `${translation('newSubtask')} ${subtasks.length + 1}`, isDone: false, taskId: taskOrTemplateId ?? '' }
+            const newSubtask: SubtaskDTO = {
+              id: '',
+              name: `${translation('newSubtask')} ${subtasks.length + 1}`,
+              isDone: false,
+              taskId: taskOrTemplateId ?? ''
+            }
             onChange([...subtasks, newSubtask])
             if (!isCreating) {
               onAdd(newSubtask)
@@ -112,32 +116,29 @@ export const SubtaskView = ({
           }}
           size="small"
         >
-          <div className="row items-center gap-x-2">
+          <div className="flex-row-2 items-center">
             <Plus size={18}/>
             <span>{translation('addSubtask')}</span>
           </div>
         </SolidButton>
       </div>
-      <div className="max-h-[500px] overflow-hidden">
-        <Scrollbars autoHide={true} ref={scrollableRef} className="h-screen" style={{ minHeight: 250 }}>
-          <div className="grid grid-cols-1 gap-y-2">
-            {subtasks.map((subtask, index) => (
-              <SubtaskTile
-                key={index}
-                subtask={subtask}
-                onChange={newSubtask => {
-                  const newSubtasks = [...subtasks]
-                  newSubtasks[index] = newSubtask
-                  if (subtask.id) {
-                    onUpdate(newSubtask)
-                  }
-                  onChange(newSubtasks)
-                }}
-                onRemoveClick={() => removeSubtask(subtask, index)}
-              />
-            ))}
-          </div>
-        </Scrollbars>
+      <div className="flex-col-2 overflow-y-auto min-h-96 max-h-96">
+        {/* TODO add subtask tile if empty */}
+        {subtasks.toSorted((a, b) => a.id.localeCompare(b.id)).map((subtask, index) => (
+          <SubtaskTile
+            key={index}
+            subtask={subtask}
+            onChange={newSubtask => {
+              const newSubtasks = [...subtasks]
+              newSubtasks[index] = newSubtask
+              if (subtask.id) {
+                onUpdate(newSubtask)
+              }
+              onChange(newSubtasks)
+            }}
+            onRemoveClick={() => removeSubtask(subtask, index)}
+          />
+        ))}
       </div>
     </div>
   )

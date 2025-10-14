@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import type { Translation } from '@helpwave/hightide'
+import { LanguageDialog, ThemeDialog } from '@helpwave/hightide'
 import {
   Avatar,
-  LanguageModal,
   Menu,
   MenuItem,
   type PropsForTranslation,
-  ThemeModal,
   useTranslation
 } from '@helpwave/hightide'
 import { useAuth } from '@helpwave/api-services/authentication/useAuth'
@@ -74,11 +73,11 @@ export const UserMenu = ({
 
   return (
     <div className={clsx('row relative z-10', className)}>
-      <LanguageModal
+      <LanguageDialog
         isOpen={isLanguageModalOpen}
         onClose={() => setLanguageModalOpen(false)}
       />
-      <ThemeModal
+      <ThemeDialog
         isOpen={isThemeModalOpen}
         onClose={() => setThemeModalOpen(false)}
       />

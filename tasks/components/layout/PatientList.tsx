@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
 import {
   Chip,
-  ConfirmModal,
   ExpandableUncontrolled,
   Input,
   LoadingAndErrorComponent,
@@ -130,7 +130,7 @@ export const PatientList = ({
     refetch: refetchPatientListQuery
   } = usePatientListQuery(wardId)
 
-  const [addModalState, setAddModalState] = useState<AddModalState>({
+  const [addPatientModalState, setAddPatientModalState] = useState<AddModalState>({
     value: {
       name: ''
     },
@@ -161,7 +161,7 @@ export const PatientList = ({
 
   return (
     <div className="relative col py-4 px-6">
-      <ConfirmModal
+      <ConfirmDialog
         isOpen={!!deletePatient}
         onConfirm={() => {
           if (deletePatient) {
@@ -171,10 +171,8 @@ export const PatientList = ({
         }}
         confirmType="negative"
         onCancel={() => setDeletePatient(undefined)}
-        headerProps={{
-          titleText: translation('deleteConfirmText'),
-          descriptionText: translation('deleteDescriptionText')
-        }}
+        titleElement={ translation('deleteConfirmText')}
+        description={translation('deleteDescriptionText')}
       />
       <PatientDischargeModal
         isOpen={!!dischargingPatient}
@@ -188,20 +186,20 @@ export const PatientList = ({
         patient={dischargingPatient}
       />
       <AddPatientModal
-        isOpen={addModalState.isOpen}
-        value={addModalState.value}
-        onChange={value => setAddModalState(prevState => ({ ...prevState, value: value }))}
+        isOpen={addPatientModalState.isOpen}
+        value={addPatientModalState.value}
+        onValueChange={value => setAddPatientModalState(prevState => ({ ...prevState, value: value }))}
         onConfirm={() => {
           createPatientMutation.mutate({
             id: '', // TODO remove id from create Patient type
-            humanReadableIdentifier: addModalState.value.name,
-            bedId: addModalState.value.bedId,
+            humanReadableIdentifier: addPatientModalState.value.name,
+            bedId: addPatientModalState.value.bedId,
             notes: '',
             tasks: []
           })
-          setAddModalState({ value: { name: '' }, isOpen: false })
+          setAddPatientModalState({ value: { name: '' }, isOpen: false })
         }}
-        onCancel={() => setAddModalState({ value: { name: '' }, isOpen: false })}
+        onCancel={() => setAddPatientModalState({ value: { name: '' }, isOpen: false })}
         wardId={context.wardId}
       />
       <ColumnTitle
@@ -213,7 +211,7 @@ export const PatientList = ({
               className="whitespace-nowrap"
               color="positive"
               onClick={() => {
-                setAddModalState(prevState => ({ ...prevState, isOpen: false }))
+                setAddPatientModalState(prevState => ({ ...prevState, isOpen: true }))
               }}
             >
               {translation('addPatient')}
@@ -230,10 +228,9 @@ export const PatientList = ({
           <ExpandableUncontrolled
             isExpanded={initialOpenedSections?.active}
             disabled={filteredActive.length <= 0}
-            label={<span className="textstyle-accent">{`${translation('active')} (${filteredActive.length})`}</span>}
+            label={<span className="typography-title-md text-description">{`${translation('active')} (${filteredActive.length})`}</span>}
             className={clsx('border-2 border-transparent bg-transparent !shadow-none')}
             headerClassName="bg-transparent"
-            contentClassName="!px-0"
           >
             {filteredActive.map(patient => (
               <WardOverviewDraggable
@@ -249,14 +246,14 @@ export const PatientList = ({
               >
                 {() => (
                   <div
-                    className="row justify-between items-center cursor-pointer mx-2 px-2 py-1 hover:bg-primary/20 rounded-lg"
+                    className="row justify-between items-center cursor-pointer px-2 py-1 hover:bg-primary/20 rounded-lg"
                     onClick={() => updateContext({
                       ...context,
                       patientId: patient.id,
                       bedId: patient.bed.id
                     })}
                   >
-                    <span className="textstyle-title-normal w-1/3 text-ellipsis">{patient.humanReadableIdentifier}</span>
+                    <span className="typography-title-md w-1/3 text-ellipsis">{patient.humanReadableIdentifier}</span>
                     <div className="row flex-1 justify-between items-center">
                       <Chip color="blue" variant="fullyRounded" className="min-w-40 justify-center">
                         {activeLabelText(patient)}
@@ -285,7 +282,7 @@ export const PatientList = ({
                 isExpanded={initialOpenedSections?.unassigned}
                 disabled={filteredUnassigned.length <= 0}
                 label={(
-                  <span className="textstyle-accent text-tag-yellow-text">
+                  <span className="typography-title-md text-tag-yellow-text">
                       {`${translation('unassigned')} (${filteredUnassigned.length})`}
                   </span>
                 )}
@@ -310,13 +307,13 @@ export const PatientList = ({
                     {() => (
                       <div
                         key={patient.id}
-                        className="row items-center cursor-pointer mx-2 px-2 py-1 hover:bg-primary/20 rounded-lg"
+                        className="row items-center cursor-pointer px-2 py-1 hover:bg-primary/20 rounded-lg"
                         onClick={() => updateContext({
                           wardId: context.wardId,
                           patientId: patient.id
                         })}
                       >
-                        <span className="textstyle-title-normal w-1/3 text-ellipsis">{patient.humanReadableIdentifier}</span>
+                        <span className="typography-title-md w-1/3 text-ellipsis">{patient.humanReadableIdentifier}</span>
                         <div className="row flex-1 justify-between items-center">
                           <Chip color="yellow" variant="fullyRounded" className="min-w-40 justify-center">
                             {`${translation('unassigned')}`}
@@ -347,7 +344,7 @@ export const PatientList = ({
                 isExpanded={initialOpenedSections?.discharged}
                 disabled={filteredDischarged.length <= 0}
                 label={(
-                  <span className="textstyle-accent">
+                  <span className="typography-title-md text-description">
                     {`${translation('discharged')} (${filteredDischarged.length})`}
                   </span>
                 )}
@@ -372,13 +369,13 @@ export const PatientList = ({
                     {() => (
                       <div
                         key={patient.id}
-                        className="row justify-between items-center cursor-not-pointer mx-2 px-2 py-1 hover:bg-primary/20 rounded-lg"
+                        className="row justify-between items-center cursor-not-pointer px-2 py-1 hover:bg-primary/20 rounded-lg"
                         onClick={() => updateContext({
                           wardId: context.wardId,
                           patientId: patient.id
                         })}
                       >
-                        <span className="textstyle-title-normal">{patient.humanReadableIdentifier}</span>
+                        <span className="typography-title-md">{patient.humanReadableIdentifier}</span>
                         <div className="row gap-x-4">
                           <TextButton onClick={event => {
                             event.stopPropagation()

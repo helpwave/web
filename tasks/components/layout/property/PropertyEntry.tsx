@@ -4,6 +4,7 @@ import {
   LoadingAndErrorComponent,
   MultiSelectProperty,
   NumberProperty,
+  SelectOption,
   SingleSelectProperty,
   TextProperty
 } from '@helpwave/hightide'
@@ -155,19 +156,13 @@ export const PropertyEntryDisplay = ({
         <SingleSelectProperty
           {...commonProps}
           value={attachedProperty.value.singleSelectValue?.id}
-          onChange={selectedId => {
+          onValueChanged={selectedId => {
             const newProperty = updater(prev => {
               prev.value.singleSelectValue = property.selectData!.options.find(value => value.id === selectedId)
             })
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.selectData!.options
-            .map(option => ({
-              value: option.id,
-              label: option.name,
-              searchTags: [option.name]
-            }))}
           onAddNew={(name) => {
             updatePropertyMutation.mutate({
               property,
@@ -184,54 +179,44 @@ export const PropertyEntryDisplay = ({
               },
             })
           }}
-          selectedDisplayOverwrite={attachedProperty.value.singleSelectValue?.name}
-          alignmentVertical="topOutside"
-        />
+        >
+          {property.selectData!.options
+            .filter(option => option !== undefined)
+            .map(option => (
+              <SelectOption key={option.id} value={option.id}>
+                {option.name}
+              </SelectOption>
+            ))
+          }
+        </SingleSelectProperty>
       )
     case 'multiSelect':
       return (
         <MultiSelectProperty
           {...commonProps}
-          onChange={multiSelect => {
+          values={attachedProperty.value.multiSelectValue.map(value => value.id)}
+          onValuesChanged={selection => {
             const newProperty: AttachedProperty = {
               ...attachedProperty,
               value: {
                 ...attachedProperty.value,
-                multiSelectValue: multiSelect
-                  .filter(value => value.selected && value.value !== undefined)
-                  .map(value => property.selectData!.options.find(option => option.id === value.value)!)
+                multiSelectValue: property.selectData!.options
+                  .filter(value => selection.some(selected => selected === value.id))
               }
             }
             onChange(newProperty)
             onEditComplete(newProperty)
           }}
-          options={property.selectData!.options
+        >
+          {property.selectData!.options
             .filter(option => option !== undefined)
-            .map(option => ({
-              value: option.id,
-              label: option.name,
-              selected: !!attachedProperty.value.multiSelectValue.find(value => value.id === option.id),
-              searchTags: [option.name]
-            }))}
-          onAddNew={(name) => {
-            updatePropertyMutation.mutate({
-              property,
-              selectUpdate: {
-                add: [
-                  {
-                    id: '',
-                    name,
-                    isCustom: true,
-                  }
-                ],
-                update: [],
-                remove: []
-              },
-            })
-          }}
-          useChipDisplay={true}
-          alignmentVertical="topOutside"
-        />
+            .map(option => (
+              <SelectOption key={option.id} value={option.id}>
+                {option.name}
+              </SelectOption>
+            ))
+          }
+        </MultiSelectProperty>
       )
     default:
       console.error(`Unimplemented property type used for PropertyEntry: ${property.fieldType}`)

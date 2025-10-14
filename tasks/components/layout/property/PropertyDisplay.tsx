@@ -5,7 +5,6 @@ import {
   SolidButton,
   Table,
   TextButton,
-  Tile,
   useTranslation
 } from '@helpwave/hightide'
 import { useContext, useEffect, useMemo } from 'react'
@@ -104,10 +103,10 @@ export const PropertyDisplay = ({
         }
         const value = propertyList[cell.row.index]!
         return (
-          <Tile
-            title={value.name}
-            description={translation(value.fieldType)}
-          />
+          <div className="flex-col-1">
+            <span>{value.name}</span>
+            <span>{translation(value.fieldType)}</span>
+          </div>
         )
       },
       accessorKey: 'name',

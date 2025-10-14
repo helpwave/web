@@ -1,4 +1,4 @@
-import { Select, type SelectProps } from '@helpwave/hightide'
+import { Select, SelectOption, type SelectProps } from '@helpwave/hightide'
 import { useTranslation, type PropsForTranslation } from '@helpwave/hightide'
 
 type TaskVisibilitySelectTranslation = {
@@ -17,7 +17,10 @@ const defaultTaskVisibilitySelectTranslation = {
   }
 }
 
-type TaskVisibilitySelectProps = Omit<SelectProps<boolean>, 'options'>
+type TaskVisibilitySelectProps = Omit<SelectProps, 'children' | 'onValueChanged' | 'value'> & {
+  value?: boolean,
+  onValueChanged?: (isVisible: boolean) => void,
+}
 
 /**
  * A component for selecting a TaskVisibility
@@ -27,19 +30,36 @@ type TaskVisibilitySelectProps = Omit<SelectProps<boolean>, 'options'>
 export const TaskVisibilitySelect = ({
   overwriteTranslation,
   value,
+  onValueChanged,
   ...selectProps
 }: PropsForTranslation<TaskVisibilitySelectTranslation, TaskVisibilitySelectProps>) => {
   const translation = useTranslation([defaultTaskVisibilitySelectTranslation], overwriteTranslation)
   const options = [
-    { value: true, label: translation('public') },
-    { value: false, label: translation('private') },
+    { value: 'public', label: translation('public') },
+    { value: 'private', label: translation('private') },
   ]
 
   return (
     <Select
-      value={value}
-      options={options}
       {...selectProps}
-    />
+      value={value ? 'public' : 'private'}
+      onValueChanged={(value: string) => onValueChanged?.(value === 'public')}
+      buttonProps={{
+        ...selectProps.buttonProps,
+        selectedDisplay: (value: string) => {
+          const option = options.find(option => option.value === value)
+          if(option) {
+            return option.label
+          }
+          return '-'
+        },
+      }}
+    >
+      {options.map((option, index) => (
+        <SelectOption key={index} value={option.value}>
+          {option.label}
+        </SelectOption>
+      ))}
+    </Select>
   )
 }

@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { Translation } from '@helpwave/hightide'
-import { ConfirmModal } from '@helpwave/hightide'
+import { TextButton } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
 import {
   LoadingAndErrorComponent,
   type PropsForTranslation,
@@ -110,18 +111,18 @@ export const WardDetail = ({
         hasError={isError && !isCreatingNewWard && !ward}
         className="h-full"
       >
-        <ConfirmModal
-          headerProps={{
-            titleText: translation('deleteConfirmText'),
-            descriptionText: translation('dangerZoneText'),
-          }}
+        <ConfirmDialog
           isOpen={isShowingConfirmDialog}
+          titleElement={translation('deleteConfirmText')}
+          description={translation('dangerZoneText')}
+
           onCancel={() => setIsShowingConfirmDialog(false)}
           onConfirm={() => {
             setIsShowingConfirmDialog(false)
             deleteWardMutation.mutate(newWard.id)
           }}
           confirmType="negative"
+          className="z-300"
         />
         <ColumnTitle
           title={isCreatingNewWard ? translation('createWard') : translation('updateWard')}
@@ -139,7 +140,7 @@ export const WardDetail = ({
           />
         </div>
         {isCreatingNewWard ?
-          <span>{translation('roomsNotOnCreate')}</span>
+          <span className="mt-6">{translation('roomsNotOnCreate')}</span>
           : (
             <div className="mt-6">
               <RoomList/>
@@ -165,12 +166,13 @@ export const WardDetail = ({
             description={translation('dangerZoneText')}
             type="subtitle"
           />
-          <button
+          <TextButton
             onClick={() => setIsShowingConfirmDialog(true)}
-            className="px-0 font-bold justify-start text-negative w-min text-nowrap"
+            color="negative"
+            className="w-min"
           >
             {translation('deleteWard')}
-          </button>
+          </TextButton>
         </div>
       </LoadingAndErrorComponent>
     </div>

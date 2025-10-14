@@ -1,11 +1,7 @@
-import { LoadingAnimation } from '@helpwave/hightide'
 import type { PropsForTranslation, Translation } from '@helpwave/hightide'
-import { useTranslation } from '@helpwave/hightide'
+import { LoadingAndErrorComponent, LoadingAnimation, Menu, MenuItem, useTranslation } from '@helpwave/hightide'
 import { Plus, Tag } from 'lucide-react'
-import { LoadingAndErrorComponent } from '@helpwave/hightide'
-import { Menu, MenuItem } from '@helpwave/hightide'
 import { useEffect, useState } from 'react'
-import { SearchableList } from '@helpwave/hightide'
 import type { PropertySubjectType } from '@helpwave/api-services/types/properties/property'
 import {
   useAttachPropertyMutation,
@@ -15,11 +11,9 @@ import type {
   AttachedProperty,
   DisplayableAttachedProperty
 } from '@helpwave/api-services/types/properties/attached_property'
-import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
 import { emptyPropertyValue } from '@helpwave/api-services/types/properties/attached_property'
-import {
-  useUpdatePropertyViewRuleRequest
-} from '@helpwave/api-services/mutations/properties/property_view_src_mutations'
+import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import { useUpdatePropertyViewRuleRequest } from '@helpwave/api-services/mutations/properties/property_view_src_mutations'
 import { PropertyEntry } from '@/components/layout/property/PropertyEntry'
 import { ColumnTitle } from '@/components/ColumnTitle'
 
@@ -125,12 +119,9 @@ export const PropertyList = ({
               loadingComponent={<LoadingAnimation classname="min-h-20"/>}
             >
               {/* TODO searchbar here, possibly in a new component for list search */}
-              {propertyList && properties && (
-                <SearchableList
-                  list={propertyList
-                    .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))}
-                  searchMapping={value => [value.name]}
-                  itemMapper={property => (
+              {propertyList && properties && (propertyList
+                  .filter(property => !properties.find(propertyWithValue => propertyWithValue.propertyId === property.id))
+                  .map(property => (
                     <MenuItem
                       key={property.id}
                       onClick={() => {
@@ -151,8 +142,7 @@ export const PropertyList = ({
                     >
                       {property.name}
                     </MenuItem>
-                  )}
-                />
+                  ))
               )}
             </LoadingAndErrorComponent>
           )}

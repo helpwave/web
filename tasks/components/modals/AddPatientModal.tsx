@@ -1,8 +1,13 @@
 import { useState } from 'react'
 import clsx from 'clsx'
-import type { ConfirmModalProps, Translation } from '@helpwave/hightide'
-import { InputUncontrolled } from '@helpwave/hightide'
-import { ConfirmModal, type PropsForTranslation, useTranslation } from '@helpwave/hightide'
+import type { ConfirmDialogProps, Translation } from '@helpwave/hightide'
+import {
+  ConfirmDialog,
+  FormElementWrapper,
+  InputUncontrolled,
+  type PropsForTranslation,
+  useTranslation
+} from '@helpwave/hightide'
 import type { RoomBedSelectionValue } from '@/components/selects/RoomBedSelect'
 import { RoomBedSelect } from '@/components/selects/RoomBedSelect'
 
@@ -18,7 +23,7 @@ const defaultAddPatientModalTranslation: Translation<AddPatientModalTranslation>
     addPatient: 'Add Patient',
     name: 'Name',
     minimumLength: `The Name must be at least {{characters}} characters long`,
-    noBedSelected: 'No bed selected, the patient won\'t be assigned directly'
+    noBedSelected: 'No bed selected, the patient won\'t be assigned directly',
   },
   de: {
     addPatient: 'Patient Hinzufügen',
@@ -32,10 +37,10 @@ export type AddPatientModalValue = RoomBedSelectionValue & {
   name: string,
 }
 
-export type AddPatientModalProps = ConfirmModalProps & {
+export type AddPatientModalProps = Omit<ConfirmDialogProps, 'titleElement' | 'description'> & {
   wardId: string,
   value: AddPatientModalValue,
-  onChange: (value: AddPatientModalValue) => void,
+  onValueChange: (value: AddPatientModalValue) => void,
 }
 
 /**
@@ -44,9 +49,8 @@ export type AddPatientModalProps = ConfirmModalProps & {
 export const AddPatientModal = ({
                                   overwriteTranslation,
                                   wardId,
-                                  headerProps,
                                   value,
-                                  onChange,
+                                  onValueChange,
                                   ...modalProps
                                 }: PropsForTranslation<AddPatientModalTranslation, AddPatientModalProps>) => {
   const translation = useTranslation([defaultAddPatientModalTranslation], overwriteTranslation)
@@ -60,34 +64,37 @@ export const AddPatientModal = ({
   const isShowingError = touched && !validPatientName
 
   return (
-    <ConfirmModal
-      headerProps={{
-        titleText: translation('addPatient'),
-        ...headerProps,
-      }}
+    <ConfirmDialog
       buttonOverwrites={[{}, {}, { disabled: !validPatientName }]}
       {...modalProps}
+      titleElement={translation('addPatient')}
+      description={undefined}
     >
       <div className="col gap-y-4 min-w-[300px]">
         <div className="col gap-y-1">
-          <span className="textstyle-label-md">{translation('name')}</span>
-          <InputUncontrolled
-            value={name}
-            onEditCompleted={name => {
-              setTouched(true)
-              onChange({ ...value, name })
-            }}
-          />
-          {isShowingError && (
-            <span className="textstyle-form-error">
-              {translation('minimumLength', { replacements: { characters: minimumNameLength.toString() } })}
-            </span>
-          )}
+          <FormElementWrapper
+            required={true}
+            label={translation('name')}
+            error={isShowingError ? translation('minimumLength', { replacements: { characters: minimumNameLength.toString() } }) : undefined}
+            isShowingError={touched}
+          >
+            {({ isShowingError: _, setIsShowingError: _2, ...bag }) => (
+              <InputUncontrolled
+                value={name}
+                onEditCompleted={name => {
+                  setTouched(true)
+                  onValueChange({ ...value, name })
+                }}
+                className="max-w-72"
+                {...bag}
+              />
+            )}
+          </FormElementWrapper>
         </div>
         <RoomBedSelect
           initialRoomAndBed={{ roomId, bedId }}
           wardId={wardId}
-          onChange={(roomBedDropdownIds) => onChange({ ...roomBedDropdownIds, name })}
+          onChange={(roomBedDropdownIds) => onValueChange({ ...roomBedDropdownIds, name })}
           isClearable={true}
         />
         <span
@@ -99,6 +106,6 @@ export const AddPatientModal = ({
           {translation('noBedSelected')}
         </span>
       </div>
-    </ConfirmModal>
+    </ConfirmDialog>
   )
 }

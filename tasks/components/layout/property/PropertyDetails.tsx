@@ -1,5 +1,6 @@
 import type { PropsForTranslation, StepperState, Translation } from '@helpwave/hightide'
-import { ConfirmModal, LoadingAndErrorComponent, range, StepperBar, TextButton, useTranslation } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
+import { LoadingAndErrorComponent, range, StepperBar, TextButton, useTranslation } from '@helpwave/hightide'
 import { useContext, useEffect, useState } from 'react'
 import type { PropertySelectDataUpdate } from '@helpwave/api-services/mutations/properties/property_mutations'
 import {
@@ -85,11 +86,9 @@ export const PropertyDetails = ({
 
   return (
     <div className="py-4 px-6 col gap-y-4 min-h-full">
-      <ConfirmModal
-        headerProps={{
-          titleText: translation('archivePropertyDialogTitle'),
-          descriptionText: translation('archivePropertyDialogDescription')
-        }}
+      <ConfirmDialog
+        titleElement={translation('archivePropertyDialogTitle')}
+        description={translation('archivePropertyDialogDescription')}
         isOpen={showArchiveConfirm}
         onCancel={() => setArchiveConfirm(false)}
         onConfirm={() => {

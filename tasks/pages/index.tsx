@@ -51,7 +51,7 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
   const { isLoading, isError } = useOrganizationsForUserQuery()
 
   const [isStagingDisclaimerOpen, setStagingDisclaimerOpen] = useState(false)
-  const [lastTimeStagingDisclaimerDismissed, setLastTimeStagingDisclaimerDismissed] = useLocalStorage('staging-disclaimer-dismissed-time', 0)
+  const { value: lastTimeStagingDisclaimerDismissed, setValue: setLastTimeStagingDisclaimerDismissed } = useLocalStorage('staging-disclaimer-dismissed-time', 0)
 
   const dismissStagingDisclaimer = () => {
     setLastTimeStagingDisclaimerDismissed(new Date().getTime())
@@ -87,8 +87,10 @@ const Dashboard: NextPage<PropsForTranslation<DashboardTranslation, DashboardSer
       </Head>
 
       <StagingDisclaimerModal
+        isModal={false}
         onConfirm={dismissStagingDisclaimer}
         isOpen={isStagingDisclaimerOpen}
+        className="w-200"
       />
       <div ref={ref} className="w-full h-full">
         <LoadingAndErrorComponent

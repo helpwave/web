@@ -51,7 +51,7 @@ export const TaskTemplateListColumn = ({
   return (
     <div className="flex-col-2 overflow-hidden h-full">
       <div className="row overflow-hidden min-h-8">
-        <span className="textstyle-title-md flex-1">
+        <span className="typography-title-md flex-1">
           {translation('template')}
         </span>
         {onColumnEditClick && <Edit onClick={onColumnEditClick}/>}

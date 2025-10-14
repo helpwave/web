@@ -61,7 +61,7 @@ export const TaskCard = ({
         <div className="flex-col-1 overflow-hidden">
           <div className="flex-row-1 overflow-hidden items-center">
             {!task.isPublicVisible && <div className="w-4"><LockIcon size={16}/></div>}
-            <span className="textstyle-title-normal truncate">{task.name}</span>
+            <span className="typography-title-md truncate">{task.name}</span>
           </div>
           <span
             className={clsx(

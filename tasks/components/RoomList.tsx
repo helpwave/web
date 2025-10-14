@@ -1,8 +1,8 @@
 import type { Translation, TranslationPlural } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
 import { FillerRowElement } from '@helpwave/hightide'
 import { InputUncontrolled } from '@helpwave/hightide'
 import {
-  ConfirmModal,
   LoadingAndErrorComponent,
   type PropsForTranslation,
   SolidButton,
@@ -201,12 +201,11 @@ export const RoomList = ({
 
   return (
     <div className="col gap-y-4">
-      <ConfirmModal
-        headerProps={{
-          titleText: translation('deleteConfirmText', { count: selectedElementCount }),
-          descriptionText: translation('dangerZoneText', { count: selectedElementCount }),
-        }}
+      <ConfirmDialog
         isOpen={deleteRoomDialogState.isShowing}
+        titleElement={translation('deleteConfirmText', { count: selectedElementCount })}
+        description={translation('dangerZoneText', { count: selectedElementCount })}
+
         onCancel={() => setDeleteRoomDialogState({ isShowing: false })}
         onConfirm={() => {
           if (deleteRoomDialogState.value) {

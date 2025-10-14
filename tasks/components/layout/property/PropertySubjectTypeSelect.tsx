@@ -1,5 +1,5 @@
-import type { Translation } from '@helpwave/hightide'
-import type { PropsForTranslation } from '@helpwave/hightide'
+import { SelectOption } from '@helpwave/hightide'
+import type { PropsForTranslation , Translation } from '@helpwave/hightide'
 import { useTranslation } from '@helpwave/hightide'
 import type { SelectProps } from '@helpwave/hightide'
 import { Select } from '@helpwave/hightide'
@@ -19,21 +19,32 @@ const defaultPropertySubjectTypeSelectTranslation: Translation<PropertySubjectTy
   }
 }
 
+type PropertySubjectTypeSelectProps = Omit<SelectProps, 'children' | 'onValueChanged'> & {
+  onValueChanged: (value: PropertySubjectType) => void,
+}
+
 /**
  * A Select for the Property SubjectType
  */
 export const PropertySubjectTypeSelect = ({
   overwriteTranslation,
   ...props
-}: PropsForTranslation<PropertySubjectTypeSelectTranslation, Omit<SelectProps<PropertySubjectType>, 'options'>>) => {
+}: PropsForTranslation<PropertySubjectTypeSelectTranslation, PropertySubjectTypeSelectProps>) => {
   const translation = useTranslation([defaultPropertySubjectTypeSelectTranslation], overwriteTranslation)
   return (
     <Select
       {...props}
-      options={subjectTypeList.map(subjectType => ({
-        value: subjectType,
-        label: translation(subjectType)
-      }))}
-    />
+      onValueChanged={(value) => props.onValueChanged(value as PropertySubjectType)}
+      buttonProps={{
+        ...props?.buttonProps,
+        selectedDisplay: (value) => translation(value as PropertySubjectType),
+      }}
+    >
+      {subjectTypeList.map(subjectType =>(
+        <SelectOption key={subjectType} value={subjectType}>
+          {translation(subjectType)}
+        </SelectOption>
+      ))}
+    </Select>
   )
 }

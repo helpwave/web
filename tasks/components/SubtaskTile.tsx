@@ -44,7 +44,7 @@ export const SubtaskTile = ({
   }, [subtask])
 
   return (
-    <div className="row gap-x-2 items-center overflow-x-hidden w-full">
+    <div className="row gap-x-2 p-1 items-center overflow-x-hidden w-full shrink-0">
       <Checkbox
         onChange={isDone => {
           const newSubtask: SubtaskDTO = {
@@ -55,6 +55,7 @@ export const SubtaskTile = ({
           setLocalSubtask(newSubtask)
         }}
         checked={localSubtask.isDone}
+        className="min-w-6 min-h-6"
       />
       <div className="row justify-between items-center w-full">
         <ToggleableInput

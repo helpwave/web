@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 
 import type { Translation } from '@helpwave/hightide'
+import { Label } from '@helpwave/hightide'
 import {
   LoadingAndErrorComponent,
   type PropsForTranslation,
@@ -171,7 +172,6 @@ export const PatientDetail = ({
             <div className="h-12 w-full">
               <ToggleableInput
                 maxLength={maxHumanReadableIdentifierLength}
-                labelClassName="text-xl font-semibold"
                 className="text-lg font-semibold"
                 id="humanReadableIdentifier"
                 value={newPatient.humanReadableIdentifier}
@@ -200,15 +200,18 @@ export const PatientDetail = ({
               disabled={newPatient.discharged}
             />
           </div>
-          <div className="flex-1">
+          <div className="relative flex-1">
             <Textarea
-              headline={translation('notes')}
               value={newPatient.notes}
               onChangeText={text => changeSavedValue({
                 ...newPatient,
                 notes: text
               })}
+              className="pt-8"
             />
+            <Label className="absolute left-3 top-2">
+              {translation('notes')}
+            </Label>
           </div>
         </div>
         {!!newPatient.id && (

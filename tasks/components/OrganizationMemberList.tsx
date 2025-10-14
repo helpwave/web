@@ -1,8 +1,8 @@
 import { useContext, useMemo, useState } from 'react'
 import type { Translation, TranslationPlural } from '@helpwave/hightide'
+import { ConfirmDialog } from '@helpwave/hightide'
 import {
   Avatar,
-  ConfirmModal,
   FillerRowElement,
   LoadingAndErrorComponent,
   type PropsForTranslation,
@@ -133,7 +133,7 @@ export const OrganizationMemberList = ({
             />
             <div className="col items-start gap-y-0">
               <span className="font-bold truncate">{orgMember.nickname}</span>
-              <span className="textstyle-description text-sm truncate">{orgMember.email}</span>
+              <span className="text-description text-sm truncate">{orgMember.email}</span>
             </div>
           </TextButton>
         )
@@ -182,11 +182,9 @@ export const OrganizationMemberList = ({
 
   return (
     <div className="col">
-      <ConfirmModal
-        headerProps={{
-          titleText: translation('deleteConfirmText', { count: selectedElements }),
-          descriptionText: translation('dangerZoneText', { count: selectedElements }),
-        }}
+      <ConfirmDialog
+        titleElement={translation('deleteConfirmText', { count: selectedElements })}
+        description={translation('dangerZoneText', { count: selectedElements })}
         isOpen={deleteDialogState.isShowing}
         onCancel={() => setDeleteDialogState(defaultDeleteDialogState)}
         onConfirm={() => {

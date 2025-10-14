@@ -18,6 +18,8 @@ import { ColumnTitle } from '../ColumnTitle'
 import { type OrganizationInvitation, OrganizationInvitationList } from '../OrganizationInvitationList'
 import { OrganizationContext } from '@/pages/organizations'
 import { ReSignInDialog } from '@/components/modals/ReSignInDialog'
+import { usePropertyListQuery } from '@helpwave/api-services/mutations/properties/property_mutations'
+import Link from 'next/link'
 
 type OrganizationDetailTranslation = {
   organizationDetail: string,
@@ -27,6 +29,9 @@ type OrganizationDetailTranslation = {
   deleteOrganization: string,
   create: string,
   update: string,
+  properties: string,
+  propertiesDescription: string,
+  manageProperties: string,
 }
 
 const defaultOrganizationDetailTranslations: Translation<OrganizationDetailTranslation> = {
@@ -37,7 +42,10 @@ const defaultOrganizationDetailTranslations: Translation<OrganizationDetailTrans
     deleteConfirmText: 'Do you really want to delete this organization?',
     deleteOrganization: 'Delete Organization',
     create: 'Create',
-    update: 'Update'
+    update: 'Update',
+    properties: 'Properties',
+    propertiesDescription: 'With properties you can add custom fields to different entities you patients or beds.',
+    manageProperties: 'Manage Properties'
   },
   de: {
     organizationDetail: 'Organisations Details',
@@ -46,7 +54,10 @@ const defaultOrganizationDetailTranslations: Translation<OrganizationDetailTrans
     deleteConfirmText: 'Wollen Sie wirklich diese Organisation löschen?',
     deleteOrganization: 'Organisation löschen',
     create: 'Erstellen',
-    update: 'Ändern'
+    update: 'Ändern',
+    properties: 'Eigenschaften',
+    propertiesDescription: 'Mit Eigenschaften können Sie verschiedenen Entitäten wie Patienten oder Betten benutzerdefinierte Felder hinzufügen.',
+    manageProperties: 'Eigenschaften Verwalten'
   }
 }
 
@@ -70,6 +81,7 @@ export const OrganizationDetail = ({
   const { signOut } = useAuth()
   const isCreatingNewOrganization = contextState.organizationId === ''
   const { data } = useOrganizationQuery(contextState.organizationId)
+  const { data: propertyData } = usePropertyListQuery()
   const [isShowingConfirmDialog, setIsShowingConfirmDialog] = useState(false)
   const [isShowingReSignInDialog, setIsShowingReSignInDialog] = useState<string>()
   const [organizationForm, setOrganizationForm] = useState<OrganizationFormType>(emptyOrganizationForm)
@@ -183,6 +195,19 @@ export const OrganizationDetail = ({
           invitations={isCreatingNewOrganization ? organizationInvites : undefined}
           organizationId={contextState.organizationId}
         />
+        {propertyData && !isCreatingNewOrganization && (
+          <div className="card-lg flex-row-0 justify-between">
+            <div className="flex-col-0">
+              <span className="textstyle-title-lg">{`${translation('properties')} (${propertyData.length})`}</span>
+              <span className="text-description">{`${translation('propertiesDescription')} (${propertyData.length})`}</span>
+            </div>
+            <div className={clsx('flex flex-row justify-end items-center')}>
+              <Link href="/properties" className="bg-primary text-on-primary">
+                {translation('manageProperties')}
+              </Link>
+            </div>
+          </div>
+        )}
         <div className="row justify-end">
           <SolidButton
             className="w-auto"

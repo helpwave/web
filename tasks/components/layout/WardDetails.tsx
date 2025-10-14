@@ -146,7 +146,7 @@ export const WardDetail = ({
               <RoomList/>
             </div>
           )}
-        <div className="row justify-end mt-6">
+        <div className="flex-row-0 justify-end mt-6">
           <SolidButton
             onClick={() => isCreatingNewWard ? createWardMutation.mutate(newWard) : updateWardMutation.mutate(newWard)}
             disabled={!filledRequired}>
@@ -160,7 +160,7 @@ export const WardDetail = ({
             </div>
           )
         }
-        <div className={clsx('col justify-start mt-6', { hidden: isCreatingNewWard })}>
+        <div className={clsx('flex-col-0 justify-start mt-6', { hidden: isCreatingNewWard })}>
           <ColumnTitle
             title={translation('dangerZone')}
             description={translation('dangerZoneText')}

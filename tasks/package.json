@@ -33,7 +33,7 @@
     "zod": "3.25.73"
   },
   "devDependencies": {
-    "@helpwave/eslint-config": "^0.0.11",
+    "@helpwave/eslint-config": "0.0.11",
     "@types/node": "20.17.10",
     "@types/react": "18.3.17",
     "@types/react-dom": "18.3.5",

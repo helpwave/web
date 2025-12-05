@@ -7,10 +7,10 @@
   },
   "type": "module",
   "dependencies": {
-    "@helpwave/hightide": "^0.0.17",
+    "@helpwave/hightide": "^0.1.0",
     "@helpwave/proto-ts": "0.64.0-89e2023.0",
-    "@tanstack/react-query": "^4.36.1",
-    "@tanstack/react-query-devtools": "^4.36.1",
+    "@tanstack/react-query": "^4.42.0",
+    "@tanstack/react-query-devtools": "^4.42.0",
     "@types/google-protobuf": "3.15.12",
     "cookies-next": "2.1.2",
     "google-protobuf": "3.21.4",
@@ -18,15 +18,15 @@
     "keycloak-js": "25.0.6",
     "oauth4webapi": "2.17.0",
     "react": "18.3.1",
-    "rxjs": "7.8.1",
-    "typescript": "5.7.2",
-    "zod": "3.24.1"
+    "rxjs": "7.8.2",
+    "typescript": "5.9.3",
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "^0.0.11",
     "@types/js-cookie": "3.0.6",
-    "@types/node": "20.17.10",
-    "@types/react": "18.3.17",
-    "eslint": "9.17.0"
+    "@types/node": "20.19.25",
+    "@types/react": "18.3.27",
+    "eslint": "9.39.1"
   }
 }
